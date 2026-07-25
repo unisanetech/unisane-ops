@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "unisane.pack-manifest",
+  "packId": "provider.cloudflare",
+  "packageName": "@unisane/provider-cloudflare",
+  "version": "0.1.0",
+  "packApiVersion": 1,
+  "trust": "first-party",
+  "commands": [
+    {
+      "id": "provider.cloudflare.connection.check",
+      "path": ["connect", "cloudflare", "check"],
+      "handler": {
+        "exportPath": "./handlers/connection",
+        "exportName": "runCloudflareConnectionCheck"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["provider.cloudflare.connection-report"],
+      "riskGuards": [],
+      "json": true
+    }
+  ],
+  "configNamespaces": ["provider.cloudflare"],
+  "addItemTypes": [],
+  "capabilities": ["provider.cloudflare.connection"],
+  "providerBindings": ["provider.cloudflare.connection"],
+  "reservedRootNames": [],
+  "integrity": {
+    "algorithm": "sha256",
+    "manifestHash": "c1dc0b4f47b8dbf2fdd7a995e4f40cdd237040b33357fa02dc15699a9d97e2a6"
+  }
+}

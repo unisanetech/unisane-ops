@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 1,
+  "kind": "unisane.pack-manifest",
+  "packId": "cloud",
+  "packageName": "@unisane/cloud",
+  "version": "0.1.0",
+  "packApiVersion": 1,
+  "trust": "first-party",
+  "commands": [
+    {
+      "id": "cloud.dns.inventory",
+      "path": ["cloud", "dns", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/dns",
+        "exportName": "runCloudDnsInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.dns-inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.dns.import",
+      "path": ["cloud", "dns", "import"],
+      "handler": {
+        "exportPath": "./handlers/dns",
+        "exportName": "runCloudDnsImport"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.dns-import"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.dns.plan",
+      "path": ["cloud", "dns", "plan"],
+      "handler": {
+        "exportPath": "./handlers/dns",
+        "exportName": "runCloudDnsPlan"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.dns-plan"],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "cloud.dns.apply",
+      "path": ["cloud", "dns", "apply"],
+      "handler": {
+        "exportPath": "./handlers/dns",
+        "exportName": "runCloudDnsApply"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": ["cloud.dns-receipt"],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.dns.inventory",
+      "path": ["provider", "cloudflare", "dns", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/dns",
+        "exportName": "runProviderCloudflareDnsInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.dns-inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.dns.plan",
+      "path": ["provider", "cloudflare", "dns", "plan"],
+      "handler": {
+        "exportPath": "./handlers/dns",
+        "exportName": "runProviderCloudflareDnsPlan"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.dns-plan"],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.dns.apply",
+      "path": ["provider", "cloudflare", "dns", "apply"],
+      "handler": {
+        "exportPath": "./handlers/dns",
+        "exportName": "runProviderCloudflareDnsApply"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": ["cloud.dns-receipt"],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "cloud.inventory",
+      "path": ["cloud", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.check",
+      "path": ["cloud", "check"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudCheck"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.readiness-report"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.env",
+      "path": ["cloud", "env"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudEnv"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.environment-report"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.queues.inventory",
+      "path": ["cloud", "queues", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudQueuesInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.queue-inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.queues.plan",
+      "path": ["cloud", "queues", "plan"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudQueuesPlan"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.queue-plan"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.queues.apply",
+      "path": ["cloud", "queues", "apply"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudQueuesApply"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": ["cloud.queue-receipt"],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "cloud.workers.inventory",
+      "path": ["cloud", "workers", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudWorkersInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.worker-inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.workers.plan",
+      "path": ["cloud", "workers", "plan"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudWorkersPlan"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.worker-plan"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.workers.apply",
+      "path": ["cloud", "workers", "apply"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudWorkersApply"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": ["cloud.worker-receipt"],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "cloud.cron.inventory",
+      "path": ["cloud", "cron", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudCronInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.cron-inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.cron.plan",
+      "path": ["cloud", "cron", "plan"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudCronPlan"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.cron-plan"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "cloud.cron.apply",
+      "path": ["cloud", "cron", "apply"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runCloudCronApply"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": ["cloud.cron-receipt"],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.inventory",
+      "path": ["provider", "cloudflare", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.queues.inventory",
+      "path": ["provider", "cloudflare", "queues", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareQueuesInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.queue-inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.queues.plan",
+      "path": ["provider", "cloudflare", "queues", "plan"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareQueuesPlan"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.queue-plan"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.queues.apply",
+      "path": ["provider", "cloudflare", "queues", "apply"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareQueuesApply"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": ["cloud.queue-receipt"],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.workers.inventory",
+      "path": ["provider", "cloudflare", "workers", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareWorkersInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.worker-inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.workers.plan",
+      "path": ["provider", "cloudflare", "workers", "plan"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareWorkersPlan"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.worker-plan"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.workers.apply",
+      "path": ["provider", "cloudflare", "workers", "apply"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareWorkersApply"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": ["cloud.worker-receipt"],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.cron.inventory",
+      "path": ["provider", "cloudflare", "cron", "inventory"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareCronInventory"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.cron-inventory"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.cron.plan",
+      "path": ["provider", "cloudflare", "cron", "plan"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareCronPlan"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": ["project"],
+      "artifactClasses": ["cloud.cron-plan"],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "provider.cloudflare.cron.apply",
+      "path": ["provider", "cloudflare", "cron", "apply"],
+      "handler": {
+        "exportPath": "./handlers/cloudflare-resources",
+        "exportName": "runProviderCloudflareCronApply"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": ["cloud.cron-receipt"],
+      "riskGuards": ["production"],
+      "json": true
+    }
+  ],
+  "configNamespaces": ["cloud"],
+  "addItemTypes": [],
+  "capabilities": ["cloud.dns", "cloud", "cloud.queues", "cloud.workers", "cloud.cron"],
+  "providerBindings": ["cloud.dns.cloudflare", "cloud.resource.cloudflare"],
+  "reservedRootNames": ["cloud"],
+  "integrity": {
+    "algorithm": "sha256",
+    "manifestHash": "1f3df3be509f727de47217f4554e74c7a576a32115a69422d417f6b87049ea14"
+  }
+}

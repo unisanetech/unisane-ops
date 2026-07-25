@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "unisane.pack-manifest",
+  "packId": "core",
+  "packageName": "unisane",
+  "version": "0.1.0",
+  "packApiVersion": 1,
+  "trust": "first-party",
+  "commands": [
+    {
+      "id": "core.status",
+      "path": ["status"],
+      "handler": {
+        "exportPath": "./handlers/status",
+        "exportName": "runStatus"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "core.inspect-packs",
+      "path": ["inspect", "packs"],
+      "handler": {
+        "exportPath": "./handlers/inspect-packs",
+        "exportName": "runInspectPacks"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    }
+  ],
+  "configNamespaces": [],
+  "addItemTypes": [],
+  "capabilities": [],
+  "providerBindings": [],
+  "reservedRootNames": ["add", "app", "build", "dev", "doctor", "generate", "inspect", "llm", "remove", "sync"],
+  "reservedRootContributors": [
+    { "root": "add", "packId": "framework" },
+    { "root": "app", "packId": "framework" },
+    { "root": "build", "packId": "framework" },
+    { "root": "dev", "packId": "framework" },
+    { "root": "doctor", "packId": "framework" },
+    { "root": "generate", "packId": "framework" },
+    { "root": "inspect", "packId": "framework" },
+    { "root": "llm", "packId": "framework" },
+    { "root": "remove", "packId": "framework" },
+    { "root": "sync", "packId": "framework" }
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "manifestHash": "ae12874cb98507f9f3fd933d9646b83e19d4341ec75e4576e33c7f9916aa568c"
+  }
+}

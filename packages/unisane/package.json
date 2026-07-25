@@ -1,0 +1,106 @@
+{
+  "name": "unisane",
+  "version": "0.1.0",
+  "description": "Canonical CLI host for Unisane Framework and Unisane Ops",
+  "keywords": [
+    "unisane",
+    "cli",
+    "platform",
+    "typescript",
+    "operations",
+    "developer-tools"
+  ],
+  "author": "Unisane <hello@unisane.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unisane/unisane.git",
+    "directory": "unisane-ops/packages/unisane"
+  },
+  "homepage": "https://unisane.dev",
+  "bugs": {
+    "url": "https://github.com/unisane/unisane/issues"
+  },
+  "type": "module",
+  "bin": {
+    "unisane": "./bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "core.manifest.json",
+    "unisane.meta.json"
+  ],
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "scripts": {
+    "build": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --clean",
+    "dev": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --watch",
+    "lint": "eslint src --max-warnings 0",
+    "check-types": "tsc --noEmit",
+    "test": "pnpm build && node --test test/*.test.mjs",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@unisane/cloud": "workspace:*",
+    "@unisane/growth": "workspace:*",
+    "@unisane/ops-engine": "workspace:*",
+    "@unisane/provider-cloudflare": "workspace:*",
+    "tsx": "^4.21.0",
+    "zod": "^3.23.0"
+  },
+  "peerDependencies": {
+    "@unisane/framework-ops": "workspace:*",
+    "@unisane/provider-aws": "workspace:*",
+    "@unisane/provider-google": "workspace:*",
+    "@unisane/provider-meta": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@unisane/framework-ops": {
+      "optional": true
+    },
+    "@unisane/provider-aws": {
+      "optional": true
+    },
+    "@unisane/provider-google": {
+      "optional": true
+    },
+    "@unisane/provider-meta": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@unisane/framework-ops": "workspace:*",
+    "@unisane/provider-aws": "workspace:*",
+    "@unisane/provider-google": "workspace:*",
+    "@unisane/provider-meta": "workspace:*",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.2"
+  },
+  "exports": {
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "import": "./dist/config/index.js",
+      "default": "./dist/config/index.js"
+    },
+    "./core-manifest": "./core.manifest.json",
+    "./handlers/inspect-packs": {
+      "types": "./dist/handlers/inspect-packs.d.ts",
+      "import": "./dist/handlers/inspect-packs.js",
+      "default": "./dist/handlers/inspect-packs.js"
+    },
+    "./handlers/status": {
+      "types": "./dist/handlers/status.d.ts",
+      "import": "./dist/handlers/status.js",
+      "default": "./dist/handlers/status.js"
+    },
+    "./meta": "./unisane.meta.json"
+  },
+  "unisane": {
+    "kind": "tooling",
+    "edition": "oss",
+    "meta": "./unisane.meta.json"
+  }
+}

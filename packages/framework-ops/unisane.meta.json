@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooling",
+  "id": "@unisane/framework-ops",
+  "edition": "oss",
+  "maturity": "beta",
+  "supportedModes": [
+    "full-platform",
+    "headless"
+  ],
+  "requiresPackages": [
+    "@unisane/devtools",
+    "@unisane/ops-engine"
+  ],
+  "requiresTokens": [],
+  "runtimeProfiles": [
+    "local-minimal",
+    "standard-production",
+    "distributed-production"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "exports": [
+    ".",
+    "./handlers/framework",
+    "./pack-manifest"
+  ]
+}

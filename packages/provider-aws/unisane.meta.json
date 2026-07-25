@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooling",
+  "id": "@unisane/provider-aws",
+  "edition": "oss",
+  "maturity": "beta",
+  "supportedModes": [
+    "full-platform",
+    "headless"
+  ],
+  "requiresPackages": [
+    "@unisane/cli-core",
+    "@unisane/cloud",
+    "@unisane/ops-engine"
+  ],
+  "requiresTokens": [],
+  "runtimeProfiles": [
+    "local-minimal",
+    "standard-production",
+    "distributed-production"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "exports": [
+    ".",
+    "./cli",
+    "./handlers/provider-aws",
+    "./pack-manifest"
+  ]
+}

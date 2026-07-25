@@ -1,0 +1,91 @@
+{
+  "name": "@unisane/cloud",
+  "version": "0.1.0",
+  "description": "Provider-neutral cloud operations contracts and workflows for Unisane",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "pack.manifest.json",
+    "unisane.meta.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./contracts": {
+      "types": "./dist/contracts.d.ts",
+      "import": "./dist/contracts.js",
+      "default": "./dist/contracts.js"
+    },
+    "./aws-contracts": {
+      "types": "./dist/aws-contracts.d.ts",
+      "import": "./dist/aws-contracts.js",
+      "default": "./dist/aws-contracts.js"
+    },
+    "./cloudflare-resources": {
+      "types": "./dist/cloudflare-resources.d.ts",
+      "import": "./dist/cloudflare-resources.js",
+      "default": "./dist/cloudflare-resources.js"
+    },
+    "./cloudflare-resource-workflow": {
+      "types": "./dist/cloudflare-resource-workflow.d.ts",
+      "import": "./dist/cloudflare-resource-workflow.js",
+      "default": "./dist/cloudflare-resource-workflow.js"
+    },
+    "./cloudflare-resource-apply": {
+      "types": "./dist/cloudflare-resource-apply.d.ts",
+      "import": "./dist/cloudflare-resource-apply.js",
+      "default": "./dist/cloudflare-resource-apply.js"
+    },
+    "./handlers/dns": {
+      "types": "./dist/handlers/dns.d.ts",
+      "import": "./dist/handlers/dns.js",
+      "default": "./dist/handlers/dns.js"
+    },
+    "./handlers/cloudflare-resources": {
+      "types": "./dist/handlers/cloudflare-resources.d.ts",
+      "import": "./dist/handlers/cloudflare-resources.js",
+      "default": "./dist/handlers/cloudflare-resources.js"
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js",
+      "default": "./dist/runtime.js"
+    },
+    "./pack-manifest": "./pack.manifest.json",
+    "./meta": "./unisane.meta.json"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/contracts.ts src/aws-contracts.ts src/cloudflare-resources.ts src/cloudflare-resource-workflow.ts src/cloudflare-resource-apply.ts src/runtime.ts src/handlers/dns.ts src/handlers/cloudflare-resources.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts src/contracts.ts src/aws-contracts.ts src/cloudflare-resources.ts src/cloudflare-resource-workflow.ts src/cloudflare-resource-apply.ts src/runtime.ts src/handlers/dns.ts src/handlers/cloudflare-resources.ts --format esm --dts --watch",
+    "lint": "eslint src --max-warnings 0",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit",
+    "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
+  },
+  "dependencies": {
+    "@unisane/ops-engine": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.1",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.16"
+  },
+  "unisane": {
+    "kind": "tooling",
+    "edition": "oss",
+    "meta": "./unisane.meta.json"
+  }
+}

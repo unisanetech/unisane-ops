@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "kind": "unisane.pack-manifest",
+  "packId": "growth",
+  "packageName": "@unisane/growth",
+  "version": "0.1.0",
+  "packApiVersion": 1,
+  "trust": "first-party",
+  "commands": [
+    {
+      "id": "growth.root",
+      "path": ["growth"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "spend-impact",
+      "writeTargets": ["project", "secret-store", "remote"],
+      "artifactClasses": [],
+      "riskGuards": ["production", "security-sensitive"],
+      "json": true
+    },
+    {
+      "id": "growth.gtm",
+      "path": ["growth", "gtm"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "secret-store", "remote"],
+      "artifactClasses": [],
+      "riskGuards": ["production", "security-sensitive"],
+      "json": true
+    },
+    {
+      "id": "growth.compat.gtm",
+      "path": ["gtm"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "secret-store", "remote"],
+      "artifactClasses": [],
+      "riskGuards": ["production", "security-sensitive"],
+      "json": true
+    },
+    {
+      "id": "growth.compat.seo",
+      "path": ["seo"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project"],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.compat.marketing",
+      "path": ["marketing"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "spend-impact",
+      "writeTargets": ["project", "secret-store", "remote"],
+      "artifactClasses": [],
+      "riskGuards": ["production", "security-sensitive"],
+      "json": true
+    },
+    {
+      "id": "growth.compat.ads",
+      "path": ["ads"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "spend-impact",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": [],
+      "riskGuards": ["production"],
+      "json": true
+    },
+    {
+      "id": "growth.compat.analytics",
+      "path": ["analytics"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    }
+  ],
+  "configNamespaces": ["growth"],
+  "addItemTypes": [],
+  "capabilities": ["growth"],
+  "providerBindings": [],
+  "reservedRootNames": ["growth"],
+  "integrity": {
+    "algorithm": "sha256",
+    "manifestHash": "94d32ebe43f0601d9874141d0bca62d6badeffaddc7c9c7b33bfaf53e5f33d4f"
+  }
+}

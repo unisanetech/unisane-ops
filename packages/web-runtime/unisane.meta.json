@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooling",
+  "id": "@unisane/web-runtime",
+  "edition": "oss",
+  "maturity": "beta",
+  "supportedModes": [
+    "full-platform",
+    "headless"
+  ],
+  "requiresPackages": [],
+  "requiresTokens": [],
+  "runtimeProfiles": [
+    "local-minimal",
+    "standard-production",
+    "distributed-production"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "exports": [
+    ".",
+    "./contracts",
+    "./conversions",
+    "./conversions/google-ads",
+    "./conversions/meta",
+    "./seo",
+    "./seo/next",
+    "./testing",
+    "./tracking",
+    "./tracking/next",
+    "./tracking/react"
+  ]
+}

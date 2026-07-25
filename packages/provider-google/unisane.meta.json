@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooling",
+  "id": "@unisane/provider-google",
+  "edition": "oss",
+  "maturity": "beta",
+  "supportedModes": [
+    "full-platform",
+    "headless"
+  ],
+  "requiresPackages": [
+    "@unisane/cli-core",
+    "@unisane/growth",
+    "@unisane/ops-engine"
+  ],
+  "requiresTokens": [],
+  "runtimeProfiles": [
+    "local-minimal",
+    "standard-production",
+    "distributed-production"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "exports": [
+    ".",
+    "./cli",
+    "./gtm",
+    "./gtm-auth",
+    "./handlers/provider-google",
+    "./marketing",
+    "./pack-manifest",
+    "./seo"
+  ]
+}

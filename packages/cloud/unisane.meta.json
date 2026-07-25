@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooling",
+  "id": "@unisane/cloud",
+  "edition": "oss",
+  "maturity": "beta",
+  "supportedModes": [
+    "full-platform",
+    "headless"
+  ],
+  "requiresPackages": [
+    "@unisane/ops-engine"
+  ],
+  "requiresTokens": [],
+  "runtimeProfiles": [
+    "local-minimal",
+    "standard-production",
+    "distributed-production"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "exports": [
+    ".",
+    "./aws-contracts",
+    "./cloudflare-resource-apply",
+    "./cloudflare-resource-workflow",
+    "./cloudflare-resources",
+    "./contracts",
+    "./handlers/cloudflare-resources",
+    "./handlers/dns",
+    "./pack-manifest",
+    "./runtime"
+  ]
+}

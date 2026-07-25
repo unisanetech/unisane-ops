@@ -1,0 +1,80 @@
+import path from 'node:path';
+import { writeJson } from '../../../utils/fs.js';
+import type { FetchLike } from '../google-ads/oauth.js';
+import type { GoogleAnalyticsDataCredentials } from './config.js';
+import { runGa4PerformanceReport } from './run-report.js';
+
+export type FetchGa4PerformanceFileOptions = {
+  cwd?: string;
+  platformId: string;
+  output: string;
+  credentials?: GoogleAnalyticsDataCredentials;
+  accessToken?: string;
+  propertyId: string;
+  startDate: string;
+  endDate: string;
+  dimensions: string[];
+  metrics: string[];
+  limit?: number;
+  offset?: number;
+  maxRows?: number;
+  fetchImpl?: FetchLike;
+  dryRun?: boolean;
+};
+
+export type FetchGa4PerformanceFileResult = {
+  output: string;
+  platformId: string;
+  propertyId: string;
+  startDate: string;
+  endDate: string;
+  dimensions: string[];
+  metrics: string[];
+  recordCount: number;
+  pageCount: number;
+  dryRun: boolean;
+};
+
+export async function fetchGa4PerformanceFile(
+  options: FetchGa4PerformanceFileOptions,
+): Promise<FetchGa4PerformanceFileResult> {
+  const cwd = path.resolve(options.cwd ?? process.cwd());
+  const outputPath = resolvePath(cwd, options.output);
+  const performanceFile = await runGa4PerformanceReport({
+    platformId: options.platformId,
+    credentials: options.credentials,
+    accessToken: options.accessToken,
+    propertyId: options.propertyId,
+    startDate: options.startDate,
+    endDate: options.endDate,
+    dimensions: options.dimensions,
+    metrics: options.metrics,
+    limit: options.limit,
+    offset: options.offset,
+    maxRows: options.maxRows,
+    fetchImpl: options.fetchImpl,
+  });
+
+  if (!options.dryRun) {
+    await writeJson(outputPath, performanceFile);
+  }
+
+  return {
+    output: path.relative(cwd, outputPath),
+    platformId: performanceFile.platformId,
+    propertyId: options.propertyId,
+    startDate: options.startDate,
+    endDate: options.endDate,
+    dimensions: options.dimensions,
+    metrics: options.metrics,
+    recordCount: performanceFile.records.length,
+    pageCount: new Set(performanceFile.records.map((record) => record.pagePath)).size,
+    dryRun: options.dryRun === true,
+  };
+}
+
+function resolvePath(cwd: string, maybeRelativePath: string): string {
+  return path.isAbsolute(maybeRelativePath)
+    ? maybeRelativePath
+    : path.resolve(cwd, maybeRelativePath);
+}

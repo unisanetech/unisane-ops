@@ -1,0 +1,83 @@
+{
+  "name": "@unisane/provider-google",
+  "version": "0.1.0",
+  "description": "Google provider-family connection and control-plane operations for Unisane Ops",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "pack.manifest.json",
+    "unisane.meta.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./gtm": {
+      "types": "./dist/google/tag-manager/index.d.ts",
+      "import": "./dist/google/tag-manager/index.js",
+      "default": "./dist/google/tag-manager/index.js"
+    },
+    "./gtm-auth": {
+      "types": "./dist/cli/gtm-auth.d.ts",
+      "import": "./dist/cli/gtm-auth.js",
+      "default": "./dist/cli/gtm-auth.js"
+    },
+    "./cli": {
+      "types": "./dist/cli/register.d.ts",
+      "import": "./dist/cli/register.js",
+      "default": "./dist/cli/register.js"
+    },
+    "./handlers/provider-google": {
+      "types": "./dist/cli/handler.d.ts",
+      "import": "./dist/cli/handler.js",
+      "default": "./dist/cli/handler.js"
+    },
+    "./pack-manifest": "./pack.manifest.json",
+    "./marketing": {
+      "types": "./dist/google/marketing/index.d.ts",
+      "import": "./dist/google/marketing/index.js",
+      "default": "./dist/google/marketing/index.js"
+    },
+    "./seo": {
+      "types": "./dist/google/seo/index.d.ts",
+      "import": "./dist/google/seo/index.js",
+      "default": "./dist/google/seo/index.js"
+    },
+    "./meta": "./unisane.meta.json"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/google/tag-manager/index.ts src/google/marketing/index.ts src/google/seo/index.ts src/cli/register.ts src/cli/handler.ts src/cli/gtm-auth.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts src/google/tag-manager/index.ts src/google/marketing/index.ts src/google/seo/index.ts src/cli/register.ts src/cli/handler.ts src/cli/gtm-auth.ts --format esm --dts --watch",
+    "lint": "eslint src --max-warnings 0",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit",
+    "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
+  },
+  "dependencies": {
+    "@unisane/cli-core": "workspace:*",
+    "@unisane/growth": "workspace:*",
+    "@unisane/ops-engine": "workspace:*",
+    "commander": "^12.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.1",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.16"
+  },
+  "unisane": {
+    "kind": "tooling",
+    "edition": "oss",
+    "meta": "./unisane.meta.json"
+  }
+}

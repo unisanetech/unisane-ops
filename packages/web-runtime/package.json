@@ -1,0 +1,111 @@
+{
+  "name": "@unisane/web-runtime",
+  "version": "0.1.0",
+  "description": "Portable web tracking, conversions, delivery adapters, and SEO runtime for Unisane and standalone applications",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "unisane.meta.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./contracts": {
+      "types": "./dist/contracts.d.ts",
+      "import": "./dist/contracts.js",
+      "default": "./dist/contracts.js"
+    },
+    "./tracking": {
+      "types": "./dist/tracking/index.d.ts",
+      "import": "./dist/tracking/index.js",
+      "default": "./dist/tracking/index.js"
+    },
+    "./tracking/react": {
+      "types": "./dist/tracking/react.d.ts",
+      "import": "./dist/tracking/react.js",
+      "default": "./dist/tracking/react.js"
+    },
+    "./tracking/next": {
+      "types": "./dist/tracking/next.d.ts",
+      "import": "./dist/tracking/next.js",
+      "default": "./dist/tracking/next.js"
+    },
+    "./conversions": {
+      "types": "./dist/conversions/index.d.ts",
+      "import": "./dist/conversions/index.js",
+      "default": "./dist/conversions/index.js"
+    },
+    "./conversions/google-ads": {
+      "types": "./dist/conversions/google-ads/index.d.ts",
+      "import": "./dist/conversions/google-ads/index.js",
+      "default": "./dist/conversions/google-ads/index.js"
+    },
+    "./conversions/meta": {
+      "types": "./dist/conversions/meta/index.d.ts",
+      "import": "./dist/conversions/meta/index.js",
+      "default": "./dist/conversions/meta/index.js"
+    },
+    "./seo": {
+      "types": "./dist/seo/index.d.ts",
+      "import": "./dist/seo/index.js",
+      "default": "./dist/seo/index.js"
+    },
+    "./seo/next": {
+      "types": "./dist/seo/next.d.ts",
+      "import": "./dist/seo/next.js",
+      "default": "./dist/seo/next.js"
+    },
+    "./testing": {
+      "types": "./dist/testing.d.ts",
+      "import": "./dist/testing.js",
+      "default": "./dist/testing.js"
+    },
+    "./meta": "./unisane.meta.json"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/contracts.ts src/tracking/index.ts src/tracking/react.ts src/tracking/next.ts src/conversions/index.ts src/conversions/google-ads/index.ts src/conversions/meta/index.ts src/seo/index.ts src/seo/next.ts src/testing.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts src/contracts.ts src/tracking/index.ts src/tracking/react.ts src/tracking/next.ts src/conversions/index.ts src/conversions/google-ads/index.ts src/conversions/meta/index.ts src/seo/index.ts src/seo/next.ts src/testing.ts --format esm --dts --watch",
+    "lint": "eslint src --max-warnings 0",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit",
+    "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
+  },
+  "peerDependencies": {
+    "next": "16.0.10",
+    "react": "^19.2.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/react": "^19.2.2",
+    "eslint": "^9.39.1",
+    "next": "16.0.10",
+    "react": "^19.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.16"
+  },
+  "unisane": {
+    "kind": "tooling",
+    "edition": "oss",
+    "meta": "./unisane.meta.json"
+  }
+}

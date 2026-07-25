@@ -1,0 +1,62 @@
+{
+  "name": "@unisane/provider-cloudflare",
+  "version": "0.1.0",
+  "description": "Cloudflare provider-family implementations for Unisane Cloud operations",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "pack.manifest.json",
+    "unisane.meta.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./handlers/connection": {
+      "types": "./dist/handlers/connection.d.ts",
+      "import": "./dist/handlers/connection.js",
+      "default": "./dist/handlers/connection.js"
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js",
+      "default": "./dist/runtime.js"
+    },
+    "./pack-manifest": "./pack.manifest.json",
+    "./meta": "./unisane.meta.json"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/runtime.ts src/handlers/connection.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts src/runtime.ts src/handlers/connection.ts --format esm --dts --watch",
+    "lint": "eslint src --max-warnings 0",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit",
+    "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
+  },
+  "dependencies": {
+    "@unisane/cloud": "workspace:*",
+    "@unisane/ops-engine": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.1",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.16"
+  },
+  "unisane": {
+    "kind": "tooling",
+    "edition": "oss",
+    "meta": "./unisane.meta.json"
+  }
+}
