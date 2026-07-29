@@ -15,6 +15,8 @@ severity: MUST
 
 ## Changelog
 
+- `2026-07-29`: Replaced the absent program-index command with Skopos-selected Project
+  Memory validation.
 - `2026-07-29`: Opened the MUST gap for the missing transport-neutral action contract,
   MCP server, AI-host distribution, and managed hosted-platform boundary over the
   otherwise correct Ops package/engine foundation.
@@ -83,7 +85,7 @@ Without an explicit boundary, future work could:
 - hosted job retry/cancellation/rate-limit proof
 - repository-wide owner/import/secret-schema detectors
 - `pnpm docs:core:check`
-- `pnpm program:index:check`
+- Project Memory validation selected by the owning Skopos Task
 
 ## Linked Docs
 

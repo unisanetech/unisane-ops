@@ -15,6 +15,8 @@ status: in-progress
 
 ## Changelog
 
+- `2026-07-29`: Replaced retired workpack/program-index verification with per-slice
+  Skopos Task Evidence and closure.
 - `2026-07-29`: Tightened P120 execution to delete-first slice-local replacement.
   Retired owners and related residue must reach zero within each slice before the next
   begins; aggregate closure may validate and release but may not carry deferred cleanup.
@@ -102,8 +104,7 @@ Receipts expose machine artifacts, and Schedule omits expected automation contro
 
 ## Verification
 
-- `pnpm workpack:validate -- --file docs/work/archive/tasks/contracts/P120-W1.convergence.json`
-- `pnpm workpack:inventory -- --file docs/work/archive/tasks/contracts/P120-W1.convergence.json`
+- per-slice Task admission, impact, Evidence, and closure through Skopos
 - focused package behavior and type proof selected by Skopos for each implementation cut
 - plain-project and Framework-project onboarding scenario fixtures
 - manifest/source/build/help parity proof
@@ -114,7 +115,6 @@ Receipts expose machine artifacts, and Schedule omits expected automation contro
 - per-slice delete-first and zero-residue convergence proof before downstream slice work
 - aggregate closure inventory proving no deferred legacy-cleanup scope remains
 - `pnpm docs:core:check`
-- `pnpm program:index:check`
 
 ## Linked Docs
 
