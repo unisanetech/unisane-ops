@@ -37,7 +37,7 @@ export function googleAuthEnvEntries(
       kind: 'bootstrap-local-secret',
       required: true,
       secret: false,
-      value: env.GOOGLE_OAUTH_CLIENT_ID ?? env.GOOGLE_CLIENT_ID,
+      value: env.GOOGLE_OAUTH_CLIENT_ID,
       description: 'Shared Google OAuth client id for local devtool login.',
       example: '<google-oauth-client-id>',
     }),
@@ -72,20 +72,5 @@ export function googleAuthEnvEntries(
       example: '<SECRET>',
     }),
   ];
-  for (const fallback of namespace.fallbackClientSecretEnvs ?? []) {
-    if (fallback === namespace.defaultClientSecretEnv) continue;
-    entries.push(
-      publicControlPlaneEnvEntry({
-        name: fallback,
-        kind: 'fallback-debug',
-        required: false,
-        secret: true,
-        value: env[fallback],
-        description:
-          'Compatibility fallback for older Google OAuth secret setup. Prefer GOOGLE_OAUTH_CLIENT_SECRET.',
-        example: '<SECRET>',
-      }),
-    );
-  }
   return entries;
 }

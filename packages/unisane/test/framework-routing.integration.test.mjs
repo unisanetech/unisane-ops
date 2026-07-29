@@ -58,7 +58,7 @@ test('Growth roots select the exact Growth pack', async () => {
   assert.equal(selectedCommand, 'growth.root');
 });
 
-test('legacy Growth roots are explicit pack aliases', async () => {
+test('retired Growth roots fail closed', async () => {
   let selectedCommand = null;
   const code = await runCanonicalCli(['seo', 'doctor'], {
     loadGraph: loadFirstPartyPackGraph,
@@ -82,8 +82,8 @@ test('legacy Growth roots are explicit pack aliases', async () => {
     },
   });
 
-  assert.equal(code, 0);
-  assert.equal(selectedCommand, 'growth.compat.seo');
+  assert.equal(code, 1);
+  assert.equal(selectedCommand, null);
 });
 
 test('provider, GTM, and UI routes select exact owner packs', async () => {

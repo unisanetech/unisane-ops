@@ -59,7 +59,6 @@ export type GoogleAuthNamespaceConfig = {
   authHomeDir: string;
   defaultAccessTokenEnv: string;
   defaultClientSecretEnv: string;
-  fallbackClientSecretEnvs?: readonly string[];
   defaultScopes?: readonly string[];
   authSectionTitle?: string;
   authorizationReceivedMessage?: string;
@@ -81,7 +80,6 @@ export const GOOGLE_AUTH_NAMESPACE: GoogleAuthNamespaceConfig = {
   authHomeDir: 'google-auth',
   defaultAccessTokenEnv: 'GOOGLE_ACCESS_TOKEN',
   defaultClientSecretEnv: 'GOOGLE_OAUTH_CLIENT_SECRET',
-  fallbackClientSecretEnvs: ['GOOGLE_CLIENT_SECRET'],
   authSectionTitle: 'Google OAuth',
   tokenMissingErrorPrefix: 'GOOGLE_ACCESS_TOKEN_MISSING',
 };
@@ -99,7 +97,6 @@ export const MARKETING_GOOGLE_AUTH_NAMESPACE: GoogleAuthNamespaceConfig = {
   authHomeDir: 'marketing-auth',
   defaultAccessTokenEnv: 'GOOGLE_MARKETING_ACCESS_TOKEN',
   defaultClientSecretEnv: 'GOOGLE_OAUTH_CLIENT_SECRET',
-  fallbackClientSecretEnvs: ['GOOGLE_MARKETING_OAUTH_CLIENT_SECRET', 'GOOGLE_CLIENT_SECRET'],
   defaultScopes: [
     'https://www.googleapis.com/auth/tagmanager.readonly',
     'https://www.googleapis.com/auth/adwords',

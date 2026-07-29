@@ -41,7 +41,6 @@ const GOOGLE_TAG_MANAGER_AUTH_NAMESPACE: GoogleAuthNamespaceConfig = {
   authHomeDir: 'gtm-auth',
   defaultAccessTokenEnv: 'GOOGLE_TAG_MANAGER_ACCESS_TOKEN',
   defaultClientSecretEnv: 'GOOGLE_OAUTH_CLIENT_SECRET',
-  fallbackClientSecretEnvs: ['GOOGLE_TAG_MANAGER_OAUTH_CLIENT_SECRET', 'GOOGLE_CLIENT_SECRET'],
   defaultScopes: GOOGLE_TAG_MANAGER_AUTH_SCOPES,
   authSectionTitle: 'Google Tag Manager OAuth',
   authorizationFailedMessage:

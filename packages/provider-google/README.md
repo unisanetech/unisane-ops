@@ -26,4 +26,4 @@ unisane provider google ...
 ```
 
 Growth owns `unisane growth gtm ...` presentation and calls this provider through the
-canonical host binding. Devtools Google and GTM roots are thin compatibility facades.
+canonical host binding. No Devtools Google or GTM command roots remain.

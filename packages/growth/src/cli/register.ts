@@ -20,10 +20,6 @@ export function registerGrowthCommands(program: Command): void {
   registerFamilies(growth);
 }
 
-export function registerGrowthCompatibilityCommands(program: Command): void {
-  registerFamilies(program);
-}
-
 export {
   registerAdsCommands,
   registerAnalyticsCommands,

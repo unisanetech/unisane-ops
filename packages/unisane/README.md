@@ -92,9 +92,8 @@ Devtools dependency or catch-all subprocess fallback.
 The Cloud pack directly owns DNS plus Cloudflare resource inventory/readiness/environment
 and Queue/Worker/Cron plan/apply. The Cloudflare provider pack owns connection checking
 and all provider transport. The host constructs it lazily for network inventory/apply
-and does not load it for offline import, plan, env, or check. Historical
-`unisane-devtools cloudflare ...` resource commands remain time-bounded compatibility
-consumers over the same Cloud workflows.
+and does not load it for offline import, plan, env, or check. `unisane cloud ...` and
+`unisane provider cloudflare ...` are the only live Cloudflare command surfaces.
 
 The `unisane` package is the only owner of the public `unisane` executable.
 `@unisane/devtools` publishes only the internal `unisane-devtools` executable.

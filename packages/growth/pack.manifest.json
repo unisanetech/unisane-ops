@@ -32,71 +32,6 @@
       "artifactClasses": [],
       "riskGuards": ["production", "security-sensitive"],
       "json": true
-    },
-    {
-      "id": "growth.compat.gtm",
-      "path": ["gtm"],
-      "handler": {
-        "exportPath": "./handlers/growth",
-        "exportName": "runGrowthCommand"
-      },
-      "maximumEffect": "write",
-      "writeTargets": ["project", "secret-store", "remote"],
-      "artifactClasses": [],
-      "riskGuards": ["production", "security-sensitive"],
-      "json": true
-    },
-    {
-      "id": "growth.compat.seo",
-      "path": ["seo"],
-      "handler": {
-        "exportPath": "./handlers/growth",
-        "exportName": "runGrowthCommand"
-      },
-      "maximumEffect": "write",
-      "writeTargets": ["project"],
-      "artifactClasses": [],
-      "riskGuards": [],
-      "json": true
-    },
-    {
-      "id": "growth.compat.marketing",
-      "path": ["marketing"],
-      "handler": {
-        "exportPath": "./handlers/growth",
-        "exportName": "runGrowthCommand"
-      },
-      "maximumEffect": "spend-impact",
-      "writeTargets": ["project", "secret-store", "remote"],
-      "artifactClasses": [],
-      "riskGuards": ["production", "security-sensitive"],
-      "json": true
-    },
-    {
-      "id": "growth.compat.ads",
-      "path": ["ads"],
-      "handler": {
-        "exportPath": "./handlers/growth",
-        "exportName": "runGrowthCommand"
-      },
-      "maximumEffect": "spend-impact",
-      "writeTargets": ["project", "remote"],
-      "artifactClasses": [],
-      "riskGuards": ["production"],
-      "json": true
-    },
-    {
-      "id": "growth.compat.analytics",
-      "path": ["analytics"],
-      "handler": {
-        "exportPath": "./handlers/growth",
-        "exportName": "runGrowthCommand"
-      },
-      "maximumEffect": "read-network",
-      "writeTargets": [],
-      "artifactClasses": [],
-      "riskGuards": [],
-      "json": true
     }
   ],
   "configNamespaces": ["growth"],
@@ -106,6 +41,6 @@
   "reservedRootNames": ["growth"],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "94d32ebe43f0601d9874141d0bca62d6badeffaddc7c9c7b33bfaf53e5f33d4f"
+    "manifestHash": "1b199e0e92f0827046cca9c622783da1eac8e0330234816d85f95f1b214c9793"
   }
 }

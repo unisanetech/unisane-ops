@@ -28,24 +28,14 @@ export async function loginGoogleAuthCommand(options: GoogleAuthCliOptions): Pro
     const profile = normalizeProfileName(options.profile, options);
     const existing = getProfile(profile, options);
     const clientId =
-      options.clientId?.trim() ||
-      existing?.clientId ||
-      process.env.GOOGLE_OAUTH_CLIENT_ID?.trim() ||
-      process.env.GOOGLE_CLIENT_ID?.trim();
+      options.clientId?.trim() || existing?.clientId || process.env.GOOGLE_OAUTH_CLIENT_ID?.trim();
     if (!clientId) {
       throw new Error(
         `[${errorCode(options, 'CLIENT_ID_REQUIRED')}] Pass --client-id <oauth-client-id> for first-time login, or set GOOGLE_OAUTH_CLIENT_ID.`,
       );
     }
     const clientSecretEnv = options.clientSecretEnv ?? namespace.defaultClientSecretEnv;
-    const clientSecret =
-      process.env[clientSecretEnv]?.trim() ||
-      (!options.clientSecretEnv
-        ? namespace.fallbackClientSecretEnvs
-            ?.map((envName) => process.env[envName]?.trim())
-            .find((value): value is string => Boolean(value))
-        : undefined) ||
-      undefined;
+    const clientSecret = process.env[clientSecretEnv]?.trim() || undefined;
     const scopes = parseScopes(options.scopes, options);
     const store = resolveLoginStore(options, existing);
     if (store === 'file') assertPlaintextStoreAllowed(options);

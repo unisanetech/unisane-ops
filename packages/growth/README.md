@@ -40,12 +40,5 @@ unisane growth analytics ...
 unisane growth gtm ...
 ```
 
-The former root commands (`unisane seo`, `unisane marketing`, `unisane ads`,
-`unisane analytics`, and `unisane gtm`) remain explicit compatibility aliases for the
-current pre-1.0 migration window. New automation and documentation must use
-`unisane growth ...`.
 Provider-backed commands resolve exact typed bindings from the canonical host; offline
 commands do not load provider SDKs.
-
-`@unisane/tag-manager-google` remains a compatibility coordinate for existing consumers
-and should not be used for new code.

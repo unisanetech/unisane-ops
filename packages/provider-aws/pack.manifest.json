@@ -19,19 +19,6 @@
       "artifactClasses": [],
       "riskGuards": ["production", "security-sensitive"],
       "json": true
-    },
-    {
-      "id": "provider.aws.compat",
-      "path": ["aws"],
-      "handler": {
-        "exportPath": "./handlers/provider-aws",
-        "exportName": "runProviderAwsCommand"
-      },
-      "maximumEffect": "write",
-      "writeTargets": ["project", "secret-store", "remote"],
-      "artifactClasses": [],
-      "riskGuards": ["production", "security-sensitive"],
-      "json": true
     }
   ],
   "configNamespaces": ["provider-aws"],
@@ -41,6 +28,6 @@
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "fc98dfc2c2896066d6466c1d74dcc38d490f0797a19cd02ba9d9a79a603f71de"
+    "manifestHash": "29bd6ed58a39b866dec50eb0d5afbb0ba0f15b08f2381d58f1cfd3458ee14902"
   }
 }

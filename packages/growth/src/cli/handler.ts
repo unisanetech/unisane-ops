@@ -1,7 +1,7 @@
 import { Command, CommanderError } from 'commander';
 import type { PackCommandContext, PackCommandResult } from '@unisane/ops-engine/pack';
 import { runWithGrowthProviderRuntime } from './provider-runtime.js';
-import { registerGrowthCommands, registerGrowthCompatibilityCommands } from './register.js';
+import { registerGrowthCommands } from './register.js';
 
 interface CapturedExecution {
   exitCode: number;
@@ -71,7 +71,6 @@ export async function runGrowthCommand(context: PackCommandContext): Promise<Pac
       writeErr: (value) => process.stderr.write(value),
     });
     registerGrowthCommands(program);
-    registerGrowthCompatibilityCommands(program);
     if (!context.runtime) {
       throw new Error(
         '[GROWTH_COMMAND_RUNTIME_MISSING] Growth commands require the canonical pack runtime.',

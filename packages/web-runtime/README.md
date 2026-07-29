@@ -21,19 +21,5 @@ peers; applications install them only when they use the matching adapter entrypo
 - `@unisane/web-runtime/contracts`
 - `@unisane/web-runtime/testing`
 
-## Migration
-
-| Previous coordinate                        | Canonical coordinate                          |
-| ------------------------------------------ | --------------------------------------------- |
-| `@unisane/web-tracking`                    | `@unisane/web-runtime/tracking`               |
-| `@unisane/web-tracking/react`              | `@unisane/web-runtime/tracking/react`         |
-| `@unisane/web-tracking/next`               | `@unisane/web-runtime/tracking/next`          |
-| `@unisane/web-conversions`                 | `@unisane/web-runtime/conversions`            |
-| `@unisane/web-conversions/testing`         | `@unisane/web-runtime/testing`                |
-| `@unisane/web-conversions-google-ads`      | `@unisane/web-runtime/conversions/google-ads` |
-| `@unisane/web-conversions-meta-capi`       | `@unisane/web-runtime/conversions/meta`       |
-| pure `@unisane/web-seo` helpers and types  | `@unisane/web-runtime/seo`                    |
-| Next metadata, robots, and sitemap helpers | `@unisane/web-runtime/seo/next`               |
-
 GTM management workflows, Growth operations, reporting, campaign decisions, and
 persistent public URL state are deliberately outside Web Runtime.

@@ -19,19 +19,6 @@
       "artifactClasses": [],
       "riskGuards": ["production", "security-sensitive"],
       "json": true
-    },
-    {
-      "id": "provider.meta.compat",
-      "path": ["meta"],
-      "handler": {
-        "exportPath": "./handlers/provider-meta",
-        "exportName": "runProviderMetaCommand"
-      },
-      "maximumEffect": "spend-impact",
-      "writeTargets": ["project", "secret-store", "remote"],
-      "artifactClasses": [],
-      "riskGuards": ["production", "security-sensitive"],
-      "json": true
     }
   ],
   "configNamespaces": ["provider-meta"],
@@ -41,6 +28,6 @@
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "08556497381c648996b0f48ce6fdc437d08ae730dd77fc7658e52153cd8952f1"
+    "manifestHash": "c406313947dbee2b849c103c5c71d75f86ef1231f0803465d56ef17e2544aa04"
   }
 }
