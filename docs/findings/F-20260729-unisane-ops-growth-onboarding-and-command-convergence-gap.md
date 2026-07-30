@@ -15,6 +15,10 @@ status: in-progress
 
 ## Changelog
 
+- `2026-07-30`: Closed the P120-W1 onboarding/config/Google-connection/readiness cut.
+  The finding remains active only for W2 instrumentation, W3 console separation, and W4
+  team/CI credential lifecycle; those later slices must not reopen the deleted W1
+  owners.
 - `2026-07-29`: Replaced retired workpack/program-index verification with per-slice
   Skopos Task Evidence and closure.
 - `2026-07-29`: Tightened P120 execution to delete-first slice-local replacement.
@@ -104,6 +108,7 @@ Receipts expose machine artifacts, and Schedule omits expected automation contro
 
 ## Verification
 
+- P120-W1 completion evidence is archived in `docs/work/archive/tasks/P120-W1.md`.
 - per-slice Task admission, impact, Evidence, and closure through Skopos
 - focused package behavior and type proof selected by Skopos for each implementation cut
 - plain-project and Framework-project onboarding scenario fixtures

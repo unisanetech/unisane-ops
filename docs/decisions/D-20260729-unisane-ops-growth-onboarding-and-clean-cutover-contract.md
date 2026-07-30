@@ -14,6 +14,10 @@ status: accepted
 
 ## Changelog
 
+- `2026-07-30`: Implemented the W1 decision slice: one executable Ops adoption
+  lifecycle, canonical Growth config, Provider Google connection/grant/resource
+  lifecycle, shared readiness/action contracts, one-shot migration boundary, first-party
+  adoption, and deletion of replaced setup/auth/config/token/readiness owners.
 - `2026-07-29`: Made clean replacement slice-local rather than an end-stage cleanup.
   Every slice deletes its retired owner/export/route first, repairs consumers against
   the one replacement, removes all related residue, and passes a zero-residue gate

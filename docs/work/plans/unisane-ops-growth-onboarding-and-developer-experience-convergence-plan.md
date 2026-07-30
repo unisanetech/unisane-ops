@@ -23,6 +23,10 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-07-30`: Closed P120-W1. The single Ops adoption lifecycle, canonical Growth
+  intent, Provider Google connection/grant/resource lifecycle, derived readiness, clean
+  migration boundary, first-party adoption, and retired-owner deletion are executable.
+  W2-W4 remain active, and W3 still blocks the coordinated public cutover.
 - `2026-07-29`: Replaced end-loaded cleanup wording with a slice-local hard-replacement
   protocol. Every P120 slice now deletes its retired owner/route/export first, repairs
   consumers against the one canonical replacement, removes tests/docs/config/artifacts,
@@ -57,10 +61,9 @@ This plan owns the target onboarding and developer-experience convergence for Op
 Growth. It does not replace the package/repository architecture plan or provider
 control-plane safety.
 
-The simplified commands and config described here are target state until a closed P120
-workpack proves them. `docs/guides/manage-marketing-devtool-with-llm.md` and the live
-pack manifests remain current command authority during implementation. Do not tell a
-user to run a target command merely because it appears in this plan.
+The W1 lifecycle and configuration described here are executable current state and are
+taught by the current guides and pack manifests. W2-W4 instrumentation, console, hosted,
+team, and automation behavior remains target state until its owning workpack closes.
 
 ## Current Console Audit
 
@@ -829,6 +832,8 @@ implements the four lifecycle handlers at `src/handlers/init.ts`,
 ## Workstreams
 
 ### P120-W1: atomic onboarding and command convergence
+
+Status: completed on `2026-07-30`.
 
 Deliver the public replacement as one coordinated major-release cut:
 

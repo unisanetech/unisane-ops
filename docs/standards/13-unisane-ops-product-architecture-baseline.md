@@ -15,6 +15,10 @@ Canonical product, package, repository, command, and extension boundaries for Un
 
 ## Changelog
 
+- `2026-07-30`: Landed the P120-W1 architecture: one Ops adoption lifecycle, canonical
+  Growth intent, shared readiness/action contracts, one Provider Google connection
+  lifecycle, one-shot migration with retired-schema runtime rejection, and no replaced
+  setup/auth/config/token/readiness owner.
 - `2026-07-29`: Made the clean cut delete-first and slice-local: each replacement slice
   removes its retired owner and all residue before the next begins; the final release
   stage aggregates proof and never serves as a legacy-cleanup phase.
@@ -122,22 +126,22 @@ The admitted resource apply host is local, non-production, and single-developer 
 The headless marketing control plane, SEO research, GTM presentation, and console state
 are Growth-owned. Google
 measurement, keyword, marketing-report transport, and live campaign mutation execution
-are Provider-Google-owned. Meta connection/auth, Graph discovery/inventory, Ads report
-transport, asset upload, and guarded campaign mutation execution are
-Provider-Meta-owned. Growth selects no provider implementation; the command host injects
-the exact report, discovery, asset, and live-execution contracts.
+are Provider-Google-owned. Provider Meta currently exposes transport implementation
+only; it has no advertised provider CLI or canonical connection adapter, so Meta-backed
+Growth operations fail closed before credentials are needed. Growth selects no provider
+implementation; the command host injects exact provider contracts.
 Devtools retains only thin compatibility registrars for migrated provider and Growth
 roots; it does not own their implementations or canonical runtime composition.
 Remaining cloud commands inside `@unisane/devtools` remain transitional implementation
 state, not target-package proof.
 The canonical `unisane` host loads exact sealed packs for Cloud, Growth, AWS, Cloudflare,
-Google, Meta, and optional Framework commands. It has no Devtools dependency or catch-all
+Google, and optional Framework commands. It has no Devtools dependency or catch-all
 subprocess fallback. Devtools publishes only `unisane-devtools`.
 
-The existing expert-first Growth setup/auth/config/readiness experience remains current
-command state. P120 is the admitted target replacement but is not executable proof yet.
-Its simplified Ops adoption lifecycle must not be taught as current until the
-implementation, migration, deletion, and release gates close.
+The P120-W1 Ops adoption, Growth config, Google connection, and aggregate readiness
+lifecycle is current executable state. P120-W2 instrumentation reconciliation, P120-W3
+console separation, and P120-W4 team/CI credential lifecycle remain admitted target
+state and must not be taught as implemented before their workpacks close.
 
 This document owns:
 
