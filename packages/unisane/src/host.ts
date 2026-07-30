@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
   assertPackCommandResult,
   resolvePackCommand,
@@ -20,6 +20,7 @@ const TRUSTED_PACKAGES = [
   '@unisane/cloud',
   '@unisane/framework-ops',
   '@unisane/growth',
+  '@unisane/ops-console',
   '@unisane/provider-aws',
   '@unisane/provider-cloudflare',
   '@unisane/provider-google',
@@ -77,7 +78,11 @@ export function loadFirstPartyPackGraph(): readonly PackManifest[] {
     ),
     loadVerifiedManifest(growthManifestPath, resolve(dirname(growthManifestPath), 'package.json')),
   ];
-  for (const packageName of ['@unisane/provider-aws', '@unisane/provider-google'] as const) {
+  for (const packageName of [
+    '@unisane/ops-console',
+    '@unisane/provider-aws',
+    '@unisane/provider-google',
+  ] as const) {
     try {
       const manifestPath = require.resolve(`${packageName}/pack-manifest`);
       manifests.push(
@@ -255,6 +260,20 @@ async function loadExactHandler(command: PackCommandDescriptor): Promise<PackCom
     return module.runGrowthCommand;
   }
   if (
+    command.handler.exportPath === './handlers/console' &&
+    command.handler.exportName === 'runGrowthConsole'
+  ) {
+    const handlerPath = require.resolve('@unisane/ops-console/handlers/console');
+    const module = (await import(pathToFileURL(handlerPath).href)) as Record<string, unknown>;
+    const handler = module.runGrowthConsole;
+    if (typeof handler !== 'function') {
+      throw new Error(
+        '[OPS_PACK_HANDLER_INVALID] @unisane/ops-console does not export runGrowthConsole.',
+      );
+    }
+    return handler as PackCommandHandler;
+  }
+  if (
     command.handler.exportPath === './handlers/provider-aws' &&
     command.handler.exportName === 'runProviderAwsCommand'
   ) {
@@ -320,10 +339,12 @@ Canonical commands:
   unisane provider cloudflare queues|workers|cron inventory|plan|apply [options]
   unisane provider aws <command> [options]
   unisane provider google <command> [options]
+  unisane growth console [--cwd <path>] [--host <host>] [--port <port>]
   unisane growth gtm <command> [options]
 
 Framework commands are contributed by the optional @unisane/framework-ops pack.
 Growth commands are contributed by @unisane/growth.
+The human console is contributed by the optional @unisane/ops-console pack.
 Provider expert commands are contributed by their installed provider packs.`);
 }
 

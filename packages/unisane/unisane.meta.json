@@ -30,7 +30,12 @@
   "exports": [
     "./config",
     "./core-manifest",
+    "./handlers/add",
+    "./handlers/check",
+    "./handlers/connect",
+    "./handlers/init",
     "./handlers/inspect-packs",
+    "./handlers/migrate-growth-config",
     "./handlers/status"
   ]
 }

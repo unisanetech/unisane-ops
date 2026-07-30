@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "tooling",
-  "id": "@unisane/growth",
+  "id": "@unisane/ops-console",
   "edition": "oss",
   "maturity": "beta",
   "supportedModes": [
@@ -9,7 +9,9 @@
     "headless"
   ],
   "requiresPackages": [
-    "@unisane/ops-engine"
+    "@unisane/growth",
+    "@unisane/ops-engine",
+    "@unisane/ui"
   ],
   "requiresTokens": [],
   "runtimeProfiles": [
@@ -22,13 +24,7 @@
   ],
   "exports": [
     ".",
-    "./cli",
-    "./console",
-    "./contracts",
-    "./gtm",
-    "./handlers/growth",
-    "./marketing",
-    "./pack-manifest",
-    "./seo"
+    "./handlers/console",
+    "./pack-manifest"
   ]
 }

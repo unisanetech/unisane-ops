@@ -2,10 +2,13 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { buildMarketingConsoleApp, buildMarketingConsoleState } from '../index.js';
+import {
+  buildMarketingConsoleState,
+  loadGrowthConsoleExecutionContext,
+  runWithGrowthConsoleRuntime,
+} from '@unisane/growth/console';
 import { writeMarketingProviderReportPull } from '@unisane/growth/marketing';
-import { runWithGrowthProviderRuntime } from '../../provider-runtime.js';
-import { loadMarketingExecutionContext } from '../../project-context.js';
+import { buildMarketingConsoleApp } from './build.js';
 
 function createTempProject(): string {
   const cwd = mkdtempSync(path.join(tmpdir(), 'unisane-marketing-console-'));
@@ -153,7 +156,7 @@ function runWithTestProjectContext<T>(cwd: string, run: () => T): T {
       };
     },
   };
-  return runWithGrowthProviderRuntime(runtime as never, cwd, run);
+  return runWithGrowthConsoleRuntime(runtime as never, cwd, run);
 }
 
 function writeProviderInput(cwd: string): string {
@@ -608,7 +611,7 @@ describe('marketing console', () => {
     const cwd = createTempProject();
     tempProjects.push(cwd);
     await runWithTestProjectContext(cwd, async () => {
-      const loaded = await loadMarketingExecutionContext();
+      const loaded = await loadGrowthConsoleExecutionContext();
       writeMarketingProviderReportPull(loaded.config, {
         cwd,
         provider: 'googleAds',
@@ -825,7 +828,7 @@ describe('marketing console', () => {
     const cwd = createTempProject();
     tempProjects.push(cwd);
     await runWithTestProjectContext(cwd, async () => {
-      const loaded = await loadMarketingExecutionContext();
+      const loaded = await loadGrowthConsoleExecutionContext();
       writeMarketingProviderReportPull(loaded.config, {
         cwd,
         provider: 'searchConsole',

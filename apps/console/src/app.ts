@@ -1,4 +1,4 @@
-import type { MarketingConsoleState } from '../contracts/marketing-console-state.js';
+import type { MarketingConsoleState } from '@unisane/growth/console';
 
 export type RenderMarketingConsoleHtmlOptions = {
   unisaneUiStylesheetHref?: string;

@@ -1,6 +1,6 @@
 import type {
-  MarketingAdsStatusReport,
   MarketingAdsAuditReport,
+  MarketingAdsStatusReport,
   MarketingEvidenceStatusReport,
   MarketingResearchStatusSummary,
   MarketingStatusReport,
@@ -397,7 +397,6 @@ export type MarketingConsoleState = {
   version: 1;
   generatedAt: string;
   workspaceRoot: string;
-  outputDirectory: string;
   platformId: string;
   appId: string;
   environment: string;

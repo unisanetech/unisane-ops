@@ -2,9 +2,9 @@ import { access, copyFile, mkdir, readdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { renderMarketingConsoleHtml } from '../../app/static-app.js';
-import type { MarketingConsoleBuildResult } from '../../contracts/marketing-console-app.js';
-import { buildMarketingConsoleState } from '../build-console-state/build-console-state.service.js';
+import { buildMarketingConsoleState } from '@unisane/growth/console';
+import { renderMarketingConsoleHtml } from './app.js';
+import type { MarketingConsoleBuildResult } from './contracts.js';
 import type {
   MarketingGoogleConnectionStatus,
   MarketingMetaConnectionStatus,
@@ -27,13 +27,12 @@ export async function buildMarketingConsoleApp(
   const cwd = path.resolve(options.cwd ?? process.cwd());
   const state = await buildMarketingConsoleState({
     cwd,
-    outputDirectory: options.outputDirectory,
     maxAgeDays: options.maxAgeDays,
     googleAuth: options.googleAuth,
     metaAuth: options.metaAuth,
     now: options.now,
   });
-  const outputDirectory = state.outputDirectory;
+  const outputDirectory = path.resolve(cwd, options.outputDirectory ?? '.unisane/console');
   const entryHtmlPath = path.join(outputDirectory, 'index.html');
   const statePath = path.join(outputDirectory, 'ui-state.json');
   const unisaneUiCssSourcePath = await resolveUnisaneUiCssPath();

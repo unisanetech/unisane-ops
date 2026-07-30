@@ -26,7 +26,6 @@
     ".",
     "./cli",
     "./gtm",
-    "./gtm-auth",
     "./handlers/provider-google",
     "./marketing",
     "./pack-manifest",

@@ -17,7 +17,7 @@ import {
   loadGrowthProjectContext,
   loadMarketingExecutionContext,
   type GrowthProjectContext,
-} from '../../../project-context.js';
+} from '../cli/project-context.js';
 import type {
   MarketingProviderReportType,
   MarketingReportMetrics,
@@ -41,12 +41,11 @@ import type {
   MarketingConsoleState,
   MarketingConsoleStatus,
   MarketingConsoleTrendPoint,
-} from '../../contracts/marketing-console-state.js';
+} from './contracts.js';
 
 export type BuildMarketingConsoleStateOptions = {
   cwd?: string;
   configPath?: string;
-  outputDirectory?: string;
   maxAgeDays?: number;
   now?: Date;
   googleAuth?: MarketingGoogleConnectionStatus;
@@ -279,10 +278,6 @@ export async function buildMarketingConsoleState(
   const maxAgeDays = options.maxAgeDays ?? 3;
   const loaded = await loadMarketingExecutionContext();
   const config = loaded.config;
-  const outputDirectory = path.resolve(
-    cwd,
-    options.outputDirectory ?? '.unisane/marketing/console',
-  );
   const proof = buildMarketingEvidenceStatus(config, {
     cwd,
     configPath: loaded.path,
@@ -384,7 +379,6 @@ export async function buildMarketingConsoleState(
     version: 1,
     generatedAt,
     workspaceRoot: cwd,
-    outputDirectory,
     platformId: config.platformId,
     appId: config.appId,
     environment: config.defaultEnvironment,

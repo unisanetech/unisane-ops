@@ -39,8 +39,14 @@
   "capabilities": ["growth"],
   "providerBindings": [],
   "reservedRootNames": ["growth"],
+  "reservedRootContributors": [
+    {
+      "root": "growth",
+      "packId": "ops-console"
+    }
+  ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "802b37fb7afb1dec3e1cf2061264c289f692411df5e700d0ceb9090eb79d5ce5"
+    "manifestHash": "49ac7039accf7648ea02ffb5cfe961d8c20ef36d1f98cfa5d8a59e590af0d75f"
   }
 }

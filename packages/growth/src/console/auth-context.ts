@@ -4,9 +4,9 @@ import {
   MARKETING_GOOGLE_SEARCH_CONSOLE_SCOPE,
   MARKETING_GOOGLE_TAG_MANAGER_SCOPE,
 } from '@unisane/growth/marketing';
-import { loadGrowthProjectContext, selectGrowthEnvironment } from '../../project-context.js';
+import { loadGrowthProjectContext, selectGrowthEnvironment } from '../cli/project-context.js';
 
-export async function resolveMarketingConsoleAuthContext() {
+export async function resolveGrowthConsoleAuthContext() {
   const context = await loadGrowthProjectContext();
   const environment = context.growth.environments[selectGrowthEnvironment(context)]!;
   const connectionId = environment.connections.google;

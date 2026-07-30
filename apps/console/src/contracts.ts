@@ -1,5 +1,5 @@
 import type { Server } from 'node:http';
-import type { MarketingConsoleState } from './marketing-console-state.js';
+import type { MarketingConsoleState } from '@unisane/growth/console';
 
 export type MarketingConsoleBuildResult = {
   workspaceRoot: string;

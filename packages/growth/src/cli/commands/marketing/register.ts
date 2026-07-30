@@ -3,11 +3,6 @@ import { log } from '../../log.js';
 import { resolveControlPlaneWorkingDirectory } from '../../utils/control-plane-working-directory.js';
 import { loadEnvLocal } from '../../utils/env.js';
 import {
-  marketingConsoleBuild,
-  marketingConsoleServe,
-  type MarketingConsoleCliOptions,
-} from '../marketing-console/index.js';
-import {
   marketingAlertAcknowledge,
   marketingAudit,
   marketingConversionPull,
@@ -48,33 +43,6 @@ export function registerMarketingCommands(program: Command): void {
   const marketing = program
     .command('marketing')
     .description('Marketing control-plane health, sync, and reporting commands');
-  const consoleCommand = marketing
-    .command('console')
-    .description('Local analytical Marketing Console dashboard');
-
-  addSharedOptions(
-    consoleCommand.command('build').description('Build the local Marketing Console dashboard'),
-  )
-    .option('--out <path>', 'Dashboard output directory')
-    .option('--dry-run', 'Build console state without writing dashboard files')
-    .option('--max-age-days <days>', 'Freshness threshold for dashboard status')
-    .action(async (options: MarketingConsoleCliOptions) => {
-      await runMarketingCommand(options, marketingConsoleBuild);
-    });
-
-  addSharedOptions(
-    consoleCommand
-      .command('serve')
-      .description('Build and serve the local Marketing Console dashboard'),
-  )
-    .option('--out <path>', 'Dashboard output directory')
-    .option('--host <host>', 'Local dashboard host')
-    .option('--port <port>', 'Local dashboard port')
-    .option('--max-age-days <days>', 'Freshness threshold for dashboard status')
-    .action(async (options: MarketingConsoleCliOptions) => {
-      await runMarketingCommand(options, marketingConsoleServe);
-    });
-
   addSharedOptions(
     marketing.command('validate').description('Validate the platform marketing config'),
   ).action(async (options: MarketingCliOptions) => {

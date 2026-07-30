@@ -11,6 +11,7 @@
     "baseUrl": ".",
     "paths": {
       "@unisane/growth": ["src/index.ts"],
+      "@unisane/growth/console": ["src/console/index.ts"],
       "@unisane/growth/contracts": ["src/contracts.ts"],
       "@unisane/growth/gtm": ["src/gtm/index.ts"],
       "@unisane/growth/marketing": ["src/marketing/index.ts"],

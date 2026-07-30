@@ -20,8 +20,10 @@
   ],
   "exports": [
     ".",
+    "./lifecycle",
     "./local",
     "./pack",
+    "./readiness",
     "./testing"
   ]
 }

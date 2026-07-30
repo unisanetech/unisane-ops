@@ -2,8 +2,8 @@ import { createReadStream } from 'node:fs';
 import { access, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import path from 'node:path';
-import type { MarketingConsoleServeResult } from '../../contracts/marketing-console-app.js';
-import { buildMarketingConsoleApp } from '../build-console-app/build-console-app.service.js';
+import { buildMarketingConsoleApp } from './build.js';
+import type { MarketingConsoleServeResult } from './contracts.js';
 import type {
   MarketingGoogleConnectionStatus,
   MarketingMetaConnectionStatus,

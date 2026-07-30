@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "unisane.pack-manifest",
+  "packId": "ops-console",
+  "packageName": "@unisane/ops-console",
+  "version": "0.1.0",
+  "packApiVersion": 1,
+  "trust": "first-party",
+  "commands": [
+    {
+      "id": "growth.console",
+      "path": ["growth", "console"],
+      "handler": {
+        "exportPath": "./handlers/console",
+        "exportName": "runGrowthConsole"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project"],
+      "artifactClasses": ["generated-console"],
+      "riskGuards": [],
+      "json": false
+    }
+  ],
+  "configNamespaces": [],
+  "addItemTypes": [],
+  "capabilities": ["growth-console"],
+  "providerBindings": [],
+  "reservedRootNames": [],
+  "integrity": {
+    "algorithm": "sha256",
+    "manifestHash": "d02d5b6cf9d72adbec969b21f7c42bc6d83b2061c31749249c5350ca54e7587a"
+  }
+}

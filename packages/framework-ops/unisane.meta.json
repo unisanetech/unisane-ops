@@ -23,6 +23,7 @@
   ],
   "exports": [
     ".",
+    "./contributions/add",
     "./handlers/framework",
     "./pack-manifest"
   ]
