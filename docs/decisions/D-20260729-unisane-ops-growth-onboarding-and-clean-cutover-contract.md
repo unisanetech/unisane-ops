@@ -14,6 +14,10 @@ status: accepted
 
 ## Changelog
 
+- `2026-07-30`: Implemented the W3 Overview decision slice. One UI-neutral Growth
+  projection now supplies the executive condition, contextual priorities,
+  source-separated metrics, evidence-backed funnel, readable outcomes, and capability
+  summaries while the console app remains the sole presentation owner.
 - `2026-07-30`: Implemented the W3 Connections decision slice. One provider-neutral
   headless projection now drives the Google-only connection index and detail tabs,
   preserves independent service truth, and uses a confirmed canonical disconnect that

@@ -23,6 +23,11 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-07-30`: Completed P120-W3 slice 4. The executive Overview now derives a
+  plain-language condition, up to three contextual priorities, source-separated usable
+  business metrics, a real funnel only when evidence exists, readable recent outcomes,
+  and capability summaries from the headless Growth projection without exposing
+  readiness, receipts, report families, or planned providers.
 - `2026-07-30`: Completed P120-W3 slice 3. The console now consumes one UI-neutral
   connection projection, presents only implemented providers, keeps Google service
   access/resource/data state independent, provides the full connection-detail

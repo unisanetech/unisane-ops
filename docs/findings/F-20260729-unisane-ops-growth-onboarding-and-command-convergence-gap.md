@@ -15,6 +15,11 @@ status: in-progress
 
 ## Changelog
 
+- `2026-07-30`: Closed the P120-W3 Overview slice. Generic Performance and global
+  recommendation presentation no longer drive the home page; one human-first Overview
+  now shows the current condition, contextual priorities, honestly sourced results,
+  meaningful analysis, readable outcomes, and capability navigation without ordinary
+  control-plane terminology.
 - `2026-07-30`: Closed the P120-W3 Connections slice. The old Setup connection
   projection and stale auth-profile/env-reader test paths are absent; one
   provider-neutral projection, independent Google service health, full detail tabs,
