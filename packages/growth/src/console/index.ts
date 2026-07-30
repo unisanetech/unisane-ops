@@ -6,11 +6,16 @@ export {
   buildMarketingConsoleState,
   type BuildMarketingConsoleStateOptions,
 } from './build-state.js';
+export { buildMarketingConsoleConnections } from './connections.js';
 export { resolveGrowthConsoleAuthContext } from './auth-context.js';
 export type {
   MarketingConsoleActionItem,
   MarketingConsoleArtifactLink,
   MarketingConsoleComparisonRow,
+  MarketingConsoleConnection,
+  MarketingConsoleConnectionAction,
+  MarketingConsoleConnectionService,
+  MarketingConsoleConnectionState,
   MarketingConsoleFreshnessCell,
   MarketingConsoleMetric,
   MarketingConsoleReceiptEvent,

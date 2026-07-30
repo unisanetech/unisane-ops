@@ -2,40 +2,14 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import {
-  fetchGa4PerformanceFile,
-  readGoogleAnalyticsDataCredentials,
-  runGa4PerformanceReport,
-} from '../index.js';
+import { fetchGa4PerformanceFile, runGa4PerformanceReport } from '../index.js';
 
 describe('GA4 performance provider', () => {
-  it('reads credentials from dedicated or shared Google OAuth env', () => {
-    expect(
-      readGoogleAnalyticsDataCredentials({
-        GOOGLE_OAUTH_CLIENT_ID: 'client-id',
-        GOOGLE_OAUTH_CLIENT_SECRET: 'client-secret',
-        GOOGLE_OAUTH_REFRESH_TOKEN: 'refresh-token',
-      }),
-    ).toEqual({
-      clientId: 'client-id',
-      clientSecret: 'client-secret',
-      refreshToken: 'refresh-token',
-    });
-
-    expect(() => readGoogleAnalyticsDataCredentials({})).toThrow(
-      'Missing Google Analytics Data API env',
-    );
-  });
-
   it('runs a GA4 landing page report through the Data API', async () => {
     const requests: Array<{ url: string; init?: RequestInit }> = [];
     const artifact = await runGa4PerformanceReport({
       platformId: 'true-resume',
-      credentials: {
-        clientId: 'client-id',
-        clientSecret: 'client-secret',
-        refreshToken: 'refresh-token',
-      },
+      accessToken: 'access-token',
       propertyId: '123456',
       startDate: '2026-04-19',
       endDate: '2026-05-16',
@@ -45,18 +19,16 @@ describe('GA4 performance provider', () => {
       fetchImpl: async (url, init) => {
         const requestUrl = String(url);
         requests.push({ url: requestUrl, init });
-        return requestUrl === 'https://oauth2.googleapis.com/token'
-          ? tokenResponse()
-          : ga4Response();
+        return ga4Response();
       },
       fetchedAt: '2026-05-17T00:00:00.000Z',
     });
 
-    expect(requests).toHaveLength(2);
-    expect(requests[1]?.url).toBe(
+    expect(requests).toHaveLength(1);
+    expect(requests[0]?.url).toBe(
       'https://analyticsdata.googleapis.com/v1beta/properties/123456:runReport',
     );
-    expect(JSON.parse(String(requests[1]?.init?.body))).toMatchObject({
+    expect(JSON.parse(String(requests[0]?.init?.body))).toMatchObject({
       dateRanges: [{ startDate: '2026-04-19', endDate: '2026-05-16' }],
       dimensions: [{ name: 'landingPagePlusQueryString' }],
       metrics: [
@@ -91,23 +63,17 @@ describe('GA4 performance provider', () => {
         cwd,
         platformId: 'true-resume',
         output: 'normalized/ga4-api.json',
-        credentials: {
-          clientId: 'client-id',
-          clientSecret: 'client-secret',
-          refreshToken: 'refresh-token',
-        },
+        accessToken: 'access-token',
         propertyId: 'properties/123456',
         startDate: '2026-04-19',
         endDate: '2026-05-16',
         dimensions: ['landingPagePlusQueryString'],
         metrics: ['sessions', 'totalUsers', 'keyEvents', 'totalRevenue'],
-        fetchImpl: async (url) =>
-          String(url) === 'https://oauth2.googleapis.com/token'
-            ? tokenResponse()
-            : ga4Response({
-                dimensions: ['/resume-examples'],
-                metrics: ['100', '80', '4', '10.25'],
-              }),
+        fetchImpl: async () =>
+          ga4Response({
+            dimensions: ['/resume-examples'],
+            metrics: ['100', '80', '4', '10.25'],
+          }),
       });
       const artifact = JSON.parse(await readFile(join(cwd, 'normalized/ga4-api.json'), 'utf8'));
 
@@ -133,11 +99,7 @@ describe('GA4 performance provider', () => {
     const requestBodies: unknown[] = [];
     const artifact = await runGa4PerformanceReport({
       platformId: 'true-resume',
-      credentials: {
-        clientId: 'client-id',
-        clientSecret: 'client-secret',
-        refreshToken: 'refresh-token',
-      },
+      accessToken: 'access-token',
       propertyId: '123456',
       startDate: '2026-04-19',
       endDate: '2026-05-16',
@@ -145,10 +107,7 @@ describe('GA4 performance provider', () => {
       metrics: ['sessions'],
       limit: 1,
       maxRows: 2,
-      fetchImpl: async (url, init) => {
-        if (String(url) === 'https://oauth2.googleapis.com/token') {
-          return tokenResponse();
-        }
+      fetchImpl: async (_url, init) => {
         const body = JSON.parse(String(init?.body));
         requestBodies.push(body);
         return ga4Response({
@@ -168,13 +127,6 @@ describe('GA4 performance provider', () => {
     ]);
   });
 });
-
-function tokenResponse(): Response {
-  return new Response(JSON.stringify({ access_token: 'access-token' }), {
-    status: 200,
-    headers: { 'content-type': 'application/json' },
-  });
-}
 
 function ga4Response(
   row: { dimensions: string[]; metrics: string[] } = {

@@ -41,6 +41,7 @@ import { isGrowthProviderBinding, resolveGrowthProviderBinding } from './growth.
 const CLOUDFLARE_CONNECTION_BINDING = 'provider.cloudflare.connection';
 const OPS_LIFECYCLE_ADD_BINDING = 'ops.lifecycle.add';
 const OPS_LIFECYCLE_CONNECT_BINDING = 'ops.lifecycle.connect';
+const OPS_LIFECYCLE_DISCONNECT_BINDING = 'ops.lifecycle.disconnect';
 const OPS_LIFECYCLE_READINESS_BINDING = 'ops.lifecycle.readiness';
 
 function isStringArray(input: unknown): input is string[] {
@@ -150,6 +151,56 @@ function parseLifecycleConnectRequest(input: unknown): {
     environmentId: record.environmentId,
     recordPath: record.recordPath,
     requiredServices: record.requiredServices,
+    context: {
+      cwd: context.cwd,
+      argv: context.argv,
+      json: context.json,
+    },
+  };
+}
+
+function parseLifecycleDisconnectRequest(input: unknown): {
+  provider: string;
+  packId: string;
+  projectId: string;
+  environmentId: string;
+  connectionId: string;
+  recordPath: string;
+  context: OpsLifecycleContributionContext;
+} {
+  if (typeof input !== 'object' || input === null) {
+    throw new Error(
+      '[OPS_LIFECYCLE_DISCONNECT_REQUEST_INVALID] Invalid disconnect contribution request.',
+    );
+  }
+  const record = input as Record<string, unknown>;
+  const context =
+    typeof record.context === 'object' && record.context !== null
+      ? (record.context as Record<string, unknown>)
+      : null;
+  if (
+    typeof record.provider !== 'string' ||
+    typeof record.packId !== 'string' ||
+    typeof record.projectId !== 'string' ||
+    typeof record.environmentId !== 'string' ||
+    typeof record.connectionId !== 'string' ||
+    typeof record.recordPath !== 'string' ||
+    !context ||
+    typeof context.cwd !== 'string' ||
+    !isStringArray(context.argv) ||
+    typeof context.json !== 'boolean'
+  ) {
+    throw new Error(
+      '[OPS_LIFECYCLE_DISCONNECT_REQUEST_INVALID] Invalid disconnect contribution request.',
+    );
+  }
+  return {
+    provider: record.provider,
+    packId: record.packId,
+    projectId: record.projectId,
+    environmentId: record.environmentId,
+    connectionId: record.connectionId,
+    recordPath: record.recordPath,
     context: {
       cwd: context.cwd,
       argv: context.argv,
@@ -573,6 +624,22 @@ export class CanonicalPackRuntime implements PackCommandRuntime {
         environmentId: request.environmentId,
         recordPath: request.recordPath,
         requiredServices: request.requiredServices,
+      });
+    }
+    if (bindingId === OPS_LIFECYCLE_DISCONNECT_BINDING) {
+      const request = parseLifecycleDisconnectRequest(input);
+      if (request.provider !== 'google' || request.packId !== 'provider-google') {
+        throw new Error(
+          `[OPS_LIFECYCLE_DISCONNECT_CONTRIBUTOR_UNSUPPORTED] Pack '${request.packId}' cannot disconnect '${request.provider}'.`,
+        );
+      }
+      const google = await import('@unisane/provider-google');
+      return google.disconnectGoogle({
+        context: request.context,
+        projectId: request.projectId,
+        environmentId: request.environmentId,
+        connectionId: request.connectionId,
+        recordPath: request.recordPath,
       });
     }
     if (isGrowthProviderBinding(bindingId)) {

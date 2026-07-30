@@ -308,6 +308,55 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .empty-state strong { display: block; font-size: 14px; }
 .empty-state p { margin: 7px 0 0; color: var(--color-on-surface-variant, #62655d); font-size: 13px; line-height: 1.55; }
 .button-link { display: inline-flex; min-height: 40px; align-items: center; margin-top: 14px; padding: 8px 13px; border-radius: var(--radius-sm, 9px); background: var(--color-primary, #476242); color: var(--color-on-primary, #fff); text-decoration: none; font-size: 12px; font-weight: 700; }
+.button-link { border: 0; cursor: pointer; }
+.button-link.secondary { background: var(--color-surface-container, #ecece7); color: var(--color-on-surface, #20211f); }
+.button-link.danger { background: #972f23; color: #fff; }
+.button-link:disabled { opacity: .55; cursor: wait; }
+.page-action { margin-top: 0; }
+.context-line { margin: 8px 0 0; color: var(--color-on-surface-variant, #62655d); font-size: 12px; }
+.attention-panel { margin-top: 24px; padding: 18px 20px; border: 1px solid #e4b8ac; border-radius: var(--radius-lg, 16px); background: #fff8f5; }
+.attention-panel strong { display: block; font-size: 14px; }
+.attention-panel p { margin: 7px 0 0; color: #75453b; font-size: 13px; line-height: 1.55; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 30px 0 12px; }
+.section-heading h2 { margin: 0; font-size: 20px; }
+.section-heading p { margin: 5px 0 0; color: var(--color-on-surface-variant, #62655d); font-size: 13px; }
+.connection-card { padding: 0; overflow: hidden; }
+.connection-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 20px; }
+.connection-identity { display: flex; gap: 13px; min-width: 0; }
+.provider-mark { width: 42px; height: 42px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 12px; background: #f1f2ed; font-size: 18px; font-weight: 800; }
+.connection-identity h2 { margin: 1px 0 0; font-size: 17px; }
+.connection-identity p { margin: 5px 0 0; color: var(--color-on-surface-variant, #62655d); font-size: 12px; }
+.status-pill { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 4px 9px; border-radius: 999px; background: #edf3ea; color: #385234; font-size: 11px; font-weight: 720; white-space: nowrap; }
+.status-pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.status-pill.attention { background: #fff0eb; color: #8a2f20; }
+.status-pill.waiting { background: #fff7df; color: #765b13; }
+.service-list { border-top: 1px solid var(--color-outline-variant, #e1e1dc); }
+.service-row { display: grid; grid-template-columns: minmax(150px, 1.25fr) minmax(150px, 1.2fr) minmax(170px, 1.4fr) auto; align-items: center; gap: 16px; padding: 15px 20px; border-top: 1px solid var(--color-outline-variant, #e8e8e3); }
+.service-row:first-child { border-top: 0; }
+.service-name strong, .service-name span { display: block; }
+.service-name strong { font-size: 13px; }
+.service-name span, .service-detail { margin-top: 3px; color: var(--color-on-surface-variant, #62655d); font-size: 11px; line-height: 1.45; }
+.connection-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 20px; border-top: 1px solid var(--color-outline-variant, #e1e1dc); background: var(--color-surface-container-low, #f5f5f1); }
+.connection-footer p { margin: 0; color: var(--color-on-surface-variant, #62655d); font-size: 12px; }
+.connection-footer .button-link { margin-top: 0; }
+.command-panel { margin-top: 14px; padding: 12px; border-radius: var(--radius-sm, 9px); background: #20241f; color: #f7f7f3; }
+.command-panel code { display: block; overflow-wrap: anywhere; font: 12px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.command-panel .button-link { margin-top: 10px; background: #f7f7f3; color: #20241f; }
+.detail-stack { display: grid; gap: 12px; margin-top: 16px; }
+.detail-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding: 15px 0; border-top: 1px solid var(--color-outline-variant, #e1e1dc); }
+.detail-row:first-child { border-top: 0; padding-top: 0; }
+.detail-row strong { font-size: 13px; }
+.detail-row p { margin: 4px 0 0; color: var(--color-on-surface-variant, #62655d); font-size: 12px; line-height: 1.5; }
+.danger-zone { margin-top: 28px; padding-top: 20px; border-top: 1px solid #e3c0b8; }
+.danger-zone h3 { color: #8a2f20; }
+.dialog-backdrop { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 20px; background: rgb(20 24 20 / 52%); }
+.dialog { width: min(560px, 100%); max-height: min(720px, calc(100dvh - 40px)); overflow: auto; padding: 24px; border: 1px solid var(--color-outline-variant, #d7d8d1); border-radius: var(--radius-lg, 16px); background: var(--color-surface, #fff); box-shadow: 0 22px 60px rgb(20 24 20 / 24%); }
+.dialog h2 { margin: 0; font-size: 22px; }
+.dialog > p, .dialog li { color: var(--color-on-surface-variant, #62655d); font-size: 13px; line-height: 1.55; }
+.dialog ul { padding-left: 20px; }
+.dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.dialog-actions .button-link { margin-top: 0; }
+.toast { position: fixed; inset: auto 20px 20px auto; z-index: 100; max-width: min(440px, calc(100vw - 40px)); padding: 12px 15px; border-radius: var(--radius-sm, 9px); background: #20241f; color: #fff; font-size: 12px; box-shadow: 0 12px 36px rgb(20 24 20 / 22%); }
 .sidebar-backdrop { display: none; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 @media (max-width: 1080px) {
@@ -355,8 +404,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .filter-button { display: none; }
   .content { padding: 24px 16px 56px; }
   .page-header { display: block; }
+  .page-header .page-action { margin-top: 16px; }
   .grid { grid-template-columns: 1fr; }
   .card, .card.wide, .card.full { grid-column: auto; }
+  .service-row { grid-template-columns: 1fr; gap: 9px; }
+  .connection-header, .connection-footer, .detail-row { align-items: flex-start; flex-direction: column; }
+  .dialog-actions { flex-direction: column-reverse; }
+  .dialog-actions .button-link { justify-content: center; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
@@ -376,6 +430,10 @@ for (const item of shellModel.routes) {
 let mobileOpen = false;
 let projectMenuOpen = false;
 let restoreFocusTo = null;
+let commandAction = null;
+let disconnectProvider = null;
+let dialogTrigger = null;
+let notice = '';
 let collapsed = localStorage.getItem('unisane-ops-sidebar-collapsed') === 'true';
 
 function esc(value) {
@@ -494,12 +552,149 @@ function recentActivity() {
   if (!items.length) return '<div class="empty-state"><strong>No activity yet.</strong><p>Changes, updates, approvals, and failures will appear here after they happen.</p></div>';
   return '<div class="list">' + items.map((item) => '<article class="list-item"><strong>' + esc(humanize(item.action)) + '</strong><p>' + esc(item.timestamp ? new Date(item.timestamp).toLocaleString() : 'Time not available') + ' · ' + esc(humanize(item.status)) + '</p></article>').join('') + '</div>';
 }
+function formatTime(value) {
+  if (!value) return 'Not checked yet';
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? 'Time not available' : parsed.toLocaleString();
+}
+function connectionByProvider(provider) {
+  return state.connections.find((connection) => connection.provider === provider);
+}
+function statusClass(connectionState) {
+  if (connectionState === 'current') return '';
+  if (connectionState === 'syncing' || connectionState === 'delayed' || connectionState === 'needs-resource') return ' waiting';
+  return ' attention';
+}
+function statusPill(connectionState, label) {
+  return '<span class="status-pill' + statusClass(connectionState) + '">' + esc(label) + '</span>';
+}
+function commandButton(action, className) {
+  if (!action?.command) return '';
+  return '<button class="button-link' + (className ? ' ' + className : '') + '" type="button" data-action="show-command" data-command-id="' + esc(action.id) + '">' + esc(action.label) + '</button>';
+}
+function serviceRows(connection) {
+  return '<div class="service-list">' + connection.services.map((service) =>
+    '<article class="service-row">' +
+      '<div class="service-name"><strong>' + esc(service.label) + '</strong><span>' + esc(service.purpose) + '</span></div>' +
+      '<div>' + statusPill(service.state, service.statusLabel) + '<div class="service-detail">' + esc(service.accessLabel) + '</div></div>' +
+      '<div class="service-detail"><strong>' + esc(service.resource?.label || 'No resource selected') + '</strong><br>' + esc(service.dataLabel) + '</div>' +
+      '<div>' + (service.action ? commandButton(service.action, 'secondary') : '') + '</div>' +
+    '</article>'
+  ).join('') + '</div>';
+}
+function connectionCard(connection) {
+  const managePath = '/connections/' + encodeURIComponent(connection.provider) + '/overview';
+  return '<article class="card full connection-card">' +
+    '<div class="connection-header"><div class="connection-identity"><span class="provider-mark" aria-hidden="true">G</span><div><h2>' + esc(connection.label) + '</h2><p>' + esc(connection.identityLabel || 'No account connected') + '</p></div></div>' + statusPill(connection.state, connection.statusLabel) + '</div>' +
+    serviceRows(connection) +
+    '<div class="connection-footer"><p>' + esc(connection.summary) + ' Last checked: ' + esc(formatTime(connection.lastCheckedAt)) + '.</p><a class="button-link" href="' + esc(managePath) + '" data-route-link>Manage ' + esc(connection.label) + ' connection</a></div>' +
+  '</article>';
+}
+function onboardingCard(connection) {
+  return '<article class="card full connection-card">' +
+    '<div class="connection-header"><div class="connection-identity"><span class="provider-mark" aria-hidden="true">G</span><div><h2>Continue with Google</h2><p>One account can enable the Google services selected for this workspace.</p></div></div>' + statusPill('not-connected', 'Available') + '</div>' +
+    '<div class="service-list">' + connection.services.map((service) =>
+      '<article class="service-row"><div class="service-name"><strong>' + esc(service.label) + '</strong><span>' + esc(service.purpose) + '</span></div><div class="service-detail">Access is requested only for this selected outcome.</div><div class="service-detail">You choose a recognizable resource after sign-in when needed.</div><div></div></article>'
+    ).join('') + '</div>' +
+    '<div class="connection-footer"><p>Signing in does not publish tags, change campaigns, or spend money.</p>' + commandButton(connection.primaryAction) + '</div>' +
+  '</article>';
+}
+function connectionActivity(connection, limit) {
+  const entries = connection.services
+    .filter((service) => service.lastCheckedAt)
+    .sort((left, right) => Date.parse(right.lastCheckedAt) - Date.parse(left.lastCheckedAt))
+    .slice(0, limit);
+  if (!entries.length) return '<div class="empty-state"><strong>No connection activity yet.</strong><p>Connection checks and data updates will appear after Google is connected.</p></div>';
+  return '<div class="list">' + entries.map((service) =>
+    '<article class="list-item"><strong>' + esc(service.label + ' · ' + service.statusLabel) + '</strong><p>' + esc(formatTime(service.lastCheckedAt)) + ' · ' + esc(service.dataLabel) + '</p></article>'
+  ).join('') + '</div>';
+}
+function connectionsIndex() {
+  const connected = state.connections.filter((connection) => connection.connected);
+  const available = state.connections.filter((connection) => connection.available && !connection.connected);
+  const issue = connected
+    .flatMap((connection) => connection.services.map((service) => ({ connection, service })))
+    .find((item) => item.service.state !== 'current');
+  const attention = issue
+    ? '<section class="attention-panel"><strong>' + esc(issue.service.label + ' needs attention') + '</strong><p>' + esc(issue.service.issue || issue.service.dataLabel) + '</p>' + (issue.service.action ? commandButton(issue.service.action) : '') + '</section>'
+    : '';
+  const connectedSection = '<section><div class="section-heading"><div><h2>Your connections</h2><p>Accounts, selected resources, access, and the latest usable data.</p></div></div><div class="grid">' +
+    (connected.length ? connected.map(connectionCard).join('') : '<article class="card full"><div class="empty-state"><strong>No provider is connected yet.</strong><p>Start with one available connection below. Unisane requests only the access needed for selected outcomes.</p></div></article>') +
+    '</div></section>';
+  const availableSection = '<section><div class="section-heading"><div><h2>Available connections</h2><p>Only complete and selectable provider flows appear here.</p></div></div><div class="grid">' +
+    (available.length ? available.map(onboardingCard).join('') : '<article class="card full"><div class="empty-state"><strong>No additional connection is available.</strong><p>All currently supported providers are already connected.</p></div></article>') +
+    '</div></section>';
+  const activitySource = connected[0] ?? available[0];
+  const activity = '<section><div class="section-heading"><div><h2>Connection activity</h2><p>Recent checks and data availability for this workspace.</p></div><a href="/activity" data-route-link>View all activity</a></div><article class="card full">' + (activitySource ? connectionActivity(activitySource, 4) : '') + '</article></section>';
+  return attention + connectedSection + availableSection + activity;
+}
+function connectionOverview(connection) {
+  return '<div class="grid"><article class="card wide"><h2>Connection summary</h2><p>' + esc(connection.summary) + '</p><div class="detail-stack">' +
+    '<div class="detail-row"><div><strong>Connected account</strong><p>The Google identity used for this workspace.</p></div><div>' + esc(connection.identityLabel || 'Not available') + '</div></div>' +
+    '<div class="detail-row"><div><strong>Project and environment</strong><p>Every connection action stays scoped to this context.</p></div><div>' + esc(humanize(state.platformId) + ' · ' + humanize(state.environment)) + '</div></div>' +
+    '<div class="detail-row"><div><strong>Last verified</strong><p>The latest local connection check.</p></div><div>' + esc(formatTime(connection.lastCheckedAt)) + '</div></div>' +
+  '</div>' + (connection.primaryAction ? commandButton(connection.primaryAction) : '') + '</article><article class="card"><h2>Selected services</h2><p>Each service keeps its own access, resource, and data state.</p><div class="metric-value">' + esc(String(connection.services.filter((service) => service.state === 'current').length)) + ' / ' + esc(String(connection.services.length)) + '</div><div class="metric-helper">services working</div></article><article class="card full connection-card"><div class="connection-header"><div><h2>Service health</h2><p>One issue never marks the other Google services as disconnected.</p></div>' + statusPill(connection.state, connection.statusLabel) + '</div>' + serviceRows(connection) + '</article><article class="card full"><div class="danger-zone"><h3>Disconnect Google</h3><p>Disconnecting stops future updates and dependent automations. Existing historical data remains, and provider-side tags or campaigns are not changed.</p><button class="button-link danger" type="button" data-action="show-disconnect" data-provider="' + esc(connection.provider) + '">Disconnect Google</button></div></article></div>';
+}
+function connectionAccess(connection) {
+  return '<div class="grid"><article class="card full"><h2>Access by service</h2><p>Google access is evaluated independently. Adding a capability later requests only its additional access.</p><div class="detail-stack">' + connection.services.map((service) =>
+    '<div class="detail-row"><div><strong>' + esc(service.label) + '</strong><p>' + esc(service.accessLabel) + '</p></div><div>' + statusPill(service.state, service.statusLabel) + (service.state === 'partial-permission' && service.action ? commandButton(service.action, 'secondary') : '') + '</div></div>'
+  ).join('') + '</div></article></div>';
+}
+function connectionResources(connection) {
+  return '<div class="grid"><article class="card full"><h2>Selected resources</h2><p>These are the recognizable sites, properties, containers, and accounts used in ' + esc(humanize(state.environment)) + '.</p><div class="detail-stack">' + connection.services.map((service) =>
+    '<div class="detail-row"><div><strong>' + esc(service.label) + '</strong><p>' + esc(service.resource ? service.resource.type : 'No resource selected') + '</p></div><div><strong>' + esc(service.resource?.label || 'Selection required') + '</strong>' + (service.state === 'needs-resource' && service.action ? commandButton(service.action, 'secondary') : '') + '</div></div>'
+  ).join('') + '</div></article></div>';
+}
+function connectionSync(connection) {
+  return '<div class="grid"><article class="card full"><h2>Data availability</h2><p>Each service reports whether its latest usable data is current, warming up, or delayed.</p><div class="detail-stack">' + connection.services.map((service) =>
+    '<div class="detail-row"><div><strong>' + esc(service.label) + '</strong><p>' + esc(service.dataLabel) + '</p></div><div>' + statusPill(service.state, service.statusLabel) + '<p>' + esc(formatTime(service.lastCheckedAt)) + '</p>' + ((service.state === 'syncing' || service.state === 'delayed' || service.state === 'failed') && service.action ? commandButton(service.action, 'secondary') : '') + '</div></div>'
+  ).join('') + '</div></article></div>';
+}
+function connectionDetail(route) {
+  const provider = route.path.split('/')[2];
+  const connection = connectionByProvider(provider);
+  if (!connection?.connected) {
+    return '<div class="grid"><article class="card full"><div class="empty-state"><strong>This provider is not connected.</strong><p>Return to Connections to start the supported guided flow.</p><a class="button-link" href="/connections" data-route-link>All connections</a></div></article></div>';
+  }
+  const tab = route.id.split('.').pop();
+  if (tab === 'access') return connectionAccess(connection);
+  if (tab === 'resources') return connectionResources(connection);
+  if (tab === 'data-sync') return connectionSync(connection);
+  if (tab === 'activity') return '<div class="grid"><article class="card full"><h2>Connection activity</h2><p>Recent service checks and data availability. Technical identifiers stay out of the ordinary view.</p>' + connectionActivity(connection, 20) + '</article></div>';
+  return connectionOverview(connection);
+}
+function pageHeaderAction(route) {
+  if (route.family !== 'connections') return '';
+  const available = state.connections.find((connection) => connection.available && !connection.connected);
+  return available?.primaryAction ? commandButton(available.primaryAction, 'page-action') : '';
+}
+function pageSummary(route) {
+  if (route.family === 'connections') return '';
+  if (route.family === 'connection-detail') {
+    const connection = connectionByProvider(route.path.split('/')[2]);
+    if (!connection?.connected) return '';
+    const issue = connection.services.find((service) => service.state !== 'current');
+    return '<section class="summary"><h2>' + esc(issue ? issue.label + ' needs attention' : connection.label + ' is working') + '</h2><p>' + esc(issue?.issue || connection.summary) + '</p></section>';
+  }
+  return '<section class="summary"><h2>' + esc(route.family === 'overview' ? state.readiness.label : route.description) + '</h2><p>' + esc(route.family === 'overview' ? state.readiness.nextWorkflowStep : 'This page uses the active workspace and the latest usable data. Missing sources are explained rather than shown as zero.') + '</p></section>';
+}
+function dialogs() {
+  if (disconnectProvider) {
+    const connection = connectionByProvider(disconnectProvider);
+    if (!connection?.disconnect.command) return '';
+    return '<div class="dialog-backdrop" data-action="close-dialog"><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="disconnect-title"><h2 id="disconnect-title">' + esc(connection.disconnect.title) + '</h2><p>This action affects only ' + esc(humanize(state.platformId) + ' · ' + humanize(state.environment)) + '.</p><ul>' + connection.disconnect.consequences.map((item) => '<li>' + esc(item) + '</li>').join('') + '</ul><p><strong>Historical data remains available.</strong> Google-side tags, properties, and campaigns are left unchanged.</p><div class="dialog-actions"><button class="button-link secondary" type="button" data-action="close-dialog">Cancel</button><button class="button-link danger" type="button" data-action="confirm-disconnect">Confirm and copy command</button></div></section></div>';
+  }
+  if (commandAction) {
+    return '<div class="dialog-backdrop" data-action="close-dialog"><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="command-title"><h2 id="command-title">' + esc(commandAction.label) + '</h2><p>' + esc(commandAction.description) + '</p><div class="command-panel"><code>' + esc(commandAction.command) + '</code></div><p>Run this command in the project terminal. The command will still enforce its own confirmation and safety rules.</p><div class="dialog-actions"><button class="button-link secondary" type="button" data-action="close-dialog">Cancel</button><button class="button-link" type="button" data-action="copy-command">Copy command</button></div></section></div>';
+  }
+  return '';
+}
 function pageBody(route) {
   if (route.family === 'connections') {
-    return '<div class="grid"><article class="card wide"><h2>Your connections</h2><p>Provider accounts, access, resources, and updates will be managed from this one place.</p><div class="empty-state"><strong>Connection details are being prepared.</strong><p>The next slice replaces the former onboarding and access presentation with provider cards and guided connection management.</p></div></article><article class="card"><h2>Workspace state</h2><div class="metric-value">' + esc(state.readiness.label) + '</div><div class="metric-helper">' + esc(state.readiness.nextWorkflowStep) + '</div></article></div>';
+    return connectionsIndex();
   }
   if (route.family === 'connection-detail') {
-    return '<div class="grid"><article class="card full"><div class="empty-state"><strong>This connection page is ready for provider details.</strong><p>Account identity, access, resources, data updates, and activity will land in the dedicated Connections slice.</p><a class="button-link" href="/connections" data-route-link>All connections</a></div></article></div>';
+    return connectionDetail(route);
   }
   if (route.family === 'activity') {
     return '<div class="grid"><article class="card wide"><h2>Recent activity</h2><p>Readable workspace outcomes from the latest local evidence.</p>' + recentActivity() + '</article><article class="card"><h2>What appears here</h2><p>Changes, data updates, errors, and approvals. Technical identifiers stay inside details.</p></article></div>';
@@ -537,9 +732,9 @@ function render() {
       '</aside>' +
       '<section class="workspace">' +
         '<header class="topbar"><div class="topbar-start"><button class="icon-button mobile-menu" type="button" data-action="open-navigation" aria-label="Open navigation">☰</button><button class="icon-button desktop-collapse" type="button" data-action="toggle-collapse" aria-label="' + (collapsed ? 'Expand navigation' : 'Collapse navigation') + '">' + (collapsed ? '→' : '←') + '</button><div class="topbar-title"><strong>' + esc(route.title) + '</strong><span>' + esc(state.dateWindow.label) + '</span></div></div><div class="topbar-actions">' + timeControls + '<a class="freshness-link' + (fresh.attention ? ' attention' : '') + '" href="/connections" data-route-link aria-label="' + esc(fresh.label) + '"><span aria-hidden="true">↻</span><span>' + esc(fresh.label) + '</span></a></div></header>' +
-        '<main class="content"><header class="page-header"><div><p class="eyebrow">' + esc(route.family === 'overview' ? 'Workspace' : humanize(route.family)) + '</p><h1 tabindex="-1">' + esc(route.title) + '</h1><p class="page-description">' + esc(route.description) + '</p></div></header>' + pageTabs(route) + '<section class="summary"><h2>' + esc(route.family === 'overview' ? state.readiness.label : route.description) + '</h2><p>' + esc(route.family === 'overview' ? state.readiness.nextWorkflowStep : 'This page uses the active workspace and the latest usable data. Missing sources are explained rather than shown as zero.') + '</p></section>' + pageBody(route) + '</main>' +
+        '<main class="content"><header class="page-header"><div><p class="eyebrow">' + esc(route.family === 'overview' ? 'Workspace' : humanize(route.family)) + '</p><h1 tabindex="-1">' + esc(route.title) + '</h1><p class="page-description">' + esc(route.description) + '</p><p class="context-line">' + esc(humanize(state.platformId) + ' · ' + humanize(state.environment)) + '</p></div>' + pageHeaderAction(route) + '</header>' + pageTabs(route) + pageSummary(route) + pageBody(route) + '</main>' +
       '</section>' +
-    '</div>';
+    '</div>' + dialogs() + (notice ? '<div class="toast" role="status" aria-live="polite">' + esc(notice) + '</div>' : '');
   bind();
 }
 function closeNavigation() {
@@ -558,6 +753,41 @@ function navigate(path) {
   document.body.classList.remove('nav-open');
   render();
   document.querySelector('h1')?.focus?.();
+}
+function findConnectionAction(id) {
+  for (const connection of state.connections) {
+    if (connection.primaryAction?.id === id) return connection.primaryAction;
+    const serviceAction = connection.services.find((service) => service.action?.id === id)?.action;
+    if (serviceAction) return serviceAction;
+  }
+  return null;
+}
+function closeDialog() {
+  const trigger = dialogTrigger;
+  commandAction = null;
+  disconnectProvider = null;
+  dialogTrigger = null;
+  render();
+  if (trigger?.type === 'command') {
+    app.querySelector('[data-command-id="' + trigger.id + '"]')?.focus();
+  } else if (trigger?.type === 'disconnect') {
+    app.querySelector('[data-action="show-disconnect"][data-provider="' + trigger.provider + '"]')?.focus();
+  } else {
+    app.querySelector('h1')?.focus();
+  }
+}
+async function copyCommand(command, message) {
+  try {
+    await navigator.clipboard.writeText(command);
+    notice = message;
+  } catch {
+    notice = 'Copy was unavailable. Select the command shown and copy it manually.';
+  }
+  commandAction = null;
+  disconnectProvider = null;
+  dialogTrigger = null;
+  render();
+  app.querySelector('h1')?.focus();
 }
 function bind() {
   app.querySelectorAll('[data-route-link]').forEach((link) => {
@@ -584,9 +814,49 @@ function bind() {
     projectMenuOpen = !projectMenuOpen;
     render();
   });
+  app.querySelectorAll('[data-action="show-command"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const id = button.getAttribute('data-command-id');
+      const action = findConnectionAction(id);
+      if (!action) return;
+      dialogTrigger = { type: 'command', id };
+      commandAction = action;
+      notice = '';
+      render();
+      app.querySelector('.dialog button')?.focus();
+    });
+  });
+  app.querySelector('[data-action="show-disconnect"]')?.addEventListener('click', (event) => {
+    const provider = event.currentTarget.getAttribute('data-provider');
+    if (!provider) return;
+    dialogTrigger = { type: 'disconnect', provider };
+    disconnectProvider = provider;
+    notice = '';
+    render();
+    app.querySelector('.dialog button')?.focus();
+  });
+  app.querySelectorAll('[data-action="close-dialog"]').forEach((control) => {
+    control.addEventListener('click', (event) => {
+      if (control.classList.contains('dialog-backdrop') && event.target !== control) return;
+      closeDialog();
+    });
+  });
+  app.querySelector('[data-action="copy-command"]')?.addEventListener('click', () => {
+    if (commandAction) void copyCommand(commandAction.command, 'Command copied. Run it in the project terminal when ready.');
+  });
+  app.querySelector('[data-action="confirm-disconnect"]')?.addEventListener('click', () => {
+    const connection = disconnectProvider ? connectionByProvider(disconnectProvider) : null;
+    if (connection?.disconnect.command) {
+      void copyCommand(connection.disconnect.command, 'Disconnect command copied. Run it in the project terminal to complete the confirmed action.');
+    }
+  });
 }
 window.addEventListener('popstate', render);
 window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && (commandAction || disconnectProvider)) {
+    closeDialog();
+    return;
+  }
   if (event.key === 'Escape' && mobileOpen) closeNavigation();
   if (event.key === 'Escape' && projectMenuOpen) {
     projectMenuOpen = false;

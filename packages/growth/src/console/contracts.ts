@@ -14,27 +14,60 @@ import type {
 
 export type MarketingConsoleStatus = 'ready' | 'warn' | 'blocked' | 'missing';
 
-export type MarketingConsoleSetupStage = {
-  id: 'local' | 'deployedDomain' | 'providerAuth' | 'providerDiscovery' | 'proofReady';
-  status: 'pass' | 'current' | 'pending' | 'blocked';
-  title: string;
-  message: string;
-  checks: Array<{ id: string; status: 'pass' | 'warn' | 'error'; message: string }>;
+export type MarketingConsoleConnectionState =
+  | 'current'
+  | 'not-connected'
+  | 'syncing'
+  | 'delayed'
+  | 'needs-resource'
+  | 'partial-permission'
+  | 'expired-access'
+  | 'failed';
+
+export type MarketingConsoleConnectionAction = {
+  id: string;
+  label: string;
+  description: string;
+  command: string;
 };
 
-export type MarketingConsoleSetupProjection = {
-  kind: 'unisane.marketing.console-setup-projection';
-  version: 1;
-  nonMutating: true;
-  generatedAt: string;
-  ok: boolean;
-  cwd: string;
-  configPath: string;
-  appId: string;
-  platformId: string;
-  currentStage: MarketingConsoleSetupStage['id'];
-  stages: MarketingConsoleSetupStage[];
-  nextActions: Array<{ id: string; command?: string; message: string }>;
+export type MarketingConsoleConnectionService = {
+  id: string;
+  label: string;
+  purpose: string;
+  state: MarketingConsoleConnectionState;
+  statusLabel: string;
+  accessLabel: string;
+  resource?: {
+    type: string;
+    label: string;
+  };
+  dataLabel: string;
+  lastCheckedAt?: string;
+  issue?: string;
+  action?: MarketingConsoleConnectionAction;
+};
+
+export type MarketingConsoleConnection = {
+  provider: string;
+  label: string;
+  available: boolean;
+  connected: boolean;
+  state: MarketingConsoleConnectionState;
+  statusLabel: string;
+  summary: string;
+  connectionId?: string;
+  identityLabel?: string;
+  lastCheckedAt?: string;
+  services: MarketingConsoleConnectionService[];
+  primaryAction?: MarketingConsoleConnectionAction;
+  disconnect: {
+    title: string;
+    command?: string;
+    consequences: string[];
+    historicalDataRemains: boolean;
+    providerResourcesUnchanged: boolean;
+  };
 };
 
 export type MarketingConsoleMetric = {
@@ -383,6 +416,7 @@ export type MarketingConsoleState = {
   appId: string;
   environment: string;
   capabilities: GrowthCapability[];
+  connections: MarketingConsoleConnection[];
   dateWindow: {
     label: string;
     startDate?: string;
@@ -415,7 +449,6 @@ export type MarketingConsoleState = {
   receipts: MarketingConsoleReceiptEvent[];
   artifacts: MarketingConsoleArtifactLink[];
   reports: {
-    setup: MarketingConsoleSetupProjection;
     proof: MarketingEvidenceStatusReport;
     marketingStatus: MarketingStatusReport;
     analyticsStatus: MarketingStatusReport;

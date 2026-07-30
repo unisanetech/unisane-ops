@@ -35,8 +35,8 @@
     "node": ">=18.17.0"
   },
   "scripts": {
-    "build": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --clean",
-    "dev": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --watch",
+    "build": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --clean",
+    "dev": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --watch",
     "lint": "eslint src --max-warnings 0",
     "check-types": "tsc --noEmit",
     "test": "pnpm build && node --test test/*.test.mjs",
@@ -105,6 +105,11 @@
       "types": "./dist/handlers/connect.d.ts",
       "import": "./dist/handlers/connect.js",
       "default": "./dist/handlers/connect.js"
+    },
+    "./handlers/disconnect": {
+      "types": "./dist/handlers/disconnect.d.ts",
+      "import": "./dist/handlers/disconnect.js",
+      "default": "./dist/handlers/disconnect.js"
     },
     "./handlers/check": {
       "types": "./dist/handlers/check.d.ts",

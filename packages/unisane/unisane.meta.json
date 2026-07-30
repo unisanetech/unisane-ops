@@ -33,6 +33,7 @@
     "./handlers/add",
     "./handlers/check",
     "./handlers/connect",
+    "./handlers/disconnect",
     "./handlers/init",
     "./handlers/inspect-packs",
     "./handlers/migrate-growth-config",

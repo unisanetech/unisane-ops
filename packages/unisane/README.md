@@ -10,6 +10,7 @@ unisane ops init
 unisane add growth
 unisane connect google
 unisane check
+unisane disconnect google --yes
 ```
 
 `unisane ops init` adopts Ops in the current project. It does not create a Framework
@@ -24,6 +25,11 @@ references, resource selections, and capability policy. Provider credentials sta
 behind provider-owned connection storage. `unisane check` aggregates the shared typed
 readiness model and returns the same findings to human, JSON, CI, agent, and console
 consumers.
+
+`unisane disconnect google` removes the selected local connection, its provider-owned
+local secret material, and project resource references only after confirmation.
+Historical reporting data remains available, and Google-side tags, properties,
+containers, accounts, and campaigns are not changed.
 
 Previous Growth intent is converted only through:
 

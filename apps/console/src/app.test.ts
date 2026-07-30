@@ -124,6 +124,12 @@ function runWithTestProjectContext<T>(cwd: string, run: () => T): T {
   const runtime = {
     resolveBinding: async (_bindingId: string, input: unknown) => {
       const request = input as { operation?: string };
+      if (request.operation === 'growth.connections.context') {
+        return {
+          environmentId: 'production',
+          providers: [{ provider: 'google', available: true }],
+        };
+      }
       if (request.operation !== 'growth.project.context') {
         throw new Error(`[TEST_PROVIDER_OPERATION_UNEXPECTED] ${request.operation ?? 'missing'}`);
       }
@@ -662,6 +668,19 @@ describe('marketing console', () => {
         }),
       );
       expect(state.capabilities).toEqual(['seo', 'analytics', 'tag-manager', 'advertising']);
+      expect(state.connections).toEqual([
+        expect.objectContaining({
+          provider: 'google',
+          connected: false,
+          state: 'not-connected',
+          services: expect.arrayContaining([
+            expect.objectContaining({ id: 'search-console', state: 'not-connected' }),
+            expect.objectContaining({ id: 'analytics', state: 'not-connected' }),
+            expect.objectContaining({ id: 'tag-manager', state: 'not-connected' }),
+            expect.objectContaining({ id: 'ads', state: 'not-connected' }),
+          ]),
+        }),
+      ]);
       expect(state.seo.rows).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -865,10 +884,16 @@ describe('marketing console', () => {
       expect(html).toContain('"label":"Manage"');
       expect(html).toContain('Project');
       expect(html).toContain('Data is current');
+      expect(html).toContain('Continue with Google');
+      expect(html).toContain('Selected resources');
+      expect(html).toContain('Data availability');
+      expect(html).toContain('Confirm and copy command');
+      expect(html).toContain('Historical data remains available');
       expect(html).toContain('"country":"IN"');
       expect(html).toContain('"currencyCode":"INR"');
       expect(html).toContain('GTM-TEST123');
       expect(html).not.toContain(['Marketing', 'Console'].join(' '));
+      expect(html).not.toContain('Coming soon');
       expect(html).not.toContain('href="#/');
     });
   });

@@ -12,11 +12,10 @@ import {
   type MarketingMetaConnectionStatus,
   type MarketingAdsAuditReport,
 } from '@unisane/growth/marketing';
-import { buildGrowthConfigReadiness } from '@unisane/growth/contracts';
 import {
+  loadGrowthConnectionsContext,
   loadGrowthProjectContext,
   loadMarketingExecutionContext,
-  type GrowthProjectContext,
 } from '../cli/project-context.js';
 import type {
   MarketingProviderReportType,
@@ -28,6 +27,7 @@ import type {
   MarketingConsoleArtifactLink,
   MarketingConsoleComparisonRow,
   MarketingConsoleCompetitorResearchSummary,
+  MarketingConsoleConnection,
   MarketingConsoleFaqResearchSummary,
   MarketingConsoleFreshnessCell,
   MarketingConsoleMetric,
@@ -36,11 +36,11 @@ import type {
   MarketingConsoleReceiptEvent,
   MarketingConsoleSeoRow,
   MarketingConsoleSeoIntelligenceSummary,
-  MarketingConsoleSetupProjection,
   MarketingConsoleState,
   MarketingConsoleStatus,
   MarketingConsoleTrendPoint,
 } from './contracts.js';
+import { buildMarketingConsoleConnections } from './connections.js';
 
 export type BuildMarketingConsoleStateOptions = {
   cwd?: string;
@@ -92,141 +92,6 @@ const reportFamilies: Array<{
   { provider: 'searchConsole', reportType: 'page' },
   { provider: 'searchConsole', reportType: 'query' },
 ];
-
-function buildConsoleSetupProjection(args: {
-  cwd: string;
-  configPath: string;
-  generatedAt: string;
-  context: GrowthProjectContext;
-  googleConnected: boolean;
-  proofReady: boolean;
-  proofNext: string;
-}): MarketingConsoleSetupProjection {
-  const findings = buildGrowthConfigReadiness({
-    projectId: args.context.projectId,
-    config: args.context.growth,
-    observedAt: args.generatedAt,
-  });
-  const environmentIds = Object.keys(args.context.growth.environments);
-  const connectionFindings = findings.filter((finding) => finding.dimension === 'connection');
-  const resourceFindings = findings.filter((finding) => finding.dimension === 'resource');
-  const connectionReady = connectionFindings.length === 0 && args.googleConnected;
-  const resourcesReady =
-    resourceFindings.length > 0 && resourceFindings.every((finding) => finding.state === 'ready');
-  const runtimeSelected = args.context.growth.runtime.integration !== 'none';
-  const stages: MarketingConsoleSetupProjection['stages'] = [
-    {
-      id: 'local',
-      status: 'pass',
-      title: 'Project Intent',
-      message: 'Canonical Growth intent is loaded from unisane.config.ts.',
-      checks: [
-        {
-          id: 'growth.project.intent',
-          status: 'pass',
-          message: `${args.context.growth.capabilities.length} Growth capabilities are selected.`,
-        },
-      ],
-    },
-    {
-      id: 'deployedDomain',
-      status: environmentIds.length > 0 ? 'pass' : 'blocked',
-      title: 'Deployed Domain',
-      message:
-        environmentIds.length > 0
-          ? `Growth declares ${environmentIds.join(', ')}.`
-          : 'Growth must declare at least one environment.',
-      checks: [
-        {
-          id: 'growth.environment',
-          status: environmentIds.length > 0 ? 'pass' : 'error',
-          message: 'Environment identity comes from canonical project intent.',
-        },
-      ],
-    },
-    {
-      id: 'providerAuth',
-      status: connectionReady ? 'pass' : 'blocked',
-      title: 'Provider Login',
-      message: connectionReady
-        ? 'The selected Google connection is available.'
-        : 'Connect Google through the project lifecycle.',
-      checks: [
-        {
-          id: 'growth.connection.google',
-          status: connectionReady ? 'pass' : 'error',
-          message:
-            connectionFindings[0]?.summary ??
-            (connectionReady
-              ? 'Google connection selected.'
-              : 'Google connection verification is required.'),
-        },
-      ],
-    },
-    {
-      id: 'providerDiscovery',
-      status: resourcesReady ? 'pass' : connectionReady ? 'current' : 'pending',
-      title: 'Provider Discovery',
-      message: resourcesReady
-        ? 'Required Google resources are selected.'
-        : 'Discover and select every required Google resource explicitly.',
-      checks: resourceFindings.map((finding) => ({
-        id: finding.code,
-        status: finding.state === 'ready' ? 'pass' : 'warn',
-        message: finding.summary,
-      })),
-    },
-    {
-      id: 'proofReady',
-      status: args.proofReady ? 'pass' : runtimeSelected ? 'current' : 'blocked',
-      title: 'Current Evidence',
-      message: args.proofReady
-        ? 'Current provider evidence is sufficient for scheduled reads.'
-        : args.proofNext,
-      checks: [
-        {
-          id: 'growth.current-evidence',
-          status: args.proofReady ? 'pass' : runtimeSelected ? 'warn' : 'error',
-          message: args.proofNext,
-        },
-      ],
-    },
-  ];
-  const currentStage = stages.find((stage) => stage.status !== 'pass')?.id ?? 'proofReady';
-  const canonicalActions = findings
-    .flatMap((finding) => (finding.nextAction ? [finding.nextAction] : []))
-    .map((action) => ({
-      id: action.id,
-      ...(action.command
-        ? {
-            command: `unisane ${[...action.command.path, ...action.command.args].join(' ')}`,
-          }
-        : {}),
-      message: action.description,
-    }));
-  return {
-    kind: 'unisane.marketing.console-setup-projection',
-    version: 1,
-    nonMutating: true,
-    generatedAt: args.generatedAt,
-    ok: stages.every((stage) => stage.status === 'pass'),
-    cwd: args.cwd,
-    configPath: args.configPath,
-    appId: args.context.projectId,
-    platformId: args.context.projectId,
-    currentStage,
-    stages,
-    nextActions:
-      canonicalActions.length > 0
-        ? canonicalActions
-        : [
-            {
-              id: 'growth.evidence.refresh',
-              message: args.proofNext,
-            },
-          ],
-  };
-}
 
 function providerLabel(
   provider: MarketingReportProvider | 'confirmedConversions' | 'strategyMap',
@@ -285,15 +150,7 @@ export async function buildMarketingConsoleState(
     now,
   });
   const projectContext = await loadGrowthProjectContext();
-  const setup = buildConsoleSetupProjection({
-    cwd,
-    configPath: loaded.path,
-    generatedAt,
-    context: projectContext,
-    googleConnected: Boolean(options.googleAuth?.connected),
-    proofReady: proof.readyForScheduledPulls,
-    proofNext: proof.nextWorkflowStep,
-  });
+  const connectionContext = await loadGrowthConnectionsContext(config.defaultEnvironment);
   const marketingStatus = buildMarketingStatusReport({
     cwd,
     maxAgeDays,
@@ -315,6 +172,12 @@ export async function buildMarketingConsoleState(
   const adsAudit = readAdsAuditSummary(cwd);
   const researchStatus = readMarketingResearchStatus(config, { cwd });
   const freshness = buildFreshness(config, cwd, now, maxAgeDays);
+  const connections = buildMarketingConsoleConnections({
+    context: connectionContext,
+    capabilities: projectContext.growth.capabilities,
+    evidence: proof.providers,
+    freshness,
+  });
   const channelRows = buildChannelRows(freshness);
   const seoRows = buildSeoRows(freshness);
   const keywordResearch = readKeywordResearchSummary(cwd);
@@ -337,7 +200,8 @@ export async function buildMarketingConsoleState(
   );
   const schedule = readScheduleSummary(cwd, config.defaultEnvironment);
   const actions = buildActions({
-    setupNext: setup.nextActions[0]?.message,
+    connectionNext: connections.find((connection) => connection.primaryAction)?.primaryAction
+      ?.description,
     proofNext: proof.nextWorkflowStep,
     marketingNext: marketingStatus.nextWorkflowStep,
     analyticsNext: analyticsStatus.nextWorkflowStep,
@@ -351,7 +215,7 @@ export async function buildMarketingConsoleState(
   );
   const readinessStatuses: MarketingConsoleReadinessStatuses = {
     connections: combineConsoleStatuses(
-      setupRouteStatus(setup),
+      connectionRouteStatus(connections),
       proof.readyForScheduledPulls ? 'ready' : proof.ok ? 'warn' : 'blocked',
     ),
     overview: marketingStatus.ok ? 'ready' : 'warn',
@@ -371,7 +235,7 @@ export async function buildMarketingConsoleState(
   };
   const readiness = buildReadiness(
     readinessStatuses,
-    setup.currentStage,
+    connections.find((connection) => connection.state !== 'current')?.state ?? 'current',
     selectNextAction(actions),
   );
 
@@ -384,6 +248,7 @@ export async function buildMarketingConsoleState(
     appId: config.appId,
     environment: config.defaultEnvironment,
     capabilities: [...projectContext.growth.capabilities],
+    connections,
     dateWindow: inferDateWindow(marketingStatus.providerFreshness),
     readiness,
     metrics,
@@ -403,7 +268,6 @@ export async function buildMarketingConsoleState(
     receipts,
     artifacts,
     reports: {
-      setup,
       proof,
       marketingStatus,
       analyticsStatus,
@@ -1751,16 +1615,22 @@ function keywordMarketKey(country: string | undefined, language: string | undefi
   return [country ?? 'unknown', language ?? 'unknown'].join(' / ');
 }
 
-function setupRouteStatus(setup: MarketingConsoleSetupProjection): MarketingConsoleStatus {
-  if (setup.ok) return 'ready';
-  const preProofStages = setup.stages.filter((stage) => stage.id !== 'proofReady');
-  return preProofStages.some(
-    (stage) =>
-      (stage.status === 'current' || stage.status === 'blocked') &&
-      stage.checks.some((check) => check.status === 'error'),
-  )
-    ? 'blocked'
-    : 'warn';
+function connectionRouteStatus(
+  connections: readonly MarketingConsoleConnection[],
+): MarketingConsoleStatus {
+  if (!connections.some((connection) => connection.connected)) return 'blocked';
+  if (
+    connections.some(
+      (connection) =>
+        connection.state === 'expired-access' ||
+        connection.state === 'failed' ||
+        connection.state === 'not-connected',
+    )
+  ) {
+    return 'blocked';
+  }
+  if (connections.some((connection) => connection.state !== 'current')) return 'warn';
+  return 'ready';
 }
 
 function combineConsoleStatuses(
@@ -2184,17 +2054,20 @@ function buildReadiness(
 
 function readinessStageLabel(stage: string): string {
   const labels: Record<string, string> = {
-    local: 'local pack',
-    deployedDomain: 'deployed domain',
-    providerAuth: 'provider login',
-    providerDiscovery: 'provider identifiers',
-    proofReady: 'proof evidence',
+    current: 'current data',
+    'not-connected': 'provider connection',
+    syncing: 'first data update',
+    delayed: 'delayed data',
+    'needs-resource': 'resource selection',
+    'partial-permission': 'provider access',
+    'expired-access': 'expired provider access',
+    failed: 'provider connection',
   };
   return labels[stage] ?? stage;
 }
 
 function buildActions(input: {
-  setupNext?: string;
+  connectionNext?: string;
   proofNext: string;
   marketingNext: string;
   analyticsNext: string;
@@ -2206,7 +2079,7 @@ function buildActions(input: {
     action(
       'connections',
       'Connection next step',
-      friendlyActionMessage(input.setupNext ?? 'Setup lifecycle is complete.'),
+      friendlyActionMessage(input.connectionNext ?? 'Selected connections are working.'),
       'connections',
       'warn',
     ),

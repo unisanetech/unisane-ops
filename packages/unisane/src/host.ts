@@ -138,6 +138,13 @@ async function loadExactHandler(command: PackCommandDescriptor): Promise<PackCom
     return module.runConnect;
   }
   if (
+    command.handler.exportPath === './handlers/disconnect' &&
+    command.handler.exportName === 'runDisconnect'
+  ) {
+    const module = await import('./handlers/disconnect.js');
+    return module.runDisconnect;
+  }
+  if (
     command.handler.exportPath === './handlers/check' &&
     command.handler.exportName === 'runCheck'
   ) {
@@ -320,6 +327,7 @@ Canonical commands:
   unisane ops init [--growth] [--mode <mode>] [--yes] [--json]
   unisane add growth [--capability <id>] [--yes] [--json]
   unisane connect google [--environment <id>] [--yes] [--json]
+  unisane disconnect google [--environment <id>] [--connection <id>] [--yes] [--json]
   unisane check [--environment <id>] [--json]
   unisane ops migrate growth-config --input <path> --yes [--json]
   unisane status [--json]

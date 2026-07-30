@@ -260,6 +260,7 @@ test('canonical status returns one structured JSON document', () => {
       'cloud',
       'provider.cloudflare',
       'growth',
+      'ops-console',
       'provider-aws',
       'provider-google',
       'framework',
@@ -278,15 +279,18 @@ test('canonical pack inspection exposes the validated static graph', () => {
   assert.equal(output.result.packs[2].commands[0].id, 'provider.cloudflare.connection.check');
   assert.equal(output.result.packs[3].packageName, '@unisane/growth');
   assert.equal(output.result.packs[3].commands[0].id, 'growth.root');
-  assert.equal(output.result.packs[4].packageName, '@unisane/provider-aws');
-  assert.equal(output.result.packs[5].packageName, '@unisane/provider-google');
-  assert.equal(output.result.packs[6].packageName, '@unisane/framework-ops');
+  assert.equal(output.result.packs[4].packageName, '@unisane/ops-console');
+  assert.equal(output.result.packs[4].commands[0].id, 'growth.console');
+  assert.equal(output.result.packs[5].packageName, '@unisane/provider-aws');
+  assert.equal(output.result.packs[6].packageName, '@unisane/provider-google');
+  assert.equal(output.result.packs[7].packageName, '@unisane/framework-ops');
 });
 
 test('root help exposes canonical capability and provider routing', () => {
   const result = runCli(['--help']);
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.match(result.stdout, /Canonical commands:/);
+  assert.match(result.stdout, /disconnect google/);
   assert.match(result.stdout, /connect cloudflare check/);
   assert.match(result.stdout, /cloud dns import/);
   assert.match(result.stdout, /provider cloudflare dns/);

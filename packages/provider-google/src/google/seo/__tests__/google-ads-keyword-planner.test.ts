@@ -2,46 +2,13 @@ import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import {
-  fetchGoogleAdsKeywordIdeas,
-  fetchGoogleAdsKeywordMetricsFile,
-  readGoogleAdsKeywordPlannerCredentials,
-} from '../index.js';
+import { fetchGoogleAdsKeywordIdeas, fetchGoogleAdsKeywordMetricsFile } from '../index.js';
 
 describe('Google Ads Keyword Planner provider', () => {
-  it('validates required env without exposing secret values', () => {
-    expect(() =>
-      readGoogleAdsKeywordPlannerCredentials({
-        GOOGLE_ADS_DEVELOPER_TOKEN: 'dev-token',
-      }),
-    ).toThrow(
-      'Missing Google Ads Keyword Planner env: GOOGLE_ADS_CLIENT_ID or GOOGLE_OAUTH_CLIENT_ID or GOOGLE_CLIENT_ID, GOOGLE_ADS_CLIENT_SECRET or GOOGLE_OAUTH_CLIENT_SECRET or GOOGLE_CLIENT_SECRET, GOOGLE_ADS_REFRESH_TOKEN, GOOGLE_ADS_CUSTOMER_ID.',
-    );
-  });
-
-  it('reuses shared Google OAuth client env for Google Ads metrics', () => {
-    const credentials = readGoogleAdsKeywordPlannerCredentials({
-      GOOGLE_ADS_DEVELOPER_TOKEN: 'dev-token',
-      GOOGLE_OAUTH_CLIENT_ID: 'shared-client-id',
-      GOOGLE_OAUTH_CLIENT_SECRET: 'shared-client-secret',
-      GOOGLE_ADS_REFRESH_TOKEN: 'refresh-token',
-      GOOGLE_ADS_CUSTOMER_ID: '123-456-7890',
-    });
-
-    expect(credentials).toMatchObject({
-      clientId: 'shared-client-id',
-      clientSecret: 'shared-client-secret',
-      customerId: '1234567890',
-    });
-  });
-
-  it('fetches keyword idea metrics through OAuth and Google Ads REST', async () => {
+  it('fetches keyword idea metrics with connection-resolved access', async () => {
     const calls: Array<{ url: string; init?: RequestInit }> = [];
     const fetchImpl: typeof fetch = async (input, init) => {
       calls.push({ url: String(input), init });
-      if (String(input).includes('oauth2.googleapis.com')) {
-        return new Response(JSON.stringify({ access_token: 'access-token' }), { status: 200 });
-      }
       return new Response(
         JSON.stringify({
           results: [
@@ -65,13 +32,11 @@ describe('Google Ads Keyword Planner provider', () => {
       platformId: 'true-resume',
       credentials: {
         developerToken: 'developer-token',
-        clientId: 'client-id',
-        clientSecret: 'client-secret',
-        refreshToken: 'refresh-token',
         customerId: '1234567890',
         loginCustomerId: '9988776655',
         apiVersion: 'v24',
       },
+      accessToken: 'access-token',
       country: 'US',
       language: 'en',
       languageId: '1000',
@@ -84,11 +49,11 @@ describe('Google Ads Keyword Planner provider', () => {
       fetchedAt: '2026-05-17T00:00:00.000Z',
     });
 
-    const requestBody = JSON.parse(String(calls[1]?.init?.body));
-    expect(calls[1]?.url).toBe(
+    const requestBody = JSON.parse(String(calls[0]?.init?.body));
+    expect(calls[0]?.url).toBe(
       'https://googleads.googleapis.com/v24/customers/1234567890:generateKeywordIdeas',
     );
-    expect(calls[1]?.init?.headers).toMatchObject({
+    expect(calls[0]?.init?.headers).toMatchObject({
       authorization: 'Bearer access-token',
       'developer-token': 'developer-token',
       'login-customer-id': '9988776655',
@@ -176,6 +141,7 @@ describe('Google Ads Keyword Planner provider', () => {
         candidates: 'candidates.json',
         output: 'normalized/google-ads.json',
         credentials: createCredentials(),
+        accessToken: 'access-token',
         country: 'US',
         language: 'en',
         languageId: '1000',
@@ -248,6 +214,7 @@ describe('Google Ads Keyword Planner provider', () => {
         seedFile: 'seed.json',
         output: 'normalized/google-ads.json',
         credentials: createCredentials(),
+        accessToken: 'access-token',
         country: 'US',
         language: 'en',
         languageId: '1000',
@@ -316,6 +283,7 @@ describe('Google Ads Keyword Planner provider', () => {
         keywords: ['teacher resume examples'],
         output: 'normalized/google-ads.json',
         credentials: createCredentials(),
+        accessToken: 'access-token',
         country: 'US',
         language: 'en',
         languageId: '1000',
@@ -363,6 +331,7 @@ describe('Google Ads Keyword Planner provider', () => {
         keywords: ['data analyst resume example'],
         output: 'normalized/google-ads.json',
         credentials: createCredentials(),
+        accessToken: 'access-token',
         country: 'US',
         language: 'en',
         languageId: '1000',
@@ -381,9 +350,6 @@ describe('Google Ads Keyword Planner provider', () => {
 function createCredentials() {
   return {
     developerToken: 'developer-token',
-    clientId: 'client-id',
-    clientSecret: 'client-secret',
-    refreshToken: 'refresh-token',
     customerId: '1234567890',
     apiVersion: 'v24',
   };

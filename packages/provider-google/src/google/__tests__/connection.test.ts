@@ -9,6 +9,7 @@ import {
 } from '../connection.js';
 import { discoverGoogleConnectionResources } from '../connection-discovery.js';
 import { connectGoogle } from '../connect.js';
+import { disconnectGoogle } from '../disconnect.js';
 import { readGoogleConnectionRecord } from '../connection-store.js';
 
 const connection: GoogleConnectionRecord = {
@@ -174,6 +175,42 @@ describe('Google connection contract', () => {
       credentialState: 'missing',
       grants: [{ service: 'analytics', state: 'missing' }],
     });
+  });
+
+  it('disconnects the local connection without changing provider resources', async () => {
+    const projectRoot = mkdtempSync(path.join(tmpdir(), 'google-disconnect-'));
+    const recordPath = '.unisane/ops/connections/google-ci.json';
+    await connectGoogle({
+      context: {
+        cwd: projectRoot,
+        argv: ['--connection', 'google-ci', '--secret-reference', 'google-ci-oauth'],
+        json: true,
+      },
+      projectId: 'product-site',
+      environmentId: 'production',
+      recordPath,
+      requiredServices: ['analytics'],
+    });
+
+    const result = await disconnectGoogle({
+      context: { cwd: projectRoot, argv: [], json: true },
+      projectId: 'product-site',
+      environmentId: 'production',
+      connectionId: 'google-ci',
+      recordPath,
+    });
+
+    expect(result).toMatchObject({
+      status: 'ok',
+      actualEffect: 'write',
+      writeTargets: ['project'],
+      result: {
+        disconnected: true,
+        historicalDataRetained: true,
+        providerResourcesChanged: false,
+      },
+    });
+    expect(readGoogleConnectionRecord({ projectRoot, recordPath })).toBeNull();
   });
 
   it('keeps zero discovered resources unselected with an exact missing finding', async () => {

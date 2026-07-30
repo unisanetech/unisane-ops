@@ -10,8 +10,51 @@ export interface GrowthProjectContext {
   growth: GrowthConfig;
 }
 
+export type GrowthConnectionGrantState = 'granted' | 'missing' | 'partial' | 'revoked';
+
+export type GrowthConnectionResourceState = 'selected' | 'missing' | 'ambiguous' | 'inaccessible';
+
+export interface GrowthProviderConnectionContext {
+  provider: string;
+  available: boolean;
+  connection?: {
+    id: string;
+    displayName: string;
+    identity?: string;
+    credentialState: 'active' | 'expired' | 'revoked' | 'missing';
+    grants: Array<{
+      service: string;
+      state: GrowthConnectionGrantState;
+      observedAt: string;
+      expiresAt?: string;
+    }>;
+    resources: Array<{
+      service: string;
+      resourceType: string;
+      displayName: string;
+      state: GrowthConnectionResourceState;
+      observedAt: string;
+    }>;
+    updatedAt?: string;
+    lastVerifiedAt?: string;
+  };
+}
+
+export interface GrowthConnectionsContext {
+  environmentId: string;
+  providers: GrowthProviderConnectionContext[];
+}
+
 export function loadGrowthProjectContext(): Promise<GrowthProjectContext> {
   return executeGrowthProviderCommand('growth.project.context', {});
+}
+
+export function loadGrowthConnectionsContext(
+  environment?: string,
+): Promise<GrowthConnectionsContext> {
+  return executeGrowthProviderCommand('growth.connections.context', {
+    ...(environment ? { environment } : {}),
+  });
 }
 
 export async function loadMarketingExecutionContext(): Promise<{

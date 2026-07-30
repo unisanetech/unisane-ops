@@ -5,6 +5,7 @@ export * from './google/connection-discovery.js';
 export * from './google/connection-store.js';
 export * from './google/connection-token.js';
 export * from './google/connect.js';
+export * from './google/disconnect.js';
 export * from './google/control-plane/client.js';
 export * from './google/control-plane/commands.js';
 export * from './google/control-plane/model.js';

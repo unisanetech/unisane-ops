@@ -4,6 +4,7 @@ import type { PackCommandRuntime } from '@unisane/ops-engine/pack';
 export const GROWTH_PROVIDER_COMMAND_BINDING = 'growth.provider.command';
 
 export type GrowthProviderCommandOperation =
+  | 'growth.connections.context'
   | 'growth.project.context'
   | 'google.connection.resolve-credentials'
   | 'google.marketing.execute-live'

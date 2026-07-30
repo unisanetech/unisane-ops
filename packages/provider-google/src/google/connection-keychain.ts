@@ -65,3 +65,30 @@ export function readGoogleConnectionKeychainSecret(args: {
     `[GOOGLE_CONNECTION_KEYCHAIN_READ_FAILED] ${output.trim() || 'macOS Keychain read failed.'}`,
   );
 }
+
+export function removeGoogleConnectionKeychainSecret(args: {
+  connectionId: string;
+  field: GoogleConnectionSecretField;
+}): boolean {
+  if (process.platform !== 'darwin') {
+    throw new Error(
+      '[GOOGLE_CONNECTION_KEYCHAIN_UNAVAILABLE] Local Google connection storage currently requires macOS Keychain.',
+    );
+  }
+  const result = spawnSync(
+    '/usr/bin/security',
+    ['delete-generic-password', '-a', account(args.connectionId, args.field), '-s', SERVICE],
+    { encoding: 'utf8' },
+  );
+  if (result.status === 0) return true;
+  const output = `${result.stderr ?? ''}${result.stdout ?? ''}`;
+  if (
+    output.includes('could not be found') ||
+    output.includes('The specified item could not be found')
+  ) {
+    return false;
+  }
+  throw new Error(
+    `[GOOGLE_CONNECTION_KEYCHAIN_DELETE_FAILED] ${output.trim() || 'macOS Keychain delete failed.'}`,
+  );
+}

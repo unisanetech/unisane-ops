@@ -94,6 +94,33 @@ test('plain projects use one init, connect, and aggregate check lifecycle', () =
     findings.some((finding) => finding.code === 'growth.resource.google.analytics.selected'),
     true,
   );
+
+  const disconnected = run(
+    [
+      'disconnect',
+      'google',
+      '--environment',
+      'development',
+      '--connection',
+      'google-primary',
+      '--yes',
+      '--json',
+    ],
+    root,
+  );
+  assert.equal(disconnected.status, 0, disconnected.stderr || disconnected.stdout);
+  assert.equal(JSON.parse(disconnected.stdout).result.disconnected, true);
+  const disconnectedSource = readFileSync(resolve(root, 'unisane.config.ts'), 'utf8');
+  assert.doesNotMatch(disconnectedSource, /google-primary/);
+
+  const afterDisconnect = run(['check', '--json'], root);
+  assert.equal(afterDisconnect.status, 4, afterDisconnect.stderr || afterDisconnect.stdout);
+  assert.equal(
+    JSON.parse(afterDisconnect.stdout).result.findings.some(
+      (finding) => finding.code === 'growth.connection.google.missing',
+    ),
+    true,
+  );
 });
 
 test('Framework projects retain their default config and receive one named Ops block', () => {

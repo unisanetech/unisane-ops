@@ -64,6 +64,98 @@ async function resolveGrowthProjectContext(cwd: string): Promise<unknown> {
   };
 }
 
+async function resolveGrowthConnectionsContext(cwd: string, input: unknown): Promise<unknown> {
+  const loaded = await loadUnisaneOpsConfig(cwd);
+  const growth = loaded.config.capabilities.growth;
+  if (!growth) {
+    throw new Error(
+      '[GROWTH_CAPABILITY_NOT_SELECTED] Run `unisane add growth` before Growth operations.',
+    );
+  }
+  const requested = recordOf(input).environment;
+  const environmentId = selectGrowthEnvironment(growth.environments, requested);
+  const environment = growth.environments[environmentId];
+  const connectionId = environment.connections.google;
+  if (!connectionId) {
+    return {
+      environmentId,
+      providers: [{ provider: 'google', available: true }],
+    };
+  }
+  const reference = loaded.config.connections[connectionId];
+  if (!reference || reference.provider !== 'google' || !('recordPath' in reference)) {
+    return {
+      environmentId,
+      providers: [
+        {
+          provider: 'google',
+          available: true,
+          connection: {
+            id: connectionId,
+            displayName: 'Google',
+            credentialState: 'missing',
+            grants: [],
+            resources: [],
+          },
+        },
+      ],
+    };
+  }
+  const google = await import('@unisane/provider-google');
+  const connection = google.readGoogleConnectionRecord({
+    projectRoot: loaded.projectRoot,
+    recordPath: reference.recordPath,
+  });
+  if (!connection) {
+    return {
+      environmentId,
+      providers: [
+        {
+          provider: 'google',
+          available: true,
+          connection: {
+            id: connectionId,
+            displayName: 'Google',
+            credentialState: 'missing',
+            grants: [],
+            resources: [],
+          },
+        },
+      ],
+    };
+  }
+  return {
+    environmentId,
+    providers: [
+      {
+        provider: 'google',
+        available: true,
+        connection: {
+          id: connection.connectionId,
+          displayName: connection.displayName,
+          ...(connection.identity?.email ? { identity: connection.identity.email } : {}),
+          credentialState: connection.credentialState,
+          grants: connection.grants.map((grant) => ({
+            service: grant.service,
+            state: grant.state,
+            observedAt: grant.observedAt,
+            ...(grant.expiresAt ? { expiresAt: grant.expiresAt } : {}),
+          })),
+          resources: connection.resources.map((resource) => ({
+            service: resource.service,
+            resourceType: resource.resourceType,
+            displayName: resource.displayName,
+            state: resource.state,
+            observedAt: resource.observedAt,
+          })),
+          updatedAt: connection.updatedAt,
+          ...(connection.lastVerifiedAt ? { lastVerifiedAt: connection.lastVerifiedAt } : {}),
+        },
+      },
+    ],
+  };
+}
+
 async function resolveGoogleConnectionCredentials(cwd: string, input: unknown): Promise<unknown> {
   const provider = await import('@unisane/provider-google');
   const loaded = await loadUnisaneOpsConfig(cwd);
@@ -239,6 +331,9 @@ export async function resolveGrowthProviderBinding(
 ): Promise<unknown> {
   void runtime;
   const request = requestOf(input);
+  if (request.operation === 'growth.connections.context') {
+    return resolveGrowthConnectionsContext(request.cwd, request.input);
+  }
   if (request.operation === 'growth.project.context') {
     return resolveGrowthProjectContext(request.cwd);
   }

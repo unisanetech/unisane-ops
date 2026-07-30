@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { googleConnectionRecordSchema, type GoogleConnectionRecord } from './connection.js';
 
@@ -38,4 +38,14 @@ export function writeGoogleConnectionRecord(args: {
   });
   renameSync(temporary, absolute);
   return absolute;
+}
+
+export function removeGoogleConnectionRecord(args: {
+  projectRoot: string;
+  recordPath: string;
+}): boolean {
+  const absolute = resolveRecordPath(args.projectRoot, args.recordPath);
+  if (!existsSync(absolute)) return false;
+  rmSync(absolute);
+  return true;
 }

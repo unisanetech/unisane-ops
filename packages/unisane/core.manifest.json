@@ -47,6 +47,19 @@
       "json": true
     },
     {
+      "id": "core.disconnect",
+      "path": ["disconnect"],
+      "handler": {
+        "exportPath": "./handlers/disconnect",
+        "exportName": "runDisconnect"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project", "secret-store"],
+      "artifactClasses": [],
+      "riskGuards": ["security-sensitive", "destructive"],
+      "json": true
+    },
+    {
       "id": "core.check",
       "path": ["check"],
       "handler": {
@@ -103,7 +116,7 @@
   "addItemTypes": [],
   "capabilities": [],
   "providerBindings": [],
-  "reservedRootNames": ["add", "app", "build", "check", "connect", "dev", "doctor", "generate", "inspect", "llm", "ops", "remove", "sync"],
+  "reservedRootNames": ["add", "app", "build", "check", "connect", "dev", "disconnect", "doctor", "generate", "inspect", "llm", "ops", "remove", "sync"],
   "reservedRootContributors": [
     {
       "root": "app",
@@ -148,6 +161,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "2b6a3c8a428c5eca956932193c8712ddeccb81f3767e1a87ddd7cf3347dc3c58"
+    "manifestHash": "9988a087dc4b562b8455f54afe8e8ec03295373fa276e771fdace743f3458bee"
   }
 }

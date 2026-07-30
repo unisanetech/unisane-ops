@@ -9,6 +9,10 @@ Search Console, Analytics, Tag Manager, Ads, and project administration. This pa
 owns OAuth, secure local credentials, refresh, revocation state, discovery, explicit
 resource selection, and connection readiness.
 
+`unisane disconnect google` removes the local connection record and locally owned
+credential material after explicit confirmation. It does not delete historical reports
+or mutate provider-side tags, properties, containers, accounts, or campaigns.
+
 Zero discovered resources produces a missing finding. One is selected automatically.
 Multiple resources remain ambiguous until the user selects one. Partial permissions,
 expired access, revoked access, and unavailable Ads developer access remain explicit

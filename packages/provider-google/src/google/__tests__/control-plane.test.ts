@@ -2,13 +2,12 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { saveGoogleAuthProfile } from '../auth.js';
+import { runWithGoogleProviderCommandContext } from '../../cli/runtime.js';
 import {
   applyGoogleApisPlan,
   buildGoogleApisInventory,
   buildGoogleApisPlan,
   buildGoogleProductsInventory,
-  buildGoogleSetupStatus,
   type GoogleProviderCliOptions,
 } from '../control-plane/model.js';
 
@@ -21,28 +20,14 @@ function jsonResponse(value: unknown, status = 200): Response {
   } as Response;
 }
 
-async function withSavedProfile(
-  fn: (args: {
-    cwd: string;
-    authHome: string;
-    options: GoogleProviderCliOptions;
-    calls: string[];
-  }) => Promise<void>,
+async function withConnectionRuntime(
+  fn: (args: { cwd: string; options: GoogleProviderCliOptions; calls: string[] }) => Promise<void>,
 ): Promise<void> {
   const cwd = await mkdtemp(path.join(tmpdir(), 'unisane-google-provider-cwd-'));
-  const authHome = await mkdtemp(path.join(tmpdir(), 'unisane-google-provider-auth-'));
   const calls: string[] = [];
   const fetch = async (input: string | URL) => {
     const url = String(input);
     calls.push(url);
-    if (url === 'https://oauth2.googleapis.com/token') {
-      return jsonResponse({
-        access_token: 'access-token',
-        scope:
-          'https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/tagmanager.readonly https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/webmasters.readonly https://www.googleapis.com/auth/adwords',
-        expires_in: 3600,
-      });
-    }
     if (url.includes('cloudresourcemanager.googleapis.com')) {
       return jsonResponse({
         projectId: 'true-resume-prod',
@@ -110,73 +95,34 @@ async function withSavedProfile(
     return jsonResponse({ error: { message: `Unexpected URL ${url}` } }, 404);
   };
   try {
-    await saveGoogleAuthProfile({
-      profile: 'true-resume',
-      clientId: 'client-id',
-      clientSecret: 'client-secret',
-      refreshToken: 'refresh-token',
-      scopes: [
-        'https://www.googleapis.com/auth/cloud-platform',
-        'https://www.googleapis.com/auth/tagmanager.readonly',
-        'https://www.googleapis.com/auth/analytics.readonly',
-        'https://www.googleapis.com/auth/webmasters.readonly',
-        'https://www.googleapis.com/auth/adwords',
-      ],
-      secretStore: 'file',
-      runtime: { authHome, store: 'file', allowPlaintextStore: true },
-    });
-    await fn({
-      cwd,
-      authHome,
-      calls,
-      options: {
+    await runWithGoogleProviderCommandContext(
+      {
         cwd,
-        authHome,
-        store: 'file',
-        allowPlaintextStore: true,
-        profile: 'true-resume',
-        project: 'true-resume-prod',
-        app: 'true-resume',
-        env: 'production',
-        fetch,
+        runtime: {
+          resolveBinding: async () => ({ accessToken: 'access-token' }),
+        },
       },
-    });
+      () =>
+        fn({
+          cwd,
+          calls,
+          options: {
+            cwd,
+            connection: 'google-primary',
+            project: 'true-resume-prod',
+            environment: 'production',
+            fetch,
+          },
+        }),
+    );
   } finally {
     await rm(cwd, { recursive: true, force: true });
-    await rm(authHome, { recursive: true, force: true });
   }
 }
 
 describe('google provider control plane', () => {
-  it('reports missing project and auth as actionable setup status', async () => {
-    const authHome = await mkdtemp(path.join(tmpdir(), 'unisane-google-provider-empty-auth-'));
-    try {
-      const report = await buildGoogleSetupStatus({
-        cwd: process.cwd(),
-        authHome,
-        store: 'file',
-        allowPlaintextStore: true,
-        profile: 'true-resume',
-      });
-
-      expect(report.projectId).toBeNull();
-      expect(report.setupStatus.ready).toBe(false);
-      expect(report.setupStatus.checks).toContainEqual(
-        expect.objectContaining({ id: 'google.project', status: 'fail' }),
-      );
-      expect(report.setupStatus.nextActions).toContainEqual(
-        expect.objectContaining({ id: 'google.auth.login', owner: 'developer' }),
-      );
-      expect(report.envReport.entries).toContainEqual(
-        expect.objectContaining({ name: 'GOOGLE_CLOUD_PROJECT', configured: false }),
-      );
-    } finally {
-      await rm(authHome, { recursive: true, force: true });
-    }
-  });
-
   it('builds Google API inventory and plan artifacts from official API responses', async () => {
-    await withSavedProfile(async ({ options }) => {
+    await withConnectionRuntime(async ({ options }) => {
       const inventory = await buildGoogleApisInventory({
         ...options,
         output: '.unisane/provider/google/production/inventory/apis/latest.json',
@@ -206,7 +152,7 @@ describe('google provider control plane', () => {
   });
 
   it('applies only reviewed Google API enablement plans and writes receipts', async () => {
-    await withSavedProfile(async ({ cwd, options, calls }) => {
+    await withConnectionRuntime(async ({ cwd, options, calls }) => {
       const plan = await buildGoogleApisPlan(options);
       const planPath = path.join(cwd, 'google-plan.json');
       await writeFile(planPath, `${JSON.stringify(plan, null, 2)}\n`, 'utf8');
@@ -232,16 +178,12 @@ describe('google provider control plane', () => {
     });
   });
 
-  it('discovers Google product handoff resources for GTM, GA4, Search Console, and Ads', async () => {
-    await withSavedProfile(async ({ options }) => {
-      const inventory = await buildGoogleProductsInventory(
-        {
-          ...options,
-          developerTokenEnv: 'GOOGLE_ADS_DEVELOPER_TOKEN',
-          output: '.unisane/provider/google/production/inventory/products/latest.json',
-        },
-        { env: { GOOGLE_ADS_DEVELOPER_TOKEN: 'developer-token' } },
-      );
+  it('discovers connected Google products and reports guarded Ads access honestly', async () => {
+    await withConnectionRuntime(async ({ options }) => {
+      const inventory = await buildGoogleProductsInventory({
+        ...options,
+        output: '.unisane/provider/google/production/inventory/products/latest.json',
+      });
 
       expect(inventory.requiredScopes).toContain(
         'https://www.googleapis.com/auth/tagmanager.readonly',
@@ -260,7 +202,11 @@ describe('google provider control plane', () => {
         expect.objectContaining({ type: 'searchConsoleSite', id: 'sc-domain:trueresume.io' }),
       );
       expect(inventory.resources).toContainEqual(
-        expect.objectContaining({ type: 'googleAdsCustomer', id: '9876543210' }),
+        expect.objectContaining({
+          type: 'googleAdsDeveloperToken',
+          id: 'google-ads-developer-access',
+          state: 'missing',
+        }),
       );
       expect(inventory.artifact?.relativePath).toBe(
         '.unisane/provider/google/production/inventory/products/latest.json',
