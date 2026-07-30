@@ -325,6 +325,8 @@ export type MarketingConsoleKeywordMarketSummary = {
 export type MarketingConsoleKeywordMatrixRow = {
   term: string;
   normalizedTerm: string;
+  clusterId: string;
+  clusterLabel: string;
   marketCount: number;
   totalKnownVolume: number;
   bestMarket?: string;

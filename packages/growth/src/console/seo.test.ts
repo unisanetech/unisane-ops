@@ -201,6 +201,8 @@ describe('Growth console SEO projection', () => {
           {
             term: 'ats resume checker',
             normalizedTerm: 'ats resume checker',
+            clusterId: 'ats',
+            clusterLabel: 'ATS checker and job match',
             marketCount: 1,
             totalKnownVolume: 2400,
             bestMarket: 'US / en',

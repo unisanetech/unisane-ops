@@ -103,8 +103,8 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     '/seo/research',
     'seo',
     'Research',
-    'Search research',
-    'Compare topics and questions using real demand and current visibility.',
+    'Keyword research',
+    'Find and prioritize keywords using measured demand, markets, intent, questions, competitors, and search-result evidence.',
     true,
   ),
   route(

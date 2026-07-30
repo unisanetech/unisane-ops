@@ -792,6 +792,8 @@ describe('marketing console', () => {
         expect.arrayContaining([
           expect.objectContaining({
             normalizedTerm: 'ats resume checker',
+            clusterId: 'ats',
+            clusterLabel: 'ATS checker and job match',
             marketCount: 2,
             totalKnownVolume: 7800,
             bestMarket: 'IN / en',
@@ -971,8 +973,12 @@ describe('marketing console', () => {
       expect(html).toContain('Search pages');
       expect(html).toContain('Search queries');
       expect(html).toContain('Indexing and visibility');
-      expect(html).toContain('Keyword ideas');
-      expect(html).toContain('Content gaps');
+      expect(html).toContain('Plan what to target next');
+      expect(html).toContain('Researched keywords');
+      expect(html).toContain('Measured monthly demand');
+      expect(html).toContain('Competitors & gaps');
+      expect(html).toContain('SERP & experiments');
+      expect(html).toContain('Search Console visibility helps validate current performance');
       expect(html).toContain('"country":"IN"');
       expect(html).toContain('"currencyCode":"INR"');
       expect(html).toContain('GTM-TEST123');

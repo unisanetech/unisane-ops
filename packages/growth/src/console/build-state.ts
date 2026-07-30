@@ -1439,11 +1439,14 @@ function buildKeywordMatrix(
     const normalizedTerm = keyword.normalizedTerm ?? keyword.term.trim().toLowerCase();
     if (!normalizedTerm) continue;
     const market = keywordMarketKey(keyword.country, keyword.language);
+    const cluster = classifyKeywordCluster(normalizedTerm);
     const row =
       rows.get(normalizedTerm) ??
       ({
         term: keyword.term,
         normalizedTerm,
+        clusterId: cluster.id,
+        clusterLabel: cluster.label,
         marketCount: 0,
         totalKnownVolume: 0,
         markets: {},
@@ -1502,8 +1505,7 @@ function buildKeywordClusters(
 ): MarketingConsoleKeywordResearchSummary['clusters'] {
   const clusterRows = new Map<string, MarketingConsoleKeywordResearchSummary['matrix']>();
   for (const row of rows) {
-    const cluster = classifyKeywordCluster(row.normalizedTerm);
-    clusterRows.set(cluster.id, [...(clusterRows.get(cluster.id) ?? []), row]);
+    clusterRows.set(row.clusterId, [...(clusterRows.get(row.clusterId) ?? []), row]);
   }
 
   const clusters: MarketingConsoleKeywordClusterSummary[] = [];

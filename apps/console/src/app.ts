@@ -359,6 +359,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .row-subtitle { display: block; max-width: 340px; margin-top: 4px; overflow: hidden; color: var(--color-on-surface-variant, #62655d); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
 .source-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 20px; padding: 14px 16px; border-radius: var(--radius-md, 12px); background: var(--color-surface-container-low, #f1f1ed); color: var(--color-on-surface-variant, #62655d); font-size: 12px; }
 .summary-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.summary-strip.research-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .summary-stat { padding: 15px; border-radius: var(--radius-md, 12px); background: var(--color-surface-container-low, #f1f1ed); }
 .summary-stat strong, .summary-stat span { display: block; }
 .summary-stat strong { margin-top: 5px; font-size: 20px; }
@@ -369,6 +370,27 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .view-switcher { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0 12px; }
 .view-switcher button { min-height: 36px; border: 1px solid var(--color-outline-variant, #d7d8d1); border-radius: 999px; padding: 7px 12px; background: var(--color-surface, #fff); color: inherit; font-size: 12px; cursor: pointer; }
 .view-switcher button.active { border-color: var(--color-primary, #476242); background: var(--color-primary-container, #dce6d7); font-weight: 700; }
+.research-intro { margin-top: 18px; padding: 18px 20px; border: 1px solid var(--color-outline-variant, #deded8); border-radius: var(--radius-lg, 16px); background: var(--color-surface, #fff); }
+.research-intro h2 { margin: 0; font-size: 18px; }
+.research-intro p { max-width: 860px; margin: 7px 0 0; color: var(--color-on-surface-variant, #62655d); font-size: 13px; line-height: 1.55; }
+.research-toolbar { display: grid; grid-template-columns: minmax(240px, 2fr) repeat(3, minmax(150px, 1fr)); gap: 12px; margin: 18px 0 12px; }
+.research-toolbar .analysis-control { min-width: 0; }
+.research-result-line, .pagination { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.research-result-line { margin: 12px 2px; color: var(--color-on-surface-variant, #62655d); font-size: 12px; }
+.pagination { margin-top: 12px; }
+.pagination p { margin: 0; color: var(--color-on-surface-variant, #62655d); font-size: 12px; }
+.pagination-actions { display: flex; gap: 8px; }
+.pagination button { min-height: 36px; padding: 7px 12px; border: 1px solid var(--color-outline-variant, #d7d8d1); border-radius: var(--radius-sm, 9px); background: var(--color-surface, #fff); color: inherit; cursor: pointer; }
+.pagination button:disabled { opacity: .45; cursor: default; }
+.table-section + .table-section { margin-top: 28px; }
+.table-section > h2 { margin: 0 0 5px; font-size: 18px; }
+.table-section > p { margin: 0 0 12px; color: var(--color-on-surface-variant, #62655d); font-size: 12px; }
+.number-cell { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.market-volume { display: block; font-weight: 700; }
+.market-competition { display: block; margin-top: 3px; color: var(--color-on-surface-variant, #62655d); font-size: 10px; }
+.research-note { padding: 12px 14px; border-radius: var(--radius-sm, 9px); background: var(--color-surface-container-low, #f1f1ed); color: var(--color-on-surface-variant, #62655d); font-size: 12px; line-height: 1.5; }
+.research-list { margin: 0; padding-left: 18px; }
+.research-list li + li { margin-top: 7px; }
 .topic-card { display: grid; gap: 7px; }
 .topic-card dl { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 10px 0 0; font-size: 11px; }
 .topic-card dt { color: var(--color-on-surface-variant, #62655d); }
@@ -416,7 +438,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .card { grid-column: span 6; }
   .card.wide { grid-column: span 12; }
   .priority-grid { grid-template-columns: 1fr; }
-  .summary-strip { grid-template-columns: 1fr; }
+  .summary-strip, .summary-strip.research-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .research-toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .freshness-link span:not(:first-child) { display: none; }
 }
 @media (max-width: 760px) {
@@ -468,6 +491,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .analysis-table tbody tr:last-child { border-bottom: 0; }
   .analysis-table td { display: grid; grid-template-columns: minmax(88px, .7fr) minmax(0, 1.3fr); gap: 12px; padding: 7px 0; border: 0; }
   .analysis-table td::before { content: attr(data-label); color: var(--color-on-surface-variant, #62655d); font-size: 10px; font-weight: 700; text-transform: uppercase; }
+  .summary-strip, .summary-strip.research-summary, .research-toolbar { grid-template-columns: 1fr; }
+  .research-result-line, .pagination { align-items: flex-start; flex-direction: column; }
   .service-row { grid-template-columns: 1fr; gap: 9px; }
   .connection-header, .connection-footer, .detail-row { align-items: flex-start; flex-direction: column; }
   .dialog-actions { flex-direction: column-reverse; }
@@ -497,7 +522,12 @@ let seoDetail = null;
 let seoSearch = '';
 let seoStatus = 'all';
 let seoSort = { pages: 'clicks', queries: 'clicks' };
-let seoResearchView = 'keyword-ideas';
+let seoResearchView = 'keywords';
+let researchMarket = 'all';
+let researchCluster = 'all';
+let researchSort = 'volume';
+let researchPage = 1;
+const researchPageSize = 50;
 let dialogTrigger = null;
 let notice = '';
 let collapsed = localStorage.getItem('unisane-ops-sidebar-collapsed') === 'true';
@@ -507,6 +537,12 @@ function esc(value) {
 }
 function humanize(value) {
   return String(value ?? '').replace(/[-_.]+/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+function formatNumber(value) {
+  return Number(value ?? 0).toLocaleString();
+}
+function formatCompactNumber(value) {
+  return Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(Number(value ?? 0));
 }
 function normalizePath(value) {
   const path = String(value || '/overview').split(/[?#]/, 1)[0].replace(/^\/+|\/+$/g, '');
@@ -752,28 +788,143 @@ function seoSiteHealthPage() {
 function researchViewButton(id, label) {
   return '<button type="button" data-research-view="' + id + '" class="' + (seoResearchView === id ? 'active' : '') + '"' + (seoResearchView === id ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' + label + '</button>';
 }
+function researchSummary() {
+  const keywords = state.keywordResearch;
+  return '<div class="summary-strip research-summary">' +
+    '<article class="summary-stat"><span>Researched keywords</span><strong>' + formatNumber(keywords.matrix.length) + '</strong></article>' +
+    '<article class="summary-stat"><span>Measured monthly demand</span><strong>' + formatCompactNumber(keywords.totalKnownVolume) + '</strong></article>' +
+    '<article class="summary-stat"><span>Keyword clusters</span><strong>' + formatNumber(keywords.clusters.length) + '</strong></article>' +
+    '<article class="summary-stat"><span>Markets compared</span><strong>' + formatNumber(keywords.markets.length) + '</strong></article>' +
+  '</div>';
+}
+function researchMarketOptions() {
+  return '<option value="all"' + (researchMarket === 'all' ? ' selected' : '') + '>All markets</option>' +
+    state.keywordResearch.markets.map((item) => '<option value="' + esc(item.market) + '"' + (researchMarket === item.market ? ' selected' : '') + '>' + esc(item.market) + '</option>').join('');
+}
+function researchClusterOptions() {
+  return '<option value="all"' + (researchCluster === 'all' ? ' selected' : '') + '>All clusters</option>' +
+    state.keywordResearch.clusters.map((item) => '<option value="' + esc(item.id) + '"' + (researchCluster === item.id ? ' selected' : '') + '>' + esc(item.label) + '</option>').join('');
+}
+function keywordCompetition(row) {
+  const markets = researchMarket === 'all'
+    ? Object.values(row.markets)
+    : row.markets[researchMarket] ? [row.markets[researchMarket]] : [];
+  const values = markets.map((item) => item.competitionIndex).filter((value) => typeof value === 'number');
+  return values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : undefined;
+}
+function filteredResearchKeywords() {
+  const search = seoSearch.trim().toLowerCase();
+  const rows = state.keywordResearch.matrix.filter((row) =>
+    (!search || (row.term + ' ' + row.clusterLabel).toLowerCase().includes(search)) &&
+    (researchCluster === 'all' || row.clusterId === researchCluster) &&
+    (researchMarket === 'all' || Boolean(row.markets[researchMarket]))
+  );
+  if (researchSort === 'keyword') rows.sort((left, right) => left.term.localeCompare(right.term));
+  else if (researchSort === 'competition') rows.sort((left, right) => (keywordCompetition(right) ?? -1) - (keywordCompetition(left) ?? -1) || right.totalKnownVolume - left.totalKnownVolume);
+  else if (researchSort === 'markets') rows.sort((left, right) => right.marketCount - left.marketCount || right.totalKnownVolume - left.totalKnownVolume);
+  else rows.sort((left, right) => right.totalKnownVolume - left.totalKnownVolume || left.term.localeCompare(right.term));
+  return rows;
+}
+function keywordMarketCell(row, market) {
+  const metrics = row.markets[market];
+  if (!metrics) return '<span class="market-competition">No data</span>';
+  return '<span class="market-volume">' + formatNumber(metrics.avgMonthlySearches ?? 0) + '</span><span class="market-competition">' + esc(metrics.competition ? humanize(metrics.competition) : 'Competition unavailable') + (metrics.competitionIndex === undefined ? '' : ' · ' + metrics.competitionIndex) + '</span>';
+}
+function researchKeywordsView() {
+  const research = state.keywordResearch;
+  if (!research.matrix.length) return '<div class="empty-state"><strong>No keyword demand research yet.</strong><p>Import country- and language-specific keyword evidence to compare demand, competition, clusters, and markets.</p></div>';
+  const rows = filteredResearchKeywords();
+  const pageCount = Math.max(1, Math.ceil(rows.length / researchPageSize));
+  researchPage = Math.min(researchPage, pageCount);
+  const start = (researchPage - 1) * researchPageSize;
+  const visible = rows.slice(start, start + researchPageSize);
+  const marketHeaders = research.markets.map((item) => '<th>' + esc(item.market) + '<span class="row-subtitle">volume · competition</span></th>').join('');
+  const marketCells = (row) => research.markets.map((item) => '<td data-label="' + esc(item.market) + '" class="number-cell">' + keywordMarketCell(row, item.market) + '</td>').join('');
+  return '<div class="research-toolbar">' +
+    '<label class="analysis-control">Search keywords<input type="search" value="' + esc(seoSearch) + '" data-research-search placeholder="Search keyword or cluster"></label>' +
+    '<label class="analysis-control">Market<select data-research-market>' + researchMarketOptions() + '</select></label>' +
+    '<label class="analysis-control">Cluster<select data-research-cluster>' + researchClusterOptions() + '</select></label>' +
+    '<label class="analysis-control">Sort by<select data-research-sort><option value="volume"' + (researchSort === 'volume' ? ' selected' : '') + '>Demand</option><option value="competition"' + (researchSort === 'competition' ? ' selected' : '') + '>Competition</option><option value="markets"' + (researchSort === 'markets' ? ' selected' : '') + '>Market coverage</option><option value="keyword"' + (researchSort === 'keyword' ? ' selected' : '') + '>Keyword A–Z</option></select></label>' +
+  '</div>' +
+  '<div class="research-result-line"><span>Showing ' + (rows.length ? formatNumber(start + 1) + '–' + formatNumber(start + visible.length) : '0') + ' of ' + formatNumber(rows.length) + ' matching keywords</span><span>Volumes are provider estimates, not guaranteed traffic.</span></div>' +
+  (visible.length ? '<div class="table-shell"><table class="analysis-table"><thead><tr><th>Keyword</th><th>Cluster</th><th>Total demand</th><th>Best market</th><th>Markets</th><th>Competition</th>' + marketHeaders + '</tr></thead><tbody>' + visible.map((row) =>
+    '<tr><td data-label="Keyword"><strong>' + esc(row.term) + '</strong></td><td data-label="Cluster">' + esc(row.clusterLabel) + '</td><td data-label="Total demand" class="number-cell">' + formatNumber(row.totalKnownVolume) + '</td><td data-label="Best market">' + esc(row.bestMarket || 'Not available') + '<span class="row-subtitle">' + (row.bestMarketVolume === undefined ? '' : formatNumber(row.bestMarketVolume) + ' monthly') + '</span></td><td data-label="Markets">' + formatNumber(row.marketCount) + '</td><td data-label="Competition">' + esc(keywordCompetition(row) ?? 'Not available') + '</td>' + marketCells(row) + '</tr>'
+  ).join('') + '</tbody></table></div>' : '<div class="empty-state"><strong>No keywords match these filters.</strong><p>Try another market, cluster, or keyword.</p></div>') +
+  '<div class="pagination"><p>Page ' + researchPage + ' of ' + pageCount + '</p><div class="pagination-actions"><button type="button" data-research-page="' + (researchPage - 1) + '"' + (researchPage <= 1 ? ' disabled' : '') + '>Previous</button><button type="button" data-research-page="' + (researchPage + 1) + '"' + (researchPage >= pageCount ? ' disabled' : '') + '>Next</button></div></div>';
+}
+function researchClustersView() {
+  const clusters = state.keywordResearch.clusters;
+  if (!clusters.length) return '<div class="empty-state"><strong>No keyword clusters yet.</strong><p>Clusters appear after keyword research can be grouped by user intent.</p></div>';
+  return '<div class="table-section"><h2>Target by user intent</h2><p>Use clusters to decide which pages, product messages, or campaigns deserve focused treatment.</p><div class="table-shell"><table class="analysis-table"><thead><tr><th>Cluster</th><th>Keywords</th><th>Measured demand</th><th>Best market</th><th>Competition</th><th>Leading keywords</th><th>Recommended use</th></tr></thead><tbody>' + clusters.map((cluster) =>
+    '<tr><td data-label="Cluster"><strong>' + esc(cluster.label) + '</strong><span class="row-subtitle">' + esc(cluster.intent) + '</span></td><td data-label="Keywords">' + formatNumber(cluster.metricCount) + '</td><td data-label="Measured demand" class="number-cell">' + formatNumber(cluster.totalKnownVolume) + '</td><td data-label="Best market">' + esc(cluster.bestMarket || 'Not available') + '<span class="row-subtitle">' + (cluster.bestMarketVolume === undefined ? '' : formatNumber(cluster.bestMarketVolume) + ' monthly') + '</span></td><td data-label="Competition">' + esc(cluster.averageCompetitionIndex ?? 'Not available') + '</td><td data-label="Leading keywords">' + esc(cluster.topKeywords.slice(0, 4).map((item) => item.term).join(', ')) + '</td><td data-label="Recommended use">' + esc(cluster.recommendedUse) + '</td></tr>'
+  ).join('') + '</tbody></table></div></div>';
+}
+function researchMarketsView() {
+  const markets = state.keywordResearch.markets;
+  if (!markets.length) return '<div class="empty-state"><strong>No market comparison yet.</strong><p>Add region-specific research to understand where demand and competition differ.</p></div>';
+  return '<div class="table-section"><h2>Market comparison</h2><p>Compare demand before reusing the same keyword and content strategy in every country.</p><div class="table-shell"><table class="analysis-table"><thead><tr><th>Market</th><th>Keyword measurements</th><th>Measured demand</th><th>Average competition</th><th>Leading keywords</th></tr></thead><tbody>' + markets.map((market) =>
+    '<tr><td data-label="Market"><strong>' + esc(market.market) + '</strong><span class="row-subtitle">' + esc(market.currencyCode || 'Currency unavailable') + '</span></td><td data-label="Keyword measurements">' + formatNumber(market.metricCount) + '</td><td data-label="Measured demand" class="number-cell">' + formatNumber(market.totalKnownVolume) + '</td><td data-label="Average competition">' + esc(market.averageCompetitionIndex ?? 'Not available') + '</td><td data-label="Leading keywords">' + esc(market.topKeywords.slice(0, 6).map((item) => item.term + ' (' + formatNumber(item.avgMonthlySearches ?? 0) + ')').join(', ')) + '</td></tr>'
+  ).join('') + '</tbody></table></div></div>';
+}
+function researchQuestionsView() {
+  const research = state.faqResearch;
+  if (!research.questions.length) return '<div class="empty-state"><strong>No researched questions yet.</strong><p>Questions appear when FAQ research records the user need, target page, demand, and evidence.</p></div>';
+  return '<div class="summary-strip research-summary"><article class="summary-stat"><span>Researched questions</span><strong>' + formatNumber(research.questionCount) + '</strong></article><article class="summary-stat"><span>Approved</span><strong>' + formatNumber(research.approvedCount) + '</strong></article><article class="summary-stat"><span>Questions needing proof</span><strong>' + formatNumber(research.needsProofCount) + '</strong></article><article class="summary-stat"><span>Research quality</span><strong>' + formatNumber(research.qualityScore) + '/100</strong></article></div>' +
+  '<div class="table-section"><h2>Question and FAQ plan</h2><p>Demand alone is not enough: every question keeps its page role, evidence, and answer intent.</p><div class="table-shell"><table class="analysis-table"><thead><tr><th>Question</th><th>Target page</th><th>Priority</th><th>Measured demand</th><th>Markets</th><th>Proof</th><th>Answer intent</th></tr></thead><tbody>' + research.questions.map((item) =>
+    '<tr><td data-label="Question"><strong>' + esc(item.question) + '</strong><span class="row-subtitle">' + esc(item.clusterId ? humanize(item.clusterId) : 'Unclustered') + '</span></td><td data-label="Target page">' + esc(item.routePath) + '<span class="row-subtitle">' + esc(humanize(item.pageRole)) + '</span></td><td data-label="Priority">' + esc(item.priority.toUpperCase()) + '<span class="row-subtitle">' + esc(humanize(item.status)) + '</span></td><td data-label="Measured demand" class="number-cell">' + (item.avgMonthlySearches === undefined ? 'Not available' : formatNumber(item.avgMonthlySearches)) + '</td><td data-label="Markets">' + formatNumber(item.marketCount) + '<span class="row-subtitle">' + esc(item.bestMarket || 'Not available') + '</span></td><td data-label="Proof">' + esc(humanize(item.proofStatus)) + '<span class="row-subtitle">' + esc(item.evidenceSources.join(', ') || 'No evidence source') + '</span></td><td data-label="Answer intent">' + esc(item.answerIntent) + '</td></tr>'
+  ).join('') + '</tbody></table></div></div>';
+}
+function researchCompetitorsView() {
+  const research = state.competitorResearch;
+  if (!research.domains.length && !research.pages.length) return '<div class="empty-state"><strong>No competitor research yet.</strong><p>Add evidence-backed competitor pages to compare positioning, content patterns, and gaps.</p></div>';
+  const opportunities = research.opportunities.length ? '<div class="table-section"><h2>Positioning gaps</h2><ul class="research-list">' + research.opportunities.map((item) => '<li>' + esc(item) + '</li>').join('') + '</ul></div>' : '';
+  return '<div class="summary-strip"><article class="summary-stat"><span>Competitor domains</span><strong>' + formatNumber(research.domainCount) + '</strong></article><article class="summary-stat"><span>Pages reviewed</span><strong>' + formatNumber(research.pageCount) + '</strong></article><article class="summary-stat"><span>Keywords observed</span><strong>' + formatNumber(research.keywordCount) + '</strong></article></div>' +
+  '<div class="table-section"><h2>Competitor landscape</h2><p>Patterns and gaps are drawn from recorded pages, not assumed from brand reputation.</p><div class="table-shell"><table class="analysis-table"><thead><tr><th>Domain</th><th>Pages</th><th>Keywords</th><th>Best observed position</th><th>Content patterns</th><th>Opportunities</th></tr></thead><tbody>' + research.domains.map((item) =>
+    '<tr><td data-label="Domain"><strong>' + esc(item.domain) + '</strong></td><td data-label="Pages">' + formatNumber(item.pageCount) + '</td><td data-label="Keywords">' + formatNumber(item.keywordCount) + '</td><td data-label="Best observed position">' + esc(item.bestPosition ?? 'Not available') + '</td><td data-label="Content patterns">' + esc(item.topPatterns.join(', ') || 'Not recorded') + '</td><td data-label="Opportunities">' + esc(item.opportunities.join(' ') || 'Not recorded') + '</td></tr>'
+  ).join('') + '</tbody></table></div></div>' +
+  '<div class="table-section"><h2>Pages reviewed</h2><div class="table-shell"><table class="analysis-table"><thead><tr><th>Competitor page</th><th>Keyword</th><th>Position</th><th>Page type</th><th>Strengths</th><th>Gaps</th></tr></thead><tbody>' + research.pages.map((item) =>
+    '<tr><td data-label="Competitor page"><strong>' + esc(item.competitor) + '</strong><span class="row-subtitle">' + esc(item.domain) + '</span></td><td data-label="Keyword">' + esc(item.keyword || 'Not recorded') + '</td><td data-label="Position">' + esc(item.position ?? 'Not available') + '</td><td data-label="Page type">' + esc(item.pageType ? humanize(item.pageType) : 'Not recorded') + '</td><td data-label="Strengths">' + esc(item.strengths.join(' ') || 'Not recorded') + '</td><td data-label="Gaps">' + esc(item.gaps.join(' ') || 'Not recorded') + '</td></tr>'
+  ).join('') + '</tbody></table></div></div>' + opportunities;
+}
+function researchSerpView() {
+  const intelligence = state.seoIntelligence;
+  const serp = intelligence.serp.snapshots;
+  const experiments = intelligence.metadata.experiments;
+  const audits = intelligence.pageAudits.audits;
+  if (!serp.length && !experiments.length && !audits.length) return '<div class="empty-state"><strong>No SERP or experiment research yet.</strong><p>Add search-result snapshots, metadata hypotheses, or page audits before using this evidence view.</p></div>';
+  const serpTable = serp.length ? '<div class="table-section"><h2>Search-result snapshots</h2><p>Recorded result landscapes help validate intent and competitor assumptions.</p><div class="table-shell"><table class="analysis-table"><thead><tr><th>Keyword</th><th>Market</th><th>Intent</th><th>Top domains</th><th>People also ask</th><th>Opportunities</th></tr></thead><tbody>' + serp.map((item) =>
+    '<tr><td data-label="Keyword"><strong>' + esc(item.keyword) + '</strong></td><td data-label="Market">' + esc(item.country + ' / ' + item.language) + '</td><td data-label="Intent">' + esc(item.intent) + '</td><td data-label="Top domains">' + esc(item.topDomains.join(', ') || 'Not recorded') + '</td><td data-label="People also ask">' + esc(item.peopleAlsoAsk.join(' · ') || 'Not recorded') + '</td><td data-label="Opportunities">' + esc(item.opportunities.join(' ') || 'Not recorded') + '</td></tr>'
+  ).join('') + '</tbody></table></div></div>' : '';
+  const experimentTable = experiments.length ? '<div class="table-section"><h2>Metadata experiments</h2><p>Proposed titles and descriptions remain hypotheses until implemented and measured.</p><div class="table-shell"><table class="analysis-table"><thead><tr><th>Page</th><th>Primary keyword</th><th>Priority</th><th>Proposed title</th><th>Rationale</th><th>Expected impact</th></tr></thead><tbody>' + experiments.map((item) =>
+    '<tr><td data-label="Page"><strong>' + esc(item.routePath) + '</strong><span class="row-subtitle">' + esc(humanize(item.status)) + '</span></td><td data-label="Primary keyword">' + esc(item.primaryKeyword) + '</td><td data-label="Priority">' + esc(item.priority.toUpperCase()) + '</td><td data-label="Proposed title">' + esc(item.proposedTitle) + '</td><td data-label="Rationale">' + esc(item.rationale) + '</td><td data-label="Expected impact">' + esc(item.expectedImpact) + '</td></tr>'
+  ).join('') + '</tbody></table></div></div>' : '';
+  const auditTable = audits.length ? '<div class="table-section"><h2>Page research audits</h2><p>Audits identify missing research alignment; they do not replace live search performance.</p><div class="table-shell"><table class="analysis-table"><thead><tr><th>Page</th><th>Score</th><th>Primary keyword</th><th>Intent</th><th>Missing</th><th>Recommendations</th></tr></thead><tbody>' + audits.map((item) =>
+    '<tr><td data-label="Page"><strong>' + esc(item.routePath) + '</strong><span class="row-subtitle">' + esc(humanize(item.status)) + '</span></td><td data-label="Score">' + formatNumber(item.score) + '/100</td><td data-label="Primary keyword">' + esc(item.primaryKeyword || 'Not set') + '</td><td data-label="Intent">' + esc(item.intent || 'Not set') + '</td><td data-label="Missing">' + esc(item.missing.join(', ') || 'Nothing recorded') + '</td><td data-label="Recommendations">' + esc(item.recommendations.join(' ') || 'None recorded') + '</td></tr>'
+  ).join('') + '</tbody></table></div></div>' : '';
+  return serpTable + experimentTable + auditTable;
+}
 function seoResearchResults() {
-  const research = state.seo.research;
-  if (seoResearchView === 'questions') {
-    if (!research.questions.length) return '<div class="empty-state"><strong>No researched questions yet.</strong><p>Questions appear only when evidence-backed FAQ research exists.</p></div>';
-    return '<div class="grid">' + research.questions.map((item) =>
-      '<article class="card topic-card" data-seo-search-value="' + esc(item.question + ' ' + item.intentLabel) + '" data-seo-status="all"><h2>' + esc(item.question) + '</h2><p>' + esc(item.intentLabel) + '</p><p>' + esc(item.demandLabel + ' · ' + item.visibilityLabel) + '</p></article>'
-    ).join('') + '</div>';
-  }
-  if (seoResearchView === 'content-gaps') {
-    if (!research.contentGaps.length) return '<div class="empty-state"><strong>No evidence-backed content gap yet.</strong><p>Content gaps appear after competitor or search-result research records a supported difference.</p></div>';
-    return '<div class="grid">' + research.contentGaps.map((item) =>
-      '<article class="card topic-card" data-seo-search-value="' + esc(item.title + ' ' + item.reason) + '" data-seo-status="all"><h2>' + esc(item.title) + '</h2><p>' + esc(item.reason) + '</p><a class="button-link secondary" href="/seo/opportunities" data-route-link>' + esc(item.actionLabel) + '</a></article>'
-    ).join('') + '</div>';
-  }
-  if (!research.keywordIdeas.length) return '<div class="empty-state"><strong>No topic demand research yet.</strong><p>Keyword ideas appear only after country- and language-specific research evidence exists.</p></div>';
-  return '<div class="grid">' + research.keywordIdeas.map((item) =>
-    '<article class="card topic-card" data-seo-search-value="' + esc(item.topic + ' ' + item.intentLabel + ' ' + (item.country || '')) + '" data-seo-status="all"><h2>' + esc(item.topic) + '</h2><p>' + esc(item.demandLabel) + '</p><dl><dt>Interest</dt><dd>' + esc(item.interestLabel) + '</dd><dt>Visibility</dt><dd>' + esc(item.visibilityLabel) + '</dd><dt>Difficulty</dt><dd>' + esc(item.difficultyLabel) + '</dd><dt>User goal</dt><dd>' + esc(item.intentLabel) + '</dd><dt>Market</dt><dd>' + esc([item.country, item.language].filter(Boolean).join(' / ') || 'Not available') + '</dd></dl><a class="button-link secondary" href="/seo/opportunities" data-route-link>Review opportunity</a></article>'
-  ).join('') + '</div>';
+  if (seoResearchView === 'clusters') return researchClustersView();
+  if (seoResearchView === 'markets') return researchMarketsView();
+  if (seoResearchView === 'questions') return researchQuestionsView();
+  if (seoResearchView === 'competitors') return researchCompetitorsView();
+  if (seoResearchView === 'serp') return researchSerpView();
+  return researchKeywordsView();
 }
 function seoResearchPage() {
-  const research = state.seo.research;
-  return '<div class="analysis-controls"><label class="analysis-control">Topic<input type="search" value="' + esc(seoSearch) + '" data-seo-filter placeholder="Filter researched topics"></label><div class="context-line">' + esc(research.contextLabel) + '</div></div><p class="context-line">' + esc(research.demandExplanation) + '</p><div class="view-switcher" aria-label="Research views">' + researchViewButton('keyword-ideas', 'Keyword ideas') + researchViewButton('questions', 'Questions') + researchViewButton('content-gaps', 'Content gaps') + '</div>' + seoResearchResults();
+  const research = state.keywordResearch;
+  return '<section class="research-intro"><h2>Plan what to target next</h2><p>Start with independent keyword, market, question, competitor, and search-result research. Search Console visibility helps validate current performance, but it does not define the research opportunity.</p></section>' +
+    researchSummary() +
+    '<div class="view-switcher" aria-label="Research views">' +
+      researchViewButton('keywords', 'Keywords') +
+      researchViewButton('clusters', 'Clusters') +
+      researchViewButton('markets', 'Markets') +
+      researchViewButton('questions', 'Questions') +
+      researchViewButton('competitors', 'Competitors & gaps') +
+      researchViewButton('serp', 'SERP & experiments') +
+    '</div>' +
+    seoResearchResults() +
+    '<footer class="source-footer"><span><strong>Research source:</strong> ' + esc(research.provider || 'Project research evidence') + '</span><span><strong>Latest keyword evidence:</strong> ' + esc(formatTime(research.fetchedAt)) + '</span><span>Demand figures are estimates; use Search Console separately to measure actual visibility.</span></footer>';
 }
 function seoPage(route) {
   if (route.id === 'seo.overview') return seoOverviewPage();
@@ -910,7 +1061,7 @@ function pageSummary(route) {
     if (route.id === 'seo.pages') return '<section class="summary"><h2>' + esc(state.seo.pages.length ? state.seo.pages.length + ' pages have current search evidence.' : 'No page-level search evidence is available yet.') + '</h2><p>' + esc(state.seo.comparisonLabel + ' Pages are not labeled growing or declining without it.') + '</p></section>';
     if (route.id === 'seo.queries') return '<section class="summary"><h2>' + esc(state.seo.queries.length ? state.seo.queries.length + ' searches are visible in the available data.' : 'No search query evidence is available yet.') + '</h2><p>' + esc(state.seo.comparisonLabel + ' The console does not claim a demand or ranking cause without comparison evidence.') + '</p></section>';
     if (route.id === 'seo.site-health') return '';
-    return '<section class="summary"><h2>' + esc(state.seo.research.available ? 'Evidence-backed topic research is ready to compare.' : 'No topic research is available yet.') + '</h2><p>' + esc(state.seo.research.contextLabel) + '</p></section>';
+    return '<section class="summary"><h2>' + esc(state.keywordResearch.matrix.length ? formatNumber(state.keywordResearch.matrix.length) + ' researched keywords are ready to compare and prioritize.' : 'No keyword research is available yet.') + '</h2><p>Use measured demand, market differences, intent clusters, questions, competitor gaps, and SERP evidence to decide what to target next.</p></section>';
   }
   if (route.family === 'connection-detail') {
     const connection = connectionByProvider(route.path.split('/')[2]);
@@ -1017,6 +1168,10 @@ function navigate(path) {
   projectMenuOpen = false;
   seoSearch = '';
   seoStatus = 'all';
+  researchMarket = 'all';
+  researchCluster = 'all';
+  researchSort = 'volume';
+  researchPage = 1;
   seoDetail = null;
   dialogTrigger = null;
   document.body.classList.remove('nav-open');
@@ -1120,8 +1275,41 @@ function bind() {
   });
   app.querySelectorAll('[data-research-view]').forEach((button) => {
     button.addEventListener('click', () => {
-      seoResearchView = button.getAttribute('data-research-view') || 'keyword-ideas';
+      seoResearchView = button.getAttribute('data-research-view') || 'keywords';
+      seoSearch = '';
+      researchPage = 1;
       render();
+    });
+  });
+  app.querySelector('[data-research-search]')?.addEventListener('input', (event) => {
+    seoSearch = event.currentTarget.value;
+    researchPage = 1;
+    const cursor = event.currentTarget.selectionStart;
+    render();
+    const input = app.querySelector('[data-research-search]');
+    input?.focus();
+    if (cursor !== null) input?.setSelectionRange(cursor, cursor);
+  });
+  app.querySelector('[data-research-market]')?.addEventListener('change', (event) => {
+    researchMarket = event.currentTarget.value;
+    researchPage = 1;
+    render();
+  });
+  app.querySelector('[data-research-cluster]')?.addEventListener('change', (event) => {
+    researchCluster = event.currentTarget.value;
+    researchPage = 1;
+    render();
+  });
+  app.querySelector('[data-research-sort]')?.addEventListener('change', (event) => {
+    researchSort = event.currentTarget.value;
+    researchPage = 1;
+    render();
+  });
+  app.querySelectorAll('[data-research-page]').forEach((button) => {
+    button.addEventListener('click', () => {
+      researchPage = Number(button.getAttribute('data-research-page')) || 1;
+      render();
+      app.querySelector('.research-result-line')?.scrollIntoView({ block: 'start' });
     });
   });
   const applySeoFilters = () => {
