@@ -23,7 +23,6 @@ import type {
   MarketingReportProvider,
 } from '@unisane/growth/marketing';
 import type {
-  MarketingConsoleActionItem,
   MarketingConsoleArtifactLink,
   MarketingConsoleComparisonRow,
   MarketingConsoleCompetitorResearchSummary,
@@ -41,6 +40,7 @@ import type {
   MarketingConsoleTrendPoint,
 } from './contracts.js';
 import { buildMarketingConsoleConnections } from './connections.js';
+import { buildMarketingConsoleOverview } from './overview.js';
 
 export type BuildMarketingConsoleStateOptions = {
   cwd?: string;
@@ -81,10 +81,6 @@ const reportFamilies: Array<{
   { provider: 'googleAds', reportType: 'keyword' },
   { provider: 'googleAds', reportType: 'conversion' },
   { provider: 'googleAds', reportType: 'auctionInsight' },
-  { provider: 'metaAds', reportType: 'campaign' },
-  { provider: 'metaAds', reportType: 'adSet' },
-  { provider: 'metaAds', reportType: 'ad' },
-  { provider: 'metaAds', reportType: 'creative' },
   { provider: 'ga4', reportType: 'landingPage' },
   { provider: 'ga4', reportType: 'channel' },
   { provider: 'ga4', reportType: 'sourceMedium' },
@@ -199,15 +195,12 @@ export async function buildMarketingConsoleState(
     adsAudit,
   );
   const schedule = readScheduleSummary(cwd, config.defaultEnvironment);
-  const actions = buildActions({
-    connectionNext: connections.find((connection) => connection.primaryAction)?.primaryAction
-      ?.description,
-    proofNext: proof.nextWorkflowStep,
-    marketingNext: marketingStatus.nextWorkflowStep,
-    analyticsNext: analyticsStatus.nextWorkflowStep,
-    adsNext: adsAudit?.nextWorkflowStep ?? adsStatus.nextWorkflowStep,
-    researchNext: researchStatus.nextWorkflowStep,
-    scheduleNext: schedule?.nextWorkflowStep,
+  const { overview, priorities } = buildMarketingConsoleOverview({
+    connections,
+    freshness,
+    metrics,
+    receipts,
+    capabilities: projectContext.growth.capabilities,
   });
   const paidProviderEvidenceReady = freshness.some(
     (cell) =>
@@ -236,7 +229,7 @@ export async function buildMarketingConsoleState(
   const readiness = buildReadiness(
     readinessStatuses,
     connections.find((connection) => connection.state !== 'current')?.state ?? 'current',
-    selectNextAction(actions),
+    priorities[0]?.expectedOutcome ?? 'Review the latest growth results.',
   );
 
   return {
@@ -252,6 +245,8 @@ export async function buildMarketingConsoleState(
     dateWindow: inferDateWindow(marketingStatus.providerFreshness),
     readiness,
     metrics,
+    overview,
+    priorities,
     trends: buildTrends(freshness),
     comparisons: {
       channels: channelRows,
@@ -264,7 +259,6 @@ export async function buildMarketingConsoleState(
     faqResearch,
     seoIntelligence,
     freshness,
-    actions,
     receipts,
     artifacts,
     reports: {
@@ -1699,9 +1693,6 @@ function freshnessMessageFor(
   fallback: string | undefined,
 ): string {
   if (status === 'fresh') return fallback ?? `${reportLabel(provider, reportType)} is fresh.`;
-  if (provider === 'metaAds') {
-    return 'Meta Ads is planned for a later proof pass. Connect the ad account, pixel, and reports before running Meta campaigns.';
-  }
   if (provider === 'googleAds') {
     return 'Google Ads reports are not pulled yet. Keep ads read-only until account, conversion, and report proof are ready.';
   }
@@ -1860,34 +1851,6 @@ function addMetric(
   if (typeof value === 'number') metrics[key] = (metrics[key] ?? 0) + value;
 }
 
-function sumFreshnessMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingReportMetrics {
-  const totals: MarketingReportMetrics = {};
-  for (const cell of selectMetricFreshnessCells(freshness)) {
-    const metrics = readMetricsFromFreshnessCell(cell);
-    addMetric(totals, 'impressions', metrics.impressions);
-    addMetric(totals, 'clicks', metrics.clicks);
-    addMetric(totals, 'cost', metrics.cost);
-    addMetric(totals, 'conversions', metrics.conversions);
-    addMetric(totals, 'conversionValue', metrics.conversionValue);
-    addMetric(totals, 'revenue', metrics.revenue);
-    addMetric(totals, 'sessions', metrics.sessions);
-    addMetric(totals, 'users', metrics.users);
-  }
-  return totals;
-}
-
-function selectMetricFreshnessCells(
-  freshness: MarketingConsoleFreshnessCell[],
-): MarketingConsoleFreshnessCell[] {
-  const byProvider = new Map<string, MarketingConsoleFreshnessCell[]>();
-  for (const cell of freshness) {
-    byProvider.set(cell.provider, [...(byProvider.get(cell.provider) ?? []), cell]);
-  }
-  return [...byProvider.values()]
-    .map((cells) => selectProviderMetricCell(cells))
-    .filter((cell): cell is MarketingConsoleFreshnessCell => cell !== undefined);
-}
-
 function selectProviderMetricCell(
   cells: MarketingConsoleFreshnessCell[],
 ): MarketingConsoleFreshnessCell | undefined {
@@ -1910,72 +1873,156 @@ function selectProviderMetricCell(
 }
 
 function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingConsoleMetric[] {
-  const totals = sumFreshnessMetrics(freshness);
-  const derived = deriveMarketingMetrics(totals);
-  const currencyCode = selectMetricCurrencyCode(freshness);
+  const searchCell = selectProviderMetricCell(
+    freshness.filter((cell) => cell.provider === 'searchConsole'),
+  );
+  const adsCell = selectProviderMetricCell(
+    freshness.filter((cell) => cell.provider === 'googleAds'),
+  );
+  const analyticsCell = selectProviderMetricCell(
+    freshness.filter((cell) => cell.provider === 'ga4'),
+  );
+  const search = searchCell ? readMetricsFromFreshnessCell(searchCell) : {};
+  const ads = adsCell ? readMetricsFromFreshnessCell(adsCell) : {};
+  const analytics = analyticsCell ? readMetricsFromFreshnessCell(analyticsCell) : {};
+  const analyticsConversions = analytics.keyEvents ?? analytics.conversions ?? analytics.purchases;
+  const conversions = analyticsConversions ?? ads.conversions;
+  const conversionSource = analyticsConversions !== undefined ? analyticsCell : adsCell;
+  const revenue = analytics.revenue ?? ads.conversionValue;
+  const revenueSource = analytics.revenue !== undefined ? analyticsCell : adsCell;
+  const adsDerived = deriveMarketingMetrics(ads);
+  const currencyCode = adsCell?.currencyCode;
   return [
     metric(
+      'organic-clicks',
+      'Organic clicks',
+      number(search.clicks),
+      search.clicks,
+      'Visits from unpaid Google Search results.',
+      'Search Console',
+      searchCell,
+    ),
+    metric(
       'spend',
-      'Spend',
-      money(totals.cost, currencyCode),
-      totals.cost,
-      'Paid provider cost',
-      statusForMetric(totals.cost),
+      'Advertising spend',
+      money(ads.cost, currencyCode),
+      ads.cost,
+      'Cost reported by the selected advertising account.',
+      'Google Ads',
+      adsCell,
       currencyCode,
     ),
     metric(
       'conversions',
       'Conversions',
-      number(totals.conversions),
-      totals.conversions,
-      'Provider-reported conversions',
-      statusForMetric(totals.conversions),
+      number(conversions),
+      conversions,
+      'Reported key outcomes for the selected period.',
+      analyticsConversions !== undefined ? 'Google Analytics' : 'Google Ads',
+      conversionSource,
     ),
     metric(
-      'cpa',
-      'CPA',
-      money(derived.cpa, currencyCode),
-      derived.cpa,
-      'Cost per provider conversion',
-      derived.cpa === undefined ? 'missing' : 'ready',
-      currencyCode,
+      'revenue',
+      'Revenue',
+      money(revenue, revenueSource?.currencyCode ?? currencyCode),
+      revenue,
+      'Revenue or conversion value reported by the selected source.',
+      analytics.revenue !== undefined ? 'Google Analytics' : 'Google Ads',
+      revenueSource,
+      revenueSource?.currencyCode ?? currencyCode,
     ),
     metric(
       'roas',
-      'ROAS',
-      ratio(derived.roas),
-      derived.roas,
-      'Revenue or value over spend',
-      derived.roas === undefined ? 'missing' : 'ready',
+      'Return on ad spend',
+      ratio(adsDerived.roas),
+      adsDerived.roas,
+      'Reported advertising conversion value divided by advertising spend.',
+      'Google Ads',
+      adsCell,
+    ),
+    metric(
+      'organic-impressions',
+      'Search views',
+      number(search.impressions),
+      search.impressions,
+      'Times the site appeared in unpaid Google Search results.',
+      'Search Console',
+      searchCell,
+    ),
+    metric(
+      'paid-impressions',
+      'Advertising impressions',
+      number(ads.impressions),
+      ads.impressions,
+      'Times selected Google Ads campaigns were shown.',
+      'Google Ads',
+      adsCell,
+    ),
+    metric(
+      'paid-clicks',
+      'Advertising clicks',
+      number(ads.clicks),
+      ads.clicks,
+      'Visits reported by selected Google Ads campaigns.',
+      'Google Ads',
+      adsCell,
+    ),
+    metric(
+      'paid-conversions',
+      'Advertising conversions',
+      number(ads.conversions),
+      ads.conversions,
+      'Conversions attributed by the selected advertising account.',
+      'Google Ads',
+      adsCell,
+    ),
+    metric(
+      'sessions',
+      'Sessions',
+      number(analytics.sessions),
+      analytics.sessions,
+      'Measured visits in Google Analytics.',
+      'Google Analytics',
+      analyticsCell,
+    ),
+    metric(
+      'users',
+      'Visitors',
+      number(analytics.users),
+      analytics.users,
+      'Measured visitors in Google Analytics.',
+      'Google Analytics',
+      analyticsCell,
+    ),
+    metric(
+      'analytics-conversions',
+      'Analytics conversions',
+      number(analyticsConversions),
+      analyticsConversions,
+      'Key outcomes reported by Google Analytics.',
+      'Google Analytics',
+      analyticsCell,
+    ),
+    metric(
+      'cpa',
+      'Cost per conversion',
+      money(adsDerived.cpa, currencyCode),
+      adsDerived.cpa,
+      'Advertising spend divided by reported advertising conversions.',
+      'Google Ads',
+      adsCell,
+      currencyCode,
     ),
     metric(
       'ctr',
-      'CTR',
-      percent(derived.ctr),
-      derived.ctr,
-      'Clicks divided by impressions',
-      derived.ctr === undefined ? 'missing' : 'ready',
-    ),
-    metric(
-      'traffic',
-      'Clicks',
-      number(totals.clicks),
-      totals.clicks,
-      'Paid/organic click volume',
-      statusForMetric(totals.clicks),
+      'Click-through rate',
+      percent(adsDerived.ctr),
+      adsDerived.ctr,
+      'Advertising clicks divided by advertising impressions.',
+      'Google Ads',
+      adsCell,
     ),
   ];
-}
-
-function selectMetricCurrencyCode(freshness: MarketingConsoleFreshnessCell[]): string | undefined {
-  const currencies = [
-    ...new Set(
-      selectMetricFreshnessCells(freshness)
-        .map((cell) => cell.currencyCode)
-        .filter((currency): currency is string => currency !== undefined),
-    ),
-  ];
-  return currencies.length === 1 ? currencies[0] : undefined;
 }
 
 function metric(
@@ -1983,8 +2030,9 @@ function metric(
   label: string,
   value: string,
   numericValue: number | undefined,
-  helper: string,
-  status: MarketingConsoleStatus,
+  definition: string,
+  sourceLabel: string,
+  source: MarketingConsoleFreshnessCell | undefined,
   currencyCode?: string,
 ): MarketingConsoleMetric {
   return {
@@ -1993,13 +2041,30 @@ function metric(
     value,
     ...(numericValue !== undefined ? { numericValue } : {}),
     ...(currencyCode ? { currencyCode } : {}),
-    helper,
-    status,
+    definition,
+    sourceLabel,
+    freshnessLabel: metricFreshnessLabel(source),
+    comparisonLabel: 'Previous-period comparison is not available yet.',
+    status: statusForMetric(numericValue, source),
   };
 }
 
-function statusForMetric(value: number | undefined): MarketingConsoleStatus {
-  return value === undefined ? 'missing' : value === 0 ? 'warn' : 'ready';
+function metricFreshnessLabel(source: MarketingConsoleFreshnessCell | undefined): string {
+  if (!source) return 'No usable source data';
+  if (source.ageDays === 0) return 'Updated today';
+  if (source.ageDays !== undefined) {
+    return `${source.ageDays} day${source.ageDays === 1 ? '' : 's'} old`;
+  }
+  return source.status === 'ready' ? 'Current' : 'Update needed';
+}
+
+function statusForMetric(
+  value: number | undefined,
+  source: MarketingConsoleFreshnessCell | undefined,
+): MarketingConsoleStatus {
+  if (value === undefined) return 'missing';
+  if (value === 0 || source?.status !== 'ready') return 'warn';
+  return 'ready';
 }
 
 function buildTrends(freshness: MarketingConsoleFreshnessCell[]): {
@@ -2064,138 +2129,6 @@ function readinessStageLabel(stage: string): string {
     failed: 'provider connection',
   };
   return labels[stage] ?? stage;
-}
-
-function buildActions(input: {
-  connectionNext?: string;
-  proofNext: string;
-  marketingNext: string;
-  analyticsNext: string;
-  adsNext: string;
-  researchNext: string;
-  scheduleNext?: string;
-}): MarketingConsoleActionItem[] {
-  return [
-    action(
-      'connections',
-      'Connection next step',
-      friendlyActionMessage(input.connectionNext ?? 'Selected connections are working.'),
-      'connections',
-      'warn',
-    ),
-    action(
-      'access',
-      'Access next step',
-      friendlyActionMessage(input.proofNext),
-      'connections',
-      'warn',
-    ),
-    action(
-      'reports',
-      'Report freshness',
-      friendlyActionMessage(input.marketingNext),
-      'reports',
-      'warn',
-    ),
-    action(
-      'analytics',
-      'Analytics next step',
-      friendlyActionMessage(input.analyticsNext),
-      'analytics',
-      'info',
-    ),
-    action(
-      'advertising',
-      'Advertising next step',
-      friendlyActionMessage(input.adsNext),
-      'advertising',
-      'warn',
-    ),
-    action('seo-research', 'Research next step', input.researchNext, 'seo', 'info'),
-    ...(input.scheduleNext
-      ? [
-          action(
-            'automations',
-            'Automation next step',
-            friendlyActionMessage(input.scheduleNext),
-            'automations',
-            'info',
-          ),
-        ]
-      : []),
-  ].filter(
-    (item, index, items) =>
-      items.findIndex((candidate) => candidate.message === item.message) === index,
-  );
-}
-
-function friendlyActionMessage(message: string): string {
-  if (message.includes('Refresh googleAds')) {
-    return 'Refresh paid reporting evidence after the Google Ads account is ready; keep live changes blocked until proof exists.';
-  }
-  if (message.includes('Refresh ga4')) {
-    return 'Refresh GA4 evidence after Google analytics login is complete.';
-  }
-  if (message.includes('Refresh searchConsole')) {
-    return 'Refresh Search Console evidence after Google login is complete.';
-  }
-  if (message.includes('GOOGLE_CONNECTION_REQUIRED') && message.includes('analytics')) {
-    return 'Complete Google analytics login for GA4, then pull fresh analytics reports.';
-  }
-  if (message.includes('GOOGLE_CONNECTION_REQUIRED') && message.includes('search-console')) {
-    return 'Complete Google Search Console login, then pull fresh organic search reports.';
-  }
-  if (message.includes('marketing pull-api') && message.includes('googleAds')) {
-    return 'Pull a narrow Google Ads campaign report when the ads account is ready; keep optimization read-only until proof exists.';
-  }
-  if (message.includes('marketing pull-api') && message.includes('ga4')) {
-    return 'Pull fresh GA4 reports so analytics cards can show real traffic and conversion trends.';
-  }
-  if (message.includes('marketing pull-api') && message.includes('searchConsole')) {
-    return 'Pull Search Console query/page evidence so SEO decisions are based on verified search data.';
-  }
-  if (message.includes('metaAds')) {
-    return 'Meta Ads is planned for a later proof pass; connect account and pixel details before Meta reporting or campaigns.';
-  }
-  if (message.includes('provider scopes and rate limits')) {
-    return 'Record provider scopes and rate-limit notes before enabling scheduled pulls.';
-  }
-  if (message.includes('Google Ads and Meta Ads')) {
-    return 'Pull read-only paid reports after the paid accounts are ready; keep live optimization blocked until proof exists.';
-  }
-  return message
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/unisane (?:growth|provider) [^.,]+/g, 'the matching Unisane command');
-}
-
-function action(
-  id: string,
-  title: string,
-  message: string,
-  lane: string,
-  severity: MarketingConsoleActionItem['severity'],
-): MarketingConsoleActionItem {
-  return {
-    id,
-    title,
-    message,
-    lane,
-    severity,
-    command: commandFromMessage(message),
-  };
-}
-
-function commandFromMessage(message: string): string | undefined {
-  const match = message.match(/`([^`]+)`/);
-  return match?.[1];
-}
-
-function selectNextAction(actions: MarketingConsoleActionItem[]): string {
-  return (
-    actions.find((actionItem) => actionItem.severity === 'critical')?.message ??
-    actions[0]?.message ??
-    'Review the dashboard and refresh missing evidence.'
-  );
 }
 
 function collectReceipts(

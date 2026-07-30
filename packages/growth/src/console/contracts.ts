@@ -76,7 +76,10 @@ export type MarketingConsoleMetric = {
   value: string;
   numericValue?: number;
   currencyCode?: string;
-  helper?: string;
+  definition: string;
+  sourceLabel: string;
+  freshnessLabel: string;
+  comparisonLabel: string;
   status: MarketingConsoleStatus;
 };
 
@@ -84,6 +87,64 @@ export type MarketingConsoleTrendPoint = {
   label: string;
   value: number;
   currencyCode?: string;
+};
+
+export type MarketingConsolePriorityLane =
+  | 'overview'
+  | 'seo'
+  | 'advertising'
+  | 'analytics'
+  | 'experiments';
+
+export type MarketingConsolePriority = {
+  id: string;
+  lane: MarketingConsolePriorityLane;
+  title: string;
+  expectedOutcome: string;
+  reason: string;
+  evidence: string;
+  confidenceLabel: string;
+  freshnessLabel: string;
+  effortLabel: string;
+  priorityLabel: string;
+  riskLabel: string;
+  action: {
+    label: string;
+    path: string;
+  };
+};
+
+export type MarketingConsoleOverview = {
+  status: MarketingConsoleStatus;
+  headline: string;
+  detail: string;
+  metricIds: string[];
+  recentOutcomes: Array<{
+    id: string;
+    title: string;
+    summary: string;
+    status: MarketingConsoleStatus;
+    timestamp?: string;
+  }>;
+  funnel?: {
+    title: string;
+    summary: string;
+    sourceLabel: string;
+    stages: Array<{
+      id: string;
+      label: string;
+      value: number;
+      valueLabel: string;
+    }>;
+  };
+  capabilitySummaries: Array<{
+    id: 'seo' | 'advertising' | 'analytics' | 'experiments';
+    label: string;
+    status: MarketingConsoleStatus;
+    statusLabel: string;
+    summary: string;
+    path: string;
+  }>;
 };
 
 export type MarketingConsoleComparisonRow = {
@@ -380,15 +441,6 @@ export type MarketingConsoleFreshnessCell = {
   currencyCode?: string;
 };
 
-export type MarketingConsoleActionItem = {
-  id: string;
-  title: string;
-  message: string;
-  lane: string;
-  severity: 'info' | 'warn' | 'critical';
-  command?: string;
-};
-
 export type MarketingConsoleReceiptEvent = {
   id: string;
   lane: string;
@@ -429,6 +481,8 @@ export type MarketingConsoleState = {
     nextWorkflowStep: string;
   };
   metrics: MarketingConsoleMetric[];
+  overview: MarketingConsoleOverview;
+  priorities: MarketingConsolePriority[];
   trends: {
     spend: MarketingConsoleTrendPoint[];
     conversions: MarketingConsoleTrendPoint[];
@@ -445,7 +499,6 @@ export type MarketingConsoleState = {
   faqResearch: MarketingConsoleFaqResearchSummary;
   seoIntelligence: MarketingConsoleSeoIntelligenceSummary;
   freshness: MarketingConsoleFreshnessCell[];
-  actions: MarketingConsoleActionItem[];
   receipts: MarketingConsoleReceiptEvent[];
   artifacts: MarketingConsoleArtifactLink[];
   reports: {

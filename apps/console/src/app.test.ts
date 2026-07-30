@@ -649,8 +649,17 @@ describe('marketing console', () => {
       expect(state.platformId).toBe('true-resume');
       expect(state.metrics).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({ id: 'spend', numericValue: 250 }),
+          expect.objectContaining({
+            id: 'spend',
+            numericValue: 250,
+            sourceLabel: 'Google Ads',
+          }),
           expect.objectContaining({ id: 'conversions', numericValue: 10 }),
+          expect.objectContaining({
+            id: 'organic-clicks',
+            numericValue: 4,
+            sourceLabel: 'Search Console',
+          }),
         ]),
       );
       expect(state.metrics).toEqual(
@@ -692,9 +701,23 @@ describe('marketing console', () => {
           }),
         ]),
       );
-      expect(state.actions).toEqual(
-        expect.arrayContaining([expect.objectContaining({ id: 'seo-research', lane: 'seo' })]),
+      expect(state.overview).toEqual(
+        expect.objectContaining({
+          status: 'warn',
+          headline: 'Historical growth results are available, but Google is not connected.',
+          metricIds: expect.arrayContaining(['organic-clicks', 'spend', 'conversions']),
+          capabilitySummaries: expect.arrayContaining([
+            expect.objectContaining({ id: 'seo', statusLabel: 'Historical data' }),
+          ]),
+        }),
       );
+      expect(state.priorities).toEqual([
+        expect.objectContaining({
+          id: 'connect-google',
+          lane: 'overview',
+          action: { label: 'Review connection', path: '/connections' },
+        }),
+      ]);
       expect(state.reports.researchStatus).toEqual(
         expect.objectContaining({ recordCount: 1, decisionCount: 1, opportunityCount: 1 }),
       );
@@ -838,6 +861,14 @@ describe('marketing console', () => {
       expect(state.receipts).toEqual(
         expect.arrayContaining([expect.objectContaining({ action: 'gtm.preview' })]),
       );
+      expect(state.overview.recentOutcomes).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: 'Tag Manager preview checked',
+            summary: expect.not.stringMatching(/receipt|\.json|\/private\//i),
+          }),
+        ]),
+      );
       expect(JSON.stringify(state)).not.toContain('token');
     });
   });
@@ -889,11 +920,16 @@ describe('marketing console', () => {
       expect(html).toContain('Data availability');
       expect(html).toContain('Confirm and copy command');
       expect(html).toContain('Historical data remains available');
+      expect(html).toContain('Historical growth results are available');
+      expect(html).toContain('Previous-period comparison is not available yet');
+      expect(html).toContain('Tag Manager preview checked');
       expect(html).toContain('"country":"IN"');
       expect(html).toContain('"currencyCode":"INR"');
       expect(html).toContain('GTM-TEST123');
       expect(html).not.toContain(['Marketing', 'Console'].join(' '));
       expect(html).not.toContain('Coming soon');
+      expect(html).not.toContain('Paid/organic click volume');
+      expect(html).not.toContain('Meta Ads is planned');
       expect(html).not.toContain('href="#/');
     });
   });

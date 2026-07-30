@@ -7,9 +7,9 @@ export {
   type BuildMarketingConsoleStateOptions,
 } from './build-state.js';
 export { buildMarketingConsoleConnections } from './connections.js';
+export { buildMarketingConsoleOverview } from './overview.js';
 export { resolveGrowthConsoleAuthContext } from './auth-context.js';
 export type {
-  MarketingConsoleActionItem,
   MarketingConsoleArtifactLink,
   MarketingConsoleComparisonRow,
   MarketingConsoleConnection,
@@ -18,6 +18,9 @@ export type {
   MarketingConsoleConnectionState,
   MarketingConsoleFreshnessCell,
   MarketingConsoleMetric,
+  MarketingConsoleOverview,
+  MarketingConsolePriority,
+  MarketingConsolePriorityLane,
   MarketingConsoleReceiptEvent,
   MarketingConsoleState,
   MarketingConsoleStatus,

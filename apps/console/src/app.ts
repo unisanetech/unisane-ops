@@ -299,6 +299,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .card > p { margin: 7px 0 0; color: var(--color-on-surface-variant, #62655d); font-size: 13px; line-height: 1.55; }
 .metric-value { margin-top: 18px; font-size: 28px; font-weight: 760; letter-spacing: -.025em; }
 .metric-helper { margin-top: 6px; color: var(--color-on-surface-variant, #62655d); font-size: 12px; }
+.metric-context { display: grid; gap: 4px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--color-outline-variant, #e1e1dc); color: var(--color-on-surface-variant, #62655d); font-size: 11px; line-height: 1.45; }
 .list { display: grid; gap: 10px; margin-top: 14px; }
 .list-item { padding: 13px 0; border-top: 1px solid var(--color-outline-variant, #e1e1dc); }
 .list-item:first-child { border-top: 0; padding-top: 0; }
@@ -320,6 +321,21 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 30px 0 12px; }
 .section-heading h2 { margin: 0; font-size: 20px; }
 .section-heading p { margin: 5px 0 0; color: var(--color-on-surface-variant, #62655d); font-size: 13px; }
+.priority-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+.priority-card { display: flex; min-width: 0; flex-direction: column; padding: 16px; border: 1px solid var(--color-outline-variant, #deded8); border-radius: var(--radius-md, 12px); background: var(--color-surface-container-low, #f7f7f3); }
+.priority-card h3 { margin: 0; font-size: 14px; line-height: 1.4; }
+.priority-card > p { margin: 7px 0 0; color: var(--color-on-surface-variant, #62655d); font-size: 12px; line-height: 1.5; }
+.priority-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.meta-pill { padding: 4px 7px; border-radius: 999px; background: var(--color-surface-container, #e9e9e4); color: var(--color-on-surface-variant, #555950); font-size: 10px; font-weight: 680; }
+.priority-card .button-link { align-self: flex-start; margin-top: auto; transform: translateY(12px); }
+.funnel { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 16px; padding: 0; list-style: none; }
+.funnel-stage { position: relative; min-width: 0; padding: 15px; border-radius: var(--radius-md, 12px); background: var(--color-surface-container-low, #f1f1ed); }
+.funnel-stage strong, .funnel-stage span { display: block; }
+.funnel-stage strong { margin-top: 6px; font-size: 22px; }
+.funnel-stage span { color: var(--color-on-surface-variant, #62655d); font-size: 11px; }
+.capability-card { display: flex; flex-direction: column; }
+.capability-card .status-pill { align-self: flex-start; margin-top: 14px; }
+.capability-card .button-link { align-self: flex-start; margin-top: auto; transform: translateY(10px); }
 .connection-card { padding: 0; overflow: hidden; }
 .connection-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 20px; }
 .connection-identity { display: flex; gap: 13px; min-width: 0; }
@@ -362,7 +378,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @media (max-width: 1080px) {
   .card { grid-column: span 6; }
   .card.wide { grid-column: span 12; }
-  .freshness-link span { display: none; }
+  .priority-grid { grid-template-columns: 1fr; }
+  .freshness-link span:not(:first-child) { display: none; }
 }
 @media (max-width: 760px) {
   body.nav-open { overflow: hidden; }
@@ -520,37 +537,82 @@ function pageTabs(route) {
     '</nav>';
 }
 function freshness() {
-  const unavailable = state.freshness.filter((item) => item.status !== 'ready').length;
+  const serviceIssues = state.connections
+    .filter((connection) => connection.connected)
+    .flatMap((connection) => connection.services)
+    .filter((service) => service.state !== 'current');
+  if (serviceIssues.length > 0) {
+    return { label: serviceIssues.length + ' service' + (serviceIssues.length === 1 ? '' : 's') + ' need attention', attention: true };
+  }
+  const unavailable = new Set(state.freshness.filter((item) => item.status !== 'ready').map((item) => item.provider)).size;
   if (unavailable === 0) return { label: 'Data is current', attention: false };
-  return { label: unavailable + ' source' + (unavailable === 1 ? '' : 's') + ' need attention', attention: true };
+  return { label: unavailable + ' source' + (unavailable === 1 ? '' : 's') + ' need an update', attention: true };
 }
 function meaningfulMetrics(route) {
-  const ids = route.family === 'advertising'
-    ? ['spend', 'conversions', 'cpa', 'roas']
+  const ids = route.family === 'overview'
+    ? state.overview.metricIds
+    : route.family === 'advertising'
+      ? ['spend', 'paid-conversions', 'cpa', 'roas']
     : route.family === 'analytics'
-      ? ['sessions', 'users', 'conversions', 'revenue']
+      ? ['sessions', 'users', 'analytics-conversions', 'revenue']
       : route.family === 'seo'
-        ? ['organic-clicks', 'clicks', 'impressions', 'position']
-        : ['organic-clicks', 'spend', 'conversions', 'revenue', 'clicks'];
+        ? ['organic-clicks', 'organic-impressions']
+        : [];
   const metrics = ids.map((id) => state.metrics.find((item) => item.id === id)).filter(Boolean);
-  return (metrics.length ? metrics : state.metrics).filter((item) => item.value && item.value !== '0').slice(0, 4);
+  return metrics.filter((item) => item.numericValue !== undefined && item.numericValue > 0).slice(0, 4);
 }
 function metricCards(route) {
   const metrics = meaningfulMetrics(route);
   if (!metrics.length) {
     return '<article class="card full"><div class="empty-state"><strong>Useful performance data is not available yet.</strong><p>Connect the relevant source or wait for its first successful update. The console will not display invented zero values.</p><a class="button-link" href="/connections" data-route-link>Review connections</a></div></article>';
   }
-  return metrics.map((metric) => '<article class="card"><h2>' + esc(metric.label) + '</h2><div class="metric-value">' + esc(metric.value) + '</div><div class="metric-helper">' + esc(metric.helper || 'Current selected period') + '</div></article>').join('');
+  return metrics.map((metric) =>
+    '<article class="card"><h2>' + esc(metric.label) + '</h2><div class="metric-value">' + esc(metric.value) + '</div><div class="metric-helper">' + esc(metric.definition) + '</div><div class="metric-context"><span>' + esc(metric.sourceLabel + ' · ' + metric.freshnessLabel) + '</span><span>' + esc(metric.comparisonLabel) + '</span></div></article>'
+  ).join('');
 }
-function priorityList() {
-  const actions = state.actions.slice(0, 3);
-  if (!actions.length) return '<div class="empty-state"><strong>No immediate priorities.</strong><p>The active workspace has no suggested action from current evidence.</p></div>';
-  return '<div class="list">' + actions.map((item) => '<article class="list-item"><strong>' + esc(item.title) + '</strong><p>' + esc(item.message) + '</p></article>').join('') + '</div>';
+function contextualPriorities(route) {
+  const priorities = state.priorities
+    .filter((priority) => route.family === 'overview' || priority.lane === route.family || priority.lane === 'overview')
+    .slice(0, 3);
+  if (!priorities.length) return '<div class="empty-state"><strong>No immediate priorities.</strong><p>The latest usable evidence does not require an action right now.</p></div>';
+  return '<div class="priority-grid">' + priorities.map((item) =>
+    '<article class="priority-card"><h3>' + esc(item.title) + '</h3><p><strong>Expected outcome:</strong> ' + esc(item.expectedOutcome) + '</p><p>' + esc(item.reason) + '</p><p><strong>Evidence:</strong> ' + esc(item.evidence) + '</p><div class="priority-meta"><span class="meta-pill">' + esc(item.priorityLabel) + '</span><span class="meta-pill">' + esc(item.confidenceLabel) + '</span><span class="meta-pill">' + esc(item.effortLabel) + '</span></div><p>' + esc(item.freshnessLabel + ' · ' + item.riskLabel) + '</p><a class="button-link" href="' + esc(item.action.path) + '" data-route-link>' + esc(item.action.label) + '</a></article>'
+  ).join('') + '</div>';
 }
-function recentActivity() {
-  const items = state.receipts.slice(0, 5);
+function recentActivity(limit = 5) {
+  const items = state.receipts.slice(0, limit);
   if (!items.length) return '<div class="empty-state"><strong>No activity yet.</strong><p>Changes, updates, approvals, and failures will appear here after they happen.</p></div>';
   return '<div class="list">' + items.map((item) => '<article class="list-item"><strong>' + esc(humanize(item.action)) + '</strong><p>' + esc(item.timestamp ? new Date(item.timestamp).toLocaleString() : 'Time not available') + ' · ' + esc(humanize(item.status)) + '</p></article>').join('') + '</div>';
+}
+function recentOverviewOutcomes() {
+  const items = state.overview.recentOutcomes;
+  if (!items.length) return '<div class="empty-state"><strong>No recent changes yet.</strong><p>Completed changes and their outcomes will appear here after they happen.</p></div>';
+  return '<div class="list">' + items.map((item) =>
+    '<article class="list-item"><strong>' + esc(item.title) + '</strong><p>' + esc(item.summary) + '</p><p>' + esc(item.timestamp ? new Date(item.timestamp).toLocaleString() : 'Time not available') + ' · ' + esc(humanize(item.status)) + '</p></article>'
+  ).join('') + '</div>';
+}
+function overviewFunnel() {
+  const funnel = state.overview.funnel;
+  if (!funnel) return '';
+  return '<section><div class="section-heading"><div><h2>' + esc(funnel.title) + '</h2><p>' + esc(funnel.summary + ' Source: ' + funnel.sourceLabel + '.') + '</p></div></div><article class="card full"><ol class="funnel" aria-label="' + esc(funnel.title) + '">' + funnel.stages.map((stage) =>
+    '<li class="funnel-stage"><span>' + esc(stage.label) + '</span><strong>' + esc(stage.valueLabel) + '</strong></li>'
+  ).join('') + '</ol></article></section>';
+}
+function capabilitySummaries() {
+  return '<section><div class="section-heading"><div><h2>Channel summaries</h2><p>Open a channel to understand its results and priorities.</p></div></div><div class="grid">' + state.overview.capabilitySummaries.map((capability) =>
+    '<article class="card capability-card"><h2>' + esc(capability.label) + '</h2>' + statusPill(capability.status === 'ready' ? 'current' : capability.status === 'blocked' ? 'failed' : 'delayed', capability.statusLabel) + '<p>' + esc(capability.summary) + '</p><a class="button-link secondary" href="' + esc(capability.path) + '" data-route-link>Open ' + esc(capability.label) + '</a></article>'
+  ).join('') + '</div></section>';
+}
+function overviewPage(route) {
+  const metrics = meaningfulMetrics(route);
+  const performance = metrics.length
+    ? '<section><div class="section-heading"><div><h2>Key results</h2><p>Only usable business metrics are shown, with their source and freshness.</p></div></div><div class="grid">' + metricCards(route) + '</div></section>'
+    : '<section><div class="section-heading"><div><h2>Key results</h2></div></div><article class="card full"><div class="empty-state"><strong>No usable business metrics yet.</strong><p>Connect the relevant Google services or wait for the first successful update. Zeroes and empty charts are not used as placeholders.</p><a class="button-link" href="/connections" data-route-link>Review connections</a></div></article></section>';
+  return '<section><div class="section-heading"><div><h2>Priorities</h2><p>Up to three actions selected from current workspace evidence.</p></div></div>' + contextualPriorities(route) + '</section>' +
+    performance +
+    overviewFunnel() +
+    '<section><div class="section-heading"><div><h2>Recent changes and outcomes</h2><p>Readable results from recent workspace activity.</p></div><a href="/activity" data-route-link>View all activity</a></div><article class="card full">' + recentOverviewOutcomes() + '</article></section>' +
+    capabilitySummaries();
 }
 function formatTime(value) {
   if (!value) return 'Not checked yet';
@@ -670,13 +732,16 @@ function pageHeaderAction(route) {
 }
 function pageSummary(route) {
   if (route.family === 'connections') return '';
+  if (route.family === 'overview') {
+    return '<section class="summary"><h2>' + esc(state.overview.headline) + '</h2><p>' + esc(state.overview.detail) + '</p></section>';
+  }
   if (route.family === 'connection-detail') {
     const connection = connectionByProvider(route.path.split('/')[2]);
     if (!connection?.connected) return '';
     const issue = connection.services.find((service) => service.state !== 'current');
     return '<section class="summary"><h2>' + esc(issue ? issue.label + ' needs attention' : connection.label + ' is working') + '</h2><p>' + esc(issue?.issue || connection.summary) + '</p></section>';
   }
-  return '<section class="summary"><h2>' + esc(route.family === 'overview' ? state.readiness.label : route.description) + '</h2><p>' + esc(route.family === 'overview' ? state.readiness.nextWorkflowStep : 'This page uses the active workspace and the latest usable data. Missing sources are explained rather than shown as zero.') + '</p></section>';
+  return '<section class="summary"><h2>' + esc(route.description) + '</h2><p>This page uses the active workspace and the latest usable data. Missing sources are explained rather than shown as zero.</p></section>';
 }
 function dialogs() {
   if (disconnectProvider) {
@@ -690,6 +755,9 @@ function dialogs() {
   return '';
 }
 function pageBody(route) {
+  if (route.family === 'overview') {
+    return overviewPage(route);
+  }
   if (route.family === 'connections') {
     return connectionsIndex();
   }
@@ -706,9 +774,9 @@ function pageBody(route) {
     return '<div class="grid"><article class="card"><h2>Navigation</h2><p>Your desktop sidebar preference is stored in this browser.</p></article><article class="card"><h2>Workspace</h2><p>' + esc(humanize(state.platformId)) + ' · ' + esc(humanize(state.environment)) + '</p></article></div>';
   }
   if (route.family === 'help') {
-    return '<div class="grid"><article class="card wide"><h2>Start with what needs attention</h2><p>' + esc(state.readiness.nextWorkflowStep) + '</p><a class="button-link" href="/overview" data-route-link>Return to overview</a></article><article class="card"><h2>Technical details</h2><p>Use the structured CLI when you need exact identifiers, paths, or diagnostic records.</p></article></div>';
+    return '<div class="grid"><article class="card wide"><h2>Start with what needs attention</h2><p>' + esc(state.priorities[0]?.expectedOutcome || state.overview.detail) + '</p><a class="button-link" href="/overview" data-route-link>Return to overview</a></article><article class="card"><h2>Technical details</h2><p>Use the structured CLI when you need exact identifiers, paths, or diagnostic records.</p></article></div>';
   }
-  return '<div class="grid">' + metricCards(route) + '<article class="card wide"><h2>Priorities</h2><p>The most useful next actions from current evidence.</p>' + priorityList() + '</article><article class="card"><h2>Source and freshness</h2><p>' + esc(freshness().label) + '</p><a class="button-link" href="/connections" data-route-link>Review source</a></article></div>';
+  return '<div class="grid">' + metricCards(route) + '<article class="card full"><h2>Priorities</h2><p>The most useful actions for this channel.</p>' + contextualPriorities(route) + '</article><article class="card"><h2>Source and freshness</h2><p>' + esc(freshness().label) + '</p><a class="button-link" href="/connections" data-route-link>Review source</a></article></div>';
 }
 function render() {
   const route = currentRoute();
