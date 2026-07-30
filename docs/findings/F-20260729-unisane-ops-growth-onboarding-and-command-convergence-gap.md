@@ -15,6 +15,10 @@ status: in-progress
 
 ## Changelog
 
+- `2026-07-30`: Closed the P120-W3 Connections slice. The old Setup connection
+  projection and stale auth-profile/env-reader test paths are absent; one
+  provider-neutral projection, independent Google service health, full detail tabs,
+  and confirmed local disconnect lifecycle now have package and browser proof.
 - `2026-07-30`: Opened executable P120-W3 task `T-eede3498` with an exact console-app,
   Growth-headless, CLI-pack, route, copy, state, accessibility, and zero-residue
   convergence contract. No console code changes are admitted outside its bounded

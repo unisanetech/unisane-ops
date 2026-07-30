@@ -17,6 +17,8 @@ named provider connection.
 
 ## Changelog
 
+- `2026-07-30`: Added the confirmed Google disconnect lifecycle and documented that
+  historical evidence remains while provider-side resources stay unchanged.
 - `2026-07-30`: Replaced the separate setup, authentication-profile, provider-id
   environment, and readiness workflows with the canonical Ops lifecycle.
 
@@ -68,6 +70,17 @@ unisane connect google --environment production \
 The project config stores only non-secret connection and resource references. Local
 credentials stay in provider-owned secure storage. CI and team secret-store bindings are
 explicit adapters; there is no one-off credential bypass.
+
+To remove Google from one environment:
+
+```bash
+unisane disconnect google --environment production --yes
+```
+
+The command confirms the consequences, removes the selected local connection and its
+local credential material, and clears its project resource references. Historical
+reports remain available. Google-side tags, properties, containers, accounts, and
+campaigns are not changed.
 
 ## Readiness
 

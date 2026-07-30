@@ -14,6 +14,11 @@ status: accepted
 
 ## Changelog
 
+- `2026-07-30`: Implemented the W3 Connections decision slice. One provider-neutral
+  headless projection now drives the Google-only connection index and detail tabs,
+  preserves independent service truth, and uses a confirmed canonical disconnect that
+  removes local connection state while retaining history and leaving Google resources
+  unchanged.
 - `2026-07-30`: Admitted W3 implementation with an exact owner and deletion map. The
   optional console app contributes `growth.console` and owns presentation; Growth
   exposes only `@unisane/growth/console` headless state/actions, while the embedded app,

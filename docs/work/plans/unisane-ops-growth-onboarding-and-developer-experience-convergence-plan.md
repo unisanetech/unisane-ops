@@ -23,6 +23,11 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-07-30`: Completed P120-W3 slice 3. The console now consumes one UI-neutral
+  connection projection, presents only implemented providers, keeps Google service
+  access/resource/data state independent, provides the full connection-detail
+  hierarchy, and routes explicit disconnect through the canonical confirmed CLI and
+  Provider Google lifecycle.
 - `2026-07-30`: Completed P120-W3 slice 1. `unisane-ops/apps/console` now owns the
   optional console pack and all presentation/build/serve mechanics,
   `@unisane/growth/console` owns the headless state boundary, CLI core lazily loads the
