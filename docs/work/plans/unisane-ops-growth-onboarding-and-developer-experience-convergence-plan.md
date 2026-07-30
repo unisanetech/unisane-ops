@@ -23,6 +23,11 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-07-30`: Completed P120-W3 slice 1. `unisane-ops/apps/console` now owns the
+  optional console pack and all presentation/build/serve mechanics,
+  `@unisane/growth/console` owns the headless state boundary, CLI core lazily loads the
+  installed exact `growth.console` contribution, and the retired Growth console owners
+  and nested build/serve commands are absent.
 - `2026-07-30`: Admitted P120-W3 under Skopos task `T-eede3498` with active workpack
   `docs/work/tasks/P120-W3.md` and paired observe-mode convergence contract. The frozen
   cut makes the optional console app the command and presentation owner, moves only
