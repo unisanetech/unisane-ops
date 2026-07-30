@@ -336,6 +336,43 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .capability-card { display: flex; flex-direction: column; }
 .capability-card .status-pill { align-self: flex-start; margin-top: 14px; }
 .capability-card .button-link { align-self: flex-start; margin-top: auto; transform: translateY(10px); }
+.analysis-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin: 18px 0 12px; }
+.analysis-control { display: grid; gap: 5px; min-width: min(240px, 100%); color: var(--color-on-surface-variant, #62655d); font-size: 11px; font-weight: 650; }
+.analysis-control input, .analysis-control select {
+  min-height: 40px;
+  width: 100%;
+  border: 1px solid var(--color-outline-variant, #d7d8d1);
+  border-radius: var(--radius-sm, 9px);
+  padding: 8px 11px;
+  background: var(--color-surface, #fff);
+  color: var(--color-on-surface, #20211f);
+  font: inherit;
+  font-size: 13px;
+}
+.table-shell { overflow-x: auto; border: 1px solid var(--color-outline-variant, #d7d8d1); border-radius: var(--radius-lg, 16px); background: var(--color-surface, #fff); }
+.analysis-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.analysis-table th, .analysis-table td { padding: 12px 14px; border-bottom: 1px solid var(--color-outline-variant, #e4e4de); text-align: left; vertical-align: top; }
+.analysis-table th { position: sticky; top: 0; background: var(--color-surface-container-low, #f5f5f1); color: var(--color-on-surface-variant, #62655d); font-size: 11px; white-space: nowrap; }
+.analysis-table tbody tr:last-child td { border-bottom: 0; }
+.analysis-table [data-sort] { border: 0; padding: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; cursor: pointer; }
+.row-button { border: 0; padding: 0; background: transparent; color: var(--color-primary, #476242); font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
+.row-subtitle { display: block; max-width: 340px; margin-top: 4px; overflow: hidden; color: var(--color-on-surface-variant, #62655d); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.source-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 20px; padding: 14px 16px; border-radius: var(--radius-md, 12px); background: var(--color-surface-container-low, #f1f1ed); color: var(--color-on-surface-variant, #62655d); font-size: 12px; }
+.summary-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.summary-stat { padding: 15px; border-radius: var(--radius-md, 12px); background: var(--color-surface-container-low, #f1f1ed); }
+.summary-stat strong, .summary-stat span { display: block; }
+.summary-stat strong { margin-top: 5px; font-size: 20px; }
+.summary-stat span { color: var(--color-on-surface-variant, #62655d); font-size: 11px; }
+.health-group { margin-top: 12px; padding: 0 16px; border: 1px solid var(--color-outline-variant, #deded8); border-radius: var(--radius-md, 12px); background: var(--color-surface, #fff); }
+.health-group summary { padding: 15px 0; cursor: pointer; font-size: 13px; font-weight: 720; }
+.health-group .list { margin: 0; padding-bottom: 14px; }
+.view-switcher { display: flex; flex-wrap: wrap; gap: 6px; margin: 18px 0 12px; }
+.view-switcher button { min-height: 36px; border: 1px solid var(--color-outline-variant, #d7d8d1); border-radius: 999px; padding: 7px 12px; background: var(--color-surface, #fff); color: inherit; font-size: 12px; cursor: pointer; }
+.view-switcher button.active { border-color: var(--color-primary, #476242); background: var(--color-primary-container, #dce6d7); font-weight: 700; }
+.topic-card { display: grid; gap: 7px; }
+.topic-card dl { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 10px 0 0; font-size: 11px; }
+.topic-card dt { color: var(--color-on-surface-variant, #62655d); }
+.topic-card dd { margin: 0; }
 .connection-card { padding: 0; overflow: hidden; }
 .connection-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 20px; }
 .connection-identity { display: flex; gap: 13px; min-width: 0; }
@@ -379,6 +416,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .card { grid-column: span 6; }
   .card.wide { grid-column: span 12; }
   .priority-grid { grid-template-columns: 1fr; }
+  .summary-strip { grid-template-columns: 1fr; }
   .freshness-link span:not(:first-child) { display: none; }
 }
 @media (max-width: 760px) {
@@ -424,6 +462,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .page-header .page-action { margin-top: 16px; }
   .grid { grid-template-columns: 1fr; }
   .card, .card.wide, .card.full { grid-column: auto; }
+  .analysis-table, .analysis-table tbody, .analysis-table tr, .analysis-table td { display: block; width: 100%; }
+  .analysis-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+  .analysis-table tr { padding: 12px 14px; border-bottom: 1px solid var(--color-outline-variant, #e4e4de); }
+  .analysis-table tbody tr:last-child { border-bottom: 0; }
+  .analysis-table td { display: grid; grid-template-columns: minmax(88px, .7fr) minmax(0, 1.3fr); gap: 12px; padding: 7px 0; border: 0; }
+  .analysis-table td::before { content: attr(data-label); color: var(--color-on-surface-variant, #62655d); font-size: 10px; font-weight: 700; text-transform: uppercase; }
   .service-row { grid-template-columns: 1fr; gap: 9px; }
   .connection-header, .connection-footer, .detail-row { align-items: flex-start; flex-direction: column; }
   .dialog-actions { flex-direction: column-reverse; }
@@ -449,6 +493,11 @@ let projectMenuOpen = false;
 let restoreFocusTo = null;
 let commandAction = null;
 let disconnectProvider = null;
+let seoDetail = null;
+let seoSearch = '';
+let seoStatus = 'all';
+let seoSort = { pages: 'clicks', queries: 'clicks' };
+let seoResearchView = 'keyword-ideas';
 let dialogTrigger = null;
 let notice = '';
 let collapsed = localStorage.getItem('unisane-ops-sidebar-collapsed') === 'true';
@@ -614,6 +663,126 @@ function overviewPage(route) {
     '<section><div class="section-heading"><div><h2>Recent changes and outcomes</h2><p>Readable results from recent workspace activity.</p></div><a href="/activity" data-route-link>View all activity</a></div><article class="card full">' + recentOverviewOutcomes() + '</article></section>' +
     capabilitySummaries();
 }
+function seoMetricCards() {
+  const metrics = state.seo.overview.metrics;
+  if (!metrics.length) {
+    return '<article class="card full"><div class="empty-state"><strong>No usable search metrics yet.</strong><p>Connect Search Console or wait for its first successful update. Empty metrics are not displayed as zero.</p><a class="button-link" href="/connections" data-route-link>Review connection</a></div></article>';
+  }
+  return metrics.map((metric) =>
+    '<article class="card"><h2>' + esc(metric.label) + '</h2><div class="metric-value">' + esc(metric.value) + '</div><div class="metric-helper">' + esc(metric.definition) + '</div><div class="metric-context"><span>' + esc(metric.sourceLabel + ' · ' + metric.freshnessLabel) + '</span><span>' + esc(metric.comparisonLabel) + '</span></div></article>'
+  ).join('');
+}
+function seoSourceFooter() {
+  return '<footer class="source-footer"><span><strong>Source:</strong> ' + esc(state.seo.sourceLabel) + '</span><span><strong>Latest usable data:</strong> ' + esc(state.seo.freshnessLabel) + '</span><span>' + esc(state.seo.comparisonLabel) + '</span></footer>';
+}
+function seoOpportunityCards(items, emptyTitle) {
+  if (!items.length) {
+    return '<div class="empty-state"><strong>' + esc(emptyTitle || 'No supported opportunity yet.') + '</strong><p>An opportunity appears only when available evidence supports a useful action.</p></div>';
+  }
+  return '<div class="priority-grid">' + items.map((item) =>
+    '<article class="priority-card" data-seo-search-value="' + esc(item.title + ' ' + item.reason + ' ' + item.kind) + '" data-seo-status="' + esc(item.kind) + '"><h3>' + esc(item.title) + '</h3><p><strong>Expected outcome:</strong> ' + esc(item.expectedOutcome) + '</p><p>' + esc(item.reason) + '</p><p><strong>Affected:</strong> ' + esc(item.affectedLabel) + '</p><div class="priority-meta"><span class="meta-pill">' + esc(humanize(item.kind)) + '</span><span class="meta-pill">' + esc(item.confidenceLabel) + '</span><span class="meta-pill">' + esc(item.effortLabel) + '</span></div><p>' + esc(item.impactLabel + ' · ' + item.freshnessLabel) + '</p><button class="button-link" type="button" data-action="inspect-seo" data-seo-kind="opportunity" data-seo-id="' + esc(item.id) + '">Review opportunity</button></article>'
+  ).join('') + '</div>';
+}
+function seoPagePreview() {
+  const pages = state.seo.overview.pagePreview;
+  if (!pages.length) return '';
+  return '<section><div class="section-heading"><div><h2>Pages with search visibility</h2><p>Current-period evidence only; growth and decline need a previous-period comparison.</p></div><a href="/seo/pages" data-route-link>View all pages</a></div><article class="card full"><div class="list">' + pages.map((page) =>
+    '<article class="list-item"><button class="row-button" type="button" data-action="inspect-seo" data-seo-kind="page" data-seo-id="' + esc(page.id) + '">' + esc(page.title) + '</button><p>' + esc(page.clicks + ' organic clicks · ' + page.searchViews + ' search views · ' + (page.averagePosition === undefined ? 'position unavailable' : 'average position ' + page.averagePosition)) + '</p></article>'
+  ).join('') + '</div></article></section>';
+}
+function seoOverviewPage() {
+  return '<section><div class="section-heading"><div><h2>Search performance</h2><p>Current results from Google Search Console with honest comparison limits.</p></div></div><div class="grid">' + seoMetricCards() + '</div></section>' +
+    '<section><div class="section-heading"><div><h2>Best opportunities</h2><p>Up to three deterministic improvements supported by current search evidence.</p></div><a href="/seo/opportunities" data-route-link>View all opportunities</a></div>' + seoOpportunityCards(state.seo.overview.opportunities, 'No current search opportunity is supported yet.') + '</section>' +
+    seoPagePreview() +
+    seoSourceFooter();
+}
+function opportunitySummary() {
+  const counts = { 'high-impact': 0, 'quick-win': 0, problem: 0 };
+  state.seo.opportunities.forEach((item) => { counts[item.kind] += 1; });
+  return '<div class="summary-strip"><article class="summary-stat"><span>High impact</span><strong>' + counts['high-impact'] + '</strong></article><article class="summary-stat"><span>Quick wins</span><strong>' + counts['quick-win'] + '</strong></article><article class="summary-stat"><span>Problems</span><strong>' + counts.problem + '</strong></article></div>';
+}
+function seoOpportunitiesPage() {
+  return opportunitySummary() +
+    '<div class="analysis-controls"><label class="analysis-control">Search opportunities<input type="search" value="' + esc(seoSearch) + '" data-seo-filter placeholder="Search outcome or evidence"></label><label class="analysis-control">Type<select data-seo-status-filter><option value="all"' + (seoStatus === 'all' ? ' selected' : '') + '>All types</option><option value="high-impact"' + (seoStatus === 'high-impact' ? ' selected' : '') + '>High impact</option><option value="quick-win"' + (seoStatus === 'quick-win' ? ' selected' : '') + '>Quick wins</option><option value="problem"' + (seoStatus === 'problem' ? ' selected' : '') + '>Problems</option></select></label></div>' +
+    seoOpportunityCards(state.seo.opportunities, 'No ranked search opportunity is supported yet.') +
+    seoSourceFooter();
+}
+function sortedSeoPages() {
+  const rows = [...state.seo.pages];
+  const key = seoSort.pages;
+  if (key === 'views') rows.sort((left, right) => right.searchViews - left.searchViews);
+  else if (key === 'position') rows.sort((left, right) => (left.averagePosition ?? Number.MAX_SAFE_INTEGER) - (right.averagePosition ?? Number.MAX_SAFE_INTEGER));
+  else rows.sort((left, right) => right.clicks - left.clicks || right.searchViews - left.searchViews);
+  return rows;
+}
+function seoPagesPage() {
+  const pages = sortedSeoPages();
+  if (!pages.length) return '<div class="grid"><article class="card full"><div class="empty-state"><strong>No page-level search data is available.</strong><p>Search Console must provide query and page evidence before this table appears.</p><a class="button-link" href="/connections" data-route-link>Review connection</a></div></article></div>' + seoSourceFooter();
+  return '<div class="analysis-controls"><label class="analysis-control">Search pages<input type="search" value="' + esc(seoSearch) + '" data-seo-filter placeholder="Search page title or URL"></label><label class="analysis-control">Status<select data-seo-status-filter><option value="all"' + (seoStatus === 'all' ? ' selected' : '') + '>All statuses</option><option value="Review"' + (seoStatus === 'Review' ? ' selected' : '') + '>Review</option><option value="Not indexed"' + (seoStatus === 'Not indexed' ? ' selected' : '') + '>Not indexed</option></select></label></div>' +
+    '<div class="table-shell"><table class="analysis-table"><thead><tr><th>Page</th><th><button type="button" data-sort="pages:clicks">Clicks</button></th><th>Change</th><th><button type="button" data-sort="pages:views">Search views</button></th><th><button type="button" data-sort="pages:position">Average position</button></th><th>Status</th></tr></thead><tbody>' + pages.map((page) =>
+      '<tr data-seo-search-value="' + esc(page.title + ' ' + page.path) + '" data-seo-status="' + esc(page.status) + '"><td data-label="Page"><button class="row-button" type="button" data-action="inspect-seo" data-seo-kind="page" data-seo-id="' + esc(page.id) + '">' + esc(page.title) + '</button><span class="row-subtitle">' + esc(page.path) + '</span></td><td data-label="Clicks">' + esc(page.clicks) + '</td><td data-label="Change">' + esc(page.changeLabel) + '</td><td data-label="Search views">' + esc(page.searchViews) + '</td><td data-label="Average position">' + esc(page.averagePosition ?? 'Not available') + '</td><td data-label="Status">' + esc(page.status) + (page.indexingWarning ? '<span class="row-subtitle">' + esc(page.indexingWarning) + '</span>' : '') + '</td></tr>'
+    ).join('') + '</tbody></table></div>' + seoSourceFooter();
+}
+function sortedSeoQueries() {
+  const rows = [...state.seo.queries];
+  const key = seoSort.queries;
+  if (key === 'views') rows.sort((left, right) => right.searchViews - left.searchViews);
+  else if (key === 'position') rows.sort((left, right) => (left.averagePosition ?? Number.MAX_SAFE_INTEGER) - (right.averagePosition ?? Number.MAX_SAFE_INTEGER));
+  else rows.sort((left, right) => right.clicks - left.clicks || right.searchViews - left.searchViews);
+  return rows;
+}
+function seoQueriesPage() {
+  const queries = sortedSeoQueries();
+  if (!queries.length) return '<div class="grid"><article class="card full"><div class="empty-state"><strong>No search query data is available.</strong><p>Search Console must provide query evidence before this table appears.</p><a class="button-link" href="/connections" data-route-link>Review connection</a></div></article></div>' + seoSourceFooter();
+  return '<div class="analysis-controls"><label class="analysis-control">Search queries<input type="search" value="' + esc(seoSearch) + '" data-seo-filter placeholder="Search query text"></label></div>' +
+    '<div class="table-shell"><table class="analysis-table"><thead><tr><th>Search</th><th><button type="button" data-sort="queries:clicks">Clicks</button></th><th>Change</th><th><button type="button" data-sort="queries:views">Search views</button></th><th><button type="button" data-sort="queries:position">Average position</button></th><th>Best page</th></tr></thead><tbody>' + queries.map((query) =>
+      '<tr data-seo-search-value="' + esc(query.query + ' ' + (query.bestPage?.title || '')) + '" data-seo-status="all"><td data-label="Search"><button class="row-button" type="button" data-action="inspect-seo" data-seo-kind="query" data-seo-id="' + esc(query.id) + '">' + esc(query.query) + '</button></td><td data-label="Clicks">' + esc(query.clicks) + '</td><td data-label="Change">' + esc(query.changeLabel) + '</td><td data-label="Search views">' + esc(query.searchViews) + '</td><td data-label="Average position">' + esc(query.averagePosition ?? 'Not available') + '</td><td data-label="Best page">' + esc(query.bestPage?.title || 'Not available') + '</td></tr>'
+    ).join('') + '</tbody></table></div>' + seoSourceFooter();
+}
+function seoSiteHealthPage() {
+  const health = state.seo.siteHealth;
+  if (!health.available) return '<div class="grid"><article class="card full"><div class="empty-state"><strong>' + esc(health.headline) + '</strong><p>' + esc(health.detail) + '</p></div></article></div>';
+  const groups = health.groups.map((group) =>
+    '<details class="health-group"' + (group.issues.length ? ' open' : '') + '><summary>' + esc(group.label + ' · ' + group.issues.length) + '</summary>' + (group.issues.length ? '<div class="list">' + group.issues.map((issue) =>
+      '<article class="list-item"><strong>' + esc(issue.title) + '</strong><p>' + esc(issue.impact + ' Affected: ' + issue.affectedLabel + '.') + '</p><p>' + esc(issue.confidenceLabel + ' · ' + issue.firstSeenLabel + ' · ' + issue.lastCheckedLabel) + '</p><a class="button-link secondary" href="/seo/pages" data-route-link>' + esc(issue.actionLabel) + '</a></article>'
+    ).join('') + '</div>' : '<div class="empty-state"><strong>No issue reported in this group.</strong></div>') + '</details>'
+  ).join('');
+  return '<section class="summary"><h2>' + esc(health.headline) + '</h2><p>' + esc(health.detail) + '</p></section>' + groups + seoSourceFooter();
+}
+function researchViewButton(id, label) {
+  return '<button type="button" data-research-view="' + id + '" class="' + (seoResearchView === id ? 'active' : '') + '"' + (seoResearchView === id ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' + label + '</button>';
+}
+function seoResearchResults() {
+  const research = state.seo.research;
+  if (seoResearchView === 'questions') {
+    if (!research.questions.length) return '<div class="empty-state"><strong>No researched questions yet.</strong><p>Questions appear only when evidence-backed FAQ research exists.</p></div>';
+    return '<div class="grid">' + research.questions.map((item) =>
+      '<article class="card topic-card" data-seo-search-value="' + esc(item.question + ' ' + item.intentLabel) + '" data-seo-status="all"><h2>' + esc(item.question) + '</h2><p>' + esc(item.intentLabel) + '</p><p>' + esc(item.demandLabel + ' · ' + item.visibilityLabel) + '</p></article>'
+    ).join('') + '</div>';
+  }
+  if (seoResearchView === 'content-gaps') {
+    if (!research.contentGaps.length) return '<div class="empty-state"><strong>No evidence-backed content gap yet.</strong><p>Content gaps appear after competitor or search-result research records a supported difference.</p></div>';
+    return '<div class="grid">' + research.contentGaps.map((item) =>
+      '<article class="card topic-card" data-seo-search-value="' + esc(item.title + ' ' + item.reason) + '" data-seo-status="all"><h2>' + esc(item.title) + '</h2><p>' + esc(item.reason) + '</p><a class="button-link secondary" href="/seo/opportunities" data-route-link>' + esc(item.actionLabel) + '</a></article>'
+    ).join('') + '</div>';
+  }
+  if (!research.keywordIdeas.length) return '<div class="empty-state"><strong>No topic demand research yet.</strong><p>Keyword ideas appear only after country- and language-specific research evidence exists.</p></div>';
+  return '<div class="grid">' + research.keywordIdeas.map((item) =>
+    '<article class="card topic-card" data-seo-search-value="' + esc(item.topic + ' ' + item.intentLabel + ' ' + (item.country || '')) + '" data-seo-status="all"><h2>' + esc(item.topic) + '</h2><p>' + esc(item.demandLabel) + '</p><dl><dt>Interest</dt><dd>' + esc(item.interestLabel) + '</dd><dt>Visibility</dt><dd>' + esc(item.visibilityLabel) + '</dd><dt>Difficulty</dt><dd>' + esc(item.difficultyLabel) + '</dd><dt>User goal</dt><dd>' + esc(item.intentLabel) + '</dd><dt>Market</dt><dd>' + esc([item.country, item.language].filter(Boolean).join(' / ') || 'Not available') + '</dd></dl><a class="button-link secondary" href="/seo/opportunities" data-route-link>Review opportunity</a></article>'
+  ).join('') + '</div>';
+}
+function seoResearchPage() {
+  const research = state.seo.research;
+  return '<div class="analysis-controls"><label class="analysis-control">Topic<input type="search" value="' + esc(seoSearch) + '" data-seo-filter placeholder="Filter researched topics"></label><div class="context-line">' + esc(research.contextLabel) + '</div></div><p class="context-line">' + esc(research.demandExplanation) + '</p><div class="view-switcher" aria-label="Research views">' + researchViewButton('keyword-ideas', 'Keyword ideas') + researchViewButton('questions', 'Questions') + researchViewButton('content-gaps', 'Content gaps') + '</div>' + seoResearchResults();
+}
+function seoPage(route) {
+  if (route.id === 'seo.overview') return seoOverviewPage();
+  if (route.id === 'seo.opportunities') return seoOpportunitiesPage();
+  if (route.id === 'seo.pages') return seoPagesPage();
+  if (route.id === 'seo.queries') return seoQueriesPage();
+  if (route.id === 'seo.site-health') return seoSiteHealthPage();
+  return seoResearchPage();
+}
 function formatTime(value) {
   if (!value) return 'Not checked yet';
   const parsed = new Date(value);
@@ -735,6 +904,14 @@ function pageSummary(route) {
   if (route.family === 'overview') {
     return '<section class="summary"><h2>' + esc(state.overview.headline) + '</h2><p>' + esc(state.overview.detail) + '</p></section>';
   }
+  if (route.family === 'seo') {
+    if (route.id === 'seo.overview') return '<section class="summary"><h2>' + esc(state.seo.overview.headline) + '</h2><p>' + esc(state.seo.overview.detail) + '</p></section>';
+    if (route.id === 'seo.opportunities') return '<section class="summary"><h2>' + esc(state.seo.opportunities.length ? state.seo.opportunities.length + ' search improvements are supported by available evidence.' : 'No search improvement is supported by available evidence yet.') + '</h2><p>Every item is ranked from recorded page, query, or site-health evidence—not an unexplained model opinion.</p></section>';
+    if (route.id === 'seo.pages') return '<section class="summary"><h2>' + esc(state.seo.pages.length ? state.seo.pages.length + ' pages have current search evidence.' : 'No page-level search evidence is available yet.') + '</h2><p>' + esc(state.seo.comparisonLabel + ' Pages are not labeled growing or declining without it.') + '</p></section>';
+    if (route.id === 'seo.queries') return '<section class="summary"><h2>' + esc(state.seo.queries.length ? state.seo.queries.length + ' searches are visible in the available data.' : 'No search query evidence is available yet.') + '</h2><p>' + esc(state.seo.comparisonLabel + ' The console does not claim a demand or ranking cause without comparison evidence.') + '</p></section>';
+    if (route.id === 'seo.site-health') return '';
+    return '<section class="summary"><h2>' + esc(state.seo.research.available ? 'Evidence-backed topic research is ready to compare.' : 'No topic research is available yet.') + '</h2><p>' + esc(state.seo.research.contextLabel) + '</p></section>';
+  }
   if (route.family === 'connection-detail') {
     const connection = connectionByProvider(route.path.split('/')[2]);
     if (!connection?.connected) return '';
@@ -752,6 +929,23 @@ function dialogs() {
   if (commandAction) {
     return '<div class="dialog-backdrop" data-action="close-dialog"><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="command-title"><h2 id="command-title">' + esc(commandAction.label) + '</h2><p>' + esc(commandAction.description) + '</p><div class="command-panel"><code>' + esc(commandAction.command) + '</code></div><p>Run this command in the project terminal. The command will still enforce its own confirmation and safety rules.</p><div class="dialog-actions"><button class="button-link secondary" type="button" data-action="close-dialog">Cancel</button><button class="button-link" type="button" data-action="copy-command">Copy command</button></div></section></div>';
   }
+  if (seoDetail) {
+    const kind = seoDetail.kind;
+    const id = seoDetail.id;
+    if (kind === 'page') {
+      const page = state.seo.pages.find((item) => item.id === id);
+      if (!page) return '';
+      return '<div class="dialog-backdrop" data-action="close-dialog"><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="seo-detail-title"><h2 id="seo-detail-title">' + esc(page.title) + '</h2><p>' + esc(page.statusDetail) + '</p><div class="summary-strip"><article class="summary-stat"><span>Organic clicks</span><strong>' + esc(page.clicks) + '</strong></article><article class="summary-stat"><span>Search views</span><strong>' + esc(page.searchViews) + '</strong></article><article class="summary-stat"><span>Average position</span><strong>' + esc(page.averagePosition ?? 'Not available') + '</strong></article></div><h3>Top searches</h3>' + (page.topQueries.length ? '<ul>' + page.topQueries.map((query) => '<li>' + esc(query) + '</li>').join('') + '</ul>' : '<p>No page-specific search is available.</p>') + (page.indexingWarning ? '<p><strong>Indexing warning:</strong> ' + esc(page.indexingWarning) + '</p>' : '') + '<p><strong>Next step:</strong> Review the page and its leading searches before creating an improvement plan.</p><details><summary>Technical details</summary><p>' + esc(page.fullUrl) + '</p><p>Click-through rate: ' + esc(page.clickThroughRate === undefined ? 'Not available' : page.clickThroughRate + '%') + '</p></details><div class="dialog-actions"><button class="button-link secondary" type="button" data-action="close-dialog">Close</button><a class="button-link" href="/seo/opportunities" data-route-link>Create improvement plan</a></div></section></div>';
+    }
+    if (kind === 'query') {
+      const query = state.seo.queries.find((item) => item.id === id);
+      if (!query) return '';
+      return '<div class="dialog-backdrop" data-action="close-dialog"><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="seo-detail-title"><h2 id="seo-detail-title">' + esc(query.query) + '</h2><p>Previous-period data is unavailable, so the console cannot claim whether demand, ranking, or click-through caused a change.</p><div class="summary-strip"><article class="summary-stat"><span>Organic clicks</span><strong>' + esc(query.clicks) + '</strong></article><article class="summary-stat"><span>Search views</span><strong>' + esc(query.searchViews) + '</strong></article><article class="summary-stat"><span>Average position</span><strong>' + esc(query.averagePosition ?? 'Not available') + '</strong></article></div><p><strong>Best page:</strong> ' + esc(query.bestPage?.title || 'Not available') + '</p><p><strong>Evidence:</strong> ' + esc(state.seo.sourceLabel + ' · ' + state.seo.freshnessLabel) + '</p><p><strong>Next step:</strong> Review the best page before changing content or targeting.</p><div class="dialog-actions"><button class="button-link secondary" type="button" data-action="close-dialog">Close</button><a class="button-link" href="/seo/pages" data-route-link>Review pages</a></div></section></div>';
+    }
+    const opportunity = state.seo.opportunities.find((item) => item.id === id);
+    if (!opportunity) return '';
+    return '<div class="dialog-backdrop" data-action="close-dialog"><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="seo-detail-title"><h2 id="seo-detail-title">' + esc(opportunity.title) + '</h2><p><strong>Expected outcome:</strong> ' + esc(opportunity.expectedOutcome) + '</p><p>' + esc(opportunity.reason) + '</p><p><strong>Affected:</strong> ' + esc(opportunity.affectedLabel) + '</p><p><strong>Evidence:</strong> ' + esc(opportunity.evidence) + '</p><p>' + esc(opportunity.impactLabel + ' · ' + opportunity.confidenceLabel + ' · ' + opportunity.effortLabel + ' · ' + opportunity.freshnessLabel) + '</p><div class="dialog-actions"><button class="button-link secondary" type="button" data-action="close-dialog">Close</button><a class="button-link" href="' + esc(opportunity.action.path) + '" data-route-link>' + esc(opportunity.action.label) + '</a></div></section></div>';
+  }
   return '';
 }
 function pageBody(route) {
@@ -763,6 +957,9 @@ function pageBody(route) {
   }
   if (route.family === 'connection-detail') {
     return connectionDetail(route);
+  }
+  if (route.family === 'seo') {
+    return seoPage(route);
   }
   if (route.family === 'activity') {
     return '<div class="grid"><article class="card wide"><h2>Recent activity</h2><p>Readable workspace outcomes from the latest local evidence.</p>' + recentActivity() + '</article><article class="card"><h2>What appears here</h2><p>Changes, data updates, errors, and approvals. Technical identifiers stay inside details.</p></article></div>';
@@ -818,6 +1015,10 @@ function navigate(path) {
   history.pushState({}, '', path);
   mobileOpen = false;
   projectMenuOpen = false;
+  seoSearch = '';
+  seoStatus = 'all';
+  seoDetail = null;
+  dialogTrigger = null;
   document.body.classList.remove('nav-open');
   render();
   document.querySelector('h1')?.focus?.();
@@ -834,12 +1035,15 @@ function closeDialog() {
   const trigger = dialogTrigger;
   commandAction = null;
   disconnectProvider = null;
+  seoDetail = null;
   dialogTrigger = null;
   render();
   if (trigger?.type === 'command') {
     app.querySelector('[data-command-id="' + trigger.id + '"]')?.focus();
   } else if (trigger?.type === 'disconnect') {
     app.querySelector('[data-action="show-disconnect"][data-provider="' + trigger.provider + '"]')?.focus();
+  } else if (trigger?.type === 'seo') {
+    app.querySelector('[data-action="inspect-seo"][data-seo-id="' + trigger.id + '"]')?.focus();
   } else {
     app.querySelector('h1')?.focus();
   }
@@ -853,6 +1057,7 @@ async function copyCommand(command, message) {
   }
   commandAction = null;
   disconnectProvider = null;
+  seoDetail = null;
   dialogTrigger = null;
   render();
   app.querySelector('h1')?.focus();
@@ -894,6 +1099,49 @@ function bind() {
       app.querySelector('.dialog button')?.focus();
     });
   });
+  app.querySelectorAll('[data-action="inspect-seo"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const kind = button.getAttribute('data-seo-kind');
+      const id = button.getAttribute('data-seo-id');
+      if (!kind || !id) return;
+      dialogTrigger = { type: 'seo', id };
+      seoDetail = { kind, id };
+      render();
+      app.querySelector('.dialog button')?.focus();
+    });
+  });
+  app.querySelectorAll('[data-sort]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const [collection, key] = String(button.getAttribute('data-sort')).split(':');
+      if (!collection || !key) return;
+      seoSort[collection] = key;
+      render();
+    });
+  });
+  app.querySelectorAll('[data-research-view]').forEach((button) => {
+    button.addEventListener('click', () => {
+      seoResearchView = button.getAttribute('data-research-view') || 'keyword-ideas';
+      render();
+    });
+  });
+  const applySeoFilters = () => {
+    const search = seoSearch.trim().toLowerCase();
+    app.querySelectorAll('[data-seo-search-value]').forEach((item) => {
+      const matchesSearch = !search || String(item.getAttribute('data-seo-search-value')).toLowerCase().includes(search);
+      const status = item.getAttribute('data-seo-status');
+      const matchesStatus = seoStatus === 'all' || status === seoStatus;
+      item.hidden = !(matchesSearch && matchesStatus);
+    });
+  };
+  app.querySelector('[data-seo-filter]')?.addEventListener('input', (event) => {
+    seoSearch = event.currentTarget.value;
+    applySeoFilters();
+  });
+  app.querySelector('[data-seo-status-filter]')?.addEventListener('change', (event) => {
+    seoStatus = event.currentTarget.value;
+    applySeoFilters();
+  });
+  applySeoFilters();
   app.querySelector('[data-action="show-disconnect"]')?.addEventListener('click', (event) => {
     const provider = event.currentTarget.getAttribute('data-provider');
     if (!provider) return;
@@ -921,7 +1169,7 @@ function bind() {
 }
 window.addEventListener('popstate', render);
 window.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && (commandAction || disconnectProvider)) {
+  if (event.key === 'Escape' && (commandAction || disconnectProvider || seoDetail)) {
     closeDialog();
     return;
   }

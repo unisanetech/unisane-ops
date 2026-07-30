@@ -8,6 +8,7 @@ export {
 } from './build-state.js';
 export { buildMarketingConsoleConnections } from './connections.js';
 export { buildMarketingConsoleOverview } from './overview.js';
+export { buildMarketingConsoleSeo } from './seo.js';
 export { resolveGrowthConsoleAuthContext } from './auth-context.js';
 export type {
   MarketingConsoleArtifactLink,
@@ -22,6 +23,13 @@ export type {
   MarketingConsolePriority,
   MarketingConsolePriorityLane,
   MarketingConsoleReceiptEvent,
+  MarketingConsoleSeo,
+  MarketingConsoleSeoHealthIssue,
+  MarketingConsoleSeoMetric,
+  MarketingConsoleSeoOpportunity,
+  MarketingConsoleSeoPage,
+  MarketingConsoleSeoQuery,
+  MarketingConsoleSeoResearchIdea,
   MarketingConsoleState,
   MarketingConsoleStatus,
   MarketingConsoleTrendPoint,

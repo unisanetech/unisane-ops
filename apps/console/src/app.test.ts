@@ -690,16 +690,51 @@ describe('marketing console', () => {
           ]),
         }),
       ]);
-      expect(state.seo.rows).toEqual(
+      expect(state.seo.queries).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             query: 'executive resume templates',
             clicks: 3,
-            impressions: 120,
-            ctr: 2.5,
-            position: 8.4,
+            searchViews: 120,
+            clickThroughRate: 2.5,
+            averagePosition: 8.4,
           }),
         ]),
+      );
+      expect(state.seo.pages).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: 'Executive template',
+            clicks: 3,
+            searchViews: 120,
+            status: 'Review',
+            changeLabel: 'Previous-period comparison is not available yet.',
+          }),
+        ]),
+      );
+      expect(state.seo.opportunities).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: 'Improve Executive template for searches already finding it',
+            kind: 'quick-win',
+          }),
+        ]),
+      );
+      expect(state.seo.research).toEqual(
+        expect.objectContaining({
+          available: true,
+          keywordIdeas: expect.arrayContaining([
+            expect.objectContaining({ topic: 'ats resume checker' }),
+          ]),
+          questions: expect.arrayContaining([
+            expect.objectContaining({ question: 'Is TrueResume a free resume builder?' }),
+          ]),
+          contentGaps: expect.arrayContaining([
+            expect.objectContaining({
+              title: 'Position TrueResume around ATS-safe job-ready resumes.',
+            }),
+          ]),
+        }),
       );
       expect(state.overview).toEqual(
         expect.objectContaining({
@@ -923,6 +958,14 @@ describe('marketing console', () => {
       expect(html).toContain('Historical growth results are available');
       expect(html).toContain('Previous-period comparison is not available yet');
       expect(html).toContain('Tag Manager preview checked');
+      expect(html).toContain('Search performance');
+      expect(html).toContain('Best opportunities');
+      expect(html).toContain('Pages with search visibility');
+      expect(html).toContain('Search pages');
+      expect(html).toContain('Search queries');
+      expect(html).toContain('Indexing and visibility');
+      expect(html).toContain('Keyword ideas');
+      expect(html).toContain('Content gaps');
       expect(html).toContain('"country":"IN"');
       expect(html).toContain('"currencyCode":"INR"');
       expect(html).toContain('GTM-TEST123');

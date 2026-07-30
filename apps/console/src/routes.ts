@@ -78,7 +78,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'seo',
     'Pages',
     'Search pages',
-    'See which pages are growing, declining, or need attention.',
+    'Compare page search performance and find pages that need attention.',
     true,
   ),
   route(
@@ -87,7 +87,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'seo',
     'Queries',
     'Search queries',
-    'Understand what people search for and where visibility is changing.',
+    'Understand what people search for and where the site currently appears.',
     true,
   ),
   route(

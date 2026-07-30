@@ -162,14 +162,138 @@ export type MarketingConsoleComparisonRow = {
   };
 };
 
-export type MarketingConsoleSeoRow = {
+export type MarketingConsoleSeoMetric = {
+  id: string;
+  label: string;
+  value: string;
+  definition: string;
+  sourceLabel: string;
+  freshnessLabel: string;
+  comparisonLabel: string;
+  status: MarketingConsoleStatus;
+};
+
+export type MarketingConsoleSeoOpportunity = {
+  id: string;
+  kind: 'high-impact' | 'quick-win' | 'problem';
+  title: string;
+  expectedOutcome: string;
+  reason: string;
+  affectedLabel: string;
+  impactLabel: string;
+  confidenceLabel: string;
+  effortLabel: string;
+  freshnessLabel: string;
+  evidence: string;
+  action: {
+    label: string;
+    path: string;
+  };
+};
+
+export type MarketingConsoleSeoPage = {
+  id: string;
+  title: string;
+  path: string;
+  fullUrl: string;
+  clicks: number;
+  searchViews: number;
+  averagePosition?: number;
+  clickThroughRate?: number;
+  changeLabel: string;
+  status: 'Review' | 'Not indexed';
+  statusDetail: string;
+  indexingWarning?: string;
+  topQueries: string[];
+};
+
+export type MarketingConsoleSeoQuery = {
   id: string;
   query: string;
-  pageUrl?: string;
-  clicks?: number;
-  impressions?: number;
-  ctr?: number;
-  position?: number;
+  clicks: number;
+  searchViews: number;
+  averagePosition?: number;
+  clickThroughRate?: number;
+  changeLabel: string;
+  bestPage?: {
+    title: string;
+    path: string;
+  };
+};
+
+export type MarketingConsoleSeoHealthIssue = {
+  id: string;
+  title: string;
+  impact: string;
+  affectedLabel: string;
+  confidenceLabel: string;
+  firstSeenLabel: string;
+  lastCheckedLabel: string;
+  actionLabel: string;
+  path: string;
+  status: MarketingConsoleStatus;
+};
+
+export type MarketingConsoleSeoResearchIdea = {
+  id: string;
+  topic: string;
+  estimatedMonthlySearches?: number;
+  demandLabel: string;
+  interestLabel: string;
+  visibilityLabel: string;
+  difficultyLabel: 'Low' | 'Medium' | 'High' | 'Not available';
+  intentLabel: 'Learn' | 'Compare' | 'Buy';
+  currentPosition?: number;
+  country?: string;
+  language?: string;
+};
+
+export type MarketingConsoleSeo = {
+  sourceLabel: string;
+  freshnessLabel: string;
+  comparisonAvailable: boolean;
+  comparisonLabel: string;
+  overview: {
+    status: MarketingConsoleStatus;
+    headline: string;
+    detail: string;
+    metrics: MarketingConsoleSeoMetric[];
+    opportunities: MarketingConsoleSeoOpportunity[];
+    pagePreview: MarketingConsoleSeoPage[];
+  };
+  opportunities: MarketingConsoleSeoOpportunity[];
+  pages: MarketingConsoleSeoPage[];
+  queries: MarketingConsoleSeoQuery[];
+  siteHealth: {
+    available: boolean;
+    status: MarketingConsoleStatus;
+    headline: string;
+    detail: string;
+    groups: Array<{
+      id: 'indexing' | 'crawling' | 'sitemaps' | 'structured-data' | 'links';
+      label: string;
+      issues: MarketingConsoleSeoHealthIssue[];
+    }>;
+  };
+  research: {
+    available: boolean;
+    contextLabel: string;
+    demandExplanation: string;
+    keywordIdeas: MarketingConsoleSeoResearchIdea[];
+    questions: Array<{
+      id: string;
+      question: string;
+      demandLabel: string;
+      intentLabel: string;
+      visibilityLabel: string;
+    }>;
+    contentGaps: Array<{
+      id: string;
+      title: string;
+      reason: string;
+      actionLabel: string;
+    }>;
+  };
 };
 
 export type MarketingConsoleKeywordMetricRow = {
@@ -491,9 +615,7 @@ export type MarketingConsoleState = {
   comparisons: {
     channels: MarketingConsoleComparisonRow[];
   };
-  seo: {
-    rows: MarketingConsoleSeoRow[];
-  };
+  seo: MarketingConsoleSeo;
   keywordResearch: MarketingConsoleKeywordResearchSummary;
   competitorResearch: MarketingConsoleCompetitorResearchSummary;
   faqResearch: MarketingConsoleFaqResearchSummary;

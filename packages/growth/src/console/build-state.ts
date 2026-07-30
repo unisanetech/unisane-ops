@@ -33,7 +33,6 @@ import type {
   MarketingConsoleKeywordClusterSummary,
   MarketingConsoleKeywordResearchSummary,
   MarketingConsoleReceiptEvent,
-  MarketingConsoleSeoRow,
   MarketingConsoleSeoIntelligenceSummary,
   MarketingConsoleState,
   MarketingConsoleStatus,
@@ -41,6 +40,7 @@ import type {
 } from './contracts.js';
 import { buildMarketingConsoleConnections } from './connections.js';
 import { buildMarketingConsoleOverview } from './overview.js';
+import { buildMarketingConsoleSeo, type MarketingConsoleSeoSourceRow } from './seo.js';
 
 export type BuildMarketingConsoleStateOptions = {
   cwd?: string;
@@ -181,6 +181,15 @@ export async function buildMarketingConsoleState(
   const faqResearch = readFaqResearchSummary(cwd);
   const seoIntelligence = readSeoIntelligenceSummary(cwd);
   const metrics = buildMetrics(freshness);
+  const seo = buildMarketingConsoleSeo({
+    rows: seoRows,
+    metrics,
+    freshness,
+    keywordResearch,
+    competitorResearch,
+    faqResearch,
+    intelligence: seoIntelligence,
+  });
   const gtmArtifacts = collectGtmArtifactLinks(cwd, config.appId, config.defaultEnvironment);
   const gtmIdentity = collectGtmIdentity(cwd, config.appId, config.defaultEnvironment);
   const receipts = [
@@ -251,9 +260,7 @@ export async function buildMarketingConsoleState(
     comparisons: {
       channels: channelRows,
     },
-    seo: {
-      rows: seoRows,
-    },
+    seo,
     keywordResearch,
     competitorResearch,
     faqResearch,
@@ -1732,7 +1739,7 @@ function buildChannelRows(
     .slice(0, 8);
 }
 
-function buildSeoRows(freshness: MarketingConsoleFreshnessCell[]): MarketingConsoleSeoRow[] {
+function buildSeoRows(freshness: MarketingConsoleFreshnessCell[]): MarketingConsoleSeoSourceRow[] {
   const queryPageRows = readSeoRowsFromCell(
     freshness.find((cell) => cell.provider === 'searchConsole' && cell.reportType === 'queryPage'),
   );
@@ -1744,7 +1751,7 @@ function buildSeoRows(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
 
 function readSeoRowsFromCell(
   cell: MarketingConsoleFreshnessCell | undefined,
-): MarketingConsoleSeoRow[] {
+): MarketingConsoleSeoSourceRow[] {
   if (!cell?.path || !existsSync(cell.path)) return [];
   try {
     const parsed = JSON.parse(readFileSync(cell.path, 'utf8')) as {
@@ -1758,7 +1765,7 @@ function readSeoRowsFromCell(
       }>;
     };
     return (parsed.records ?? [])
-      .map((record, index): MarketingConsoleSeoRow | undefined => {
+      .map((record, index): MarketingConsoleSeoSourceRow | undefined => {
         if (!record.query) return undefined;
         const clicks = record.metrics?.clicks;
         const impressions = record.metrics?.impressions;
@@ -1775,7 +1782,7 @@ function readSeoRowsFromCell(
           ...(record.position !== undefined ? { position: record.position } : {}),
         };
       })
-      .filter((record): record is MarketingConsoleSeoRow => record !== undefined)
+      .filter((record): record is MarketingConsoleSeoSourceRow => record !== undefined)
       .sort(
         (left, right) =>
           (right.clicks ?? 0) - (left.clicks ?? 0) ||
