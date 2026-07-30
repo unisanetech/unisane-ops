@@ -14,6 +14,10 @@ status: accepted
 
 ## Changelog
 
+- `2026-07-30`: Admitted W3 implementation with an exact owner and deletion map. The
+  optional console app contributes `growth.console` and owns presentation; Growth
+  exposes only `@unisane/growth/console` headless state/actions, while the embedded app,
+  nested build/serve command, and old route catalog are retired without a fallback.
 - `2026-07-30`: Implemented the W1 decision slice: one executable Ops adoption
   lifecycle, canonical Growth config, Provider Google connection/grant/resource
   lifecycle, shared readiness/action contracts, one-shot migration boundary, first-party

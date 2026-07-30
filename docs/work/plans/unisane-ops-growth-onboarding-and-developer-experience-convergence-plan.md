@@ -23,6 +23,11 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-07-30`: Admitted P120-W3 under Skopos task `T-eede3498` with active workpack
+  `docs/work/tasks/P120-W3.md` and paired observe-mode convergence contract. The frozen
+  cut makes the optional console app the command and presentation owner, moves only
+  headless state/actions to `@unisane/growth/console`, and deletes the old command,
+  embedded app, and route catalog slice by slice.
 - `2026-07-30`: Closed P120-W1. The single Ops adoption lifecycle, canonical Growth
   intent, Provider Google connection/grant/resource lifecycle, derived readiness, clean
   migration boundary, first-party adoption, and retired-owner deletion are executable.

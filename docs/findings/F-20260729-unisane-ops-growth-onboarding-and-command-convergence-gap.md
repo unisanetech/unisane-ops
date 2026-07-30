@@ -15,6 +15,10 @@ status: in-progress
 
 ## Changelog
 
+- `2026-07-30`: Opened executable P120-W3 task `T-eede3498` with an exact console-app,
+  Growth-headless, CLI-pack, route, copy, state, accessibility, and zero-residue
+  convergence contract. No console code changes are admitted outside its bounded
+  delete-first slices.
 - `2026-07-30`: Closed the P120-W1 onboarding/config/Google-connection/readiness cut.
   The finding remains active only for W2 instrumentation, W3 console separation, and W4
   team/CI credential lifecycle; those later slices must not reopen the deleted W1
