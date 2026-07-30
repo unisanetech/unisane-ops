@@ -50,7 +50,7 @@ export async function serveMarketingConsoleApp(
       response.statusCode = 500;
       response.setHeader('Content-Type', 'text/plain; charset=utf-8');
       response.end(
-        `Marketing Console serve failed: ${error instanceof Error ? error.message : 'unknown error'}`,
+        `Unisane Ops Console serve failed: ${error instanceof Error ? error.message : 'unknown error'}`,
       );
     }
   });
@@ -59,7 +59,7 @@ export async function serveMarketingConsoleApp(
     server.listen(port, host, () => {
       const address = server.address();
       if (!address || typeof address === 'string') {
-        reject(new Error('Marketing Console server did not expose a TCP address.'));
+        reject(new Error('Unisane Ops Console server did not expose a TCP address.'));
         return;
       }
       resolvePort(address.port);

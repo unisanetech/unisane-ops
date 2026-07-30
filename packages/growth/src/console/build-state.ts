@@ -34,7 +34,6 @@ import type {
   MarketingConsoleKeywordClusterSummary,
   MarketingConsoleKeywordResearchSummary,
   MarketingConsoleReceiptEvent,
-  MarketingConsoleRouteSummary,
   MarketingConsoleSeoRow,
   MarketingConsoleSeoIntelligenceSummary,
   MarketingConsoleSetupProjection,
@@ -56,15 +55,14 @@ type ProviderFreshnessCell = MarketingConsoleFreshnessCell & {
   provider: MarketingReportProvider;
 };
 
-type MarketingConsoleCoreRouteStatuses = {
-  setup: MarketingConsoleStatus;
-  proof: MarketingConsoleStatus;
-  performance: MarketingConsoleStatus;
-  ads: MarketingConsoleStatus;
+type MarketingConsoleReadinessStatuses = {
+  connections: MarketingConsoleStatus;
+  overview: MarketingConsoleStatus;
+  advertising: MarketingConsoleStatus;
   analytics: MarketingConsoleStatus;
-  research: MarketingConsoleStatus;
-  gtm: MarketingConsoleStatus;
-  schedule: MarketingConsoleStatus;
+  seo: MarketingConsoleStatus;
+  tracking: MarketingConsoleStatus;
+  automations: MarketingConsoleStatus;
 };
 
 type LocalJsonArtifact = {
@@ -351,11 +349,13 @@ export async function buildMarketingConsoleState(
     (cell) =>
       (cell.provider === 'googleAds' || cell.provider === 'metaAds') && cell.status === 'ready',
   );
-  const routeStatuses: MarketingConsoleCoreRouteStatuses = {
-    setup: setupRouteStatus(setup),
-    proof: proof.readyForScheduledPulls ? 'ready' : proof.ok ? 'warn' : 'blocked',
-    performance: marketingStatus.ok ? 'ready' : 'warn',
-    ads: adsAudit
+  const readinessStatuses: MarketingConsoleReadinessStatuses = {
+    connections: combineConsoleStatuses(
+      setupRouteStatus(setup),
+      proof.readyForScheduledPulls ? 'ready' : proof.ok ? 'warn' : 'blocked',
+    ),
+    overview: marketingStatus.ok ? 'ready' : 'warn',
+    advertising: adsAudit
       ? adsAudit.ok
         ? 'ready'
         : 'warn'
@@ -363,28 +363,29 @@ export async function buildMarketingConsoleState(
         ? 'ready'
         : 'warn',
     analytics: analyticsStatus.ok ? 'ready' : 'warn',
-    research:
-      researchStatus.errors.length > 0
-        ? 'blocked'
-        : researchStatus.recordCount > 0
-          ? 'ready'
-          : 'missing',
-    gtm: deriveGtmRouteStatus(gtmArtifacts),
-    schedule: schedule?.status ?? 'missing',
+    seo: freshness.some((cell) => cell.provider === 'searchConsole' && cell.status === 'ready')
+      ? 'ready'
+      : 'warn',
+    tracking: deriveGtmRouteStatus(gtmArtifacts),
+    automations: schedule?.status ?? 'missing',
   };
-  const readiness = buildReadiness(routeStatuses, setup.currentStage, selectNextAction(actions));
+  const readiness = buildReadiness(
+    readinessStatuses,
+    setup.currentStage,
+    selectNextAction(actions),
+  );
 
   return {
-    kind: 'unisane.marketing.console-state',
+    kind: 'unisane.growth.console-state',
     version: 1,
     generatedAt,
     workspaceRoot: cwd,
     platformId: config.platformId,
     appId: config.appId,
     environment: config.defaultEnvironment,
+    capabilities: [...projectContext.growth.capabilities],
     dateWindow: inferDateWindow(marketingStatus.providerFreshness),
     readiness,
-    routes: buildRoutes(routeStatuses, freshness, receipts, researchStatus.recordCount),
     metrics,
     trends: buildTrends(freshness),
     comparisons: {
@@ -1762,6 +1763,15 @@ function setupRouteStatus(setup: MarketingConsoleSetupProjection): MarketingCons
     : 'warn';
 }
 
+function combineConsoleStatuses(
+  ...statuses: readonly MarketingConsoleStatus[]
+): MarketingConsoleStatus {
+  if (statuses.includes('blocked')) return 'blocked';
+  if (statuses.includes('warn')) return 'warn';
+  if (statuses.includes('missing')) return 'missing';
+  return 'ready';
+}
+
 function toConsoleStatus(status: string): MarketingConsoleStatus {
   if (status === 'fresh' || status === 'pass' || status === 'ready' || status === 'executed') {
     return 'ready';
@@ -2156,11 +2166,11 @@ function buildTrends(freshness: MarketingConsoleFreshnessCell[]): {
 }
 
 function buildReadiness(
-  routeStatuses: MarketingConsoleCoreRouteStatuses,
+  statusesByCapability: MarketingConsoleReadinessStatuses,
   currentStage: string,
   nextAction: string,
 ): MarketingConsoleState['readiness'] {
-  const statuses = Object.values(routeStatuses);
+  const statuses = Object.values(statusesByCapability);
   const readyCount = statuses.filter((status) => status === 'ready').length;
   const score = Math.round((readyCount / statuses.length) * 100);
   const blocked = statuses.some((status) => status === 'blocked');
@@ -2183,95 +2193,6 @@ function readinessStageLabel(stage: string): string {
   return labels[stage] ?? stage;
 }
 
-function buildRoutes(
-  routeStatuses: MarketingConsoleCoreRouteStatuses,
-  freshness: MarketingConsoleFreshnessCell[],
-  receipts: MarketingConsoleReceiptEvent[],
-  researchRecordCount: number,
-): MarketingConsoleRouteSummary[] {
-  const staleCount = freshness.filter((cell) => cell.status !== 'ready').length;
-  return [
-    route(
-      'overview',
-      'Overview',
-      routeStatuses.performance,
-      'Readiness, performance, risks, and next action.',
-    ),
-    route(
-      'setup',
-      'Setup',
-      routeStatuses.setup,
-      'Local pack, domain, provider login, and selected account readiness.',
-    ),
-    route(
-      'proof',
-      'Proof',
-      routeStatuses.proof,
-      'Read-only provider proof, scopes, limits, and reporting eligibility.',
-    ),
-    route(
-      'performance',
-      'Performance',
-      routeStatuses.performance,
-      'Spend, traffic, conversion, CPA, and ROAS summaries.',
-    ),
-    route(
-      'ads',
-      'Ads',
-      routeStatuses.ads,
-      'Paid account readiness, campaign evidence, plans, and receipts.',
-    ),
-    route(
-      'seo',
-      'SEO',
-      staleCount > 0 ? 'warn' : 'ready',
-      'Search Console freshness and organic evidence.',
-    ),
-    route(
-      'research',
-      'Research',
-      routeStatuses.research,
-      researchRecordCount > 0
-        ? 'Research memory, page decisions, opportunities, and open planning actions.'
-        : 'Structured marketing research memory is not available yet.',
-    ),
-    route(
-      'analytics',
-      'Analytics',
-      routeStatuses.analytics,
-      'GA4, Search Console, and confirmed conversion truth.',
-    ),
-    route(
-      'gtm',
-      'GTM',
-      routeStatuses.gtm,
-      'Manifest, validation, publish, and rollback receipt status.',
-    ),
-    route(
-      'recommendations',
-      'Recommendations',
-      receipts.length > 0 ? 'ready' : 'missing',
-      'Plain-English next actions from current local evidence.',
-    ),
-    route(
-      'receipts',
-      'Receipts',
-      receipts.length > 0 ? 'ready' : 'missing',
-      'Dry-run, live, decision, publish, and rollback evidence.',
-    ),
-    route('schedule', 'Schedule', routeStatuses.schedule, 'Scheduled reporting jobs and blockers.'),
-  ];
-}
-
-function route(
-  id: MarketingConsoleRouteSummary['id'],
-  label: string,
-  status: MarketingConsoleStatus,
-  summary: string,
-): MarketingConsoleRouteSummary {
-  return { id, label, status, summary };
-}
-
 function buildActions(input: {
   setupNext?: string;
   proofNext: string;
@@ -2283,13 +2204,19 @@ function buildActions(input: {
 }): MarketingConsoleActionItem[] {
   return [
     action(
-      'setup',
-      'Setup next step',
+      'connections',
+      'Connection next step',
       friendlyActionMessage(input.setupNext ?? 'Setup lifecycle is complete.'),
-      'setup',
+      'connections',
       'warn',
     ),
-    action('proof', 'Proof next step', friendlyActionMessage(input.proofNext), 'proof', 'warn'),
+    action(
+      'access',
+      'Access next step',
+      friendlyActionMessage(input.proofNext),
+      'connections',
+      'warn',
+    ),
     action(
       'reports',
       'Report freshness',
@@ -2304,15 +2231,21 @@ function buildActions(input: {
       'analytics',
       'info',
     ),
-    action('ads', 'Ads next step', friendlyActionMessage(input.adsNext), 'ads', 'warn'),
-    action('research', 'Research next step', input.researchNext, 'research', 'info'),
+    action(
+      'advertising',
+      'Advertising next step',
+      friendlyActionMessage(input.adsNext),
+      'advertising',
+      'warn',
+    ),
+    action('seo-research', 'Research next step', input.researchNext, 'seo', 'info'),
     ...(input.scheduleNext
       ? [
           action(
-            'schedule',
-            'Schedule next step',
+            'automations',
+            'Automation next step',
             friendlyActionMessage(input.scheduleNext),
-            'schedule',
+            'automations',
             'info',
           ),
         ]

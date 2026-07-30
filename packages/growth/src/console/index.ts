@@ -14,7 +14,6 @@ export type {
   MarketingConsoleFreshnessCell,
   MarketingConsoleMetric,
   MarketingConsoleReceiptEvent,
-  MarketingConsoleRouteSummary,
   MarketingConsoleState,
   MarketingConsoleStatus,
   MarketingConsoleTrendPoint,

@@ -5,6 +5,7 @@ import type {
   MarketingResearchStatusSummary,
   MarketingStatusReport,
 } from '@unisane/growth/marketing';
+import type { GrowthCapability } from '../config.js';
 import type {
   MarketingProviderReportType,
   MarketingReportMetrics,
@@ -373,33 +374,15 @@ export type MarketingConsoleArtifactLink = {
   status: MarketingConsoleStatus;
 };
 
-export type MarketingConsoleRouteSummary = {
-  id:
-    | 'overview'
-    | 'setup'
-    | 'proof'
-    | 'performance'
-    | 'ads'
-    | 'seo'
-    | 'research'
-    | 'analytics'
-    | 'gtm'
-    | 'recommendations'
-    | 'receipts'
-    | 'schedule';
-  label: string;
-  status: MarketingConsoleStatus;
-  summary: string;
-};
-
 export type MarketingConsoleState = {
-  kind: 'unisane.marketing.console-state';
+  kind: 'unisane.growth.console-state';
   version: 1;
   generatedAt: string;
   workspaceRoot: string;
   platformId: string;
   appId: string;
   environment: string;
+  capabilities: GrowthCapability[];
   dateWindow: {
     label: string;
     startDate?: string;
@@ -411,7 +394,6 @@ export type MarketingConsoleState = {
     label: string;
     nextWorkflowStep: string;
   };
-  routes: MarketingConsoleRouteSummary[];
   metrics: MarketingConsoleMetric[];
   trends: {
     spend: MarketingConsoleTrendPoint[];

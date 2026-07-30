@@ -639,7 +639,7 @@ describe('marketing console', () => {
         now: new Date('2026-05-21T01:00:00.000Z'),
       });
 
-      expect(state.kind).toBe('unisane.marketing.console-state');
+      expect(state.kind).toBe('unisane.growth.console-state');
       expect(state.platformId).toBe('true-resume');
       expect(state.metrics).toEqual(
         expect.arrayContaining([
@@ -661,7 +661,7 @@ describe('marketing console', () => {
           currencyCode: 'INR',
         }),
       );
-      expect(state.routes.map((route) => route.id)).toContain('performance');
+      expect(state.capabilities).toEqual(['seo', 'analytics', 'tag-manager', 'advertising']);
       expect(state.seo.rows).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -673,8 +673,8 @@ describe('marketing console', () => {
           }),
         ]),
       );
-      expect(state.routes).toContainEqual(
-        expect.objectContaining({ id: 'research', status: 'ready' }),
+      expect(state.actions).toEqual(
+        expect.arrayContaining([expect.objectContaining({ id: 'seo-research', lane: 'seo' })]),
       );
       expect(state.reports.researchStatus).toEqual(
         expect.objectContaining({ recordCount: 1, decisionCount: 1, opportunityCount: 1 }),
@@ -802,7 +802,6 @@ describe('marketing console', () => {
       expect(state.artifacts).toEqual(
         expect.arrayContaining([expect.objectContaining({ lane: 'research', status: 'ready' })]),
       );
-      expect(state.routes).toContainEqual(expect.objectContaining({ id: 'gtm', status: 'ready' }));
       expect(state.gtm).toEqual(
         expect.objectContaining({
           accountId: '1',
@@ -843,7 +842,7 @@ describe('marketing console', () => {
 
       const result = await buildMarketingConsoleApp({
         cwd,
-        outputDirectory: '.unisane/marketing/console-test',
+        outputDirectory: '.unisane/console-test',
         now: new Date('2026-05-21T01:00:00.000Z'),
       });
 
@@ -854,36 +853,23 @@ describe('marketing console', () => {
         result.assetPaths.some((assetPath) => assetPath.endsWith('assets/unisane-ui.css')),
       ).toBe(true);
       const html = readFileSync(result.entryHtmlPath, 'utf8');
-      expect(html).toContain('Marketing Console');
+      expect(html).toContain('Unisane Ops');
       expect(html).toContain('./assets/unisane-ui.css');
-      expect(html).toContain('marketing-console-state');
-      expect(html).toContain('Pre-live checklist');
-      expect(html).toContain('Live mutation guard');
-      expect(html).toContain('Organic decision map');
-      expect(html).toContain('Organic queries');
-      expect(html).toContain('Avg. position');
-      expect(html).toContain('executive resume templates');
-      expect(html).toContain('Research memory');
-      expect(html).toContain('Keyword Planner evidence');
-      expect(html).toContain('Keyword clusters');
-      expect(html).toContain('Keyword matrix');
-      expect(html).toContain('Market summary');
-      expect(html).toContain('ats resume checker');
+      expect(html).toContain('unisane-ops-state');
+      expect(html).toContain('"path":"/overview"');
+      expect(html).toContain('"path":"/seo/opportunities"');
+      expect(html).toContain('"path":"/advertising/change-history"');
+      expect(html).toContain('"path":"/analytics/tracking-health"');
+      expect(html).toContain('"path":"/settings/automations"');
+      expect(html).toContain('"label":"Channels"');
+      expect(html).toContain('"label":"Manage"');
+      expect(html).toContain('Project');
+      expect(html).toContain('Data is current');
       expect(html).toContain('"country":"IN"');
       expect(html).toContain('"currencyCode":"INR"');
-      expect(html).toContain('Measurement trust');
-      expect(html).toContain('Publish safety');
-      expect(html).toContain('Container identity');
-      expect(html).toContain('Provider tags in container');
       expect(html).toContain('GTM-TEST123');
-      expect(html).toContain('Performance decision table');
-      expect(html).toContain('Campaign control');
-      expect(html).toContain('Operator checklist');
-      expect(html).toContain('Spend and conversions');
-      expect(html).toContain('unisane growth gtm validate');
-      expect(html).toContain(
-        'unisane growth marketing pull-api --provider searchConsole --report queryPage',
-      );
+      expect(html).not.toContain(['Marketing', 'Console'].join(' '));
+      expect(html).not.toContain('href="#/');
     });
   });
 });
