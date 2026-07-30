@@ -11,6 +11,7 @@ import { resolveSeoResearchWorkspacePaths } from './paths.js';
 export type LoadSeoResearchConfigOptions = {
   cwd?: string;
   platformId?: string;
+  researchRoot?: string;
 };
 
 export type LoadSeoResearchConfigResult = {
@@ -24,7 +25,7 @@ export async function loadSeoResearchConfig(
   options: LoadSeoResearchConfigOptions = {},
 ): Promise<LoadSeoResearchConfigResult> {
   const cwd = path.resolve(options.cwd ?? process.cwd());
-  const paths = resolveSeoResearchWorkspacePaths(cwd);
+  const paths = resolveSeoResearchWorkspacePaths(cwd, options.researchRoot);
 
   if (await exists(paths.config)) {
     return {

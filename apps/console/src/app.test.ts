@@ -34,7 +34,7 @@ function createTempProject(): string {
       manifests: {
         events: 'docs/marketing/events.json',
         conversions: 'docs/marketing/conversions.json',
-        research: 'ops/growth/research'
+        research: 'docs/domains/seo/keyword-research'
       },
       runtime: {
         integration: 'tag-manager',
@@ -148,7 +148,7 @@ function runWithTestProjectContext<T>(cwd: string, run: () => T): T {
           manifests: {
             events: 'docs/marketing/events.json',
             conversions: 'docs/marketing/conversions.json',
-            research: 'ops/growth/research',
+            research: 'docs/domains/seo/keyword-research',
           },
           runtime: {
             integration: 'tag-manager',
@@ -376,7 +376,7 @@ function writeResearchMemory(cwd: string): void {
 }
 
 function writeKeywordPlannerMetrics(cwd: string): void {
-  const metricsDir = path.join(cwd, 'docs', 'seo', 'keyword-research', 'metrics');
+  const metricsDir = path.join(cwd, 'docs', 'domains', 'seo', 'keyword-research', 'metrics');
   mkdirSync(metricsDir, { recursive: true });
   writeFileSync(
     path.join(metricsDir, 'true-resume-primary-google-ads-metrics.json'),
@@ -491,7 +491,14 @@ function writeKeywordPlannerMetrics(cwd: string): void {
 }
 
 function writeCompetitorResearch(cwd: string): void {
-  const competitorsDir = path.join(cwd, 'docs', 'seo', 'keyword-research', 'competitors');
+  const competitorsDir = path.join(
+    cwd,
+    'docs',
+    'domains',
+    'seo',
+    'keyword-research',
+    'competitors',
+  );
   mkdirSync(competitorsDir, { recursive: true });
   writeFileSync(
     path.join(competitorsDir, 'homepage-resume-builder-competitors.json'),
@@ -538,7 +545,7 @@ function writeCompetitorResearch(cwd: string): void {
 }
 
 function writeFaqResearch(cwd: string): void {
-  const faqDir = path.join(cwd, 'docs', 'seo', 'keyword-research', 'faqs');
+  const faqDir = path.join(cwd, 'docs', 'domains', 'seo', 'keyword-research', 'faqs');
   mkdirSync(faqDir, { recursive: true });
   writeFileSync(
     path.join(faqDir, 'homepage-resume-builder-faqs.json'),

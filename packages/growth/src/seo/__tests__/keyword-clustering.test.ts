@@ -66,28 +66,28 @@ describe('clusterKeywordFile', () => {
   it('writes keyword clusters from candidates and metrics', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'unisane-seo-cluster-'));
     try {
-      await mkdir(join(cwd, 'docs/seo/keyword-research/normalized'), { recursive: true });
-      await mkdir(join(cwd, 'docs/seo/keyword-research/clusters'), { recursive: true });
+      await mkdir(join(cwd, 'docs/domains/seo/keyword-research/normalized'), { recursive: true });
+      await mkdir(join(cwd, 'docs/domains/seo/keyword-research/clusters'), { recursive: true });
       await writeFile(
-        join(cwd, 'docs/seo/keyword-research/normalized/resume-keywords.json'),
+        join(cwd, 'docs/domains/seo/keyword-research/normalized/resume-keywords.json'),
         JSON.stringify(createCandidateFile(), null, 2),
       );
       await writeFile(
-        join(cwd, 'docs/seo/keyword-research/normalized/metrics-us-en.json'),
+        join(cwd, 'docs/domains/seo/keyword-research/normalized/metrics-us-en.json'),
         JSON.stringify(createMetricFile(), null, 2),
       );
 
       const result = await clusterKeywordFile({
         cwd,
-        candidates: 'docs/seo/keyword-research/normalized/resume-keywords.json',
-        metrics: 'docs/seo/keyword-research/normalized/metrics-us-en.json',
-        output: 'docs/seo/keyword-research/clusters/resume-examples-clusters.json',
+        candidates: 'docs/domains/seo/keyword-research/normalized/resume-keywords.json',
+        metrics: 'docs/domains/seo/keyword-research/normalized/metrics-us-en.json',
+        output: 'docs/domains/seo/keyword-research/clusters/resume-examples-clusters.json',
       });
 
       expect(result.clusterCount).toBe(2);
       const output = JSON.parse(
         await readFile(
-          join(cwd, 'docs/seo/keyword-research/clusters/resume-examples-clusters.json'),
+          join(cwd, 'docs/domains/seo/keyword-research/clusters/resume-examples-clusters.json'),
           'utf8',
         ),
       );

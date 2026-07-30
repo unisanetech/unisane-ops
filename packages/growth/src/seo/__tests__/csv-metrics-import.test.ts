@@ -76,7 +76,7 @@ describe('importCsvKeywordMetrics', () => {
         cwd,
         platformId: 'true-resume',
         input: 'imports/keyword-planner.csv',
-        output: 'docs/seo/keyword-research/normalized/metrics-us-en.json',
+        output: 'docs/domains/seo/keyword-research/normalized/metrics-us-en.json',
         country: 'US',
         language: 'en',
       });
@@ -84,7 +84,7 @@ describe('importCsvKeywordMetrics', () => {
       expect(result.metricCount).toBe(1);
       const output = JSON.parse(
         await readFile(
-          join(cwd, 'docs/seo/keyword-research/normalized/metrics-us-en.json'),
+          join(cwd, 'docs/domains/seo/keyword-research/normalized/metrics-us-en.json'),
           'utf8',
         ),
       );

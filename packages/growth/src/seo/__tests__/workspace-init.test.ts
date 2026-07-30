@@ -11,15 +11,20 @@ describe('initSeoResearchWorkspace', () => {
       const result = await initSeoResearchWorkspace({ cwd });
 
       expect(result.platformId).toBe('true-resume');
-      expect(result.created).toContain('docs/seo/keyword-research/seo-research.config.json');
-      expect(result.created).toContain('docs/seo/keyword-research/seeds/manual.seed.json');
-      expect(result.created).toContain('docs/seo/keyword-research/faqs');
-      expect(result.created).toContain('docs/seo/keyword-research/serp');
-      expect(result.created).toContain('docs/seo/keyword-research/metadata');
-      expect(result.created).toContain('docs/seo/keyword-research/page-audits');
+      expect(result.created).toContain(
+        'docs/domains/seo/keyword-research/seo-research.config.json',
+      );
+      expect(result.created).toContain('docs/domains/seo/keyword-research/seeds/manual.seed.json');
+      expect(result.created).toContain('docs/domains/seo/keyword-research/faqs');
+      expect(result.created).toContain('docs/domains/seo/keyword-research/serp');
+      expect(result.created).toContain('docs/domains/seo/keyword-research/metadata');
+      expect(result.created).toContain('docs/domains/seo/keyword-research/page-audits');
 
       const config = JSON.parse(
-        await readFile(join(cwd, 'docs/seo/keyword-research/seo-research.config.json'), 'utf8'),
+        await readFile(
+          join(cwd, 'docs/domains/seo/keyword-research/seo-research.config.json'),
+          'utf8',
+        ),
       );
       expect(config).toMatchObject({
         version: 1,
@@ -41,7 +46,10 @@ describe('initSeoResearchWorkspace', () => {
       });
 
       const seeds = JSON.parse(
-        await readFile(join(cwd, 'docs/seo/keyword-research/seeds/manual.seed.json'), 'utf8'),
+        await readFile(
+          join(cwd, 'docs/domains/seo/keyword-research/seeds/manual.seed.json'),
+          'utf8',
+        ),
       );
       expect(seeds).toEqual({
         version: 1,
@@ -56,14 +64,16 @@ describe('initSeoResearchWorkspace', () => {
   it('does not overwrite existing config without force', async () => {
     const cwd = await createPackageWorkspace('@unisane-platforms/true-resume');
     try {
-      const configPath = join(cwd, 'docs/seo/keyword-research/seo-research.config.json');
+      const configPath = join(cwd, 'docs/domains/seo/keyword-research/seo-research.config.json');
 
       await initSeoResearchWorkspace({ cwd });
       await writeFile(configPath, '{"custom":true}\n');
 
       const result = await initSeoResearchWorkspace({ cwd });
 
-      expect(result.skipped).toContain('docs/seo/keyword-research/seo-research.config.json');
+      expect(result.skipped).toContain(
+        'docs/domains/seo/keyword-research/seo-research.config.json',
+      );
       expect(await readFile(configPath, 'utf8')).toBe('{"custom":true}\n');
     } finally {
       await rm(cwd, { recursive: true, force: true });
@@ -77,7 +87,7 @@ describe('initSeoResearchWorkspace', () => {
 
       expect(result.dryRun).toBe(true);
       await expect(
-        readFile(join(cwd, 'docs/seo/keyword-research/seo-research.config.json')),
+        readFile(join(cwd, 'docs/domains/seo/keyword-research/seo-research.config.json')),
       ).rejects.toThrow();
     } finally {
       await rm(cwd, { recursive: true, force: true });

@@ -40,23 +40,23 @@ describe('expandKeywordSeedFile', () => {
   it('reads a seed file and writes expanded candidates', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'unisane-seo-expand-'));
     try {
-      await mkdir(join(cwd, 'docs/seo/keyword-research/seeds'), { recursive: true });
+      await mkdir(join(cwd, 'docs/domains/seo/keyword-research/seeds'), { recursive: true });
       await writeFile(
-        join(cwd, 'docs/seo/keyword-research/seeds/manual.seed.json'),
+        join(cwd, 'docs/domains/seo/keyword-research/seeds/manual.seed.json'),
         JSON.stringify(createSeedFile(), null, 2),
       );
 
       const result = await expandKeywordSeedFile({
         cwd,
-        input: 'docs/seo/keyword-research/seeds/manual.seed.json',
-        output: 'docs/seo/keyword-research/normalized/resume-keywords.json',
+        input: 'docs/domains/seo/keyword-research/seeds/manual.seed.json',
+        output: 'docs/domains/seo/keyword-research/normalized/resume-keywords.json',
         patternPackId: 'resume-examples',
       });
 
       expect(result.candidateCount).toBeGreaterThan(0);
       const output = JSON.parse(
         await readFile(
-          join(cwd, 'docs/seo/keyword-research/normalized/resume-keywords.json'),
+          join(cwd, 'docs/domains/seo/keyword-research/normalized/resume-keywords.json'),
           'utf8',
         ),
       );

@@ -56,16 +56,18 @@ describe('planInternalLinkFile', () => {
   it('writes internal link plan JSON', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'unisane-seo-links-'));
     try {
-      await mkdir(join(cwd, 'docs/seo/keyword-research/opportunities'), { recursive: true });
+      await mkdir(join(cwd, 'docs/domains/seo/keyword-research/opportunities'), {
+        recursive: true,
+      });
       await writeFile(
-        join(cwd, 'docs/seo/keyword-research/opportunities/resume-examples.json'),
+        join(cwd, 'docs/domains/seo/keyword-research/opportunities/resume-examples.json'),
         JSON.stringify(createOpportunityFile(), null, 2),
       );
 
       const result = await planInternalLinkFile({
         cwd,
-        opportunities: 'docs/seo/keyword-research/opportunities/resume-examples.json',
-        output: 'docs/seo/keyword-research/internal-links/resume-examples-links.json',
+        opportunities: 'docs/domains/seo/keyword-research/opportunities/resume-examples.json',
+        output: 'docs/domains/seo/keyword-research/internal-links/resume-examples-links.json',
       });
 
       expect(result).toMatchObject({
@@ -74,7 +76,7 @@ describe('planInternalLinkFile', () => {
       });
       const output = JSON.parse(
         await readFile(
-          join(cwd, 'docs/seo/keyword-research/internal-links/resume-examples-links.json'),
+          join(cwd, 'docs/domains/seo/keyword-research/internal-links/resume-examples-links.json'),
           'utf8',
         ),
       );

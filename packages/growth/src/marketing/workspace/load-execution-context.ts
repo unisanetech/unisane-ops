@@ -69,7 +69,7 @@ export function deriveMarketingExecutionContext(
       eventRegistry: growth.manifests.events ?? 'ops/growth/events.json',
       conversionRegistry: growth.manifests.conversions ?? 'ops/growth/conversions.json',
       sourceRoots: ['src'],
-      seoRoot: growth.manifests.research ?? 'ops/growth/research',
+      seoRoot: growth.manifests.research ?? 'docs/domains/seo/keyword-research',
       marketingRoot: 'ops/growth',
       analyticsRoot: 'ops/growth/analytics',
     },

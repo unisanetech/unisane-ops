@@ -41,6 +41,7 @@ import type {
 import { buildMarketingConsoleConnections } from './connections.js';
 import { buildMarketingConsoleOverview } from './overview.js';
 import { buildMarketingConsoleSeo, type MarketingConsoleSeoSourceRow } from './seo.js';
+import { resolveSeoResearchWorkspacePaths } from '../seo/workspace/paths.js';
 
 export type BuildMarketingConsoleStateOptions = {
   cwd?: string;
@@ -176,10 +177,14 @@ export async function buildMarketingConsoleState(
   });
   const channelRows = buildChannelRows(freshness);
   const seoRows = buildSeoRows(freshness);
-  const keywordResearch = readKeywordResearchSummary(cwd);
-  const competitorResearch = readCompetitorResearchSummary(cwd);
-  const faqResearch = readFaqResearchSummary(cwd);
-  const seoIntelligence = readSeoIntelligenceSummary(cwd);
+  const seoResearchRoot = resolveSeoResearchWorkspacePaths(
+    cwd,
+    projectContext.growth.manifests.research,
+  ).root;
+  const keywordResearch = readKeywordResearchSummary(seoResearchRoot);
+  const competitorResearch = readCompetitorResearchSummary(seoResearchRoot);
+  const faqResearch = readFaqResearchSummary(seoResearchRoot);
+  const seoIntelligence = readSeoIntelligenceSummary(seoResearchRoot);
   const metrics = buildMetrics(freshness);
   const seo = buildMarketingConsoleSeo({
     rows: seoRows,
@@ -431,8 +436,8 @@ type PageAuditJson = {
   }>;
 };
 
-function readFaqResearchSummary(cwd: string): MarketingConsoleFaqResearchSummary {
-  const faqsRoot = path.join(cwd, 'docs', 'seo', 'keyword-research', 'faqs');
+function readFaqResearchSummary(researchRoot: string): MarketingConsoleFaqResearchSummary {
+  const faqsRoot = path.join(researchRoot, 'faqs');
   const missing: MarketingConsoleFaqResearchSummary = {
     status: 'missing',
     sourceCount: 0,
@@ -809,10 +814,10 @@ function countFaqRouteConflicts(
   return [...ownership.values()].filter((routes) => routes.size > 1).length;
 }
 
-function readSeoIntelligenceSummary(cwd: string): MarketingConsoleSeoIntelligenceSummary {
-  const serp = readSerpSummary(cwd);
-  const metadata = readMetadataExperimentSummary(cwd);
-  const pageAudits = readPageAuditSummary(cwd);
+function readSeoIntelligenceSummary(researchRoot: string): MarketingConsoleSeoIntelligenceSummary {
+  const serp = readSerpSummary(researchRoot);
+  const metadata = readMetadataExperimentSummary(researchRoot);
+  const pageAudits = readPageAuditSummary(researchRoot);
   const warnings: MarketingConsoleSeoIntelligenceSummary['warnings'] = [];
   if (serp.snapshotCount === 0) {
     warnings.push({
@@ -871,8 +876,8 @@ function readSeoIntelligenceSummary(cwd: string): MarketingConsoleSeoIntelligenc
   };
 }
 
-function readSerpSummary(cwd: string): MarketingConsoleSeoIntelligenceSummary['serp'] {
-  const root = path.join(cwd, 'docs', 'seo', 'keyword-research', 'serp');
+function readSerpSummary(researchRoot: string): MarketingConsoleSeoIntelligenceSummary['serp'] {
+  const root = path.join(researchRoot, 'serp');
   const missing = {
     status: 'missing' as const,
     sourceCount: 0,
@@ -944,9 +949,9 @@ function normalizeSerpSnapshots(
 }
 
 function readMetadataExperimentSummary(
-  cwd: string,
+  researchRoot: string,
 ): MarketingConsoleSeoIntelligenceSummary['metadata'] {
-  const root = path.join(cwd, 'docs', 'seo', 'keyword-research', 'metadata');
+  const root = path.join(researchRoot, 'metadata');
   const missing = {
     status: 'missing' as const,
     sourceCount: 0,
@@ -1011,8 +1016,10 @@ function normalizeMetadataExperiments(
     );
 }
 
-function readPageAuditSummary(cwd: string): MarketingConsoleSeoIntelligenceSummary['pageAudits'] {
-  const root = path.join(cwd, 'docs', 'seo', 'keyword-research', 'page-audits');
+function readPageAuditSummary(
+  researchRoot: string,
+): MarketingConsoleSeoIntelligenceSummary['pageAudits'] {
+  const root = path.join(researchRoot, 'page-audits');
   const missing = {
     status: 'missing' as const,
     sourceCount: 0,
@@ -1087,8 +1094,10 @@ function priorityRank(priority: string | undefined): number {
   return 3;
 }
 
-function readCompetitorResearchSummary(cwd: string): MarketingConsoleCompetitorResearchSummary {
-  const competitorsRoot = path.join(cwd, 'docs', 'seo', 'keyword-research', 'competitors');
+function readCompetitorResearchSummary(
+  researchRoot: string,
+): MarketingConsoleCompetitorResearchSummary {
+  const competitorsRoot = path.join(researchRoot, 'competitors');
   const missing: MarketingConsoleCompetitorResearchSummary = {
     status: 'missing',
     sourceCount: 0,
@@ -1246,8 +1255,8 @@ function topStrings(values: string[], limit: number): string[] {
     .map(([value]) => value);
 }
 
-function readKeywordResearchSummary(cwd: string): MarketingConsoleKeywordResearchSummary {
-  const metricsRoot = path.join(cwd, 'docs', 'seo', 'keyword-research', 'metrics');
+function readKeywordResearchSummary(researchRoot: string): MarketingConsoleKeywordResearchSummary {
+  const metricsRoot = path.join(researchRoot, 'metrics');
   const missing: MarketingConsoleKeywordResearchSummary = {
     status: 'missing',
     metricCount: 0,

@@ -26,27 +26,31 @@ describe('generateSeoReportFile', () => {
   it('writes a Markdown report from opportunities and internal links', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'unisane-seo-report-'));
     try {
-      await mkdir(join(cwd, 'docs/seo/keyword-research/opportunities'), { recursive: true });
-      await mkdir(join(cwd, 'docs/seo/keyword-research/internal-links'), { recursive: true });
+      await mkdir(join(cwd, 'docs/domains/seo/keyword-research/opportunities'), {
+        recursive: true,
+      });
+      await mkdir(join(cwd, 'docs/domains/seo/keyword-research/internal-links'), {
+        recursive: true,
+      });
       await writeFile(
-        join(cwd, 'docs/seo/keyword-research/opportunities/pages.json'),
+        join(cwd, 'docs/domains/seo/keyword-research/opportunities/pages.json'),
         JSON.stringify(createOpportunityFile(), null, 2),
       );
       await writeFile(
-        join(cwd, 'docs/seo/keyword-research/internal-links/links.json'),
+        join(cwd, 'docs/domains/seo/keyword-research/internal-links/links.json'),
         JSON.stringify(createInternalLinkPlan(), null, 2),
       );
 
       const result = await generateSeoReportFile({
         cwd,
-        opportunities: 'docs/seo/keyword-research/opportunities/pages.json',
-        internalLinks: 'docs/seo/keyword-research/internal-links/links.json',
-        output: 'docs/seo/keyword-research/reports/resume-examples-report.md',
+        opportunities: 'docs/domains/seo/keyword-research/opportunities/pages.json',
+        internalLinks: 'docs/domains/seo/keyword-research/internal-links/links.json',
+        output: 'docs/domains/seo/keyword-research/reports/resume-examples-report.md',
       });
 
       expect(result.opportunityCount).toBe(2);
       const report = await readFile(
-        join(cwd, 'docs/seo/keyword-research/reports/resume-examples-report.md'),
+        join(cwd, 'docs/domains/seo/keyword-research/reports/resume-examples-report.md'),
         'utf8',
       );
       expect(report).toContain('Known search volume: 1700');

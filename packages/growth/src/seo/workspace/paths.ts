@@ -21,8 +21,11 @@ export type SeoResearchWorkspacePaths = {
   manualSeeds: string;
 };
 
-export function resolveSeoResearchWorkspacePaths(cwd: string): SeoResearchWorkspacePaths {
-  const root = path.resolve(cwd, 'docs', 'seo', 'keyword-research');
+export function resolveSeoResearchWorkspacePaths(
+  cwd: string,
+  researchRoot = 'docs/domains/seo/keyword-research',
+): SeoResearchWorkspacePaths {
+  const root = path.resolve(cwd, researchRoot);
   return {
     root,
     config: path.join(root, 'seo-research.config.json'),

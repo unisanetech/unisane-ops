@@ -64,23 +64,29 @@ describe('planPageOpportunityFile', () => {
   it('writes opportunity JSON from a cluster file', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'unisane-seo-opportunities-'));
     try {
-      await mkdir(join(cwd, 'docs/seo/keyword-research/clusters'), { recursive: true });
-      await mkdir(join(cwd, 'docs/seo/keyword-research/opportunities'), { recursive: true });
+      await mkdir(join(cwd, 'docs/domains/seo/keyword-research/clusters'), { recursive: true });
+      await mkdir(join(cwd, 'docs/domains/seo/keyword-research/opportunities'), {
+        recursive: true,
+      });
       await writeFile(
-        join(cwd, 'docs/seo/keyword-research/clusters/resume-examples-clusters.json'),
+        join(cwd, 'docs/domains/seo/keyword-research/clusters/resume-examples-clusters.json'),
         JSON.stringify(createClusterFile(), null, 2),
       );
 
       const result = await planPageOpportunityFile({
         cwd,
-        clusters: 'docs/seo/keyword-research/clusters/resume-examples-clusters.json',
-        output: 'docs/seo/keyword-research/opportunities/resume-examples-opportunities.json',
+        clusters: 'docs/domains/seo/keyword-research/clusters/resume-examples-clusters.json',
+        output:
+          'docs/domains/seo/keyword-research/opportunities/resume-examples-opportunities.json',
       });
 
       expect(result.opportunityCount).toBe(1);
       const output = JSON.parse(
         await readFile(
-          join(cwd, 'docs/seo/keyword-research/opportunities/resume-examples-opportunities.json'),
+          join(
+            cwd,
+            'docs/domains/seo/keyword-research/opportunities/resume-examples-opportunities.json',
+          ),
           'utf8',
         ),
       );

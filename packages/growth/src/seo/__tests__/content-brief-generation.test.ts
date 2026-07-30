@@ -25,33 +25,35 @@ describe('generateContentBriefFile', () => {
   it('writes markdown briefs and an index file', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'unisane-seo-briefs-'));
     try {
-      await mkdir(join(cwd, 'docs/seo/keyword-research/opportunities'), { recursive: true });
+      await mkdir(join(cwd, 'docs/domains/seo/keyword-research/opportunities'), {
+        recursive: true,
+      });
       await writeFile(
-        join(cwd, 'docs/seo/keyword-research/opportunities/resume-examples.json'),
+        join(cwd, 'docs/domains/seo/keyword-research/opportunities/resume-examples.json'),
         JSON.stringify(createOpportunityFile(), null, 2),
       );
 
       const result = await generateContentBriefFile({
         cwd,
-        opportunities: 'docs/seo/keyword-research/opportunities/resume-examples.json',
-        outputDir: 'docs/seo/keyword-research/briefs/resume-examples',
+        opportunities: 'docs/domains/seo/keyword-research/opportunities/resume-examples.json',
+        outputDir: 'docs/domains/seo/keyword-research/briefs/resume-examples',
       });
 
       expect(result.briefCount).toBe(1);
       const markdown = await readFile(
-        join(cwd, 'docs/seo/keyword-research/briefs/resume-examples/data-analyst.md'),
+        join(cwd, 'docs/domains/seo/keyword-research/briefs/resume-examples/data-analyst.md'),
         'utf8',
       );
       const index = JSON.parse(
         await readFile(
-          join(cwd, 'docs/seo/keyword-research/briefs/resume-examples/briefs.index.json'),
+          join(cwd, 'docs/domains/seo/keyword-research/briefs/resume-examples/briefs.index.json'),
           'utf8',
         ),
       );
       expect(markdown).toContain('Primary keyword: `data analyst resume example`');
       expect(index.briefs[0]).toMatchObject({
         routePath: '/resume-examples/data-analyst',
-        filePath: 'docs/seo/keyword-research/briefs/resume-examples/data-analyst.md',
+        filePath: 'docs/domains/seo/keyword-research/briefs/resume-examples/data-analyst.md',
       });
     } finally {
       await rm(cwd, { recursive: true, force: true });
