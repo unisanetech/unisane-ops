@@ -23,6 +23,11 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-07-30`: Corrected the Research product contract after the summary-only slice
+  erased the workflow's research-led positioning. `SEO > Research` now preserves the
+  complete keyword matrix, intent clusters, market comparisons, FAQ/question plan,
+  competitor gaps, and SERP/experiment evidence through progressive views. Search
+  Console is a validation signal for actual visibility, not the owner of research.
 - `2026-07-30`: Completed P120-W3 slice 5. SEO now has six distinct, URL-addressable
   experiences backed by one headless projection: performance Overview, deterministic
   Opportunities, page and query analysis, user-impact Site health, and qualified
@@ -391,14 +396,14 @@ empty chart frame.
 The SEO section answers six distinct user questions without duplicating the same data
 under different labels:
 
-| Tab             | User question                                                         | Default primary content                                                                                                                                      |
-| --------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Overview`      | How is search performing, what changed, and what should I do next?    | one health/outcome summary, organic clicks, search views, average position, one trend, up to three opportunities, gaining/losing pages, and source freshness |
-| `Opportunities` | What improvements are most worthwhile?                                | ranked opportunities with expected outcome, affected pages/queries, impact, confidence, effort, freshness, evidence, and one action                          |
-| `Pages`         | Which pages are growing, declining, or blocked?                       | searchable/filterable page table with clicks, change, search views, average position, human status, indexing warning, and row drill-down                     |
-| `Queries`       | What do people search for, and where are we gaining or losing?        | searchable/filterable query table with clicks, change, search views, average position, best page, and query drill-down                                       |
-| `Site health`   | Can search engines discover, understand, and index important content? | user-impact summary plus prioritized indexing, crawl/access, sitemap, canonical, structured-data, and broken-link groups                                     |
-| `Research`      | What topics should we create or improve based on real demand?         | topic input, country/language context, estimated demand/trend/current visibility, and `Keyword ideas`, `Questions`, and `Content gaps` views                 |
+| Tab             | User question                                                                        | Default primary content                                                                                                                                             |
+| --------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Overview`      | How is search performing, what changed, and what should I do next?                   | one health/outcome summary, organic clicks, search views, average position, one trend, up to three opportunities, gaining/losing pages, and source freshness        |
+| `Opportunities` | What improvements are most worthwhile?                                               | ranked opportunities with expected outcome, affected pages/queries, impact, confidence, effort, freshness, evidence, and one action                                 |
+| `Pages`         | Which pages are growing, declining, or blocked?                                      | searchable/filterable page table with clicks, change, search views, average position, human status, indexing warning, and row drill-down                            |
+| `Queries`       | What do people search for, and where are we gaining or losing?                       | searchable/filterable query table with clicks, change, search views, average position, best page, and query drill-down                                              |
+| `Site health`   | Can search engines discover, understand, and index important content?                | user-impact summary plus prioritized indexing, crawl/access, sitemap, canonical, structured-data, and broken-link groups                                            |
+| `Research`      | Which keywords, markets, questions, and content opportunities should we target next? | complete keyword matrix, intent clusters, market comparison, question/FAQ plan, competitor gaps, and SERP/experiment evidence with estimated demand and competition |
 
 `Search performance` is the primary analysis on `SEO > Overview`; it is not a second
 tab. `Queries` is the user-facing name for provider keyword/search-query reporting.
@@ -498,16 +503,29 @@ issues, paginate affected examples, and keep diagnostics in `Technical details`.
 
 #### SEO Research
 
-Research begins with one topic input and explicit country/language context. Results
-contain:
+Research is the primary planning workspace for discovering and prioritizing what the
+project should target next. It is not a small Search Console companion and must remain
+useful before the site has meaningful organic visibility.
 
-- estimated monthly searches
-- interest direction over time
-- current site visibility
-- ranking difficulty expressed as `Low`, `Medium`, or `High`
-- user goal such as `Learn`, `Compare`, or `Buy`
-- current position when the site already appears
-- `Keyword ideas`, `Questions`, and `Content gaps`
+The default `Keywords` view preserves the complete researched keyword matrix rather
+than a capped card sample. It provides search, market and cluster filters, deterministic
+sorting, pagination, total measured demand, best market, market coverage, competition,
+and per-market demand/competition columns. Additional progressive views own:
+
+- `Clusters`: grouped user intent, keyword count, measured demand, best market,
+  competition, leading keywords, and recommended use
+- `Markets`: region/language comparison and each market's leading keywords
+- `Questions`: the full FAQ/question plan with target page, priority, demand, markets,
+  proof status, and answer intent
+- `Competitors & gaps`: recorded domains and pages, positioning patterns, strengths,
+  gaps, and supported opportunities
+- `SERP & experiments`: search-result snapshots, people-also-ask evidence, metadata
+  hypotheses, and research-alignment page audits
+
+Search Console owns actual clicks, search views, positions, and current visibility on
+`Overview`, `Pages`, and `Queries`. Research may use those values as feedback, but
+independent keyword, market, competitor, FAQ, and SERP evidence remains its primary
+input. Missing Search Console data must not collapse or hide valid research.
 
 Estimated demand is never presented as exact traffic. The contextual explanation is:
 `An estimate of how often people search for this topic each month. Use it to compare

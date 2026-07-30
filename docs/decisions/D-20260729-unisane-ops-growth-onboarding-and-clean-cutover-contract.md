@@ -14,6 +14,11 @@ status: accepted
 
 ## Changelog
 
+- `2026-07-30`: Corrected the W3 Research contract. Human-first presentation now means
+  progressive disclosure of the complete decision model, not replacement by capped
+  summary cards. Research owns the keyword matrix, clusters, markets, question plan,
+  competitor gaps, and SERP/experiment evidence; Search Console remains actual-
+  visibility feedback.
 - `2026-07-30`: Implemented the W3 SEO decision slice. One UI-neutral Growth
   projection now supplies the six distinct SEO page models, deterministic
   opportunities, honest comparison limits, focused page/query details, grouped
@@ -313,9 +318,14 @@ gaining/losing-page preview, and freshness. `Opportunities` owns deterministic r
 work with impact, confidence, effort, evidence, and one action. `Pages` and `Queries`
 own their respective sortable/filterable analysis and focused row drill-down. `Site
 health` owns grouped indexing, crawling/access, sitemap/canonical, structured-data, and
-link/redirect problems. `Research` owns country/language-bound estimated demand,
-questions, content gaps, and current visibility. It never presents demand estimates as
-exact traffic or a suggestion as a ranking promise.
+link/redirect problems. `Research` is the research-led planning workspace and owns the
+complete country/language-bound keyword matrix, intent clusters, market comparison,
+question/FAQ plan, competitor gaps, and SERP/metadata/page-audit research. Search
+Console owns actual clicks, search views, positions, and visibility and may validate a
+research opportunity without becoming Research's primary data model. The UI uses
+filtering, pagination, summaries, and progressive views to make the complete model
+understandable; it must not hide valid research behind a capped sample. It never
+presents demand estimates as exact traffic or a suggestion as a ranking promise.
 
 `Connections` presents Google, Meta, Web Runtime, and later admitted
 providers/integrations as human-readable provider cards with connection identity,

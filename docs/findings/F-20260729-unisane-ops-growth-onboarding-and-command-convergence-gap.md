@@ -15,6 +15,11 @@ status: in-progress
 
 ## Changelog
 
+- `2026-07-30`: Corrected the P120-W3 SEO Research slice after product review exposed
+  semantic loss: the first human-first projection retained data in state but hid most
+  of the keyword, market, cluster, question, competitor, and SERP decision model. The
+  corrected contract uses progressive disclosure without changing Research into a
+  Search Console summary.
 - `2026-07-30`: Closed the P120-W3 SEO slice. Generic SEO cards and raw row reuse no
   longer stand in for product workflows; Overview, Opportunities, Pages, Queries, Site
   health, and Research now answer separate user questions while missing comparison,
@@ -114,8 +119,10 @@ Receipts expose machine artifacts, and Schedule omits expected automation contro
 9. Delete the old routes and embedded presentation without an expert-mode dashboard,
    old shell, or presentation fallback.
 10. Implement the exact SEO Overview/Opportunities/Pages/Queries/Site health/Research
-    ownership, table/drill-down/state/copy contracts, and remove duplicate Search
-    performance/Keywords navigation.
+    ownership, table/drill-down/state/copy contracts, preserve the complete
+    research-led keyword/market/cluster/question/competitor/SERP decision model through
+    progressive disclosure, and remove duplicate Search performance/Keywords
+    navigation.
 11. Implement one provider-card Connections index, independently truthful Google
     service rows, supported-provider-only availability, a full connection detail page,
     incremental grants/resource confirmation, and explicit disconnect consequences.
