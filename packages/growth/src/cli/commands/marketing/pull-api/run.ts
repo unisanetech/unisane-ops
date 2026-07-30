@@ -1,7 +1,5 @@
 import {
-  loadMarketingConfig,
   writeMarketingProviderApiReportPull,
-  type MarketingConfig,
   MARKETING_GOOGLE_ADS_SCOPE,
   MARKETING_GOOGLE_ANALYTICS_SCOPE,
   MARKETING_GOOGLE_SEARCH_CONSOLE_SCOPE,
@@ -12,11 +10,15 @@ import {
   pullSearchConsoleReport,
   pullMetaAdsReport,
 } from '../../../provider-adapters.js';
-import { resolveMarketingGoogleAccessToken } from '../auth/google.js';
-import { resolveMarketingMetaAccessToken } from '../auth/meta.js';
 import type { MarketingCliOptions } from '../options.js';
 import { printMarketingProviderPullResult } from '../output/doctor.js';
-import { resolveMarketingGoogleProfile, resolveMarketingMetaProfile } from '../profile-defaults.js';
+import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
+import { resolveGrowthMetaConnectionToken } from '../../../connections/meta.js';
+import {
+  loadGrowthProjectContext,
+  loadMarketingExecutionContext,
+  resolveGrowthResource,
+} from '../../../project-context.js';
 
 function printJson(value: unknown): void {
   console.log(JSON.stringify(value, null, 2));
@@ -33,61 +35,48 @@ function parsePositiveInteger(value: string | undefined, optionName: string): nu
   return parsed;
 }
 
-async function fillGoogleAccessTokenEnv(args: {
-  env: Record<string, string | undefined>;
-  accessTokenEnv?: string;
-  authProfile?: string;
-  requiredScope: string;
-}): Promise<void> {
-  if (!args.accessTokenEnv) return;
-  if (args.env[args.accessTokenEnv]?.trim()) return;
-  args.env[args.accessTokenEnv] = await resolveMarketingGoogleAccessToken({
-    accessTokenEnv: args.accessTokenEnv,
-    authProfile: args.authProfile,
-    requiredScope: args.requiredScope,
+async function googlePullContext(options: MarketingCliOptions): Promise<{
+  accountId: string;
+  accessToken: string;
+  developerToken?: string;
+}> {
+  const service =
+    options.provider === 'googleAds'
+      ? 'ads'
+      : options.provider === 'ga4'
+        ? 'analytics'
+        : 'search-console';
+  const resourceType =
+    service === 'ads' ? 'customer' : service === 'analytics' ? 'property' : 'site';
+  const context = await loadGrowthProjectContext();
+  const resource = resolveGrowthResource({
+    context,
+    environment: options.environment,
+    provider: 'google',
+    service,
+    resourceType,
   });
-}
-
-async function resolveMarketingPullApiEnv(
-  config: MarketingConfig,
-  options: MarketingCliOptions,
-): Promise<Record<string, string | undefined>> {
-  const env = { ...process.env };
-  if (options.provider === 'googleAds') {
-    await fillGoogleAccessTokenEnv({
-      env,
-      accessTokenEnv: config.providers.googleAds.accessTokenEnv,
-      authProfile: resolveMarketingGoogleProfile(config, options),
-      requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
-    });
+  if (options.accountId && options.accountId !== resource.resourceId) {
+    throw new Error(
+      `[GROWTH_RESOURCE_OVERRIDE_REJECTED] '${options.accountId}' is not the selected ${service} resource.`,
+    );
   }
-  if (options.provider === 'ga4') {
-    await fillGoogleAccessTokenEnv({
-      env,
-      accessTokenEnv: config.providers.ga4.accessTokenEnv,
-      authProfile: resolveMarketingGoogleProfile(config, options),
-      requiredScope: MARKETING_GOOGLE_ANALYTICS_SCOPE,
-    });
-  }
-  if (options.provider === 'searchConsole') {
-    await fillGoogleAccessTokenEnv({
-      env,
-      accessTokenEnv: config.providers.searchConsole.accessTokenEnv,
-      authProfile: resolveMarketingGoogleProfile(config, options),
-      requiredScope: MARKETING_GOOGLE_SEARCH_CONSOLE_SCOPE,
-    });
-  }
-  if (
-    options.provider === 'metaAds' &&
-    config.providers.metaAds.accessTokenEnv &&
-    !env[config.providers.metaAds.accessTokenEnv]?.trim()
-  ) {
-    env[config.providers.metaAds.accessTokenEnv] = await resolveMarketingMetaAccessToken({
-      accessTokenEnv: config.providers.metaAds.accessTokenEnv,
-      authProfile: resolveMarketingMetaProfile(config, options),
-    });
-  }
-  return env;
+  const requiredScope =
+    service === 'ads'
+      ? MARKETING_GOOGLE_ADS_SCOPE
+      : service === 'analytics'
+        ? MARKETING_GOOGLE_ANALYTICS_SCOPE
+        : MARKETING_GOOGLE_SEARCH_CONSOLE_SCOPE;
+  const credentials = await resolveGrowthGoogleConnectionCredentials({
+    service,
+    connection: options.connection,
+    environment: options.environment,
+    requiredScope,
+  });
+  return {
+    accountId: resource.resourceId,
+    ...credentials,
+  };
 }
 
 export async function marketingPullApi(options: MarketingCliOptions): Promise<number> {
@@ -98,11 +87,30 @@ export async function marketingPullApi(options: MarketingCliOptions): Promise<nu
     if (!options.startDate || !options.endDate) {
       throw new Error('[MARKETING_PULL_DATE_RANGE_REQUIRED] Pass --start-date and --end-date.');
     }
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
-    const env = await resolveMarketingPullApiEnv(loaded.config, options);
+    const loaded = await loadMarketingExecutionContext();
+    const env = { ...process.env };
+    const google =
+      options.provider === 'googleAds' ||
+      options.provider === 'ga4' ||
+      options.provider === 'searchConsole'
+        ? await googlePullContext(options)
+        : undefined;
+    const meta =
+      options.provider === 'metaAds'
+        ? {
+            resource: resolveGrowthResource({
+              context: await loadGrowthProjectContext(),
+              environment: options.environment,
+              provider: 'meta',
+              service: 'ads',
+              resourceType: 'ad-account',
+            }),
+            accessToken: await resolveGrowthMetaConnectionToken({
+              connection: options.connection,
+              environment: options.environment,
+            }),
+          }
+        : undefined;
     const result = await writeMarketingProviderApiReportPull(loaded.config, {
       cwd: options.cwd,
       provider: options.provider,
@@ -117,7 +125,18 @@ export async function marketingPullApi(options: MarketingCliOptions): Promise<nu
                 ? pullMetaAdsReport
                 : undefined,
       env,
-      accountId: options.accountId,
+      accountId: google?.accountId ?? meta?.resource.resourceId ?? options.accountId,
+      credentials: google
+        ? {
+            accessToken: google.accessToken,
+            ...(google.developerToken ? { developerToken: google.developerToken } : {}),
+          }
+        : meta
+          ? {
+              accountId: meta.resource.resourceId,
+              accessToken: meta.accessToken,
+            }
+          : undefined,
       startDate: options.startDate,
       endDate: options.endDate,
       timeZone: options.timeZone,

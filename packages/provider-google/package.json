@@ -27,11 +27,6 @@
       "import": "./dist/google/tag-manager/index.js",
       "default": "./dist/google/tag-manager/index.js"
     },
-    "./gtm-auth": {
-      "types": "./dist/cli/gtm-auth.d.ts",
-      "import": "./dist/cli/gtm-auth.js",
-      "default": "./dist/cli/gtm-auth.js"
-    },
     "./cli": {
       "types": "./dist/cli/register.d.ts",
       "import": "./dist/cli/register.js",
@@ -56,8 +51,8 @@
     "./meta": "./unisane.meta.json"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/google/tag-manager/index.ts src/google/marketing/index.ts src/google/seo/index.ts src/cli/register.ts src/cli/handler.ts src/cli/gtm-auth.ts --format esm --dts --clean",
-    "dev": "tsup src/index.ts src/google/tag-manager/index.ts src/google/marketing/index.ts src/google/seo/index.ts src/cli/register.ts src/cli/handler.ts src/cli/gtm-auth.ts --format esm --dts --watch",
+    "build": "tsup src/index.ts src/google/tag-manager/index.ts src/google/marketing/index.ts src/google/seo/index.ts src/cli/register.ts src/cli/handler.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts src/google/tag-manager/index.ts src/google/marketing/index.ts src/google/seo/index.ts src/cli/register.ts src/cli/handler.ts --format esm --dts --watch",
     "lint": "eslint src --max-warnings 0",
     "test": "vitest run",
     "check-types": "tsc --noEmit",
@@ -67,7 +62,8 @@
     "@unisane/cli-core": "workspace:*",
     "@unisane/growth": "workspace:*",
     "@unisane/ops-engine": "workspace:*",
-    "commander": "^12.0.0"
+    "commander": "^12.0.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "eslint": "^9.39.1",

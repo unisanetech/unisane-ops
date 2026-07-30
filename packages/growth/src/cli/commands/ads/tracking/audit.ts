@@ -1,4 +1,5 @@
-import { auditMarketingTrackingSource, loadMarketingConfig } from '@unisane/growth/marketing';
+import { auditMarketingTrackingSource } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { AdsCliOptions } from '../options.js';
 import { printMarketingTrackingAuditReport } from '../../marketing/output/doctor.js';
 
@@ -8,10 +9,7 @@ function printJson(value: unknown): void {
 
 export async function adsTrackingAudit(options: AdsCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const report = await auditMarketingTrackingSource(loaded.config, {
       cwd: options.cwd,
       sourceRoots: options.sourceRoot,

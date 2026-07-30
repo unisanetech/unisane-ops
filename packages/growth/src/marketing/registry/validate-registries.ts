@@ -2,7 +2,7 @@ import path from 'node:path';
 import { loadMarketingRegistries } from './load-registries.js';
 import type { MarketingConversion } from '../schema/conversion-registry.js';
 import type { MarketingEvent } from '../schema/event-registry.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 
 export type MarketingRegistryCheckStatus = 'pass' | 'warn' | 'error';
 
@@ -104,7 +104,7 @@ function lifecycleChecks(conversions: MarketingConversion[]): MarketingRegistryC
 }
 
 function platformChecks(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   eventPlatformId: string,
   conversionPlatformId: string,
 ): MarketingRegistryCheck[] {
@@ -134,7 +134,7 @@ function platformChecks(
 }
 
 export async function validateMarketingRegistries(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingRegistryValidationOptions = {},
 ): Promise<MarketingRegistryValidationReport> {
   const cwd = path.resolve(options.cwd ?? process.cwd());

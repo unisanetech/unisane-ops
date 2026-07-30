@@ -4,7 +4,6 @@ import {
   resolveControlPlaneProviderContext,
 } from '@unisane/ops-engine';
 import {
-  listGoogleAdsAccessibleCustomers,
   listGoogleAnalyticsProperties,
   listGoogleSearchConsoleSites,
   listGoogleTagManagerAccounts,
@@ -19,6 +18,8 @@ import {
 } from '../shared/runtime.js';
 import {
   GOOGLE_PRODUCT_DISCOVERY_SCOPES,
+  GOOGLE_ANALYTICS_READONLY_SCOPE,
+  GOOGLE_SEARCH_CONSOLE_READONLY_SCOPE,
   GOOGLE_TAG_MANAGER_READONLY_SCOPE,
   type GoogleProviderCliOptions,
   type GoogleProviderInventoryResource,
@@ -49,22 +50,21 @@ export async function buildGoogleProductsInventory(
 ): Promise<GoogleProviderProductsInventoryArtifact> {
   const context = resolveControlPlaneProviderContext({
     cwd: options.cwd,
-    appId: options.app,
     provider: 'google',
-    environment: options.env,
-    configPath: options.config,
-    profile: options.profile,
+    environment: options.environment,
+    profile: options.connection,
   });
   const cwd = context.cwd;
-  const env = deps?.env ?? process.env;
-  const developerTokenEnv = options.developerTokenEnv ?? 'GOOGLE_ADS_DEVELOPER_TOKEN';
-  const developerToken = env[developerTokenEnv]?.trim();
-  const accessToken = await googleProviderAccessToken(options, GOOGLE_TAG_MANAGER_READONLY_SCOPE);
   const providerFetch = googleProviderFetchFromOptions(options, deps?.fetch);
   const [gtm, ga4, searchConsole, googleAds] = await Promise.all([
     collectProductResources({
       product: 'GTM',
       run: async () => {
+        const accessToken = await googleProviderAccessToken(
+          options,
+          'tag-manager',
+          GOOGLE_TAG_MANAGER_READONLY_SCOPE,
+        );
         const accounts = await listGoogleTagManagerAccounts({
           accessToken,
           fetch: providerFetch,
@@ -108,8 +108,13 @@ export async function buildGoogleProductsInventory(
     }),
     collectProductResources({
       product: 'GA4',
-      run: async () =>
-        (
+      run: async () => {
+        const accessToken = await googleProviderAccessToken(
+          options,
+          'analytics',
+          GOOGLE_ANALYTICS_READONLY_SCOPE,
+        );
+        return (
           await listGoogleAnalyticsProperties({
             accessToken,
             fetch: providerFetch,
@@ -128,12 +133,18 @@ export async function buildGoogleProductsInventory(
                 : {}),
             },
           }),
-        ),
+        );
+      },
     }),
     collectProductResources({
       product: 'Search Console',
-      run: async () =>
-        (
+      run: async () => {
+        const accessToken = await googleProviderAccessToken(
+          options,
+          'search-console',
+          GOOGLE_SEARCH_CONSOLE_READONLY_SCOPE,
+        );
+        return (
           await listGoogleSearchConsoleSites({
             accessToken,
             fetch: providerFetch,
@@ -145,37 +156,21 @@ export async function buildGoogleProductsInventory(
             title: site.siteUrl,
             state: site.permissionLevel ?? 'accessible',
           }),
-        ),
+        );
+      },
     }),
     collectProductResources({
       product: 'Google Ads',
       run: async () => {
-        if (!developerToken) {
-          return [
-            {
-              type: 'googleAdsDeveloperToken',
-              id: developerTokenEnv,
-              state: 'missing',
-              reason:
-                'Google Ads customer discovery needs a developer token; approval remains provider-side.',
-            },
-          ];
-        }
-        return (
-          await listGoogleAdsAccessibleCustomers({
-            accessToken,
-            developerToken,
-            apiVersion: options.apiVersion,
-            fetch: providerFetch,
-          })
-        ).map(
-          (customer): GoogleProviderInventoryResource => ({
-            type: 'googleAdsCustomer',
-            id: customer.customerId,
-            title: customer.resourceName,
-            state: 'accessible',
-          }),
-        );
+        return [
+          {
+            type: 'googleAdsDeveloperToken',
+            id: 'google-ads-developer-access',
+            state: 'missing',
+            reason:
+              'Google Ads discovery requires approved developer access through the selected connection adapter.',
+          },
+        ];
       },
     }),
   ]);
@@ -201,7 +196,6 @@ export async function buildGoogleProductsInventory(
       ],
     }),
     requiredScopes: GOOGLE_PRODUCT_DISCOVERY_SCOPES,
-    developerTokenEnv,
   };
   if (!options.output) return inventory;
   return writeGoogleProviderArtifact({

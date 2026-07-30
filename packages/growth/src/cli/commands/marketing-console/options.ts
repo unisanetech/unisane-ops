@@ -5,7 +5,6 @@ export type MarketingConsoleCliOptions = {
   out?: string;
   dryRun?: boolean;
   maxAgeDays?: string;
-  limits?: string;
   host?: string;
   port?: string;
 };

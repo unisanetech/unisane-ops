@@ -3,30 +3,45 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { buildMarketingConsoleApp, buildMarketingConsoleState } from '../index.js';
-import { loadMarketingConfig, writeMarketingProviderReportPull } from '@unisane/growth/marketing';
+import { writeMarketingProviderReportPull } from '@unisane/growth/marketing';
+import { runWithGrowthProviderRuntime } from '../../provider-runtime.js';
+import { loadMarketingExecutionContext } from '../../project-context.js';
 
 function createTempProject(): string {
   const cwd = mkdtempSync(path.join(tmpdir(), 'unisane-marketing-console-'));
-  mkdirSync(path.join(cwd, 'config'), { recursive: true });
   mkdirSync(path.join(cwd, 'docs', 'marketing'), { recursive: true });
   writeFileSync(
-    path.join(cwd, 'config', 'marketing.mjs'),
-    `export default {
-  version: 1,
-  platformId: 'true-resume',
-  appId: 'true-resume',
-  defaultEnvironment: 'production',
+    path.join(cwd, 'unisane.config.ts'),
+    `export const ops = {
+  schemaVersion: 1,
+  project: { id: 'true-resume' },
   environments: {
-    production: {
-      production: true,
-      publicBaseUrl: 'https://true-resume.example.com'
-    }
+    production: { production: true }
   },
-  providers: {
-    googleAds: { state: 'planned', accountIdEnv: 'GOOGLE_ADS_CUSTOMER_ID' },
-    metaAds: { state: 'planned', accountIdEnv: 'META_AD_ACCOUNT_ID' },
-    ga4: { state: 'planned', accountIdEnv: 'GA4_PROPERTY_ID' },
-    searchConsole: { state: 'planned', accountIdEnv: 'SEARCH_CONSOLE_SITE_URL' }
+  connections: {},
+  targets: {},
+  capabilities: {
+    growth: {
+      schemaVersion: 1,
+      adoptionMode: 'adopt-existing',
+      capabilities: ['seo', 'analytics', 'tag-manager', 'advertising'],
+      environments: {
+        production: { connections: {}, resources: [] }
+      },
+      manifests: {
+        events: 'docs/marketing/events.json',
+        conversions: 'docs/marketing/conversions.json',
+        research: 'ops/growth/research'
+      },
+      runtime: {
+        integration: 'tag-manager',
+        manifest: 'ops/growth/tag-manager.ts'
+      },
+      policy: {
+        mutation: 'disabled',
+        spend: 'disabled'
+      }
+    }
   }
 };`,
     'utf8',
@@ -100,6 +115,45 @@ function createTempProject(): string {
     'utf8',
   );
   return cwd;
+}
+
+function runWithTestProjectContext<T>(cwd: string, run: () => T): T {
+  const runtime = {
+    resolveBinding: async (_bindingId: string, input: unknown) => {
+      const request = input as { operation?: string };
+      if (request.operation !== 'growth.project.context') {
+        throw new Error(`[TEST_PROVIDER_OPERATION_UNEXPECTED] ${request.operation ?? 'missing'}`);
+      }
+      return {
+        projectRoot: cwd,
+        configPath: path.join(cwd, 'unisane.config.ts'),
+        projectId: 'true-resume',
+        environments: { production: { production: true } },
+        growth: {
+          schemaVersion: 1,
+          adoptionMode: 'adopt-existing',
+          capabilities: ['seo', 'analytics', 'tag-manager', 'advertising'],
+          environments: {
+            production: { connections: {}, resources: [] },
+          },
+          manifests: {
+            events: 'docs/marketing/events.json',
+            conversions: 'docs/marketing/conversions.json',
+            research: 'ops/growth/research',
+          },
+          runtime: {
+            integration: 'tag-manager',
+            manifest: 'ops/growth/tag-manager.ts',
+          },
+          policy: {
+            mutation: 'disabled',
+            spend: 'disabled',
+          },
+        },
+      };
+    },
+  };
+  return runWithGrowthProviderRuntime(runtime as never, cwd, run);
 }
 
 function writeProviderInput(cwd: string): string {
@@ -249,7 +303,7 @@ function writeGtmArtifacts(cwd: string): void {
 }
 
 function writeResearchMemory(cwd: string): void {
-  const root = path.join(cwd, 'docs', 'marketing', 'research');
+  const root = path.join(cwd, 'ops', 'growth', 'research');
   mkdirSync(root, { recursive: true });
   writeFileSync(
     path.join(root, 'research-memory.json'),
@@ -553,276 +607,280 @@ describe('marketing console', () => {
   it('builds a typed console state from marketing artifacts without secrets', async () => {
     const cwd = createTempProject();
     tempProjects.push(cwd);
-    const loaded = await loadMarketingConfig({ cwd });
-    writeMarketingProviderReportPull(loaded.config, {
-      cwd,
-      provider: 'googleAds',
-      reportType: 'campaign',
-      inputPath: writeProviderInput(cwd),
-      inputFormat: 'normalized',
-      now: new Date('2026-05-21T00:00:00.000Z'),
-    });
-    writeMarketingProviderReportPull(loaded.config, {
-      cwd,
-      provider: 'searchConsole',
-      reportType: 'queryPage',
-      inputPath: writeSearchConsoleInput(cwd),
-      inputFormat: 'search-console',
-      now: new Date('2026-05-21T00:00:00.000Z'),
-    });
-    writeGtmArtifacts(cwd);
-    writeResearchMemory(cwd);
-    writeKeywordPlannerMetrics(cwd);
-    writeCompetitorResearch(cwd);
-    writeFaqResearch(cwd);
+    await runWithTestProjectContext(cwd, async () => {
+      const loaded = await loadMarketingExecutionContext();
+      writeMarketingProviderReportPull(loaded.config, {
+        cwd,
+        provider: 'googleAds',
+        reportType: 'campaign',
+        inputPath: writeProviderInput(cwd),
+        inputFormat: 'normalized',
+        now: new Date('2026-05-21T00:00:00.000Z'),
+      });
+      writeMarketingProviderReportPull(loaded.config, {
+        cwd,
+        provider: 'searchConsole',
+        reportType: 'queryPage',
+        inputPath: writeSearchConsoleInput(cwd),
+        inputFormat: 'search-console',
+        now: new Date('2026-05-21T00:00:00.000Z'),
+      });
+      writeGtmArtifacts(cwd);
+      writeResearchMemory(cwd);
+      writeKeywordPlannerMetrics(cwd);
+      writeCompetitorResearch(cwd);
+      writeFaqResearch(cwd);
 
-    const state = await buildMarketingConsoleState({
-      cwd,
-      now: new Date('2026-05-21T01:00:00.000Z'),
-    });
+      const state = await buildMarketingConsoleState({
+        cwd,
+        now: new Date('2026-05-21T01:00:00.000Z'),
+      });
 
-    expect(state.kind).toBe('unisane.marketing.console-state');
-    expect(state.platformId).toBe('true-resume');
-    expect(state.metrics).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ id: 'spend', numericValue: 250 }),
-        expect.objectContaining({ id: 'conversions', numericValue: 10 }),
-      ]),
-    );
-    expect(state.metrics).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ id: 'spend', value: '₹250 INR', currencyCode: 'INR' }),
-      ]),
-    );
-    expect(state.freshness).toContainEqual(
-      expect.objectContaining({
-        id: 'googleAds.campaign',
-        label: 'Google Ads campaign',
-        status: 'ready',
-        recordCount: 1,
-        currencyCode: 'INR',
-      }),
-    );
-    expect(state.routes.map((route) => route.id)).toContain('performance');
-    expect(state.seo.rows).toEqual(
-      expect.arrayContaining([
+      expect(state.kind).toBe('unisane.marketing.console-state');
+      expect(state.platformId).toBe('true-resume');
+      expect(state.metrics).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id: 'spend', numericValue: 250 }),
+          expect.objectContaining({ id: 'conversions', numericValue: 10 }),
+        ]),
+      );
+      expect(state.metrics).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id: 'spend', value: '₹250 INR', currencyCode: 'INR' }),
+        ]),
+      );
+      expect(state.freshness).toContainEqual(
         expect.objectContaining({
-          query: 'executive resume templates',
-          clicks: 3,
-          impressions: 120,
-          ctr: 2.5,
-          position: 8.4,
-        }),
-      ]),
-    );
-    expect(state.routes).toContainEqual(
-      expect.objectContaining({ id: 'research', status: 'ready' }),
-    );
-    expect(state.reports.researchStatus).toEqual(
-      expect.objectContaining({ recordCount: 1, decisionCount: 1, opportunityCount: 1 }),
-    );
-    expect(state.keywordResearch).toEqual(
-      expect.objectContaining({
-        status: 'ready',
-        sourceCount: 2,
-        runCount: 2,
-        metricCount: 4,
-        totalKnownVolume: 9900,
-      }),
-    );
-    expect(state.keywordResearch.markets).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          market: 'IN / en',
+          id: 'googleAds.campaign',
+          label: 'Google Ads campaign',
+          status: 'ready',
+          recordCount: 1,
           currencyCode: 'INR',
-          metricCount: 2,
-          totalKnownVolume: 6600,
         }),
+      );
+      expect(state.routes.map((route) => route.id)).toContain('performance');
+      expect(state.seo.rows).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            query: 'executive resume templates',
+            clicks: 3,
+            impressions: 120,
+            ctr: 2.5,
+            position: 8.4,
+          }),
+        ]),
+      );
+      expect(state.routes).toContainEqual(
+        expect.objectContaining({ id: 'research', status: 'ready' }),
+      );
+      expect(state.reports.researchStatus).toEqual(
+        expect.objectContaining({ recordCount: 1, decisionCount: 1, opportunityCount: 1 }),
+      );
+      expect(state.keywordResearch).toEqual(
         expect.objectContaining({
-          market: 'US / en',
-          currencyCode: 'USD',
-          metricCount: 2,
-          totalKnownVolume: 3300,
+          status: 'ready',
+          sourceCount: 2,
+          runCount: 2,
+          metricCount: 4,
+          totalKnownVolume: 9900,
         }),
-      ]),
-    );
-    expect(state.keywordResearch.matrix).toEqual(
-      expect.arrayContaining([
+      );
+      expect(state.keywordResearch.markets).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            market: 'IN / en',
+            currencyCode: 'INR',
+            metricCount: 2,
+            totalKnownVolume: 6600,
+          }),
+          expect.objectContaining({
+            market: 'US / en',
+            currencyCode: 'USD',
+            metricCount: 2,
+            totalKnownVolume: 3300,
+          }),
+        ]),
+      );
+      expect(state.keywordResearch.matrix).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            normalizedTerm: 'ats resume checker',
+            marketCount: 2,
+            totalKnownVolume: 7800,
+            bestMarket: 'IN / en',
+          }),
+        ]),
+      );
+      expect(state.keywordResearch.clusters).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: 'ats',
+            label: 'ATS checker and job match',
+            bestMarket: 'IN / en',
+            totalKnownVolume: 8700,
+          }),
+        ]),
+      );
+      expect(state.keywordResearch.topKeywords[0]).toEqual(
         expect.objectContaining({
-          normalizedTerm: 'ats resume checker',
-          marketCount: 2,
-          totalKnownVolume: 7800,
-          bestMarket: 'IN / en',
+          term: 'ats resume checker',
+          country: 'IN',
+          currencyCode: 'INR',
+          sourceClusterId: 'cv-fresher',
+          avgMonthlySearches: 5400,
         }),
-      ]),
-    );
-    expect(state.keywordResearch.clusters).toEqual(
-      expect.arrayContaining([
+      );
+      expect(state.competitorResearch).toEqual(
         expect.objectContaining({
-          id: 'ats',
-          label: 'ATS checker and job match',
-          bestMarket: 'IN / en',
-          totalKnownVolume: 8700,
+          status: 'ready',
+          sourceCount: 1,
+          pageCount: 2,
+          domainCount: 2,
+          keywordCount: 2,
         }),
-      ]),
-    );
-    expect(state.keywordResearch.topKeywords[0]).toEqual(
-      expect.objectContaining({
-        term: 'ats resume checker',
-        country: 'IN',
-        currencyCode: 'INR',
-        sourceClusterId: 'cv-fresher',
-        avgMonthlySearches: 5400,
-      }),
-    );
-    expect(state.competitorResearch).toEqual(
-      expect.objectContaining({
-        status: 'ready',
-        sourceCount: 1,
-        pageCount: 2,
-        domainCount: 2,
-        keywordCount: 2,
-      }),
-    );
-    expect(state.competitorResearch.domains).toEqual(
-      expect.arrayContaining([
+      );
+      expect(state.competitorResearch.domains).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            domain: 'canva.com',
+            topPatterns: expect.arrayContaining(['template library']),
+          }),
+        ]),
+      );
+      expect(state.competitorResearch.opportunities).toEqual(
+        expect.arrayContaining(['Position TrueResume around ATS-safe job-ready resumes.']),
+      );
+      expect(state.faqResearch).toEqual(
         expect.objectContaining({
-          domain: 'canva.com',
-          topPatterns: expect.arrayContaining(['template library']),
-        }),
-      ]),
-    );
-    expect(state.competitorResearch.opportunities).toEqual(
-      expect.arrayContaining(['Position TrueResume around ATS-safe job-ready resumes.']),
-    );
-    expect(state.faqResearch).toEqual(
-      expect.objectContaining({
-        status: 'warn',
-        sourceCount: 1,
-        questionCount: 3,
-        pageCount: 2,
-        approvedCount: 2,
-        highPriorityCount: 3,
-        totalKnownVolume: 116600,
-        qualityScore: 72,
-        evidenceSourceCount: 1,
-        marketCount: 1,
-        needsProofCount: 2,
-        duplicateQuestionCount: 0,
-        routeConflictCount: 0,
-      }),
-    );
-    expect(state.faqResearch.warnings).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ title: 'Proof gaps', severity: 'warn' }),
-        expect.objectContaining({ title: 'Single evidence source', severity: 'warn' }),
-      ]),
-    );
-    expect(state.faqResearch.pages).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          routePath: '/',
-          questionCount: 2,
-          totalKnownVolume: 115400,
+          status: 'warn',
+          sourceCount: 1,
+          questionCount: 3,
+          pageCount: 2,
+          approvedCount: 2,
+          highPriorityCount: 3,
+          totalKnownVolume: 116600,
+          qualityScore: 72,
           evidenceSourceCount: 1,
+          marketCount: 1,
+          needsProofCount: 2,
+          duplicateQuestionCount: 0,
+          routeConflictCount: 0,
         }),
+      );
+      expect(state.faqResearch.warnings).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ title: 'Proof gaps', severity: 'warn' }),
+          expect.objectContaining({ title: 'Single evidence source', severity: 'warn' }),
+        ]),
+      );
+      expect(state.faqResearch.pages).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            routePath: '/',
+            questionCount: 2,
+            totalKnownVolume: 115400,
+            evidenceSourceCount: 1,
+          }),
+          expect.objectContaining({
+            routePath: '/cv-maker',
+            questionCount: 1,
+            needsProofCount: 1,
+          }),
+        ]),
+      );
+      expect(state.faqResearch.topQuestions[0]).toEqual(
         expect.objectContaining({
-          routePath: '/cv-maker',
-          questionCount: 1,
-          needsProofCount: 1,
+          id: 'free-resume-builder',
+          bestMarket: 'US / en · 110000',
+          proofStatus: 'ready',
+          evidenceSources: ['google-ads'],
         }),
-      ]),
-    );
-    expect(state.faqResearch.topQuestions[0]).toEqual(
-      expect.objectContaining({
-        id: 'free-resume-builder',
-        bestMarket: 'US / en · 110000',
-        proofStatus: 'ready',
-        evidenceSources: ['google-ads'],
-      }),
-    );
-    expect(state.artifacts).toEqual(
-      expect.arrayContaining([expect.objectContaining({ lane: 'research', status: 'ready' })]),
-    );
-    expect(state.routes).toContainEqual(expect.objectContaining({ id: 'gtm', status: 'ready' }));
-    expect(state.gtm).toEqual(
-      expect.objectContaining({
-        accountId: '1',
-        containerId: '2',
-        workspaceId: '3',
-        publicId: 'GTM-TEST123',
-      }),
-    );
-    expect(state.artifacts).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ id: 'gtm.plan.latest', status: 'ready' }),
-        expect.objectContaining({ id: 'gtm.preview.latest', status: 'ready' }),
-      ]),
-    );
-    expect(state.receipts).toEqual(
-      expect.arrayContaining([expect.objectContaining({ action: 'gtm.preview' })]),
-    );
-    expect(JSON.stringify(state)).not.toContain('token');
+      );
+      expect(state.artifacts).toEqual(
+        expect.arrayContaining([expect.objectContaining({ lane: 'research', status: 'ready' })]),
+      );
+      expect(state.routes).toContainEqual(expect.objectContaining({ id: 'gtm', status: 'ready' }));
+      expect(state.gtm).toEqual(
+        expect.objectContaining({
+          accountId: '1',
+          containerId: '2',
+          workspaceId: '3',
+          publicId: 'GTM-TEST123',
+        }),
+      );
+      expect(state.artifacts).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id: 'gtm.plan.latest', status: 'ready' }),
+          expect.objectContaining({ id: 'gtm.preview.latest', status: 'ready' }),
+        ]),
+      );
+      expect(state.receipts).toEqual(
+        expect.arrayContaining([expect.objectContaining({ action: 'gtm.preview' })]),
+      );
+      expect(JSON.stringify(state)).not.toContain('token');
+    });
   });
 
   it('writes a static dashboard and serialized console state', async () => {
     const cwd = createTempProject();
     tempProjects.push(cwd);
-    const loaded = await loadMarketingConfig({ cwd });
-    writeMarketingProviderReportPull(loaded.config, {
-      cwd,
-      provider: 'searchConsole',
-      reportType: 'queryPage',
-      inputPath: writeSearchConsoleInput(cwd),
-      inputFormat: 'search-console',
-      now: new Date('2026-05-21T00:00:00.000Z'),
-    });
-    writeGtmArtifacts(cwd);
-    writeResearchMemory(cwd);
-    writeKeywordPlannerMetrics(cwd);
+    await runWithTestProjectContext(cwd, async () => {
+      const loaded = await loadMarketingExecutionContext();
+      writeMarketingProviderReportPull(loaded.config, {
+        cwd,
+        provider: 'searchConsole',
+        reportType: 'queryPage',
+        inputPath: writeSearchConsoleInput(cwd),
+        inputFormat: 'search-console',
+        now: new Date('2026-05-21T00:00:00.000Z'),
+      });
+      writeGtmArtifacts(cwd);
+      writeResearchMemory(cwd);
+      writeKeywordPlannerMetrics(cwd);
 
-    const result = await buildMarketingConsoleApp({
-      cwd,
-      outputDirectory: '.unisane/marketing/console-test',
-      now: new Date('2026-05-21T01:00:00.000Z'),
-    });
+      const result = await buildMarketingConsoleApp({
+        cwd,
+        outputDirectory: '.unisane/marketing/console-test',
+        now: new Date('2026-05-21T01:00:00.000Z'),
+      });
 
-    expect(result.writeStatus).toBe('written');
-    expect(existsSync(result.entryHtmlPath)).toBe(true);
-    expect(existsSync(result.statePath)).toBe(true);
-    expect(result.assetPaths.some((assetPath) => assetPath.endsWith('assets/unisane-ui.css'))).toBe(
-      true,
-    );
-    const html = readFileSync(result.entryHtmlPath, 'utf8');
-    expect(html).toContain('Marketing Console');
-    expect(html).toContain('./assets/unisane-ui.css');
-    expect(html).toContain('marketing-console-state');
-    expect(html).toContain('Pre-live checklist');
-    expect(html).toContain('Live mutation guard');
-    expect(html).toContain('Organic decision map');
-    expect(html).toContain('Organic queries');
-    expect(html).toContain('Avg. position');
-    expect(html).toContain('executive resume templates');
-    expect(html).toContain('Research memory');
-    expect(html).toContain('Keyword Planner evidence');
-    expect(html).toContain('Keyword clusters');
-    expect(html).toContain('Keyword matrix');
-    expect(html).toContain('Market summary');
-    expect(html).toContain('ats resume checker');
-    expect(html).toContain('"country":"IN"');
-    expect(html).toContain('"currencyCode":"INR"');
-    expect(html).toContain('Measurement trust');
-    expect(html).toContain('Publish safety');
-    expect(html).toContain('Container identity');
-    expect(html).toContain('Provider tags in container');
-    expect(html).toContain('GTM-TEST123');
-    expect(html).toContain('Performance decision table');
-    expect(html).toContain('Campaign control');
-    expect(html).toContain('Operator checklist');
-    expect(html).toContain('Spend and conversions');
-    expect(html).toContain('unisane growth gtm validate');
-    expect(html).toContain(
-      'unisane growth marketing pull-api --provider searchConsole --report queryPage',
-    );
+      expect(result.writeStatus).toBe('written');
+      expect(existsSync(result.entryHtmlPath)).toBe(true);
+      expect(existsSync(result.statePath)).toBe(true);
+      expect(
+        result.assetPaths.some((assetPath) => assetPath.endsWith('assets/unisane-ui.css')),
+      ).toBe(true);
+      const html = readFileSync(result.entryHtmlPath, 'utf8');
+      expect(html).toContain('Marketing Console');
+      expect(html).toContain('./assets/unisane-ui.css');
+      expect(html).toContain('marketing-console-state');
+      expect(html).toContain('Pre-live checklist');
+      expect(html).toContain('Live mutation guard');
+      expect(html).toContain('Organic decision map');
+      expect(html).toContain('Organic queries');
+      expect(html).toContain('Avg. position');
+      expect(html).toContain('executive resume templates');
+      expect(html).toContain('Research memory');
+      expect(html).toContain('Keyword Planner evidence');
+      expect(html).toContain('Keyword clusters');
+      expect(html).toContain('Keyword matrix');
+      expect(html).toContain('Market summary');
+      expect(html).toContain('ats resume checker');
+      expect(html).toContain('"country":"IN"');
+      expect(html).toContain('"currencyCode":"INR"');
+      expect(html).toContain('Measurement trust');
+      expect(html).toContain('Publish safety');
+      expect(html).toContain('Container identity');
+      expect(html).toContain('Provider tags in container');
+      expect(html).toContain('GTM-TEST123');
+      expect(html).toContain('Performance decision table');
+      expect(html).toContain('Campaign control');
+      expect(html).toContain('Operator checklist');
+      expect(html).toContain('Spend and conversions');
+      expect(html).toContain('unisane growth gtm validate');
+      expect(html).toContain(
+        'unisane growth marketing pull-api --provider searchConsole --report queryPage',
+      );
+    });
   });
 });

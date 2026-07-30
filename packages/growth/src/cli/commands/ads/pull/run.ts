@@ -1,20 +1,19 @@
 import {
-  loadMarketingConfig,
   MARKETING_GOOGLE_ADS_SCOPE,
   writeMarketingProviderApiReportPull,
   writeMarketingProviderReportPull,
-  type MarketingConfig,
   type MarketingAdsPlanProvider,
 } from '@unisane/growth/marketing';
 import { pullGoogleAdsReport, pullMetaAdsReport } from '../../../provider-adapters.js';
 import type { AdsCliOptions } from '../options.js';
 import { printMarketingProviderPullResult } from '../../marketing/output/doctor.js';
-import { resolveMarketingGoogleAccessToken } from '../../marketing/auth/google.js';
-import { resolveMarketingMetaAccessToken } from '../../marketing/auth/meta.js';
+import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
+import { resolveGrowthMetaConnectionToken } from '../../../connections/meta.js';
 import {
-  resolveMarketingGoogleProfile,
-  resolveMarketingMetaProfile,
-} from '../../marketing/profile-defaults.js';
+  loadGrowthProjectContext,
+  loadMarketingExecutionContext,
+  resolveGrowthResource,
+} from '../../../project-context.js';
 
 function printJson(value: unknown): void {
   console.log(JSON.stringify(value, null, 2));
@@ -34,55 +33,69 @@ function parsePositiveInteger(value: string | undefined, optionName: string): nu
   return parsed;
 }
 
-async function resolveAdsPullApiEnv(
-  config: MarketingConfig,
-  provider: MarketingAdsPlanProvider,
-  options: AdsCliOptions,
-): Promise<Record<string, string | undefined>> {
-  const env = { ...process.env };
-  if (
-    provider === 'googleAds' &&
-    config.providers.googleAds.accessTokenEnv &&
-    !env[config.providers.googleAds.accessTokenEnv]?.trim()
-  ) {
-    env[config.providers.googleAds.accessTokenEnv] = await resolveMarketingGoogleAccessToken({
-      accessTokenEnv: config.providers.googleAds.accessTokenEnv,
-      authProfile: resolveMarketingGoogleProfile(config, options),
-      requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
-    });
-  }
-  if (
-    provider === 'metaAds' &&
-    config.providers.metaAds.accessTokenEnv &&
-    !env[config.providers.metaAds.accessTokenEnv]?.trim()
-  ) {
-    env[config.providers.metaAds.accessTokenEnv] = await resolveMarketingMetaAccessToken({
-      accessTokenEnv: config.providers.metaAds.accessTokenEnv,
-      authProfile: resolveMarketingMetaProfile(config, options),
-    });
-  }
-  return env;
-}
-
 export async function adsPull(options: AdsCliOptions): Promise<number> {
   try {
     const provider = parseAdsProvider(options.provider);
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
 
     if (options.api) {
       if (!options.startDate || !options.endDate) {
         throw new Error('[ADS_PULL_DATE_RANGE_REQUIRED] Pass --start-date and --end-date.');
       }
-      const env = await resolveAdsPullApiEnv(loaded.config, provider, options);
+      const env = { ...process.env };
+      const google =
+        provider === 'googleAds'
+          ? {
+              resource: resolveGrowthResource({
+                context: await loadGrowthProjectContext(),
+                environment: options.environment,
+                provider: 'google',
+                service: 'ads',
+                resourceType: 'customer',
+              }),
+              credentials: await resolveGrowthGoogleConnectionCredentials({
+                service: 'ads',
+                connection: options.connection,
+                environment: options.environment,
+                requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
+              }),
+            }
+          : undefined;
+      const meta =
+        provider === 'metaAds'
+          ? {
+              resource: resolveGrowthResource({
+                context: await loadGrowthProjectContext(),
+                environment: options.environment,
+                provider: 'meta',
+                service: 'ads',
+                resourceType: 'ad-account',
+              }),
+              accessToken: await resolveGrowthMetaConnectionToken({
+                connection: options.connection,
+                environment: options.environment,
+              }),
+            }
+          : undefined;
+      if (google && options.accountId && options.accountId !== google.resource.resourceId) {
+        throw new Error(
+          `[GROWTH_RESOURCE_OVERRIDE_REJECTED] '${options.accountId}' is not the selected Google Ads customer.`,
+        );
+      }
       const result = await writeMarketingProviderApiReportPull(loaded.config, {
         cwd: options.cwd,
         provider,
         driver: provider === 'googleAds' ? pullGoogleAdsReport : pullMetaAdsReport,
         env,
-        accountId: options.accountId,
+        accountId: google?.resource.resourceId ?? meta?.resource.resourceId ?? options.accountId,
+        credentials: google
+          ? google.credentials
+          : meta
+            ? {
+                accountId: meta.resource.resourceId,
+                accessToken: meta.accessToken,
+              }
+            : undefined,
         startDate: options.startDate,
         endDate: options.endDate,
         timeZone: options.timeZone,

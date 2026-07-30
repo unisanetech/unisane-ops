@@ -26,10 +26,20 @@
       "import": "./dist/local.js",
       "default": "./dist/local.js"
     },
+    "./lifecycle": {
+      "types": "./dist/lifecycle.d.ts",
+      "import": "./dist/lifecycle.js",
+      "default": "./dist/lifecycle.js"
+    },
     "./pack": {
       "types": "./dist/pack.d.ts",
       "import": "./dist/pack.js",
       "default": "./dist/pack.js"
+    },
+    "./readiness": {
+      "types": "./dist/readiness.d.ts",
+      "import": "./dist/readiness.js",
+      "default": "./dist/readiness.js"
     },
     "./testing": {
       "types": "./dist/testing.d.ts",
@@ -39,8 +49,8 @@
     "./meta": "./unisane.meta.json"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/local.ts src/pack.ts src/testing.ts --format esm --dts --clean",
-    "dev": "tsup src/index.ts src/local.ts src/pack.ts src/testing.ts --format esm --dts --watch",
+    "build": "tsup src/index.ts src/lifecycle.ts src/local.ts src/pack.ts src/readiness.ts src/testing.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts src/lifecycle.ts src/local.ts src/pack.ts src/readiness.ts src/testing.ts --format esm --dts --watch",
     "lint": "eslint src --max-warnings 0",
     "test": "vitest run",
     "check-types": "tsc --noEmit",

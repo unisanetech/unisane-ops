@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingConfirmedConversionArtifactInputSchema,
   marketingConfirmedConversionArtifactSchema,
@@ -61,7 +61,7 @@ function safeTimestamp(iso: string): string {
 }
 
 function normalizeConfirmedConversionArtifact(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   value: unknown,
   options: MarketingConfirmedConversionPullOptions,
 ): MarketingConfirmedConversionArtifact {
@@ -109,7 +109,7 @@ export function cacheMarketingConfirmedConversionArtifact(
 }
 
 export function writeMarketingConfirmedConversionPull(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingConfirmedConversionPullOptions,
 ): MarketingConfirmedConversionPullResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());

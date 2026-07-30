@@ -9,7 +9,7 @@ import type {
   MarketingAdsPlanCandidate,
   MarketingAdsPlanProvider,
 } from '../schema/ads-plan.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import type { FetchLike } from '../providers/api-pull-types.js';
 
 export type MarketingAdsExecutorMode = 'dry-run' | 'live-disabled' | 'live-api';
@@ -37,11 +37,21 @@ export function assertLiveAdsExecutorDisabled(mode: MarketingAdsExecutorMode): v
 }
 
 export type MarketingAdsLiveProviderExecutionOptions = {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   plan: MarketingAdsPlanArtifact;
   operation: MarketingAdsApplyOperation;
   candidate?: MarketingAdsPlanCandidate;
   env: Record<string, string | undefined>;
+  credentials?: {
+    accessToken?: string;
+    developerToken?: string;
+    accountId?: string;
+    loginCustomerId?: string;
+    pageId?: string;
+    instagramActorId?: string;
+    pixelId?: string;
+    datasetId?: string;
+  };
   fetch: FetchLike;
   apiVersion?: string;
 };
@@ -60,11 +70,14 @@ export type MarketingAdsLiveProviderExecutors = Partial<
 >;
 
 export type MarketingAdsLiveExecutorOptions = {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   plan: MarketingAdsPlanArtifact;
   operation: MarketingAdsApplyOperation;
   mode: MarketingAdsLiveExecutorMode;
   providerExecutors?: MarketingAdsLiveProviderExecutors;
+  providerCredentials?: Partial<
+    Record<MarketingAdsPlanProvider, MarketingAdsLiveProviderExecutionOptions['credentials']>
+  >;
   env?: Record<string, string | undefined>;
   fetch?: FetchLike;
   now?: Date;
@@ -183,6 +196,7 @@ export async function executeMarketingAdsLiveOperation(
       operation: options.operation,
       candidate,
       env: options.env ?? process.env,
+      credentials: options.providerCredentials?.[options.operation.provider],
       fetch: options.fetch ?? fetch,
       apiVersion: options.apiVersion,
     });

@@ -1,4 +1,4 @@
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   buildMarketingRecommendations,
   writeMarketingRecommendations,
@@ -11,14 +11,14 @@ export type MarketingAdsOptimizationOptions = MarketingRecommendationOptions;
 export type MarketingAdsOptimizationResult = MarketingRecommendationResult;
 
 export async function buildMarketingAdsOptimization(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsOptimizationOptions = {},
 ): Promise<MarketingRecommendationArtifact> {
   return buildMarketingRecommendations(config, options);
 }
 
 export async function writeMarketingAdsOptimization(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsOptimizationOptions = {},
 ): Promise<MarketingAdsOptimizationResult> {
   return writeMarketingRecommendations(config, options);

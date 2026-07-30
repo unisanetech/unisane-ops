@@ -56,26 +56,73 @@ function unwrapDefault(input: unknown): unknown {
 
 function normalizeConfig(namespace: Record<string, unknown>): UnisaneOpsConfig {
   if ('ops' in namespace && namespace.ops !== undefined) {
-    return unisaneOpsConfigSchema.parse(namespace.ops);
+    return parseCurrentOpsConfig(namespace.ops);
   }
   const unwrapped = unwrapDefault(namespace);
   if (
     typeof unwrapped === 'object' &&
     unwrapped !== null &&
     'ops' in unwrapped &&
-    'schemaVersion' in unwrapped &&
-    !('project' in unwrapped)
+    !('project' in unwrapped) &&
+    !('schemaVersion' in unwrapped) &&
+    (unwrapped as Record<string, unknown>).ops !== undefined
   ) {
-    return unisaneOpsConfigSchema.parse((unwrapped as Record<string, unknown>).ops);
+    return parseCurrentOpsConfig((unwrapped as Record<string, unknown>).ops);
   }
-  const standalone = unisaneProjectConfigSchema.parse(unwrapped);
+  const standalone = parseCurrentProjectConfig(unwrapped);
   return unisaneOpsConfigSchema.parse({
     schemaVersion: standalone.schemaVersion,
     project: standalone.project,
     environments: standalone.environments,
     connections: standalone.ops.connections,
     targets: standalone.ops.targets,
+    capabilities: standalone.ops.capabilities,
   });
+}
+
+function isRetiredGrowthConfig(input: unknown): boolean {
+  if (typeof input !== 'object' || input === null) return false;
+  const record = input as Record<string, unknown>;
+  if ('marketing' in record || 'googleTagManager' in record || 'gtm' in record) return true;
+  if (
+    record.version === 1 &&
+    typeof record.platformId === 'string' &&
+    'providers' in record &&
+    'environments' in record &&
+    !('schemaVersion' in record)
+  ) {
+    return true;
+  }
+  const capabilities =
+    typeof record.capabilities === 'object' && record.capabilities !== null
+      ? (record.capabilities as Record<string, unknown>)
+      : null;
+  return capabilities !== null && 'growth' in capabilities;
+}
+
+function retiredGrowthConfigError(): Error {
+  return new Error(
+    '[GROWTH_CONFIG_SCHEMA_RETIRED] This project uses a retired Growth configuration. Run the versioned Growth config migrator before loading it.',
+  );
+}
+
+function parseCurrentOpsConfig(input: unknown): UnisaneOpsConfig {
+  const result = unisaneOpsConfigSchema.safeParse(input);
+  if (result.success) return result.data;
+  if (isRetiredGrowthConfig(input)) throw retiredGrowthConfigError();
+  throw result.error;
+}
+
+function parseCurrentProjectConfig(
+  input: unknown,
+): ReturnType<typeof unisaneProjectConfigSchema.parse> {
+  const result = unisaneProjectConfigSchema.safeParse(input);
+  if (result.success) return result.data;
+  if (isRetiredGrowthConfig(input)) throw retiredGrowthConfigError();
+  const record =
+    typeof input === 'object' && input !== null ? (input as Record<string, unknown>) : null;
+  if (record?.ops && isRetiredGrowthConfig(record.ops)) throw retiredGrowthConfigError();
+  throw result.error;
 }
 
 export async function loadUnisaneOpsConfig(cwd: string): Promise<LoadedUnisaneOpsConfig> {

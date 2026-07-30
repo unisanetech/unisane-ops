@@ -32,15 +32,17 @@ export async function buildGoogleApisInventory(
   if (!projectId) {
     throw new Error('[GOOGLE_PROJECT_REQUIRED] Set GOOGLE_CLOUD_PROJECT or pass --project.');
   }
-  const accessToken = await googleProviderAccessToken(options, GOOGLE_CONTROL_PLANE_SCOPE);
+  const accessToken = await googleProviderAccessToken(
+    options,
+    'project-administration',
+    GOOGLE_CONTROL_PLANE_SCOPE,
+  );
   const providerFetch = googleProviderFetchFromOptions(options, deps?.fetch);
   const context = resolveControlPlaneProviderContext({
     cwd: options.cwd,
-    appId: options.app,
     provider: 'google',
-    environment: options.env,
-    configPath: options.config,
-    profile: options.profile,
+    environment: options.environment,
+    profile: options.connection,
   });
   const cwd = context.cwd;
   const desiredApis = resolveGoogleRequiredApis(options.api);

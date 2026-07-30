@@ -5,7 +5,7 @@ import { keywordCandidateFileSchema, keywordSeedFileSchema } from '@unisane/grow
 import { keywordMetricFileSchema, type KeywordMetricFile } from '@unisane/growth/contracts';
 import type { GoogleAdsKeywordPlannerCredentials } from './config.js';
 import { fetchGoogleAdsKeywordIdeas } from './keyword-ideas.js';
-import type { FetchLike } from './oauth.js';
+import type { FetchLike } from './transport.js';
 
 const GOOGLE_ADS_KEYWORD_SEED_BATCH_SIZE = 20;
 
@@ -14,7 +14,7 @@ export type FetchGoogleAdsKeywordMetricsFileOptions = {
   platformId: string;
   output: string;
   credentials: GoogleAdsKeywordPlannerCredentials;
-  accessToken?: string;
+  accessToken: string;
   candidates?: string;
   seedFile?: string;
   keywords?: string[];

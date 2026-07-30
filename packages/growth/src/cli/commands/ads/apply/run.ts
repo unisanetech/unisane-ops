@@ -2,53 +2,91 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { log } from '../../../log.js';
 import {
-  loadMarketingConfig,
   MARKETING_GOOGLE_ADS_SCOPE,
   marketingAdsPlanArtifactSchema,
   writeMarketingAdsLiveApplyReceipt,
   writeMarketingAdsApplyPreview,
-  type MarketingConfig,
+  type MarketingExecutionContext,
   type MarketingAdsPlanProvider,
 } from '@unisane/growth/marketing';
 import {
   executeGoogleAdsLiveOperation,
   executeMetaAdsLiveOperation,
 } from '../../../provider-adapters.js';
-import { resolveMarketingGoogleAccessToken } from '../../marketing/auth/google.js';
-import { resolveMarketingMetaAccessToken } from '../../marketing/auth/meta.js';
 import type { AdsCliOptions } from '../options.js';
 import { printAdsApplyResult, printAdsLiveApplyResult } from '../output/apply.js';
+import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
+import { resolveGrowthMetaConnectionToken } from '../../../connections/meta.js';
+import {
+  loadGrowthProjectContext,
+  loadMarketingExecutionContext,
+  resolveGrowthResource,
+} from '../../../project-context.js';
 
 async function resolveAdsLiveEnv(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: AdsCliOptions,
   providers: Set<MarketingAdsPlanProvider>,
-): Promise<Record<string, string | undefined>> {
+): Promise<{
+  env: Record<string, string | undefined>;
+  providerCredentials: Parameters<
+    typeof writeMarketingAdsLiveApplyReceipt
+  >[1]['providerCredentials'];
+}> {
   const env = { ...process.env };
-  const googleProvider = config.providers.googleAds;
-  if (
-    providers.has('googleAds') &&
-    googleProvider.accessTokenEnv &&
-    !env[googleProvider.accessTokenEnv]?.trim()
-  ) {
-    env[googleProvider.accessTokenEnv] = await resolveMarketingGoogleAccessToken({
-      accessTokenEnv: googleProvider.accessTokenEnv,
-      authProfile: options.authProfile,
-      requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
-    });
-  }
-  const metaProvider = config.providers.metaAds;
-  if (
-    providers.has('metaAds') &&
-    metaProvider.accessTokenEnv &&
-    !env[metaProvider.accessTokenEnv]?.trim()
-  ) {
-    env[metaProvider.accessTokenEnv] = await resolveMarketingMetaAccessToken({
-      accessTokenEnv: metaProvider.accessTokenEnv,
-      authProfile: options.metaAuthProfile,
-    });
-  }
-  return env;
+  const google = providers.has('googleAds')
+    ? {
+        resource: resolveGrowthResource({
+          context: await loadGrowthProjectContext(),
+          environment: options.environment,
+          provider: 'google',
+          service: 'ads',
+          resourceType: 'customer',
+        }),
+        credentials: await resolveGrowthGoogleConnectionCredentials({
+          service: 'ads',
+          connection: options.connection,
+          environment: options.environment,
+          requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
+        }),
+      }
+    : undefined;
+  const meta = providers.has('metaAds')
+    ? {
+        resource: resolveGrowthResource({
+          context: await loadGrowthProjectContext(),
+          environment: options.environment,
+          provider: 'meta',
+          service: 'ads',
+          resourceType: 'ad-account',
+        }),
+        accessToken: await resolveGrowthMetaConnectionToken({
+          connection: options.connection,
+          environment: options.environment,
+        }),
+      }
+    : undefined;
+  return {
+    env,
+    providerCredentials: {
+      ...(google
+        ? {
+            googleAds: {
+              accountId: google.resource.resourceId,
+              ...google.credentials,
+            },
+          }
+        : {}),
+      ...(meta
+        ? {
+            metaAds: {
+              accountId: meta.resource.resourceId,
+              accessToken: meta.accessToken,
+            },
+          }
+        : {}),
+    },
+  };
 }
 
 function adsPlanProviders(options: AdsCliOptions): Set<MarketingAdsPlanProvider> {
@@ -64,12 +102,13 @@ export async function adsApply(options: AdsCliOptions): Promise<number> {
     if (!options.plan) {
       throw new Error('[ADS_APPLY_PLAN_REQUIRED] ads apply requires --plan <path>.');
     }
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     if (options.yes && options.receipt) {
-      const env = await resolveAdsLiveEnv(loaded.config, options, adsPlanProviders(options));
+      const providerContext = await resolveAdsLiveEnv(
+        loaded.config,
+        options,
+        adsPlanProviders(options),
+      );
       const result = await writeMarketingAdsLiveApplyReceipt(loaded.config, {
         cwd: options.cwd,
         planPath: options.plan,
@@ -85,7 +124,8 @@ export async function adsApply(options: AdsCliOptions): Promise<number> {
           metaAds: executeMetaAdsLiveOperation,
         },
         out: options.out,
-        env,
+        env: providerContext.env,
+        providerCredentials: providerContext.providerCredentials,
         apiVersion: options.apiVersion,
       });
       printAdsLiveApplyResult(result, { json: options.json });

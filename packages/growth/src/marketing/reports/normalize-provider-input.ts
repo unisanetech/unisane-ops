@@ -1,4 +1,4 @@
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingProviderReportArtifactInputSchema,
   marketingProviderReportArtifactSchema,
@@ -21,7 +21,7 @@ export type MarketingProviderReportInputFormat =
   | 'search-console';
 
 export type NormalizeMarketingProviderReportInputOptions = {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   provider: string;
   value: unknown;
   inputFormat?: MarketingProviderReportInputFormat;

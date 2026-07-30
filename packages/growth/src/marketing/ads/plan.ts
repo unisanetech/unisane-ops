@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingAdsPlanArtifactSchema,
   marketingAdsPlanProviderSchema,
@@ -47,7 +47,7 @@ function resolveOutputPath(
 }
 
 function enabledProviders(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   providerFilter: MarketingAdsPlanProvider | 'all',
 ): MarketingAdsPlanProvider[] {
   const providers: MarketingAdsPlanProvider[] = ['googleAds', 'metaAds'];
@@ -68,7 +68,7 @@ function nextWorkflowStep(artifact: MarketingAdsPlanArtifact): string {
 }
 
 export function buildMarketingAdsPlan(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsPlanOptions = {},
 ): MarketingAdsPlanArtifact {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -143,7 +143,7 @@ export function buildMarketingAdsPlan(
 }
 
 export function writeMarketingAdsPlan(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsPlanOptions = {},
 ): MarketingAdsPlanResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());

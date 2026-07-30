@@ -3,19 +3,9 @@ import type {
   MarketingAdsLiveProviderExecutionOptions,
   MarketingAdsLiveProviderExecutionResult,
   MarketingAdsPlanCandidate,
-  MarketingConfig,
   MarketingGoogleAdsSearchBuildout,
 } from '@unisane/growth/contracts';
 import { asArray, asRecord } from './transport-utils.js';
-
-function envValue(
-  env: Record<string, string | undefined>,
-  name: string | undefined,
-): string | undefined {
-  if (!name) return undefined;
-  const value = env[name]?.trim();
-  return value ? value : undefined;
-}
 
 function normalizeGoogleAdsCustomerId(value: string): string {
   return value.replaceAll('-', '');
@@ -458,20 +448,19 @@ async function createGoogleAdsCampaignAssets(args: {
 }
 
 async function pauseGoogleAdsCampaign(args: {
-  config: MarketingConfig;
   campaignId: string;
+  credentials?: MarketingAdsLiveProviderExecutionOptions['credentials'];
   env: Record<string, string | undefined>;
   fetcher: FetchLike;
   apiVersion?: string;
 }): Promise<{ providerOperationId?: string; message: string }> {
-  const provider = args.config.providers.googleAds;
-  const customerId = envValue(args.env, provider.accountIdEnv);
-  const loginCustomerId = envValue(args.env, provider.loginCustomerIdEnv);
-  const developerToken = envValue(args.env, provider.developerTokenEnv);
-  const accessToken = envValue(args.env, provider.accessTokenEnv);
+  const customerId = args.credentials?.accountId;
+  const loginCustomerId = args.credentials?.loginCustomerId;
+  const developerToken = args.credentials?.developerToken;
+  const accessToken = args.credentials?.accessToken;
   if (!customerId || !developerToken || !accessToken) {
     throw new Error(
-      '[ADS_LIVE_GOOGLE_ENV_MISSING] Google Ads live pause requires customer id, developer token, and access token env refs.',
+      '[ADS_LIVE_GOOGLE_CONNECTION_INCOMPLETE] Google Ads live pause requires a selected customer, OAuth access, and approved developer access.',
     );
   }
   const apiVersion = args.apiVersion ?? 'v24';
@@ -517,20 +506,19 @@ async function pauseGoogleAdsCampaign(args: {
 }
 
 async function createPausedGoogleAdsSearchCampaign(args: {
-  config: MarketingConfig;
   candidate: MarketingAdsPlanCandidate;
+  credentials?: MarketingAdsLiveProviderExecutionOptions['credentials'];
   env: Record<string, string | undefined>;
   fetcher: FetchLike;
   apiVersion?: string;
 }): Promise<{ providerOperationId?: string; message: string }> {
-  const provider = args.config.providers.googleAds;
-  const customerId = envValue(args.env, provider.accountIdEnv);
-  const loginCustomerId = envValue(args.env, provider.loginCustomerIdEnv);
-  const developerToken = envValue(args.env, provider.developerTokenEnv);
-  const accessToken = envValue(args.env, provider.accessTokenEnv);
+  const customerId = args.credentials?.accountId;
+  const loginCustomerId = args.credentials?.loginCustomerId;
+  const developerToken = args.credentials?.developerToken;
+  const accessToken = args.credentials?.accessToken;
   if (!customerId || !developerToken || !accessToken) {
     throw new Error(
-      '[ADS_LIVE_GOOGLE_ENV_MISSING] Google Ads live create requires customer id, developer token, and access token env refs.',
+      '[ADS_LIVE_GOOGLE_CONNECTION_INCOMPLETE] Google Ads live create requires a selected customer, OAuth access, and approved developer access.',
     );
   }
   const apiVersion = args.apiVersion ?? 'v24';
@@ -706,8 +694,8 @@ export async function executeGoogleAdsLiveOperation(
       );
     }
     return createPausedGoogleAdsSearchCampaign({
-      config: options.config,
       candidate: options.candidate,
+      credentials: options.credentials,
       env: options.env,
       fetcher: options.fetch,
       apiVersion: options.apiVersion,
@@ -725,8 +713,8 @@ export async function executeGoogleAdsLiveOperation(
     );
   }
   return pauseGoogleAdsCampaign({
-    config: options.config,
     campaignId,
+    credentials: options.credentials,
     env: options.env,
     fetcher: options.fetch,
     apiVersion: options.apiVersion,

@@ -72,14 +72,8 @@ export function registerSeoKeywordCommands(seo: Command): void {
     )
     .option('--exclude-terms <terms>', 'Comma-separated terms; drop ideas containing any term')
     .option('--page-size <count>', 'Google Ads result page size', '1000')
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing/google auth profile; defaults to --platform when available',
-    )
-    .option(
-      '--access-token-env <name>',
-      'Environment variable containing a Google Ads access token',
-    )
+    .option('--connection <id>', 'Canonical Google connection id')
+    .option('--environment <name>', 'Ops environment name')
     .option('--dry-run', 'Preview Google Ads import without writing')
     .action(async (options: SeoKeywordFetchGoogleAdsCliOptions) => {
       await runSeoCommand(options, seoKeywordsFetchGoogleAds);

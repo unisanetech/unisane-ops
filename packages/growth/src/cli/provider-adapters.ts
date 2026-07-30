@@ -1,8 +1,6 @@
 import type {
   MarketingAdsAssetProviderUploader,
   MarketingAdsLiveProviderExecutor,
-  MarketingGoogleDiscoveryDriver,
-  MarketingMetaDiscoveryDriver,
   MarketingProviderApiPullDriver,
 } from '../contracts.js';
 import {
@@ -27,12 +25,6 @@ export const executeMetaAdsLiveOperation: MarketingAdsLiveProviderExecutor = (in
 
 export const uploadMetaAdsAsset: MarketingAdsAssetProviderUploader = (input) =>
   executeGrowthProviderCommand('meta.marketing.upload-asset', input);
-
-export const discoverMarketingMetaAccounts: MarketingMetaDiscoveryDriver = (config, options) =>
-  executeGrowthProviderCommand('meta.marketing.discover', { config, options });
-
-export const discoverMarketingGoogleAccounts: MarketingGoogleDiscoveryDriver = (config, options) =>
-  executeGrowthProviderCommand('google.marketing.discover', { config, options });
 
 export type SearchConsoleDimension =
   | 'query'

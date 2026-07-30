@@ -3,18 +3,8 @@ import type {
   MarketingAdsLiveProviderExecutionOptions,
   MarketingAdsLiveProviderExecutionResult,
   MarketingAdsPlanCandidate,
-  MarketingConfig,
   MarketingMetaAdsBuildout,
 } from '@unisane/growth/contracts';
-
-function envValue(
-  env: Record<string, string | undefined>,
-  name: string | undefined,
-): string | undefined {
-  if (!name) return undefined;
-  const value = env[name]?.trim();
-  return value ? value : undefined;
-}
 
 function absoluteFinalUrl(origin: string | undefined, value: string): string {
   if (/^https?:\/\//i.test(value)) return value;
@@ -66,23 +56,15 @@ async function readProviderResponse(
 }
 
 async function pauseMetaCampaign(args: {
-  config: MarketingConfig;
   campaignId: string;
-  env: Record<string, string | undefined>;
+  accessToken: string;
   fetcher: FetchLike;
   apiVersion?: string;
 }): Promise<{ providerOperationId?: string; message: string }> {
-  const provider = args.config.providers.metaAds;
-  const accessToken = envValue(args.env, provider.accessTokenEnv);
-  if (!accessToken) {
-    throw new Error(
-      '[ADS_LIVE_META_ENV_MISSING] Meta live pause requires the configured access token env ref.',
-    );
-  }
   const apiVersion = args.apiVersion ?? 'v23.0';
   const body = new URLSearchParams();
   body.set('status', 'PAUSED');
-  body.set('access_token', accessToken);
+  body.set('access_token', args.accessToken);
   const response = await args.fetcher(
     `https://graph.facebook.com/${apiVersion}/${args.campaignId}`,
     {
@@ -100,14 +82,6 @@ async function pauseMetaCampaign(args: {
     providerOperationId: args.campaignId,
     message: 'Meta Ads campaign pause mutation sent.',
   };
-}
-
-function metaEnvValue(args: {
-  env: Record<string, string | undefined>;
-  configuredName?: string;
-  fallbackName?: string;
-}): string | undefined {
-  return envValue(args.env, args.configuredName) ?? envValue(args.env, args.fallbackName);
 }
 
 async function mutateMetaAds(args: {
@@ -213,39 +187,21 @@ function assertReviewedMetaBuildout(buildout: MarketingMetaAdsBuildout): void {
 }
 
 async function createPausedMetaAdsCampaign(args: {
-  config: MarketingConfig;
   candidate: MarketingAdsPlanCandidate;
-  env: Record<string, string | undefined>;
+  credentials: NonNullable<MarketingAdsLiveProviderExecutionOptions['credentials']>;
   fetcher: FetchLike;
   apiVersion?: string;
 }): Promise<{ providerOperationId?: string; message: string }> {
-  const provider = args.config.providers.metaAds;
-  const accountId = envValue(args.env, provider.accountIdEnv);
-  const accessToken = envValue(args.env, provider.accessTokenEnv);
-  const pageId = metaEnvValue({
-    env: args.env,
-    configuredName: provider.pageIdEnv,
-    fallbackName: 'META_PAGE_ID',
-  });
-  const instagramActorId = metaEnvValue({
-    env: args.env,
-    configuredName: provider.instagramActorIdEnv,
-    fallbackName: 'META_INSTAGRAM_ACTOR_ID',
-  });
-  const pixelId = metaEnvValue({
-    env: args.env,
-    configuredName: provider.pixelIdEnv,
-    fallbackName: 'META_PIXEL_ID',
-  });
-  const datasetId = metaEnvValue({
-    env: args.env,
-    configuredName: provider.datasetIdEnv,
-    fallbackName: 'META_DATASET_ID',
-  });
+  const accountId = args.credentials.accountId;
+  const accessToken = args.credentials.accessToken;
+  const pageId = args.credentials.pageId;
+  const instagramActorId = args.credentials.instagramActorId;
+  const pixelId = args.credentials.pixelId;
+  const datasetId = args.credentials.datasetId;
   const buildout = args.candidate.metaAdsBuildout;
   if (!accountId || !accessToken || !pageId || (!pixelId && !datasetId)) {
     throw new Error(
-      '[ADS_LIVE_META_ENV_MISSING] Meta live create requires account id, access token, page id, and pixel or dataset env refs.',
+      '[ADS_LIVE_META_CONNECTION_INCOMPLETE] Meta live create requires selected account, page, and pixel or dataset resources plus a canonical connection credential.',
     );
   }
   if (!buildout) {
@@ -357,9 +313,8 @@ export async function executeMetaAdsLiveOperation(
       );
     }
     return createPausedMetaAdsCampaign({
-      config: options.config,
       candidate: options.candidate,
-      env: options.env,
+      credentials: options.credentials ?? {},
       fetcher: options.fetch,
       apiVersion: options.apiVersion,
     });
@@ -375,10 +330,15 @@ export async function executeMetaAdsLiveOperation(
       '[ADS_LIVE_META_CAMPAIGN_ID_REQUIRED] Meta Ads pause requires a reviewed provider campaign id.',
     );
   }
+  const accessToken = options.credentials?.accessToken;
+  if (!accessToken) {
+    throw new Error(
+      '[ADS_LIVE_META_CONNECTION_INCOMPLETE] Meta Ads pause requires a canonical connection credential.',
+    );
+  }
   return pauseMetaCampaign({
-    config: options.config,
     campaignId,
-    env: options.env,
+    accessToken,
     fetcher: options.fetch,
     apiVersion: options.apiVersion,
   });

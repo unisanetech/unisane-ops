@@ -3,7 +3,6 @@ import {
   archiveMarketingAdsAsset,
   buildMarketingAdsAssetReport,
   importMarketingAdsAsset,
-  loadMarketingConfig,
   MARKETING_GOOGLE_ADS_SCOPE,
   marketingAdsAssetTypeSchema,
   marketingAdsPlanProviderSchema,
@@ -11,7 +10,7 @@ import {
   writeMarketingAdsAssetUploadReceipt,
   writeMarketingAdsAssetUploadPlan,
   writeMarketingGoogleAdsCampaignAssetLinkReceipt,
-  type MarketingConfig,
+  type MarketingExecutionContext,
   type MarketingAdsPlanProvider,
 } from '@unisane/growth/marketing';
 import type { AdsCliOptions } from '../options.js';
@@ -22,9 +21,14 @@ import {
   printAdsAssetUploadResult,
   printAdsAssetUploadPlanResult,
 } from '../output/assets.js';
-import { resolveMarketingGoogleAccessToken } from '../../marketing/auth/google.js';
-import { resolveMarketingMetaAccessToken } from '../../marketing/auth/meta.js';
 import { uploadMetaAdsAsset } from '../../../provider-adapters.js';
+import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
+import { resolveGrowthMetaConnectionToken } from '../../../connections/meta.js';
+import {
+  loadGrowthProjectContext,
+  loadMarketingExecutionContext,
+  resolveGrowthResource,
+} from '../../../project-context.js';
 
 type AdsAssetMode =
   | 'import'
@@ -71,45 +75,76 @@ function parseGoogleCampaignImageFieldType(
 }
 
 async function resolveAdsAssetLiveEnv(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: AdsCliOptions,
   providers: Set<MarketingAdsPlanProvider>,
-): Promise<Record<string, string | undefined>> {
+): Promise<{
+  env: Record<string, string | undefined>;
+  providerCredentials: NonNullable<
+    Parameters<typeof writeMarketingAdsAssetUploadReceipt>[1]['providerCredentials']
+  >;
+}> {
   const env = { ...process.env };
-  const googleProvider = config.providers.googleAds;
-  if (
-    providers.has('googleAds') &&
-    googleProvider.accessTokenEnv &&
-    !env[googleProvider.accessTokenEnv]?.trim()
-  ) {
-    env[googleProvider.accessTokenEnv] = await resolveMarketingGoogleAccessToken({
-      accessTokenEnv: googleProvider.accessTokenEnv,
-      authProfile: options.authProfile,
-      requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
-    });
-  }
-  const metaProvider = config.providers.metaAds;
-  if (
-    providers.has('metaAds') &&
-    metaProvider.accessTokenEnv &&
-    !env[metaProvider.accessTokenEnv]?.trim()
-  ) {
-    env[metaProvider.accessTokenEnv] = await resolveMarketingMetaAccessToken({
-      accessTokenEnv: metaProvider.accessTokenEnv,
-      authProfile: options.metaAuthProfile,
-    });
-  }
-  return env;
+  const google = providers.has('googleAds')
+    ? {
+        resource: resolveGrowthResource({
+          context: await loadGrowthProjectContext(),
+          environment: options.environment,
+          provider: 'google',
+          service: 'ads',
+          resourceType: 'customer',
+        }),
+        credentials: await resolveGrowthGoogleConnectionCredentials({
+          service: 'ads',
+          connection: options.connection,
+          environment: options.environment,
+          requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
+        }),
+      }
+    : undefined;
+  const meta = providers.has('metaAds')
+    ? {
+        resource: resolveGrowthResource({
+          context: await loadGrowthProjectContext(),
+          environment: options.environment,
+          provider: 'meta',
+          service: 'ads',
+          resourceType: 'ad-account',
+        }),
+        accessToken: await resolveGrowthMetaConnectionToken({
+          connection: options.connection,
+          environment: options.environment,
+        }),
+      }
+    : undefined;
+  return {
+    env,
+    providerCredentials: {
+      ...(google
+        ? {
+            googleAds: {
+              accountId: google.resource.resourceId,
+              ...google.credentials,
+            },
+          }
+        : {}),
+      ...(meta
+        ? {
+            metaAds: {
+              accountId: meta.resource.resourceId,
+              accessToken: meta.accessToken,
+            },
+          }
+        : {}),
+    },
+  };
 }
 
 export async function adsAssets(
   options: AdsCliOptions & { assetMode: AdsAssetMode },
 ): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     if (options.assetMode === 'import') {
       if (!options.file) throw new Error('[ADS_ASSET_FILE_REQUIRED] Pass --file <path>.');
       if (!options.assetId) {
@@ -189,7 +224,7 @@ export async function adsAssets(
         providers === 'all'
           ? new Set<MarketingAdsPlanProvider>(['googleAds', 'metaAds'])
           : new Set([providers]);
-      const env = options.yes
+      const providerContext = options.yes
         ? await resolveAdsAssetLiveEnv(loaded.config, options, selectedProviders)
         : undefined;
       const result = await writeMarketingAdsAssetUploadReceipt(loaded.config, {
@@ -207,7 +242,8 @@ export async function adsAssets(
           metaAds: uploadMetaAdsAsset,
         },
         out: options.out,
-        env,
+        env: providerContext?.env,
+        providerCredentials: providerContext?.providerCredentials,
         apiVersion: options.apiVersion,
       });
       printAdsAssetUploadResult(result, { json: options.json });
@@ -222,9 +258,9 @@ export async function adsAssets(
       }
       const assetIds = parseCsv(options.assetId);
       if (!assetIds) throw new Error('[ADS_ASSET_ID_REQUIRED] Pass --asset-id <id[,id]>.');
-      const env = options.yes
+      const providerContext = options.yes
         ? await resolveAdsAssetLiveEnv(loaded.config, options, new Set(['googleAds']))
-        : { ...process.env };
+        : undefined;
       const result = await writeMarketingGoogleAdsCampaignAssetLinkReceipt(loaded.config, {
         cwd: options.cwd,
         campaignResourceName: options.campaignResource,
@@ -232,7 +268,8 @@ export async function adsAssets(
         fieldType: parseGoogleCampaignImageFieldType(options.fieldType),
         yes: options.yes,
         out: options.out,
-        env,
+        env: providerContext?.env,
+        credentials: providerContext?.providerCredentials.googleAds,
         apiVersion: options.apiVersion,
       });
       printJson(result.receipt);

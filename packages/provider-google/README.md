@@ -1,29 +1,28 @@
 # @unisane/provider-google
 
-Google provider-family connection and control-plane implementation for Unisane Ops.
+Provider-owned Google connection and transport implementation for Unisane Ops.
 
-The package owns one reusable Google OAuth profile/token lifecycle, Google Cloud project
-and API inventory/plan/apply, setup/readiness reporting, and read-only GTM, GA4, Search
-Console, and Google Ads discovery clients. The `@unisane/provider-google/gtm` subpath
-also owns GTM API transport, remote snapshot translation, controlled workspace mutation,
-preview, version creation, publish, and rollback execution behind Growth-owned contracts.
-The `@unisane/provider-google/seo` subpath owns Google OAuth refresh, GA4 reporting,
-Search Console queries, Google Ads Keyword Planner execution, and translation into
-Growth-owned SEO contracts.
-The `@unisane/provider-google/marketing` subpath owns read-only Google Ads reporting,
-GA4 Data API pagination, Search Console Search Analytics report transport, and Google Ads
-live campaign pause or paused Search-campaign creation behind Growth-owned provider
-contracts. Growth retains all plan, approval, lock, blocker, and receipt policy.
+## Connection Contract
 
-It intentionally does not own Growth strategy, SEO recommendations, campaign decisions,
-GTM manifests, validation, policy, desired-state planning, or UI presentation. Those
-remain with Growth or their composition/presentation surface.
+`unisane connect google` creates one named connection carrying incremental grants for
+Search Console, Analytics, Tag Manager, Ads, and project administration. This package
+owns OAuth, secure local credentials, refresh, revocation state, discovery, explicit
+resource selection, and connection readiness.
 
-The package owns the sealed expert command pack and exact handler:
+Zero discovered resources produces a missing finding. One is selected automatically.
+Multiple resources remain ambiguous until the user selects one. Partial permissions,
+expired access, revoked access, and unavailable Ads developer access remain explicit
+states; none silently falls back to another credential or resource.
+
+Growth calls Provider Google through the canonical host binding. The `./gtm`, `./seo`,
+and `./marketing` subpaths own provider transport and normalization while Growth retains
+desired state, strategy, policy, plans, approvals, locks, and receipts.
+
+The narrow expert lane remains:
 
 ```bash
 unisane provider google ...
 ```
 
-Growth owns `unisane growth gtm ...` presentation and calls this provider through the
-canonical host binding. No Devtools Google or GTM command roots remain.
+It is for provider-specific inventory and transport diagnostics, not a second
+onboarding or credential path.

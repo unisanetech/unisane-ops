@@ -7,7 +7,15 @@
     "target": "ES2022",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@unisane/growth": ["src/index.ts"],
+      "@unisane/growth/contracts": ["src/contracts.ts"],
+      "@unisane/growth/gtm": ["src/gtm/index.ts"],
+      "@unisane/growth/marketing": ["src/marketing/index.ts"],
+      "@unisane/growth/seo": ["src/seo/index.ts"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

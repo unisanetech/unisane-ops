@@ -11,69 +11,23 @@ import {
   marketingAlertAcknowledge,
   marketingAudit,
   marketingConversionPull,
-  marketingDoctor,
   marketingExperimentDecide,
-  loginMarketingGoogleAuthCommand,
-  logoutMarketingGoogleAuthCommand,
-  logoutMarketingMetaAuthCommand,
   marketingPull,
   marketingPullApi,
-  marketingProofSetup,
-  marketingProofStatus,
   marketingRecommend,
   marketingRecommendDecision,
   marketingResearchStatus,
   marketingReport,
   marketingScheduleReporting,
-  marketingSetupDiscoverGoogle,
-  marketingSetupDiscoverMeta,
-  marketingSetupGuide,
-  marketingSetupPrelive,
-  marketingSetupStatus,
   marketingStrategyPull,
-  marketingStatus,
   marketingValidate,
-  saveMarketingMetaAuthCommand,
-  statusMarketingGoogleAuthCommand,
-  statusMarketingMetaAuthCommand,
-  tokenMarketingGoogleAuthCommand,
-  tokenMarketingMetaAuthCommand,
-  type MarketingGoogleAuthCliOptions,
-  type MarketingMetaAuthCliOptions,
   type MarketingCliOptions,
 } from './index.js';
-import {
-  withDefaultMarketingGoogleAuthProfile,
-  withDefaultMarketingMetaAuthProfile,
-} from './profile-defaults.js';
 
 function addSharedOptions(command: Command): Command {
   return command
     .option('--cwd <path>', 'Platform app directory')
-    .option('--config <path>', 'Path to marketing config')
     .option('--source-root <path...>', 'Override source roots for tracking audit')
-    .option('--json', 'Emit machine-readable JSON output');
-}
-
-function addAuthSharedOptions(
-  command: Command,
-  options: { profileDescription?: string; authHomeDescription?: string } = {},
-): Command {
-  return command
-    .option(
-      '--profile <name>',
-      options.profileDescription ?? 'Saved marketing Google auth profile name',
-    )
-    .option('--cwd <path>', 'Directory to load .env.local/.env from')
-    .option(
-      '--auth-home <path>',
-      options.authHomeDescription ?? 'Local marketing auth profile directory',
-    )
-    .option('--store <keychain|file>', 'Secret store backend')
-    .option(
-      '--allow-plaintext-store',
-      'Allow plaintext file secrets for controlled CI/test environments',
-    )
     .option('--json', 'Emit machine-readable JSON output');
 }
 
@@ -94,9 +48,6 @@ export function registerMarketingCommands(program: Command): void {
   const marketing = program
     .command('marketing')
     .description('Marketing control-plane health, sync, and reporting commands');
-  const auth = marketing
-    .command('auth')
-    .description('Manage local Marketing Google OAuth profiles');
   const consoleCommand = marketing
     .command('console')
     .description('Local analytical Marketing Console dashboard');
@@ -107,7 +58,6 @@ export function registerMarketingCommands(program: Command): void {
     .option('--out <path>', 'Dashboard output directory')
     .option('--dry-run', 'Build console state without writing dashboard files')
     .option('--max-age-days <days>', 'Freshness threshold for dashboard status')
-    .option('--limits <path>', 'Local provider limits/scopes proof record')
     .action(async (options: MarketingConsoleCliOptions) => {
       await runMarketingCommand(options, marketingConsoleBuild);
     });
@@ -121,199 +71,8 @@ export function registerMarketingCommands(program: Command): void {
     .option('--host <host>', 'Local dashboard host')
     .option('--port <port>', 'Local dashboard port')
     .option('--max-age-days <days>', 'Freshness threshold for dashboard status')
-    .option('--limits <path>', 'Local provider limits/scopes proof record')
     .action(async (options: MarketingConsoleCliOptions) => {
       await runMarketingCommand(options, marketingConsoleServe);
-    });
-
-  addAuthSharedOptions(
-    auth.command('login').description('Run local OAuth and save a Marketing Google auth profile'),
-  )
-    .option('--client-id <id>', 'Google OAuth client id; defaults to GOOGLE_OAUTH_CLIENT_ID')
-    .option('--client-secret-env <name>', 'Environment variable containing the OAuth client secret')
-    .option('--scopes <scopes>', 'Comma or space separated OAuth scopes')
-    .option('--port <port>', 'Loopback callback port, or 0 for a random available port')
-    .option('--timeout-ms <ms>', 'OAuth callback wait timeout')
-    .action(async (options: MarketingGoogleAuthCliOptions) => {
-      await runMarketingCommand(options, async (resolved) =>
-        loginMarketingGoogleAuthCommand(await withDefaultMarketingGoogleAuthProfile(resolved)),
-      );
-    });
-
-  addAuthSharedOptions(
-    auth
-      .command('status')
-      .description('Show saved Marketing Google auth profile status without secrets'),
-  ).action(async (options: MarketingGoogleAuthCliOptions) => {
-    await runMarketingCommand(options, async (resolved) =>
-      statusMarketingGoogleAuthCommand(await withDefaultMarketingGoogleAuthProfile(resolved)),
-    );
-  });
-
-  addAuthSharedOptions(
-    auth.command('token').description('Mint an access token from a saved Marketing Google profile'),
-  )
-    .option('--required-scope <scope>', 'Required OAuth scope to verify')
-    .option('--print', 'Print the raw access token')
-    .action(async (options: MarketingGoogleAuthCliOptions) => {
-      await runMarketingCommand(options, async (resolved) =>
-        tokenMarketingGoogleAuthCommand(await withDefaultMarketingGoogleAuthProfile(resolved)),
-      );
-    });
-
-  addAuthSharedOptions(
-    auth.command('logout').description('Delete a saved Marketing Google auth profile'),
-  ).action(async (options: MarketingGoogleAuthCliOptions) => {
-    await runMarketingCommand(options, async (resolved) =>
-      logoutMarketingGoogleAuthCommand(await withDefaultMarketingGoogleAuthProfile(resolved)),
-    );
-  });
-
-  const metaAuth = auth.command('meta').description('Manage local Marketing Meta token profiles');
-  addAuthSharedOptions(
-    metaAuth.command('save').description('Save a Marketing Meta access token from an env var'),
-    {
-      profileDescription: 'Saved marketing Meta token profile name',
-      authHomeDescription: 'Local marketing Meta token profile directory',
-    },
-  )
-    .option('--access-token-env <name>', 'Environment variable containing the Meta access token')
-    .option('--scopes <scopes>', 'Comma or space separated token scopes for local documentation')
-    .option('--expires-at <iso>', 'Optional token expiry timestamp for local readiness checks')
-    .action(async (options: MarketingMetaAuthCliOptions) => {
-      await runMarketingCommand(options, async (resolved) =>
-        saveMarketingMetaAuthCommand(await withDefaultMarketingMetaAuthProfile(resolved)),
-      );
-    });
-
-  addAuthSharedOptions(
-    metaAuth
-      .command('status')
-      .description('Show saved Marketing Meta token profile status without secrets'),
-    {
-      profileDescription: 'Saved marketing Meta token profile name',
-      authHomeDescription: 'Local marketing Meta token profile directory',
-    },
-  ).action(async (options: MarketingMetaAuthCliOptions) => {
-    await runMarketingCommand(options, async (resolved) =>
-      statusMarketingMetaAuthCommand(await withDefaultMarketingMetaAuthProfile(resolved)),
-    );
-  });
-
-  addAuthSharedOptions(
-    metaAuth
-      .command('token')
-      .description('Resolve a Marketing Meta access token from env or profile'),
-    {
-      profileDescription: 'Saved marketing Meta token profile name',
-      authHomeDescription: 'Local marketing Meta token profile directory',
-    },
-  )
-    .option('--print', 'Print the raw access token')
-    .action(async (options: MarketingMetaAuthCliOptions) => {
-      await runMarketingCommand(options, async (resolved) =>
-        tokenMarketingMetaAuthCommand(await withDefaultMarketingMetaAuthProfile(resolved)),
-      );
-    });
-
-  addAuthSharedOptions(
-    metaAuth.command('logout').description('Delete a saved Marketing Meta token profile'),
-    {
-      profileDescription: 'Saved marketing Meta token profile name',
-      authHomeDescription: 'Local marketing Meta token profile directory',
-    },
-  ).action(async (options: MarketingMetaAuthCliOptions) => {
-    await runMarketingCommand(options, async (resolved) =>
-      logoutMarketingMetaAuthCommand(await withDefaultMarketingMetaAuthProfile(resolved)),
-    );
-  });
-
-  addSharedOptions(
-    marketing.command('doctor').description('Inspect marketing control-plane readiness'),
-  )
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing Google auth profile; defaults to the app id when a marketing config is present',
-    )
-    .option(
-      '--meta-auth-profile <name>',
-      'Saved marketing Meta token profile; defaults to the app id when a marketing config is present',
-    )
-    .action(async (options: MarketingCliOptions) => {
-      await runMarketingCommand(options, marketingDoctor);
-    });
-
-  const setup = marketing.command('setup').description('Simplified marketing setup guidance');
-  addSharedOptions(setup.command('guide').description('Show the next few setup actions'))
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing Google auth profile; defaults to the app id when a marketing config is present',
-    )
-    .option(
-      '--meta-auth-profile <name>',
-      'Saved marketing Meta token profile; defaults to the app id when a marketing config is present',
-    )
-    .action(async (options: MarketingCliOptions) => {
-      await runMarketingCommand(options, marketingSetupGuide);
-    });
-  for (const command of [
-    setup.command('status').description('Show lifecycle setup status and the next safest step'),
-    setup.command('wizard').description('Alias for setup status with staged next-step guidance'),
-  ]) {
-    addSharedOptions(command)
-      .option(
-        '--auth-profile <name>',
-        'Saved marketing Google auth profile; defaults to the app id when a marketing config is present',
-      )
-      .option(
-        '--meta-auth-profile <name>',
-        'Saved marketing Meta token profile; defaults to the app id when a marketing config is present',
-      )
-      .action(async (options: MarketingCliOptions) => {
-        await runMarketingCommand(options, marketingSetupStatus);
-      });
-  }
-  addSharedOptions(
-    setup
-      .command('prelive')
-      .description('Run one local pre-live readiness check before real-account use'),
-  )
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing Google auth profile; defaults to the app id when a marketing config is present',
-    )
-    .option(
-      '--meta-auth-profile <name>',
-      'Saved marketing Meta token profile; defaults to the app id when a marketing config is present',
-    )
-    .action(async (options: MarketingCliOptions) => {
-      await runMarketingCommand(options, marketingSetupPrelive);
-    });
-  addSharedOptions(
-    setup
-      .command('discover-google')
-      .description('Discover accessible Google Ads, GA4, and Search Console accounts'),
-  )
-    .option('--auth-profile <name>', 'Saved marketing Google auth profile; defaults to the app id')
-    .option('--api-version <version>', 'Google Ads API version override')
-    .option('--out <path>', 'Write discovery artifact JSON')
-    .action(async (options: MarketingCliOptions) => {
-      await runMarketingCommand(options, marketingSetupDiscoverGoogle);
-    });
-  addSharedOptions(
-    setup.command('discover-meta').description('Discover accessible Meta ad accounts and pixels'),
-  )
-    .option('--api-version <version>', 'Meta Graph API version override')
-    .option('--account-id <id>', 'Meta ad account id to use for pixel discovery')
-    .option('--max-pages <count>', 'Maximum Graph API pages to read')
-    .option('--page-size <count>', 'Graph API page size')
-    .option(
-      '--meta-auth-profile <name>',
-      'Saved marketing Meta token profile; defaults to the app id',
-    )
-    .option('--out <path>', 'Write discovery artifact JSON')
-    .action(async (options: MarketingCliOptions) => {
-      await runMarketingCommand(options, marketingSetupDiscoverMeta);
     });
 
   addSharedOptions(
@@ -383,14 +142,7 @@ export function registerMarketingCommands(program: Command): void {
     .option('--account-id <id>', 'Provider account/property/site identifier for this pull')
     .option('--time-zone <zone>', 'Report window time zone')
     .option('--api-version <version>', 'Provider API version override')
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing Google auth profile for provider API access; defaults to the app id',
-    )
-    .option(
-      '--meta-auth-profile <name>',
-      'Saved marketing Meta token profile; defaults to the app id when no Meta access token env is set',
-    )
+    .option('--connection <id>', 'Canonical provider connection id')
     .option('--report <type>', 'Provider report family to pull')
     .option('--max-pages <count>', 'Maximum API pages/windows to pull for paginated providers')
     .option('--page-size <count>', 'Provider page size or row limit where supported')
@@ -410,67 +162,21 @@ export function registerMarketingCommands(program: Command): void {
       await runMarketingCommand(options, marketingReport);
     });
 
-  addSharedOptions(
-    marketing
-      .command('status')
-      .description('Show provider, analytics, conversion, and strategy freshness'),
-  )
-    .option('--max-age-days <days>', 'Freshness threshold for latest pulls')
-    .action(async (options: MarketingCliOptions) => {
-      await runMarketingCommand(options, marketingStatus);
-    });
-
   const schedule = marketing
     .command('schedule')
     .description('Scheduled reporting automation planning');
   addSharedOptions(
     schedule
       .command('reporting')
-      .description('Write proof-gated scheduled provider reporting commands'),
+      .description('Write evidence-gated scheduled provider reporting commands'),
   )
-    .option('--limits <path>', 'Local provider limits/scopes proof record')
     .option('--max-age-days <days>', 'Freshness threshold for proof evidence')
     .option('--window-days <days>', 'Rolling reporting window size for scheduled pulls', '3')
     .option('--cadence <cadence>', 'Reporting cadence: daily or weekly', 'daily')
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing Google auth profile for scheduled pulls; defaults to the app id',
-    )
-    .option(
-      '--meta-auth-profile <name>',
-      'Saved marketing Meta token profile for scheduled pulls; defaults to the app id',
-    )
+    .option('--connection <id>', 'Canonical provider connection id')
     .option('--out <path>', 'Scheduled reporting plan output path')
     .action(async (options: MarketingCliOptions) => {
       await runMarketingCommand(options, marketingScheduleReporting);
-    });
-
-  const proof = marketing.command('proof').description('Real-account proof readiness commands');
-  addSharedOptions(
-    proof.command('setup').description('Create a read-only real-account proof setup file'),
-  )
-    .option('--out <path>', 'Provider limits/scopes proof record output path')
-    .option('--force', 'Overwrite an existing proof setup file')
-    .action(async (options: MarketingCliOptions) => {
-      await runMarketingCommand(options, marketingProofSetup);
-    });
-
-  addSharedOptions(
-    proof.command('status').description('Show read-only real-account proof readiness'),
-  )
-    .option('--max-age-days <days>', 'Freshness threshold for proof evidence')
-    .option('--limits <path>', 'Local provider limits/scopes proof record')
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing Google auth profile; defaults to the app id when a marketing config is present',
-    )
-    .option(
-      '--meta-auth-profile <name>',
-      'Saved marketing Meta token profile; defaults to the app id when a marketing config is present',
-    )
-    .option('--out <path>', 'Write proof status artifact JSON')
-    .action(async (options: MarketingCliOptions) => {
-      await runMarketingCommand(options, marketingProofStatus);
     });
 
   const recommend = addSharedOptions(

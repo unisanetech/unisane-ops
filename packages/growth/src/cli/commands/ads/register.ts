@@ -9,17 +9,13 @@ import {
   adsCompetitors,
   adsCreativeStatus,
   adsDiff,
-  adsDoctor,
   adsGoalsGoogle,
   adsNegatives,
   adsOptimize,
   adsPlan,
   adsPull,
-  adsReadiness,
   adsReport,
   adsSearchTerms,
-  adsSetupGoogle,
-  adsSetupGoogleTestClient,
   adsTrackingAudit,
   adsValidate,
   type AdsCliOptions,
@@ -28,7 +24,6 @@ import {
 function addSharedOptions(command: Command): Command {
   return command
     .option('--cwd <path>', 'Platform app directory')
-    .option('--config <path>', 'Path to marketing config')
     .option('--json', 'Emit machine-readable JSON output');
 }
 
@@ -51,13 +46,6 @@ export function registerAdsCommands(program: Command): void {
     .command('ads')
     .description('Paid acquisition planning, reporting, and guarded apply commands');
 
-  addSharedOptions(ads.command('doctor').description('Inspect paid acquisition readiness'))
-    .option('--report <type>', 'Provider report family to inspect')
-    .option('--max-age-days <days>', 'Freshness threshold for latest ads provider pulls')
-    .action(async (options: AdsCliOptions) => {
-      await runAdsCommand(options, adsDoctor);
-    });
-
   addSharedOptions(
     ads.command('validate').description('Validate paid acquisition config and mappings'),
   )
@@ -75,18 +63,6 @@ export function registerAdsCommands(program: Command): void {
     .option('--max-age-days <days>', 'Freshness threshold for latest ads provider pulls')
     .action(async (options: AdsCliOptions) => {
       await runAdsCommand(options, adsReport);
-    });
-
-  addSharedOptions(
-    ads
-      .command('readiness')
-      .description('Build a product-specific Google Ads readiness and optimization plan'),
-  )
-    .option('--max-age-days <days>', 'Freshness threshold for readiness inputs')
-    .option('--out <path>', 'Readiness output path')
-    .option('--dry-run', 'Preview readiness plan without writing')
-    .action(async (options: AdsCliOptions) => {
-      await runAdsCommand(options, adsReadiness);
     });
 
   addSharedOptions(
@@ -144,7 +120,7 @@ export function registerAdsCommands(program: Command): void {
       .command('google')
       .description('Plan, validate, or create Google Ads conversion actions from the registry'),
   )
-    .option('--auth-profile <name>', 'Saved marketing Google auth profile; defaults to the app id')
+    .option('--connection <id>', 'Canonical Google connection id')
     .option('--account-id <id>', 'Google Ads customer id; defaults to config env')
     .option('--manager-customer-id <id>', 'Optional Google Ads manager/login customer id')
     .option('--api-version <version>', 'Google Ads API version override')
@@ -155,38 +131,6 @@ export function registerAdsCommands(program: Command): void {
     .option('--live-executor <mode>', 'Live executor mode: disabled or api', 'disabled')
     .action(async (options: AdsCliOptions) => {
       await runAdsCommand(options, adsGoalsGoogle);
-    });
-
-  const setup = ads.command('setup').description('Paid provider account and API setup helpers');
-  addSharedOptions(
-    setup.command('google').description('Verify Google Ads API customer and token readiness'),
-  )
-    .option('--auth-profile <name>', 'Saved marketing Google auth profile; defaults to the app id')
-    .option('--account-id <id>', 'Google Ads customer id to verify; defaults to config env')
-    .option(
-      '--manager-customer-id <id>',
-      'Optional Google Ads manager/login customer id for hierarchy access',
-    )
-    .option('--api-version <version>', 'Google Ads API version override')
-    .action(async (options: AdsCliOptions) => {
-      await runAdsCommand(options, adsSetupGoogle);
-    });
-  addSharedOptions(
-    setup
-      .command('google-test-client')
-      .description('Create a Google Ads API test client under a manager account'),
-  )
-    .requiredOption('--manager-customer-id <id>', 'Google Ads manager customer id')
-    .option('--auth-profile <name>', 'Saved marketing Google auth profile; defaults to the app id')
-    .option('--name <name>', 'Google Ads client descriptive name')
-    .option('--currency <code>', 'Client currency code', 'USD')
-    .option('--time-zone <zone>', 'Client time zone', 'Asia/Kolkata')
-    .option('--api-version <version>', 'Google Ads API version override')
-    .option('--dry-run', 'Validate the create request without creating a client')
-    .option('--yes', 'Create the client customer')
-    .option('--update-env', 'Set the configured Google Ads customer env in .env.local')
-    .action(async (options: AdsCliOptions) => {
-      await runAdsCommand(options, adsSetupGoogleTestClient);
     });
 
   const creative = ads
@@ -215,11 +159,7 @@ export function registerAdsCommands(program: Command): void {
     .option('--source <source>', 'Report source: api, manual-export, or fixture')
     .option('--report <type>', 'Provider report family for isolated cache paths')
     .option('--account-id <id>', 'Provider account identifier for this pull')
-    .option('--auth-profile <name>', 'Saved marketing Google auth profile; defaults to the app id')
-    .option(
-      '--meta-auth-profile <name>',
-      'Saved marketing Meta auth profile; defaults to the app id',
-    )
+    .option('--connection <id>', 'Canonical provider connection id')
     .option('--start-date <date>', 'Report window start date, YYYY-MM-DD')
     .option('--end-date <date>', 'Report window end date, YYYY-MM-DD')
     .option('--time-zone <zone>', 'Report window time zone')
@@ -330,8 +270,7 @@ export function registerAdsCommands(program: Command): void {
       'Comma-separated exact live upload operation confirmation strings',
     )
     .option('--live-executor <mode>', 'Live executor mode: disabled or api', 'disabled')
-    .option('--auth-profile <name>', 'Saved marketing Google token profile for live Google upload')
-    .option('--meta-auth-profile <name>', 'Saved marketing Meta token profile for live Meta upload')
+    .option('--connection <id>', 'Canonical provider connection id')
     .option('--api-version <version>', 'Provider API version override for live upload')
     .action(async (options: AdsCliOptions) => {
       await runAdsCommand(options, (runOptions) =>
@@ -347,7 +286,7 @@ export function registerAdsCommands(program: Command): void {
     .requiredOption('--asset-id <id>', 'Comma-separated uploaded asset ids to link')
     .option('--field-type <type>', 'Google Ads campaign asset field type', 'MARKETING_IMAGE')
     .option('--yes', 'Send the guarded Google Ads campaign asset link mutation')
-    .option('--auth-profile <name>', 'Saved marketing Google token profile for Google Ads mutation')
+    .option('--connection <id>', 'Canonical Google connection id')
     .option('--api-version <version>', 'Google Ads API version override')
     .option('--out <path>', 'Campaign asset link receipt output path')
     .action(async (options: AdsCliOptions) => {
@@ -413,14 +352,7 @@ export function registerAdsCommands(program: Command): void {
       'Comma-separated exact live operation confirmation strings',
     )
     .option('--live-executor <mode>', 'Live executor mode: disabled or api', 'disabled')
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing Google auth profile for live Google Ads mutation',
-    )
-    .option(
-      '--meta-auth-profile <name>',
-      'Saved marketing Meta token profile for live Meta Ads mutation',
-    )
+    .option('--connection <id>', 'Canonical provider connection id')
     .option('--api-version <version>', 'Provider API version override for live executor')
     .action(async (options: AdsCliOptions) => {
       await runAdsCommand(options, adsApply);

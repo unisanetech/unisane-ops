@@ -4,8 +4,9 @@ import {
   type SearchConsoleDimension,
 } from '../../../provider-adapters.js';
 import { printFetchSearchConsolePerformanceFileResult } from '../format-output.js';
-import { resolveSeoGoogleAccessToken } from '../google-suite-auth.js';
+import { resolveSeoGoogleConnectionToken } from '../google-connection.js';
 import type { SeoPerformanceFetchSearchConsoleCliOptions } from '../options.js';
+import { loadGrowthProjectContext, resolveGrowthResource } from '../../../project-context.js';
 
 const allowedDimensions = new Set<SearchConsoleDimension>([
   'query',
@@ -27,21 +28,30 @@ export async function seoPerformanceFetchSearchConsole(
     if (!options.out) {
       throw new Error('Missing required --out path.');
     }
-    if (!options.siteUrl) {
-      throw new Error('Missing required --site-url.');
-    }
     if (!options.startDate || !options.endDate) {
       throw new Error('Missing required --start-date and --end-date.');
     }
 
-    const accessToken = await resolveOptionalAccessToken(options);
+    const accessToken = await resolveSeoGoogleConnectionToken({
+      service: 'search-console',
+      connection: options.connection,
+      environment: options.environment,
+      requiredScope: SEARCH_CONSOLE_READONLY_SCOPE,
+    });
+    const site = resolveGrowthResource({
+      context: await loadGrowthProjectContext(),
+      environment: options.environment,
+      provider: 'google',
+      service: 'search-console',
+      resourceType: 'site',
+    });
     const result = await fetchSearchConsolePerformanceFile({
       cwd: options.cwd,
       platformId: options.platform,
       output: options.out,
       env: process.env,
       accessToken,
-      siteUrl: options.siteUrl,
+      siteUrl: site.resourceId,
       startDate: options.startDate,
       endDate: options.endDate,
       dimensions: parseDimensions(options.dimensions ?? 'query,page'),
@@ -64,21 +74,6 @@ export async function seoPerformanceFetchSearchConsole(
     }
     return 1;
   }
-}
-
-async function resolveOptionalAccessToken(
-  options: SeoPerformanceFetchSearchConsoleCliOptions,
-): Promise<string | undefined> {
-  const accessTokenEnv = options.accessTokenEnv ?? 'GOOGLE_SEARCH_CONSOLE_ACCESS_TOKEN';
-  if (process.env[accessTokenEnv]?.trim() || options.authProfile || options.platform) {
-    return resolveSeoGoogleAccessToken({
-      accessTokenEnv,
-      authProfile: options.authProfile,
-      platform: options.platform,
-      requiredScope: SEARCH_CONSOLE_READONLY_SCOPE,
-    });
-  }
-  return undefined;
 }
 
 function parseDimensions(value: string): SearchConsoleDimension[] {

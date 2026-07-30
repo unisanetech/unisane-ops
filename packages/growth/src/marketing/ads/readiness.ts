@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { loadMarketingRegistries } from '../registry/load-registries.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingProviderReportArtifactSchema,
   type MarketingProviderReportRecord,
@@ -205,7 +205,7 @@ function resolveOutputPath(cwd: string, out: string | undefined): string {
 }
 
 export async function buildMarketingAdsReadinessPlan(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsReadinessOptions = {},
 ): Promise<MarketingAdsReadinessPlan> {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -495,7 +495,7 @@ export async function buildMarketingAdsReadinessPlan(
 }
 
 export async function writeMarketingAdsReadinessPlan(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsReadinessOptions = {},
 ): Promise<MarketingAdsReadinessResult> {
   const cwd = path.resolve(options.cwd ?? process.cwd());

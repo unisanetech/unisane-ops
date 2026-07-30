@@ -7,7 +7,7 @@ import type {
   MarketingAdsPlanNegativeKeyword,
   MarketingAdsPlanProvider,
 } from '../schema/ads-plan.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import type { MarketingStrategyObjectJoin } from '../reports/strategy-object-report.js';
 import { ensurePathWithinCwd } from '../reports/paths.js';
 import { planMarketingAdsCandidate } from './plan-candidates.js';
@@ -16,7 +16,7 @@ export type SeoAdsPlanInputOptions = {
   cwd: string;
   path: string;
   providers: MarketingAdsPlanProvider[];
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   dailyBudgetAmount?: number;
   currency?: string;
 };

@@ -1,17 +1,12 @@
 import { log } from '../../../log.js';
-import {
-  loadMarketingConfig,
-  writeMarketingNegativeKeywordReport,
-} from '@unisane/growth/marketing';
+import { writeMarketingNegativeKeywordReport } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { AdsCliOptions } from '../options.js';
 import { printAdsNegativeKeywordResult } from '../output/negatives.js';
 
 export async function adsNegatives(options: AdsCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const result = writeMarketingNegativeKeywordReport(loaded.config, {
       cwd: options.cwd,
       out: options.out,

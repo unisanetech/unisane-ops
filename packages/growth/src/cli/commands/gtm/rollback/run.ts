@@ -1,7 +1,7 @@
 import { log } from '../../../log.js';
 import type { GoogleTagManagerRollbackReceipt } from '../../../../contracts.js';
 import { executeGrowthProviderCommand } from '../../../provider-runtime.js';
-import { GOOGLE_TAG_MANAGER_PUBLISH_SCOPE } from '../auth.js';
+import { GOOGLE_TAG_MANAGER_PUBLISH_SCOPE } from '../shared.js';
 import { assertPublishAllowed, requiredVersion } from '../publish-policy.js';
 import { assertRollbackSource } from '../receipts.js';
 import {

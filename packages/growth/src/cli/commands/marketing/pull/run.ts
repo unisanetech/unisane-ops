@@ -1,4 +1,5 @@
-import { loadMarketingConfig, writeMarketingProviderReportPull } from '@unisane/growth/marketing';
+import { writeMarketingProviderReportPull } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { MarketingCliOptions } from '../options.js';
 import { printMarketingProviderPullResult } from '../output/doctor.js';
 
@@ -14,10 +15,7 @@ export async function marketingPull(options: MarketingCliOptions): Promise<numbe
     if (!options.input) {
       throw new Error('[MARKETING_PULL_INPUT_REQUIRED] Pass --input <artifact.json>.');
     }
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const result = writeMarketingProviderReportPull(loaded.config, {
       cwd: options.cwd,
       provider: options.provider,

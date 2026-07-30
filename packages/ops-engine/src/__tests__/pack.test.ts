@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import {
   assertPackCommandResult,
   mergeCommandEffects,
+  resolveAddItemContributor,
   resolvePackCommand,
+  resolveProviderBindingContributor,
   sealPackManifest,
   validatePackGraph,
   verifyPackManifestIntegrity,
@@ -175,6 +177,23 @@ describe('pack contracts', () => {
       writeTargets: ['project'],
       riskGuards: ['production'],
     });
+  });
+
+  it('resolves root add and connect contributions from exact manifest declarations', () => {
+    const growth = sealPackManifest({
+      ...payload('growth'),
+      addItemTypes: ['growth'],
+    });
+    const google = sealPackManifest({
+      ...payload('provider-google'),
+      providerBindings: ['google'],
+    });
+    expect(resolveAddItemContributor([growth, google], 'growth')?.packId).toBe('growth');
+    expect(resolveProviderBindingContributor([growth, google], 'google')?.packId).toBe(
+      'provider-google',
+    );
+    expect(resolveAddItemContributor([growth, google], 'cloud')).toBeNull();
+    expect(resolveProviderBindingContributor([growth, google], 'meta')).toBeNull();
   });
 
   it('rejects handler results that exceed the manifest effect boundary', () => {

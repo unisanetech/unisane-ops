@@ -1,11 +1,5 @@
 import type { ProviderApiPullContext, ProviderApiPullPayload } from '@unisane/growth/contracts';
-import {
-  asArray,
-  asRecord,
-  optionalNumber,
-  readJsonResponse,
-  resolveEnv,
-} from '../transport-utils.js';
+import { asArray, asRecord, optionalNumber, readJsonResponse } from '../transport-utils.js';
 
 type Ga4ReportType = 'event' | 'landingPage' | 'channel' | 'sourceMedium' | 'ecommerce';
 
@@ -51,21 +45,16 @@ function ga4Metrics(reportType: Ga4ReportType): Array<{ name: string }> {
 export async function pullGa4Report(
   input: ProviderApiPullContext,
 ): Promise<ProviderApiPullPayload<'ga4'>> {
-  const provider = input.config.providers.ga4;
-  const propertyId =
-    input.options.accountId ??
-    resolveEnv(
-      input.env,
-      provider.accountIdEnv,
-      'MARKETING_GA4_PROPERTY_ID_REQUIRED',
-      'GA4 property id',
+  const propertyId = input.options.accountId;
+  if (!propertyId) {
+    throw new Error('[MARKETING_GA4_PROPERTY_REQUIRED] Select a GA4 property.');
+  }
+  const accessToken = input.credentials?.accessToken;
+  if (!accessToken) {
+    throw new Error(
+      '[MARKETING_GA4_CONNECTION_REQUIRED] GA4 requires a canonical Google connection.',
     );
-  const accessToken = resolveEnv(
-    input.env,
-    provider.accessTokenEnv,
-    'MARKETING_GA4_ACCESS_TOKEN_REQUIRED',
-    'GA4 access token',
-  );
+  }
   const normalizedProperty = propertyId.replace(/^properties\//, '');
   const pageSize = input.options.pageSize ?? 10_000;
   const maxPages = input.options.maxPages ?? 10;

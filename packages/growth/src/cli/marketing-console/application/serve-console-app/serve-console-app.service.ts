@@ -5,8 +5,8 @@ import path from 'node:path';
 import type { MarketingConsoleServeResult } from '../../contracts/marketing-console-app.js';
 import { buildMarketingConsoleApp } from '../build-console-app/build-console-app.service.js';
 import type {
-  MarketingGoogleAuthProfileStatus,
-  MarketingMetaAuthProfileStatus,
+  MarketingGoogleConnectionStatus,
+  MarketingMetaConnectionStatus,
 } from '@unisane/growth/marketing';
 
 export type ServeMarketingConsoleAppOptions = {
@@ -16,9 +16,8 @@ export type ServeMarketingConsoleAppOptions = {
   host?: string;
   port?: number;
   maxAgeDays?: number;
-  limitsPath?: string;
-  googleAuth?: MarketingGoogleAuthProfileStatus;
-  metaAuth?: MarketingMetaAuthProfileStatus;
+  googleAuth?: MarketingGoogleConnectionStatus;
+  metaAuth?: MarketingMetaConnectionStatus;
   createHttpServer?: typeof createServer;
 };
 
@@ -29,10 +28,8 @@ export async function serveMarketingConsoleApp(
   const port = options.port ?? 4174;
   const buildResult = await buildMarketingConsoleApp({
     cwd: options.cwd,
-    configPath: options.configPath,
     outputDirectory: options.outputDirectory,
     maxAgeDays: options.maxAgeDays,
-    limitsPath: options.limitsPath,
     googleAuth: options.googleAuth,
     metaAuth: options.metaAuth,
   });

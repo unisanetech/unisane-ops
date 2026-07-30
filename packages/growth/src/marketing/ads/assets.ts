@@ -8,7 +8,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingAdsAssetRegistrySchema,
   marketingAdsAssetSchema,
@@ -159,6 +159,21 @@ export type MarketingAdsAssetUploadOptions = {
   now?: Date;
   apiVersion?: string;
   providerUploaders?: MarketingAdsAssetProviderUploaders;
+  providerCredentials?: Partial<
+    Record<
+      MarketingAdsPlanProvider,
+      {
+        accessToken?: string;
+        developerToken?: string;
+        accountId?: string;
+        loginCustomerId?: string;
+        pageId?: string;
+        instagramActorId?: string;
+        pixelId?: string;
+        datasetId?: string;
+      }
+    >
+  >;
 };
 
 export type MarketingAdsAssetProviderUploadOperation =
@@ -171,10 +186,13 @@ export type MarketingAdsAssetProviderUploadSource = {
 };
 
 export type MarketingAdsAssetProviderUploadOptions = {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   operation: MarketingAdsAssetProviderUploadOperation;
   source: MarketingAdsAssetProviderUploadSource;
   env: Record<string, string | undefined>;
+  credentials?: NonNullable<
+    MarketingAdsAssetUploadOptions['providerCredentials']
+  >[MarketingAdsPlanProvider];
   fetch: FetchLike;
   apiVersion?: string;
 };
@@ -246,6 +264,12 @@ export type MarketingGoogleAdsCampaignAssetLinkOptions = {
   yes?: boolean;
   out?: string;
   env?: Record<string, string | undefined>;
+  credentials?: {
+    accessToken?: string;
+    developerToken?: string;
+    accountId?: string;
+    loginCustomerId?: string;
+  };
   fetch?: FetchLike;
   now?: Date;
   apiVersion?: string;
@@ -333,7 +357,7 @@ function resolveRegistryPath(cwd: string): string {
   return resolved;
 }
 
-function emptyRegistry(config: MarketingConfig, now: Date): MarketingAdsAssetRegistry {
+function emptyRegistry(config: MarketingExecutionContext, now: Date): MarketingAdsAssetRegistry {
   return {
     version: 1,
     platformId: config.platformId,
@@ -344,7 +368,7 @@ function emptyRegistry(config: MarketingConfig, now: Date): MarketingAdsAssetReg
 }
 
 export function readMarketingAdsAssetRegistry(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: { cwd?: string; now?: Date } = {},
 ): { path: string; registry: MarketingAdsAssetRegistry } {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -377,7 +401,7 @@ function sourceDestination(args: { cwd: string; assetId: string; filePath: strin
 }
 
 export function importMarketingAdsAsset(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsAssetImportOptions,
 ): MarketingAdsAssetImportResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -440,7 +464,7 @@ export function importMarketingAdsAsset(
 }
 
 function updateMarketingAdsAsset(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsAssetUpdateOptions & {
     lifecycleStatus: MarketingAdsAsset['lifecycleStatus'];
   },
@@ -475,7 +499,7 @@ function updateMarketingAdsAsset(
 }
 
 export function approveMarketingAdsAsset(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsAssetUpdateOptions,
 ): MarketingAdsAssetImportResult {
   if (!options.approvalRef) {
@@ -485,7 +509,7 @@ export function approveMarketingAdsAsset(
 }
 
 export function archiveMarketingAdsAsset(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsAssetUpdateOptions,
 ): MarketingAdsAssetImportResult {
   return updateMarketingAdsAsset(config, { ...options, lifecycleStatus: 'archived' });
@@ -624,7 +648,7 @@ function resolveNextWorkflowStep(
 }
 
 export function buildMarketingAdsAssetReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: { cwd?: string; now?: Date } = {},
 ): MarketingAdsAssetReport {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -695,7 +719,7 @@ function providersFor(provider: MarketingAdsPlanProvider | 'all'): MarketingAdsP
 }
 
 export function writeMarketingAdsAssetUploadPlan(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsAssetUploadPlanOptions = {},
 ): MarketingAdsAssetUploadPlanResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -723,7 +747,6 @@ export function writeMarketingAdsAssetUploadPlan(
         assetType: asset.assetType,
         sourceSha256: asset.sourceFile?.sha256 ?? '',
         sourceLocalPath: asset.sourceFile?.localPath ?? '',
-        accountIdEnv: config.providers[entry].accountIdEnv,
         requiresApproval: true,
         mutation: 'upload_asset' as const,
       }));
@@ -892,7 +915,7 @@ function placementRequiresVertical(placement: MarketingMetaAdsPlacement): boolea
 }
 
 function placementValidationChecks(args: {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   asset: MarketingAdsAsset;
   placements: MarketingMetaAdsPlacement[];
 }): MarketingAdsAssetCreativePlan['checks'] {
@@ -984,7 +1007,7 @@ function placementValidationChecks(args: {
 }
 
 export function writeMarketingAdsAssetCreativePlan(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsAssetCreativePlanOptions = {},
 ): MarketingAdsAssetCreativePlanResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -1171,12 +1194,12 @@ function confirmationValues(value: string | undefined): Set<string> {
 }
 
 function uploadAccountConfirmation(args: {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   provider: MarketingAdsPlanProvider;
+  accountId?: string;
   provided: Set<string>;
 }): MarketingAdsAssetUploadConfirmation {
-  const accountRef =
-    args.config.providers[args.provider].accountIdEnv ?? `${args.provider}.accountIdEnv`;
+  const accountRef = args.accountId ?? `${args.provider}.resource`;
   const expected = `${args.config.defaultEnvironment}:${args.provider}:${accountRef}:ads-assets-upload`;
   const confirmed = args.provided.has(expected);
   return {
@@ -1189,7 +1212,7 @@ function uploadAccountConfirmation(args: {
 }
 
 function uploadProductionConfirmation(args: {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   provided: string | undefined;
 }): MarketingAdsAssetUploadConfirmation | undefined {
   const environment = args.config.environments[args.config.defaultEnvironment];
@@ -1218,15 +1241,6 @@ function operationConfirmation(args: {
   approvalRef: string;
 }): string {
   return `live-assets:${args.environment}:${args.operationId}:${args.approvalRef}`;
-}
-
-function envValue(
-  env: Record<string, string | undefined>,
-  name: string | undefined,
-): string | undefined {
-  if (!name) return undefined;
-  const value = env[name]?.trim();
-  return value ? value : undefined;
 }
 
 function normalizeGoogleAdsCustomerId(value: string): string {
@@ -1281,7 +1295,7 @@ function googleAdsResultResourceNames(value: unknown): string[] {
 
 function readGoogleAdsProviderAssetRef(args: {
   cwd: string;
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   assetId: string;
 }): { providerAssetId: string; path: string } {
   const refPath = providerRefPath({
@@ -1325,21 +1339,23 @@ function providerRefPath(args: {
 
 async function uploadGoogleImageAsset(args: {
   cwd: string;
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   operation: MarketingAdsAssetUploadPlan['operations'][number];
   env: Record<string, string | undefined>;
+  credentials?: NonNullable<
+    MarketingAdsAssetUploadOptions['providerCredentials']
+  >[MarketingAdsPlanProvider];
   fetcher: FetchLike;
   apiVersion?: string;
   attemptedAt: string;
 }): Promise<{ providerAssetId: string; providerRefPath: string; message: string }> {
-  const provider = args.config.providers.googleAds;
-  const accountId = envValue(args.env, provider.accountIdEnv);
-  const developerToken = envValue(args.env, provider.developerTokenEnv);
-  const accessToken = envValue(args.env, provider.accessTokenEnv);
-  const loginCustomerId = envValue(args.env, provider.loginCustomerIdEnv);
+  const accountId = args.credentials?.accountId;
+  const developerToken = args.credentials?.developerToken;
+  const accessToken = args.credentials?.accessToken;
+  const loginCustomerId = args.credentials?.loginCustomerId;
   if (!accountId || !developerToken || !accessToken) {
     throw new Error(
-      '[ADS_ASSET_GOOGLE_ENV_MISSING] Google Ads image upload requires customer id, developer token, and access token env refs.',
+      '[ADS_ASSET_GOOGLE_CONNECTION_INCOMPLETE] Google Ads image upload requires a selected customer, OAuth access, and approved developer access.',
     );
   }
   if (args.operation.assetType !== 'image' && args.operation.assetType !== 'logo') {
@@ -1405,7 +1421,7 @@ async function uploadGoogleImageAsset(args: {
     providerAssetId,
     sourceSha256: args.operation.sourceSha256,
     uploadedAt: args.attemptedAt,
-    accountIdEnv: provider.accountIdEnv,
+    accountId,
   });
   return {
     providerAssetId,
@@ -1415,7 +1431,7 @@ async function uploadGoogleImageAsset(args: {
 }
 
 function dryRunReceipt(args: {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   planPath: string;
   plan: MarketingAdsAssetUploadPlan;
   planHash: string;
@@ -1474,7 +1490,7 @@ function uploadBlockers(args: {
 }
 
 export async function writeMarketingAdsAssetUploadReceipt(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsAssetUploadOptions,
 ): Promise<MarketingAdsAssetUploadResult> {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -1486,6 +1502,7 @@ export async function writeMarketingAdsAssetUploadReceipt(
     uploadAccountConfirmation({
       config,
       provider: operation.provider,
+      accountId: options.providerCredentials?.[operation.provider]?.accountId,
       provided: confirmationValues(options.accountConfirm),
     }),
   );
@@ -1595,6 +1612,7 @@ export async function writeMarketingAdsAssetUploadReceipt(
             bytes: readFileSync(sourcePath),
           },
           env,
+          credentials: options.providerCredentials?.[operation.provider],
           fetch: fetcher,
           apiVersion: options.apiVersion,
         });
@@ -1614,7 +1632,7 @@ export async function writeMarketingAdsAssetUploadReceipt(
           providerAssetId: uploaded.providerAssetId,
           sourceSha256: operation.sourceSha256,
           uploadedAt: generatedAt,
-          accountIdEnv: config.providers[operation.provider].accountIdEnv,
+          accountId: options.providerCredentials?.[operation.provider]?.accountId,
         });
         result = {
           ...uploaded,
@@ -1626,6 +1644,7 @@ export async function writeMarketingAdsAssetUploadReceipt(
           config,
           operation,
           env,
+          credentials: options.providerCredentials?.googleAds,
           fetcher,
           apiVersion: options.apiVersion,
           attemptedAt: generatedAt,
@@ -1708,21 +1727,19 @@ export async function writeMarketingAdsAssetUploadReceipt(
 }
 
 export async function writeMarketingGoogleAdsCampaignAssetLinkReceipt(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingGoogleAdsCampaignAssetLinkOptions,
 ): Promise<MarketingGoogleAdsCampaignAssetLinkResult> {
   const cwd = path.resolve(options.cwd ?? process.cwd());
   const now = options.now ?? new Date();
   const generatedAt = now.toISOString();
-  const provider = config.providers.googleAds;
-  const env = options.env ?? process.env;
-  const customerId = envValue(env, provider.accountIdEnv);
-  const loginCustomerId = envValue(env, provider.loginCustomerIdEnv);
-  const developerToken = envValue(env, provider.developerTokenEnv);
-  const accessToken = envValue(env, provider.accessTokenEnv);
+  const customerId = options.credentials?.accountId;
+  const loginCustomerId = options.credentials?.loginCustomerId;
+  const developerToken = options.credentials?.developerToken;
+  const accessToken = options.credentials?.accessToken;
   if (!customerId || !developerToken || !accessToken) {
     throw new Error(
-      '[ADS_ASSET_GOOGLE_LINK_ENV_MISSING] Google Ads campaign asset linking requires customer id, developer token, and access token env refs.',
+      '[ADS_ASSET_GOOGLE_LINK_CONNECTION_INCOMPLETE] Google Ads campaign asset linking requires a selected customer, OAuth access, and approved developer access.',
     );
   }
   if (

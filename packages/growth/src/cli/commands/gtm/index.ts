@@ -1,21 +1,4 @@
 export {
-  deleteGoogleTagManagerAuthProfile,
-  getGoogleTagManagerAuthStatus,
-  loginGoogleTagManagerAuthCommand,
-  logoutGoogleTagManagerAuthCommand,
-  refreshGoogleTagManagerAccessToken,
-  resolveGoogleTagManagerAccessToken,
-  saveGoogleTagManagerAuthProfile,
-  statusGoogleTagManagerAuthCommand,
-  tokenGoogleTagManagerAuthCommand,
-} from './auth.js';
-export type {
-  GoogleTagManagerAccessTokenResult,
-  GoogleTagManagerAuthCliOptions,
-  GoogleTagManagerAuthRuntimeOptions,
-  GoogleTagManagerAuthStatus,
-} from './auth.js';
-export {
   applyGoogleTagManagerCommand,
   createVersionGoogleTagManagerCommand,
   diffGoogleTagManagerCommand,

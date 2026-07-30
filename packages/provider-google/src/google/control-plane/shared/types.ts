@@ -1,14 +1,8 @@
 import type {
   ControlPlaneApplyReceipt,
-  ControlPlaneEnvReport,
   ControlPlaneInventoryArtifact,
-  ControlPlaneSetupStatus,
   ControlPlanePlanArtifact,
 } from '@unisane/ops-engine';
-import type {
-  GoogleAuthRuntimeOptions,
-  googleAuthStatusToControlPlaneProfile,
-} from '../../auth.js';
 import type { GoogleServiceEnableResult } from '../client.js';
 
 export const GOOGLE_CONTROL_PLANE_SCOPE = 'https://www.googleapis.com/auth/cloud-platform';
@@ -69,21 +63,19 @@ export type GoogleProviderRequiredApi = {
   reason: string;
 };
 
-export type GoogleProviderCliOptions = GoogleAuthRuntimeOptions & {
+export type GoogleProviderCliOptions = {
   cwd?: string;
   project?: string;
-  profile?: string;
-  env?: string;
-  app?: string;
-  config?: string;
+  connection?: string;
+  environment?: string;
   api?: string[];
   output?: string;
   inventory?: string;
   plan?: string;
   receiptOutput?: string;
   productionConfirm?: string;
-  developerTokenEnv?: string;
   apiVersion?: string;
+  fetch?: typeof fetch;
   yes?: boolean;
   json?: boolean;
 };
@@ -117,20 +109,6 @@ export type GoogleProviderPlanArtifact = ControlPlanePlanArtifact & {
   requiredApis: GoogleProviderRequiredApi[];
 };
 
-export type GoogleProviderSetupStatusReport = {
-  schemaVersion: 1;
-  kind: 'google.setup-status';
-  provider: 'google';
-  appId: string;
-  environment: string;
-  generatedAt: string;
-  projectId: string | null;
-  authProfile: ReturnType<typeof googleAuthStatusToControlPlaneProfile>;
-  envReport: ControlPlaneEnvReport;
-  setupStatus: ControlPlaneSetupStatus;
-  desiredApis: GoogleProviderRequiredApi[];
-};
-
 export type GoogleProviderApplyReceipt = ControlPlaneApplyReceipt & {
   projectId: string;
   enabledServices: GoogleServiceEnableResult[];
@@ -139,5 +117,4 @@ export type GoogleProviderApplyReceipt = ControlPlaneApplyReceipt & {
 export type GoogleProviderProductsInventoryArtifact =
   ControlPlaneInventoryArtifact<GoogleProviderInventoryResource> & {
     requiredScopes: readonly string[];
-    developerTokenEnv: string;
   };

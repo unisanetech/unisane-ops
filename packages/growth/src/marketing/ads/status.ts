@@ -4,7 +4,10 @@ import {
   loadMarketingRegistries,
   type LoadedMarketingRegistries,
 } from '../registry/load-registries.js';
-import type { MarketingConfig, MarketingProviderState } from '../schema/marketing-config.js';
+import type {
+  MarketingExecutionContext,
+  MarketingProviderAvailability,
+} from '../schema/execution-context.js';
 import type { MarketingProviderReportStatus } from '../reports/provider-pulls.js';
 import { readMarketingProviderReportStatus } from '../reports/provider-pulls.js';
 import type { MarketingProviderReportType } from '../schema/report.js';
@@ -21,7 +24,7 @@ export type MarketingAdsStatusCheck = {
 
 export type MarketingAdsProviderStatus = {
   provider: MarketingAdsProvider;
-  state: MarketingProviderState;
+  state: MarketingProviderAvailability;
   accountIdEnv?: string;
   accountIdSet: boolean;
   loginCustomerIdEnv?: string;
@@ -79,14 +82,14 @@ export type MarketingAdsStatusOptions = {
 const adsProviders: MarketingAdsProvider[] = ['googleAds', 'metaAds'];
 
 function providerAccountEnv(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   provider: MarketingAdsProvider,
 ): string | undefined {
   return config.providers[provider].accountIdEnv;
 }
 
 function environmentAccountEnv(
-  environment: MarketingConfig['environments'][string],
+  environment: MarketingExecutionContext['environments'][string],
   provider: MarketingAdsProvider,
 ): string | undefined {
   return provider === 'googleAds'
@@ -95,7 +98,7 @@ function environmentAccountEnv(
 }
 
 function providerStatuses(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   env: Record<string, string | undefined>,
 ): MarketingAdsProviderStatus[] {
   return adsProviders.map((provider) => {
@@ -147,10 +150,10 @@ function providerChecks(providers: MarketingAdsProviderStatus[]): MarketingAdsSt
         status: provider.accountIdEnv
           ? provider.accountIdSet
             ? 'pass'
-            : provider.state === 'configured'
+            : provider.state === 'connected'
               ? 'error'
               : 'warn'
-          : provider.state === 'configured'
+          : provider.state === 'connected'
             ? 'error'
             : 'warn',
         message: provider.accountIdEnv
@@ -206,7 +209,7 @@ function providerChecks(providers: MarketingAdsProviderStatus[]): MarketingAdsSt
       checks.push({
         id: `providers.${provider.provider}.environments.${environment.environment}.account`,
         status: environment.accountIdEnv
-          ? environment.production && !environment.accountIdSet && provider.state === 'configured'
+          ? environment.production && !environment.accountIdSet && provider.state === 'connected'
             ? 'error'
             : 'pass'
           : environment.production
@@ -223,7 +226,7 @@ function providerChecks(providers: MarketingAdsProviderStatus[]): MarketingAdsSt
 }
 
 function conversionMappingStatuses(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   registries: LoadedMarketingRegistries,
 ): MarketingAdsConversionMappingStatus[] {
   return adsProviders.map((provider) => {
@@ -246,7 +249,7 @@ function conversionMappingStatuses(
 }
 
 function conversionMappingChecks(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   mappings: MarketingAdsConversionMappingStatus[],
 ): MarketingAdsStatusCheck[] {
   return mappings.map((mapping) => {
@@ -261,7 +264,7 @@ function conversionMappingChecks(
     const missingCount = mapping.missingConversions.length;
     return {
       id: `conversions.${mapping.provider}.mappings`,
-      status: missingCount === 0 ? 'pass' : state === 'configured' ? 'error' : 'warn',
+      status: missingCount === 0 ? 'pass' : state === 'connected' ? 'error' : 'warn',
       message:
         missingCount === 0
           ? `${mapping.provider} conversion mappings cover all canonical conversions.`
@@ -310,7 +313,7 @@ function resolveNextWorkflowStep(
 }
 
 export async function buildMarketingAdsStatusReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsStatusOptions = {},
 ): Promise<MarketingAdsStatusReport> {
   const cwd = path.resolve(options.cwd ?? process.cwd());

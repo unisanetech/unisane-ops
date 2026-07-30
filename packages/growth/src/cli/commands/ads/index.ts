@@ -1,12 +1,10 @@
 export { adsAudit } from './audit/run.js';
 export { adsDiff } from './diff/run.js';
-export { adsDoctor } from './doctor/run.js';
 export { adsCompetitors } from './competitors/run.js';
 export { adsCreativeStatus } from './creative/status.js';
 export { adsNegatives } from './negatives/run.js';
 export { adsOptimize } from './optimize/run.js';
 export { adsPull } from './pull/run.js';
-export { adsReadiness } from './readiness/run.js';
 export { adsReport } from './report/run.js';
 export { adsSearchTerms } from './search-terms/run.js';
 export { adsGoalsGoogle } from './goals/google.js';
@@ -15,5 +13,4 @@ export { adsValidate } from './validate/run.js';
 export { adsApply } from './apply/run.js';
 export { adsPlan } from './plan/run.js';
 export { adsAssets } from './assets/run.js';
-export { adsSetupGoogle, adsSetupGoogleTestClient } from './setup/google.js';
 export type { AdsCliOptions } from './options.js';

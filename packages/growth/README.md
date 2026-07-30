@@ -1,44 +1,47 @@
 # @unisane/growth
 
-Provider-neutral growth operations contracts and workflows.
+Provider-neutral Growth contracts, readiness, desired state, analysis, planning, and
+mutation policy for Unisane Ops.
 
-Admitted capabilities:
+## Ownership
 
-- `@unisane/growth/contracts` exposes schema/type and provider-interface contracts.
-- `@unisane/growth/gtm` exposes manifest authoring, recipes, validation, policy,
-  normalization, and deterministic planning.
-- `@unisane/growth/seo` exposes SEO research workspaces, schemas, CSV ingestion, keyword
-  expansion and clustering, competitor research, opportunities, briefs, internal-link
-  planning, performance feedback, trends, reports, and health evaluation.
-- `@unisane/growth/marketing` exposes marketing configuration, registries, normalized
-  reporting, research memory, recommendations, experiments, tracking audits, provider
-  discovery state, proof workflows, and ads planning/policy/apply behavior.
+- `@unisane/growth/contracts` owns the versioned `growthConfigContribution` and
+  provider-neutral contracts.
+- `@unisane/growth/gtm` owns Tag Manager manifests, validation, deterministic planning,
+  policy, and receipts.
+- `@unisane/growth/seo` owns research, opportunities, briefs, performance feedback, and
+  health evaluation.
+- `@unisane/growth/marketing` owns event/conversion truth, normalized reporting,
+  recommendations, experiments, tracking audits, and ads plans.
 
-Google authentication and remote execution live under the matching
-`@unisane/provider-google/gtm` and `@unisane/provider-google/seo` subpaths. Growth never
-imports the provider package. A host or CLI composition root binds provider execution to
-Growth-owned contracts and workflows.
+Growth does not own OAuth, token storage, provider resource discovery, or provider
+transport. Those are host-injected from provider packages through canonical connection
+bindings.
 
-Google Ads, GA4, and Search Console report transports live at
-`@unisane/provider-google/marketing` and are injected into Growth-owned normalization,
-caching, and reporting. Google Ads live campaign mutation is injected from the same
-provider subpath; Growth still owns plan validation, confirmations, approvals, locks,
-blockers, and receipts. Saved Meta auth, Graph discovery/inventory, report transport,
-asset upload, and remote campaign execution live at `@unisane/provider-meta` and its
-`./marketing` subpath. Hosts inject those implementations through Growth-owned
-contracts; Growth does not import Provider Meta.
+## Lifecycle
 
-## CLI pack
+Growth is selected through the root lifecycle:
 
-Growth owns one static command pack and one embedded-safe handler:
+```bash
+unisane ops init --growth --yes
+unisane add growth --capability seo --capability analytics --yes
+unisane connect google
+unisane check
+```
+
+Project intent lives only in `unisane.config.ts`. Readiness is derived from shared
+project, connection, resource, instrumentation, data, business-truth, decision, and
+mutation findings.
+
+After readiness permits the operation:
 
 ```bash
 unisane growth seo ...
 unisane growth marketing ...
 unisane growth ads ...
-unisane growth analytics ...
 unisane growth gtm ...
+unisane growth console
 ```
 
-Provider-backed commands resolve exact typed bindings from the canonical host; offline
-commands do not load provider SDKs.
+Offline imports and planning do not load provider SDKs. Provider-backed commands resolve
+the selected connection and selected resource through the canonical host.

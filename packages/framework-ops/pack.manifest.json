@@ -8,19 +8,12 @@
   "trust": "first-party",
   "commands": [
     {
-      "id": "framework.add",
-      "path": ["add"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
-      "maximumEffect": "write",
-      "writeTargets": ["project"],
-      "artifactClasses": [],
-      "riskGuards": [],
-      "json": true
-    },
-    {
       "id": "framework.app",
       "path": ["app"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -30,7 +23,10 @@
     {
       "id": "framework.billing",
       "path": ["billing"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["remote"],
       "artifactClasses": [],
@@ -40,7 +36,10 @@
     {
       "id": "framework.brand",
       "path": ["brand"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -50,7 +49,10 @@
     {
       "id": "framework.build",
       "path": ["build"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -60,7 +62,10 @@
     {
       "id": "framework.configure",
       "path": ["configure"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -70,7 +75,10 @@
     {
       "id": "framework.create",
       "path": ["create"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -80,7 +88,10 @@
     {
       "id": "framework.db",
       "path": ["db"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["remote"],
       "artifactClasses": [],
@@ -90,7 +101,10 @@
     {
       "id": "framework.describe",
       "path": ["describe"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "offline",
       "writeTargets": [],
       "artifactClasses": [],
@@ -100,7 +114,10 @@
     {
       "id": "framework.dev",
       "path": ["dev"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -110,7 +127,10 @@
     {
       "id": "framework.doctor",
       "path": ["doctor"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "read-network",
       "writeTargets": [],
       "artifactClasses": [],
@@ -120,7 +140,10 @@
     {
       "id": "framework.env",
       "path": ["env"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project", "secret-store", "remote"],
       "artifactClasses": [],
@@ -130,7 +153,10 @@
     {
       "id": "framework.generate",
       "path": ["generate"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -140,7 +166,10 @@
     {
       "id": "framework.inspect",
       "path": ["inspect"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "read-network",
       "writeTargets": [],
       "artifactClasses": [],
@@ -150,7 +179,10 @@
     {
       "id": "framework.list",
       "path": ["list"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "offline",
       "writeTargets": [],
       "artifactClasses": [],
@@ -160,7 +192,10 @@
     {
       "id": "framework.llm",
       "path": ["llm"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -170,7 +205,10 @@
     {
       "id": "framework.migrations",
       "path": ["migrations"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "read-network",
       "writeTargets": [],
       "artifactClasses": [],
@@ -180,7 +218,10 @@
     {
       "id": "framework.provider",
       "path": ["provider"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["remote"],
       "artifactClasses": [],
@@ -190,7 +231,10 @@
     {
       "id": "framework.remove",
       "path": ["remove"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -200,7 +244,10 @@
     {
       "id": "framework.start",
       "path": ["start"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "offline",
       "writeTargets": [],
       "artifactClasses": [],
@@ -210,7 +257,10 @@
     {
       "id": "framework.sync",
       "path": ["sync"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -220,7 +270,10 @@
     {
       "id": "framework.upgrade",
       "path": ["upgrade"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -230,7 +283,10 @@
     {
       "id": "framework.ui",
       "path": ["ui"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -240,7 +296,10 @@
     {
       "id": "framework.verify",
       "path": ["verify"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "read-network",
       "writeTargets": [],
       "artifactClasses": [],
@@ -250,7 +309,10 @@
     {
       "id": "framework.watch",
       "path": ["watch"],
-      "handler": { "exportPath": "./handlers/framework", "exportName": "runFrameworkCommand" },
+      "handler": {
+        "exportPath": "./handlers/framework",
+        "exportName": "runFrameworkCommand"
+      },
       "maximumEffect": "write",
       "writeTargets": ["project"],
       "artifactClasses": [],
@@ -265,6 +327,6 @@
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "aa319fbb504b62697ca58f5f97a5e3c284d16d93f9ec20490c4b71e4018f4fc4"
+    "manifestHash": "b2589c863a93bd53bab65e122dcc5a51d4c85fa3ffeae51d3d5c1bc914c1ce99"
   }
 }

@@ -77,11 +77,7 @@ export function loadFirstPartyPackGraph(): readonly PackManifest[] {
     ),
     loadVerifiedManifest(growthManifestPath, resolve(dirname(growthManifestPath), 'package.json')),
   ];
-  for (const packageName of [
-    '@unisane/provider-aws',
-    '@unisane/provider-google',
-    '@unisane/provider-meta',
-  ] as const) {
+  for (const packageName of ['@unisane/provider-aws', '@unisane/provider-google'] as const) {
     try {
       const manifestPath = require.resolve(`${packageName}/pack-manifest`);
       manifests.push(
@@ -118,6 +114,38 @@ export function loadFirstPartyPackGraph(): readonly PackManifest[] {
 }
 
 async function loadExactHandler(command: PackCommandDescriptor): Promise<PackCommandHandler> {
+  if (
+    command.handler.exportPath === './handlers/init' &&
+    command.handler.exportName === 'runOpsInit'
+  ) {
+    const module = await import('./handlers/init.js');
+    return module.runOpsInit;
+  }
+  if (command.handler.exportPath === './handlers/add' && command.handler.exportName === 'runAdd') {
+    const module = await import('./handlers/add.js');
+    return module.runAdd;
+  }
+  if (
+    command.handler.exportPath === './handlers/connect' &&
+    command.handler.exportName === 'runConnect'
+  ) {
+    const module = await import('./handlers/connect.js');
+    return module.runConnect;
+  }
+  if (
+    command.handler.exportPath === './handlers/check' &&
+    command.handler.exportName === 'runCheck'
+  ) {
+    const module = await import('./handlers/check.js');
+    return module.runCheck;
+  }
+  if (
+    command.handler.exportPath === './handlers/migrate-growth-config' &&
+    command.handler.exportName === 'runMigrateGrowthConfig'
+  ) {
+    const module = await import('./handlers/migrate-growth-config.js');
+    return module.runMigrateGrowthConfig;
+  }
   if (
     command.handler.exportPath === './handlers/status' &&
     command.handler.exportName === 'runStatus'
@@ -240,13 +268,6 @@ async function loadExactHandler(command: PackCommandDescriptor): Promise<PackCom
     const module = await import('@unisane/provider-google/handlers/provider-google');
     return module.runProviderGoogleCommand;
   }
-  if (
-    command.handler.exportPath === './handlers/provider-meta' &&
-    command.handler.exportName === 'runProviderMetaCommand'
-  ) {
-    const module = await import('@unisane/provider-meta/handlers/provider-meta');
-    return module.runProviderMetaCommand;
-  }
   throw new Error(
     `[OPS_PACK_HANDLER_UNREGISTERED] No exact loader for ${command.handler.exportPath}#${command.handler.exportName}.`,
   );
@@ -277,6 +298,11 @@ function rootHelp(): void {
   console.log(`Unisane CLI
 
 Canonical commands:
+  unisane ops init [--growth] [--mode <mode>] [--yes] [--json]
+  unisane add growth [--capability <id>] [--yes] [--json]
+  unisane connect google [--environment <id>] [--yes] [--json]
+  unisane check [--environment <id>] [--json]
+  unisane ops migrate growth-config --input <path> --yes [--json]
   unisane status [--json]
   unisane inspect packs [--json]
   unisane connect cloudflare check [--connection <id>] [--json]
@@ -294,7 +320,6 @@ Canonical commands:
   unisane provider cloudflare queues|workers|cron inventory|plan|apply [options]
   unisane provider aws <command> [options]
   unisane provider google <command> [options]
-  unisane provider meta <command> [options]
   unisane growth gtm <command> [options]
 
 Framework commands are contributed by the optional @unisane/framework-ops pack.
@@ -320,6 +345,12 @@ export async function runCanonicalCli(
     const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
     console.log(readIdentity(resolve(packageRoot, 'package.json')).version);
     return 0;
+  }
+  if (argv[0] === 'init') {
+    console.error(`\`unisane init\` is not a command.
+Set up Ops in this project: unisane ops init
+Create a Framework application: npx create-unisane <project-name>`);
+    return 1;
   }
 
   const manifests = (dependencies.loadGraph ?? loadFirstPartyPackGraph)();

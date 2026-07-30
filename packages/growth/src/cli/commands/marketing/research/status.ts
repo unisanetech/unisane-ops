@@ -1,8 +1,8 @@
 import {
-  loadMarketingConfig,
   readMarketingResearchStatus,
   type MarketingResearchStatusSummary,
 } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { MarketingCliOptions } from '../options.js';
 
 function printJson(value: unknown): void {
@@ -40,10 +40,7 @@ function printStatus(status: MarketingResearchStatusSummary): void {
 
 export async function marketingResearchStatus(options: MarketingCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const status = readMarketingResearchStatus(loaded.config, {
       cwd: options.cwd,
       researchRoot: options.researchRoot,

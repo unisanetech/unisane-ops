@@ -1,11 +1,16 @@
 import {
-  loadMarketingConfig,
+  MARKETING_GOOGLE_ADS_SCOPE,
+  MARKETING_GOOGLE_ANALYTICS_SCOPE,
+  MARKETING_GOOGLE_SEARCH_CONSOLE_SCOPE,
+  MARKETING_GOOGLE_TAG_MANAGER_SCOPE,
   writeMarketingScheduledReportingPlan,
 } from '@unisane/growth/marketing';
-import { getMarketingGoogleAuthStatus } from '../auth/google.js';
-import { getMarketingMetaAuthStatus } from '../auth/meta.js';
 import type { MarketingCliOptions } from '../options.js';
-import { resolveMarketingGoogleProfile, resolveMarketingMetaProfile } from '../profile-defaults.js';
+import {
+  loadGrowthProjectContext,
+  loadMarketingExecutionContext,
+  selectGrowthEnvironment,
+} from '../../../project-context.js';
 
 function printJson(value: unknown): void {
   console.log(JSON.stringify(value, null, 2));
@@ -28,20 +33,39 @@ function parsePositiveInteger(
 
 export async function marketingScheduleReporting(options: MarketingCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
-    const authProfile = resolveMarketingGoogleProfile(loaded.config, options);
-    const metaAuthProfile = resolveMarketingMetaProfile(loaded.config, options);
-    const googleAuth = await getMarketingGoogleAuthStatus({ profile: authProfile });
-    const metaAuth = await getMarketingMetaAuthStatus({ profile: metaAuthProfile });
+    const loaded = await loadMarketingExecutionContext();
+    const context = await loadGrowthProjectContext();
+    const environment =
+      context.growth.environments[selectGrowthEnvironment(context, options.environment)]!;
+    const connectionId = options.connection ?? environment.connections.google;
+    const serviceScopes = new Map([
+      ['ads', MARKETING_GOOGLE_ADS_SCOPE],
+      ['analytics', MARKETING_GOOGLE_ANALYTICS_SCOPE],
+      ['search-console', MARKETING_GOOGLE_SEARCH_CONSOLE_SCOPE],
+      ['tag-manager', MARKETING_GOOGLE_TAG_MANAGER_SCOPE],
+    ]);
+    const googleAuth = {
+      connectionId: connectionId ?? 'google',
+      connected: Boolean(connectionId),
+      scopes: environment.resources.flatMap((resource) => {
+        const scope = serviceScopes.get(resource.service);
+        return scope ? [scope] : [];
+      }),
+      credentialAvailable: Boolean(connectionId),
+    };
+    const metaConnectionId = environment.connections.meta;
+    const metaAuth = {
+      ok: false,
+      connectionId: metaConnectionId ?? 'meta',
+      connected: Boolean(metaConnectionId),
+      scopes: [],
+      credentialAvailable: false,
+    };
     const result = writeMarketingScheduledReportingPlan(loaded.config, {
       cwd: options.cwd,
-      limitsPath: options.limits,
       out: options.out,
-      authProfile,
-      metaAuthProfile,
+      connection: connectionId,
+      metaConnection: metaConnectionId,
       googleAuth,
       metaAuth,
       cadence: options.cadence === 'weekly' ? 'weekly' : 'daily',

@@ -1,15 +1,13 @@
 import path from 'node:path';
 import { writeJson } from '../../../utils/fs.js';
-import type { FetchLike } from '../google-ads/oauth.js';
-import type { GoogleSearchConsoleCredentials } from './config.js';
+import type { FetchLike } from '../google-ads/transport.js';
 import { querySearchConsolePerformance, type SearchConsoleDimension } from './query.js';
 
 export type FetchSearchConsolePerformanceFileOptions = {
   cwd?: string;
   platformId: string;
   output: string;
-  credentials?: GoogleSearchConsoleCredentials;
-  accessToken?: string;
+  accessToken: string;
   siteUrl: string;
   startDate: string;
   endDate: string;
@@ -45,7 +43,6 @@ export async function fetchSearchConsolePerformanceFile(
   const outputPath = resolvePath(cwd, options.output);
   const performanceFile = await querySearchConsolePerformance({
     platformId: options.platformId,
-    credentials: options.credentials,
     accessToken: options.accessToken,
     siteUrl: options.siteUrl,
     startDate: options.startDate,

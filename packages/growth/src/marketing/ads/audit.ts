@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   auditMarketingTrackingSource,
   type MarketingTrackingAuditReport,
@@ -285,7 +285,7 @@ function nextStep(actions: MarketingAdsAuditAction[]): string {
 }
 
 export async function buildMarketingAdsAuditReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsAuditOptions = {},
 ): Promise<MarketingAdsAuditReport> {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -354,7 +354,7 @@ export async function buildMarketingAdsAuditReport(
 }
 
 export async function writeMarketingAdsAuditReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsAuditOptions = {},
 ): Promise<MarketingAdsAuditResult> {
   const cwd = path.resolve(options.cwd ?? process.cwd());

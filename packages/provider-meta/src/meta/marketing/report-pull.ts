@@ -3,20 +3,6 @@ import { asArray, asRecord, optionalString } from './graph-utils.js';
 
 type MetaAdsReportType = 'account' | 'campaign' | 'adSet' | 'ad' | 'creative' | 'device';
 
-function resolveEnv(
-  env: Record<string, string | undefined>,
-  envName: string | undefined,
-  code: string,
-  label: string,
-): string {
-  if (!envName) {
-    throw new Error(`[${code}] ${label} env name is required for read-only provider API pulls.`);
-  }
-  const value = env[envName];
-  if (value) return value;
-  throw new Error(`[${code}] ${envName} is not set.`);
-}
-
 async function readJsonResponse(response: Response): Promise<unknown> {
   if (response.ok) return response.json();
   let body = '';
@@ -54,21 +40,13 @@ function resolveMetaAdsReportType(input: ProviderApiPullContext): MetaAdsReportT
 export async function pullMetaAdsReport(
   input: ProviderApiPullContext,
 ): Promise<ProviderApiPullPayload<'meta-ads'>> {
-  const provider = input.config.providers.metaAds;
-  const accountId =
-    input.options.accountId ??
-    resolveEnv(
-      input.env,
-      provider.accountIdEnv,
-      'MARKETING_META_ADS_ACCOUNT_ID_REQUIRED',
-      'Meta Ads account id',
+  const accountId = input.options.accountId ?? input.credentials?.accountId;
+  const accessToken = input.credentials?.accessToken;
+  if (!accountId || !accessToken) {
+    throw new Error(
+      '[MARKETING_META_ADS_CONNECTION_INCOMPLETE] Meta Ads report pulls require a selected ad account and canonical connection credential.',
     );
-  const accessToken = resolveEnv(
-    input.env,
-    provider.accessTokenEnv,
-    'MARKETING_META_ADS_ACCESS_TOKEN_REQUIRED',
-    'Meta Ads access token',
-  );
+  }
   const version = input.options.apiVersion ?? 'v25.0';
   const maxPages = input.options.maxPages ?? 10;
   const reportType = resolveMetaAdsReportType(input);

@@ -1,6 +1,5 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
 import type {
   MarketingConversion,
   MarketingConversionRegistry,
@@ -43,6 +42,7 @@ export type MarketingGoogleAdsGoalPlan = {
 
 export type MarketingGoogleAdsGoalsOptions = {
   accessToken?: string;
+  developerToken?: string;
   accountId?: string;
   managerCustomerId?: string;
   env?: Record<string, string | undefined>;
@@ -82,23 +82,6 @@ function asRecord(value: unknown): Record<string, unknown> {
 
 function asArray(value: unknown): unknown[] {
   return Array.isArray(value) ? value : [];
-}
-
-function requiredEnv(
-  env: Record<string, string | undefined>,
-  name: string | undefined,
-  label: string,
-): string {
-  if (!name)
-    throw new Error(
-      `[GOOGLE_ADS_GOALS_${label}_ENV_MISSING] Marketing config does not define ${label}.`,
-    );
-  const value = env[name]?.trim();
-  if (!value)
-    throw new Error(
-      `[GOOGLE_ADS_GOALS_${label}_MISSING] Set ${name} before running Google Ads goals setup.`,
-    );
-  return value;
 }
 
 function headers(input: {
@@ -150,47 +133,27 @@ function buildOperations(registry: MarketingConversionRegistry): MarketingGoogle
     .filter((entry): entry is MarketingGoogleAdsGoalOperation => Boolean(entry));
 }
 
-function envCustomerId(
-  config: MarketingConfig,
-  env: Record<string, string | undefined>,
-): string | undefined {
-  const accountEnv = config.providers.googleAds.accountIdEnv;
-  return normalizeCustomerId(accountEnv ? env[accountEnv] : undefined);
-}
-
-function envLoginCustomerId(
-  config: MarketingConfig,
-  env: Record<string, string | undefined>,
-): string | undefined {
-  const loginEnv = config.providers.googleAds.loginCustomerIdEnv;
-  return normalizeCustomerId(loginEnv ? env[loginEnv] : undefined);
-}
-
 function plannedStep(validateOnly: boolean, live: boolean): string {
   if (live)
-    return 'Pull the Google Ads conversion report and wire returned conversion action ids into app env.';
+    return 'Pull the Google Ads conversion report and reconcile the returned actions with the selected connection resources.';
   if (validateOnly)
     return 'Review validate-only result, then rerun with --yes and exact account confirmation.';
   return 'Run ads goals google --dry-run to validate the planned conversion action mutations.';
 }
 
 export function buildMarketingGoogleAdsGoalPlan(input: {
-  config: MarketingConfig;
   registry: MarketingConversionRegistry;
   accountId?: string;
   managerCustomerId?: string;
-  env?: Record<string, string | undefined>;
   now?: Date;
 }): MarketingGoogleAdsGoalPlan {
-  const env = input.env ?? process.env;
-  const customerId = normalizeCustomerId(input.accountId) ?? envCustomerId(input.config, env);
+  const customerId = normalizeCustomerId(input.accountId);
   if (!customerId) {
     throw new Error(
-      '[GOOGLE_ADS_GOALS_CUSTOMER_MISSING] Pass --account-id or set the configured Google Ads customer env.',
+      '[GOOGLE_ADS_GOALS_CUSTOMER_MISSING] Select a Google Ads customer through the canonical Google connection.',
     );
   }
-  const loginCustomerId =
-    normalizeCustomerId(input.managerCustomerId) ?? envLoginCustomerId(input.config, env);
+  const loginCustomerId = normalizeCustomerId(input.managerCustomerId);
   return {
     kind: 'unisane.marketing.google-ads-goals',
     version: 1,
@@ -281,27 +244,24 @@ function operationResultResourceName(result: unknown): string | undefined {
 }
 
 export async function applyMarketingGoogleAdsGoals(
-  config: MarketingConfig,
   registry: MarketingConversionRegistry,
   options: MarketingGoogleAdsGoalsOptions,
 ): Promise<MarketingGoogleAdsGoalPlan> {
-  const env = options.env ?? process.env;
   const accessToken = options.accessToken;
   if (!accessToken)
     throw new Error(
       '[GOOGLE_ADS_GOALS_ACCESS_TOKEN_MISSING] Google Ads OAuth access token is required.',
     );
-  const developerToken = requiredEnv(
-    env,
-    config.providers.googleAds.developerTokenEnv,
-    'DEVELOPER_TOKEN',
-  );
+  const developerToken = options.developerToken;
+  if (!developerToken) {
+    throw new Error(
+      '[GOOGLE_ADS_DEVELOPER_ACCESS_REQUIRED] The selected Google connection does not provide approved developer access.',
+    );
+  }
   const plan = buildMarketingGoogleAdsGoalPlan({
-    config,
     registry,
     accountId: options.accountId,
     managerCustomerId: options.managerCustomerId,
-    env,
     now: options.now,
   });
   const fetcher = options.fetch ?? fetch;

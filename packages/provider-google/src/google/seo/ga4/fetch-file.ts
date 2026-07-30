@@ -1,15 +1,13 @@
 import path from 'node:path';
 import { writeJson } from '../../../utils/fs.js';
-import type { FetchLike } from '../google-ads/oauth.js';
-import type { GoogleAnalyticsDataCredentials } from './config.js';
+import type { FetchLike } from '../google-ads/transport.js';
 import { runGa4PerformanceReport } from './run-report.js';
 
 export type FetchGa4PerformanceFileOptions = {
   cwd?: string;
   platformId: string;
   output: string;
-  credentials?: GoogleAnalyticsDataCredentials;
-  accessToken?: string;
+  accessToken: string;
   propertyId: string;
   startDate: string;
   endDate: string;
@@ -42,7 +40,6 @@ export async function fetchGa4PerformanceFile(
   const outputPath = resolvePath(cwd, options.output);
   const performanceFile = await runGa4PerformanceReport({
     platformId: options.platformId,
-    credentials: options.credentials,
     accessToken: options.accessToken,
     propertyId: options.propertyId,
     startDate: options.startDate,

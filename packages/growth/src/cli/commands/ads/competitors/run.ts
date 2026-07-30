@@ -1,7 +1,5 @@
-import {
-  loadMarketingConfig,
-  writeMarketingAdsCompetitorMonitorReport,
-} from '@unisane/growth/marketing';
+import { writeMarketingAdsCompetitorMonitorReport } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { AdsCliOptions } from '../options.js';
 import { printAdsCompetitorsResult } from '../output/competitors.js';
 
@@ -22,10 +20,7 @@ function printJson(value: unknown): void {
 
 export async function adsCompetitors(options: AdsCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const result = writeMarketingAdsCompetitorMonitorReport(loaded.config, {
       cwd: options.cwd,
       maxAgeDays: parseMaxAgeDays(options.maxAgeDays),

@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingResearchMemoryFileSchema,
   type MarketingResearchAction,
@@ -47,12 +47,12 @@ export type MarketingResearchStatusOptions = {
   researchRoot?: string;
 };
 
-export function marketingResearchRoot(config: MarketingConfig, cwd: string): string {
+export function marketingResearchRoot(config: MarketingExecutionContext, cwd: string): string {
   return path.resolve(cwd, config.paths.marketingRoot, 'research');
 }
 
 export function readMarketingResearchMemoryFiles(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingResearchStatusOptions = {},
 ): Array<{ path: string; file: MarketingResearchMemoryFile; updatedAt: string }> {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -76,7 +76,7 @@ export function readMarketingResearchMemoryFiles(
 }
 
 export function readMarketingResearchStatus(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingResearchStatusOptions = {},
 ): MarketingResearchStatusSummary {
   const cwd = path.resolve(options.cwd ?? process.cwd());

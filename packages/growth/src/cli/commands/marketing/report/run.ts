@@ -1,8 +1,8 @@
 import {
   buildUnifiedMarketingReport,
-  loadMarketingConfig,
   readMarketingProviderReportStatus,
 } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { MarketingCliOptions } from '../options.js';
 import { printMarketingProviderReportStatus } from '../output/doctor.js';
 import { printUnifiedMarketingReport } from '../output/report.js';
@@ -25,10 +25,7 @@ function parseMaxAgeDays(value: string | undefined): number | undefined {
 export async function marketingReport(options: MarketingCliOptions): Promise<number> {
   try {
     if (options.unified) {
-      const loaded = await loadMarketingConfig({
-        cwd: options.cwd,
-        configPath: options.config,
-      });
+      const loaded = await loadMarketingExecutionContext();
       const unified = await buildUnifiedMarketingReport(loaded.config, {
         cwd: options.cwd,
         sourceRoots: options.sourceRoot,

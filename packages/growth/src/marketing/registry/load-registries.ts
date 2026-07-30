@@ -10,7 +10,7 @@ import {
   marketingEventRegistrySchema,
   type MarketingEventRegistry,
 } from '../schema/event-registry.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 
 type LoadedMarketingArtifact<T> = {
   path: string;
@@ -74,7 +74,7 @@ async function loadArtifact<T>(
 }
 
 export async function loadMarketingRegistries(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: LoadMarketingRegistryOptions = {},
 ): Promise<LoadedMarketingRegistries> {
   const cwd = path.resolve(options.cwd ?? process.cwd());

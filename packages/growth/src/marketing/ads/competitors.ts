@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingProviderReportArtifactSchema,
   type MarketingProviderReportRecord,
@@ -256,7 +256,7 @@ function buildSignals(
 }
 
 export function buildMarketingAdsCompetitorMonitorReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsCompetitorMonitorOptions = {},
 ): MarketingAdsCompetitorMonitorReport {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -367,7 +367,7 @@ export function buildMarketingAdsCompetitorMonitorReport(
 }
 
 export function writeMarketingAdsCompetitorMonitorReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsCompetitorMonitorOptions = {},
 ): MarketingAdsCompetitorMonitorResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());

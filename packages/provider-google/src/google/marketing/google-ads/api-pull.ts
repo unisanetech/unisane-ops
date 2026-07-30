@@ -1,5 +1,5 @@
 import type { ProviderApiPullContext, ProviderApiPullPayload } from '@unisane/growth/contracts';
-import { asArray, asRecord, readJsonResponse, resolveEnv } from '../transport-utils.js';
+import { asArray, asRecord, readJsonResponse } from '../transport-utils.js';
 
 type GoogleAdsReportType =
   | 'account'
@@ -70,30 +70,23 @@ function normalizeGoogleAdsCustomerId(value: string): string {
 export async function pullGoogleAdsReport(
   input: ProviderApiPullContext,
 ): Promise<ProviderApiPullPayload<'google-ads'>> {
-  const provider = input.config.providers.googleAds;
-  const customerId =
-    input.options.accountId ??
-    resolveEnv(
-      input.env,
-      provider.accountIdEnv,
-      'MARKETING_GOOGLE_ADS_CUSTOMER_ID_REQUIRED',
-      'Google Ads customer id',
+  const customerId = input.options.accountId;
+  if (!customerId) {
+    throw new Error('[MARKETING_GOOGLE_ADS_CUSTOMER_REQUIRED] Select a Google Ads customer.');
+  }
+  const accessToken = input.credentials?.accessToken;
+  if (!accessToken) {
+    throw new Error(
+      '[MARKETING_GOOGLE_ADS_CONNECTION_REQUIRED] Google Ads requires a canonical Google connection.',
     );
-  const accessToken = resolveEnv(
-    input.env,
-    provider.accessTokenEnv,
-    'MARKETING_GOOGLE_ADS_ACCESS_TOKEN_REQUIRED',
-    'Google Ads access token',
-  );
-  const developerToken = resolveEnv(
-    input.env,
-    provider.developerTokenEnv,
-    'MARKETING_GOOGLE_ADS_DEVELOPER_TOKEN_REQUIRED',
-    'Google Ads developer token',
-  );
-  const loginCustomerId = provider.loginCustomerIdEnv
-    ? input.env[provider.loginCustomerIdEnv]?.trim()
-    : undefined;
+  }
+  const developerToken = input.credentials?.developerToken;
+  if (!developerToken) {
+    throw new Error(
+      '[MARKETING_GOOGLE_ADS_DEVELOPER_ACCESS_REQUIRED] Google Ads developer access is not available through the selected connection adapter.',
+    );
+  }
+  const loginCustomerId = input.credentials?.loginCustomerId;
   const version = input.options.apiVersion ?? 'v22';
   const reportType = resolveGoogleAdsReportType(input);
   const query = googleAdsQuery(reportType, input.options.startDate, input.options.endDate);

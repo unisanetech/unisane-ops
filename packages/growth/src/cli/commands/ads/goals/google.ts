@@ -3,15 +3,18 @@ import { log } from '../../../log.js';
 import {
   applyMarketingGoogleAdsGoals,
   buildMarketingGoogleAdsGoalPlan,
-  loadMarketingConfig,
   loadMarketingRegistries,
   MARKETING_GOOGLE_ADS_SCOPE,
   writeMarketingGoogleAdsGoalPlan,
   type MarketingGoogleAdsGoalPlan,
 } from '@unisane/growth/marketing';
-import { resolveMarketingGoogleAccessToken } from '../../marketing/auth/google.js';
-import { resolveMarketingGoogleProfile } from '../../marketing/profile-defaults.js';
 import type { AdsCliOptions } from '../options.js';
+import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
+import {
+  loadGrowthProjectContext,
+  loadMarketingExecutionContext,
+  resolveGrowthResource,
+} from '../../../project-context.js';
 
 function printJson(value: unknown): void {
   console.log(JSON.stringify(value, null, 2));
@@ -61,16 +64,24 @@ function printPlan(plan: MarketingGoogleAdsGoalPlan, outPath?: string): void {
 
 export async function adsGoalsGoogle(options: AdsCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const cwd = path.resolve(options.cwd ?? process.cwd());
     const registries = await loadMarketingRegistries(loaded.config, { cwd });
+    const selectedCustomer = resolveGrowthResource({
+      context: await loadGrowthProjectContext(),
+      environment: options.environment,
+      provider: 'google',
+      service: 'ads',
+      resourceType: 'customer',
+    });
+    if (options.accountId && options.accountId !== selectedCustomer.resourceId) {
+      throw new Error(
+        `[GROWTH_RESOURCE_OVERRIDE_REJECTED] '${options.accountId}' is not the selected Google Ads customer.`,
+      );
+    }
     const planned = buildMarketingGoogleAdsGoalPlan({
-      config: loaded.config,
       registry: registries.conversions.value,
-      accountId: options.accountId,
+      accountId: selectedCustomer.resourceId,
       managerCustomerId: options.managerCustomerId,
     });
 
@@ -93,14 +104,16 @@ export async function adsGoalsGoogle(options: AdsCliOptions): Promise<number> {
       requiredAccountConfirmation(options, planned.customerId);
     }
 
-    const authProfile = resolveMarketingGoogleProfile(loaded.config, options);
-    const accessToken = await resolveMarketingGoogleAccessToken({
-      authProfile,
+    const credentials = await resolveGrowthGoogleConnectionCredentials({
+      service: 'ads',
+      connection: options.connection,
+      environment: options.environment,
       requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
     });
-    const result = await applyMarketingGoogleAdsGoals(loaded.config, registries.conversions.value, {
-      accessToken,
-      accountId: options.accountId,
+    const result = await applyMarketingGoogleAdsGoals(registries.conversions.value, {
+      accessToken: credentials.accessToken,
+      developerToken: credentials.developerToken,
+      accountId: selectedCustomer.resourceId,
       managerCustomerId: options.managerCustomerId,
       apiVersion: options.apiVersion,
       validateOnly: Boolean(options.dryRun),

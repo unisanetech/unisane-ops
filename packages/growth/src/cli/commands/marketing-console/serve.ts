@@ -18,15 +18,13 @@ function parsePositiveInteger(
 
 export async function marketingConsoleServe(options: MarketingConsoleCliOptions): Promise<number> {
   try {
-    const authContext = await resolveMarketingConsoleAuthContext(options);
+    const authContext = await resolveMarketingConsoleAuthContext();
     const result = await serveMarketingConsoleApp({
       cwd: options.cwd,
-      configPath: options.config,
       outputDirectory: options.out,
       host: options.host,
       port: parsePositiveInteger(options.port, 4174, '--port'),
       maxAgeDays: parsePositiveInteger(options.maxAgeDays, 3, '--max-age-days'),
-      limitsPath: options.limits,
       googleAuth: authContext.googleAuth,
       metaAuth: authContext.metaAuth,
     });

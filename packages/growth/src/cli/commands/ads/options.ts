@@ -8,9 +8,9 @@ export type AdsCliOptions = {
   api?: boolean;
   apiVersion?: string;
   approvalRef?: string;
-  authProfile?: string;
+  connection?: string;
+  environment?: string;
   cwd?: string;
-  config?: string;
   currency?: string;
   dailyBudget?: string;
   dryRun?: boolean;
@@ -27,7 +27,6 @@ export type AdsCliOptions = {
   maxAgeDays?: string;
   maxPages?: string;
   managerCustomerId?: string;
-  metaAuthProfile?: string;
   name?: string;
   out?: string;
   owner?: string;

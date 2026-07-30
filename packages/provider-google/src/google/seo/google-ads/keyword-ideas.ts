@@ -1,7 +1,7 @@
 import { normalizeKeywordTerm } from '@unisane/growth/contracts';
 import { keywordMetricFileSchema, type KeywordMetricFile } from '@unisane/growth/contracts';
 import type { GoogleAdsKeywordPlannerCredentials } from './config.js';
-import { refreshGoogleOAuthAccessToken, type FetchLike } from './oauth.js';
+import type { FetchLike } from './transport.js';
 
 export type FetchGoogleAdsKeywordIdeasOptions = {
   platformId: string;
@@ -19,7 +19,7 @@ export type FetchGoogleAdsKeywordIdeasOptions = {
   campaignIntent?: string;
   includeAdultKeywords?: boolean;
   pageSize?: number;
-  accessToken?: string;
+  accessToken: string;
   fetchImpl?: FetchLike;
   fetchedAt?: string;
   runId?: string;
@@ -45,14 +45,7 @@ export async function fetchGoogleAdsKeywordIdeas(
   }
 
   const fetchImpl = options.fetchImpl ?? fetch;
-  const accessToken =
-    options.accessToken ??
-    (await refreshGoogleOAuthAccessToken({
-      clientId: options.credentials.clientId,
-      clientSecret: options.credentials.clientSecret,
-      refreshToken: requireRefreshToken(options.credentials.refreshToken),
-      fetchImpl,
-    }));
+  const accessToken = options.accessToken;
   const response = await fetchImpl(createKeywordIdeasUrl(options.credentials), {
     method: 'POST',
     headers: createGoogleAdsHeaders(options.credentials, accessToken),
@@ -93,11 +86,6 @@ export async function fetchGoogleAdsKeywordIdeas(
       )
       .filter((metric) => metric.normalizedTerm.length > 0),
   });
-}
-
-function requireRefreshToken(refreshToken: string | undefined): string {
-  if (refreshToken?.trim()) return refreshToken;
-  throw new Error('Missing Google Ads OAuth refresh token or access token.');
 }
 
 function createKeywordIdeasUrl(credentials: GoogleAdsKeywordPlannerCredentials): string {

@@ -1,7 +1,5 @@
-import {
-  loadMarketingConfig,
-  writeMarketingConfirmedConversionPull,
-} from '@unisane/growth/marketing';
+import { writeMarketingConfirmedConversionPull } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { MarketingCliOptions } from '../options.js';
 
 function printJson(value: unknown): void {
@@ -19,10 +17,7 @@ export async function marketingConversionPull(options: MarketingCliOptions): Pro
     if (!options.input) {
       throw new Error('[MARKETING_CONVERSION_PULL_INPUT_REQUIRED] Pass --input <artifact.json>.');
     }
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const result = writeMarketingConfirmedConversionPull(loaded.config, {
       cwd: options.cwd,
       inputPath: options.input,

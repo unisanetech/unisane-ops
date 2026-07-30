@@ -2,8 +2,9 @@ import { log } from '../../../log.js';
 import { loadSeoResearchConfig } from '@unisane/growth/seo';
 import { fetchGoogleAdsKeywordMetricsFile } from '../../../provider-adapters.js';
 import { printFetchGoogleAdsKeywordMetricsFileResult } from '../format-output.js';
-import { resolveSeoGoogleAccessToken } from '../google-suite-auth.js';
+import { resolveSeoGoogleConnectionCredentials } from '../google-connection.js';
 import type { SeoKeywordFetchGoogleAdsCliOptions } from '../options.js';
+import { loadGrowthProjectContext, resolveGrowthResource } from '../../../project-context.js';
 
 const GOOGLE_ADS_SCOPE = 'https://www.googleapis.com/auth/adwords';
 
@@ -24,13 +25,27 @@ export async function seoKeywordsFetchGoogleAds(
       cwd: options.cwd,
       platformId: options.platform,
     });
-    const accessToken = await resolveAdsAccessToken(options);
+    const credentials = await resolveSeoGoogleConnectionCredentials({
+      service: 'ads',
+      connection: options.connection,
+      environment: options.environment,
+      requiredScope: GOOGLE_ADS_SCOPE,
+    });
+    const customer = resolveGrowthResource({
+      context: await loadGrowthProjectContext(),
+      environment: options.environment,
+      provider: 'google',
+      service: 'ads',
+      resourceType: 'customer',
+    });
     const result = await fetchGoogleAdsKeywordMetricsFile({
       cwd: options.cwd,
       platformId: options.platform,
       output: options.out,
       env: process.env,
-      accessToken,
+      accessToken: credentials.accessToken,
+      developerToken: credentials.developerToken,
+      customerId: customer.resourceId,
       candidates: options.candidates,
       seedFile: options.seedFile,
       keywords: parseCsvList(options.keywords),
@@ -71,21 +86,6 @@ function normalizeCurrencyCode(value: string | undefined): string | undefined {
 function cleanOptional(value: string | undefined): string | undefined {
   const trimmed = value?.trim();
   return trimmed ? trimmed : undefined;
-}
-
-async function resolveAdsAccessToken(
-  options: SeoKeywordFetchGoogleAdsCliOptions,
-): Promise<string | undefined> {
-  const accessTokenEnv = options.accessTokenEnv ?? 'GOOGLE_ADS_ACCESS_TOKEN';
-  if (process.env[accessTokenEnv]?.trim() || options.authProfile || options.platform) {
-    return resolveSeoGoogleAccessToken({
-      accessTokenEnv,
-      authProfile: options.authProfile,
-      platform: options.platform,
-      requiredScope: GOOGLE_ADS_SCOPE,
-    });
-  }
-  return undefined;
 }
 
 function parseCsvList(value: string | undefined): string[] {

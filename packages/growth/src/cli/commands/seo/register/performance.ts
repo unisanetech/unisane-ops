@@ -36,7 +36,6 @@ export function registerSeoPerformanceCommands(seo: Command): void {
       .command('fetch-ga4')
       .description('Fetch GA4 landing page performance through the Data API'),
   )
-    .requiredOption('--property-id <id>', 'GA4 property id, with or without properties/ prefix')
     .requiredOption('--start-date <date>', 'Start date in YYYY-MM-DD format')
     .requiredOption('--end-date <date>', 'End date in YYYY-MM-DD format')
     .requiredOption('--out <path>', 'Normalized SEO performance output path')
@@ -49,11 +48,8 @@ export function registerSeoPerformanceCommands(seo: Command): void {
     .option('--limit <count>', 'Maximum rows per GA4 API request')
     .option('--offset <offset>', 'Zero-based GA4 row offset')
     .option('--max-rows <count>', 'Maximum rows to fetch across pages')
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing/google auth profile; defaults to --platform when available',
-    )
-    .option('--access-token-env <name>', 'Environment variable containing a GA4 access token')
+    .option('--connection <id>', 'Canonical Google connection id')
+    .option('--environment <name>', 'Ops environment name')
     .option('--dry-run', 'Preview GA4 fetch without writing')
     .action(async (options: SeoPerformanceFetchGa4CliOptions) => {
       await runSeoCommand(options, seoPerformanceFetchGa4);
@@ -64,7 +60,6 @@ export function registerSeoPerformanceCommands(seo: Command): void {
       .command('fetch-search-console')
       .description('Fetch Google Search Console performance through the API'),
   )
-    .requiredOption('--site-url <url>', 'Search Console site URL or sc-domain property')
     .requiredOption('--start-date <date>', 'Start date in YYYY-MM-DD format')
     .requiredOption('--end-date <date>', 'End date in YYYY-MM-DD format')
     .requiredOption('--out <path>', 'Normalized SEO performance output path')
@@ -74,14 +69,8 @@ export function registerSeoPerformanceCommands(seo: Command): void {
     .option('--max-rows <count>', 'Maximum rows to fetch across pages')
     .option('--search-type <type>', 'Search type: web, image, video, news, discover, googleNews')
     .option('--data-state <state>', 'Search Console data state, for example final or all')
-    .option(
-      '--auth-profile <name>',
-      'Saved marketing/google auth profile; defaults to --platform when available',
-    )
-    .option(
-      '--access-token-env <name>',
-      'Environment variable containing a Search Console access token',
-    )
+    .option('--connection <id>', 'Canonical Google connection id')
+    .option('--environment <name>', 'Ops environment name')
     .option('--dry-run', 'Preview Search Console fetch without writing')
     .action(async (options: SeoPerformanceFetchSearchConsoleCliOptions) => {
       await runSeoCommand(options, seoPerformanceFetchSearchConsole);

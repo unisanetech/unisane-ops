@@ -15,10 +15,11 @@ import {
   type GoogleTagManagerValidationResult,
 } from '../../../gtm/index.js';
 import { executeGrowthProviderCommand } from '../../provider-runtime.js';
-import { resolveGoogleTagManagerAccessToken } from './auth.js';
+import { resolveGrowthGoogleConnectionToken } from '../../connections/google.js';
 import { loadGoogleTagManagerManifest } from './manifest-loader.js';
 
-const GTM_AUTH_PROFILE_ENV = 'UNISANE_GTM_AUTH_PROFILE';
+export const GOOGLE_TAG_MANAGER_PUBLISH_SCOPE =
+  'https://www.googleapis.com/auth/tagmanager.publish';
 
 export type GoogleTagManagerCliOptions = {
   app?: string;
@@ -28,8 +29,7 @@ export type GoogleTagManagerCliOptions = {
   json?: boolean;
   output?: string;
   snapshot?: string;
-  accessTokenEnv?: string;
-  authProfile?: string;
+  connection?: string;
   workspaceId?: string;
   workspaceName?: string;
   extended?: boolean;
@@ -91,9 +91,6 @@ export async function loadCommandContext(
     manifestPath: options.manifest,
     app: options.app,
   });
-  if (!options.authProfile && !process.env[GTM_AUTH_PROFILE_ENV]) {
-    options.authProfile = loaded.manifest.appId;
-  }
   return {
     cwd,
     manifest: loaded.manifest,
@@ -179,9 +176,10 @@ export async function accessToken(
   options: GoogleTagManagerCliOptions,
   requiredScope: string,
 ): Promise<string> {
-  return resolveGoogleTagManagerAccessToken({
-    accessTokenEnv: options.accessTokenEnv,
-    authProfile: options.authProfile,
+  return resolveGrowthGoogleConnectionToken({
+    service: 'tag-manager',
+    connection: options.connection,
+    environment: options.env,
     requiredScope,
   });
 }

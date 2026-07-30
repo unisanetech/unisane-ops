@@ -1,5 +1,6 @@
 import { log } from '../../../log.js';
-import { loadMarketingConfig, writeMarketingAdsOptimization } from '@unisane/growth/marketing';
+import { writeMarketingAdsOptimization } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { AdsCliOptions } from '../options.js';
 import { printAdsOptimizationResult } from '../output/optimize.js';
 
@@ -25,10 +26,7 @@ function parseMaxAgeDays(value: string | undefined): number | undefined {
 
 export async function adsOptimize(options: AdsCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const result = await writeMarketingAdsOptimization(loaded.config, {
       cwd: options.cwd,
       maxAgeDays: parseMaxAgeDays(options.maxAgeDays),

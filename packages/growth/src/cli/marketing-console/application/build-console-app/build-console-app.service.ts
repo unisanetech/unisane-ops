@@ -6,8 +6,8 @@ import { renderMarketingConsoleHtml } from '../../app/static-app.js';
 import type { MarketingConsoleBuildResult } from '../../contracts/marketing-console-app.js';
 import { buildMarketingConsoleState } from '../build-console-state/build-console-state.service.js';
 import type {
-  MarketingGoogleAuthProfileStatus,
-  MarketingMetaAuthProfileStatus,
+  MarketingGoogleConnectionStatus,
+  MarketingMetaConnectionStatus,
 } from '@unisane/growth/marketing';
 
 export type BuildMarketingConsoleAppOptions = {
@@ -16,10 +16,9 @@ export type BuildMarketingConsoleAppOptions = {
   outputDirectory?: string;
   dryRun?: boolean;
   maxAgeDays?: number;
-  limitsPath?: string;
   now?: Date;
-  googleAuth?: MarketingGoogleAuthProfileStatus;
-  metaAuth?: MarketingMetaAuthProfileStatus;
+  googleAuth?: MarketingGoogleConnectionStatus;
+  metaAuth?: MarketingMetaConnectionStatus;
 };
 
 export async function buildMarketingConsoleApp(
@@ -28,10 +27,8 @@ export async function buildMarketingConsoleApp(
   const cwd = path.resolve(options.cwd ?? process.cwd());
   const state = await buildMarketingConsoleState({
     cwd,
-    configPath: options.configPath,
     outputDirectory: options.outputDirectory,
     maxAgeDays: options.maxAgeDays,
-    limitsPath: options.limitsPath,
     googleAuth: options.googleAuth,
     metaAuth: options.metaAuth,
     now: options.now,

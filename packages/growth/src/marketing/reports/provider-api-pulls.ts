@@ -1,5 +1,5 @@
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingProviderReportArtifactSchema,
   marketingProviderReportTypeSchema,
@@ -14,6 +14,7 @@ import {
 import type {
   FetchLike,
   MarketingProviderApiPullDriver,
+  ProviderApiPullContext,
   ProviderApiPullOptions,
 } from '../providers/api-pull-types.js';
 
@@ -23,13 +24,14 @@ export type MarketingProviderApiPullOptions = ProviderApiPullOptions & {
   env?: Record<string, string | undefined>;
   fetch?: FetchLike;
   driver?: MarketingProviderApiPullDriver;
+  credentials?: ProviderApiPullContext['credentials'];
   now?: Date;
 };
 
 export type MarketingProviderApiPullResult = MarketingProviderCacheWriteResult;
 
 export async function writeMarketingProviderApiReportPull(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingProviderApiPullOptions,
 ): Promise<MarketingProviderApiPullResult> {
   const provider = marketingReportProviderSchema.parse(options.provider);
@@ -47,6 +49,7 @@ export async function writeMarketingProviderApiReportPull(
       ...window,
       reportType,
     },
+    credentials: options.credentials,
     env,
     fetch: fetcher,
   };

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingProviderReportArtifactSchema,
   marketingReportProviderSchema,
@@ -81,7 +81,7 @@ function resolveProviders(provider?: string): MarketingReportProvider[] {
 }
 
 export function writeMarketingProviderReportPull(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingProviderPullOptions,
 ): MarketingProviderPullResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());

@@ -2,15 +2,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { GoogleTagManagerContainerManifest } from '../../../contracts.js';
-
-const GTM_MANIFEST_CANDIDATES = [
-  path.join('config', 'google-tag-manager.ts'),
-  path.join('config', 'google-tag-manager.mjs'),
-  path.join('config', 'gtm.container.ts'),
-  path.join('config', 'gtm.container.mjs'),
-  path.join('src', 'config', 'google-tag-manager.ts'),
-  path.join('src', 'config', 'gtm.container.ts'),
-] as const;
+import { loadGrowthProjectContext } from '../../project-context.js';
 
 type LoadedModule = {
   default?: unknown;
@@ -51,26 +43,13 @@ function ensureWithinCwd(cwd: string, resolvedPath: string): void {
   }
 }
 
-function resolveManifestPath(cwd: string, explicitPath?: string): string {
-  if (explicitPath) {
-    const resolved = path.resolve(cwd, explicitPath);
-    ensureWithinCwd(cwd, resolved);
-    if (!existsSync(resolved)) {
-      throw new Error(`[GTM_MANIFEST_NOT_FOUND] GTM manifest was not found at ${resolved}.`);
-    }
-    return resolved;
+function resolveManifestPath(cwd: string, selectedPath: string): string {
+  const resolved = path.resolve(cwd, selectedPath);
+  ensureWithinCwd(cwd, resolved);
+  if (!existsSync(resolved)) {
+    throw new Error(`[GTM_MANIFEST_NOT_FOUND] GTM manifest was not found at ${resolved}.`);
   }
-
-  for (const candidate of GTM_MANIFEST_CANDIDATES) {
-    const resolved = path.resolve(cwd, candidate);
-    if (existsSync(resolved)) {
-      return resolved;
-    }
-  }
-
-  throw new Error(
-    `[GTM_MANIFEST_NOT_FOUND] Could not find a GTM manifest. Create config/google-tag-manager.ts or pass --manifest <path>.`,
-  );
+  return resolved;
 }
 
 function manifestFromModule(moduleValue: LoadedModule): unknown {
@@ -82,8 +61,15 @@ export async function loadGoogleTagManagerManifest(args: {
   manifestPath?: string;
   app?: string;
 }): Promise<LoadedGoogleTagManagerManifest> {
-  const cwd = path.resolve(args.cwd ?? process.cwd());
-  const resolvedPath = resolveManifestPath(cwd, args.manifestPath);
+  const context = await loadGrowthProjectContext();
+  const cwd = path.resolve(args.cwd ?? context.projectRoot);
+  const selectedPath = args.manifestPath ?? context.growth.runtime.manifest;
+  if (!selectedPath) {
+    throw new Error(
+      '[GTM_MANIFEST_SELECTION_MISSING] Select the Growth runtime manifest in unisane.config.ts or pass --manifest <path>.',
+    );
+  }
+  const resolvedPath = resolveManifestPath(cwd, selectedPath);
   const imported = (await import(pathToFileURL(resolvedPath).href)) as LoadedModule;
   const manifest = manifestFromModule(imported);
 

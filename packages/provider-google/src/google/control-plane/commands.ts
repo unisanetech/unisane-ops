@@ -4,32 +4,14 @@ import {
   buildGoogleApisInventory,
   buildGoogleApisPlan,
   buildGoogleProductsInventory,
-  buildGoogleSetupStatus,
   type GoogleProviderCliOptions,
   type GoogleProviderInventoryArtifact,
   type GoogleProviderPlanArtifact,
   type GoogleProviderProductsInventoryArtifact,
-  type GoogleProviderSetupStatusReport,
 } from './model.js';
 
 function printJson(value: unknown): void {
   console.log(JSON.stringify(value, null, 2));
-}
-
-function printSetupStatus(report: GoogleProviderSetupStatusReport): void {
-  log.success(report.setupStatus.ready ? 'Google setup is ready' : 'Google setup needs action');
-  log.kv('Project', report.projectId ?? 'missing');
-  log.kv('Auth profile', `${report.authProfile.profile} (${report.authProfile.status})`);
-  log.kv('Env guidance', `${report.envReport.entries.length} secret-free entries`);
-  log.info('Checks');
-  for (const check of report.setupStatus.checks) {
-    log.kv(`  ${check.title}`, `${check.status}: ${check.message}`);
-  }
-  log.info('Next actions');
-  for (const action of report.setupStatus.nextActions) {
-    log.kv(`  ${action.title}`, `${action.owner}/${action.risk}: ${action.message}`);
-    if (action.command) log.kv('    command', action.command);
-  }
 }
 
 function printInventory(inventory: GoogleProviderInventoryArtifact): void {
@@ -49,7 +31,6 @@ function printProductsInventory(inventory: GoogleProviderProductsInventoryArtifa
   log.kv('GA4 properties', `${count('ga4Property')}`);
   log.kv('Search Console sites', `${count('searchConsoleSite')}`);
   log.kv('Google Ads customers', `${count('googleAdsCustomer')}`);
-  log.kv('Developer token env', inventory.developerTokenEnv);
   if (inventory.artifact) log.kv('Artifact', inventory.artifact.relativePath);
   for (const warning of inventory.warnings) log.warn(warning);
 }
@@ -63,17 +44,6 @@ function printPlan(plan: GoogleProviderPlanArtifact): void {
   for (const action of plan.actions.filter((entry) => entry.type === 'create')) {
     log.kv(`  ${action.id}`, `${action.risk}: ${action.summary}`);
   }
-}
-
-export async function googleDoctor(options: GoogleProviderCliOptions): Promise<number> {
-  const report = await buildGoogleSetupStatus(options);
-  if (options.json) printJson(report);
-  else printSetupStatus(report);
-  return report.setupStatus.ready ? 0 : 1;
-}
-
-export async function googleSetupStatus(options: GoogleProviderCliOptions): Promise<number> {
-  return googleDoctor(options);
 }
 
 export async function googleApisInventory(options: GoogleProviderCliOptions): Promise<number> {

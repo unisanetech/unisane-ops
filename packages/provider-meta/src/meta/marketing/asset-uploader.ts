@@ -14,15 +14,6 @@ async function parseProviderResponse(response: Response): Promise<unknown> {
   }
 }
 
-function envValue(
-  env: Record<string, string | undefined>,
-  name: string | undefined,
-): string | undefined {
-  if (!name) return undefined;
-  const value = env[name]?.trim();
-  return value ? value : undefined;
-}
-
 function accountPath(accountId: string): string {
   return accountId.startsWith('act_') ? accountId : `act_${accountId}`;
 }
@@ -51,12 +42,11 @@ export async function uploadMetaAdsAsset(
       '[ADS_ASSET_META_PROVIDER_INVALID] Meta asset uploader received a non-Meta operation.',
     );
   }
-  const provider = options.config.providers.metaAds;
-  const accountId = envValue(options.env, provider.accountIdEnv);
-  const accessToken = envValue(options.env, provider.accessTokenEnv);
+  const accountId = options.credentials?.accountId;
+  const accessToken = options.credentials?.accessToken;
   if (!accountId || !accessToken) {
     throw new Error(
-      '[ADS_ASSET_META_ENV_MISSING] Meta asset upload requires account id and access token env refs.',
+      '[ADS_ASSET_META_CONNECTION_INCOMPLETE] Meta asset upload requires a selected ad account and canonical connection credential.',
     );
   }
   const apiVersion = options.apiVersion ?? 'v25.0';

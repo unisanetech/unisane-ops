@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { loadMarketingRegistries } from '../registry/load-registries.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import type { MarketingReportMetrics, MarketingReportProvider } from '../schema/report.js';
 import {
   auditMarketingTrackingSource,
@@ -192,7 +192,7 @@ function reconcileConversionTruth(input: {
 }
 
 export async function buildUnifiedMarketingReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingUnifiedReportOptions = {},
 ): Promise<MarketingUnifiedReport> {
   const cwd = path.resolve(options.cwd ?? process.cwd());

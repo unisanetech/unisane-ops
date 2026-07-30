@@ -1,13 +1,11 @@
 import type { SeoPerformanceFile } from '@unisane/growth/contracts';
 import { seoPerformanceFileSchema } from '@unisane/growth/contracts';
-import { refreshGoogleOAuthAccessToken, type FetchLike } from '../google-ads/oauth.js';
-import type { GoogleAnalyticsDataCredentials } from './config.js';
+import type { FetchLike } from '../google-ads/transport.js';
 import { mapGa4RowsToPerformanceRecords, type Ga4ResponseRow } from './map-report.js';
 
 export type RunGa4PerformanceReportOptions = {
   platformId: string;
-  credentials?: GoogleAnalyticsDataCredentials;
-  accessToken?: string;
+  accessToken: string;
   propertyId: string;
   startDate: string;
   endDate: string;
@@ -24,7 +22,7 @@ export async function runGa4PerformanceReport(
   options: RunGa4PerformanceReportOptions,
 ): Promise<SeoPerformanceFile> {
   const fetchImpl = options.fetchImpl ?? fetch;
-  const accessToken = await resolveAccessToken(options, fetchImpl);
+  const accessToken = options.accessToken;
   const rows = await fetchAllRows({ options, fetchImpl, accessToken });
 
   return seoPerformanceFileSchema.parse({
@@ -40,22 +38,6 @@ export async function runGa4PerformanceReport(
       metrics: options.metrics,
       fetchedAt: options.fetchedAt ?? new Date().toISOString(),
     }),
-  });
-}
-
-async function resolveAccessToken(
-  options: RunGa4PerformanceReportOptions,
-  fetchImpl: FetchLike,
-): Promise<string> {
-  if (options.accessToken?.trim()) return options.accessToken.trim();
-  if (!options.credentials) {
-    throw new Error('Missing Google Analytics Data API credentials or access token.');
-  }
-  return refreshGoogleOAuthAccessToken({
-    clientId: options.credentials.clientId,
-    clientSecret: options.credentials.clientSecret,
-    refreshToken: options.credentials.refreshToken,
-    fetchImpl,
   });
 }
 

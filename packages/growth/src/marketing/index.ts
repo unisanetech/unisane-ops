@@ -4,59 +4,26 @@ export {
   MARKETING_GOOGLE_AUTH_SCOPES,
   MARKETING_GOOGLE_SEARCH_CONSOLE_SCOPE,
   MARKETING_GOOGLE_TAG_MANAGER_SCOPE,
-  marketingGoogleAuthReadyForProvider,
+  marketingGoogleConnectionReadyForProvider,
   requiredMarketingGoogleScope,
-  type MarketingGoogleAuthProfileStatus,
-} from './auth/google.js';
-export { marketingMetaAuthReady, type MarketingMetaAuthProfileStatus } from './auth/meta.js';
+  type MarketingGoogleConnectionStatus,
+} from './connections/google.js';
 export {
-  discoverMarketingGoogleAccounts,
-  writeMarketingGoogleDiscovery,
-  type MarketingGa4Discovery,
-  type MarketingGa4DiscoveryProperty,
-  type MarketingGoogleAdsDiscovery,
-  type MarketingGoogleDiscoveryAction,
-  type MarketingGoogleDiscoveryDriver,
-  type MarketingGoogleDiscoveryOptions,
-  type MarketingGoogleDiscoveryReport,
-  type MarketingGoogleDiscoveryStatus,
-  type MarketingGoogleDiscoveryWriteOptions,
-  type MarketingSearchConsoleDiscovery,
-  type MarketingSearchConsoleDiscoverySite,
-} from './setup/google-discovery.js';
+  marketingMetaConnectionReady,
+  type MarketingMetaConnectionStatus,
+} from './connections/meta.js';
 export {
-  createMarketingGoogleAdsTestClient,
-  verifyMarketingGoogleAdsApiSetup,
-  type MarketingGoogleAdsApiCustomer,
-  type MarketingGoogleAdsApiSetupReport,
-  type MarketingGoogleAdsApiSetupStatus,
-  type MarketingGoogleAdsTestClientCreateResult,
-} from './setup/google-ads-api-setup.js';
-export {
-  discoverMarketingMetaAccounts,
-  writeMarketingMetaDiscovery,
-  type MarketingMetaAdAccountDiscovery,
-  type MarketingMetaDiscoveryAccount,
-  type MarketingMetaDiscoveryAction,
-  type MarketingMetaDiscoveryDriver,
-  type MarketingMetaDiscoveryPixel,
-  type MarketingMetaDiscoveryReport,
-  type MarketingMetaDiscoveryStatus,
-  type MarketingMetaDiscoveryWriteOptions,
-  type MarketingMetaPixelDiscovery,
-} from './setup/meta-discovery.js';
-export {
-  defineMarketingConfig,
+  defineMarketingExecutionContext,
   marketingAttributionStoreSchema,
-  marketingConfigSchema,
+  marketingExecutionContextSchema,
   marketingEnvRefSchema,
   marketingEnvironmentSchema,
   marketingPathsSchema,
   marketingProviderSchema,
-  marketingProviderStateSchema,
-  type MarketingConfig,
-  type MarketingProviderState,
-} from './schema/marketing-config.js';
+  marketingProviderAvailabilitySchema,
+  type MarketingExecutionContext,
+  type MarketingProviderAvailability,
+} from './schema/execution-context.js';
 export {
   marketingConsentCategorySchema,
   marketingConsentRequirementSchema,
@@ -328,34 +295,15 @@ export {
   type MarketingStatusReport,
 } from './reports/status.js';
 export {
-  buildMarketingRealAccountProofStatus,
-  writeMarketingProofSetup,
-  writeMarketingRealAccountProofStatus,
-  type MarketingProofCheck,
-  type MarketingProofCheckStatus,
-  type MarketingProofCommand,
-  type MarketingProofEnvRefStatus,
-  type MarketingProofProviderLimitRecord,
-  type MarketingProofProviderReportFamilyStatus,
-  type MarketingProofProvider,
-  type MarketingProofProviderStatus,
-  type MarketingProofSetupCommand,
-  type MarketingProofSetupFile,
-  type MarketingProofSetupOptions,
-  type MarketingProofSetupProviderRecord,
-  type MarketingProofSetupResult,
-  type MarketingRealAccountProofStatusOptions,
-  type MarketingRealAccountProofStatusReport,
-} from './proof/real-account-proof.js';
-export {
-  buildMarketingSetupLifecycleStatus,
-  type MarketingSetupLifecycleAction,
-  type MarketingSetupLifecycleOptions,
-  type MarketingSetupLifecycleReport,
-  type MarketingSetupLifecycleStage,
-  type MarketingSetupStageId,
-  type MarketingSetupStageStatus,
-} from './setup/lifecycle-status.js';
+  buildMarketingEvidenceStatus,
+  type MarketingEvidenceCommand,
+  type MarketingEvidenceProvider,
+  type MarketingEvidenceProviderStatus,
+  type MarketingEvidenceReportFamilyStatus,
+  type MarketingEvidenceState,
+  type MarketingEvidenceStatusOptions,
+  type MarketingEvidenceStatusReport,
+} from './reports/evidence-status.js';
 export {
   summarizeConfirmedConversionMetrics,
   summarizeProviderArtifactMetrics,
@@ -600,18 +548,9 @@ export {
   type MarketingTrackingAuditStatus,
 } from './tracking/audit-source.js';
 export {
-  loadMarketingConfig,
-  resolveMarketingConfigPath,
-  type LoadedMarketingConfig,
-  type LoadMarketingConfigOptions,
-} from './workspace/load-config.js';
-export {
-  runMarketingDoctor,
-  type MarketingCheckStatus,
-  type MarketingDoctorCheck,
-  type MarketingDoctorOptions,
-  type MarketingDoctorReport,
-} from './workspace/doctor.js';
+  deriveMarketingExecutionContext,
+  type GrowthExecutionProjectContext,
+} from './workspace/load-execution-context.js';
 export type {
   FetchLike,
   MarketingProviderApiPullDriver,

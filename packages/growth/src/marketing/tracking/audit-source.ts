@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { loadMarketingRegistries } from '../registry/load-registries.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import { auditGoogleTagManagerManifest } from './audit-gtm.js';
 import { auditProviderConversionMappings } from './audit-provider-conversions.js';
 import { auditTrackingRequirements } from './audit-requirements.js';
@@ -78,7 +78,7 @@ function collectSourceFiles(root: string): SourceFile[] {
 
 function resolveSourceRoots(
   cwd: string,
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingTrackingAuditOptions,
 ): string[] {
   return (options.sourceRoots?.length ? options.sourceRoots : config.paths.sourceRoots)
@@ -123,7 +123,7 @@ function directVendorGlobalChecks(files: SourceFile[]): MarketingTrackingAuditCh
 
 function providerTransportChecks(args: {
   files: SourceFile[];
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   registries: Awaited<ReturnType<typeof loadMarketingRegistries>>;
 }): MarketingTrackingAuditCheck[] {
   const checks: MarketingTrackingAuditCheck[] = [];
@@ -159,7 +159,7 @@ function providerTransportChecks(args: {
 }
 
 export async function auditMarketingTrackingSource(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingTrackingAuditOptions = {},
 ): Promise<MarketingTrackingAuditReport> {
   const cwd = path.resolve(options.cwd ?? process.cwd());

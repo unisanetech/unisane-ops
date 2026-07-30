@@ -1,7 +1,4 @@
-export {
-  normalizeCustomerId,
-  readGoogleAdsKeywordPlannerCredentials,
-} from './google-ads/config.js';
+export { normalizeCustomerId } from './google-ads/config.js';
 export type { GoogleAdsKeywordPlannerCredentials } from './google-ads/config.js';
 export { fetchGoogleAdsKeywordMetricsFile } from './google-ads/fetch-metrics-file.js';
 export type {
@@ -10,10 +7,7 @@ export type {
 } from './google-ads/fetch-metrics-file.js';
 export { fetchGoogleAdsKeywordIdeas } from './google-ads/keyword-ideas.js';
 export type { FetchGoogleAdsKeywordIdeasOptions } from './google-ads/keyword-ideas.js';
-export { refreshGoogleOAuthAccessToken } from './google-ads/oauth.js';
-export type { FetchLike, RefreshGoogleOAuthAccessTokenOptions } from './google-ads/oauth.js';
-export { readGoogleAnalyticsDataCredentials } from './ga4/config.js';
-export type { GoogleAnalyticsDataCredentials } from './ga4/config.js';
+export type { FetchLike } from './google-ads/transport.js';
 export { fetchGa4PerformanceFile } from './ga4/fetch-file.js';
 export type {
   FetchGa4PerformanceFileOptions,
@@ -21,8 +15,6 @@ export type {
 } from './ga4/fetch-file.js';
 export { runGa4PerformanceReport } from './ga4/run-report.js';
 export type { RunGa4PerformanceReportOptions } from './ga4/run-report.js';
-export { readGoogleSearchConsoleCredentials } from './search-console/config.js';
-export type { GoogleSearchConsoleCredentials } from './search-console/config.js';
 export { fetchSearchConsolePerformanceFile } from './search-console/fetch-file.js';
 export type {
   FetchSearchConsolePerformanceFileOptions,

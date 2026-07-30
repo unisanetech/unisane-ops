@@ -1,3 +1,19 @@
+export {
+  createGrowthConfigIntent,
+  defineGrowthConfig,
+  growthAdoptionModeSchema,
+  growthCapabilitySchema,
+  growthConfigContribution,
+  growthConfigSchema,
+  growthResourceReferenceSchema,
+} from './config.js';
+export type {
+  GrowthAdoptionMode,
+  GrowthCapability,
+  GrowthConfig,
+  GrowthResourceReference,
+} from './config.js';
+export { buildGrowthConfigReadiness, requiredGrowthProviderServices } from './readiness.js';
 export type * from './gtm/contracts.js';
 export type * from './gtm/provider.js';
 export * from './seo/contracts.js';
@@ -9,7 +25,7 @@ export type {
   ProviderApiPullOptions,
   ProviderApiPullPayload,
 } from './marketing/providers/api-pull-types.js';
-export type { MarketingConfig } from './marketing/schema/marketing-config.js';
+export type { MarketingExecutionContext } from './marketing/schema/execution-context.js';
 export type {
   MarketingProviderReportType,
   MarketingReportProvider,
@@ -36,29 +52,4 @@ export type {
   MarketingAdsAssetProviderUploadResult,
   MarketingAdsAssetProviderUploadSource,
 } from './marketing/ads/assets.js';
-export type { MarketingMetaAuthProfileStatus } from './marketing/auth/meta.js';
-export type {
-  MarketingGa4Discovery,
-  MarketingGa4DiscoveryProperty,
-  MarketingGoogleAdsDiscovery,
-  MarketingGoogleDiscoveryAction,
-  MarketingGoogleDiscoveryDriver,
-  MarketingGoogleDiscoveryOptions,
-  MarketingGoogleDiscoveryReport,
-  MarketingGoogleDiscoveryStatus,
-  MarketingGoogleDiscoveryWriteOptions,
-  MarketingSearchConsoleDiscovery,
-  MarketingSearchConsoleDiscoverySite,
-} from './marketing/setup/google-discovery.js';
-export type {
-  MarketingMetaAdAccountDiscovery,
-  MarketingMetaDiscoveryAccount,
-  MarketingMetaDiscoveryAction,
-  MarketingMetaDiscoveryDriver,
-  MarketingMetaDiscoveryOptions,
-  MarketingMetaDiscoveryPixel,
-  MarketingMetaDiscoveryReport,
-  MarketingMetaDiscoveryStatus,
-  MarketingMetaDiscoveryWriteOptions,
-  MarketingMetaPixelDiscovery,
-} from './marketing/setup/meta-discovery.js';
+export type { MarketingMetaConnectionStatus } from './marketing/connections/meta.js';

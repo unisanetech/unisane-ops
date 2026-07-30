@@ -47,8 +47,8 @@ export type SeoKeywordFetchGoogleAdsCliOptions = SeoCliOptions & {
   requireTermGroups?: string;
   excludeTerms?: string;
   pageSize?: string;
-  authProfile?: string;
-  accessTokenEnv?: string;
+  connection?: string;
+  environment?: string;
 };
 
 export type SeoKeywordClusterCliOptions = SeoCliOptions & {
@@ -119,7 +119,6 @@ export type SeoPerformanceImportCliOptions = SeoCliOptions & {
 
 export type SeoPerformanceFetchSearchConsoleCliOptions = SeoCliOptions & {
   out?: string;
-  siteUrl?: string;
   startDate?: string;
   endDate?: string;
   dimensions?: string;
@@ -128,13 +127,12 @@ export type SeoPerformanceFetchSearchConsoleCliOptions = SeoCliOptions & {
   maxRows?: string;
   searchType?: string;
   dataState?: string;
-  authProfile?: string;
-  accessTokenEnv?: string;
+  connection?: string;
+  environment?: string;
 };
 
 export type SeoPerformanceFetchGa4CliOptions = SeoCliOptions & {
   out?: string;
-  propertyId?: string;
   startDate?: string;
   endDate?: string;
   dimensions?: string;
@@ -142,8 +140,8 @@ export type SeoPerformanceFetchGa4CliOptions = SeoCliOptions & {
   limit?: string;
   offset?: string;
   maxRows?: string;
-  authProfile?: string;
-  accessTokenEnv?: string;
+  connection?: string;
+  environment?: string;
 };
 
 export type SeoPerformanceReportCliOptions = SeoCliOptions & {

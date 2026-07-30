@@ -257,14 +257,5 @@ export type {
   GenerateSeoReportFileOptions,
   GenerateSeoReportFileResult,
 } from './reports/generate-file.js';
-export { runSeoDoctor } from './status/doctor.js';
-export type {
-  RunSeoDoctorOptions,
-  SeoDoctorArtifact,
-  SeoDoctorArtifactKind,
-  SeoDoctorArtifactStatus,
-  SeoDoctorProvider,
-  SeoDoctorResult,
-} from './status/doctor.js';
 export { renderSeoResearchReport } from './reports/render-report.js';
 export type { RenderSeoResearchReportOptions } from './reports/render-report.js';

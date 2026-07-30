@@ -262,7 +262,6 @@ test('canonical status returns one structured JSON document', () => {
       'growth',
       'provider-aws',
       'provider-google',
-      'provider-meta',
       'framework',
     ],
   );
@@ -281,7 +280,7 @@ test('canonical pack inspection exposes the validated static graph', () => {
   assert.equal(output.result.packs[3].commands[0].id, 'growth.root');
   assert.equal(output.result.packs[4].packageName, '@unisane/provider-aws');
   assert.equal(output.result.packs[5].packageName, '@unisane/provider-google');
-  assert.equal(output.result.packs[6].packageName, '@unisane/provider-meta');
+  assert.equal(output.result.packs[6].packageName, '@unisane/framework-ops');
 });
 
 test('root help exposes canonical capability and provider routing', () => {
@@ -295,7 +294,7 @@ test('root help exposes canonical capability and provider routing', () => {
   assert.match(result.stdout, /Growth commands are contributed by @unisane\/growth/);
   assert.match(result.stdout, /provider aws/);
   assert.match(result.stdout, /provider google/);
-  assert.match(result.stdout, /provider meta/);
+  assert.doesNotMatch(result.stdout, /provider meta/);
 });
 
 test('canonical Growth namespace loads the Growth pack handler', () => {

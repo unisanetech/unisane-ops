@@ -1,12 +1,12 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import type { MarketingProviderReportType, MarketingReportProvider } from '../schema/report.js';
 import {
-  buildMarketingRealAccountProofStatus,
-  type MarketingProofProviderReportFamilyStatus,
-  type MarketingRealAccountProofStatusOptions,
-} from '../proof/real-account-proof.js';
+  buildMarketingEvidenceStatus,
+  type MarketingEvidenceReportFamilyStatus,
+  type MarketingEvidenceStatusOptions,
+} from './evidence-status.js';
 import { ensurePathWithinCwd } from './paths.js';
 
 export type MarketingScheduledReportingCadence = 'daily' | 'weekly';
@@ -40,12 +40,12 @@ export type MarketingScheduledReportingPlan = {
   nextWorkflowStep: string;
 };
 
-export type MarketingScheduledReportingOptions = MarketingRealAccountProofStatusOptions & {
+export type MarketingScheduledReportingOptions = MarketingEvidenceStatusOptions & {
   cadence?: MarketingScheduledReportingCadence;
   windowDays?: number;
   proofStatusPath?: string;
-  authProfile?: string;
-  metaAuthProfile?: string;
+  connection?: string;
+  metaConnection?: string;
   out?: string;
 };
 
@@ -68,21 +68,21 @@ function authSuffix(
 ): string {
   if (
     (provider === 'googleAds' || provider === 'ga4' || provider === 'searchConsole') &&
-    options.authProfile
+    options.connection
   ) {
-    return `--auth-profile ${options.authProfile}`;
+    return `--connection ${options.connection}`;
   }
-  if (provider === 'metaAds' && options.metaAuthProfile) {
-    return `--meta-auth-profile ${options.metaAuthProfile}`;
+  if (provider === 'metaAds' && options.metaConnection) {
+    return `--connection ${options.metaConnection}`;
   }
   return '';
 }
 
 function extraReportFamilies(input: {
   provider: MarketingReportProvider;
-  config: MarketingConfig;
-  existing: MarketingProofProviderReportFamilyStatus[];
-}): MarketingProofProviderReportFamilyStatus[] {
+  config: MarketingExecutionContext;
+  existing: MarketingEvidenceReportFamilyStatus[];
+}): MarketingEvidenceReportFamilyStatus[] {
   if (input.provider !== 'googleAds') return [];
   if (input.config.providers.googleAds.state === 'disabled') return [];
   if (input.existing.some((family) => family.reportType === 'auctionInsight')) return [];
@@ -131,14 +131,14 @@ function defaultScheduledReportingPath(cwd: string, environment: string): string
 }
 
 export function buildMarketingScheduledReportingPlan(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingScheduledReportingOptions = {},
 ): MarketingScheduledReportingPlan {
   const generatedAt = (options.now ?? new Date()).toISOString();
   const cadence = options.cadence ?? 'daily';
   const windowDays = options.windowDays ?? 3;
   const maxAgeDays = options.maxAgeDays ?? 3;
-  const proof = buildMarketingRealAccountProofStatus(config, {
+  const proof = buildMarketingEvidenceStatus(config, {
     ...options,
     maxAgeDays,
   });
@@ -209,7 +209,7 @@ export function buildMarketingScheduledReportingPlan(
 }
 
 export function writeMarketingScheduledReportingPlan(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingScheduledReportingOptions = {},
 ): MarketingScheduledReportingResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());

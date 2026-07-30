@@ -22,32 +22,16 @@ export const seoResearchConfigSchema = z.object({
       googleAds: z
         .object({
           enabled: z.boolean().default(false),
-          developerTokenEnv: z.string().default('GOOGLE_ADS_DEVELOPER_TOKEN'),
-          customerIdEnv: z.string().default('GOOGLE_ADS_CUSTOMER_ID'),
-          loginCustomerIdEnv: z.string().default('GOOGLE_ADS_LOGIN_CUSTOMER_ID'),
-          clientIdEnv: z.string().default('GOOGLE_OAUTH_CLIENT_ID'),
-          clientSecretEnv: z.string().default('GOOGLE_OAUTH_CLIENT_SECRET'),
-          refreshTokenEnv: z.string().default('GOOGLE_ADS_REFRESH_TOKEN'),
         })
         .default({}),
       ga4: z
         .object({
           enabled: z.boolean().default(false),
-          propertyIdEnv: z.string().default('GOOGLE_ANALYTICS_DATA_PROPERTY_ID'),
-          clientIdEnv: z.string().default('GOOGLE_OAUTH_CLIENT_ID'),
-          clientSecretEnv: z.string().default('GOOGLE_OAUTH_CLIENT_SECRET'),
-          refreshTokenEnv: z.string().default('GOOGLE_ANALYTICS_DATA_REFRESH_TOKEN'),
-          accessTokenEnv: z.string().default('GOOGLE_ANALYTICS_DATA_ACCESS_TOKEN'),
         })
         .default({}),
       searchConsole: z
         .object({
           enabled: z.boolean().default(false),
-          siteUrlEnv: z.string().default('GOOGLE_SEARCH_CONSOLE_SITE_URL'),
-          clientIdEnv: z.string().default('GOOGLE_OAUTH_CLIENT_ID'),
-          clientSecretEnv: z.string().default('GOOGLE_OAUTH_CLIENT_SECRET'),
-          refreshTokenEnv: z.string().default('GOOGLE_SEARCH_CONSOLE_REFRESH_TOKEN'),
-          accessTokenEnv: z.string().default('GOOGLE_SEARCH_CONSOLE_ACCESS_TOKEN'),
         })
         .default({}),
       trends: z

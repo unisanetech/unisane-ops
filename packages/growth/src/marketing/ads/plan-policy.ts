@@ -5,7 +5,7 @@ import type {
   MarketingAdsPlanUtm,
   MarketingGoogleAdsSearchSettings,
 } from '../schema/ads-plan.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import type { MarketingStrategyObjectJoin } from '../reports/strategy-object-report.js';
 
 function slugify(value: string): string {
@@ -107,7 +107,7 @@ export function marketingAdsBidStrategy(
 }
 
 export function marketingGoogleAdsSearchSettings(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
 ): MarketingGoogleAdsSearchSettings {
   const defaults = config.providers.googleAds.googleSearchDefaults;
   return {

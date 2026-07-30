@@ -1,64 +1,10 @@
 import { log } from '../../../log.js';
 import type {
-  MarketingDoctorReport,
   MarketingProviderPullResult,
   MarketingProviderReportStatusReport,
   MarketingRegistryValidationReport,
   MarketingTrackingAuditReport,
 } from '@unisane/growth/marketing';
-
-export function printMarketingDoctorReport(report: MarketingDoctorReport): void {
-  log.section('Marketing Control Plane');
-  if (report.configPath) log.info(`Config: ${report.configPath}`);
-  if (report.appId) log.info(`App: ${report.appId}`);
-  if (report.platformId) log.info(`Platform: ${report.platformId}`);
-  if (report.providers?.length) {
-    log.info(
-      `Providers: ${report.providers
-        .map((provider) => `${provider.id}=${provider.state}${provider.configured ? ':ready' : ''}`)
-        .join(', ')}`,
-    );
-  }
-  if (report.auth?.google) {
-    const status = report.auth.google;
-    if (status.configured) {
-      log.info(`Google auth: profile=${status.profile} scopes=${status.scopes.length}`);
-    } else {
-      log.info(`Google auth: profile=${status.profile}:not-configured`);
-    }
-  }
-  if (report.auth?.meta) {
-    const status = report.auth.meta;
-    if (status.configured) {
-      log.info(
-        `Meta auth: profile=${status.profile} token=${status.accessTokenStored ? 'stored' : 'missing'}`,
-      );
-    } else {
-      log.info(`Meta auth: profile=${status.profile}:not-configured`);
-    }
-  }
-  if (report.artifacts?.length) {
-    const staleArtifacts = report.artifacts.filter(
-      (artifact) => artifact.exists && artifact.ageDays !== undefined,
-    );
-    if (staleArtifacts.length) {
-      log.info(
-        `Artifacts: ${staleArtifacts
-          .map((artifact) => `${artifact.id}=${artifact.ageDays}d`)
-          .join(', ')}`,
-      );
-    }
-  }
-  if (report.nextWorkflowStep) log.info(`Next: ${report.nextWorkflowStep}`);
-
-  for (const check of report.checks) {
-    const line = `${check.id}: ${check.message}`;
-    if (check.status === 'pass') log.success(line);
-    else if (check.status === 'error') log.error(line);
-    else if (check.status === 'warn') log.warn(line);
-    else log.dim(`SKIP ${line}`);
-  }
-}
 
 export function printMarketingRegistryReport(report: MarketingRegistryValidationReport): void {
   log.section('Marketing Registries');

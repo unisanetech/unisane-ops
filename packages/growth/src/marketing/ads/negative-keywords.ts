@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import { ensurePathWithinCwd } from '../reports/paths.js';
 
 const negativeKeywordMatchTypeSchema = z.enum(['exact', 'phrase', 'broad']);
@@ -163,7 +163,7 @@ function readSearchTermNegativeCandidates(searchTermsPath: string): Array<{
 }
 
 export function buildMarketingNegativeKeywordReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingNegativeKeywordOptions = {},
 ): MarketingNegativeKeywordReport {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -272,7 +272,7 @@ export function buildMarketingNegativeKeywordReport(
 }
 
 export function writeMarketingNegativeKeywordReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingNegativeKeywordOptions = {},
 ): MarketingNegativeKeywordResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());

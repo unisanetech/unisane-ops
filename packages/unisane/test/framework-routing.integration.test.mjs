@@ -90,7 +90,6 @@ test('provider, GTM, and UI routes select exact owner packs', async () => {
   const cases = [
     [['provider', 'aws', 'doctor'], 'provider.aws'],
     [['provider', 'google', 'doctor'], 'provider.google'],
-    [['provider', 'meta', 'doctor'], 'provider.meta'],
     [['growth', 'gtm', 'validate'], 'growth.gtm'],
     [['ui', 'list'], 'framework.ui'],
   ];

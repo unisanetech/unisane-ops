@@ -35,8 +35,8 @@
     "node": ">=18.17.0"
   },
   "scripts": {
-    "build": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --clean",
-    "dev": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --watch",
+    "build": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --clean",
+    "dev": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --watch",
     "lint": "eslint src --max-warnings 0",
     "check-types": "tsc --noEmit",
     "test": "pnpm build && node --test test/*.test.mjs",
@@ -90,6 +90,31 @@
       "types": "./dist/handlers/inspect-packs.d.ts",
       "import": "./dist/handlers/inspect-packs.js",
       "default": "./dist/handlers/inspect-packs.js"
+    },
+    "./handlers/init": {
+      "types": "./dist/handlers/init.d.ts",
+      "import": "./dist/handlers/init.js",
+      "default": "./dist/handlers/init.js"
+    },
+    "./handlers/add": {
+      "types": "./dist/handlers/add.d.ts",
+      "import": "./dist/handlers/add.js",
+      "default": "./dist/handlers/add.js"
+    },
+    "./handlers/connect": {
+      "types": "./dist/handlers/connect.d.ts",
+      "import": "./dist/handlers/connect.js",
+      "default": "./dist/handlers/connect.js"
+    },
+    "./handlers/check": {
+      "types": "./dist/handlers/check.d.ts",
+      "import": "./dist/handlers/check.js",
+      "default": "./dist/handlers/check.js"
+    },
+    "./handlers/migrate-growth-config": {
+      "types": "./dist/handlers/migrate-growth-config.d.ts",
+      "import": "./dist/handlers/migrate-growth-config.js",
+      "default": "./dist/handlers/migrate-growth-config.js"
     },
     "./handlers/status": {
       "types": "./dist/handlers/status.d.ts",

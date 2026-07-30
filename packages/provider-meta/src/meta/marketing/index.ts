@@ -1,4 +1,3 @@
-export { discoverMarketingMetaAccounts } from './discovery.js';
 export { collectMetaSocialInventory } from './inventory.js';
 export { pullMetaAdsReport } from './report-pull.js';
 export { uploadMetaAdsAsset } from './asset-uploader.js';

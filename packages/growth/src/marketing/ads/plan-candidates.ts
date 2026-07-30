@@ -12,11 +12,11 @@ import {
   marketingAdsUtmFor,
   marketingGoogleAdsSearchSettings,
 } from './plan-policy.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 
 export type PlanMarketingAdsCandidateOptions = {
   provider: MarketingAdsPlanProvider;
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   objectJoin: MarketingStrategyObjectJoin;
   dailyBudgetAmount?: number;
   currency?: string;

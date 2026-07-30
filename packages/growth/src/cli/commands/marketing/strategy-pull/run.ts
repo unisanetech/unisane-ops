@@ -1,4 +1,5 @@
-import { loadMarketingConfig, writeMarketingStrategyMapPull } from '@unisane/growth/marketing';
+import { writeMarketingStrategyMapPull } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { MarketingCliOptions } from '../options.js';
 
 function printJson(value: unknown): void {
@@ -16,10 +17,7 @@ export async function marketingStrategyPull(options: MarketingCliOptions): Promi
     if (!options.input) {
       throw new Error('[MARKETING_STRATEGY_PULL_INPUT_REQUIRED] Pass --input <artifact.json>.');
     }
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const result = writeMarketingStrategyMapPull(loaded.config, {
       cwd: options.cwd,
       inputPath: options.input,

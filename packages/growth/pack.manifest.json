@@ -35,12 +35,12 @@
     }
   ],
   "configNamespaces": ["growth"],
-  "addItemTypes": [],
+  "addItemTypes": ["growth"],
   "capabilities": ["growth"],
   "providerBindings": [],
   "reservedRootNames": ["growth"],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "1b199e0e92f0827046cca9c622783da1eac8e0330234816d85f95f1b214c9793"
+    "manifestHash": "802b37fb7afb1dec3e1cf2061264c289f692411df5e700d0ceb9090eb79d5ce5"
   }
 }

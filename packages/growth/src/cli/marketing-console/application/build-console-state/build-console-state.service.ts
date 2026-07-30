@@ -2,19 +2,22 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import {
   buildMarketingAdsStatusReport,
-  buildMarketingRealAccountProofStatus,
-  buildMarketingSetupLifecycleStatus,
+  buildMarketingEvidenceStatus,
   buildMarketingStatusReport,
   deriveMarketingMetrics,
-  loadMarketingConfig,
   readMarketingResearchStatus,
   readMarketingProviderReportStatus,
-  type MarketingSetupLifecycleReport,
   type MarketingProviderReportStatus,
-  type MarketingGoogleAuthProfileStatus,
-  type MarketingMetaAuthProfileStatus,
+  type MarketingGoogleConnectionStatus,
+  type MarketingMetaConnectionStatus,
   type MarketingAdsAuditReport,
 } from '@unisane/growth/marketing';
+import { buildGrowthConfigReadiness } from '@unisane/growth/contracts';
+import {
+  loadGrowthProjectContext,
+  loadMarketingExecutionContext,
+  type GrowthProjectContext,
+} from '../../../project-context.js';
 import type {
   MarketingProviderReportType,
   MarketingReportMetrics,
@@ -34,6 +37,7 @@ import type {
   MarketingConsoleRouteSummary,
   MarketingConsoleSeoRow,
   MarketingConsoleSeoIntelligenceSummary,
+  MarketingConsoleSetupProjection,
   MarketingConsoleState,
   MarketingConsoleStatus,
   MarketingConsoleTrendPoint,
@@ -45,9 +49,8 @@ export type BuildMarketingConsoleStateOptions = {
   outputDirectory?: string;
   maxAgeDays?: number;
   now?: Date;
-  limitsPath?: string;
-  googleAuth?: MarketingGoogleAuthProfileStatus;
-  metaAuth?: MarketingMetaAuthProfileStatus;
+  googleAuth?: MarketingGoogleConnectionStatus;
+  metaAuth?: MarketingMetaConnectionStatus;
 };
 
 type ProviderFreshnessCell = MarketingConsoleFreshnessCell & {
@@ -92,6 +95,141 @@ const reportFamilies: Array<{
   { provider: 'searchConsole', reportType: 'page' },
   { provider: 'searchConsole', reportType: 'query' },
 ];
+
+function buildConsoleSetupProjection(args: {
+  cwd: string;
+  configPath: string;
+  generatedAt: string;
+  context: GrowthProjectContext;
+  googleConnected: boolean;
+  proofReady: boolean;
+  proofNext: string;
+}): MarketingConsoleSetupProjection {
+  const findings = buildGrowthConfigReadiness({
+    projectId: args.context.projectId,
+    config: args.context.growth,
+    observedAt: args.generatedAt,
+  });
+  const environmentIds = Object.keys(args.context.growth.environments);
+  const connectionFindings = findings.filter((finding) => finding.dimension === 'connection');
+  const resourceFindings = findings.filter((finding) => finding.dimension === 'resource');
+  const connectionReady = connectionFindings.length === 0 && args.googleConnected;
+  const resourcesReady =
+    resourceFindings.length > 0 && resourceFindings.every((finding) => finding.state === 'ready');
+  const runtimeSelected = args.context.growth.runtime.integration !== 'none';
+  const stages: MarketingConsoleSetupProjection['stages'] = [
+    {
+      id: 'local',
+      status: 'pass',
+      title: 'Project Intent',
+      message: 'Canonical Growth intent is loaded from unisane.config.ts.',
+      checks: [
+        {
+          id: 'growth.project.intent',
+          status: 'pass',
+          message: `${args.context.growth.capabilities.length} Growth capabilities are selected.`,
+        },
+      ],
+    },
+    {
+      id: 'deployedDomain',
+      status: environmentIds.length > 0 ? 'pass' : 'blocked',
+      title: 'Deployed Domain',
+      message:
+        environmentIds.length > 0
+          ? `Growth declares ${environmentIds.join(', ')}.`
+          : 'Growth must declare at least one environment.',
+      checks: [
+        {
+          id: 'growth.environment',
+          status: environmentIds.length > 0 ? 'pass' : 'error',
+          message: 'Environment identity comes from canonical project intent.',
+        },
+      ],
+    },
+    {
+      id: 'providerAuth',
+      status: connectionReady ? 'pass' : 'blocked',
+      title: 'Provider Login',
+      message: connectionReady
+        ? 'The selected Google connection is available.'
+        : 'Connect Google through the project lifecycle.',
+      checks: [
+        {
+          id: 'growth.connection.google',
+          status: connectionReady ? 'pass' : 'error',
+          message:
+            connectionFindings[0]?.summary ??
+            (connectionReady
+              ? 'Google connection selected.'
+              : 'Google connection verification is required.'),
+        },
+      ],
+    },
+    {
+      id: 'providerDiscovery',
+      status: resourcesReady ? 'pass' : connectionReady ? 'current' : 'pending',
+      title: 'Provider Discovery',
+      message: resourcesReady
+        ? 'Required Google resources are selected.'
+        : 'Discover and select every required Google resource explicitly.',
+      checks: resourceFindings.map((finding) => ({
+        id: finding.code,
+        status: finding.state === 'ready' ? 'pass' : 'warn',
+        message: finding.summary,
+      })),
+    },
+    {
+      id: 'proofReady',
+      status: args.proofReady ? 'pass' : runtimeSelected ? 'current' : 'blocked',
+      title: 'Current Evidence',
+      message: args.proofReady
+        ? 'Current provider evidence is sufficient for scheduled reads.'
+        : args.proofNext,
+      checks: [
+        {
+          id: 'growth.current-evidence',
+          status: args.proofReady ? 'pass' : runtimeSelected ? 'warn' : 'error',
+          message: args.proofNext,
+        },
+      ],
+    },
+  ];
+  const currentStage = stages.find((stage) => stage.status !== 'pass')?.id ?? 'proofReady';
+  const canonicalActions = findings
+    .flatMap((finding) => (finding.nextAction ? [finding.nextAction] : []))
+    .map((action) => ({
+      id: action.id,
+      ...(action.command
+        ? {
+            command: `unisane ${[...action.command.path, ...action.command.args].join(' ')}`,
+          }
+        : {}),
+      message: action.description,
+    }));
+  return {
+    kind: 'unisane.marketing.console-setup-projection',
+    version: 1,
+    nonMutating: true,
+    generatedAt: args.generatedAt,
+    ok: stages.every((stage) => stage.status === 'pass'),
+    cwd: args.cwd,
+    configPath: args.configPath,
+    appId: args.context.projectId,
+    platformId: args.context.projectId,
+    currentStage,
+    stages,
+    nextActions:
+      canonicalActions.length > 0
+        ? canonicalActions
+        : [
+            {
+              id: 'growth.evidence.refresh',
+              message: args.proofNext,
+            },
+          ],
+  };
+}
 
 function providerLabel(
   provider: MarketingReportProvider | 'confirmedConversions' | 'strategyMap',
@@ -139,30 +277,29 @@ export async function buildMarketingConsoleState(
   const now = options.now ?? new Date();
   const generatedAt = now.toISOString();
   const maxAgeDays = options.maxAgeDays ?? 3;
-  const loaded = await loadMarketingConfig({
-    cwd,
-    configPath: options.configPath,
-  });
+  const loaded = await loadMarketingExecutionContext();
   const config = loaded.config;
   const outputDirectory = path.resolve(
     cwd,
     options.outputDirectory ?? '.unisane/marketing/console',
   );
-  const setup = buildMarketingSetupLifecycleStatus(config, {
+  const proof = buildMarketingEvidenceStatus(config, {
     cwd,
     configPath: loaded.path,
-    googleAuth: options.googleAuth,
-    metaAuth: options.metaAuth,
-    now,
-  });
-  const proof = buildMarketingRealAccountProofStatus(config, {
-    cwd,
-    configPath: loaded.path,
-    limitsPath: options.limitsPath,
     googleAuth: options.googleAuth,
     metaAuth: options.metaAuth,
     maxAgeDays,
     now,
+  });
+  const projectContext = await loadGrowthProjectContext();
+  const setup = buildConsoleSetupProjection({
+    cwd,
+    configPath: loaded.path,
+    generatedAt,
+    context: projectContext,
+    googleConnected: Boolean(options.googleAuth?.connected),
+    proofReady: proof.readyForScheduledPulls,
+    proofNext: proof.nextWorkflowStep,
   });
   const marketingStatus = buildMarketingStatusReport({
     cwd,
@@ -1619,7 +1756,7 @@ function keywordMarketKey(country: string | undefined, language: string | undefi
   return [country ?? 'unknown', language ?? 'unknown'].join(' / ');
 }
 
-function setupRouteStatus(setup: MarketingSetupLifecycleReport): MarketingConsoleStatus {
+function setupRouteStatus(setup: MarketingConsoleSetupProjection): MarketingConsoleStatus {
   if (setup.ok) return 'ready';
   const preProofStages = setup.stages.filter((stage) => stage.id !== 'proofReady');
   return preProofStages.some(
@@ -1641,7 +1778,7 @@ function toConsoleStatus(status: string): MarketingConsoleStatus {
 }
 
 function buildFreshness(
-  config: Awaited<ReturnType<typeof loadMarketingConfig>>['config'],
+  config: Awaited<ReturnType<typeof loadMarketingExecutionContext>>['config'],
   cwd: string,
   now: Date,
   maxAgeDays: number,
@@ -2202,13 +2339,10 @@ function friendlyActionMessage(message: string): string {
   if (message.includes('Refresh searchConsole')) {
     return 'Refresh Search Console evidence after Google login is complete.';
   }
-  if (message.includes('providers.ga4.env') || message.includes('GA4_ACCESS_TOKEN')) {
+  if (message.includes('GOOGLE_CONNECTION_REQUIRED') && message.includes('analytics')) {
     return 'Complete Google analytics login for GA4, then pull fresh analytics reports.';
   }
-  if (
-    message.includes('providers.searchConsole.env') ||
-    message.includes('GOOGLE_SEARCH_CONSOLE_ACCESS_TOKEN')
-  ) {
+  if (message.includes('GOOGLE_CONNECTION_REQUIRED') && message.includes('search-console')) {
     return 'Complete Google Search Console login, then pull fresh organic search reports.';
   }
   if (message.includes('marketing pull-api') && message.includes('googleAds')) {

@@ -1,17 +1,20 @@
 import type { LoadedMarketingRegistries } from '../registry/load-registries.js';
 import type { MarketingConversion } from '../schema/conversion-registry.js';
-import type { MarketingConfig, MarketingProviderState } from '../schema/marketing-config.js';
+import type {
+  MarketingExecutionContext,
+  MarketingProviderAvailability,
+} from '../schema/execution-context.js';
 import type { MarketingTrackingAuditCheck } from './audit-types.js';
 
 type ProviderId = 'googleAds' | 'metaAds';
 
 function missingMappingStatus(
-  state: MarketingProviderState,
+  state: MarketingProviderAvailability,
 ): MarketingTrackingAuditCheck['status'] {
-  return state === 'configured' ? 'error' : 'warn';
+  return state === 'connected' ? 'error' : 'warn';
 }
 
-function providerEnabled(state: MarketingProviderState): boolean {
+function providerEnabled(state: MarketingProviderAvailability): boolean {
   return state !== 'disabled';
 }
 
@@ -83,7 +86,7 @@ function disabledProviderCheck(provider: ProviderId): MarketingTrackingAuditChec
 
 function auditGoogleAdsConversions(
   conversions: MarketingConversion[],
-  providerState: MarketingProviderState,
+  providerState: MarketingProviderAvailability,
 ): MarketingTrackingAuditCheck[] {
   if (!providerEnabled(providerState)) return [disabledProviderCheck('googleAds')];
   const checks: MarketingTrackingAuditCheck[] = [];
@@ -119,7 +122,7 @@ function auditGoogleAdsConversions(
 
 function auditMetaConversions(
   conversions: MarketingConversion[],
-  providerState: MarketingProviderState,
+  providerState: MarketingProviderAvailability,
 ): MarketingTrackingAuditCheck[] {
   if (!providerEnabled(providerState)) return [disabledProviderCheck('metaAds')];
   const checks: MarketingTrackingAuditCheck[] = [];
@@ -176,7 +179,7 @@ function auditMetaConversions(
 }
 
 export function auditProviderConversionMappings(args: {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   registries: LoadedMarketingRegistries;
 }): MarketingTrackingAuditCheck[] {
   const conversions = args.registries.conversions.value.conversions;

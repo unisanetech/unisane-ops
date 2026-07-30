@@ -1,1 +1,1 @@
-export * from './meta/auth.js';
+export {};

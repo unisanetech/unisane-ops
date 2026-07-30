@@ -9,7 +9,7 @@ import type {
   GoogleTagManagerTrigger,
 } from '../../gtm/index.js';
 import type { LoadedMarketingRegistries } from '../registry/load-registries.js';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import type { MarketingTrackingAuditCheck } from './audit-types.js';
 
 type LoadedModule = {
@@ -204,7 +204,7 @@ function auditConversionTags(
 }
 
 export async function auditGoogleTagManagerManifest(args: {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   registries: LoadedMarketingRegistries;
   options?: MarketingGtmAuditOptions;
 }): Promise<MarketingTrackingAuditCheck[]> {

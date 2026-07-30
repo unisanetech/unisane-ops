@@ -29,6 +29,7 @@ import {
   writeControlPlaneJsonArtifact,
 } from '@unisane/ops-engine/local';
 import type { PackCommandRuntime } from '@unisane/ops-engine/pack';
+import type { OpsLifecycleContributionContext } from '@unisane/ops-engine/lifecycle';
 import type {
   CloudflareConnectionArtifactAccess,
   CloudflareConnectionBindingRequest,
@@ -38,6 +39,124 @@ import { loadUnisaneOpsConfig } from '../config/loader.js';
 import { isGrowthProviderBinding, resolveGrowthProviderBinding } from './growth.js';
 
 const CLOUDFLARE_CONNECTION_BINDING = 'provider.cloudflare.connection';
+const OPS_LIFECYCLE_ADD_BINDING = 'ops.lifecycle.add';
+const OPS_LIFECYCLE_CONNECT_BINDING = 'ops.lifecycle.connect';
+const OPS_LIFECYCLE_READINESS_BINDING = 'ops.lifecycle.readiness';
+
+function isStringArray(input: unknown): input is string[] {
+  return Array.isArray(input) && input.every((value) => typeof value === 'string');
+}
+
+function parseLifecycleAddRequest(input: unknown): {
+  packId: string;
+  itemType: string;
+  context: OpsLifecycleContributionContext;
+} {
+  if (typeof input !== 'object' || input === null) {
+    throw new Error('[OPS_LIFECYCLE_ADD_REQUEST_INVALID] Invalid add contribution request.');
+  }
+  const record = input as Record<string, unknown>;
+  const context =
+    typeof record.context === 'object' && record.context !== null
+      ? (record.context as Record<string, unknown>)
+      : null;
+  if (
+    typeof record.packId !== 'string' ||
+    typeof record.itemType !== 'string' ||
+    !context ||
+    typeof context.cwd !== 'string' ||
+    !isStringArray(context.argv) ||
+    typeof context.json !== 'boolean'
+  ) {
+    throw new Error('[OPS_LIFECYCLE_ADD_REQUEST_INVALID] Invalid add contribution request.');
+  }
+  return {
+    packId: record.packId,
+    itemType: record.itemType,
+    context: {
+      cwd: context.cwd,
+      argv: context.argv,
+      json: context.json,
+    },
+  };
+}
+
+function parseLifecycleReadinessRequest(input: unknown): {
+  provider: string;
+  projectRoot: string;
+  recordPath: string;
+} {
+  if (typeof input !== 'object' || input === null) {
+    throw new Error(
+      '[OPS_LIFECYCLE_READINESS_REQUEST_INVALID] Invalid readiness contribution request.',
+    );
+  }
+  const record = input as Record<string, unknown>;
+  if (
+    typeof record.provider !== 'string' ||
+    typeof record.projectRoot !== 'string' ||
+    typeof record.recordPath !== 'string'
+  ) {
+    throw new Error(
+      '[OPS_LIFECYCLE_READINESS_REQUEST_INVALID] Invalid readiness contribution request.',
+    );
+  }
+  return {
+    provider: record.provider,
+    projectRoot: record.projectRoot,
+    recordPath: record.recordPath,
+  };
+}
+
+function parseLifecycleConnectRequest(input: unknown): {
+  provider: string;
+  packId: string;
+  projectId: string;
+  environmentId: string;
+  recordPath: string;
+  requiredServices: readonly string[];
+  context: OpsLifecycleContributionContext;
+} {
+  if (typeof input !== 'object' || input === null) {
+    throw new Error(
+      '[OPS_LIFECYCLE_CONNECT_REQUEST_INVALID] Invalid connection contribution request.',
+    );
+  }
+  const record = input as Record<string, unknown>;
+  const context =
+    typeof record.context === 'object' && record.context !== null
+      ? (record.context as Record<string, unknown>)
+      : null;
+  if (
+    typeof record.provider !== 'string' ||
+    typeof record.packId !== 'string' ||
+    typeof record.projectId !== 'string' ||
+    typeof record.environmentId !== 'string' ||
+    typeof record.recordPath !== 'string' ||
+    !isStringArray(record.requiredServices) ||
+    !context ||
+    typeof context.cwd !== 'string' ||
+    !isStringArray(context.argv) ||
+    typeof context.json !== 'boolean'
+  ) {
+    throw new Error(
+      '[OPS_LIFECYCLE_CONNECT_REQUEST_INVALID] Invalid connection contribution request.',
+    );
+  }
+  return {
+    provider: record.provider,
+    packId: record.packId,
+    projectId: record.projectId,
+    environmentId: record.environmentId,
+    recordPath: record.recordPath,
+    requiredServices: record.requiredServices,
+    context: {
+      cwd: context.cwd,
+      argv: context.argv,
+      json: context.json,
+    },
+  };
+}
 
 function parseCloudDnsRequest(input: unknown): CloudDnsBindingRequest {
   if (typeof input !== 'object' || input === null || !('command' in input)) {
@@ -278,7 +397,7 @@ function resolveTargetContext(args: {
     label: 'environment',
   });
   const connection = args.loaded.config.connections[target.connection];
-  if (!connection || connection.provider !== target.provider) {
+  if (!connection || connection.provider !== target.provider || !('credential' in connection)) {
     throw new Error(
       `[UNISANE_OPS_CONNECTION_INVALID] Target '${targetId}' has no matching Cloudflare connection.`,
     );
@@ -371,7 +490,7 @@ function resolveResourceTarget(args: {
     label: 'environment',
   });
   const connection = args.loaded.config.connections[target.connection];
-  if (!connection || connection.provider !== target.provider) {
+  if (!connection || connection.provider !== target.provider || !('credential' in connection)) {
     throw new Error(
       `[UNISANE_OPS_CONNECTION_INVALID] Target '${targetId}' has no matching Cloudflare connection.`,
     );
@@ -416,6 +535,46 @@ function resolveResourceTarget(args: {
 
 export class CanonicalPackRuntime implements PackCommandRuntime {
   async resolveBinding(bindingId: string, input: unknown): Promise<unknown> {
+    if (bindingId === OPS_LIFECYCLE_ADD_BINDING) {
+      const request = parseLifecycleAddRequest(input);
+      if (
+        request.packId !== 'framework' ||
+        !['capability', 'feature', 'integration', 'module', 'plugin'].includes(request.itemType)
+      ) {
+        throw new Error(
+          `[OPS_LIFECYCLE_ADD_CONTRIBUTOR_UNSUPPORTED] Pack '${request.packId}' cannot add '${request.itemType}'.`,
+        );
+      }
+      const framework = await import('@unisane/framework-ops/contributions/add');
+      return framework.addFrameworkItem(request.context);
+    }
+    if (bindingId === OPS_LIFECYCLE_READINESS_BINDING) {
+      const request = parseLifecycleReadinessRequest(input);
+      if (request.provider !== 'google') {
+        throw new Error(
+          `[OPS_LIFECYCLE_READINESS_CONTRIBUTOR_UNSUPPORTED] Provider '${request.provider}' does not contribute readiness.`,
+        );
+      }
+      const google = await import('@unisane/provider-google');
+      const connection = google.readGoogleConnectionRecord(request);
+      return connection ? google.buildGoogleConnectionReadiness(connection) : null;
+    }
+    if (bindingId === OPS_LIFECYCLE_CONNECT_BINDING) {
+      const request = parseLifecycleConnectRequest(input);
+      if (request.provider !== 'google' || request.packId !== 'provider-google') {
+        throw new Error(
+          `[OPS_LIFECYCLE_CONNECT_CONTRIBUTOR_UNSUPPORTED] Pack '${request.packId}' cannot connect '${request.provider}'.`,
+        );
+      }
+      const google = await import('@unisane/provider-google');
+      return google.connectGoogle({
+        context: request.context,
+        projectId: request.projectId,
+        environmentId: request.environmentId,
+        recordPath: request.recordPath,
+        requiredServices: request.requiredServices,
+      });
+    }
     if (isGrowthProviderBinding(bindingId)) {
       return resolveGrowthProviderBinding(this, input);
     }
@@ -428,7 +587,7 @@ export class CanonicalPackRuntime implements PackCommandRuntime {
         label: 'connection',
       });
       const connection = loaded.config.connections[connectionId];
-      if (connection.provider !== 'cloudflare') {
+      if (connection.provider !== 'cloudflare' || !('credential' in connection)) {
         throw new Error(
           `[UNISANE_OPS_CONNECTION_INVALID] Connection '${connectionId}' is not a Cloudflare connection.`,
         );

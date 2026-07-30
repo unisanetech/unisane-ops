@@ -1,4 +1,4 @@
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import type { MarketingProviderReportType } from '../schema/report.js';
 
 export type FetchLike = typeof fetch;
@@ -15,8 +15,14 @@ export type ProviderApiPullOptions = {
 };
 
 export type ProviderApiPullContext = {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   options: ProviderApiPullOptions;
+  credentials?: {
+    accountId?: string;
+    accessToken?: string;
+    developerToken?: string;
+    loginCustomerId?: string;
+  };
   env: Record<string, string | undefined>;
   fetch: FetchLike;
 };

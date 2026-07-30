@@ -1,8 +1,9 @@
 import { log } from '../../../log.js';
 import { fetchGa4PerformanceFile } from '../../../provider-adapters.js';
 import { printFetchGa4PerformanceFileResult } from '../format-output.js';
-import { resolveSeoGoogleAccessToken } from '../google-suite-auth.js';
+import { resolveSeoGoogleConnectionToken } from '../google-connection.js';
 import type { SeoPerformanceFetchGa4CliOptions } from '../options.js';
+import { loadGrowthProjectContext, resolveGrowthResource } from '../../../project-context.js';
 
 const defaultDimensions = ['landingPagePlusQueryString'];
 const defaultMetrics = ['sessions', 'totalUsers', 'conversions', 'totalRevenue'];
@@ -18,21 +19,30 @@ export async function seoPerformanceFetchGa4(
     if (!options.out) {
       throw new Error('Missing required --out path.');
     }
-    if (!options.propertyId) {
-      throw new Error('Missing required --property-id.');
-    }
     if (!options.startDate || !options.endDate) {
       throw new Error('Missing required --start-date and --end-date.');
     }
 
-    const accessToken = await resolveOptionalAccessToken(options);
+    const accessToken = await resolveSeoGoogleConnectionToken({
+      service: 'analytics',
+      connection: options.connection,
+      environment: options.environment,
+      requiredScope: GA4_READONLY_SCOPE,
+    });
+    const property = resolveGrowthResource({
+      context: await loadGrowthProjectContext(),
+      environment: options.environment,
+      provider: 'google',
+      service: 'analytics',
+      resourceType: 'property',
+    });
     const result = await fetchGa4PerformanceFile({
       cwd: options.cwd,
       platformId: options.platform,
       output: options.out,
       env: process.env,
       accessToken,
-      propertyId: options.propertyId,
+      propertyId: property.resourceId,
       startDate: options.startDate,
       endDate: options.endDate,
       dimensions: parseCsvList(options.dimensions, defaultDimensions),
@@ -53,21 +63,6 @@ export async function seoPerformanceFetchGa4(
     }
     return 1;
   }
-}
-
-async function resolveOptionalAccessToken(
-  options: SeoPerformanceFetchGa4CliOptions,
-): Promise<string | undefined> {
-  const accessTokenEnv = options.accessTokenEnv ?? 'GOOGLE_ANALYTICS_DATA_ACCESS_TOKEN';
-  if (process.env[accessTokenEnv]?.trim() || options.authProfile || options.platform) {
-    return resolveSeoGoogleAccessToken({
-      accessTokenEnv,
-      authProfile: options.authProfile,
-      platform: options.platform,
-      requiredScope: GA4_READONLY_SCOPE,
-    });
-  }
-  return undefined;
 }
 
 function parseCsvList(value: string | undefined, fallback: string[]): string[] {

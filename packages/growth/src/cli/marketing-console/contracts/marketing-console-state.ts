@@ -1,9 +1,8 @@
 import type {
   MarketingAdsStatusReport,
   MarketingAdsAuditReport,
-  MarketingRealAccountProofStatusReport,
+  MarketingEvidenceStatusReport,
   MarketingResearchStatusSummary,
-  MarketingSetupLifecycleReport,
   MarketingStatusReport,
 } from '@unisane/growth/marketing';
 import type {
@@ -13,6 +12,29 @@ import type {
 } from '@unisane/growth/marketing';
 
 export type MarketingConsoleStatus = 'ready' | 'warn' | 'blocked' | 'missing';
+
+export type MarketingConsoleSetupStage = {
+  id: 'local' | 'deployedDomain' | 'providerAuth' | 'providerDiscovery' | 'proofReady';
+  status: 'pass' | 'current' | 'pending' | 'blocked';
+  title: string;
+  message: string;
+  checks: Array<{ id: string; status: 'pass' | 'warn' | 'error'; message: string }>;
+};
+
+export type MarketingConsoleSetupProjection = {
+  kind: 'unisane.marketing.console-setup-projection';
+  version: 1;
+  nonMutating: true;
+  generatedAt: string;
+  ok: boolean;
+  cwd: string;
+  configPath: string;
+  appId: string;
+  platformId: string;
+  currentStage: MarketingConsoleSetupStage['id'];
+  stages: MarketingConsoleSetupStage[];
+  nextActions: Array<{ id: string; command?: string; message: string }>;
+};
 
 export type MarketingConsoleMetric = {
   id: string;
@@ -412,8 +434,8 @@ export type MarketingConsoleState = {
   receipts: MarketingConsoleReceiptEvent[];
   artifacts: MarketingConsoleArtifactLink[];
   reports: {
-    setup: MarketingSetupLifecycleReport;
-    proof: MarketingRealAccountProofStatusReport;
+    setup: MarketingConsoleSetupProjection;
+    proof: MarketingEvidenceStatusReport;
     marketingStatus: MarketingStatusReport;
     analyticsStatus: MarketingStatusReport;
     adsStatus: MarketingAdsStatusReport;

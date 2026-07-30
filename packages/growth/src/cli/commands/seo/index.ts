@@ -3,7 +3,6 @@ export { seoBriefsGenerate } from './briefs/generate.js';
 export { seoCompetitorsFetch } from './competitors/fetch.js';
 export { seoCompetitorsImport } from './competitors/import.js';
 export { seoCompetitorsReport } from './competitors/report.js';
-export { seoDoctor } from './doctor.js';
 export { seoInternalLinksPlan } from './internal-links/plan.js';
 export { seoKeywordsCluster } from './keywords/cluster.js';
 export { seoKeywordsExpand } from './keywords/expand.js';

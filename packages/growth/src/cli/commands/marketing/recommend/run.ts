@@ -1,5 +1,6 @@
 import { log } from '../../../log.js';
-import { loadMarketingConfig, writeMarketingRecommendations } from '@unisane/growth/marketing';
+import { writeMarketingRecommendations } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { MarketingCliOptions } from '../options.js';
 import { printMarketingRecommendationResult } from '../output/recommend.js';
 
@@ -25,10 +26,7 @@ function parseMaxAgeDays(value: string | undefined): number | undefined {
 
 export async function marketingRecommend(options: MarketingCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const result = await writeMarketingRecommendations(loaded.config, {
       cwd: options.cwd,
       maxAgeDays: parseMaxAgeDays(options.maxAgeDays),

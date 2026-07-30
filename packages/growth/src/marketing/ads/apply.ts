@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingAdsPlanArtifactSchema,
   type MarketingAdsPlanArtifact,
@@ -56,6 +56,9 @@ export type MarketingAdsLiveApplyOptions = {
   approvalRef?: string;
   liveExecutorMode?: MarketingAdsLiveExecutorMode;
   providerExecutors?: MarketingAdsLiveProviderExecutors;
+  providerCredentials?: Parameters<
+    typeof executeMarketingAdsLiveOperation
+  >[0]['providerCredentials'];
   out?: string;
   env?: Record<string, string | undefined>;
   fetch?: FetchLike;
@@ -142,7 +145,7 @@ function confirmationValues(value: string | undefined): Set<string> {
 }
 
 function providerAccountConfirmation(args: {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   provider: MarketingAdsPlanProvider;
   provided: Set<string>;
 }): MarketingAdsApplyConfirmation {
@@ -160,7 +163,7 @@ function providerAccountConfirmation(args: {
 }
 
 function productionConfirmation(args: {
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   provided: string | undefined;
 }): MarketingAdsApplyConfirmation | undefined {
   const environment = args.config.environments[args.config.defaultEnvironment];
@@ -273,7 +276,7 @@ function liveBlockersFor(args: {
   plan: MarketingAdsPlanArtifact;
   planHash: string;
   receipt: MarketingAdsApplyReceipt;
-  config: MarketingConfig;
+  config: MarketingExecutionContext;
   yes?: boolean;
   accountConfirm?: string;
   productionConfirm?: string;
@@ -321,7 +324,7 @@ function liveBlockersFor(args: {
 }
 
 export function buildMarketingAdsApplyPreview(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsApplyOptions,
 ): MarketingAdsApplyResult {
   if (!options.dryRun) {
@@ -387,7 +390,7 @@ export function buildMarketingAdsApplyPreview(
 }
 
 export async function writeMarketingAdsApplyPreview(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsApplyOptions,
 ): Promise<MarketingAdsApplyResult> {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -428,7 +431,7 @@ export async function writeMarketingAdsApplyPreview(
 }
 
 export async function writeMarketingAdsLiveApplyReceipt(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsLiveApplyOptions,
 ): Promise<MarketingAdsLiveApplyResult> {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -483,6 +486,7 @@ export async function writeMarketingAdsLiveApplyReceipt(
                   operation,
                   mode,
                   providerExecutors: options.providerExecutors,
+                  providerCredentials: options.providerCredentials,
                   env: options.env,
                   fetch: options.fetch,
                   now: options.now,

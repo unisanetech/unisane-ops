@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingStrategyMapArtifactInputSchema,
   marketingStrategyMapArtifactSchema,
@@ -53,7 +53,7 @@ function safeTimestamp(iso: string): string {
 }
 
 function normalizeStrategyMapArtifact(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   value: unknown,
   options: MarketingStrategyMapPullOptions,
 ): MarketingStrategyMapArtifact {
@@ -88,7 +88,7 @@ export function cacheMarketingStrategyMapArtifact(
 }
 
 export function writeMarketingStrategyMapPull(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingStrategyMapPullOptions,
 ): MarketingStrategyMapPullResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());

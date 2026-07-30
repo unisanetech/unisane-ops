@@ -32,7 +32,7 @@ export async function applyGoogleApisPlan(
   const plan = asGoogleApisPlan(readGoogleJsonFile(options.plan, cwd));
   const risk = highestControlPlaneMutationRisk(plan.actions.map((action) => action.risk));
   assertControlPlaneApproval({ risk, yes: options.yes });
-  const production = plan.environment === 'production' || options.env === 'production';
+  const production = plan.environment === 'production' || options.environment === 'production';
   if (production) {
     const expected = expectedControlPlaneProductionConfirmation({
       environment: plan.environment,
@@ -45,7 +45,11 @@ export async function applyGoogleApisPlan(
       );
     }
   }
-  const accessToken = await googleProviderAccessToken(options, GOOGLE_CONTROL_PLANE_SCOPE);
+  const accessToken = await googleProviderAccessToken(
+    options,
+    'project-administration',
+    GOOGLE_CONTROL_PLANE_SCOPE,
+  );
   const providerFetch = googleProviderFetchFromOptions(options, deps?.fetch);
   const enabledServices: GoogleProviderApplyReceipt['enabledServices'] = [];
   const results: GoogleProviderApplyReceipt['results'] = [];

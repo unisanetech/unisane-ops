@@ -1,8 +1,7 @@
 import { createHash } from 'node:crypto';
 import type { SeoPerformanceFile, SeoPerformanceRecord } from '@unisane/growth/contracts';
 import { seoPerformanceFileSchema } from '@unisane/growth/contracts';
-import { refreshGoogleOAuthAccessToken, type FetchLike } from '../google-ads/oauth.js';
-import type { GoogleSearchConsoleCredentials } from './config.js';
+import type { FetchLike } from '../google-ads/transport.js';
 
 export type SearchConsoleDimension =
   | 'query'
@@ -14,8 +13,7 @@ export type SearchConsoleDimension =
 
 export type QuerySearchConsolePerformanceOptions = {
   platformId: string;
-  credentials?: GoogleSearchConsoleCredentials;
-  accessToken?: string;
+  accessToken: string;
   siteUrl: string;
   startDate: string;
   endDate: string;
@@ -33,7 +31,7 @@ export async function querySearchConsolePerformance(
   options: QuerySearchConsolePerformanceOptions,
 ): Promise<SeoPerformanceFile> {
   const fetchImpl = options.fetchImpl ?? fetch;
-  const accessToken = await resolveAccessToken(options, fetchImpl);
+  const accessToken = options.accessToken;
   const rows = await fetchAllRows({
     options,
     fetchImpl,
@@ -52,22 +50,6 @@ export async function querySearchConsolePerformance(
       dimensions: options.dimensions,
       fetchedAt: options.fetchedAt ?? new Date().toISOString(),
     }),
-  });
-}
-
-async function resolveAccessToken(
-  options: QuerySearchConsolePerformanceOptions,
-  fetchImpl: FetchLike,
-): Promise<string> {
-  if (options.accessToken?.trim()) return options.accessToken.trim();
-  if (!options.credentials) {
-    throw new Error('Missing Google Search Console credentials or access token.');
-  }
-  return refreshGoogleOAuthAccessToken({
-    clientId: options.credentials.clientId,
-    clientSecret: options.credentials.clientSecret,
-    refreshToken: options.credentials.refreshToken,
-    fetchImpl,
   });
 }
 

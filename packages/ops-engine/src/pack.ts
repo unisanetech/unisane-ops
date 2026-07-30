@@ -335,6 +335,30 @@ export function resolvePackCommand(
   return matches[0];
 }
 
+export function resolveAddItemContributor(
+  manifests: readonly PackManifest[],
+  itemType: string,
+): PackManifest | null {
+  const matches = manifests.filter((manifest) => manifest.addItemTypes.includes(itemType));
+  if (matches.length > 1) {
+    throw new Error(`[OPS_PACK_ADD_ITEM_AMBIGUOUS] Multiple packs contribute '${itemType}'.`);
+  }
+  return matches[0] ?? null;
+}
+
+export function resolveProviderBindingContributor(
+  manifests: readonly PackManifest[],
+  provider: string,
+): PackManifest | null {
+  const matches = manifests.filter((manifest) => manifest.providerBindings.includes(provider));
+  if (matches.length > 1) {
+    throw new Error(
+      `[OPS_PACK_PROVIDER_BINDING_AMBIGUOUS] Multiple packs bind provider '${provider}'.`,
+    );
+  }
+  return matches[0] ?? null;
+}
+
 const EFFECT_ORDER = ['offline', 'read-network', 'write', 'spend-impact'] as const;
 
 export function assertPackCommandResult(

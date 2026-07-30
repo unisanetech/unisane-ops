@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingRecommendationArtifactSchema,
   type MarketingRecommendationArtifact,
@@ -47,7 +47,7 @@ function recommendationPath(cwd: string, generatedAt: string, out: string | unde
 }
 
 export async function buildMarketingRecommendations(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingRecommendationOptions = {},
 ): Promise<MarketingRecommendationArtifact> {
   const now = options.now ?? new Date();
@@ -86,7 +86,7 @@ export async function buildMarketingRecommendations(
 }
 
 export async function writeMarketingRecommendations(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingRecommendationOptions = {},
 ): Promise<MarketingRecommendationResult> {
   const cwd = path.resolve(options.cwd ?? process.cwd());

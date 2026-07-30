@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { MarketingConfig } from '../schema/marketing-config.js';
+import type { MarketingExecutionContext } from '../schema/execution-context.js';
 import {
   marketingProviderReportArtifactSchema,
   type MarketingProviderReportRecord,
@@ -215,7 +215,7 @@ function resolveOutputPath(cwd: string, out: string | undefined): string {
 }
 
 export function buildMarketingAdsSearchTermsReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsSearchTermsOptions = {},
 ): MarketingAdsSearchTermsReport {
   const cwd = path.resolve(options.cwd ?? process.cwd());
@@ -275,7 +275,7 @@ export function buildMarketingAdsSearchTermsReport(
 }
 
 export function writeMarketingAdsSearchTermsReport(
-  config: MarketingConfig,
+  config: MarketingExecutionContext,
   options: MarketingAdsSearchTermsOptions = {},
 ): MarketingAdsSearchTermsResult {
   const cwd = path.resolve(options.cwd ?? process.cwd());

@@ -76,7 +76,7 @@ export async function runGrowthCommand(context: PackCommandContext): Promise<Pac
         '[GROWTH_COMMAND_RUNTIME_MISSING] Growth commands require the canonical pack runtime.',
       );
     }
-    await runWithGrowthProviderRuntime(context.runtime, () =>
+    await runWithGrowthProviderRuntime(context.runtime, context.cwd, () =>
       program.parseAsync(['node', 'unisane', ...args]),
     );
   });

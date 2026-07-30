@@ -33,7 +33,7 @@ export const marketingAdsAssetSourceFileSchema = z.object({
 
 export const marketingAdsAssetProviderRefSchema = z.object({
   provider: marketingCreativeProviderSchema,
-  accountIdEnv: z.string().min(1).optional(),
+  accountId: z.string().min(1).optional(),
   providerAssetId: z.string().min(1).optional(),
   uploadedAt: z.string().datetime().optional(),
   receiptPath: z.string().min(1).optional(),
@@ -74,7 +74,6 @@ export const marketingAdsAssetUploadPlanOperationSchema = z.object({
   assetType: marketingAdsAssetTypeSchema,
   sourceSha256: z.string().regex(/^[a-f0-9]{64}$/),
   sourceLocalPath: z.string().min(1),
-  accountIdEnv: z.string().min(1).optional(),
   requiresApproval: z.boolean().default(true),
   mutation: z.literal('upload_asset'),
 });

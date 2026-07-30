@@ -1,10 +1,10 @@
 export type MarketingCliOptions = {
   accountId?: string;
   apiVersion?: string;
-  authProfile?: string;
+  connection?: string;
+  environment?: string;
   cadence?: string;
   cwd?: string;
-  config?: string;
   endDate?: string;
   dryRun?: boolean;
   experimentId?: string;
@@ -13,7 +13,6 @@ export type MarketingCliOptions = {
   input?: string;
   inputFormat?: 'normalized' | 'google-ads' | 'meta-ads' | 'ga4' | 'search-console';
   json?: boolean;
-  limits?: string;
   approvalRef?: string;
   acknowledgedBy?: string;
   alertId?: string;
@@ -21,7 +20,6 @@ export type MarketingCliOptions = {
   decidedBy?: string;
   maxAgeDays?: string;
   maxPages?: string;
-  metaAuthProfile?: string;
   pageSize?: string;
   provider?: string;
   recommendationId?: string;

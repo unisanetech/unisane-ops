@@ -1,5 +1,5 @@
 import type { ProviderApiPullContext, ProviderApiPullPayload } from '@unisane/growth/contracts';
-import { asArray, asRecord, readJsonResponse, resolveEnv } from '../transport-utils.js';
+import { asArray, asRecord, readJsonResponse } from '../transport-utils.js';
 
 type SearchConsoleReportType =
   | 'queryPage'
@@ -34,21 +34,16 @@ function searchConsoleDimensions(reportType: SearchConsoleReportType): string[] 
 export async function pullSearchConsoleReport(
   input: ProviderApiPullContext,
 ): Promise<ProviderApiPullPayload<'search-console'>> {
-  const provider = input.config.providers.searchConsole;
-  const siteUrl =
-    input.options.accountId ??
-    resolveEnv(
-      input.env,
-      provider.accountIdEnv,
-      'MARKETING_SEARCH_CONSOLE_SITE_URL_REQUIRED',
-      'Search Console site URL',
+  const siteUrl = input.options.accountId;
+  if (!siteUrl) {
+    throw new Error('[MARKETING_SEARCH_CONSOLE_SITE_REQUIRED] Select a Search Console site.');
+  }
+  const accessToken = input.credentials?.accessToken;
+  if (!accessToken) {
+    throw new Error(
+      '[MARKETING_SEARCH_CONSOLE_CONNECTION_REQUIRED] Search Console requires a canonical Google connection.',
     );
-  const accessToken = resolveEnv(
-    input.env,
-    provider.accessTokenEnv,
-    'MARKETING_SEARCH_CONSOLE_ACCESS_TOKEN_REQUIRED',
-    'Search Console access token',
-  );
+  }
   const rowLimit = input.options.pageSize ?? 25_000;
   const maxPages = input.options.maxPages ?? 2;
   const reportType = resolveSearchConsoleReportType(input);

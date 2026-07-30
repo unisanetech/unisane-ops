@@ -6,22 +6,14 @@ import {
   applyGoogleTagManagerCommand,
   createVersionGoogleTagManagerCommand,
   diffGoogleTagManagerCommand,
-  loginGoogleTagManagerAuthCommand,
-  logoutGoogleTagManagerAuthCommand,
   planGoogleTagManagerCommand,
   previewGoogleTagManagerCommand,
   publishGoogleTagManagerCommand,
   pullGoogleTagManagerCommand,
   rollbackGoogleTagManagerCommand,
-  statusGoogleTagManagerAuthCommand,
-  tokenGoogleTagManagerAuthCommand,
   validateGoogleTagManagerCommand,
-  type GoogleTagManagerAuthCliOptions,
   type GoogleTagManagerCliOptions,
 } from './index.js';
-import { loadGoogleTagManagerManifest } from './manifest-loader.js';
-
-const GTM_AUTH_PROFILE_ENV = 'UNISANE_GTM_AUTH_PROFILE';
 
 function addSharedOptions(command: Command): Command {
   return command
@@ -34,49 +26,16 @@ function addSharedOptions(command: Command): Command {
 
 function addWorkspaceApiOptions(command: Command): Command {
   return command
-    .option('--access-token-env <name>', 'Environment variable containing a GTM OAuth access token')
-    .option(
-      '--auth-profile <name>',
-      'Saved GTM auth profile; defaults to the manifest app id when available',
-    )
+    .option('--connection <id>', 'Canonical Google connection id')
     .option('--workspace-id <id>', 'GTM workspace id to select')
     .option('--workspace-name <name>', 'GTM workspace name to select')
     .option('--rate-limit-ms <ms>', 'Minimum delay between GTM API requests');
-}
-
-function addAuthSharedOptions(command: Command): Command {
-  return command
-    .option('--profile <name>', 'Saved GTM auth profile name')
-    .option('--cwd <path>', 'Directory to load .env.local/.env from')
-    .option('--auth-home <path>', 'Local GTM auth profile directory')
-    .option('--store <keychain|file>', 'Secret store backend')
-    .option(
-      '--allow-plaintext-store',
-      'Allow plaintext file secrets for controlled CI/test environments',
-    )
-    .option('--json', 'Emit machine-readable JSON output');
 }
 
 function addReadOptions(command: Command): Command {
   return addWorkspaceApiOptions(command)
     .option('--snapshot <path>', 'Read an existing local snapshot instead of calling the GTM API')
     .option('--extended', 'Include extended read-only GTM resources in pull snapshots');
-}
-
-async function withDefaultGtmAuthProfile<
-  TOptions extends { profile?: string; cwd?: string; manifest?: string; app?: string },
->(options: TOptions): Promise<TOptions> {
-  if (options.profile || process.env[GTM_AUTH_PROFILE_ENV]) return options;
-  try {
-    const loaded = await loadGoogleTagManagerManifest({
-      cwd: options.cwd,
-      manifestPath: options.manifest,
-      app: options.app,
-    });
-    return { ...options, profile: loaded.manifest.appId };
-  } catch {
-    return options;
-  }
 }
 
 async function runGtmCommand<TOptions extends { cwd?: string }>(
@@ -95,50 +54,6 @@ async function runGtmCommand<TOptions extends { cwd?: string }>(
 
 export function registerGoogleTagManagerCommands(program: Command): void {
   const gtm = program.command('gtm').description('Google Tag Manager control-plane commands');
-  const auth = gtm.command('auth').description('Manage local Google Tag Manager OAuth profiles');
-
-  addAuthSharedOptions(
-    auth.command('login').description('Run local OAuth and save a refresh-token auth profile'),
-  )
-    .option('--client-id <id>', 'Google OAuth client id; defaults to GOOGLE_OAUTH_CLIENT_ID')
-    .option('--client-secret-env <name>', 'Environment variable containing the OAuth client secret')
-    .option('--scopes <scopes>', 'Comma or space separated OAuth scopes')
-    .option('--port <port>', 'Loopback callback port, or 0 for a random available port')
-    .option('--timeout-ms <ms>', 'OAuth callback wait timeout')
-    .action(async (options: GoogleTagManagerAuthCliOptions) => {
-      await runGtmCommand(options, async (resolved) =>
-        loginGoogleTagManagerAuthCommand(await withDefaultGtmAuthProfile(resolved)),
-      );
-    });
-
-  addAuthSharedOptions(
-    auth
-      .command('status')
-      .description('Show saved GTM auth profile status without printing secrets'),
-  ).action(async (options: GoogleTagManagerAuthCliOptions) => {
-    await runGtmCommand(options, async (resolved) =>
-      statusGoogleTagManagerAuthCommand(await withDefaultGtmAuthProfile(resolved)),
-    );
-  });
-
-  addAuthSharedOptions(
-    auth.command('token').description('Mint an access token from a saved GTM auth profile'),
-  )
-    .option('--required-scope <scope>', 'Required OAuth scope to verify')
-    .option('--print', 'Print the raw access token')
-    .action(async (options: GoogleTagManagerAuthCliOptions) => {
-      await runGtmCommand(options, async (resolved) =>
-        tokenGoogleTagManagerAuthCommand(await withDefaultGtmAuthProfile(resolved)),
-      );
-    });
-
-  addAuthSharedOptions(
-    auth.command('logout').description('Delete a saved GTM auth profile and its stored secrets'),
-  ).action(async (options: GoogleTagManagerAuthCliOptions) => {
-    await runGtmCommand(options, async (resolved) =>
-      logoutGoogleTagManagerAuthCommand(await withDefaultGtmAuthProfile(resolved)),
-    );
-  });
 
   addSharedOptions(
     gtm.command('validate').description('Validate the local GTM manifest and policy gates'),
@@ -225,11 +140,7 @@ export function registerGoogleTagManagerCommands(program: Command): void {
       '--production-confirm <value>',
       'Required production confirmation: <app>:production:<version>',
     )
-    .option('--access-token-env <name>', 'Environment variable containing a GTM OAuth access token')
-    .option(
-      '--auth-profile <name>',
-      'Saved GTM auth profile; defaults to the manifest app id when available',
-    )
+    .option('--connection <id>', 'Canonical Google connection id')
     .option('--rate-limit-ms <ms>', 'Minimum delay between GTM API requests')
     .option('--output <path>', 'Publish receipt output path')
     .option('--yes', 'Confirm GTM publish')
@@ -250,11 +161,7 @@ export function registerGoogleTagManagerCommands(program: Command): void {
       '--production-confirm <value>',
       'Required production confirmation: <app>:production:<version>',
     )
-    .option('--access-token-env <name>', 'Environment variable containing a GTM OAuth access token')
-    .option(
-      '--auth-profile <name>',
-      'Saved GTM auth profile; defaults to the manifest app id when available',
-    )
+    .option('--connection <id>', 'Canonical Google connection id')
     .option('--rate-limit-ms <ms>', 'Minimum delay between GTM API requests')
     .option('--output <path>', 'Rollback receipt output path')
     .option(

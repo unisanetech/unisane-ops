@@ -1,4 +1,5 @@
-import { loadMarketingConfig, validateMarketingRegistries } from '@unisane/growth/marketing';
+import { validateMarketingRegistries } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { MarketingCliOptions } from '../options.js';
 import { printMarketingRegistryReport } from '../output/doctor.js';
 
@@ -8,10 +9,7 @@ function printJson(value: unknown): void {
 
 export async function marketingValidate(options: MarketingCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const registryReport = await validateMarketingRegistries(loaded.config, {
       cwd: options.cwd,
       missingStatus: 'error',

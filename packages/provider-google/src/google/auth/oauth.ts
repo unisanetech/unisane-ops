@@ -3,56 +3,34 @@ import { spawnSync } from 'node:child_process';
 import { createServer, type Server } from 'node:http';
 import { log } from '@unisane/cli-core';
 import {
-  authNamespace,
-  DEFAULT_AUTH_TIMEOUT_MS,
-  errorCode,
-  GOOGLE_AUTH_URL,
+  DEFAULT_OAUTH_TIMEOUT_MS,
+  GOOGLE_AUTHORIZATION_URL,
   GOOGLE_TOKEN_URL,
+  googleOAuthErrorCode,
   isRecord,
-  type FetchLike,
   type GoogleAccessTokenResult,
-  type GoogleAuthRuntimeOptions,
-  type TokenResponse,
-} from './types.js';
+  type GoogleOAuthFetch,
+  type GoogleOAuthRuntime,
+  type GoogleTokenResponse,
+} from './oauth-types.js';
 
-export function parseScopes(
-  input: string | undefined,
-  options: GoogleAuthRuntimeOptions,
-): readonly string[] {
-  const fallback = authNamespace(options).defaultScopes;
-  if (!input?.trim() && fallback) return fallback;
-  const scopes = (input ?? '')
-    .split(/[,\s]+/g)
-    .map((scope) => scope.trim())
-    .filter(Boolean);
-  if (scopes.length === 0) {
-    throw new Error(
-      `[${errorCode(options, 'SCOPES_REQUIRED')}] Pass --scopes with at least one OAuth scope.`,
-    );
-  }
-  return scopes;
-}
-
-export function parsePort(input: string | undefined, options: GoogleAuthRuntimeOptions): number {
+export function parsePort(input: string | undefined): number {
   if (!input?.trim()) return 0;
   const port = Number.parseInt(input, 10);
   if (!Number.isInteger(port) || port < 0 || port > 65535) {
     throw new Error(
-      `[${errorCode(options, 'PORT_INVALID')}] --port must be an integer from 0 to 65535.`,
+      `[${googleOAuthErrorCode('PORT_INVALID')}] --port must be an integer from 0 to 65535.`,
     );
   }
   return port;
 }
 
-export function parseTimeoutMs(
-  input: string | undefined,
-  options: GoogleAuthRuntimeOptions,
-): number {
-  if (!input?.trim()) return DEFAULT_AUTH_TIMEOUT_MS;
+export function parseTimeoutMs(input: string | undefined): number {
+  if (!input?.trim()) return DEFAULT_OAUTH_TIMEOUT_MS;
   const value = Number.parseInt(input, 10);
   if (!Number.isInteger(value) || value <= 0) {
     throw new Error(
-      `[${errorCode(options, 'TIMEOUT_INVALID')}] --timeout-ms must be a positive integer.`,
+      `[${googleOAuthErrorCode('TIMEOUT_INVALID')}] --timeout-ms must be a positive integer.`,
     );
   }
   return value;
@@ -70,20 +48,20 @@ function createCodeChallenge(verifier: string): string {
   return base64Url(createHash('sha256').update(verifier, 'ascii').digest());
 }
 
-function fetchImpl(runtime: GoogleAuthRuntimeOptions = {}): FetchLike {
+function fetchImpl(runtime: GoogleOAuthRuntime = {}): GoogleOAuthFetch {
   if (runtime.fetch) return runtime.fetch;
   if (typeof globalThis.fetch !== 'function') {
     throw new Error(
-      `[${errorCode(runtime, 'FETCH_UNAVAILABLE')}] This Node runtime does not provide fetch.`,
+      `[${googleOAuthErrorCode('FETCH_UNAVAILABLE')}] This Node runtime does not provide fetch.`,
     );
   }
-  return globalThis.fetch as FetchLike;
+  return globalThis.fetch as GoogleOAuthFetch;
 }
 
 async function postToken(
   body: URLSearchParams,
-  runtime: GoogleAuthRuntimeOptions = {},
-): Promise<TokenResponse> {
+  runtime: GoogleOAuthRuntime = {},
+): Promise<GoogleTokenResponse> {
   const response = await fetchImpl(runtime)(GOOGLE_TOKEN_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -95,21 +73,21 @@ async function postToken(
     parsed = text ? JSON.parse(text) : {};
   } catch {
     throw new Error(
-      `[${errorCode(runtime, 'TOKEN_RESPONSE_INVALID')}] Google token endpoint returned non-JSON status ${response.status}.`,
+      `[${googleOAuthErrorCode('TOKEN_RESPONSE_INVALID')}] Google token endpoint returned non-JSON status ${response.status}.`,
     );
   }
   if (!isRecord(parsed)) {
     throw new Error(
-      `[${errorCode(runtime, 'TOKEN_RESPONSE_INVALID')}] Google token endpoint returned an invalid JSON payload.`,
+      `[${googleOAuthErrorCode('TOKEN_RESPONSE_INVALID')}] Google token endpoint returned an invalid JSON payload.`,
     );
   }
   if (!response.ok) {
     const error = typeof parsed.error === 'string' ? parsed.error : `HTTP ${response.status}`;
     const description =
       typeof parsed.error_description === 'string' ? `: ${parsed.error_description}` : '';
-    throw new Error(`[${errorCode(runtime, 'TOKEN_EXCHANGE_FAILED')}] ${error}${description}`);
+    throw new Error(`[${googleOAuthErrorCode('TOKEN_EXCHANGE_FAILED')}] ${error}${description}`);
   }
-  return parsed as TokenResponse;
+  return parsed as GoogleTokenResponse;
 }
 
 export async function exchangeAuthorizationCode(args: {
@@ -118,8 +96,8 @@ export async function exchangeAuthorizationCode(args: {
   code: string;
   codeVerifier: string;
   redirectUri: string;
-  runtime?: GoogleAuthRuntimeOptions;
-}): Promise<TokenResponse> {
+  runtime?: GoogleOAuthRuntime;
+}): Promise<GoogleTokenResponse> {
   const body = new URLSearchParams({
     client_id: args.clientId,
     code: args.code,
@@ -135,7 +113,7 @@ export async function refreshAccessToken(args: {
   clientId: string;
   clientSecret?: string;
   refreshToken: string;
-  runtime?: GoogleAuthRuntimeOptions;
+  runtime?: GoogleOAuthRuntime;
 }): Promise<GoogleAccessTokenResult> {
   const body = new URLSearchParams({
     client_id: args.clientId,
@@ -146,7 +124,7 @@ export async function refreshAccessToken(args: {
   const response = await postToken(body, args.runtime);
   if (typeof response.access_token !== 'string' || !response.access_token.trim()) {
     throw new Error(
-      `[${errorCode(args.runtime, 'ACCESS_TOKEN_MISSING')}] Google token endpoint did not return an access token.`,
+      `[${googleOAuthErrorCode('ACCESS_TOKEN_MISSING')}] Google token endpoint did not return an access token.`,
     );
   }
   return {
@@ -161,7 +139,7 @@ export function assertRequiredScope(args: {
   grantedScope?: string;
   profileScopes: readonly string[];
   requiredScope: string;
-  runtime?: GoogleAuthRuntimeOptions;
+  runtime?: GoogleOAuthRuntime;
 }): void {
   const required = args.requiredScope.trim();
   if (!required) return;
@@ -175,13 +153,13 @@ export function assertRequiredScope(args: {
     : `https://www.googleapis.com/auth/${required}`;
   if (granted.has(exactRequired)) return;
   throw new Error(
-    `[${errorCode(args.runtime, 'SCOPE_MISSING')}] Auth profile does not include required scope ${exactRequired}.`,
+    `[${googleOAuthErrorCode('SCOPE_MISSING')}] Google connection does not include required scope ${exactRequired}.`,
   );
 }
 
 export async function openAuthorizationUrl(
   url: string,
-  runtime: GoogleAuthRuntimeOptions = {},
+  runtime: GoogleOAuthRuntime = {},
 ): Promise<boolean> {
   if (runtime.openUrl) {
     try {
@@ -221,9 +199,8 @@ export async function waitForAuthorizationCode(args: {
   port: number;
   timeoutMs: number;
   json?: boolean;
-  runtime?: GoogleAuthRuntimeOptions;
+  runtime?: GoogleOAuthRuntime;
 }): Promise<{ code: string; redirectUri: string; codeVerifier: string }> {
-  const namespace = authNamespace(args.runtime);
   const state = base64Url(randomBytes(32));
   const codeVerifier = createCodeVerifier();
   const codeChallenge = createCodeChallenge(codeVerifier);
@@ -235,7 +212,7 @@ export async function waitForAuthorizationCode(args: {
         const timeout = setTimeout(() => {
           reject(
             new Error(
-              `[${errorCode(args.runtime, 'TIMEOUT')}] Timed out waiting for the OAuth browser callback.`,
+              `[${googleOAuthErrorCode('TIMEOUT')}] Timed out waiting for the OAuth browser callback.`,
             ),
           );
         }, args.timeoutMs);
@@ -249,33 +226,25 @@ export async function waitForAuthorizationCode(args: {
             const returnedState = url.searchParams.get('state');
             if (error) {
               response.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-              response.end(
-                namespace.authorizationFailedMessage ??
-                  `${namespace.displayName} authorization failed. You can close this tab.`,
-              );
+              response.end('Google authorization failed. You can close this tab.');
               clearTimeout(timeout);
               reject(
-                new Error(`[${errorCode(args.runtime, 'DENIED')}] Google OAuth returned ${error}.`),
+                new Error(`[${googleOAuthErrorCode('DENIED')}] Google OAuth returned ${error}.`),
               );
               return;
             }
             if (!code) {
               response.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-              response.end(
-                namespace.authorizationMissingCodeMessage ??
-                  `No ${namespace.displayName} authorization code was found.`,
-              );
+              response.end('No Google authorization code was found.');
               return;
             }
             if (returnedState !== state) {
               response.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-              response.end(
-                `Invalid ${namespace.displayName} authorization response. You can close this tab.`,
-              );
+              response.end('Invalid Google authorization response. You can close this tab.');
               clearTimeout(timeout);
               reject(
                 new Error(
-                  `[${errorCode(args.runtime, 'STATE_MISMATCH')}] Google OAuth state did not match the local auth session.`,
+                  `[${googleOAuthErrorCode('STATE_MISMATCH')}] Google OAuth state did not match the local auth session.`,
                 ),
               );
               return;
@@ -283,10 +252,7 @@ export async function waitForAuthorizationCode(args: {
             const address = server?.address();
             const port = typeof address === 'object' && address ? address.port : args.port;
             response.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
-            response.end(
-              namespace.authorizationReceivedMessage ??
-                `${namespace.displayName} authorization received. You can close this tab.`,
-            );
+            response.end('Google authorization received. You can close this tab.');
             clearTimeout(timeout);
             resolve({
               code,
@@ -307,7 +273,7 @@ export async function waitForAuthorizationCode(args: {
           const address = server?.address();
           const port = typeof address === 'object' && address ? address.port : args.port;
           const redirectUri = `http://127.0.0.1:${port}`;
-          const authUrl = new URL(GOOGLE_AUTH_URL);
+          const authUrl = new URL(GOOGLE_AUTHORIZATION_URL);
           authUrl.searchParams.set('client_id', args.clientId);
           authUrl.searchParams.set('redirect_uri', redirectUri);
           authUrl.searchParams.set('response_type', 'code');
@@ -322,7 +288,7 @@ export async function waitForAuthorizationCode(args: {
               `${JSON.stringify({ authorizationUrl: authUrl.href, redirectUri })}\n`,
             );
           } else {
-            log.section(namespace.authSectionTitle ?? `${namespace.displayName} OAuth`);
+            log.section('Google OAuth');
             void openAuthorizationUrl(authUrl.href, args.runtime).then((opened) => {
               if (opened) {
                 log.info('Opened authorization URL in your browser.');

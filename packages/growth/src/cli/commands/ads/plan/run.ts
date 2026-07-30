@@ -1,9 +1,6 @@
 import { log } from '../../../log.js';
-import {
-  loadMarketingConfig,
-  marketingAdsPlanProviderSchema,
-  writeMarketingAdsPlan,
-} from '@unisane/growth/marketing';
+import { marketingAdsPlanProviderSchema, writeMarketingAdsPlan } from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 import type { AdsCliOptions } from '../options.js';
 import { printAdsPlanResult } from '../output/plan.js';
 
@@ -23,10 +20,7 @@ function parseDailyBudget(value: string | undefined): number | undefined {
 
 export async function adsPlan(options: AdsCliOptions): Promise<number> {
   try {
-    const loaded = await loadMarketingConfig({
-      cwd: options.cwd,
-      configPath: options.config,
-    });
+    const loaded = await loadMarketingExecutionContext();
     const result = writeMarketingAdsPlan(loaded.config, {
       cwd: options.cwd,
       provider: parseProvider(options.provider),
