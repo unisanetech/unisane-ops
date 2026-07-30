@@ -23,6 +23,11 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-07-30`: Completed P120-W3 slice 5. SEO now has six distinct, URL-addressable
+  experiences backed by one headless projection: performance Overview, deterministic
+  Opportunities, page and query analysis, user-impact Site health, and qualified
+  Research. Missing comparison, audit, and research evidence produces explicit limits
+  or empty states rather than invented trends, health, demand, or rankings.
 - `2026-07-30`: Completed P120-W3 slice 4. The executive Overview now derives a
   plain-language condition, up to three contextual priorities, source-separated usable
   business metrics, a real funnel only when evidence exists, readable recent outcomes,

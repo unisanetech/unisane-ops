@@ -14,6 +14,11 @@ status: accepted
 
 ## Changelog
 
+- `2026-07-30`: Implemented the W3 SEO decision slice. One UI-neutral Growth
+  projection now supplies the six distinct SEO page models, deterministic
+  opportunities, honest comparison limits, focused page/query details, grouped
+  site-health issues, and evidence-qualified research while the console app owns all
+  presentation and interaction.
 - `2026-07-30`: Implemented the W3 Overview decision slice. One UI-neutral Growth
   projection now supplies the executive condition, contextual priorities,
   source-separated metrics, evidence-backed funnel, readable outcomes, and capability

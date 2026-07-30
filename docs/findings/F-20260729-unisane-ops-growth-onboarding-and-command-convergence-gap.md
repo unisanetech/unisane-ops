@@ -15,6 +15,10 @@ status: in-progress
 
 ## Changelog
 
+- `2026-07-30`: Closed the P120-W3 SEO slice. Generic SEO cards and raw row reuse no
+  longer stand in for product workflows; Overview, Opportunities, Pages, Queries, Site
+  health, and Research now answer separate user questions while missing comparison,
+  audit, or research evidence stays explicit.
 - `2026-07-30`: Closed the P120-W3 Overview slice. Generic Performance and global
   recommendation presentation no longer drive the home page; one human-first Overview
   now shows the current condition, contextual priorities, honestly sourced results,
