@@ -1,23 +1,41 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
+import type { OpsReadinessFinding } from '@unisane/ops-engine/readiness';
 import { loadMarketingRegistries } from '../registry/load-registries.js';
 import type { MarketingExecutionContext } from '../schema/execution-context.js';
+import { detectMarketingTrackingEmitters } from './audit-emitters.js';
 import { auditGoogleTagManagerManifest } from './audit-gtm.js';
+import {
+  loadMarketingTrackingObservations,
+  reconcileMarketingTrackingObservations,
+} from './audit-observations.js';
 import { auditProviderConversionMappings } from './audit-provider-conversions.js';
 import { auditTrackingRequirements } from './audit-requirements.js';
 import type {
   MarketingTrackingAuditCheck,
   MarketingTrackingAuditOptions,
   MarketingTrackingAuditReport,
+  MarketingTrackingFinding,
   SourceFile,
 } from './audit-types.js';
 export type {
   MarketingTrackingAuditCheck,
   MarketingTrackingAuditOptions,
   MarketingTrackingAuditReport,
+  MarketingTrackingAuditSummary,
   MarketingTrackingAuditStatus,
+  MarketingTrackingCoverage,
+  MarketingTrackingEmitter,
+  MarketingTrackingEmitterId,
+  MarketingTrackingFinding,
+  MarketingTrackingFindingCategory,
   SourceFile,
 } from './audit-types.js';
+export {
+  marketingTrackingObservationArtifactSchema,
+  type MarketingTrackingObservation,
+  type MarketingTrackingObservationArtifact,
+} from './audit-observations.js';
 
 const SOURCE_EXTENSIONS = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs']);
 const IGNORED_DIRECTORIES = new Set([
@@ -158,6 +176,85 @@ function providerTransportChecks(args: {
   return checks;
 }
 
+function stableId(value: string): string {
+  return (
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9.-]+/g, '-')
+      .replace(/^[.-]+|[.-]+$/g, '') || 'project'
+  );
+}
+
+function findingChecks(findings: MarketingTrackingFinding[]): MarketingTrackingAuditCheck[] {
+  return findings.map((finding) => ({
+    id: finding.id,
+    status: finding.severity === 'error' ? 'error' : 'warn',
+    message: `${finding.title}. ${finding.detail}`,
+    ...(finding.path ? { path: finding.path } : {}),
+  }));
+}
+
+function buildReadinessFinding(input: {
+  config: MarketingExecutionContext;
+  generatedAt: string;
+  status: 'ready' | 'attention' | 'blocked';
+  summary: string;
+  observationPath?: string;
+  scannedFileCount: number;
+}): OpsReadinessFinding {
+  const state =
+    input.status === 'ready' ? 'ready' : input.status === 'blocked' ? 'conflicted' : 'partial';
+  return {
+    schemaVersion: 1,
+    code: `growth.instrumentation.audit.${state}`,
+    dimension: 'instrumentation',
+    state,
+    severity: input.status === 'ready' ? 'info' : input.status === 'blocked' ? 'error' : 'warning',
+    projectId: stableId(input.config.platformId),
+    environmentId: stableId(input.config.defaultEnvironment),
+    summary: input.summary,
+    blocking: input.status === 'blocked',
+    observedAt: input.generatedAt,
+    evidence: [
+      {
+        kind: 'tracking-audit',
+        source: input.observationPath ?? 'project source and manifests',
+        observedAt: input.generatedAt,
+        freshness: input.observationPath ? 'fresh' : 'unknown',
+        summary: `${input.scannedFileCount} source files inspected in audit-only mode.`,
+      },
+    ],
+    ...(input.status !== 'ready'
+      ? {
+          nextAction: input.observationPath
+            ? {
+                id: 'growth.instrumentation.audit.review',
+                label: 'Review tracking audit findings',
+                description:
+                  'Repair the named source, payload, consent, or environment issue and rerun the read-only audit.',
+                command: {
+                  path: ['growth', 'marketing', 'audit'],
+                  args: ['--cwd', '.', '--observations', input.observationPath],
+                  json: false,
+                  maximumEffect: 'offline',
+                },
+                requiresConfirmation: false,
+                requiresApproval: false,
+              }
+            : {
+                id: 'growth.instrumentation.observations.capture',
+                label: 'Provide tracking observations',
+                description:
+                  'Provide a read-only browser and server observation artifact for reconciliation.',
+                file: input.config.paths.trackingObservations,
+                requiresConfirmation: false,
+                requiresApproval: false,
+              },
+        }
+      : {}),
+  };
+}
+
 export async function auditMarketingTrackingSource(
   config: MarketingExecutionContext,
   options: MarketingTrackingAuditOptions = {},
@@ -166,6 +263,22 @@ export async function auditMarketingTrackingSource(
   const roots = resolveSourceRoots(cwd, config, options);
   const files = roots.flatMap(collectSourceFiles);
   const registries = await loadMarketingRegistries(config, { cwd });
+  const generatedAt = (options.now ?? new Date()).toISOString();
+  const observations = loadMarketingTrackingObservations(
+    cwd,
+    options.observationsPath ?? config.paths.trackingObservations,
+  );
+  const reconciled = reconcileMarketingTrackingObservations({
+    registries,
+    loaded: observations,
+    environment: config.defaultEnvironment,
+  });
+  const detected = detectMarketingTrackingEmitters({
+    cwd,
+    files,
+    gtmManifestPath: config.paths.gtmManifest,
+    observedEmitterIds: reconciled.observedEmitters,
+  });
   const browserEvents = registries.events.value.events.filter(
     (event) => event.source === 'browser',
   );
@@ -240,12 +353,49 @@ export async function auditMarketingTrackingSource(
       registries,
       files,
     }),
+    ...findingChecks([...detected.findings, ...reconciled.findings]),
   );
 
+  const findings = [...detected.findings, ...reconciled.findings];
+  const errorCount = checks.filter((check) => check.status === 'error').length;
+  const warningCount = checks.filter((check) => check.status === 'warn').length;
+  const status = errorCount > 0 ? 'blocked' : warningCount > 0 ? 'attention' : 'ready';
+  const summary = {
+    status,
+    emitterCount: detected.emitters.length,
+    findingCount: findings.length,
+    errorCount,
+    warningCount,
+  } as const;
+  const summaryText =
+    status === 'ready'
+      ? 'Tracking evidence matches the expected events and conversions.'
+      : status === 'blocked'
+        ? `${errorCount} tracking error${errorCount === 1 ? '' : 's'} make conversion evidence unreliable.`
+        : `${warningCount} tracking warning${warningCount === 1 ? '' : 's'} need review.`;
+
   return {
-    ok: checks.every((check) => check.status !== 'error'),
+    kind: 'unisane.growth.tracking-audit',
+    version: 1,
+    mode: 'audit-only',
+    generatedAt,
+    ok: status !== 'blocked',
     cwd,
+    environment: config.defaultEnvironment,
     scannedFileCount: files.length,
+    ...(observations.path ? { observationArtifactPath: observations.path } : {}),
+    summary,
+    coverage: reconciled.coverage,
+    emitters: detected.emitters,
+    findings,
+    readiness: buildReadinessFinding({
+      config,
+      generatedAt,
+      status,
+      summary: summaryText,
+      observationPath: observations.path,
+      scannedFileCount: files.length,
+    }),
     checks,
   };
 }

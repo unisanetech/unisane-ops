@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import {
   buildMarketingAdsStatusReport,
+  auditMarketingTrackingSource,
   buildMarketingEvidenceStatus,
   buildMarketingStatusReport,
   deriveMarketingMetrics,
@@ -190,6 +191,7 @@ export async function buildMarketingConsoleState(
     now,
   });
   const adsAudit = readAdsAuditSummary(cwd);
+  const trackingAudit = await auditMarketingTrackingSource(config, { cwd, now });
   const researchStatus = readMarketingResearchStatus(config, { cwd });
   const freshness = buildFreshness(config, cwd, now, maxAgeDays);
   const connections = buildMarketingConsoleConnections({
@@ -318,6 +320,7 @@ export async function buildMarketingConsoleState(
     freshness,
     connections,
     tagManager,
+    trackingAudit,
   });
   const experiments = buildMarketingConsoleExperiments(seoIntelligence.metadata.experiments);
   const paidProviderEvidenceReady = freshness.some(

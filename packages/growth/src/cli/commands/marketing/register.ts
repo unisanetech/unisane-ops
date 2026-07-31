@@ -51,9 +51,14 @@ export function registerMarketingCommands(program: Command): void {
 
   addSharedOptions(
     marketing.command('audit').description('Audit marketing tracking and conversion source usage'),
-  ).action(async (options: MarketingCliOptions) => {
-    await runMarketingCommand(options, marketingAudit);
-  });
+  )
+    .option(
+      '--observations <path>',
+      'Read-only browser/server event observation artifact (defaults to project Growth path)',
+    )
+    .action(async (options: MarketingCliOptions) => {
+      await runMarketingCommand(options, marketingAudit);
+    });
 
   addSharedOptions(
     marketing.command('pull').description('Cache a read-only normalized provider report artifact'),

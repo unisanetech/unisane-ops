@@ -352,6 +352,34 @@ export type MarketingConsoleTrackingCheck = {
   detail: string;
 };
 
+export type MarketingConsoleTrackingEmitter = {
+  id: string;
+  label: string;
+  status: MarketingConsoleStatus;
+  detail: string;
+};
+
+export type MarketingConsoleTrackingFinding = {
+  id: string;
+  category: string;
+  status: MarketingConsoleStatus;
+  title: string;
+  detail: string;
+};
+
+export type MarketingConsoleTrackingAudit = {
+  mode: 'audit-only';
+  generatedAt: string;
+  status: MarketingConsoleStatus;
+  evidenceLabel: string;
+  expectedEventCount: number;
+  observedEventCount: number;
+  expectedConversionCount: number;
+  observedConversionCount: number;
+  emitters: MarketingConsoleTrackingEmitter[];
+  findings: MarketingConsoleTrackingFinding[];
+};
+
 export type MarketingConsoleTagManager = {
   status: MarketingConsoleStatus;
   headline: string;
@@ -390,6 +418,7 @@ export type MarketingConsoleAnalytics = {
     headline: string;
     detail: string;
     checks: MarketingConsoleTrackingCheck[];
+    audit: MarketingConsoleTrackingAudit;
   };
 };
 

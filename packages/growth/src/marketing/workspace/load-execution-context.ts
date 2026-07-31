@@ -66,6 +66,7 @@ export function deriveMarketingExecutionContext(
       gtmManifest: growth.runtime.manifest ?? 'ops/growth/tag-manager.ts',
       webTrackingConfig: growth.manifests.events ?? 'ops/growth/events.json',
       webConversionsConfig: growth.manifests.conversions ?? 'ops/growth/conversions.json',
+      trackingObservations: 'ops/growth/tracking-observations.json',
       eventRegistry: growth.manifests.events ?? 'ops/growth/events.json',
       conversionRegistry: growth.manifests.conversions ?? 'ops/growth/conversions.json',
       sourceRoots: ['src'],

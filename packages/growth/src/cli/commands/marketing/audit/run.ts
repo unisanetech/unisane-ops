@@ -13,6 +13,7 @@ export async function marketingAudit(options: MarketingCliOptions): Promise<numb
     const report = await auditMarketingTrackingSource(loaded.config, {
       cwd: options.cwd,
       sourceRoots: options.sourceRoot,
+      observationsPath: options.observations,
     });
     if (options.json) printJson(report);
     else printMarketingTrackingAuditReport(report);

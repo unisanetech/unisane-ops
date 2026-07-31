@@ -61,6 +61,9 @@ export type {
   MarketingConsoleTagManager,
   MarketingConsoleSourceSummary,
   MarketingConsoleTrackingCheck,
+  MarketingConsoleTrackingAudit,
+  MarketingConsoleTrackingEmitter,
+  MarketingConsoleTrackingFinding,
   MarketingConsoleTrendPoint,
 } from './contracts.js';
 

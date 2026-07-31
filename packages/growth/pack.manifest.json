@@ -21,6 +21,19 @@
       "json": true
     },
     {
+      "id": "growth.marketing.audit",
+      "path": ["growth", "marketing", "audit"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
       "id": "growth.gtm",
       "path": ["growth", "gtm"],
       "handler": {
@@ -47,6 +60,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "49ac7039accf7648ea02ffb5cfe961d8c20ef36d1f98cfa5d8a59e590af0d75f"
+    "manifestHash": "86291a209142258bcd5cc6e64765b9ea1cc89fc1f06a59c6bd9bcc3440cdcee7"
   }
 }

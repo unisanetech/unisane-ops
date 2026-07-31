@@ -189,6 +189,90 @@ function TrackingHealth(props: ConsoleScreenProps) {
   return (
     <>
       <Summary headline={health.headline} detail={health.detail} />
+      <ContentSection
+        title="Observed measurement"
+        description={`${health.audit.evidenceLabel}. This audit is read-only and does not install scripts or change provider configuration.`}
+      >
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Card variant="outlined" padding="sm">
+            <Typography variant="labelMedium" className="text-on-surface-variant">
+              Expected events observed
+            </Typography>
+            <Typography variant="titleMedium" className="mt-1">
+              {health.audit.observedEventCount} of {health.audit.expectedEventCount}
+            </Typography>
+          </Card>
+          <Card variant="outlined" padding="sm">
+            <Typography variant="labelMedium" className="text-on-surface-variant">
+              Expected conversions confirmed
+            </Typography>
+            <Typography variant="titleMedium" className="mt-1">
+              {health.audit.observedConversionCount} of {health.audit.expectedConversionCount}
+            </Typography>
+          </Card>
+        </div>
+      </ContentSection>
+      <ContentSection
+        title="Detected emitters"
+        description="These systems can send browser or server measurement events for the current project."
+      >
+        {health.audit.emitters.length ? (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {health.audit.emitters.map((emitter) => (
+              <Card key={emitter.id} variant="outlined" padding="sm">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <Typography variant="labelLarge">{emitter.label}</Typography>
+                    <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
+                      {emitter.detail}
+                    </Typography>
+                  </div>
+                  <Badge variant="tonal" color={statusColor(emitter.status)} size="sm">
+                    {emitter.status === 'warn' ? 'Direct' : 'Detected'}
+                  </Badge>
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="No event emitter was detected."
+            description="The audit could not find Web Runtime, Tag Manager, direct gtag, Meta Pixel, or supported server conversion transports in the scanned project source."
+          />
+        )}
+      </ContentSection>
+      <ContentSection
+        title="Tracking findings"
+        description="Fix blocked findings before trusting conversion totals; warnings name missing or suppressed evidence that still needs review."
+      >
+        {health.audit.findings.length ? (
+          <div className="grid gap-3">
+            {health.audit.findings.map((finding) => (
+              <Card key={finding.id} variant="outlined" padding="sm">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <Typography variant="labelLarge">{finding.title}</Typography>
+                    <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
+                      {finding.detail}
+                    </Typography>
+                  </div>
+                  <Badge variant="tonal" color={statusColor(finding.status)} size="sm">
+                    {finding.status === 'blocked' ? 'Blocked' : 'Review'}
+                  </Badge>
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card variant="outlined" padding="sm">
+            <Typography variant="labelLarge">No tracking conflicts were found.</Typography>
+            <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
+              The observed evidence matches the expected events, conversions, environment, and
+              payload requirements.
+            </Typography>
+          </Card>
+        )}
+      </ContentSection>
       <ContentSection title="Measurement checks">
         <div className="grid gap-3">
           {health.checks.map((check) => (

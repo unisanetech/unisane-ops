@@ -20,6 +20,7 @@ export type MarketingCliOptions = {
   decidedBy?: string;
   maxAgeDays?: string;
   maxPages?: string;
+  observations?: string;
   pageSize?: string;
   provider?: string;
   recommendationId?: string;

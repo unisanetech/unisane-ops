@@ -23,8 +23,24 @@ export function printMarketingRegistryReport(report: MarketingRegistryValidation
 
 export function printMarketingTrackingAuditReport(report: MarketingTrackingAuditReport): void {
   log.section('Marketing Tracking Audit');
+  log.info(`Mode: ${report.mode}`);
+  log.info(`Environment: ${report.environment}`);
   log.info(`Scanned files: ${report.scannedFileCount}`);
+  log.info(
+    `Observed events: ${report.coverage.observedEventCount}/${report.coverage.expectedEventCount}`,
+  );
+  log.info(
+    `Observed conversions: ${report.coverage.observedConversionCount}/${report.coverage.expectedConversionCount}`,
+  );
+  log.info(`Emitters: ${report.emitters.map((emitter) => emitter.label).join(', ') || 'None'}`);
 
+  for (const finding of report.findings) {
+    const line = `${finding.title}: ${finding.detail}`;
+    if (finding.severity === 'error') log.error(line);
+    else log.warn(line);
+  }
+
+  log.section('Technical Checks');
   for (const check of report.checks) {
     const pathSuffix = check.path ? ` (${check.path})` : '';
     const line = `${check.id}: ${check.message}${pathSuffix}`;

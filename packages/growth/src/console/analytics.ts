@@ -1,4 +1,7 @@
-import type { MarketingProviderReportRecord } from '@unisane/growth/marketing';
+import type {
+  MarketingProviderReportRecord,
+  MarketingTrackingAuditReport,
+} from '@unisane/growth/marketing';
 import type {
   MarketingConsoleAnalytics,
   MarketingConsoleConnection,
@@ -16,6 +19,7 @@ export type BuildMarketingConsoleAnalyticsInput = {
   freshness: MarketingConsoleFreshnessCell[];
   connections: MarketingConsoleConnection[];
   tagManager: MarketingConsoleTagManager;
+  trackingAudit: MarketingTrackingAuditReport;
 };
 
 const analyticsMetricIds = new Set(['sessions', 'users', 'analytics-conversions', 'revenue']);
@@ -38,6 +42,12 @@ export function buildMarketingConsoleAnalytics(
   const google = input.connections.find((connection) => connection.provider === 'google');
   const analyticsService = google?.services.find((service) => service.id === 'analytics');
   const checks = [
+    {
+      id: 'instrumentation-audit',
+      label: 'Instrumentation audit',
+      status: auditStatus(input.trackingAudit),
+      detail: input.trackingAudit.readiness.summary,
+    },
     {
       id: 'analytics-access',
       label: 'Google Analytics access',
@@ -89,14 +99,48 @@ export function buildMarketingConsoleAnalytics(
     trackingHealth: {
       status: trackingStatus,
       headline:
-        trackingStatus === 'ready'
-          ? 'Measurement prerequisites are available.'
-          : 'Measurement needs attention before reports can be trusted.',
-      detail:
-        'Connection access, report freshness, and Tag Manager configuration are checked independently.',
+        input.trackingAudit.summary.status === 'ready'
+          ? 'Tracking evidence matches the expected measurement plan.'
+          : input.trackingAudit.summary.status === 'blocked'
+            ? 'Tracking conflicts make conversion evidence unreliable.'
+            : 'Tracking evidence is incomplete and needs review.',
+      detail: input.trackingAudit.observationArtifactPath
+        ? 'Source, tag configuration, and observed browser/server events were reconciled without changing the site or any provider.'
+        : 'Source and tag configuration were inspected, but browser/server observations are not available yet.',
       checks,
+      audit: {
+        mode: input.trackingAudit.mode,
+        generatedAt: input.trackingAudit.generatedAt,
+        status: auditStatus(input.trackingAudit),
+        evidenceLabel: input.trackingAudit.observationArtifactPath
+          ? `${input.trackingAudit.coverage.observationCount} observed event${input.trackingAudit.coverage.observationCount === 1 ? '' : 's'}`
+          : 'Source and manifest evidence only',
+        expectedEventCount: input.trackingAudit.coverage.expectedEventCount,
+        observedEventCount: input.trackingAudit.coverage.observedEventCount,
+        expectedConversionCount: input.trackingAudit.coverage.expectedConversionCount,
+        observedConversionCount: input.trackingAudit.coverage.observedConversionCount,
+        emitters: input.trackingAudit.emitters.map((emitter) => ({
+          id: emitter.id,
+          label: emitter.label,
+          status: emitter.direct ? 'warn' : 'ready',
+          detail: `${emitter.channels.join(' and ')} evidence detected through ${emitter.detectedBy.join(', ')}.`,
+        })),
+        findings: input.trackingAudit.findings.map((finding) => ({
+          id: finding.id,
+          category: finding.category,
+          status: finding.severity === 'error' ? 'blocked' : 'warn',
+          title: finding.title,
+          detail: finding.detail,
+        })),
+      },
     },
   };
+}
+
+function auditStatus(report: MarketingTrackingAuditReport): MarketingConsoleStatus {
+  if (report.summary.status === 'blocked') return 'blocked';
+  if (report.summary.status === 'attention') return 'warn';
+  return 'ready';
 }
 
 function projectRows(

@@ -52,6 +52,7 @@ export const marketingPathsSchema = z
     gtmManifest: z.string().min(1).default('ops/growth/tag-manager.ts'),
     webTrackingConfig: z.string().min(1).default('config/web-tracking.ts'),
     webConversionsConfig: z.string().min(1).default('config/web-conversions.ts'),
+    trackingObservations: z.string().min(1).default('ops/growth/tracking-observations.json'),
     eventRegistry: z.string().min(1).default('docs/marketing/events.json'),
     conversionRegistry: z.string().min(1).default('docs/marketing/conversions.json'),
     sourceRoots: z.array(z.string().min(1)).default(['src']),
