@@ -81,8 +81,11 @@ export function normalizeGa4Report(
         users: optionalNumber(row.activeUsers) ?? optionalNumber(row.totalUsers),
         conversions: optionalNumber(row.conversions),
         keyEvents: optionalNumber(row.keyEvents) ?? optionalNumber(row.eventCount),
-        revenue: optionalNumber(row.totalRevenue) ?? optionalNumber(row.purchaseRevenue),
-        purchases: optionalNumber(row.ecommercePurchases),
+        revenue:
+          optionalNumber(row.totalRevenue) ??
+          optionalNumber(row.purchaseRevenue) ??
+          optionalNumber(row.itemRevenue),
+        purchases: optionalNumber(row.ecommercePurchases) ?? optionalNumber(row.itemsPurchased),
       }),
     } satisfies MarketingProviderReportArtifact['records'][number];
   });

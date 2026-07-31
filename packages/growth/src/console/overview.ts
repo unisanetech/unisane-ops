@@ -9,6 +9,7 @@ import type {
   MarketingConsoleReceiptEvent,
   MarketingConsoleStatus,
 } from './contracts.js';
+import { activitySummaryForStatus, activityTitleForReceipt } from './activity.js';
 
 const capabilityDefinitions = [
   {
@@ -23,7 +24,7 @@ const capabilityDefinitions = [
     label: 'Advertising',
     service: 'ads',
     provider: 'googleAds',
-    path: '/advertising/overview',
+    path: '/advertising/all/overview',
   },
   {
     id: 'analytics',
@@ -41,41 +42,15 @@ const capabilityDefinitions = [
   },
 ] as const;
 
-const overviewMetricOrder = ['organic-clicks', 'spend', 'conversions', 'revenue', 'roas'];
-
-function outcomeTitle(receipt: MarketingConsoleReceiptEvent): string {
-  const action = receipt.action.toLowerCase();
-  if (action === 'gtm.preview') return 'Tag Manager preview checked';
-  if (action === 'gtm.apply') return 'Tag Manager workspace updated';
-  if (action === 'gtm.version') return 'Tag Manager version created';
-  if (action === 'gtm.publish') return 'Tag Manager changes published';
-  if (action === 'gtm.rollback') return 'Tag Manager changes rolled back';
-  if (action.includes('maximize-conversions') && action.includes('open-targeting')) {
-    return 'Advertising targeting restored for Maximize Conversions';
-  }
-  if (action.includes('targeting-restore')) return 'Advertising targeting restored';
-  if (action.includes('cpa') && action.includes('budget') && action.includes('update')) {
-    return 'Advertising budget and target cost updated';
-  }
-  if (receipt.lane === 'ads' || action.includes('ads')) return 'Advertising settings updated';
-  if (receipt.lane === 'gtm' || action.includes('gtm')) return 'Tag Manager activity recorded';
-  return 'Growth workspace updated';
-}
-
-function outcomeSummary(receipt: MarketingConsoleReceiptEvent): string {
-  if (receipt.status === 'ready') return 'The change completed successfully.';
-  if (receipt.status === 'blocked') return 'The change did not complete and needs attention.';
-  if (receipt.status === 'warn') return 'The change completed with an item to review.';
-  return 'The result of this change is not available yet.';
-}
+const overviewMetricOrder = ['organic-clicks', 'sessions', 'spend', 'conversions'];
 
 function buildRecentOutcomes(
   receipts: readonly MarketingConsoleReceiptEvent[],
 ): MarketingConsoleOverview['recentOutcomes'] {
   return receipts.slice(0, 3).map((receipt) => ({
     id: receipt.id,
-    title: outcomeTitle(receipt),
-    summary: outcomeSummary(receipt),
+    title: activityTitleForReceipt(receipt),
+    summary: activitySummaryForStatus(receipt.status),
     status: receipt.status,
     ...(receipt.timestamp ? { timestamp: receipt.timestamp } : {}),
   }));
@@ -108,6 +83,7 @@ function buildPriorities(args: {
   connections: readonly MarketingConsoleConnection[];
   freshness: readonly MarketingConsoleFreshnessCell[];
   capabilities: readonly GrowthCapability[];
+  recommendationPriorities?: readonly MarketingConsolePriority[];
 }): MarketingConsolePriority[] {
   const connected = args.connections.filter((connection) => connection.connected);
   if (connected.length === 0) {
@@ -155,7 +131,7 @@ function buildPriorities(args: {
             : 'Medium priority',
         riskLabel: 'Only this service is affected; working services remain available.',
         action: {
-          label: service.action?.label ?? `Review ${service.label}`,
+          label: service.primaryAction?.label ?? `Review ${service.label}`,
           path: serviceDetailPath(connection.provider, service.state),
         },
       });
@@ -196,11 +172,19 @@ function buildPriorities(args: {
     });
   }
 
-  return priorities.slice(0, 6);
+  const recommendationPriorities = args.recommendationPriorities ?? [];
+  const seen = new Set<string>();
+  return [...recommendationPriorities, ...priorities]
+    .filter((priority) => {
+      if (seen.has(priority.id)) return false;
+      seen.add(priority.id);
+      return true;
+    })
+    .slice(0, 6);
 }
 
-function metricAvailable(metric: MarketingConsoleMetric | undefined): boolean {
-  return Boolean(metric && metric.numericValue !== undefined && metric.numericValue > 0);
+function metricKnown(metric: MarketingConsoleMetric | undefined): boolean {
+  return Boolean(metric && metric.numericValue !== undefined);
 }
 
 function buildFunnel(
@@ -234,7 +218,7 @@ function buildFunnel(
     const stages = candidate.ids
       .map((id, index) => {
         const metric = byId.get(id);
-        if (!metricAvailable(metric)) return undefined;
+        if (!metricKnown(metric)) return undefined;
         return {
           id,
           label: candidate.labels[index] ?? metric!.label,
@@ -284,7 +268,7 @@ function capabilityStatus(args: {
   const service = args.connection?.services.find((item) => item.id === args.capability.service);
   const hasHistoricalData = args.metrics.some(
     (metric) =>
-      metricAvailable(metric) &&
+      metricKnown(metric) &&
       ((args.capability.id === 'seo' && metric.id.startsWith('organic-')) ||
         (args.capability.id === 'advertising' &&
           ['spend', 'paid-clicks', 'paid-conversions', 'roas'].includes(metric.id)) ||
@@ -330,6 +314,7 @@ export function buildMarketingConsoleOverview(args: {
   metrics: readonly MarketingConsoleMetric[];
   receipts: readonly MarketingConsoleReceiptEvent[];
   capabilities: readonly GrowthCapability[];
+  recommendationPriorities?: readonly MarketingConsolePriority[];
 }): {
   overview: MarketingConsoleOverview;
   priorities: MarketingConsolePriority[];
@@ -337,7 +322,7 @@ export function buildMarketingConsoleOverview(args: {
   const priorities = buildPriorities(args);
   const connected = args.connections.some((connection) => connection.connected);
   const metricIds = overviewMetricOrder.filter((id) =>
-    metricAvailable(args.metrics.find((metric) => metric.id === id)),
+    metricKnown(args.metrics.find((metric) => metric.id === id)),
   );
   const hasHistoricalData = metricIds.length > 0;
   const connectionIssue = args.connections

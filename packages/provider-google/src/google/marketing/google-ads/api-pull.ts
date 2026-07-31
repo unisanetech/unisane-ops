@@ -60,7 +60,9 @@ function googleAdsQuery(
   if (reportType === 'auctionInsight') {
     return `SELECT ${customerFields}, campaign.id, campaign.name, segments.auction_insight_domain, metrics.auction_insight_search_impression_share, metrics.auction_insight_search_overlap_rate, metrics.auction_insight_search_position_above_rate, metrics.auction_insight_search_outranking_share, metrics.auction_insight_search_top_impression_percentage, metrics.auction_insight_search_absolute_top_impression_percentage FROM campaign WHERE ${dateFilter}`;
   }
-  return `SELECT ${customerFields}, campaign.id, campaign.name, ${metrics} FROM campaign WHERE ${dateFilter}`;
+  const campaignConfiguration =
+    'campaign.status, campaign.primary_status, campaign.primary_status_reasons, campaign.serving_status, campaign.advertising_channel_type, campaign.bidding_strategy_type, campaign.bidding_strategy_system_status, campaign.start_date, campaign.end_date, campaign_budget.amount_micros, campaign_budget.status, campaign_budget.explicitly_shared';
+  return `SELECT ${customerFields}, campaign.id, campaign.name, ${campaignConfiguration}, ${metrics} FROM campaign WHERE ${dateFilter}`;
 }
 
 function normalizeGoogleAdsCustomerId(value: string): string {

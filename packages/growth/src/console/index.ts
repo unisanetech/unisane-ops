@@ -9,20 +9,46 @@ export {
 export { buildMarketingConsoleConnections } from './connections.js';
 export { buildMarketingConsoleOverview } from './overview.js';
 export { buildMarketingConsoleSeo } from './seo.js';
+export { buildMarketingConsoleAdvertising } from './advertising.js';
+export { buildMarketingConsoleAnalytics } from './analytics.js';
+export { buildMarketingConsoleExperiments } from './experiments.js';
+export { buildMarketingConsoleActivity } from './activity.js';
+export { buildMarketingConsoleAutomations } from './automations.js';
+export {
+  buildMarketingConsoleRecommendations,
+  recommendationPriorities,
+} from './recommendations.js';
+export { buildMarketingConsoleTagManager } from './tag-manager.js';
 export { resolveGrowthConsoleAuthContext } from './auth-context.js';
 export type {
   MarketingConsoleArtifactLink,
+  MarketingConsoleAdvertising,
+  MarketingConsoleAdvertisingCampaign,
+  MarketingConsoleAdvertisingChange,
+  MarketingConsoleAdvertisingConversion,
+  MarketingConsoleAdvertisingEntity,
+  MarketingConsoleAdvertisingView,
+  MarketingConsoleAnalytics,
+  MarketingConsoleAnalyticsRow,
+  MarketingConsoleActivity,
+  MarketingConsoleActivityCategory,
+  MarketingConsoleActivityItem,
+  MarketingConsoleAutomation,
+  MarketingConsoleAutomations,
   MarketingConsoleComparisonRow,
   MarketingConsoleConnection,
   MarketingConsoleConnectionAction,
   MarketingConsoleConnectionService,
   MarketingConsoleConnectionState,
   MarketingConsoleFreshnessCell,
+  MarketingConsoleExperiments,
+  MarketingConsoleExperimentIdea,
   MarketingConsoleMetric,
   MarketingConsoleOverview,
   MarketingConsolePriority,
   MarketingConsolePriorityLane,
-  MarketingConsoleReceiptEvent,
+  MarketingConsoleRecommendation,
+  MarketingConsoleRecommendations,
   MarketingConsoleSeo,
   MarketingConsoleSeoHealthIssue,
   MarketingConsoleSeoMetric,
@@ -32,6 +58,9 @@ export type {
   MarketingConsoleSeoResearchIdea,
   MarketingConsoleState,
   MarketingConsoleStatus,
+  MarketingConsoleTagManager,
+  MarketingConsoleSourceSummary,
+  MarketingConsoleTrackingCheck,
   MarketingConsoleTrendPoint,
 } from './contracts.js';
 

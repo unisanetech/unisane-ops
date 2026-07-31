@@ -18,11 +18,13 @@ describe('Growth console connection projection', () => {
               grants: [
                 {
                   service: 'analytics',
+                  scopes: ['https://www.googleapis.com/auth/analytics.readonly'],
                   state: 'granted',
                   observedAt: '2026-07-30T00:00:00.000Z',
                 },
                 {
                   service: 'search-console',
+                  scopes: ['https://www.googleapis.com/auth/webmasters.readonly'],
                   state: 'partial',
                   observedAt: '2026-07-30T00:00:00.000Z',
                 },
@@ -31,6 +33,7 @@ describe('Growth console connection projection', () => {
                 {
                   service: 'analytics',
                   resourceType: 'property',
+                  resourceId: 'properties/123',
                   displayName: 'True Resume',
                   state: 'selected',
                   observedAt: '2026-07-30T00:00:00.000Z',
@@ -38,6 +41,7 @@ describe('Growth console connection projection', () => {
                 {
                   service: 'search-console',
                   resourceType: 'site',
+                  resourceId: 'sc-domain:trueresume.io',
                   displayName: 'trueresume.io',
                   state: 'selected',
                   observedAt: '2026-07-30T00:00:00.000Z',
@@ -87,7 +91,7 @@ describe('Growth console connection projection', () => {
       expect.objectContaining({
         id: 'search-console',
         state: 'partial-permission',
-        action: expect.objectContaining({
+        primaryAction: expect.objectContaining({
           command:
             'unisane connect google --environment production --connection google-primary --service search-console',
         }),
@@ -95,12 +99,21 @@ describe('Growth console connection projection', () => {
       expect.objectContaining({
         id: 'analytics',
         state: 'current',
-        resource: { type: 'Property', label: 'True Resume' },
+        accessLevelLabel: 'Read-only provider access',
+        resource: {
+          type: 'Property',
+          label: 'True Resume',
+          identifier: 'properties/123',
+          selectedAt: '2026-07-30T00:00:00.000Z',
+        },
+        resourceAction: expect.objectContaining({
+          label: 'Change resource',
+        }),
       }),
     ]);
   });
 
-  it('offers only the admitted Google flow when no provider is connected', () => {
+  it('keeps Meta visible but optional without inventing a connection flow', () => {
     const connections = buildMarketingConsoleConnections({
       context: {
         environmentId: 'development',
@@ -109,7 +122,7 @@ describe('Growth console connection projection', () => {
           { provider: 'meta', available: true },
         ],
       },
-      capabilities: ['seo'],
+      capabilities: ['seo', 'advertising'],
       evidence: [],
       freshness: [],
     });
@@ -117,6 +130,7 @@ describe('Growth console connection projection', () => {
     expect(connections).toEqual([
       expect.objectContaining({
         provider: 'google',
+        required: true,
         available: true,
         connected: false,
         state: 'not-connected',
@@ -125,7 +139,16 @@ describe('Growth console connection projection', () => {
           command: 'unisane connect google --environment development',
         }),
       }),
+      expect.objectContaining({
+        provider: 'meta',
+        required: false,
+        available: true,
+        connected: false,
+        state: 'not-connected',
+        statusLabel: 'Not connected',
+      }),
     ]);
-    expect(JSON.stringify(connections)).not.toMatch(/Meta|coming soon|scope|token/i);
+    expect(connections[1]).not.toHaveProperty('primaryAction');
+    expect(JSON.stringify(connections)).not.toMatch(/coming soon|scope|token/i);
   });
 });

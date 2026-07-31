@@ -269,7 +269,10 @@ describe('Growth console SEO projection', () => {
               status: 'blocked',
               score: 50,
               missing: ['Page is blocked from indexing'],
-              warnings: ['Missing structured data'],
+              warnings: [
+                'Missing structured data',
+                'Add category chips for commercial search intent',
+              ],
               recommendations: [],
             },
           ],
@@ -281,7 +284,7 @@ describe('Growth console SEO projection', () => {
       expect.objectContaining({
         available: true,
         status: 'blocked',
-        headline: '2 search visibility issues need attention.',
+        headline: '2 technical search issues need attention.',
       }),
     );
     expect(result.siteHealth.groups).toEqual(
@@ -295,6 +298,9 @@ describe('Growth console SEO projection', () => {
           issues: [expect.objectContaining({ title: 'Missing structured data' })],
         }),
       ]),
+    );
+    expect(JSON.stringify(result.siteHealth)).not.toContain(
+      'Add category chips for commercial search intent',
     );
     expect(result.research).toEqual(
       expect.objectContaining({

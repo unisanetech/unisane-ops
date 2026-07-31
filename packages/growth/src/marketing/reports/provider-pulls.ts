@@ -50,6 +50,7 @@ export type MarketingProviderReportStatus = {
   recordCount?: number;
   window?: MarketingProviderReportArtifact['window'];
   metrics?: MarketingReportMetrics;
+  source?: MarketingReportSource;
 };
 
 export type MarketingProviderReportStatusOptions = {
@@ -148,6 +149,7 @@ export function readMarketingProviderReportStatus(
         recordCount: artifact.records.length,
         window: artifact.window,
         metrics: summarizeProviderArtifactMetrics(artifact),
+        source: artifact.source,
       } satisfies MarketingProviderReportStatus;
     } catch (error) {
       const message =

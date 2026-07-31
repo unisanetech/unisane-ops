@@ -31,7 +31,9 @@
     "./meta": "./unisane.meta.json"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/handler.ts --format esm --dts --clean --external @unisane/growth --external @unisane/growth/*",
+    "build": "pnpm build:server && pnpm build:browser",
+    "build:server": "tsup src/index.ts src/handler.ts --format esm --dts --clean --external @unisane/growth --external @unisane/growth/*",
+    "build:browser": "tsup --config tsup.browser.config.ts",
     "dev": "tsup src/index.ts src/handler.ts --format esm --dts --watch --external @unisane/growth --external @unisane/growth/*",
     "lint": "eslint src --max-warnings 0",
     "check-types": "tsc --noEmit",
@@ -39,11 +41,16 @@
     "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
   },
   "dependencies": {
+    "@material-symbols/font-400": "^0.40.2",
     "@unisane/growth": "workspace:*",
     "@unisane/ops-engine": "workspace:*",
-    "@unisane/ui": "workspace:*"
+    "@unisane/ui": "workspace:*",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
     "eslint": "^9.39.1",
     "tsup": "^8.0.0",
     "typescript": "^5.9.2",

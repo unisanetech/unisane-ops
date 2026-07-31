@@ -28,6 +28,7 @@ export function normalizeGoogleAdsReport(
   const records = rowsFromGoogleAdsInput(value).map((rowValue, index) => {
     const row = asRecord(rowValue);
     const campaign = asRecord(row.campaign);
+    const campaignBudget = asRecord(row.campaignBudget);
     const adGroup = asRecord(row.adGroup);
     const ad = asRecord(row.adGroupAd);
     const adGroupCriterion = asRecord(row.adGroupCriterion);
@@ -133,6 +134,36 @@ export function normalizeGoogleAdsReport(
         pickString(row, ['conversionTrackingStatus']),
       campaignId,
       campaignName: optionalString(campaign.name) ?? pickString(row, ['campaignName']),
+      campaignStatus: optionalString(campaign.status) ?? pickString(row, ['campaignStatus']),
+      campaignPrimaryStatus:
+        optionalString(campaign.primaryStatus) ?? pickString(row, ['campaignPrimaryStatus']),
+      campaignPrimaryStatusReasons: asArray(campaign.primaryStatusReasons).filter(
+        (reason): reason is string => typeof reason === 'string' && reason.length > 0,
+      ),
+      campaignServingStatus:
+        optionalString(campaign.servingStatus) ?? pickString(row, ['campaignServingStatus']),
+      campaignAdvertisingChannelType:
+        optionalString(campaign.advertisingChannelType) ??
+        pickString(row, ['campaignAdvertisingChannelType']),
+      campaignBiddingStrategyType:
+        optionalString(campaign.biddingStrategyType) ??
+        pickString(row, ['campaignBiddingStrategyType']),
+      campaignBiddingStrategySystemStatus:
+        optionalString(campaign.biddingStrategySystemStatus) ??
+        pickString(row, ['campaignBiddingStrategySystemStatus']),
+      campaignStartDate:
+        optionalString(campaign.startDate) ?? pickString(row, ['campaignStartDate']),
+      campaignEndDate: optionalString(campaign.endDate) ?? pickString(row, ['campaignEndDate']),
+      campaignDailyBudget:
+        microsToCurrency(campaignBudget.amountMicros) ?? pickNumber(row, ['campaignDailyBudget']),
+      campaignBudgetStatus:
+        optionalString(campaignBudget.status) ?? pickString(row, ['campaignBudgetStatus']),
+      campaignBudgetShared:
+        typeof campaignBudget.explicitlyShared === 'boolean'
+          ? campaignBudget.explicitlyShared
+          : typeof row.campaignBudgetShared === 'boolean'
+            ? row.campaignBudgetShared
+            : undefined,
       adGroupId,
       adGroupName: optionalString(adGroup.name) ?? pickString(row, ['adGroupName']),
       adId,

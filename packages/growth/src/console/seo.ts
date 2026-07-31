@@ -235,7 +235,9 @@ function auditOpportunity(
   freshnessLabel: string,
 ): MarketingConsoleSeoOpportunity | undefined {
   if (audit.status === 'ready') return undefined;
-  const issue = audit.missing[0] ?? audit.warnings[0] ?? audit.recommendations[0];
+  const issue = [...audit.missing, ...audit.warnings].find((detail) =>
+    technicalHealthGroupFor(detail),
+  );
   if (!issue) return undefined;
   return {
     id: `audit:${audit.id}`,
@@ -287,13 +289,40 @@ const healthGroups: MarketingConsoleSeo['siteHealth']['groups'] = [
   { id: 'links', label: 'Links and redirects', issues: [] },
 ];
 
-function healthGroupFor(text: string): MarketingConsoleSeo['siteHealth']['groups'][number]['id'] {
+function technicalHealthGroupFor(
+  text: string,
+): MarketingConsoleSeo['siteHealth']['groups'][number]['id'] | undefined {
   const normalized = text.toLowerCase();
   if (/schema|structured|json-ld/.test(normalized)) return 'structured-data';
-  if (/sitemap|canonical/.test(normalized)) return 'sitemaps';
-  if (/link|redirect|404/.test(normalized)) return 'links';
-  if (/crawl|robot|access|response/.test(normalized)) return 'crawling';
-  return 'indexing';
+  if (
+    /missing sitemap|sitemap error|invalid sitemap|canonical (error|conflict|missing)|missing canonical/.test(
+      normalized,
+    )
+  ) {
+    return 'sitemaps';
+  }
+  if (
+    /broken (internal )?link|orphaned page|redirect (loop|chain|error)|\b404\b|page not found/.test(
+      normalized,
+    )
+  ) {
+    return 'links';
+  }
+  if (
+    /blocked by robots|robots\.txt|crawl (error|blocked)|access denied|invalid http status|server response error|rendering failed/.test(
+      normalized,
+    )
+  ) {
+    return 'crawling';
+  }
+  if (
+    /blocked from indexing|not indexed|indexing (blocked|error)|not indexable|\bnoindex\b|excluded from (the )?index/.test(
+      normalized,
+    )
+  ) {
+    return 'indexing';
+  }
+  return undefined;
 }
 
 function buildSiteHealth(
@@ -307,7 +336,9 @@ function buildSiteHealth(
   for (const audit of intelligence.pageAudits.audits) {
     const details = [...audit.missing, ...audit.warnings];
     for (const [index, detail] of details.entries()) {
-      const group = groups.find((item) => item.id === healthGroupFor(detail));
+      const groupId = technicalHealthGroupFor(detail);
+      if (!groupId) continue;
+      const group = groups.find((item) => item.id === groupId);
       if (!group) continue;
       group.issues.push({
         id: `${audit.id}:${index}`,
@@ -346,12 +377,14 @@ function buildSiteHealth(
     status: blockedCount > 0 ? 'blocked' : issueCount > 0 ? 'warn' : 'ready',
     headline:
       issueCount === 0
-        ? 'No search visibility problem was found in the latest page checks.'
-        : `${issueCount} search visibility issue${issueCount === 1 ? '' : 's'} need attention.`,
+        ? 'No technical search problem was found in the latest page checks.'
+        : `${issueCount} technical search issue${issueCount === 1 ? '' : 's'} need attention.`,
     detail:
       issueCount === 0
-        ? `${intelligence.pageAudits.pageCount} checked page${intelligence.pageAudits.pageCount === 1 ? '' : 's'} have no reported indexing or discoverability issue.`
-        : `${blockedCount} issue${blockedCount === 1 ? '' : 's'} may prevent an important page from appearing in search.`,
+        ? `${intelligence.pageAudits.pageCount} checked page${intelligence.pageAudits.pageCount === 1 ? '' : 's'} have no reported indexing, crawl, sitemap, structured-data, or link issue. Content strategy findings remain in Research and Opportunities.`
+        : blockedCount > 0
+          ? `${blockedCount} issue${blockedCount === 1 ? '' : 's'} may prevent an important page from appearing in search.`
+          : `${issueCount} non-blocking technical issue${issueCount === 1 ? '' : 's'} should be reviewed.`,
     groups,
   };
 }

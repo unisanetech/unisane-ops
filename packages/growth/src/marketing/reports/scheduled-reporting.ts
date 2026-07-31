@@ -144,7 +144,7 @@ export function buildMarketingScheduledReportingPlan(
   });
   const jobs = proof.providers.flatMap((provider) => {
     if (
-      provider.state === 'disabled' ||
+      provider.state !== 'connected' ||
       provider.provider === 'gtm' ||
       provider.provider === 'confirmedConversions' ||
       provider.provider === 'strategyMap'

@@ -1,0 +1,50 @@
+{
+  "accountId": "sample-meta-account",
+  "data": [
+    {
+      "campaign_id": "sample-campaign-001",
+      "campaign_name": "Resume Builder Prospecting",
+      "adset_id": "sample-adset-001",
+      "adset_name": "India · Early career",
+      "ad_id": "sample-ad-001",
+      "ad_name": "Build a resume in minutes",
+      "effective_status": "ACTIVE",
+      "account_currency": "INR",
+      "impressions": "101000",
+      "clicks": "1690",
+      "spend": "6400",
+      "actions": [{ "action_type": "lead", "value": "61" }],
+      "action_values": [{ "action_type": "lead", "value": "30500" }]
+    },
+    {
+      "campaign_id": "sample-campaign-001",
+      "campaign_name": "Resume Builder Prospecting",
+      "adset_id": "sample-adset-001",
+      "adset_name": "India · Early career",
+      "ad_id": "sample-ad-002",
+      "ad_name": "A stronger first application",
+      "effective_status": "ACTIVE",
+      "account_currency": "INR",
+      "impressions": "70000",
+      "clicks": "1020",
+      "spend": "4400",
+      "actions": [{ "action_type": "lead", "value": "33" }],
+      "action_values": [{ "action_type": "lead", "value": "16500" }]
+    },
+    {
+      "campaign_id": "sample-campaign-002",
+      "campaign_name": "Resume Template Retargeting",
+      "adset_id": "sample-adset-003",
+      "adset_name": "Visited templates · 30 days",
+      "ad_id": "sample-ad-003",
+      "ad_name": "Finish your resume today",
+      "effective_status": "ACTIVE",
+      "account_currency": "INR",
+      "impressions": "96000",
+      "clicks": "2410",
+      "spend": "9200",
+      "actions": [{ "action_type": "purchase", "value": "71" }],
+      "action_values": [{ "action_type": "purchase", "value": "56800" }]
+    }
+  ]
+}

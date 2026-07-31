@@ -24,6 +24,7 @@ export interface GrowthProviderConnectionContext {
     credentialState: 'active' | 'expired' | 'revoked' | 'missing';
     grants: Array<{
       service: string;
+      scopes: string[];
       state: GrowthConnectionGrantState;
       observedAt: string;
       expiresAt?: string;
@@ -31,6 +32,7 @@ export interface GrowthProviderConnectionContext {
     resources: Array<{
       service: string;
       resourceType: string;
+      resourceId: string;
       displayName: string;
       state: GrowthConnectionResourceState;
       observedAt: string;

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   CONSOLE_ROUTES,
+  advertisingPlatformRoutes,
   consoleNavigation,
   resolveConsoleRoute,
   tabsForRoute,
@@ -19,11 +20,23 @@ describe('console route catalog', () => {
       '/seo/queries',
       '/seo/site-health',
       '/seo/research',
-      '/advertising/overview',
-      '/advertising/campaigns',
-      '/advertising/conversions',
-      '/advertising/recommendations',
-      '/advertising/change-history',
+      '/advertising/all/overview',
+      '/advertising/all/campaigns',
+      '/advertising/all/conversions',
+      '/advertising/all/recommendations',
+      '/advertising/all/change-history',
+      '/advertising/google/overview',
+      '/advertising/google/campaigns',
+      '/advertising/google/conversions',
+      '/advertising/google/recommendations',
+      '/advertising/google/change-history',
+      '/advertising/meta/overview',
+      '/advertising/meta/campaigns',
+      '/advertising/meta/ad-sets',
+      '/advertising/meta/ads-creatives',
+      '/advertising/meta/conversions',
+      '/advertising/meta/recommendations',
+      '/advertising/meta/change-history',
       '/analytics/overview',
       '/analytics/traffic',
       '/analytics/visitors',
@@ -40,6 +53,27 @@ describe('console route catalog', () => {
       '/help',
     ]);
     expect(CONSOLE_ROUTES.every((route) => route.path.startsWith('/'))).toBe(true);
+  });
+
+  it('keeps platform and section navigation URL-backed', () => {
+    const route = resolveConsoleRoute('/advertising/meta/campaigns', baseCapabilities);
+    expect(route).toMatchObject({
+      advertisingPlatform: 'metaAds',
+      advertisingSection: 'campaigns',
+    });
+    expect(tabsForRoute(route).map((item) => item.path)).toContain('/advertising/meta/ad-sets');
+    expect(advertisingPlatformRoutes(route).map((item) => item.path)).toEqual([
+      '/advertising/all/campaigns',
+      '/advertising/google/campaigns',
+      '/advertising/meta/campaigns',
+    ]);
+
+    const metaOnlyRoute = resolveConsoleRoute('/advertising/meta/ads-creatives', baseCapabilities);
+    expect(advertisingPlatformRoutes(metaOnlyRoute).map((item) => item.path)).toEqual([
+      '/advertising/all/overview',
+      '/advertising/google/overview',
+      '/advertising/meta/ads-creatives',
+    ]);
   });
 
   it('shows Experiments only when selected and resolves provider detail tabs', () => {
@@ -59,14 +93,14 @@ describe('console route catalog', () => {
       expect.objectContaining({
         id: 'connections.provider.data-sync',
         family: 'connection-detail',
-        label: 'Data sync',
+        label: 'Data updates',
       }),
     );
     expect(tabsForRoute(provider).map((route) => route.label)).toEqual([
       'Overview',
       'Access',
       'Resources',
-      'Data sync',
+      'Data updates',
       'Activity',
     ]);
   });

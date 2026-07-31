@@ -10,6 +10,7 @@ import type {
   MarketingProviderReportType,
   MarketingReportMetrics,
   MarketingReportProvider,
+  MarketingReportSource,
 } from '@unisane/growth/marketing';
 
 export type MarketingConsoleStatus = 'ready' | 'warn' | 'blocked' | 'missing';
@@ -38,20 +39,31 @@ export type MarketingConsoleConnectionService = {
   state: MarketingConsoleConnectionState;
   statusLabel: string;
   accessLabel: string;
+  accessLevelLabel: string;
+  accessVerifiedAt?: string;
+  accessExpiresAt?: string;
   resource?: {
     type: string;
     label: string;
+    identifier: string;
+    selectedAt: string;
   };
   dataLabel: string;
+  dataUpdatedAt?: string;
+  dataCoverageLabel: string;
   lastCheckedAt?: string;
   issue?: string;
-  action?: MarketingConsoleConnectionAction;
+  primaryAction?: MarketingConsoleConnectionAction;
+  accessAction?: MarketingConsoleConnectionAction;
+  resourceAction?: MarketingConsoleConnectionAction;
+  syncAction?: MarketingConsoleConnectionAction;
 };
 
 export type MarketingConsoleConnection = {
   provider: string;
   label: string;
   available: boolean;
+  required: boolean;
   connected: boolean;
   state: MarketingConsoleConnectionState;
   statusLabel: string;
@@ -160,6 +172,244 @@ export type MarketingConsoleComparisonRow = {
     cpa?: number;
     roas?: number;
   };
+};
+
+export type MarketingConsoleSourceSummary = {
+  provider?: MarketingReportProvider;
+  sourceKind?: MarketingReportSource;
+  status: MarketingConsoleStatus;
+  label: string;
+  freshnessLabel: string;
+  detail: string;
+  available: boolean;
+};
+
+export type MarketingConsoleAdvertisingCampaign = {
+  id: string;
+  provider: 'googleAds' | 'metaAds';
+  providerLabel: string;
+  name: string;
+  deliveryStatus?: string;
+  primaryStatus?: string;
+  primaryStatusReasons: string[];
+  servingStatus?: string;
+  channelType?: string;
+  dailyBudget?: number;
+  budgetStatus?: string;
+  sharedBudget?: boolean;
+  biddingStrategy?: string;
+  biddingStrategyStatus?: string;
+  startDate?: string;
+  endDate?: string;
+  spend: number;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  conversionValue: number;
+  currencyCode?: string;
+  ctr?: number;
+  cpc?: number;
+  cpa?: number;
+  roas?: number;
+};
+
+export type MarketingConsoleAdvertisingConversion = {
+  id: string;
+  provider: 'googleAds' | 'metaAds';
+  providerLabel: string;
+  name: string;
+  conversions?: number;
+  conversionValue?: number;
+  currencyCode?: string;
+  measurementLabel: string;
+};
+
+export type MarketingConsoleRecommendation = {
+  id: string;
+  lane: MarketingConsolePriorityLane;
+  provider?: MarketingReportProvider;
+  actionType:
+    | 'fix_tracking'
+    | 'refresh_provider_data'
+    | 'investigate_conversion_mismatch'
+    | 'pause_or_reduce_spend'
+    | 'decrease_budget'
+    | 'run_experiment'
+    | 'hold_scaling';
+  severity: 'info' | 'warn' | 'high' | 'critical';
+  title: string;
+  expectedOutcome: string;
+  rationale: string;
+  evidenceLabel: string;
+  confidenceLabel: string;
+  freshnessLabel: string;
+  effortLabel: string;
+  riskLabel: string;
+  approvalLabel: string;
+  decision: 'pending' | 'accepted' | 'dismissed';
+  decisionLabel: string;
+  primaryAction: {
+    label: string;
+    path: string;
+  };
+  acceptAction?: MarketingConsoleConnectionAction;
+  dismissAction?: MarketingConsoleConnectionAction;
+  technical: {
+    owner: string;
+    source: string;
+    alertIds: string[];
+    experimentIds: string[];
+  };
+};
+
+export type MarketingConsoleRecommendations = {
+  status: MarketingConsoleStatus;
+  headline: string;
+  summary: string;
+  generatedAt?: string;
+  items: MarketingConsoleRecommendation[];
+};
+
+export type MarketingConsoleAdvertisingChange = {
+  id: string;
+  provider?: 'googleAds' | 'metaAds';
+  providerLabel?: string;
+  title: string;
+  summary: string;
+  status: MarketingConsoleStatus;
+  timestamp?: string;
+};
+
+export type MarketingConsoleAdvertisingEntity = {
+  id: string;
+  provider: 'metaAds';
+  providerLabel: 'Meta Ads';
+  level: 'adSet' | 'ad' | 'creative';
+  name: string;
+  campaignName?: string;
+  adSetName?: string;
+  deliveryStatus?: string;
+  assetType?: string;
+  headline?: string;
+  body?: string;
+  destinationUrl?: string;
+  spend: number;
+  impressions: number;
+  clicks: number;
+  conversions: number;
+  conversionValue: number;
+  currencyCode?: string;
+  ctr?: number;
+  cpc?: number;
+  cpa?: number;
+  roas?: number;
+};
+
+export type MarketingConsoleAdvertisingView = {
+  scope: 'all' | 'googleAds' | 'metaAds';
+  label: string;
+  sources: MarketingConsoleSourceSummary[];
+  headline: string;
+  detail: string;
+  metrics: MarketingConsoleMetric[];
+  campaigns: MarketingConsoleAdvertisingCampaign[];
+  conversions: MarketingConsoleAdvertisingConversion[];
+  changeHistory: MarketingConsoleAdvertisingChange[];
+  adSets: MarketingConsoleAdvertisingEntity[];
+  ads: MarketingConsoleAdvertisingEntity[];
+  creatives: MarketingConsoleAdvertisingEntity[];
+};
+
+export type MarketingConsoleAdvertising = {
+  combined: MarketingConsoleAdvertisingView;
+  providers: Array<
+    MarketingConsoleAdvertisingView & {
+      scope: 'googleAds' | 'metaAds';
+    }
+  >;
+  auditSections: Array<{
+    id: string;
+    label: string;
+    status: MarketingConsoleStatus;
+    summary: string;
+  }>;
+};
+
+export type MarketingConsoleAnalyticsRow = {
+  id: string;
+  label: string;
+  sessions?: number;
+  visitors?: number;
+  conversions?: number;
+  revenue?: number;
+  currencyCode?: string;
+};
+
+export type MarketingConsoleTrackingCheck = {
+  id: string;
+  label: string;
+  status: MarketingConsoleStatus;
+  detail: string;
+};
+
+export type MarketingConsoleTagManager = {
+  status: MarketingConsoleStatus;
+  headline: string;
+  detail: string;
+  resourceCount?: number;
+  pendingChangeCount?: number;
+  lastSyncedAt?: string;
+  lastPreviewAt?: string;
+  lastPublishedAt?: string;
+  checks: MarketingConsoleTrackingCheck[];
+  actions: MarketingConsoleConnectionAction[];
+  technical: {
+    accountId?: string;
+    containerId?: string;
+    workspaceId?: string;
+    publicId?: string;
+    containerPath?: string;
+    workspacePath?: string;
+    snapshotPath?: string;
+    planPath?: string;
+    previewPath?: string;
+    publishPath?: string;
+  };
+};
+
+export type MarketingConsoleAnalytics = {
+  source: MarketingConsoleSourceSummary;
+  headline: string;
+  detail: string;
+  metrics: MarketingConsoleMetric[];
+  traffic: MarketingConsoleAnalyticsRow[];
+  visitors: MarketingConsoleAnalyticsRow[];
+  conversions: MarketingConsoleAnalyticsRow[];
+  trackingHealth: {
+    status: MarketingConsoleStatus;
+    headline: string;
+    detail: string;
+    checks: MarketingConsoleTrackingCheck[];
+  };
+};
+
+export type MarketingConsoleExperimentIdea = {
+  id: string;
+  title: string;
+  target: string;
+  priority: string;
+  rationale: string;
+  expectedImpact: string;
+  kind: 'metadata';
+};
+
+export type MarketingConsoleExperiments = {
+  status: MarketingConsoleStatus;
+  headline: string;
+  detail: string;
+  running: [];
+  results: [];
+  ideas: MarketingConsoleExperimentIdea[];
 };
 
 export type MarketingConsoleSeoMetric = {
@@ -562,9 +812,11 @@ export type MarketingConsoleFreshnessCell = {
   label: string;
   message: string;
   path?: string;
+  pulledAt?: string;
   ageDays?: number;
   recordCount?: number;
   currencyCode?: string;
+  sourceKind?: MarketingReportSource;
 };
 
 export type MarketingConsoleReceiptEvent = {
@@ -575,6 +827,70 @@ export type MarketingConsoleReceiptEvent = {
   timestamp?: string;
   path: string;
   message: string;
+  actorLabel?: string;
+  approvalLabel?: string;
+  providerLabel?: string;
+  resourceLabel?: string;
+  previousValue?: string;
+  newValue?: string;
+};
+
+export type MarketingConsoleActivityCategory = 'changes' | 'syncs' | 'errors' | 'approvals';
+
+export type MarketingConsoleActivityItem = {
+  id: string;
+  category: MarketingConsoleActivityCategory;
+  title: string;
+  summary: string;
+  status: MarketingConsoleStatus;
+  providerLabel: string;
+  resourceLabel: string;
+  actorLabel: string;
+  approvalLabel: string;
+  occurredAt?: string;
+  previousValue?: string;
+  newValue?: string;
+  technical: {
+    action: string;
+    sourcePath: string;
+    rawTimestamp?: string;
+  };
+};
+
+export type MarketingConsoleActivity = {
+  status: MarketingConsoleStatus;
+  headline: string;
+  summary: string;
+  items: MarketingConsoleActivityItem[];
+};
+
+export type MarketingConsoleAutomation = {
+  id: string;
+  name: string;
+  purpose: string;
+  providerLabel: string;
+  status: MarketingConsoleStatus;
+  statusLabel: string;
+  frequencyLabel: string;
+  timezoneLabel: string;
+  lastSuccessAt?: string;
+  lastSuccessLabel: string;
+  nextRunLabel: string;
+  issue?: string;
+  runNow: MarketingConsoleConnectionAction;
+  edit: MarketingConsoleConnectionAction;
+  technical: {
+    reportType: MarketingProviderReportType;
+    schedulePath?: string;
+  };
+};
+
+export type MarketingConsoleAutomations = {
+  status: MarketingConsoleStatus;
+  headline: string;
+  summary: string;
+  sharedIssue?: string;
+  items: MarketingConsoleAutomation[];
 };
 
 export type MarketingConsoleArtifactLink = {
@@ -617,13 +933,19 @@ export type MarketingConsoleState = {
   comparisons: {
     channels: MarketingConsoleComparisonRow[];
   };
+  advertising: MarketingConsoleAdvertising;
+  recommendations: MarketingConsoleRecommendations;
+  analytics: MarketingConsoleAnalytics;
+  experiments: MarketingConsoleExperiments;
   seo: MarketingConsoleSeo;
   keywordResearch: MarketingConsoleKeywordResearchSummary;
   competitorResearch: MarketingConsoleCompetitorResearchSummary;
   faqResearch: MarketingConsoleFaqResearchSummary;
   seoIntelligence: MarketingConsoleSeoIntelligenceSummary;
   freshness: MarketingConsoleFreshnessCell[];
-  receipts: MarketingConsoleReceiptEvent[];
+  activity: MarketingConsoleActivity;
+  automations: MarketingConsoleAutomations;
+  tagManager: MarketingConsoleTagManager;
   artifacts: MarketingConsoleArtifactLink[];
   reports: {
     proof: MarketingEvidenceStatusReport;
@@ -632,21 +954,5 @@ export type MarketingConsoleState = {
     adsStatus: MarketingAdsStatusReport;
     adsAudit?: MarketingAdsAuditReport;
     researchStatus: MarketingResearchStatusSummary;
-  };
-  schedule?: {
-    path: string;
-    status: MarketingConsoleStatus;
-    readyJobs: number;
-    blockedJobs: number;
-    jobCount: number;
-    nextWorkflowStep?: string;
-  };
-  gtm?: {
-    accountId?: string;
-    containerId?: string;
-    workspaceId?: string;
-    publicId?: string;
-    containerPath?: string;
-    workspacePath?: string;
   };
 };

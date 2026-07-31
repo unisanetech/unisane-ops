@@ -1,0 +1,44 @@
+{
+  "accountId": "sample-meta-account",
+  "data": [
+    {
+      "campaign_id": "sample-campaign-001",
+      "campaign_name": "Resume Builder Prospecting",
+      "adset_id": "sample-adset-001",
+      "adset_name": "India · Early career",
+      "effective_status": "ACTIVE",
+      "account_currency": "INR",
+      "impressions": "171000",
+      "clicks": "2710",
+      "spend": "10800",
+      "actions": [{ "action_type": "lead", "value": "94" }],
+      "action_values": [{ "action_type": "lead", "value": "47000" }]
+    },
+    {
+      "campaign_id": "sample-campaign-001",
+      "campaign_name": "Resume Builder Prospecting",
+      "adset_id": "sample-adset-002",
+      "adset_name": "India · Career switchers",
+      "effective_status": "ACTIVE",
+      "account_currency": "INR",
+      "impressions": "114000",
+      "clicks": "1570",
+      "spend": "7600",
+      "actions": [{ "action_type": "lead", "value": "52" }],
+      "action_values": [{ "action_type": "lead", "value": "26000" }]
+    },
+    {
+      "campaign_id": "sample-campaign-002",
+      "campaign_name": "Resume Template Retargeting",
+      "adset_id": "sample-adset-003",
+      "adset_name": "Visited templates · 30 days",
+      "effective_status": "ACTIVE",
+      "account_currency": "INR",
+      "impressions": "96000",
+      "clicks": "2410",
+      "spend": "9200",
+      "actions": [{ "action_type": "purchase", "value": "71" }],
+      "action_values": [{ "action_type": "purchase", "value": "56800" }]
+    }
+  ]
+}

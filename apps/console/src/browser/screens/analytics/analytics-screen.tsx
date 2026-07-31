@@ -1,0 +1,234 @@
+import { Badge } from '@unisane/ui/badge';
+import { Card } from '@unisane/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@unisane/ui/table';
+import { Typography } from '@unisane/ui/typography';
+import type { MarketingConsoleAnalyticsRow } from '@unisane/growth/console';
+import type { ConsoleScreenProps } from '../../contracts.js';
+import { formatNumber, healthStatusLabel, humanize, statusColor } from '../../lib/format.js';
+import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
+import { RecommendationList } from '../../shared/recommendation-list.js';
+import { TableFrame } from '../../shared/controls.js';
+import { ChannelMetrics, formatMoney, SourceSummary } from '../channels/shared.js';
+import { TagManagerWorkspace } from './tag-manager-workspace.js';
+
+export function AnalyticsScreen(props: ConsoleScreenProps) {
+  switch (props.route.id) {
+    case 'analytics.traffic':
+      return <AnalyticsRows {...props} kind="traffic" />;
+    case 'analytics.visitors':
+      return <AnalyticsRows {...props} kind="visitors" />;
+    case 'analytics.conversions':
+      return <AnalyticsRows {...props} kind="conversions" />;
+    case 'analytics.tracking-health':
+      return <TrackingHealth {...props} />;
+    default:
+      return <AnalyticsOverview {...props} />;
+  }
+}
+
+function AnalyticsOverview({ state, navigate }: ConsoleScreenProps) {
+  const analytics = state.analytics;
+  return (
+    <>
+      <Summary headline={analytics.headline} detail={analytics.detail} />
+      {analytics.source.available ? (
+        <ChannelMetrics
+          metrics={analytics.metrics}
+          ids={['sessions', 'users', 'analytics-conversions', 'revenue']}
+        />
+      ) : (
+        <ContentSection>
+          <EmptyState
+            title="Visitor reporting is unavailable."
+            description="The latest Analytics reports contain no usable rows, so this page does not display misleading zero metrics or an empty chart."
+            actionLabel="Review Analytics connection"
+            onAction={() => navigate('/connections/google/data-sync')}
+          />
+        </ContentSection>
+      )}
+      <ContentSection title="Measurement confidence">
+        <Card variant="outlined" padding="sm">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <Typography variant="labelLarge">{analytics.trackingHealth.headline}</Typography>
+              <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
+                {analytics.trackingHealth.detail}
+              </Typography>
+            </div>
+            <Badge variant="tonal" color={statusColor(analytics.trackingHealth.status)} size="sm">
+              {healthStatusLabel(analytics.trackingHealth.status)}
+            </Badge>
+          </div>
+        </Card>
+      </ContentSection>
+      <SourceSummary source={analytics.source} />
+    </>
+  );
+}
+
+function AnalyticsRows({
+  state,
+  navigate,
+  kind,
+}: ConsoleScreenProps & { kind: 'traffic' | 'visitors' | 'conversions' }) {
+  const rows = state.analytics[kind];
+  const hasMeasuredConversions =
+    kind !== 'conversions' || rows.some((row) => (row.conversions ?? 0) > 0);
+  const labels = {
+    traffic: {
+      headline: 'Traffic by acquisition channel',
+      detail: 'Compare the sources bringing sessions and visitors to the selected site.',
+      firstColumn: 'Channel',
+    },
+    visitors: {
+      headline: 'Where visitors begin',
+      detail:
+        'Compare landing pages that started measured visits. This report does not infer visitor identity or demographics.',
+      firstColumn: 'Landing page',
+    },
+    conversions: {
+      headline: hasMeasuredConversions
+        ? 'Conversions by source'
+        : 'Traffic is measured, but no Analytics conversions are recorded.',
+      detail: hasMeasuredConversions
+        ? 'Keep acquisition source and measured outcomes together.'
+        : 'This is a measured zero, not missing traffic. Check the conversion definition and Tag Manager setup before judging channel performance.',
+      firstColumn: 'Source',
+    },
+  }[kind];
+  return (
+    <>
+      <Summary headline={labels.headline} detail={labels.detail} />
+      {kind === 'conversions' && rows.length > 0 && !hasMeasuredConversions ? (
+        <ContentSection>
+          <EmptyState
+            title="Confirm that the intended outcome is being measured."
+            description="Tracking health separates Analytics access, report freshness, and Tag Manager configuration so you can repair the missing signal safely."
+            actionLabel="Review tracking health"
+            onAction={() => navigate('/analytics/tracking-health')}
+          />
+        </ContentSection>
+      ) : null}
+      {rows.length ? (
+        <ContentSection
+          title={
+            kind === 'conversions' && !hasMeasuredConversions
+              ? 'Sources receiving traffic without recorded outcomes'
+              : `${humanize(kind)} evidence`
+          }
+          description={`Results for ${state.dateWindow.label.toLowerCase()}; previous-period comparison is not available yet.`}
+        >
+          <AnalyticsTable rows={rows} firstColumn={labels.firstColumn} />
+        </ContentSection>
+      ) : (
+        <ContentSection>
+          <EmptyState
+            title={`No ${kind} rows are available.`}
+            description="Refresh the selected Google Analytics property before using this report to make a decision."
+            actionLabel={
+              kind === 'conversions' ? 'Review tracking health' : 'Review Analytics connection'
+            }
+            onAction={() =>
+              navigate(
+                kind === 'conversions'
+                  ? '/analytics/tracking-health'
+                  : '/connections/google/data-sync',
+              )
+            }
+          />
+        </ContentSection>
+      )}
+      <SourceSummary source={state.analytics.source} />
+    </>
+  );
+}
+
+function AnalyticsTable({
+  rows,
+  firstColumn,
+}: {
+  rows: MarketingConsoleAnalyticsRow[];
+  firstColumn: string;
+}) {
+  return (
+    <TableFrame label={`${firstColumn} analytics`}>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{firstColumn}</TableHead>
+            <TableHead>Sessions</TableHead>
+            <TableHead>Visitors</TableHead>
+            <TableHead>Conversions</TableHead>
+            <TableHead>Revenue</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.id}>
+              <TableCell>{row.label}</TableCell>
+              <TableCell>{formatOptional(row.sessions)}</TableCell>
+              <TableCell>{formatOptional(row.visitors)}</TableCell>
+              <TableCell>{formatOptional(row.conversions)}</TableCell>
+              <TableCell>
+                {row.revenue === undefined
+                  ? 'Not available'
+                  : formatMoney(row.revenue, row.currencyCode)}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableFrame>
+  );
+}
+
+function TrackingHealth(props: ConsoleScreenProps) {
+  const { state, navigate } = props;
+  const health = state.analytics.trackingHealth;
+  const recommendations = state.recommendations.items.filter((item) => item.lane === 'analytics');
+  return (
+    <>
+      <Summary headline={health.headline} detail={health.detail} />
+      <ContentSection title="Measurement checks">
+        <div className="grid gap-3">
+          {health.checks.map((check) => (
+            <Card key={check.id} variant="outlined" padding="sm">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <Typography variant="labelLarge">{check.label}</Typography>
+                  <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
+                    {check.detail}
+                  </Typography>
+                </div>
+                <Badge variant="tonal" color={statusColor(check.status)} size="sm">
+                  {healthStatusLabel(check.status)}
+                </Badge>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </ContentSection>
+      <TagManagerWorkspace {...props} />
+      {recommendations.length ? (
+        <ContentSection
+          title="Recommended measurement work"
+          description="Each item keeps evidence, expected outcome, review level, and the recorded decision together."
+        >
+          <RecommendationList items={recommendations} {...props} />
+        </ContentSection>
+      ) : null}
+      <ContentSection>
+        <EmptyState
+          title="Need to repair measurement?"
+          description="Connections keeps access and resource selection in one place; this page only explains measurement confidence."
+          actionLabel="Review connections"
+          onAction={() => navigate('/connections')}
+        />
+      </ContentSection>
+    </>
+  );
+}
+
+function formatOptional(value: number | undefined): string {
+  return value === undefined ? 'Not available' : formatNumber(value);
+}

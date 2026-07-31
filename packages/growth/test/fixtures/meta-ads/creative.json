@@ -1,0 +1,55 @@
+{
+  "accountId": "sample-meta-account",
+  "data": [
+    {
+      "campaign_id": "sample-campaign-001",
+      "campaign_name": "Resume Builder Prospecting",
+      "adset_id": "sample-adset-001",
+      "adset_name": "India · Early career",
+      "creative_id": "sample-creative-001",
+      "creative_name": "Resume builder product card",
+      "status": "ACTIVE",
+      "object_type": "SHARE",
+      "object_story_spec": {
+        "link_data": {
+          "title": "Build a job-ready resume",
+          "message": "Turn your experience into a clear, professional resume.",
+          "link": "https://trueresume.io/resume-builder",
+          "image_url": "https://example.test/meta-samples/resume-builder-card.png",
+          "call_to_action": { "type": "LEARN_MORE" }
+        }
+      },
+      "account_currency": "INR",
+      "impressions": "101000",
+      "clicks": "1690",
+      "spend": "6400",
+      "actions": [{ "action_type": "lead", "value": "61" }],
+      "action_values": [{ "action_type": "lead", "value": "30500" }]
+    },
+    {
+      "campaign_id": "sample-campaign-002",
+      "campaign_name": "Resume Template Retargeting",
+      "adset_id": "sample-adset-003",
+      "adset_name": "Visited templates · 30 days",
+      "creative_id": "sample-creative-002",
+      "creative_name": "Template completion reminder",
+      "status": "ACTIVE",
+      "object_type": "VIDEO",
+      "object_story_spec": {
+        "video_data": {
+          "title": "Your resume is almost ready",
+          "message": "Return to your saved template and finish with confidence.",
+          "link": "https://trueresume.io/resume-templates",
+          "video_id": "sample-video-001",
+          "call_to_action": { "type": "SIGN_UP" }
+        }
+      },
+      "account_currency": "INR",
+      "impressions": "96000",
+      "clicks": "2410",
+      "spend": "9200",
+      "actions": [{ "action_type": "purchase", "value": "71" }],
+      "action_values": [{ "action_type": "purchase", "value": "56800" }]
+    }
+  ]
+}

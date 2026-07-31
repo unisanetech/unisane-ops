@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -9,6 +9,7 @@ import {
 } from '@unisane/growth/console';
 import { writeMarketingProviderReportPull } from '@unisane/growth/marketing';
 import { buildMarketingConsoleApp } from './build.js';
+import { renderMarketingConsoleHtml } from './app.js';
 
 function createTempProject(): string {
   const cwd = mkdtempSync(path.join(tmpdir(), 'unisane-marketing-console-'));
@@ -888,7 +889,7 @@ describe('marketing console', () => {
       expect(state.artifacts).toEqual(
         expect.arrayContaining([expect.objectContaining({ lane: 'research', status: 'ready' })]),
       );
-      expect(state.gtm).toEqual(
+      expect(state.tagManager.technical).toEqual(
         expect.objectContaining({
           accountId: '1',
           containerId: '2',
@@ -902,8 +903,13 @@ describe('marketing console', () => {
           expect.objectContaining({ id: 'gtm.preview.latest', status: 'ready' }),
         ]),
       );
-      expect(state.receipts).toEqual(
-        expect.arrayContaining([expect.objectContaining({ action: 'gtm.preview' })]),
+      expect(state.activity.items).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            title: 'Tag Manager preview checked',
+            technical: expect.objectContaining({ action: 'gtm.preview' }),
+          }),
+        ]),
       );
       expect(state.overview.recentOutcomes).toEqual(
         expect.arrayContaining([
@@ -917,7 +923,7 @@ describe('marketing console', () => {
     });
   });
 
-  it('writes a static dashboard and serialized console state', async () => {
+  it('renders the component-app boot shell and serialized console state', async () => {
     const cwd = createTempProject();
     tempProjects.push(cwd);
     await runWithTestProjectContext(cwd, async () => {
@@ -938,50 +944,30 @@ describe('marketing console', () => {
         cwd,
         outputDirectory: '.unisane/console-test',
         now: new Date('2026-05-21T01:00:00.000Z'),
+        dryRun: true,
       });
 
-      expect(result.writeStatus).toBe('written');
-      expect(existsSync(result.entryHtmlPath)).toBe(true);
-      expect(existsSync(result.statePath)).toBe(true);
-      expect(
-        result.assetPaths.some((assetPath) => assetPath.endsWith('assets/unisane-ui.css')),
-      ).toBe(true);
-      const html = readFileSync(result.entryHtmlPath, 'utf8');
+      expect(result.writeStatus).toBe('dry-run');
+      const html = renderMarketingConsoleHtml(result.state, {
+        browserScriptHref: '/assets/console.js',
+        browserStylesheetHref: '/assets/console.css',
+      });
       expect(html).toContain('Unisane Ops');
-      expect(html).toContain('./assets/unisane-ui.css');
+      expect(html).toContain('href="/assets/console.css"');
+      expect(html).toContain('src="/assets/console.js"');
       expect(html).toContain('unisane-ops-state');
       expect(html).toContain('"path":"/overview"');
       expect(html).toContain('"path":"/seo/opportunities"');
-      expect(html).toContain('"path":"/advertising/change-history"');
+      expect(html).toContain('"path":"/advertising/all/change-history"');
       expect(html).toContain('"path":"/analytics/tracking-health"');
       expect(html).toContain('"path":"/settings/automations"');
       expect(html).toContain('"label":"Channels"');
       expect(html).toContain('"label":"Manage"');
-      expect(html).toContain('Project');
-      expect(html).toContain('Data is current');
-      expect(html).toContain('Continue with Google');
-      expect(html).toContain('Selected resources');
-      expect(html).toContain('Data availability');
-      expect(html).toContain('Confirm and copy command');
-      expect(html).toContain('Historical data remains available');
-      expect(html).toContain('Historical growth results are available');
-      expect(html).toContain('Previous-period comparison is not available yet');
-      expect(html).toContain('Tag Manager preview checked');
-      expect(html).toContain('Search performance');
-      expect(html).toContain('Best opportunities');
-      expect(html).toContain('Pages with search visibility');
-      expect(html).toContain('Search pages');
-      expect(html).toContain('Search queries');
-      expect(html).toContain('Indexing and visibility');
-      expect(html).toContain('Plan what to target next');
-      expect(html).toContain('Researched keywords');
-      expect(html).toContain('Measured monthly demand');
-      expect(html).toContain('Competitors & gaps');
-      expect(html).toContain('SERP & experiments');
-      expect(html).toContain('Search Console visibility helps validate current performance');
       expect(html).toContain('"country":"IN"');
       expect(html).toContain('"currencyCode":"INR"');
       expect(html).toContain('GTM-TEST123');
+      expect(html).not.toContain('<style>');
+      expect(html).not.toContain('const state = JSON.parse');
       expect(html).not.toContain(['Marketing', 'Console'].join(' '));
       expect(html).not.toContain('Coming soon');
       expect(html).not.toContain('Paid/organic click volume');

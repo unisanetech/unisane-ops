@@ -50,13 +50,13 @@ const statusReportFamilies: Array<{
   { provider: 'searchConsole', reportType: 'query' },
 ];
 
-export function buildMarketingStatusReport(
+export function readMarketingStatusProviderFreshness(
   options: MarketingStatusOptions = {},
-): MarketingStatusReport {
+): MarketingProviderReportStatus[] {
   const cwd = path.resolve(options.cwd ?? process.cwd());
   const maxAgeDays = options.maxAgeDays ?? 3;
   const mode = options.mode ?? 'marketing';
-  const providerFreshness = statusReportFamilies
+  return statusReportFamilies
     .filter((family) =>
       mode === 'analytics' ? analyticsProviders.includes(family.provider) : true,
     )
@@ -71,6 +71,15 @@ export function buildMarketingStatusReport(
         }).providers[0],
     )
     .filter((provider): provider is MarketingProviderReportStatus => provider !== undefined);
+}
+
+export function buildMarketingStatusReport(
+  options: MarketingStatusOptions = {},
+): MarketingStatusReport {
+  const cwd = path.resolve(options.cwd ?? process.cwd());
+  const maxAgeDays = options.maxAgeDays ?? 3;
+  const mode = options.mode ?? 'marketing';
+  const providerFreshness = readMarketingStatusProviderFreshness(options);
   const confirmedConversions = readMarketingConfirmedConversionStatus({
     cwd,
     maxAgeDays,

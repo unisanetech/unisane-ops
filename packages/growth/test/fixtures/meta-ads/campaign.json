@@ -1,0 +1,38 @@
+{
+  "accountId": "sample-meta-account",
+  "data": [
+    {
+      "campaign_id": "sample-campaign-001",
+      "campaign_name": "Resume Builder Prospecting",
+      "effective_status": "ACTIVE",
+      "account_currency": "INR",
+      "impressions": "285000",
+      "clicks": "4280",
+      "spend": "18400",
+      "actions": [{ "action_type": "lead", "value": "146" }],
+      "action_values": [{ "action_type": "lead", "value": "73000" }]
+    },
+    {
+      "campaign_id": "sample-campaign-002",
+      "campaign_name": "Resume Template Retargeting",
+      "effective_status": "ACTIVE",
+      "account_currency": "INR",
+      "impressions": "96000",
+      "clicks": "2410",
+      "spend": "9200",
+      "actions": [{ "action_type": "purchase", "value": "71" }],
+      "action_values": [{ "action_type": "purchase", "value": "56800" }]
+    },
+    {
+      "campaign_id": "sample-campaign-003",
+      "campaign_name": "Career Starter Awareness",
+      "effective_status": "PAUSED",
+      "account_currency": "INR",
+      "impressions": "148000",
+      "clicks": "1730",
+      "spend": "5300",
+      "actions": [{ "action_type": "lead", "value": "24" }],
+      "action_values": [{ "action_type": "lead", "value": "9600" }]
+    }
+  ]
+}

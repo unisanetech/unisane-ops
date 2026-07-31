@@ -7,10 +7,16 @@ import {
   deriveMarketingMetrics,
   readMarketingResearchStatus,
   readMarketingProviderReportStatus,
+  marketingProviderReportArtifactSchema,
+  marketingRecommendationArtifactSchema,
+  marketingRecommendationDecisionReceiptSchema,
   type MarketingProviderReportStatus,
+  type MarketingProviderReportRecord,
   type MarketingGoogleConnectionStatus,
   type MarketingMetaConnectionStatus,
   type MarketingAdsAuditReport,
+  type MarketingRecommendationArtifact,
+  type MarketingRecommendationDecisionReceipt,
 } from '@unisane/growth/marketing';
 import {
   loadGrowthConnectionsContext,
@@ -41,6 +47,19 @@ import type {
 import { buildMarketingConsoleConnections } from './connections.js';
 import { buildMarketingConsoleOverview } from './overview.js';
 import { buildMarketingConsoleSeo, type MarketingConsoleSeoSourceRow } from './seo.js';
+import { buildMarketingConsoleAdvertising } from './advertising.js';
+import { buildMarketingConsoleAnalytics } from './analytics.js';
+import { buildMarketingConsoleExperiments } from './experiments.js';
+import { buildMarketingConsoleActivity } from './activity.js';
+import { buildMarketingConsoleAutomations } from './automations.js';
+import {
+  buildMarketingConsoleRecommendations,
+  recommendationPriorities,
+} from './recommendations.js';
+import {
+  buildMarketingConsoleTagManager,
+  type MarketingConsoleTagManagerArtifact,
+} from './tag-manager.js';
 import { resolveSeoResearchWorkspacePaths } from '../seo/workspace/paths.js';
 
 export type BuildMarketingConsoleStateOptions = {
@@ -82,6 +101,10 @@ const reportFamilies: Array<{
   { provider: 'googleAds', reportType: 'keyword' },
   { provider: 'googleAds', reportType: 'conversion' },
   { provider: 'googleAds', reportType: 'auctionInsight' },
+  { provider: 'metaAds', reportType: 'campaign' },
+  { provider: 'metaAds', reportType: 'adSet' },
+  { provider: 'metaAds', reportType: 'ad' },
+  { provider: 'metaAds', reportType: 'creative' },
   { provider: 'ga4', reportType: 'landingPage' },
   { provider: 'ga4', reportType: 'channel' },
   { provider: 'ga4', reportType: 'sourceMedium' },
@@ -196,10 +219,39 @@ export async function buildMarketingConsoleState(
     intelligence: seoIntelligence,
   });
   const gtmArtifacts = collectGtmArtifactLinks(cwd, config.appId, config.defaultEnvironment);
-  const gtmIdentity = collectGtmIdentity(cwd, config.appId, config.defaultEnvironment);
+  const tagManagerArtifacts = readTagManagerArtifacts(cwd, config.appId, config.defaultEnvironment);
+  const manifestPath = projectContext.growth.runtime.manifest
+    ? path.resolve(cwd, projectContext.growth.runtime.manifest)
+    : undefined;
+  const googleConnection = connections.find((connection) => connection.provider === 'google');
+  const tagManager = buildMarketingConsoleTagManager({
+    appId: config.appId,
+    environment: config.defaultEnvironment,
+    ...(manifestPath && existsSync(manifestPath)
+      ? { manifestChangedAt: statSync(manifestPath).mtime.toISOString() }
+      : {}),
+    ...(googleConnection ? { connection: googleConnection } : {}),
+    ...tagManagerArtifacts,
+  });
+  const recommendationEvidence = readRecommendationEvidence(cwd);
+  const recommendationDecisionEvidence = readRecommendationDecisionReceipts(cwd);
+  const recommendationDecisions = recommendationDecisionEvidence.map(
+    (evidence) => evidence.receipt,
+  );
+  const recommendations = buildMarketingConsoleRecommendations({
+    ...(recommendationEvidence
+      ? {
+          artifact: recommendationEvidence.artifact,
+          artifactPath: recommendationEvidence.relativePath,
+        }
+      : {}),
+    receipts: recommendationDecisions,
+    experimentsAvailable: projectContext.growth.capabilities.includes('experiments'),
+  });
   const receipts = [
     ...collectReceipts(cwd, config.defaultEnvironment, now),
     ...collectGtmReceiptEvents(cwd, config.appId, config.defaultEnvironment, now),
+    ...recommendationDecisionEvidence.map(recommendationDecisionEvent),
   ];
   const artifacts = buildArtifactLinks(
     freshness,
@@ -207,15 +259,67 @@ export async function buildMarketingConsoleState(
     [...gtmArtifacts, ...buildResearchArtifactLinks(researchStatus.files)],
     adsStatus.latestPlan?.path,
     adsAudit,
+    recommendationEvidence?.path,
   );
-  const schedule = readScheduleSummary(cwd, config.defaultEnvironment);
+  const schedule = readSchedulePlan(cwd, config.defaultEnvironment);
+  const activity = buildMarketingConsoleActivity({ receipts, freshness });
+  const automations = buildMarketingConsoleAutomations({
+    ...(schedule ? { schedule: schedule.parsed, schedulePath: schedule.path } : {}),
+    connections,
+    freshness,
+    now,
+  });
   const { overview, priorities } = buildMarketingConsoleOverview({
     connections,
     freshness,
     metrics,
     receipts,
     capabilities: projectContext.growth.capabilities,
+    recommendationPriorities: recommendationPriorities(recommendations),
   });
+  const advertising = buildMarketingConsoleAdvertising({
+    googleAds: {
+      campaigns: readProviderRows(
+        freshness.find((cell) => cell.provider === 'googleAds' && cell.reportType === 'campaign'),
+      ),
+      conversions: readProviderRows(
+        freshness.find((cell) => cell.provider === 'googleAds' && cell.reportType === 'conversion'),
+      ),
+    },
+    metaAds: {
+      campaigns: readProviderRows(
+        freshness.find((cell) => cell.provider === 'metaAds' && cell.reportType === 'campaign'),
+      ),
+      adSets: readProviderRows(
+        freshness.find((cell) => cell.provider === 'metaAds' && cell.reportType === 'adSet'),
+      ),
+      ads: readProviderRows(
+        freshness.find((cell) => cell.provider === 'metaAds' && cell.reportType === 'ad'),
+      ),
+      creatives: readProviderRows(
+        freshness.find((cell) => cell.provider === 'metaAds' && cell.reportType === 'creative'),
+      ),
+    },
+    freshness,
+    receipts,
+    ...(adsAudit ? { audit: adsAudit } : {}),
+  });
+  const analytics = buildMarketingConsoleAnalytics({
+    metrics,
+    traffic: readProviderRows(
+      freshness.find((cell) => cell.provider === 'ga4' && cell.reportType === 'channel'),
+    ),
+    visitors: readProviderRows(
+      freshness.find((cell) => cell.provider === 'ga4' && cell.reportType === 'landingPage'),
+    ),
+    conversions: readProviderRows(
+      freshness.find((cell) => cell.provider === 'ga4' && cell.reportType === 'sourceMedium'),
+    ),
+    freshness,
+    connections,
+    tagManager,
+  });
+  const experiments = buildMarketingConsoleExperiments(seoIntelligence.metadata.experiments);
   const paidProviderEvidenceReady = freshness.some(
     (cell) =>
       (cell.provider === 'googleAds' || cell.provider === 'metaAds') && cell.status === 'ready',
@@ -225,7 +329,7 @@ export async function buildMarketingConsoleState(
       connectionRouteStatus(connections),
       proof.readyForScheduledPulls ? 'ready' : proof.ok ? 'warn' : 'blocked',
     ),
-    overview: marketingStatus.ok ? 'ready' : 'warn',
+    overview: overview.status,
     advertising: adsAudit
       ? adsAudit.ok
         ? 'ready'
@@ -233,16 +337,13 @@ export async function buildMarketingConsoleState(
       : adsStatus.ok && paidProviderEvidenceReady
         ? 'ready'
         : 'warn',
-    analytics: analyticsStatus.ok ? 'ready' : 'warn',
-    seo: freshness.some((cell) => cell.provider === 'searchConsole' && cell.status === 'ready')
-      ? 'ready'
-      : 'warn',
-    tracking: deriveGtmRouteStatus(gtmArtifacts),
-    automations: schedule?.status ?? 'missing',
+    analytics: analytics.source.status,
+    seo: seo.overview.status,
+    tracking: analytics.trackingHealth.status,
+    automations: automations.status,
   };
   const readiness = buildReadiness(
     readinessStatuses,
-    connections.find((connection) => connection.state !== 'current')?.state ?? 'current',
     priorities[0]?.expectedOutcome ?? 'Review the latest growth results.',
   );
 
@@ -265,13 +366,19 @@ export async function buildMarketingConsoleState(
     comparisons: {
       channels: channelRows,
     },
+    advertising,
+    recommendations,
+    analytics,
+    experiments,
     seo,
     keywordResearch,
     competitorResearch,
     faqResearch,
     seoIntelligence,
     freshness,
-    receipts,
+    activity,
+    automations,
+    tagManager,
     artifacts,
     reports: {
       proof,
@@ -281,8 +388,6 @@ export async function buildMarketingConsoleState(
       adsAudit,
       researchStatus,
     },
-    ...(schedule ? { schedule } : {}),
-    ...(gtmIdentity ? { gtm: gtmIdentity } : {}),
   };
 }
 
@@ -1631,8 +1736,9 @@ function connectionRouteStatus(
   connections: readonly MarketingConsoleConnection[],
 ): MarketingConsoleStatus {
   if (!connections.some((connection) => connection.connected)) return 'blocked';
+  const requiredConnections = connections.filter((connection) => connection.required);
   if (
-    connections.some(
+    requiredConnections.some(
       (connection) =>
         connection.state === 'expired-access' ||
         connection.state === 'failed' ||
@@ -1641,7 +1747,7 @@ function connectionRouteStatus(
   ) {
     return 'blocked';
   }
-  if (connections.some((connection) => connection.state !== 'current')) return 'warn';
+  if (requiredConnections.some((connection) => connection.state !== 'current')) return 'warn';
   return 'ready';
 }
 
@@ -1690,9 +1796,11 @@ function buildFreshness(
         status?.message,
       ),
       path: status?.path,
+      pulledAt: status?.pulledAt,
       ageDays: status?.ageDays,
       recordCount: status?.recordCount,
       ...(status?.path ? { currencyCode: readCurrencyFromReportPath(status.path) } : {}),
+      ...(status?.source ? { sourceKind: status.source } : {}),
     };
   });
 }
@@ -1806,6 +1914,18 @@ function readSeoRowsFromCell(
   }
 }
 
+function readProviderRows(
+  cell: MarketingConsoleFreshnessCell | undefined,
+): MarketingProviderReportRecord[] {
+  if (!cell?.path || !existsSync(cell.path)) return [];
+  try {
+    return marketingProviderReportArtifactSchema.parse(JSON.parse(readFileSync(cell.path, 'utf8')))
+      .records;
+  } catch {
+    return [];
+  }
+}
+
 function normalizeSearchConsoleCtr(value: number | undefined): number | undefined {
   if (value === undefined) return undefined;
   return value <= 1 ? value * 100 : value;
@@ -1894,14 +2014,47 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
   const searchCell = selectProviderMetricCell(
     freshness.filter((cell) => cell.provider === 'searchConsole'),
   );
-  const adsCell = selectProviderMetricCell(
+  const googleAdsCell = selectProviderMetricCell(
     freshness.filter((cell) => cell.provider === 'googleAds'),
   );
+  const metaAdsCell = selectProviderMetricCell(
+    freshness.filter((cell) => cell.provider === 'metaAds'),
+  );
+  const adsCells = [googleAdsCell, metaAdsCell].filter(
+    (cell): cell is MarketingConsoleFreshnessCell => cell !== undefined,
+  );
+  const adsCell =
+    adsCells.find((cell) => cell.status !== 'ready') ??
+    adsCells.find((cell) => cell.sourceKind === 'fixture') ??
+    adsCells[0];
   const analyticsCell = selectProviderMetricCell(
     freshness.filter((cell) => cell.provider === 'ga4'),
   );
   const search = searchCell ? readMetricsFromFreshnessCell(searchCell) : {};
-  const ads = adsCell ? readMetricsFromFreshnessCell(adsCell) : {};
+  const adsReports = adsCells.map((cell) => ({
+    cell,
+    metrics: readMetricsFromFreshnessCell(cell),
+  }));
+  const advertisingCurrencies = [
+    ...new Set(
+      adsReports
+        .map(({ cell }) => cell.currencyCode)
+        .filter((currency): currency is string => Boolean(currency)),
+    ),
+  ];
+  const comparableAdvertisingMoney = advertisingCurrencies.length <= 1;
+  const ads = adsReports.reduce<MarketingReportMetrics>((totals, report) => {
+    addMetric(totals, 'impressions', report.metrics.impressions);
+    addMetric(totals, 'clicks', report.metrics.clicks);
+    addMetric(totals, 'conversions', report.metrics.conversions);
+    if (comparableAdvertisingMoney) {
+      addMetric(totals, 'cost', report.metrics.cost);
+      addMetric(totals, 'conversionValue', report.metrics.conversionValue);
+    }
+    return totals;
+  }, {});
+  const adsSourceLabel =
+    adsCells.map((cell) => providerLabel(cell.provider)).join(' + ') || 'Advertising';
   const analytics = analyticsCell ? readMetricsFromFreshnessCell(analyticsCell) : {};
   const analyticsConversions = analytics.keyEvents ?? analytics.conversions ?? analytics.purchases;
   const conversions = analyticsConversions ?? ads.conversions;
@@ -1909,7 +2062,10 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
   const revenue = analytics.revenue ?? ads.conversionValue;
   const revenueSource = analytics.revenue !== undefined ? analyticsCell : adsCell;
   const adsDerived = deriveMarketingMetrics(ads);
-  const currencyCode = adsCell?.currencyCode;
+  const currencyCode =
+    comparableAdvertisingMoney && advertisingCurrencies.length === 1
+      ? advertisingCurrencies[0]
+      : undefined;
   return [
     metric(
       'organic-clicks',
@@ -1926,7 +2082,7 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
       money(ads.cost, currencyCode),
       ads.cost,
       'Cost reported by the selected advertising account.',
-      'Google Ads',
+      adsSourceLabel,
       adsCell,
       currencyCode,
     ),
@@ -1936,7 +2092,7 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
       number(conversions),
       conversions,
       'Reported key outcomes for the selected period.',
-      analyticsConversions !== undefined ? 'Google Analytics' : 'Google Ads',
+      analyticsConversions !== undefined ? 'Google Analytics' : adsSourceLabel,
       conversionSource,
     ),
     metric(
@@ -1945,7 +2101,7 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
       money(revenue, revenueSource?.currencyCode ?? currencyCode),
       revenue,
       'Revenue or conversion value reported by the selected source.',
-      analytics.revenue !== undefined ? 'Google Analytics' : 'Google Ads',
+      analytics.revenue !== undefined ? 'Google Analytics' : adsSourceLabel,
       revenueSource,
       revenueSource?.currencyCode ?? currencyCode,
     ),
@@ -1955,7 +2111,7 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
       ratio(adsDerived.roas),
       adsDerived.roas,
       'Reported advertising conversion value divided by advertising spend.',
-      'Google Ads',
+      adsSourceLabel,
       adsCell,
     ),
     metric(
@@ -1972,8 +2128,8 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
       'Advertising impressions',
       number(ads.impressions),
       ads.impressions,
-      'Times selected Google Ads campaigns were shown.',
-      'Google Ads',
+      'Times campaigns were shown across available advertising evidence.',
+      adsSourceLabel,
       adsCell,
     ),
     metric(
@@ -1981,8 +2137,8 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
       'Advertising clicks',
       number(ads.clicks),
       ads.clicks,
-      'Visits reported by selected Google Ads campaigns.',
-      'Google Ads',
+      'Clicks reported across available advertising evidence.',
+      adsSourceLabel,
       adsCell,
     ),
     metric(
@@ -1990,8 +2146,8 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
       'Advertising conversions',
       number(ads.conversions),
       ads.conversions,
-      'Conversions attributed by the selected advertising account.',
-      'Google Ads',
+      'Provider-attributed conversions across available advertising evidence.',
+      adsSourceLabel,
       adsCell,
     ),
     metric(
@@ -2027,7 +2183,7 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
       money(adsDerived.cpa, currencyCode),
       adsDerived.cpa,
       'Advertising spend divided by reported advertising conversions.',
-      'Google Ads',
+      adsSourceLabel,
       adsCell,
       currencyCode,
     ),
@@ -2037,7 +2193,7 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
       percent(adsDerived.ctr),
       adsDerived.ctr,
       'Advertising clicks divided by advertising impressions.',
-      'Google Ads',
+      adsSourceLabel,
       adsCell,
     ),
   ];
@@ -2069,6 +2225,7 @@ function metric(
 
 function metricFreshnessLabel(source: MarketingConsoleFreshnessCell | undefined): string {
   if (!source) return 'No usable source data';
+  if (source.sourceKind === 'fixture') return 'Includes sample data';
   if (source.ageDays === 0) return 'Updated today';
   if (source.ageDays !== undefined) {
     return `${source.ageDays} day${source.ageDays === 1 ? '' : 's'} old`;
@@ -2120,33 +2277,36 @@ function buildTrends(freshness: MarketingConsoleFreshnessCell[]): {
 
 function buildReadiness(
   statusesByCapability: MarketingConsoleReadinessStatuses,
-  currentStage: string,
   nextAction: string,
 ): MarketingConsoleState['readiness'] {
   const statuses = Object.values(statusesByCapability);
   const readyCount = statuses.filter((status) => status === 'ready').length;
   const score = Math.round((readyCount / statuses.length) * 100);
-  const blocked = statuses.some((status) => status === 'blocked');
+  const blockedCapability = Object.entries(statusesByCapability).find(
+    ([, status]) => status === 'blocked',
+  )?.[0] as keyof MarketingConsoleReadinessStatuses | undefined;
+  const attentionCapability = Object.entries(statusesByCapability).find(
+    ([, status]) => status === 'warn' || status === 'missing',
+  )?.[0] as keyof MarketingConsoleReadinessStatuses | undefined;
+  const attentionLabel: Record<keyof MarketingConsoleReadinessStatuses, string> = {
+    connections: 'provider connection',
+    overview: 'current data',
+    advertising: 'advertising evidence',
+    analytics: 'analytics evidence',
+    seo: 'search evidence',
+    tracking: 'tracking configuration',
+    automations: 'automation setup',
+  };
   return {
-    status: blocked ? 'blocked' : score >= 75 ? 'ready' : 'warn',
+    status: blockedCapability ? 'blocked' : score >= 75 ? 'ready' : 'warn',
     score,
-    label: blocked ? `Needs attention: ${readinessStageLabel(currentStage)}` : `${score}% ready`,
+    label: blockedCapability
+      ? `Needs attention: ${attentionLabel[blockedCapability]}`
+      : attentionCapability
+        ? `Needs attention: ${attentionLabel[attentionCapability]}`
+        : 'Core growth data is current',
     nextWorkflowStep: nextAction,
   };
-}
-
-function readinessStageLabel(stage: string): string {
-  const labels: Record<string, string> = {
-    current: 'current data',
-    'not-connected': 'provider connection',
-    syncing: 'first data update',
-    delayed: 'delayed data',
-    'needs-resource': 'resource selection',
-    'partial-permission': 'provider access',
-    'expired-access': 'expired provider access',
-    failed: 'provider connection',
-  };
-  return labels[stage] ?? stage;
 }
 
 function collectReceipts(
@@ -2211,41 +2371,73 @@ function collectGtmArtifactLinks(
   ].filter((artifact): artifact is MarketingConsoleArtifactLink => artifact !== undefined);
 }
 
-function collectGtmIdentity(
+function readTagManagerArtifacts(
   cwd: string,
   appId: string,
   environment: string,
-): MarketingConsoleState['gtm'] | undefined {
+): {
+  snapshot?: MarketingConsoleTagManagerArtifact;
+  plan?: MarketingConsoleTagManagerArtifact;
+  apply?: MarketingConsoleTagManagerArtifact;
+  preview?: MarketingConsoleTagManagerArtifact;
+  publish?: MarketingConsoleTagManagerArtifact;
+} {
   const root = path.join(cwd, '.unisane', 'gtm', appId, environment);
-  const candidates = [
-    latestJsonArtifact(path.join(root, 'previews')),
-    latestJsonArtifact(path.join(root, 'receipts')),
-    latestJsonArtifact(path.join(root, 'plans')),
-    latestJsonArtifact(path.join(root, 'snapshots')),
-  ].filter((artifact): artifact is LocalJsonArtifact => artifact !== undefined);
-  const identity: NonNullable<MarketingConsoleState['gtm']> = {};
-  for (const artifact of candidates) {
-    assignGtmIdentityString(identity, 'accountId', artifact.parsed?.accountId);
-    assignGtmIdentityString(identity, 'containerId', artifact.parsed?.containerId);
-    assignGtmIdentityString(identity, 'containerPath', artifact.parsed?.containerPath);
-    assignGtmIdentityString(identity, 'workspacePath', artifact.parsed?.workspacePath);
-    const containerVersion = objectField(artifact.parsed, 'containerVersion');
-    const container = objectField(containerVersion, 'container');
-    assignGtmIdentityString(identity, 'publicId', container?.publicId);
-    if (!identity.workspaceId && identity.workspacePath) {
-      const match = identity.workspacePath.match(/\/workspaces\/([^/]+)$/);
-      if (match?.[1]) identity.workspaceId = match[1];
-    }
-  }
-  return Object.keys(identity).length > 0 ? identity : undefined;
+  const snapshot = tagManagerArtifact(latestJsonArtifact(path.join(root, 'snapshots')));
+  const plan = tagManagerArtifact(latestJsonArtifact(path.join(root, 'plans')));
+  const apply = tagManagerArtifact(latestJsonArtifact(path.join(root, 'receipts')));
+  const preview = tagManagerArtifact(latestJsonArtifact(path.join(root, 'previews')));
+  const publish = tagManagerArtifact(latestJsonArtifact(path.join(root, 'publishes')));
+  return {
+    ...(snapshot ? { snapshot } : {}),
+    ...(plan ? { plan } : {}),
+    ...(apply ? { apply } : {}),
+    ...(preview ? { preview } : {}),
+    ...(publish ? { publish } : {}),
+  };
 }
 
-function assignGtmIdentityString(
-  target: NonNullable<MarketingConsoleState['gtm']>,
-  key: keyof NonNullable<MarketingConsoleState['gtm']>,
-  value: unknown,
-): void {
-  if (!target[key] && typeof value === 'string' && value.length > 0) target[key] = value;
+function tagManagerArtifact(
+  artifact: LocalJsonArtifact | undefined,
+): MarketingConsoleTagManagerArtifact | undefined {
+  if (!artifact) return undefined;
+  const parsed = artifact.parsed;
+  const validation = objectField(parsed, 'validation');
+  const resources = parsed?.resources;
+  const workspacePath =
+    typeof parsed?.workspacePath === 'string' ? parsed.workspacePath : undefined;
+  const workspaceId = workspacePath?.match(/\/workspaces\/([^/]+)$/)?.[1];
+  const containerVersion = objectField(parsed, 'containerVersion');
+  const container = objectField(containerVersion, 'container');
+  const validationOk =
+    typeof validation?.ok === 'boolean'
+      ? validation.ok
+      : parsed?.compilerError === true
+        ? false
+        : undefined;
+  const plan = objectField(parsed, 'plan');
+  const operations = Array.isArray(plan?.operations) ? plan.operations : undefined;
+  const operationCount = operations
+    ? operations.filter(
+        (operation) =>
+          typeof operation === 'object' &&
+          operation !== null &&
+          (operation as Record<string, unknown>).type !== 'retain_unmanaged_resource',
+      ).length
+    : numberField(parsed, 'operationCount');
+  return {
+    path: artifact.filePath,
+    observedAt: timestampFromGtmArtifact(artifact),
+    ...(validationOk !== undefined ? { valid: validationOk } : {}),
+    ...(operationCount !== undefined ? { operationCount } : {}),
+    ...(Array.isArray(resources) ? { resourceCount: resources.length } : {}),
+    ...(typeof parsed?.accountId === 'string' ? { accountId: parsed.accountId } : {}),
+    ...(typeof parsed?.containerId === 'string' ? { containerId: parsed.containerId } : {}),
+    ...(workspaceId ? { workspaceId } : {}),
+    ...(typeof container?.publicId === 'string' ? { publicId: container.publicId } : {}),
+    ...(typeof parsed?.containerPath === 'string' ? { containerPath: parsed.containerPath } : {}),
+    ...(workspacePath ? { workspacePath } : {}),
+  };
 }
 
 function objectField(
@@ -2339,16 +2531,6 @@ function messageForGtmReceipt(artifact: LocalJsonArtifact, action: string, now: 
   return `${artifact.fileName} updated ${ageDays(now, artifact.mtimeMs)} days ago.`;
 }
 
-function deriveGtmRouteStatus(artifacts: MarketingConsoleArtifactLink[]): MarketingConsoleStatus {
-  const latestPlan = artifacts.find((artifact) => artifact.id === 'gtm.plan.latest');
-  const latestApply = artifacts.find((artifact) => artifact.id === 'gtm.apply.latest');
-  const latestPreview = artifacts.find((artifact) => artifact.id === 'gtm.preview.latest');
-  if (!latestPlan && !latestApply && !latestPreview) return 'warn';
-  if (latestPreview?.status === 'blocked') return 'blocked';
-  if (latestPlan?.status === 'ready' && latestPreview?.status === 'ready') return 'ready';
-  return 'warn';
-}
-
 function statusForGtmPlan(artifact: LocalJsonArtifact | undefined): MarketingConsoleStatus {
   if (!artifact) return 'missing';
   const validation = artifact.parsed?.validation;
@@ -2395,6 +2577,7 @@ function numberField(record: Record<string, unknown> | undefined, key: string): 
 function timestampFromGtmArtifact(artifact: LocalJsonArtifact): string {
   const fields = [
     'generatedAt',
+    'pulledAt',
     'appliedAt',
     'previewedAt',
     'versionedAt',
@@ -2423,6 +2606,64 @@ function safeReadJson(filePath: string): Record<string, unknown> | undefined {
   }
 }
 
+function readRecommendationEvidence(cwd: string):
+  | {
+      artifact: MarketingRecommendationArtifact;
+      path: string;
+      relativePath: string;
+    }
+  | undefined {
+  const artifact = latestJsonArtifact(path.join(cwd, '.unisane', 'marketing', 'recommendations'));
+  if (!artifact?.parsed) return undefined;
+  const parsed = marketingRecommendationArtifactSchema.safeParse(artifact.parsed);
+  if (!parsed.success) return undefined;
+  return {
+    artifact: parsed.data,
+    path: artifact.filePath,
+    relativePath: path.relative(cwd, artifact.filePath),
+  };
+}
+
+type RecommendationDecisionEvidence = {
+  receipt: MarketingRecommendationDecisionReceipt;
+  path: string;
+};
+
+function readRecommendationDecisionReceipts(cwd: string): RecommendationDecisionEvidence[] {
+  return collectJsonArtifacts(
+    path.join(cwd, '.unisane', 'marketing', 'recommendations', 'receipts'),
+  ).flatMap((artifact) => {
+    if (!artifact.parsed) return [];
+    const parsed = marketingRecommendationDecisionReceiptSchema.safeParse(artifact.parsed);
+    return parsed.success ? [{ receipt: parsed.data, path: artifact.filePath }] : [];
+  });
+}
+
+function recommendationDecisionEvent(
+  evidence: RecommendationDecisionEvidence,
+): MarketingConsoleReceiptEvent {
+  const accepted = evidence.receipt.decision === 'accepted';
+  return {
+    id: `recommendation.${evidence.receipt.recommendationId}.${evidence.receipt.generatedAt}`,
+    lane: 'marketing',
+    action: accepted ? 'recommendation.accepted' : 'recommendation.dismissed',
+    status: 'ready',
+    timestamp: evidence.receipt.generatedAt,
+    path: evidence.path,
+    message: evidence.receipt.nextWorkflowStep,
+    actorLabel: evidence.receipt.decidedBy ?? 'Not recorded',
+    approvalLabel: evidence.receipt.approvalReference
+      ? `Approval ${evidence.receipt.approvalReference}`
+      : accepted
+        ? 'Accepted for planning'
+        : 'Dismissed with reason',
+    providerLabel: 'Unisane',
+    resourceLabel: evidence.receipt.recommendation.title,
+    previousValue: 'Awaiting decision',
+    newValue: accepted ? 'Accepted for planning' : 'Dismissed',
+  };
+}
+
 function readAdsAuditSummary(cwd: string): MarketingAdsAuditReport | undefined {
   const auditPath = path.join(cwd, '.unisane', 'marketing', 'ads', 'audit', 'latest.json');
   if (!existsSync(auditPath)) return undefined;
@@ -2443,6 +2684,7 @@ function buildArtifactLinks(
   gtmArtifacts: MarketingConsoleArtifactLink[],
   latestPlanPath?: string,
   adsAudit?: MarketingAdsAuditReport,
+  recommendationPath?: string,
 ): MarketingConsoleArtifactLink[] {
   const providerArtifacts = freshness
     .filter((cell) => cell.path)
@@ -2486,6 +2728,17 @@ function buildArtifactLinks(
           },
         ]
       : []),
+    ...(recommendationPath
+      ? [
+          {
+            id: 'recommendations.latest',
+            label: 'Latest recommendations',
+            lane: 'recommendations',
+            path: recommendationPath,
+            status: 'ready' as const,
+          },
+        ]
+      : []),
   ];
 }
 
@@ -2501,10 +2754,10 @@ function buildResearchArtifactLinks(
   }));
 }
 
-function readScheduleSummary(
+function readSchedulePlan(
   cwd: string,
   environment: string,
-): MarketingConsoleState['schedule'] | undefined {
+): { path: string; parsed: Record<string, unknown> } | undefined {
   const schedulePath = path.join(
     cwd,
     '.unisane',
@@ -2515,21 +2768,7 @@ function readScheduleSummary(
   );
   if (!existsSync(schedulePath)) return undefined;
   const parsed = safeReadJson(schedulePath);
-  const jobs = Array.isArray(parsed?.jobs) ? parsed.jobs : [];
-  const readyJobs = jobs.filter(
-    (job) =>
-      typeof job === 'object' && job !== null && (job as { status?: string }).status === 'ready',
-  ).length;
-  const blockedJobs = jobs.length - readyJobs;
-  return {
-    path: schedulePath,
-    status: readyJobs > 0 && blockedJobs === 0 ? 'ready' : blockedJobs > 0 ? 'blocked' : 'missing',
-    readyJobs,
-    blockedJobs,
-    jobCount: jobs.length,
-    nextWorkflowStep:
-      typeof parsed?.nextWorkflowStep === 'string' ? parsed.nextWorkflowStep : undefined,
-  };
+  return parsed ? { path: schedulePath, parsed } : undefined;
 }
 
 function inferDateWindow(

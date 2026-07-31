@@ -28,10 +28,10 @@ function ga4Dimensions(reportType: Ga4ReportType): Array<{ name: string }> {
 function ga4Metrics(reportType: Ga4ReportType): Array<{ name: string }> {
   if (reportType === 'ecommerce') {
     return [
-      { name: 'sessions' },
-      { name: 'ecommercePurchases' },
-      { name: 'purchaseRevenue' },
-      { name: 'totalRevenue' },
+      { name: 'itemsViewed' },
+      { name: 'itemsAddedToCart' },
+      { name: 'itemsPurchased' },
+      { name: 'itemRevenue' },
     ];
   }
   return [

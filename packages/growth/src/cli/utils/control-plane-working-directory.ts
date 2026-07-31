@@ -19,11 +19,14 @@ export function resolveControlPlaneWorkingDirectory(
   if (!input?.trim()) return baseCwd;
   if (path.isAbsolute(input)) return path.resolve(input);
 
+  const callerRelative = path.resolve(baseCwd, input);
+  if (existsSync(callerRelative)) return callerRelative;
+
   const workspaceRoot = findWorkspaceRoot(baseCwd);
   if (workspaceRoot) {
     const workspaceRelative = path.resolve(workspaceRoot, input);
     if (existsSync(workspaceRelative)) return workspaceRelative;
   }
 
-  return path.resolve(baseCwd, input);
+  return callerRelative;
 }

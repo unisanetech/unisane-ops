@@ -1,6 +1,5 @@
-import { access, copyFile, mkdir, readdir, writeFile } from 'node:fs/promises';
+import { access, copyFile, mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
 import path from 'node:path';
 import { buildMarketingConsoleState } from '@unisane/growth/console';
 import { renderMarketingConsoleHtml } from './app.js';
@@ -35,20 +34,18 @@ export async function buildMarketingConsoleApp(
   const outputDirectory = path.resolve(cwd, options.outputDirectory ?? '.unisane/console');
   const entryHtmlPath = path.join(outputDirectory, 'index.html');
   const statePath = path.join(outputDirectory, 'ui-state.json');
-  const unisaneUiCssSourcePath = await resolveUnisaneUiCssPath();
-  const unisaneUiCssOutputPath = unisaneUiCssSourcePath
-    ? path.join(outputDirectory, 'assets', 'unisane-ui.css')
-    : undefined;
+  const browserScriptOutputPath = path.join(outputDirectory, 'assets', 'console.js');
   if (!options.dryRun) {
+    const browserAssetDirectory = path.dirname(await resolveBrowserAssetPath('main.js'));
     await mkdir(outputDirectory, { recursive: true });
-    if (unisaneUiCssSourcePath && unisaneUiCssOutputPath) {
-      await mkdir(path.dirname(unisaneUiCssOutputPath), { recursive: true });
-      await copyFile(unisaneUiCssSourcePath, unisaneUiCssOutputPath);
-    }
+    await rm(path.dirname(browserScriptOutputPath), { recursive: true, force: true });
+    await mkdir(path.dirname(browserScriptOutputPath), { recursive: true });
+    await copyBrowserAssets(browserAssetDirectory, path.dirname(browserScriptOutputPath));
     await writeFile(
       entryHtmlPath,
       renderMarketingConsoleHtml(state, {
-        unisaneUiStylesheetHref: unisaneUiCssOutputPath ? './assets/unisane-ui.css' : undefined,
+        browserScriptHref: '/assets/console.js',
+        browserStylesheetHref: '/assets/console.css',
       }),
       'utf8',
     );
@@ -67,36 +64,52 @@ export async function buildMarketingConsoleApp(
   };
 }
 
-async function resolveUnisaneUiCssPath(): Promise<string | undefined> {
+async function copyBrowserAssets(sourceDirectory: string, outputDirectory: string): Promise<void> {
+  const entries = await readdir(sourceDirectory, { withFileTypes: true });
+  await Promise.all(
+    entries
+      .filter((entry) => entry.isFile())
+      .map((entry) => {
+        const outputName =
+          entry.name === 'main.js'
+            ? 'console.js'
+            : entry.name === 'main.css'
+              ? 'console.css'
+              : entry.name;
+        return copyFile(
+          path.join(sourceDirectory, entry.name),
+          path.join(outputDirectory, outputName),
+        );
+      }),
+  );
+}
+
+async function resolveBrowserAssetPath(fileName: string): Promise<string> {
   const candidatePaths = [
-    resolvePackageStylesheet(),
-    ...candidateRepositoryStylesheetPaths(process.cwd()),
-    ...candidateRepositoryStylesheetPaths(path.dirname(fileURLToPath(import.meta.url))),
-  ].filter((candidatePath): candidatePath is string => Boolean(candidatePath));
+    ...candidateBrowserAssetPaths(process.cwd(), fileName),
+    ...candidateBrowserAssetPaths(path.dirname(fileURLToPath(import.meta.url)), fileName),
+  ];
   for (const candidatePath of candidatePaths) {
     if (await fileExists(candidatePath)) return candidatePath;
   }
-  return undefined;
+  throw new Error(
+    `[OPS_CONSOLE_BROWSER_ASSET_MISSING] Build @unisane/ops-console before serving (${fileName}).`,
+  );
 }
 
-function candidateRepositoryStylesheetPaths(startDirectory: string): string[] {
+function candidateBrowserAssetPaths(startDirectory: string, fileName: string): string[] {
   const candidates: string[] = [];
   let currentDirectory = path.resolve(startDirectory);
   while (true) {
-    candidates.push(path.join(currentDirectory, 'unisane-ui/packages/core/dist/index.css'));
+    candidates.push(
+      path.join(currentDirectory, 'unisane-ops/apps/console/dist/browser', fileName),
+      path.join(currentDirectory, 'browser', fileName),
+    );
     const parentDirectory = path.dirname(currentDirectory);
     if (parentDirectory === currentDirectory) break;
     currentDirectory = parentDirectory;
   }
   return candidates;
-}
-
-function resolvePackageStylesheet(): string | undefined {
-  try {
-    return createRequire(import.meta.url).resolve('@unisane/ui/styles.css');
-  } catch {
-    return undefined;
-  }
 }
 
 async function fileExists(filePath: string): Promise<boolean> {

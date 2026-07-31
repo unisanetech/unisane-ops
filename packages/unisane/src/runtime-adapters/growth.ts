@@ -79,7 +79,10 @@ async function resolveGrowthConnectionsContext(cwd: string, input: unknown): Pro
   if (!connectionId) {
     return {
       environmentId,
-      providers: [{ provider: 'google', available: true }],
+      providers: [
+        { provider: 'google', available: true },
+        { provider: 'meta', available: true },
+      ],
     };
   }
   const reference = loaded.config.connections[connectionId];
@@ -98,6 +101,7 @@ async function resolveGrowthConnectionsContext(cwd: string, input: unknown): Pro
             resources: [],
           },
         },
+        { provider: 'meta', available: true },
       ],
     };
   }
@@ -137,6 +141,7 @@ async function resolveGrowthConnectionsContext(cwd: string, input: unknown): Pro
           credentialState: connection.credentialState,
           grants: connection.grants.map((grant) => ({
             service: grant.service,
+            scopes: grant.scopes,
             state: grant.state,
             observedAt: grant.observedAt,
             ...(grant.expiresAt ? { expiresAt: grant.expiresAt } : {}),
@@ -144,6 +149,7 @@ async function resolveGrowthConnectionsContext(cwd: string, input: unknown): Pro
           resources: connection.resources.map((resource) => ({
             service: resource.service,
             resourceType: resource.resourceType,
+            resourceId: resource.resourceId,
             displayName: resource.displayName,
             state: resource.state,
             observedAt: resource.observedAt,
@@ -152,6 +158,7 @@ async function resolveGrowthConnectionsContext(cwd: string, input: unknown): Pro
           ...(connection.lastVerifiedAt ? { lastVerifiedAt: connection.lastVerifiedAt } : {}),
         },
       },
+      { provider: 'meta', available: true },
     ],
   };
 }

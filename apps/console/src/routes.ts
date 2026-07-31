@@ -6,6 +6,8 @@ export type ConsoleCapability =
   | 'experiments'
   | 'recommendations';
 
+export type AdvertisingPlatform = 'all' | 'googleAds' | 'metaAds';
+
 export type ConsoleRoute = {
   id: string;
   path: string;
@@ -14,7 +16,18 @@ export type ConsoleRoute = {
   title: string;
   description: string;
   timeAnalysis: boolean;
+  advertisingPlatform?: AdvertisingPlatform;
+  advertisingSection?: AdvertisingSection;
 };
+
+export type AdvertisingSection =
+  | 'overview'
+  | 'campaigns'
+  | 'ad-sets'
+  | 'ads-creatives'
+  | 'conversions'
+  | 'recommendations'
+  | 'change-history';
 
 export type ConsoleNavigationItem = {
   label: string;
@@ -43,6 +56,95 @@ const route = (
   description: string,
   timeAnalysis = false,
 ): ConsoleRoute => ({ id, path, family, label, title, description, timeAnalysis });
+
+const advertisingPlatformPaths: Record<AdvertisingPlatform, string> = {
+  all: 'all',
+  googleAds: 'google',
+  metaAds: 'meta',
+};
+
+const advertisingPlatformLabels: Record<AdvertisingPlatform, string> = {
+  all: 'All advertising',
+  googleAds: 'Google Ads',
+  metaAds: 'Meta Ads',
+};
+
+const advertisingRoute = (
+  platform: AdvertisingPlatform,
+  section: AdvertisingSection,
+  label: string,
+  title: string,
+  description: string,
+  timeAnalysis = true,
+): ConsoleRoute => ({
+  ...route(
+    `advertising.${platform}.${section}`,
+    `/advertising/${advertisingPlatformPaths[platform]}/${section}`,
+    'advertising',
+    label,
+    title,
+    description,
+    timeAnalysis,
+  ),
+  advertisingPlatform: platform,
+  advertisingSection: section,
+});
+
+const advertisingRoutes = (platform: AdvertisingPlatform): readonly ConsoleRoute[] => [
+  advertisingRoute(
+    platform,
+    'overview',
+    'Overview',
+    `${advertisingPlatformLabels[platform]} overview`,
+    'Understand paid performance, current risks, and the next useful action.',
+  ),
+  advertisingRoute(
+    platform,
+    'campaigns',
+    'Campaigns',
+    `${advertisingPlatformLabels[platform]} campaigns`,
+    'Compare delivery, budgets, and outcomes across campaigns.',
+  ),
+  ...(platform === 'metaAds'
+    ? [
+        advertisingRoute(
+          platform,
+          'ad-sets',
+          'Ad sets',
+          'Meta Ads ad sets',
+          'Compare Meta audience, delivery, spend, and outcomes at ad-set level.',
+        ),
+        advertisingRoute(
+          platform,
+          'ads-creatives',
+          'Ads & creatives',
+          'Meta Ads and creatives',
+          'Review Meta ads, creative assets, delivery, and performance evidence.',
+        ),
+      ]
+    : []),
+  advertisingRoute(
+    platform,
+    'conversions',
+    'Conversions',
+    `${advertisingPlatformLabels[platform]} conversions`,
+    'Understand which paid activity is producing provider-attributed outcomes.',
+  ),
+  advertisingRoute(
+    platform,
+    'recommendations',
+    'Recommendations',
+    `${advertisingPlatformLabels[platform]} recommendations`,
+    'Review prioritized improvements with evidence, effort, and risk.',
+  ),
+  advertisingRoute(
+    platform,
+    'change-history',
+    'Change history',
+    `${advertisingPlatformLabels[platform]} change history`,
+    'See the changes that affected paid performance and their outcomes.',
+  ),
+];
 
 export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
   route(
@@ -104,54 +206,12 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'seo',
     'Research',
     'Keyword research',
-    'Find and prioritize keywords using measured demand, markets, intent, questions, competitors, and search-result evidence.',
+    'Find and prioritize keywords using provider-estimated demand, markets, intent, questions, competitors, and search-result evidence.',
     true,
   ),
-  route(
-    'advertising.overview',
-    '/advertising/overview',
-    'advertising',
-    'Overview',
-    'Advertising overview',
-    'Understand paid performance, current risks, and the next useful action.',
-    true,
-  ),
-  route(
-    'advertising.campaigns',
-    '/advertising/campaigns',
-    'advertising',
-    'Campaigns',
-    'Advertising campaigns',
-    'Compare campaign outcomes without exposing raw provider records.',
-    true,
-  ),
-  route(
-    'advertising.conversions',
-    '/advertising/conversions',
-    'advertising',
-    'Conversions',
-    'Advertising conversions',
-    'Understand which paid activity is producing confirmed outcomes.',
-    true,
-  ),
-  route(
-    'advertising.recommendations',
-    '/advertising/recommendations',
-    'advertising',
-    'Recommendations',
-    'Advertising recommendations',
-    'Review prioritized improvements with evidence, effort, and risk.',
-    true,
-  ),
-  route(
-    'advertising.change-history',
-    '/advertising/change-history',
-    'advertising',
-    'Change history',
-    'Advertising change history',
-    'See the changes that affected paid performance and their outcomes.',
-    true,
-  ),
+  ...advertisingRoutes('all'),
+  ...advertisingRoutes('googleAds'),
+  ...advertisingRoutes('metaAds'),
   route(
     'analytics.overview',
     '/analytics/overview',
@@ -176,7 +236,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'analytics',
     'Visitors',
     'Visitors',
-    'Understand who is visiting and how engagement is changing.',
+    'See where measured visitors begin and which landing pages bring them into the site.',
     true,
   ),
   route(
@@ -185,7 +245,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'analytics',
     'Conversions',
     'Analytics conversions',
-    'See which journeys are producing confirmed outcomes.',
+    'See whether measured journeys produce outcomes and repair measurement when they do not.',
     true,
   ),
   route(
@@ -276,7 +336,6 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
 
 export const FAMILY_TABS = Object.freeze({
   seo: CONSOLE_ROUTES.filter((item) => item.family === 'seo'),
-  advertising: CONSOLE_ROUTES.filter((item) => item.family === 'advertising'),
   analytics: CONSOLE_ROUTES.filter((item) => item.family === 'analytics'),
   experiments: CONSOLE_ROUTES.filter((item) => item.family === 'experiments'),
   settings: CONSOLE_ROUTES.filter((item) => item.family === 'settings'),
@@ -294,7 +353,7 @@ export function consoleNavigation(
       label: 'Channels',
       items: [
         { label: 'SEO', path: '/seo/overview', icon: 'seo' },
-        { label: 'Advertising', path: '/advertising/overview', icon: 'advertising' },
+        { label: 'Advertising', path: '/advertising/all/overview', icon: 'advertising' },
         { label: 'Analytics', path: '/analytics/overview', icon: 'analytics' },
         ...(experimentsSelected
           ? [{ label: 'Experiments', path: '/experiments/overview', icon: 'experiments' as const }]
@@ -328,7 +387,7 @@ function connectionRoute(pathname: string): ConsoleRoute | undefined {
     overview: 'Overview',
     access: 'Access',
     resources: 'Resources',
-    'data-sync': 'Data sync',
+    'data-sync': 'Data updates',
     activity: 'Activity',
   };
   return route(
@@ -363,7 +422,38 @@ export function tabsForRoute(routeValue: ConsoleRoute): readonly ConsoleRoute[] 
       .map((tab) => connectionRoute(`/connections/${provider}/${tab}`))
       .filter((item): item is ConsoleRoute => Boolean(item));
   }
+  if (routeValue.family === 'advertising') {
+    return CONSOLE_ROUTES.filter(
+      (item) =>
+        item.family === 'advertising' &&
+        item.advertisingPlatform === routeValue.advertisingPlatform,
+    );
+  }
   return FAMILY_TABS[routeValue.family as keyof typeof FAMILY_TABS] ?? [];
+}
+
+export function advertisingPlatformRoutes(routeValue: ConsoleRoute): readonly ConsoleRoute[] {
+  if (
+    routeValue.family !== 'advertising' ||
+    !routeValue.advertisingPlatform ||
+    !routeValue.advertisingSection
+  ) {
+    return [];
+  }
+  return (['all', 'googleAds', 'metaAds'] as const).map((platform) => {
+    const supportsSection =
+      platform === 'metaAds' ||
+      (routeValue.advertisingSection !== 'ad-sets' &&
+        routeValue.advertisingSection !== 'ads-creatives');
+    const section = supportsSection ? routeValue.advertisingSection! : 'overview';
+    return CONSOLE_ROUTES.find(
+      (item) => item.advertisingPlatform === platform && item.advertisingSection === section,
+    )!;
+  });
+}
+
+export function advertisingPlatformLabel(platform: AdvertisingPlatform): string {
+  return advertisingPlatformLabels[platform];
 }
 
 function humanize(value: string): string {

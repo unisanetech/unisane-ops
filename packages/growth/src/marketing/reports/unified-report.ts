@@ -6,10 +6,8 @@ import {
   auditMarketingTrackingSource,
   type MarketingTrackingAuditCheck,
 } from '../tracking/audit-source.js';
-import {
-  readMarketingProviderReportStatus,
-  type MarketingProviderReportStatus,
-} from './provider-pulls.js';
+import { type MarketingProviderReportStatus } from './provider-pulls.js';
+import { readMarketingStatusProviderFreshness } from './status.js';
 import {
   readMarketingConfirmedConversionStatus,
   type MarketingConfirmedConversionStatus,
@@ -85,7 +83,19 @@ export type MarketingUnifiedReport = {
 };
 
 function summarizeStatuses(statuses: MarketingProviderReportStatus[]): MarketingReportMetrics {
-  return mergeMarketingMetrics(statuses.map((status) => status.metrics));
+  const canonicalMetricsReport: Partial<
+    Record<MarketingReportProvider, MarketingProviderReportStatus['reportType']>
+  > = {
+    googleAds: 'campaign',
+    metaAds: 'campaign',
+    ga4: 'channel',
+    searchConsole: 'queryPage',
+  };
+  return mergeMarketingMetrics(
+    statuses
+      .filter((status) => status.reportType === canonicalMetricsReport[status.provider])
+      .map((status) => status.metrics),
+  );
 }
 
 function sectionFor(
@@ -93,9 +103,12 @@ function sectionFor(
   providers: MarketingReportProvider[],
 ): MarketingUnifiedMetricsSection {
   const sectionStatuses = statuses.filter((status) => providers.includes(status.provider));
+  const observedProviders = providers.filter((provider) =>
+    sectionStatuses.some((status) => status.provider === provider),
+  );
   const metrics = summarizeStatuses(sectionStatuses);
   return {
-    providers,
+    providers: observedProviders,
     statuses: sectionStatuses,
     metrics,
     derived: deriveMarketingMetrics(metrics),
@@ -198,11 +211,11 @@ export async function buildUnifiedMarketingReport(
   const cwd = path.resolve(options.cwd ?? process.cwd());
   const now = options.now ?? new Date();
   const maxAgeDays = options.maxAgeDays ?? 3;
-  const providerReport = readMarketingProviderReportStatus({
+  const providerFreshness = readMarketingStatusProviderFreshness({
     cwd,
     maxAgeDays,
     now,
-  });
+  }).filter((status) => config.providers[status.provider].state === 'connected' || status.exists);
   const confirmedConversionStatus = readMarketingConfirmedConversionStatus({
     cwd,
     maxAgeDays,
@@ -225,10 +238,10 @@ export async function buildUnifiedMarketingReport(
     (check) => check.id.startsWith('conversions.') && check.id.endsWith('.usage'),
   );
   const trackingGaps = auditReport.checks.filter((check) => check.status !== 'pass');
-  const ads = sectionFor(providerReport.providers, ['googleAds', 'metaAds']);
-  const analytics = sectionFor(providerReport.providers, ['ga4']);
-  const seo = sectionFor(providerReport.providers, ['searchConsole']);
-  const conversionSources = providerReportedConversionSources(providerReport.providers);
+  const ads = sectionFor(providerFreshness, ['googleAds', 'metaAds']);
+  const analytics = sectionFor(providerFreshness, ['ga4']);
+  const seo = sectionFor(providerFreshness, ['searchConsole']);
+  const conversionSources = providerReportedConversionSources(providerFreshness);
   const reconciliation = reconcileConversionTruth({
     providerConversions: ads.metrics.conversions,
     providerConversionValue: ads.metrics.conversionValue,
@@ -257,7 +270,10 @@ export async function buildUnifiedMarketingReport(
   };
 
   return {
-    ok: providerReport.ok && auditReport.ok && confirmedConversionStatus.status !== 'error',
+    ok:
+      !providerFreshness.some((status) => status.status === 'error') &&
+      auditReport.ok &&
+      confirmedConversionStatus.status !== 'error',
     cwd,
     generatedAt: now.toISOString(),
     platformId: config.platformId,
@@ -271,12 +287,12 @@ export async function buildUnifiedMarketingReport(
       strategyObjects,
       trackingGaps,
     },
-    providerFreshness: providerReport.providers,
+    providerFreshness,
     confirmedConversionFreshness: confirmedConversionStatus,
     strategyMapFreshness: strategyObjects.freshness,
     nextWorkflowStep: resolveNextWorkflowStep({
       trackingGaps,
-      providerFreshness: providerReport.providers,
+      providerFreshness,
       conversionTruth,
       strategyObjects,
     }),
