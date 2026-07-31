@@ -14,6 +14,15 @@ status: accepted
 
 ## Changelog
 
+- `2026-07-30`: Fixed the W3 presentation implementation boundary after an inline
+  renderer began concentrating shell, routes, styles, and interaction logic. The
+  accepted replacement is a modular React browser app using public `@unisane/ui/*`
+  components, external assets, and a minimal serialized-data boot document; no
+  parallel local component or style foundation is admitted.
+- `2026-07-30`: Made `Focus areas` the default Research view so the console begins with
+  a ranked decision layer while preserving the complete `Keywords` matrix one click
+  away. Restricted Site health to explicit technical discoverability failures; content
+  strategy and research-alignment findings remain in Research and Opportunities.
 - `2026-07-30`: Corrected the W3 Research contract. Human-first presentation now means
   progressive disclosure of the complete decision model, not replacement by capped
   summary cards. Research owns the keyword matrix, clusters, markets, question plan,
@@ -318,9 +327,11 @@ gaining/losing-page preview, and freshness. `Opportunities` owns deterministic r
 work with impact, confidence, effort, evidence, and one action. `Pages` and `Queries`
 own their respective sortable/filterable analysis and focused row drill-down. `Site
 health` owns grouped indexing, crawling/access, sitemap/canonical, structured-data, and
-link/redirect problems. `Research` is the research-led planning workspace and owns the
+link/redirect problems; research-alignment and content-strategy notes never become
+technical health alarms. `Research` is the research-led planning workspace and owns the
 complete country/language-bound keyword matrix, intent clusters, market comparison,
-question/FAQ plan, competitor gaps, and SERP/metadata/page-audit research. Search
+question/FAQ plan, competitor gaps, and SERP/metadata/page-audit research. It opens on
+ranked `Focus areas`, with the complete `Keywords` explorer one click away. Search
 Console owns actual clicks, search views, positions, and visibility and may validate a
 research opportunity without becoming Research's primary data model. The UI uses
 filtering, pagination, summaries, and progressive views to make the complete model

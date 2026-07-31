@@ -23,6 +23,16 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-07-30`: Corrected the W3 UI implementation direction. The console now converges
+  on a modular React browser app with route-owned screens, a minimal external-asset boot
+  shell, and direct public `@unisane/ui/*` component usage. Inline application
+  JavaScript/CSS and page-spanning monolithic renderers are retired patterns, not
+  acceptable shortcuts.
+- `2026-07-30`: Made Research decision-first without reducing its evidence model.
+  `Focus areas` is now the default ranked cluster view; `Keywords` remains the complete
+  filterable, sortable, paginated country/language matrix one click away. Site health
+  now admits only explicit technical discoverability failures, while content strategy
+  and research-alignment findings remain in Research and Opportunities.
 - `2026-07-30`: Corrected the Research product contract after the summary-only slice
   erased the workflow's research-led positioning. `SEO > Research` now preserves the
   complete keyword matrix, intent clusters, market comparisons, FAQ/question plan,
@@ -49,7 +59,7 @@ onboarding lifecycle while preserving the established Ops package boundaries.
   installed exact `growth.console` contribution, and the retired Growth console owners
   and nested build/serve commands are absent.
 - `2026-07-30`: Admitted P120-W3 under Skopos task `T-eede3498` with active workpack
-  `docs/work/tasks/P120-W3.md` and paired observe-mode convergence contract. The frozen
+  `docs/work/archive/tasks/P120-W3.md` and paired blocking convergence contract. The frozen
   cut makes the optional console app the command and presentation owner, moves only
   headless state/actions to `@unisane/growth/console`, and deletes the old command,
   embedded app, and route catalog slice by slice.
@@ -507,13 +517,15 @@ Research is the primary planning workspace for discovering and prioritizing what
 project should target next. It is not a small Search Console companion and must remain
 useful before the site has meaningful organic visibility.
 
-The default `Keywords` view preserves the complete researched keyword matrix rather
-than a capped card sample. It provides search, market and cluster filters, deterministic
-sorting, pagination, total measured demand, best market, market coverage, competition,
-and per-market demand/competition columns. Additional progressive views own:
+The default `Focus areas` view ranks intent clusters so an ordinary user can decide
+where to investigate first. It shows keyword count, provider-estimated demand, best
+market, advertiser competition, leading keywords, and recommended use. The progressive
+`Keywords` view preserves the complete researched keyword matrix rather than a capped
+card sample. It provides search, market and cluster filters, deterministic sorting,
+pagination, total provider-estimated demand, best market, market coverage, advertiser
+competition, and per-market demand/competition columns. Additional progressive views
+own:
 
-- `Clusters`: grouped user intent, keyword count, measured demand, best market,
-  competition, leading keywords, and recommended use
 - `Markets`: region/language comparison and each market's leading keywords
 - `Questions`: the full FAQ/question plan with target page, priority, demand, markets,
   proof status, and answer intent

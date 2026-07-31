@@ -15,6 +15,15 @@ Canonical product, package, repository, command, and extension boundaries for Un
 
 ## Changelog
 
+- `2026-07-30`: Defined the console presentation implementation boundary: a minimal
+  server-rendered boot document, external browser assets, route-owned React screens,
+  and first-party flat `@unisane/ui/*` components and defaults. Inline application
+  runtimes, embedded style systems, monolithic renderers, and duplicate local component
+  foundations are prohibited.
+- `2026-07-30`: Clarified the SEO decision hierarchy: Research opens on ranked focus
+  areas while retaining the complete keyword matrix as a progressive explorer, and
+  Site health accepts only explicit technical discoverability failures rather than
+  content-strategy or research-alignment notes.
 - `2026-07-30`: Landed the P120-W1 architecture: one Ops adoption lifecycle, canonical
   Growth intent, shared readiness/action contracts, one Provider Google connection
   lifecycle, one-shot migration with retired-schema runtime rejection, and no replaced
@@ -253,11 +262,24 @@ moves to `Analytics > Tracking health` and the Google connection; recommendation
 become contextual priorities; receipts become Activity; Schedule becomes
 `Settings > Automations`. The old routes are deleted in the console cut.
 
+The console application is a real browser component application, not an HTML string
+application. Its server-side document owner emits only safe serialized boot data,
+external browser asset references, and a loading fallback. Route-owned React screens,
+shell, routing, shared interaction primitives, and feature tables remain separate
+source owners. Presentation uses flat public `@unisane/ui/*` imports and component
+defaults; app-local classes may compose layout but must not recreate or broadly
+override typography, controls, dialogs, navigation, cards, tokens, or interaction
+states. Inline runtime JavaScript, embedded application CSS, giant template renderers,
+and a second app-local design system are forbidden.
+
 SEO uses exactly `Overview`, `Opportunities`, `Pages`, `Queries`, `Site health`, and
 `Research`. Overview owns search-performance summary and trend; Opportunities owns
 ranked actionable work; Pages and Queries own their respective analysis; Site health
-owns discoverability/indexing correction; Research owns explicitly estimated demand and
-content exploration. No duplicate `Search performance` or `Keywords` tab survives.
+owns technical discoverability/indexing correction; Research owns explicitly estimated
+demand and content exploration. Research opens on ranked focus areas while the complete
+keyword matrix remains available as its detailed explorer. No content-strategy finding
+is promoted into Site health, and no duplicate `Search performance` or top-level
+`Keywords` tab survives.
 
 Connections uses one card per provider. Google contains independently truthful Search
 Console, Analytics, Tag Manager, and Ads service rows under one account lifecycle.
