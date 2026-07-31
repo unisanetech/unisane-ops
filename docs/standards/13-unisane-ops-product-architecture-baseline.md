@@ -150,7 +150,8 @@ subprocess fallback. Devtools publishes only `unisane-devtools`.
 The P120-W1 Ops adoption, Growth config, Google connection, and aggregate readiness
 lifecycle is current executable state. P120-W2 instrumentation reconciliation, P120-W3
 console separation, and P120-W4 team/CI credential lifecycle remain admitted target
-state and must not be taught as implemented before their workpacks close.
+state and must not be taught as implemented before their owning Skopos Tasks close
+with direct acceptance Evidence.
 
 This document owns:
 
@@ -318,7 +319,7 @@ screen readers.
 
 > Target steady state: the proposed P121 sequence owns implementation. MCP servers,
 > AI-host plugins, hosted APIs, managed OAuth, and SaaS behavior are not current product
-> truth until their bounded workpacks close.
+> truth until their bounded Skopos Tasks close with direct acceptance Evidence.
 
 Packages are the reusable product foundation, not the only delivery experience. Unisane
 Ops uses one headless engine and one versioned, transport-neutral action contract across

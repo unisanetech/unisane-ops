@@ -38,8 +38,8 @@ P120 remains responsible for clean Growth onboarding, provider connections, deri
 readiness, instrumentation reconciliation, and the human-first console. P121 must consume
 those results and must not redesign or duplicate them.
 
-No P121 execution workpack exists until its bounded implementation begins. The proposed
-workpack sequence below is planning authority, not evidence of implementation.
+No P121 Skopos Task exists until bounded implementation begins. The proposed Task
+sequence below is planning direction, not evidence of implementation.
 
 ## Product Outcome
 
@@ -235,7 +235,8 @@ The initial tool inventory is designed by user goal:
 | change safety      | plan, inspect approval requirements, apply an approved plan, prepare rollback   |
 | activity/jobs      | inspect progress, changes, receipts, schedules, and failures                    |
 
-Exact public tool ids are frozen in the first MCP workpack after scenario evaluation.
+Exact public tool ids are frozen by the first MCP Task Decision after scenario
+evaluation.
 There must not be one generic `run_command` tool and there must not be a tool for every
 CLI spelling.
 
@@ -550,10 +551,10 @@ arbitrary success thresholds in planning.
 
 When P121 implementation begins:
 
-1. create only the active bounded workpack and convergence contract
+1. start one bounded Skopos Task with explicit acceptance, ownership, risk, and Guards
 2. keep this plan at strategy level
-3. update the finding status and target workpack
+3. update the Finding and link the owning Task
 4. update MCP security and command workflow docs when executable behavior changes
 5. update package READMEs and generated references in the same cut
-6. archive completed workpacks and remove dead planning duplication
+6. let Skopos archive completed Task records and remove dead planning duplication
 7. never teach target installation or tool ids before implementation proof

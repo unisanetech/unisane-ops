@@ -58,8 +58,8 @@ onboarding lifecycle while preserving the established Ops package boundaries.
   `@unisane/growth/console` owns the headless state boundary, CLI core lazily loads the
   installed exact `growth.console` contribution, and the retired Growth console owners
   and nested build/serve commands are absent.
-- `2026-07-30`: Admitted P120-W3 under Skopos task `T-eede3498` with active workpack
-  `docs/work/archive/tasks/P120-W3.md` and paired blocking convergence contract. The frozen
+- `2026-07-30`: Admitted P120-W3 under Skopos Task `T-eede3498`; its historical
+  execution record is `docs/work/archive/tasks/P120-W3.md`. The frozen
   cut makes the optional console app the command and presentation owner, moves only
   headless state/actions to `@unisane/growth/console`, and deletes the old command,
   embedded app, and route catalog slice by slice.
@@ -103,7 +103,8 @@ control-plane safety.
 
 The W1 lifecycle and configuration described here are executable current state and are
 taught by the current guides and pack manifests. W2-W4 instrumentation, console, hosted,
-team, and automation behavior remains target state until its owning workpack closes.
+team, and automation behavior remains target state until its owning Skopos Task closes
+with direct acceptance Evidence.
 
 ## Current Console Audit
 
@@ -902,7 +903,7 @@ Deliver the public replacement as one coordinated major-release cut:
 8. publish the versioned migration guide and reject retired schemas in normal loading
 9. prove all scenario fixtures and repository-wide zero residue
 
-The replacement and deletion happen in the same workpack. A partially migrated command
+The replacement and deletion happen in the same bounded Task. A partially migrated command
 tree is not a shippable checkpoint.
 
 ### P120-W2: instrumentation reconciliation and event debugger
@@ -956,8 +957,9 @@ This workstream may extend checks but must use the W1 readiness and action contr
 15. keep `unisane growth console` as the only visual entrypoint
 
 No second API, cache, readiness computation, or action implementation is admitted for
-the console. W3 requires its own paired convergence contract before code changes begin;
-P120-W1 does not retain or delete presentation on W3's behalf.
+the console. W3 required one bounded Task with explicit replacement, deletion,
+acceptance, and Guard evidence; P120-W1 did not retain or delete presentation on W3's
+behalf.
 
 ### P120-W4: team, CI, and credential lifecycle
 
@@ -1122,7 +1124,7 @@ fallback to accommodate it.
 
 This plan is complete only when:
 
-1. P120 workpacks are closed and archived
+1. P120 implementation Tasks are closed and their generated records archived
 2. the target lifecycle works in plain and Framework fixture projects
 3. current command docs teach only the replacement
 4. old schemas migrate through the one-shot migrator but are rejected by runtime loading
@@ -1132,9 +1134,9 @@ This plan is complete only when:
    remains
 7. package versions, migration notes, and release coordination are recorded
 8. the linked finding is closed and removed from the active registry
-9. P120-W3's paired convergence contract proves the final navigation, connection model,
-   page hierarchy, copy vocabulary, progressive disclosure, accessibility, and deletion
-   of all old routes/embedded presentation
+9. P120-W3's closed Task Evidence proves the final navigation, connection model, page
+   hierarchy, copy vocabulary, progressive disclosure, accessibility, and deletion of
+   all old routes/embedded presentation
 10. the normal console contains no parallel expert mode and no ordinary page exposes
     duplicate, irrelevant, misleading, unactionable, or machine-oriented control-plane
     presentation

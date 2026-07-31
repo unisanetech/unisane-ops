@@ -36,7 +36,7 @@ web projects.
   `unisane ops init`, never bare `unisane init`; `create-unisane` remains the only
   Framework application scaffolder.
 - `2026-07-29`: Routed Growth onboarding and developer-experience convergence to the
-  dedicated P120 plan, decision, MUST finding, and active replacement workpack. P120
+  dedicated P120 Plan, Decision, MUST Finding, and active replacement Task. P120
   preserves the established package boundaries and requires a major-release clean cut
   with no command/config/auth/token/readiness/console fallback.
 - `2026-07-25`: Closed and archived P116-W21 with the Devtools-to-Ops
@@ -219,7 +219,7 @@ The authority order is:
    that are actually available in the current repository.
 
 Everything under **Target** remains future-state unless the current checkpoint or an
-archived workpack proves it. The canonical CLI, pack protocol, root config, Cloud DNS,
+archived Task Evidence proves it. The canonical CLI, pack protocol, root config, Cloud DNS,
 Cloudflare connection/inventory/readiness/environment, and Queue/Worker/Cron plan/apply
 are available. Resource apply is limited to local, non-production, single-developer
 execution until a durable host state adapter lands. Growth, wider providers, durable
@@ -229,7 +229,7 @@ instruct a user to run an unproved command.
 P120 owns the target Growth onboarding and developer-experience refactor. Its
 `ops init` plus root `add`/`connect`/`check` lifecycle, canonical Growth config
 contribution, unified provider connection, derived readiness, and console separation
-are not current command truth until the linked workpacks close. P120 must replace and
+are not current command truth until the linked Tasks close. P120 must replace and
 delete the old public surfaces in one coordinated major-release workstream; this
 umbrella plan does not admit wrappers, aliases, dual loaders, or cleanup-later staging.
 Inside that workstream, every bounded slice deletes its retired owner/export/route
@@ -241,7 +241,7 @@ The dedicated P121 strategy owns future transport-neutral actions, local/remote 
 AI-host distribution, managed hosting, team operations, and commercial/enterprise
 delivery. P121 consumes the P120 onboarding, connection, readiness, and console results;
 it does not widen P120 or make proposed action ids, packages, tools, plugins, APIs, or
-hosted behavior current truth. Its workpacks are opened only when bounded implementation
+hosted behavior current truth. Its Tasks are opened only when bounded implementation
 begins.
 
 This plan supersedes older plans only for:
@@ -300,7 +300,7 @@ The program is complete when:
     are deleted
 11. public migrations follow semver and ship with migration notes
 12. no internal compatibility path or duplicate command owner remains after its
-    replacement workpack closes
+    replacement Task closes
 
 ## Non-Goals
 
@@ -611,7 +611,7 @@ Default choices:
 ### Package-budget admission record
 
 Every proposed package not already approved in the target package table must add this
-record to its admitting decision or workpack before source is created:
+record to its admitting Decision or Task before source is created:
 
 | Field                        | Required evidence                                                                    |
 | ---------------------------- | ------------------------------------------------------------------------------------ |
@@ -823,7 +823,7 @@ such as `@unisane/storage`, `@unisane/storage-s3`, `@unisane/email-ses`,
 ports or business capabilities. Ops provider packages administer remote resources and
 accounts; they do not absorb Framework modules or runtime adapters.
 
-An extraction workpack must classify each same-vendor surface as runtime consumption,
+An extraction Task must classify each same-vendor surface as runtime consumption,
 remote administration, or a deliberately shared provider-neutral contract before moving
 it. Moving an Ops command must not move the Framework package it happens to operate.
 
@@ -856,7 +856,7 @@ Initial family contents:
 
 Deferred candidate lanes remain inside the same provider-family boundary: R2, KV,
 Turnstile, and broader Cloudflare security posture. They are not promised initial
-capabilities and enter a workpack only after capability admission, contract ownership,
+capabilities and enter a Task only after capability admission, contract ownership,
 provider-access, and safety evidence. They do not justify separate packages.
 
 ### `@unisane/provider-google`
@@ -928,7 +928,7 @@ export default defineConfig({
 ```
 
 The function names above describe the target authoring contract and are not current API
-claims. The owning implementation workpack must settle their exact import coordinates,
+claims. The owning implementation Task must settle their exact import coordinates,
 schemas, and package exports before documenting them as runnable.
 
 Rules:
@@ -1247,7 +1247,7 @@ Repository-shaped staging, history filtering, commit/provenance maps, remote vis
 authority cutover, branch protection, CODEOWNERS, cross-repository dependency policy, and
 umbrella retirement are owned by
 `unisane-ecosystem-repository-separation-and-git-governance-plan.md`. This plan owns the
-Ops package contents and proof that must be ready before the repository cutover workpack
+Ops package contents and proof that must be ready before the repository cutover Task
 can be admitted.
 
 ## Security And Mutation Policy
@@ -1289,32 +1289,32 @@ reporting, SEO, tracking, or Web Runtime capabilities.
 
 This is a migration map, not a claim that target packages exist.
 
-| Current source/package                                                                                                                                                                                     | Current responsibility                                                       | Target                                                                                                                                                                 |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `unisane-tools/packages/unisane`                                                                                                                                                                           | `unisane` wrapper binary                                                     | become the canonical lightweight `unisane` CLI                                                                                                                         |
-| `unisane-tools/packages/devtools` binary map                                                                                                                                                               | publishes both `unisane` and `unisane-devtools`                              | retain only the Framework-owned internal/devtools entry after canonical CLI cutover                                                                                    |
-| `unisane-tools/packages/unisane` dependency on `@unisane/devtools`                                                                                                                                         | launches the full Devtools CLI                                               | replace with Ops engine and explicit pack dependencies/loaders                                                                                                         |
-| `devtools/src/control-plane/**`                                                                                                                                                                            | artifact, plan, receipt, drift, policy primitives                            | `@unisane/ops-engine` after characterization                                                                                                                           |
-| `devtools/src/commands/aws/**`                                                                                                                                                                             | AWS auth/inventory/plan/apply                                                | `@unisane/provider-aws` plus Cloud capability orchestration                                                                                                            |
-| `devtools/src/commands/cloudflare/**`                                                                                                                                                                      | Cloudflare auth/inventory/plan/apply                                         | `@unisane/provider-cloudflare` plus Cloud capability orchestration                                                                                                     |
-| `devtools/src/commands/google/**`, `commands/gtm/**`, and Google provider clients under marketing/SEO                                                                                                      | Google auth, GTM, GA4, Search Console, Ads                                   | `@unisane/provider-google` plus Growth workflows                                                                                                                       |
-| `devtools/src/marketing-control-plane/**`, `seo-research/**`, `commands/marketing/**`, `commands/seo/**`, `commands/ads/**`, `commands/analytics/**`                                                       | marketing, SEO, ads, analytics, reports                                      | `@unisane/growth` headless workflows and state                                                                                                                         |
-| `devtools/src/marketing-console/**`                                                                                                                                                                        | marketing presentation and mixed console state                               | headless state to `@unisane/growth`; optional UI to `unisane-ops/apps/console`, otherwise retire                                                                       |
-| Framework `create`, `configure`, composition, `add`, `app`, feature-spec, `generate`, routes, SDK, database, migrations, `dev`, `inspect`, LLM, workpack, ownership, verify, upgrade, and release commands | Framework assembly and maintenance                                           | remain Framework-owned in `@unisane/devtools`/`create-unisane`; Phase 0 classifies each as Framework root/`app` contribution or maintainer-only Devtools               |
-| current `commands/ui/**` and UI-related generators                                                                                                                                                         | mixed Framework starter UI composition and reusable UI registry/docs tooling | Framework app composition stays in Devtools/Framework pack; genuinely reusable UI registry/docs tooling moves to `unisane-ui` only after owner and compatibility proof |
-| current `commands/brand/**`                                                                                                                                                                                | mixed brand/project operations                                               | site content/publishing/deployment moves to `unisane-site`; Framework starter/app brand config remains Framework; Growth analytics belongs to Growth                   |
-| current `commands/env/**`                                                                                                                                                                                  | Framework and provider environment guidance                                  | Framework compiled/runtime env projection remains Framework; generic Ops connection/secret-reference guidance moves only with an admitted Ops capability               |
-| current `commands/billing/**` and billing provider sync/runtime state                                                                                                                                      | Framework business/runtime billing operations                                | remain Framework-owned unless a separately admitted Ops contract proves a provider-account operation; shared vendor naming alone does not move it                      |
-| `@unisane/web-tracking`                                                                                                                                                                                    | browser tracking, consent, attribution, React/Next adapters                  | `@unisane/web-runtime/tracking` subpaths                                                                                                                               |
-| `@unisane/web-conversions`                                                                                                                                                                                 | provider-neutral server conversion runtime                                   | `@unisane/web-runtime/conversions`                                                                                                                                     |
-| `@unisane/web-conversions-google-ads`                                                                                                                                                                      | Google Ads conversion delivery                                               | `@unisane/web-runtime/conversions/google-ads`                                                                                                                          |
-| `@unisane/web-conversions-meta-capi`                                                                                                                                                                       | Meta CAPI delivery                                                           | `@unisane/web-runtime/conversions/meta`                                                                                                                                |
-| `@unisane/web-seo`                                                                                                                                                                                         | metadata, canonical URL, robots, sitemap, JSON-LD                            | `@unisane/web-runtime/seo` and `/seo/next`                                                                                                                             |
-| future `@unisane/public-urls` / persistent public URL lane                                                                                                                                                 | slug history, redirects, aliases, canonical identity                         | remain a Framework capability; never migrate into Web Runtime SEO                                                                                                      |
-| `@unisane/tag-manager-google`                                                                                                                                                                              | Google tag-manager integration                                               | split by behavior: management in Google provider; application runtime helpers in Web Runtime tracking                                                                  |
-| Framework runtime/business provider packages (`storage*`, `email-ses`, `queue-cloudflare`, `scheduler-cloudflare`, Framework `analytics`)                                                                  | application runtime ports/adapters or business capabilities                  | remain Framework-owned; Ops provider packages administer remote state and do not absorb them                                                                           |
-| current Meta control-plane/reporting code                                                                                                                                                                  | Meta management and evidence                                                 | migrate transport/auth ownership to admitted `@unisane/provider-meta`; retain Devtools command composition only until CLI-host migration                               |
-| `config/aws.ops.ts`, Cloudflare ops config, marketing config                                                                                                                                               | parallel config authorities                                                  | migrate into `unisane.config.ts` Ops export under a public schema migration                                                                                            |
+| Current source/package                                                                                                                                                                      | Current responsibility                                                       | Target                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `unisane-tools/packages/unisane`                                                                                                                                                            | `unisane` wrapper binary                                                     | become the canonical lightweight `unisane` CLI                                                                                                                         |
+| `unisane-tools/packages/devtools` binary map                                                                                                                                                | publishes both `unisane` and `unisane-devtools`                              | retain only the Framework-owned internal/devtools entry after canonical CLI cutover                                                                                    |
+| `unisane-tools/packages/unisane` dependency on `@unisane/devtools`                                                                                                                          | launches the full Devtools CLI                                               | replace with Ops engine and explicit pack dependencies/loaders                                                                                                         |
+| `devtools/src/control-plane/**`                                                                                                                                                             | artifact, plan, receipt, drift, policy primitives                            | `@unisane/ops-engine` after characterization                                                                                                                           |
+| `devtools/src/commands/aws/**`                                                                                                                                                              | AWS auth/inventory/plan/apply                                                | `@unisane/provider-aws` plus Cloud capability orchestration                                                                                                            |
+| `devtools/src/commands/cloudflare/**`                                                                                                                                                       | Cloudflare auth/inventory/plan/apply                                         | `@unisane/provider-cloudflare` plus Cloud capability orchestration                                                                                                     |
+| `devtools/src/commands/google/**`, `commands/gtm/**`, and Google provider clients under marketing/SEO                                                                                       | Google auth, GTM, GA4, Search Console, Ads                                   | `@unisane/provider-google` plus Growth workflows                                                                                                                       |
+| `devtools/src/marketing-control-plane/**`, `seo-research/**`, `commands/marketing/**`, `commands/seo/**`, `commands/ads/**`, `commands/analytics/**`                                        | marketing, SEO, ads, analytics, reports                                      | `@unisane/growth` headless workflows and state                                                                                                                         |
+| `devtools/src/marketing-console/**`                                                                                                                                                         | marketing presentation and mixed console state                               | headless state to `@unisane/growth`; optional UI to `unisane-ops/apps/console`, otherwise retire                                                                       |
+| Framework `create`, `configure`, composition, `add`, `app`, feature-spec, `generate`, routes, SDK, database, migrations, `dev`, `inspect`, ownership, verify, upgrade, and release commands | Framework assembly and maintenance                                           | remain Framework-owned in `@unisane/devtools`/`create-unisane`; Phase 0 classifies each as Framework root/`app` contribution or maintainer-only Devtools               |
+| current `commands/ui/**` and UI-related generators                                                                                                                                          | mixed Framework starter UI composition and reusable UI registry/docs tooling | Framework app composition stays in Devtools/Framework pack; genuinely reusable UI registry/docs tooling moves to `unisane-ui` only after owner and compatibility proof |
+| current `commands/brand/**`                                                                                                                                                                 | mixed brand/project operations                                               | site content/publishing/deployment moves to `unisane-site`; Framework starter/app brand config remains Framework; Growth analytics belongs to Growth                   |
+| current `commands/env/**`                                                                                                                                                                   | Framework and provider environment guidance                                  | Framework compiled/runtime env projection remains Framework; generic Ops connection/secret-reference guidance moves only with an admitted Ops capability               |
+| current `commands/billing/**` and billing provider sync/runtime state                                                                                                                       | Framework business/runtime billing operations                                | remain Framework-owned unless a separately admitted Ops contract proves a provider-account operation; shared vendor naming alone does not move it                      |
+| `@unisane/web-tracking`                                                                                                                                                                     | browser tracking, consent, attribution, React/Next adapters                  | `@unisane/web-runtime/tracking` subpaths                                                                                                                               |
+| `@unisane/web-conversions`                                                                                                                                                                  | provider-neutral server conversion runtime                                   | `@unisane/web-runtime/conversions`                                                                                                                                     |
+| `@unisane/web-conversions-google-ads`                                                                                                                                                       | Google Ads conversion delivery                                               | `@unisane/web-runtime/conversions/google-ads`                                                                                                                          |
+| `@unisane/web-conversions-meta-capi`                                                                                                                                                        | Meta CAPI delivery                                                           | `@unisane/web-runtime/conversions/meta`                                                                                                                                |
+| `@unisane/web-seo`                                                                                                                                                                          | metadata, canonical URL, robots, sitemap, JSON-LD                            | `@unisane/web-runtime/seo` and `/seo/next`                                                                                                                             |
+| future `@unisane/public-urls` / persistent public URL lane                                                                                                                                  | slug history, redirects, aliases, canonical identity                         | remain a Framework capability; never migrate into Web Runtime SEO                                                                                                      |
+| `@unisane/tag-manager-google`                                                                                                                                                               | Google tag-manager integration                                               | split by behavior: management in Google provider; application runtime helpers in Web Runtime tracking                                                                  |
+| Framework runtime/business provider packages (`storage*`, `email-ses`, `queue-cloudflare`, `scheduler-cloudflare`, Framework `analytics`)                                                   | application runtime ports/adapters or business capabilities                  | remain Framework-owned; Ops provider packages administer remote state and do not absorb them                                                                           |
+| current Meta control-plane/reporting code                                                                                                                                                   | Meta management and evidence                                                 | migrate transport/auth ownership to admitted `@unisane/provider-meta`; retain Devtools command composition only until CLI-host migration                               |
+| `config/aws.ops.ts`, Cloudflare ops config, marketing config                                                                                                                                | parallel config authorities                                                  | migrate into `unisane.config.ts` Ops export under a public schema migration                                                                                            |
 
 Before moving any row, inventory its exports, tests, commands, artifacts, consumers,
 secrets, side effects, and public compatibility obligations.
@@ -1332,7 +1332,7 @@ Deliverables:
 - produce a reviewed command-disposition manifest for every current Devtools and wrapper
   command, including create/composition, `sync`, `dev`, `build`, `app`, codegen,
   routes/SDK, database/migrations, billing, brand, environment, UI, provider, growth,
-  LLM/workpack/governance, verification, and release commands
+  Skopos integration, governance, verification, and release commands
 - for each command record its current path/profile/effect/public compatibility, canonical
   stable id, and exactly one target: CLI core, an Ops suite/provider pack, Framework
   integration/root/`app`, maintainer-only Devtools, UI, Site, or explicit semver
@@ -1348,7 +1348,7 @@ Exit:
 - target and current commands are clearly separated
 - every current command has one reviewed disposition; unclassified commands block binary
   or registrar removal
-- no implementation workpack has silently started
+- no implementation Task has silently started
 
 ### Phase 1: Characterization And Effect Classification
 
@@ -1540,7 +1540,7 @@ Deliverables:
 
 Exit:
 
-- Ops is eligible for a bounded repository-cutover workpack under the repository
+- Ops is eligible for a bounded repository-cutover Task under the repository
   separation plan
 - declared exports, types, pack/API/config versions, and package contents pass
 - no private platform code, secret, account data, local artifact, or generated cache is
@@ -1572,14 +1572,14 @@ engine, provider safety, compatibility, and deletion gates do not parallelize cl
 The estimate expands when provider access/app review is delayed, current behavior lacks
 fixtures, public semver windows require dual releases, security/provenance audits find
 unknown data, or Meta management is admitted instead of retired. It contracts when
-characterization proves capabilities can be retired. Each admitted workpack must replace
+characterization proves capabilities can be retired. Each admitted Task must replace
 its phase range with evidence-based scope and update this table when the total forecast
 changes materially. Repository separation outside the Ops readiness handoff is estimated
 and governed independently by the ecosystem Git plan.
 
-## Workpack Admission And Retirement
+## Task Admission And Retirement
 
-This strategy does not itself open an execution workpack.
+This strategy does not itself start an execution Task.
 
 Before the first implementation slice:
 
@@ -1588,12 +1588,13 @@ Before the first implementation slice:
    old paths to delete
 3. capture baseline command/API/artifact/security evidence
 4. classify blockers before editing
-5. create a convergence contract when the slice replaces an existing path
+5. declare retired-pattern Guards, replacement acceptance, and direct Evidence when the
+   slice replaces an existing path
 6. name the required docs, generators, compatibility notes, and closure checks
 
 During implementation:
 
-- keep one bounded migration owner per workpack
+- keep one bounded migration owner per Task
 - do not create destination skeletons without moving real behavior
 - do not copy a capability and leave two active owners
 - keep public compatibility only at published boundaries with version, owner, removal
@@ -1653,6 +1654,7 @@ Every implementation phase additionally proves, proportionate to scope:
 - secret, license, package-content, and provenance audit before public release
 
 Program closure requires all Success Criteria to pass, the linked finding to be marked
-`done` with proof, temporary workpacks to be archived, superseded plans to be archived or
+complete with Evidence, generated Task records to be archived, superseded Plans to be
+archived or
 compacted, durable rules to remain in SSOT, and target commands to be promoted into the
 live command workflow only after delivery.
