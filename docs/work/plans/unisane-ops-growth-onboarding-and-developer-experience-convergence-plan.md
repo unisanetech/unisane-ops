@@ -23,6 +23,14 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-07-31`: Completed the first bounded P120-W2 audit-only slice. The exact offline
+  `growth marketing audit` command now emits one normalized source/manifest/observation
+  result for CLI JSON, agents, and `Analytics > Tracking health`; it detects Web
+  Runtime, GTM, direct gtag, Meta Pixel, server transports, and conflicting browser
+  emitters, and reconciles expected events/conversions with optional versioned browser
+  and server observations for duplicate ids, consent suppression, payload/parameter
+  failures, missing evidence, and environment drift. The slice cannot install scripts,
+  publish GTM, or mutate providers. W2 remains active for later installation adapters.
 - `2026-07-30`: Corrected the W3 UI implementation direction. The console now converges
   on a modular React browser app with route-owned screens, a minimal external-asset boot
   shell, and direct public `@unisane/ui/*` component usage. Inline application
@@ -907,6 +915,9 @@ The replacement and deletion happen in the same bounded Task. A partially migrat
 tree is not a shippable checkpoint.
 
 ### P120-W2: instrumentation reconciliation and event debugger
+
+Status: audit-only reconciliation slice completed on `2026-07-31`; framework- and
+stack-neutral installation adapters remain pending.
 
 After W1 establishes one lifecycle:
 

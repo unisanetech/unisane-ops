@@ -15,6 +15,11 @@ status: in-progress
 
 ## Changelog
 
+- `2026-07-31`: Closed the first bounded P120-W2 audit-only gap. One normalized offline
+  audit now drives CLI JSON, agents, and Analytics Tracking health across source,
+  manifest, and optional observed browser/server evidence, including emitter conflicts,
+  duplicates, consent suppression, payload/parameter failures, missing signals, and
+  environment drift. Installation adapters remain active W2 scope.
 - `2026-07-30`: Corrected the P120-W3 SEO Research slice after product review exposed
   semantic loss: the first human-first projection retained data in state but hid most
   of the keyword, market, cluster, question, competitor, and SERP decision model. The
@@ -132,6 +137,9 @@ Receipts expose machine artifacts, and Schedule omits expected automation contro
 
 ## Verification
 
+- P120-W2 audit-only source/observation reconciliation tests, exact offline pack-command
+  execution against True Resume, and live Tracking health rendering without browser
+  errors
 - P120-W1 completion evidence is archived in `docs/work/archive/tasks/P120-W1.md`.
 - per-slice Task admission, impact, Evidence, and closure through Skopos
 - focused package behavior and type proof selected by Skopos for each implementation cut
