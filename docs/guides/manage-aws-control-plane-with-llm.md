@@ -17,6 +17,8 @@ Use this guide when changing or operating Unisane-managed AWS resources through
 
 ## Changelog
 
+- `2026-07-31`: Replaced manual Task verification with atomic `skopos finish`
+  closure.
 - `2026-07-27`: Removed the unreleased Devtools AWS facade and root alias;
   `unisane provider aws ...` is now the only command route.
 - `2026-07-25`: P116-W10 moved all proven AWS behavior, AWS SDK dependencies, and
@@ -244,7 +246,7 @@ pnpm --filter @unisane/devtools exec vitest run src/commands/aws/__tests__
 pnpm --filter @unisane/devtools check-types
 pnpm ops:architecture:check
 pnpm docs:core:check
-skopos task verify <task-id> . --actor <id>
 pnpm architecture:index:check
 pnpm -w typecheck
+skopos finish <task-id> . --actor <id>
 ```
