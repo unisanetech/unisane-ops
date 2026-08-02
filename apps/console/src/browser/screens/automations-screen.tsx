@@ -2,11 +2,17 @@ import { ActionCluster } from '@unisane/ui/action-cluster';
 import { Badge } from '@unisane/ui/badge';
 import { Button } from '@unisane/ui/button';
 import { Card } from '@unisane/ui/card';
-import { CardGrid } from '@unisane/ui/card-grid';
 import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../contracts.js';
 import { formatDateTime, humanize, statusColor } from '../lib/format.js';
-import { ContentSection, EmptyState, MetricCard, MetricGrid, Summary } from '../shared/content.js';
+import {
+  ConsoleCardGrid,
+  ContentSection,
+  DataState,
+  MetricCard,
+  MetricGrid,
+  Summary,
+} from '../shared/content.js';
 
 export function AutomationsScreen({ state, openOverlay, navigate }: ConsoleScreenProps) {
   const automations = state.automations;
@@ -37,7 +43,7 @@ export function AutomationsScreen({ state, openOverlay, navigate }: ConsoleScree
         description="Configure only the provider updates this project actually uses."
       >
         {automations.items.length ? (
-          <CardGrid minItemWidth="md">
+          <ConsoleCardGrid minItemWidth="md">
             {automations.items.map((item) => (
               <Card variant="outlined" padding="md" key={item.id}>
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -113,9 +119,10 @@ export function AutomationsScreen({ state, openOverlay, navigate }: ConsoleScree
                 </details>
               </Card>
             ))}
-          </CardGrid>
+          </ConsoleCardGrid>
         ) : (
-          <EmptyState
+          <DataState
+            kind="unavailable"
             title="No reporting automation is ready to configure."
             description="Create a reporting plan after connecting the provider data this project should keep current."
             actionLabel="Review connections"

@@ -1,9 +1,8 @@
 import { Card } from '@unisane/ui/card';
-import { CardGrid } from '@unisane/ui/card-grid';
 import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../../contracts.js';
 import { formatNumber } from '../../lib/format.js';
-import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
+import { ConsoleCardGrid, ContentSection, DataState, Summary } from '../../shared/content.js';
 import { formatMoney, SourceSummaries } from '../channels/shared.js';
 import { advertisingConnectionPath, advertisingView } from './view.js';
 
@@ -32,7 +31,7 @@ export function AdvertisingConversions({ state, route, navigate }: ConsoleScreen
       />
       {advertising.conversions.length && measuredOutcomeCount === 0 ? (
         <ContentSection>
-          <EmptyState
+          <DataState
             title="No paid conversion outcome is recorded."
             description="Review tracking health before increasing spend. This preserves the difference between a configured action, a measured zero, and an outcome count that was not included."
             actionLabel="Review tracking health"
@@ -45,7 +44,7 @@ export function AdvertisingConversions({ state, route, navigate }: ConsoleScreen
           title="Conversion actions"
           description="Each action shows whether this report includes measured outcomes."
         >
-          <CardGrid minItemWidth="md">
+          <ConsoleCardGrid minItemWidth="md">
             {advertising.conversions.map((conversion) => (
               <Card variant="outlined" padding="sm" key={conversion.id}>
                 <Typography variant="cardTitle">{conversion.name}</Typography>
@@ -75,11 +74,12 @@ export function AdvertisingConversions({ state, route, navigate }: ConsoleScreen
                 </dl>
               </Card>
             ))}
-          </CardGrid>
+          </ConsoleCardGrid>
         </ContentSection>
       ) : (
         <ContentSection>
-          <EmptyState
+          <DataState
+            kind="stale"
             title="No conversion actions are available."
             description="Refresh the conversion report before evaluating which paid activity produces outcomes."
             actionLabel="Review connection"

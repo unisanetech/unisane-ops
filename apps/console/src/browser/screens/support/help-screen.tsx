@@ -1,11 +1,16 @@
-import { Button } from '@unisane/ui/button';
+import { Badge } from '@unisane/ui/badge';
 import { Card } from '@unisane/ui/card';
-import { CardGrid } from '@unisane/ui/card-grid';
 import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../../contracts.js';
 import { readHelpSource } from '../../routing/help-context.js';
 import { resolveConsoleRoute } from '../../../routes.js';
-import { ContentSection, StatusBadge } from '../../shared/content.js';
+import {
+  ActionGroup,
+  ConsoleCardGrid,
+  ContentSection,
+  InsightCard,
+  StatusBadge,
+} from '../../shared/content.js';
 
 const guidanceByFamily: Record<string, string[]> = {
   overview: [
@@ -57,25 +62,25 @@ export function HelpScreen({ state, navigate }: ConsoleScreenProps) {
   const priority = state.priorities[0];
   return (
     <>
-      <ContentSection>
-        <Card variant="outlined" padding="md">
-          <Typography variant="panelTitle">Help for {sourceRoute.title}</Typography>
-          <Typography variant="bodyMedium" className="text-on-surface-variant mt-2">
-            {sourceRoute.description}
-          </Typography>
-          <Button className="mt-5" variant="tonal" onClick={() => navigate(sourceRoute.path)}>
-            Return to {sourceRoute.label}
-          </Button>
-        </Card>
+      <ContentSection width="reading">
+        <InsightCard
+          title={`Help for ${sourceRoute.title}`}
+          description={sourceRoute.description}
+          actionLabel={`Return to ${sourceRoute.label}`}
+          onAction={() => navigate(sourceRoute.path)}
+          density="compact"
+        />
       </ContentSection>
-      <ContentSection title="How to use this page">
-        <Card variant="outlined" padding="md">
+      <ContentSection title="How to use this page" width="reading">
+        <Card variant="low" padding="md" className="border-outline-weak border">
           <ol className="grid gap-3">
             {guidance.map((item, index) => (
-              <li className="flex gap-3" key={item}>
-                <Typography component="span" variant="labelMedium" className="text-primary">
-                  {index + 1}.
-                </Typography>
+              <li className="flex items-start gap-3" key={item}>
+                <div className="shrink-0">
+                  <Badge variant="tonal" color="primary" size="sm">
+                    {index + 1}
+                  </Badge>
+                </div>
                 <Typography component="span" variant="bodyMedium">
                   {item}
                 </Typography>
@@ -88,7 +93,7 @@ export function HelpScreen({ state, navigate }: ConsoleScreenProps) {
         title="Status meanings"
         description="Status labels use one plain-language system across the Console."
       >
-        <CardGrid minItemWidth="sm">
+        <ConsoleCardGrid minItemWidth="sm">
           <StatusMeaning
             status="current"
             label="Healthy"
@@ -109,9 +114,9 @@ export function HelpScreen({ state, navigate }: ConsoleScreenProps) {
             label="Not available"
             detail="The required evidence has not been recorded."
           />
-        </CardGrid>
+        </ConsoleCardGrid>
       </ContentSection>
-      <ContentSection title="What should I do next?">
+      <ContentSection title="What should I do next?" width="wide">
         <Card variant="outlined" padding="md">
           <Typography variant="panelTitle">
             {priority?.title ?? 'Review the latest growth evidence'}
@@ -119,16 +124,17 @@ export function HelpScreen({ state, navigate }: ConsoleScreenProps) {
           <Typography variant="bodySmall" className="text-on-surface-variant mt-2">
             {priority?.reason ?? state.overview.detail}
           </Typography>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Button size="sm" onClick={() => navigate(priority?.action.path ?? '/overview')}>
-              {priority?.action.label ?? 'Open overview'}
-            </Button>
-            <Button variant="tonal" size="sm" onClick={() => navigate('/connections')}>
-              Review data sources
-            </Button>
-            <Button variant="tonal" size="sm" onClick={() => navigate('/activity')}>
-              Review activity
-            </Button>
+          <div className="mt-5">
+            <ActionGroup
+              primary={{
+                label: priority?.action.label ?? 'Open overview',
+                onAction: () => navigate(priority?.action.path ?? '/overview'),
+              }}
+              secondary={[
+                { label: 'Review data sources', onAction: () => navigate('/connections') },
+                { label: 'Review activity', onAction: () => navigate('/activity') },
+              ]}
+            />
           </div>
         </Card>
       </ContentSection>
@@ -147,7 +153,9 @@ function StatusMeaning({
 }) {
   return (
     <Card variant="outlined" padding="sm">
-      <StatusBadge status={status} label={label} />
+      <div>
+        <StatusBadge status={status} label={label} />
+      </div>
       <Typography variant="bodySmall" className="text-on-surface-variant mt-3">
         {detail}
       </Typography>

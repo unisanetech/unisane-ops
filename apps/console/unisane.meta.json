@@ -9,6 +9,7 @@
     "headless"
   ],
   "requiresPackages": [
+    "@unisane/data-table",
     "@unisane/growth",
     "@unisane/ops-engine",
     "@unisane/ui"

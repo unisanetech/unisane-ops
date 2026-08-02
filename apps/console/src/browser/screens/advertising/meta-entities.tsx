@@ -1,9 +1,11 @@
+import { useMemo } from 'react';
 import type { MarketingConsoleAdvertisingEntity } from '@unisane/growth/console';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@unisane/ui/table';
+import type { Column } from '@unisane/data-table';
 import type { ConsoleScreenProps } from '../../contracts.js';
 import { formatNumber } from '../../lib/format.js';
-import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
-import { TableFrame } from '../../shared/controls.js';
+import { ContentSection, DataState, Summary } from '../../shared/content.js';
+import { ConsoleDataTable } from '../../shared/console-data-table.js';
+import { DataTablePrimaryText, DataTableWrappedText } from '../../shared/data-table-content.js';
 import { formatMoney, SourceSummaries } from '../channels/shared.js';
 import { advertisingView } from './view.js';
 
@@ -100,44 +102,98 @@ function EntitySection({
   emptyDescription: string;
   showCreative?: boolean;
 }) {
+  const columns = useMemo<Column<MarketingConsoleAdvertisingEntity>[]>(
+    () => [
+      {
+        key: 'name',
+        header: 'Name',
+        width: 280,
+        minWidth: 220,
+        sortable: true,
+        responsivePriority: 1,
+        render: (entity) => <DataTablePrimaryText>{entity.name}</DataTablePrimaryText>,
+      },
+      {
+        key: 'campaignName',
+        header: 'Campaign',
+        width: 240,
+        minWidth: 190,
+        sortable: true,
+        responsivePriority: 1,
+        render: (entity) => entity.campaignName ?? 'Not captured',
+      },
+      ...(showCreative
+        ? [
+            {
+              key: 'creativeEvidence',
+              header: 'Creative evidence',
+              width: 280,
+              minWidth: 220,
+              minVisibleWidth: 820,
+              responsivePriority: 4 as const,
+              render: (entity: MarketingConsoleAdvertisingEntity) => (
+                <DataTableWrappedText>
+                  {entity.assetType ?? entity.headline ?? 'Not captured'}
+                </DataTableWrappedText>
+              ),
+            },
+          ]
+        : []),
+      {
+        key: 'deliveryStatus',
+        header: 'Delivery',
+        width: 132,
+        minWidth: 116,
+        sortable: true,
+        responsivePriority: 1,
+        render: (entity) => entity.deliveryStatus ?? 'Not captured',
+      },
+      entityMetric('spend', 'Spend', (entity) => formatMoney(entity.spend, entity.currencyCode)),
+      entityMetric('impressions', 'Impressions', (entity) => formatNumber(entity.impressions)),
+      entityMetric('clicks', 'Clicks', (entity) => formatNumber(entity.clicks), 650, 2),
+      entityMetric(
+        'conversions',
+        'Conversions',
+        (entity) => formatNumber(entity.conversions),
+        760,
+        3,
+      ),
+    ],
+    [showCreative],
+  );
   return (
     <ContentSection title={title}>
       {entities.length ? (
-        <TableFrame label={title}>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Campaign</TableHead>
-                {showCreative ? <TableHead>Creative evidence</TableHead> : null}
-                <TableHead>Delivery</TableHead>
-                <TableHead>Spend</TableHead>
-                <TableHead>Impressions</TableHead>
-                <TableHead>Clicks</TableHead>
-                <TableHead>Conversions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {entities.map((entity) => (
-                <TableRow key={entity.id}>
-                  <TableCell>{entity.name}</TableCell>
-                  <TableCell>{entity.campaignName ?? 'Not captured'}</TableCell>
-                  {showCreative ? (
-                    <TableCell>{entity.assetType ?? entity.headline ?? 'Not captured'}</TableCell>
-                  ) : null}
-                  <TableCell>{entity.deliveryStatus ?? 'Not captured'}</TableCell>
-                  <TableCell>{formatMoney(entity.spend, entity.currencyCode)}</TableCell>
-                  <TableCell>{formatNumber(entity.impressions)}</TableCell>
-                  <TableCell>{formatNumber(entity.clicks)}</TableCell>
-                  <TableCell>{formatNumber(entity.conversions)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableFrame>
+        <ConsoleDataTable
+          tableId={`ops-meta-${title.toLowerCase().replaceAll(' ', '-')}`}
+          data={entities}
+          columns={columns}
+          emptyMessage={`No ${title.toLowerCase()} were recorded`}
+          emptyIcon="ads_click"
+        />
       ) : (
-        <EmptyState title={emptyTitle} description={emptyDescription} />
+        <DataState title={emptyTitle} description={emptyDescription} />
       )}
     </ContentSection>
   );
+}
+
+function entityMetric(
+  key: string,
+  header: string,
+  render: (entity: MarketingConsoleAdvertisingEntity) => string,
+  minVisibleWidth?: number,
+  responsivePriority: 1 | 2 | 3 | 4 | 5 = 1,
+): Column<MarketingConsoleAdvertisingEntity> {
+  return {
+    key,
+    header,
+    width: 126,
+    minWidth: 110,
+    align: 'end',
+    sortable: true,
+    minVisibleWidth,
+    responsivePriority,
+    render,
+  };
 }

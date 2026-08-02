@@ -10,15 +10,9 @@ export type ConsoleShellModel = {
   navigation: readonly ConsoleNavigationGroup[];
 };
 
-export type SeoDetail =
-  | { kind: 'opportunity'; id: string }
-  | { kind: 'page'; id: string }
-  | { kind: 'query'; id: string };
-
 export type ConsoleOverlay =
   | { kind: 'command'; action: MarketingConsoleConnectionAction }
-  | { kind: 'disconnect'; connection: MarketingConsoleConnection }
-  | { kind: 'seo'; detail: SeoDetail };
+  | { kind: 'disconnect'; connection: MarketingConsoleConnection };
 
 export type ConsoleScreenProps = {
   state: MarketingConsoleState;

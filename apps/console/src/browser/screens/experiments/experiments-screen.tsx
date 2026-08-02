@@ -3,7 +3,7 @@ import { Card } from '@unisane/ui/card';
 import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../../contracts.js';
 import { humanize } from '../../lib/format.js';
-import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
+import { ContentSection, DataState, Summary } from '../../shared/content.js';
 
 export function ExperimentsScreen({ state, route }: ConsoleScreenProps) {
   const experiments = state.experiments;
@@ -80,5 +80,5 @@ function ExperimentEmpty({ kind }: { kind: 'running' | 'results' | 'ideas' }) {
       description: 'Add a testable hypothesis with a target and expected outcome first.',
     },
   }[kind];
-  return <EmptyState title={copy.title} description={copy.description} />;
+  return <DataState title={copy.title} description={copy.description} />;
 }

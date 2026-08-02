@@ -3,9 +3,8 @@ import type {
   MarketingConsoleSourceSummary,
 } from '@unisane/growth/console';
 import { Badge } from '@unisane/ui/badge';
-import { Typography } from '@unisane/ui/typography';
 import { healthStatusLabel, statusColor } from '../../lib/format.js';
-import { ContentSection, MetricCard, MetricGrid } from '../../shared/content.js';
+import { ContentSection, EvidenceRow, MetricCard, MetricGrid } from '../../shared/content.js';
 
 export function ChannelMetrics({
   metrics,
@@ -28,6 +27,9 @@ export function ChannelMetrics({
             value={metric.value}
             helper={metric.definition}
             context={`${metric.sourceLabel} · ${metric.freshnessLabel}`}
+            comparison={
+              metric.comparisonLabel.includes('not available') ? undefined : metric.comparisonLabel
+            }
           />
         ))}
       </MetricGrid>
@@ -38,26 +40,24 @@ export function ChannelMetrics({
 export function SourceSummary({ source }: { source: MarketingConsoleSourceSummary }) {
   return (
     <ContentSection title="Data source">
-      <div className="border-outline-soft bg-surface flex flex-wrap items-start justify-between gap-3 rounded-sm border px-4 py-3">
-        <div>
-          <Typography variant="labelLarge">{source.label}</Typography>
-          <Typography variant="bodySmall" className="text-on-surface-variant mt-1 max-w-2xl">
-            {source.detail}
-          </Typography>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {source.sourceKind === 'fixture' ? (
-            <Badge variant="tonal" color="warning" size="sm">
-              Sample data
-            </Badge>
-          ) : null}
-          {source.sourceKind !== 'fixture' ? (
-            <Badge variant="tonal" color={statusColor(source.status)} size="sm">
-              {source.available ? source.freshnessLabel : healthStatusLabel(source.status)}
-            </Badge>
-          ) : null}
-        </div>
-      </div>
+      <EvidenceRow
+        title={source.label}
+        detail={source.detail}
+        status={
+          <>
+            {source.sourceKind === 'fixture' ? (
+              <Badge variant="tonal" color="warning" size="sm">
+                Sample data
+              </Badge>
+            ) : null}
+            {source.sourceKind !== 'fixture' ? (
+              <Badge variant="tonal" color={statusColor(source.status)} size="sm">
+                {source.available ? source.freshnessLabel : healthStatusLabel(source.status)}
+              </Badge>
+            ) : null}
+          </>
+        }
+      />
     </ContentSection>
   );
 }
@@ -68,29 +68,25 @@ export function SourceSummaries({ sources }: { sources: MarketingConsoleSourceSu
     <ContentSection title={sources.length === 1 ? 'Data source' : 'Data sources'}>
       <div className="grid gap-3">
         {sources.map((source) => (
-          <div
+          <EvidenceRow
             key={source.provider ?? source.label}
-            className="border-outline-soft bg-surface flex flex-wrap items-start justify-between gap-3 rounded-sm border px-4 py-3"
-          >
-            <div>
-              <Typography variant="labelLarge">{source.label}</Typography>
-              <Typography variant="bodySmall" className="text-on-surface-variant mt-1 max-w-2xl">
-                {source.detail}
-              </Typography>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              {source.sourceKind === 'fixture' ? (
-                <Badge variant="tonal" color="warning" size="sm">
-                  Sample data
-                </Badge>
-              ) : null}
-              {source.sourceKind !== 'fixture' ? (
-                <Badge variant="tonal" color={statusColor(source.status)} size="sm">
-                  {source.available ? source.freshnessLabel : healthStatusLabel(source.status)}
-                </Badge>
-              ) : null}
-            </div>
-          </div>
+            title={source.label}
+            detail={source.detail}
+            status={
+              <>
+                {source.sourceKind === 'fixture' ? (
+                  <Badge variant="tonal" color="warning" size="sm">
+                    Sample data
+                  </Badge>
+                ) : null}
+                {source.sourceKind !== 'fixture' ? (
+                  <Badge variant="tonal" color={statusColor(source.status)} size="sm">
+                    {source.available ? source.freshnessLabel : healthStatusLabel(source.status)}
+                  </Badge>
+                ) : null}
+              </>
+            }
+          />
         ))}
       </div>
     </ContentSection>

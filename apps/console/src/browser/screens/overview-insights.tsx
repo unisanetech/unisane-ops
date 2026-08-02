@@ -1,10 +1,9 @@
 import type { MarketingConsoleOverview } from '@unisane/growth/console';
 import { Badge } from '@unisane/ui/badge';
 import { Card } from '@unisane/ui/card';
-import { CardGrid } from '@unisane/ui/card-grid';
 import { Typography } from '@unisane/ui/typography';
 import { formatDateTime, outcomeStatusLabel, statusColor } from '../lib/format.js';
-import { ContentSection } from '../shared/content.js';
+import { ConsoleCardGrid, ContentSection } from '../shared/content.js';
 
 export function OverviewFunnel({
   funnel,
@@ -53,7 +52,7 @@ export function RecentOutcomes({
       title="Recent outcomes"
       description="The latest recorded provider updates and managed changes."
     >
-      <CardGrid minItemWidth="md">
+      <ConsoleCardGrid minItemWidth="md">
         {outcomes.map((outcome) => (
           <Card key={outcome.id} variant="outlined" padding="sm">
             <div className="flex flex-wrap items-start justify-between gap-3">
@@ -78,7 +77,7 @@ export function RecentOutcomes({
             ) : null}
           </Card>
         ))}
-      </CardGrid>
+      </ConsoleCardGrid>
     </ContentSection>
   );
 }

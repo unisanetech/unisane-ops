@@ -1,15 +1,22 @@
-import { Badge } from '@unisane/ui/badge';
 import { Button } from '@unisane/ui/button';
-import { Card } from '@unisane/ui/card';
-import { CardGrid } from '@unisane/ui/card-grid';
-import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../../contracts.js';
-import { ContentSection, MetricCard, MetricGrid, Summary } from '../../shared/content.js';
+import {
+  ConsoleCardGrid,
+  ContentSection,
+  InsightCard,
+  MetricCard,
+  MetricGrid,
+  Summary,
+} from '../../shared/content.js';
 
-export function SeoOverviewScreen({ state, navigate, openOverlay }: ConsoleScreenProps) {
+export function SeoOverviewScreen({ state, navigate }: ConsoleScreenProps) {
   return (
     <>
-      <Summary headline={state.seo.overview.headline} detail={state.seo.overview.detail} />
+      <Summary
+        headline={state.seo.overview.headline}
+        detail={state.seo.overview.detail}
+        context={`${state.seo.sourceLabel} · ${state.seo.freshnessLabel}`}
+      />
       <ContentSection>
         <MetricGrid>
           {state.seo.overview.metrics.map((metric) => (
@@ -19,6 +26,7 @@ export function SeoOverviewScreen({ state, navigate, openOverlay }: ConsoleScree
               value={metric.value}
               helper={metric.definition}
               context={`${metric.sourceLabel} · ${metric.freshnessLabel}`}
+              comparison={state.seo.comparisonAvailable ? metric.comparisonLabel : undefined}
             />
           ))}
         </MetricGrid>
@@ -27,35 +35,21 @@ export function SeoOverviewScreen({ state, navigate, openOverlay }: ConsoleScree
         title="Best opportunities"
         description="Evidence-backed improvements to review first."
       >
-        <CardGrid minItemWidth="md">
+        <ConsoleCardGrid minItemWidth="md">
           {state.seo.overview.opportunities.slice(0, 3).map((item) => (
-            <Card variant="low" padding="md" key={item.id}>
-              <Badge
-                variant="tonal"
-                color={item.kind === 'problem' ? 'error' : 'primary'}
-                size="sm"
-              >
-                {item.kind.replace('-', ' ')}
-              </Badge>
-              <Typography variant="cardTitle" className="mt-3">
-                {item.title}
-              </Typography>
-              <Typography variant="bodySmall" className="text-on-surface-variant mt-2">
-                {item.reason}
-              </Typography>
-              <Button
-                className="mt-5"
-                variant="tonal"
-                size="sm"
-                onClick={() =>
-                  openOverlay({ kind: 'seo', detail: { kind: 'opportunity', id: item.id } })
-                }
-              >
-                Open details
-              </Button>
-            </Card>
+            <InsightCard
+              key={item.id}
+              badge={item.kind.replace('-', ' ')}
+              tone={
+                item.kind === 'problem' ? 'warning' : item.kind === 'quick-win' ? 'success' : 'info'
+              }
+              title={item.title}
+              description={item.expectedOutcome}
+              evidence={item.reason}
+              metadata={`${item.evidence} · ${item.freshnessLabel}`}
+            />
           ))}
-        </CardGrid>
+        </ConsoleCardGrid>
         <Button className="mt-4" variant="outlined" onClick={() => navigate('/seo/opportunities')}>
           Review all opportunities
         </Button>

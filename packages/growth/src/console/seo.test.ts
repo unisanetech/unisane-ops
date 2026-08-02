@@ -169,7 +169,7 @@ describe('Growth console SEO projection', () => {
     expect(result.opportunities[0]).toEqual(
       expect.objectContaining({
         kind: 'quick-win',
-        title: 'Improve Executive template for searches already finding it',
+        title: 'Improve Executive template search click-through',
         action: { label: 'Review page', path: '/seo/pages' },
       }),
     );

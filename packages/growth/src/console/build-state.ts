@@ -2091,10 +2091,12 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
     ),
     metric(
       'conversions',
-      'Conversions',
+      analyticsConversions !== undefined ? 'Analytics conversions' : 'Advertising conversions',
       number(conversions),
       conversions,
-      'Reported key outcomes for the selected period.',
+      analyticsConversions !== undefined
+        ? 'Key outcomes measured by Google Analytics for the selected period.'
+        : 'Provider-attributed advertising outcomes for the selected period.',
       analyticsConversions !== undefined ? 'Google Analytics' : adsSourceLabel,
       conversionSource,
     ),

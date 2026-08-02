@@ -10,7 +10,7 @@ import { formatDateTime } from '../../lib/format.js';
 import { ActivityItemCard } from '../../shared/activity-item-card.js';
 import {
   ContentSection,
-  EmptyState,
+  DataState,
   MetricCard,
   MetricGrid,
   StatusBadge,
@@ -22,7 +22,8 @@ export function ConnectionDetailScreen(props: ConsoleScreenProps) {
   if (!connection?.connected) {
     return (
       <ContentSection>
-        <EmptyState
+        <DataState
+          kind="unavailable"
           title="This provider is not connected."
           description="Return to Connections to start the supported guided flow."
           actionLabel="All connections"
@@ -83,15 +84,15 @@ function ConnectionOverview({
       </ContentSection>
       <ContentSection>
         <Card variant="outlined" padding="md">
-          <Typography variant="panelTitle" className="text-error">
+          <Typography variant="titleLarge" className="text-error font-semibold">
             Disconnect {connection.label}
           </Typography>
-          <Typography variant="bodySmall" className="text-on-surface-variant mt-2">
+          <Typography variant="bodyMedium" className="text-on-surface-variant mt-2">
             Future updates stop. Historical data and provider-side resources remain.
           </Typography>
           <Button
             className="mt-5"
-            variant="tonal"
+            variant="outlined"
             onClick={() => openOverlay({ kind: 'disconnect', connection })}
           >
             Disconnect
@@ -261,7 +262,7 @@ function ConnectionDataSync({
         </div>
       </ContentSection>
       <ContentSection>
-        <EmptyState
+        <DataState
           title="Need recurring updates?"
           description="Automations controls the reporting jobs selected for this workspace."
           actionLabel="Review automations"
@@ -296,7 +297,7 @@ function ConnectionActivity({
           ))}
         </div>
       ) : (
-        <EmptyState
+        <DataState
           title="No connection activity is recorded yet."
           description="Provider updates and connection failures will appear here after they occur."
           actionLabel="Open all activity"
@@ -312,7 +313,7 @@ function ServiceHeading({ service }: { service: MarketingConsoleConnectionServic
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div>
         <Typography variant="labelLarge">{service.label}</Typography>
-        <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
+        <Typography variant="bodyMedium" className="text-on-surface-variant mt-1">
           {service.purpose}
         </Typography>
       </div>

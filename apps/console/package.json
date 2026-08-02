@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "@material-symbols/font-400": "^0.40.2",
+    "@unisane/data-table": "workspace:*",
     "@unisane/growth": "workspace:*",
     "@unisane/ops-engine": "workspace:*",
     "@unisane/ui": "workspace:*",

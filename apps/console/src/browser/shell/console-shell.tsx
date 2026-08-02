@@ -68,13 +68,13 @@ export function ConsoleShell({
           <SidebarInset
             id="main-content"
             tabIndex={-1}
-            className="bg-surface-container-low medium:p-3 mt-0 h-full min-w-0 overflow-hidden p-2"
+            className="bg-surface-container-low medium:py-3 medium:pr-3 mt-0 h-full min-w-0 overflow-hidden py-2 pr-2 pl-0"
           >
             <section className="border-outline-weak bg-surface flex min-h-0 flex-1 flex-col overflow-hidden rounded-md border shadow-none">
               <TopAppBar
                 variant="small"
                 className="z-40 shrink-0"
-                title={route.title}
+                title={topAppBarTitle(route)}
                 titleVariant="titleMedium"
                 titleClassName="text-on-surface"
                 navigationIcon={<SidebarTrigger aria-label="Toggle navigation" />}
@@ -91,7 +91,9 @@ export function ConsoleShell({
                   </Button>
                 }
               />
-              <div className="min-h-0 flex-1 overflow-y-auto">{children}</div>
+              <div className="ops-console-scroll-region min-h-0 flex-1 overflow-y-auto">
+                {children}
+              </div>
             </section>
           </SidebarInset>
         </Sidebar>
@@ -102,19 +104,19 @@ export function ConsoleShell({
 
 function ProjectIdentity({ state }: { state: MarketingConsoleState }) {
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex items-start gap-3 pt-1 pb-3">
       <BrandMark />
-      <div className="min-w-0">
-        <Typography variant="titleMedium">{humanize(state.platformId)}</Typography>
-        <div className="mt-2 flex justify-start">
-          <Badge
-            variant="tonal"
-            color={state.environment.toLowerCase().includes('production') ? 'error' : 'info'}
-            size="sm"
-          >
-            {state.environment}
-          </Badge>
-        </div>
+      <div className="flex min-w-0 flex-col items-start gap-1">
+        <Typography variant="titleMedium" className="truncate">
+          {humanize(state.platformId)}
+        </Typography>
+        <Badge
+          variant="tonal"
+          color={state.environment.toLowerCase().includes('production') ? 'error' : 'info'}
+          size="sm"
+        >
+          {state.environment}
+        </Badge>
       </div>
     </div>
   );
@@ -122,7 +124,7 @@ function ProjectIdentity({ state }: { state: MarketingConsoleState }) {
 
 function CollapsedBrand({ state }: { state: MarketingConsoleState }) {
   return (
-    <div className="flex w-full justify-center">
+    <div className="flex w-full justify-center pt-2 pb-3">
       <BrandMark accessibleLabel={humanize(state.platformId)} />
     </div>
   );
@@ -195,4 +197,20 @@ function activeItemId(route: ConsoleRoute): string {
   if (route.family === 'help') return '/help';
   if (route.family === 'advertising') return '/advertising/all/overview';
   return `/${route.family}${['seo', 'analytics', 'experiments'].includes(route.family) ? '/overview' : ''}`;
+}
+
+function topAppBarTitle(route: ConsoleRoute): string {
+  const titles: Record<string, string> = {
+    overview: 'Growth',
+    seo: 'SEO',
+    advertising: 'Advertising',
+    analytics: 'Analytics',
+    experiments: 'Experiments',
+    connections: 'Manage',
+    'connection-detail': 'Manage',
+    activity: 'Manage',
+    settings: 'Workspace',
+    help: 'Workspace',
+  };
+  return titles[route.family] ?? route.title;
 }

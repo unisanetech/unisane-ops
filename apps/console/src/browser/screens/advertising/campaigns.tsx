@@ -1,12 +1,18 @@
 import { useMemo, useState } from 'react';
+import type { Column } from '@unisane/data-table';
 import { SelectField } from '@unisane/ui/select-field';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@unisane/ui/table';
 import { TextField } from '@unisane/ui/text-field';
 import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../../contracts.js';
 import { formatNumber } from '../../lib/format.js';
-import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
-import { FilterBar, TableFrame } from '../../shared/controls.js';
+import { ContentSection, DataState, Summary } from '../../shared/content.js';
+import { FilterToolbar } from '../../shared/controls.js';
+import {
+  DataTablePrimaryText,
+  ExpandedDataSection,
+  ExpandedDataTableRow,
+} from '../../shared/data-table-content.js';
+import { NarrativeDataTable } from '../../shared/narrative-data-table.js';
 import { formatMoney, SourceSummaries } from '../channels/shared.js';
 import { advertisingConnectionPath, advertisingView } from './view.js';
 
@@ -32,6 +38,63 @@ export function AdvertisingCampaigns({ state, route, navigate }: ConsoleScreenPr
         .sort((left, right) => compareCampaigns(left, right, sort)),
     [advertising.campaigns, delivery, search, sort],
   );
+  const columns = useMemo<Column<Campaign>[]>(
+    () => [
+      {
+        key: 'name',
+        header: 'Campaign',
+        width: 300,
+        minWidth: 220,
+        sortable: true,
+        responsivePriority: 1,
+        render: (campaign) => <DataTablePrimaryText>{campaign.name}</DataTablePrimaryText>,
+      },
+      ...(showProvider
+        ? [
+            {
+              key: 'providerLabel',
+              header: 'Platform',
+              width: 124,
+              minWidth: 112,
+              sortable: true,
+              responsivePriority: 1 as const,
+            },
+          ]
+        : []),
+      {
+        key: 'deliveryStatus',
+        header: 'Delivery',
+        width: 142,
+        minWidth: 124,
+        sortable: true,
+        responsivePriority: 1,
+        render: (campaign) => campaignDeliveryLabel(campaignDeliveryValue(campaign)),
+      },
+      campaignMetric('spend', 'Spend', (campaign) =>
+        formatMoney(campaign.spend, campaign.currencyCode),
+      ),
+      campaignMetric('impressions', 'Impressions', (campaign) =>
+        formatNumber(campaign.impressions),
+      ),
+      campaignMetric('clicks', 'Clicks', (campaign) => formatNumber(campaign.clicks)),
+      campaignMetric(
+        'conversions',
+        'Conversions',
+        (campaign) => formatNumber(campaign.conversions),
+        650,
+        2,
+      ),
+      campaignMetric(
+        'ctr',
+        'CTR',
+        (campaign) =>
+          campaign.ctr === undefined ? 'Not available' : `${campaign.ctr.toFixed(1)}%`,
+        820,
+        3,
+      ),
+    ],
+    [showProvider],
+  );
   return (
     <>
       <Summary
@@ -40,7 +103,16 @@ export function AdvertisingCampaigns({ state, route, navigate }: ConsoleScreenPr
       />
       {advertising.campaigns.length ? (
         <ContentSection>
-          <FilterBar>
+          <FilterToolbar
+            resultCount={campaigns.length}
+            totalCount={advertising.campaigns.length}
+            resultLabel="campaigns"
+            isFiltered={Boolean(search.trim()) || delivery !== 'all'}
+            onClear={() => {
+              setSearch('');
+              setDelivery('all');
+            }}
+          >
             <TextField
               label="Search campaigns"
               placeholder="Search campaign name"
@@ -70,7 +142,7 @@ export function AdvertisingCampaigns({ state, route, navigate }: ConsoleScreenPr
                 { value: 'name', label: 'Campaign name' },
               ]}
             />
-          </FilterBar>
+          </FilterToolbar>
         </ContentSection>
       ) : null}
       {campaigns.length ? (
@@ -78,76 +150,54 @@ export function AdvertisingCampaigns({ state, route, navigate }: ConsoleScreenPr
           title="Campaign performance"
           description={`${campaigns.length} of ${advertising.campaigns.length} campaigns for ${state.dateWindow.label.toLowerCase()}.`}
         >
-          <TableFrame label="Advertising campaigns">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Campaign</TableHead>
-                  {showProvider ? <TableHead>Platform</TableHead> : null}
-                  <TableHead>Delivery</TableHead>
-                  <TableHead>Daily budget</TableHead>
-                  <TableHead>Spend</TableHead>
-                  <TableHead>Impressions</TableHead>
-                  <TableHead>Clicks</TableHead>
-                  <TableHead>CTR</TableHead>
-                  <TableHead>Average CPC</TableHead>
-                  <TableHead>Conversions</TableHead>
-                  <TableHead>Bidding</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {campaigns.map((campaign) => (
-                  <TableRow key={campaign.id}>
-                    <TableCell>{campaign.name}</TableCell>
-                    {showProvider ? <TableCell>{campaign.providerLabel}</TableCell> : null}
-                    <TableCell>
-                      <CampaignDelivery campaign={campaign} />
-                    </TableCell>
-                    <TableCell>
-                      {campaign.dailyBudget === undefined
-                        ? 'Not captured'
-                        : `${formatMoney(campaign.dailyBudget, campaign.currencyCode)}${campaign.sharedBudget ? ' · Shared' : ''}`}
-                    </TableCell>
-                    <TableCell>{formatMoney(campaign.spend, campaign.currencyCode)}</TableCell>
-                    <TableCell>{formatNumber(campaign.impressions)}</TableCell>
-                    <TableCell>{formatNumber(campaign.clicks)}</TableCell>
-                    <TableCell>
-                      {campaign.ctr === undefined ? 'Not available' : `${campaign.ctr.toFixed(1)}%`}
-                    </TableCell>
-                    <TableCell>
-                      {campaign.cpc === undefined
-                        ? 'Not available'
-                        : formatMoney(campaign.cpc, campaign.currencyCode)}
-                    </TableCell>
-                    <TableCell>{formatNumber(campaign.conversions)}</TableCell>
-                    <TableCell>
-                      {campaign.biddingStrategy ? (
-                        <div className="grid gap-1">
-                          <Typography variant="labelMedium">
-                            {campaignCodeLabel(campaign.biddingStrategy)}
-                          </Typography>
-                          {campaign.biddingStrategyStatus ? (
-                            <Typography
-                              variant="labelSmall"
-                              className="text-on-surface-variant mt-1"
-                            >
-                              {campaignCodeLabel(campaign.biddingStrategyStatus)}
-                            </Typography>
-                          ) : null}
-                        </div>
-                      ) : (
-                        'Not captured'
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableFrame>
+          <NarrativeDataTable
+            tableId={`ops-advertising-${route.advertisingPlatform}-campaigns`}
+            data={campaigns}
+            columns={columns}
+            emptyMessage="No advertising campaigns match the current filters"
+            emptyIcon="campaign"
+            renderExpandedRow={(campaign) => (
+              <ExpandedDataTableRow
+                title={campaign.name}
+                description={`${campaign.providerLabel} · Complete delivery and bidding evidence.`}
+              >
+                <ExpandedDataSection title="Delivery context">
+                  <CampaignDelivery campaign={campaign} />
+                </ExpandedDataSection>
+                <ExpandedDataSection title="Budget and cost">
+                  <p>
+                    Daily budget:{' '}
+                    {campaign.dailyBudget === undefined
+                      ? 'Not captured'
+                      : `${formatMoney(campaign.dailyBudget, campaign.currencyCode)}${campaign.sharedBudget ? ' · Shared' : ''}`}
+                  </p>
+                  <p className="mt-2">
+                    Average CPC:{' '}
+                    {campaign.cpc === undefined
+                      ? 'Not available'
+                      : formatMoney(campaign.cpc, campaign.currencyCode)}
+                  </p>
+                </ExpandedDataSection>
+                <ExpandedDataSection title="Bidding">
+                  <p>
+                    {campaign.biddingStrategy
+                      ? campaignCodeLabel(campaign.biddingStrategy)
+                      : 'Not captured'}
+                  </p>
+                  {campaign.biddingStrategyStatus ? (
+                    <p className="mt-2">
+                      Status: {campaignCodeLabel(campaign.biddingStrategyStatus)}
+                    </p>
+                  ) : null}
+                </ExpandedDataSection>
+              </ExpandedDataTableRow>
+            )}
+          />
         </ContentSection>
       ) : (
         <ContentSection>
-          <EmptyState
+          <DataState
+            kind={advertising.campaigns.length ? 'empty' : 'stale'}
             title={
               advertising.campaigns.length
                 ? 'No campaign matches these filters.'
@@ -265,4 +315,24 @@ function CampaignDelivery({ campaign }: { campaign: Campaign }) {
       </Typography>
     </div>
   );
+}
+
+function campaignMetric(
+  key: string,
+  header: string,
+  render: (campaign: Campaign) => string,
+  minVisibleWidth?: number,
+  responsivePriority: 1 | 2 | 3 | 4 | 5 = 1,
+): Column<Campaign> {
+  return {
+    key,
+    header,
+    width: 126,
+    minWidth: 110,
+    align: 'end',
+    sortable: true,
+    minVisibleWidth,
+    responsivePriority,
+    render,
+  };
 }

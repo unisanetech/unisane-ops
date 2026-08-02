@@ -1,20 +1,16 @@
 import { useMemo, useState } from 'react';
 import type { MarketingConsoleSeoPage } from '@unisane/growth/console';
-import { Badge } from '@unisane/ui/badge';
-import { Button } from '@unisane/ui/button';
 import { SelectField } from '@unisane/ui/select-field';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@unisane/ui/table';
 import { TextField } from '@unisane/ui/text-field';
-import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../../contracts.js';
-import { formatNumber } from '../../lib/format.js';
-import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
-import { FilterBar, TableFrame } from '../../shared/controls.js';
+import { ContentSection, DataState, Summary } from '../../shared/content.js';
+import { FilterToolbar } from '../../shared/controls.js';
+import { SeoPagesDataTable } from './seo-performance-data-tables.js';
 import { SeoSourceNote } from './source-note.js';
 
 type PageSort = 'clicks' | 'views' | 'position';
 
-export function SeoPagesScreen({ state, openOverlay, navigate }: ConsoleScreenProps) {
+export function SeoPagesScreen({ state, navigate }: ConsoleScreenProps) {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('all');
   const [sort, setSort] = useState<PageSort>('clicks');
@@ -40,7 +36,16 @@ export function SeoPagesScreen({ state, openOverlay, navigate }: ConsoleScreenPr
         detail={state.seo.comparisonLabel}
       />
       <ContentSection>
-        <FilterBar>
+        <FilterToolbar
+          resultCount={pages.length}
+          totalCount={state.seo.pages.length}
+          resultLabel="pages"
+          isFiltered={Boolean(search.trim()) || status !== 'all'}
+          onClear={() => {
+            setSearch('');
+            setStatus('all');
+          }}
+        >
           <TextField
             label="Search pages"
             placeholder="Search page title or URL"
@@ -67,63 +72,13 @@ export function SeoPagesScreen({ state, openOverlay, navigate }: ConsoleScreenPr
               { value: 'position', label: 'Average position' },
             ]}
           />
-        </FilterBar>
+        </FilterToolbar>
       </ContentSection>
       <ContentSection>
         {pages.length ? (
-          <TableFrame label="Search pages">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Page</TableHead>
-                  <TableHead>Clicks</TableHead>
-                  <TableHead>Search views</TableHead>
-                  <TableHead>CTR</TableHead>
-                  <TableHead>Average position</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {pages.map((page) => (
-                  <TableRow key={page.id}>
-                    <TableCell>
-                      <Button
-                        variant="text"
-                        size="sm"
-                        onClick={() =>
-                          openOverlay({ kind: 'seo', detail: { kind: 'page', id: page.id } })
-                        }
-                      >
-                        {page.title}
-                      </Button>
-                      <Typography variant="labelSmall" className="text-on-surface-variant">
-                        {page.path}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>{formatNumber(page.clicks)}</TableCell>
-                    <TableCell>{formatNumber(page.searchViews)}</TableCell>
-                    <TableCell>
-                      {page.clickThroughRate === undefined
-                        ? 'Not available'
-                        : `${page.clickThroughRate}%`}
-                    </TableCell>
-                    <TableCell>{page.averagePosition ?? 'Not available'}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant="tonal"
-                        color={page.status === 'Not indexed' ? 'error' : 'warning'}
-                        size="sm"
-                      >
-                        {page.status}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableFrame>
+          <SeoPagesDataTable pages={pages} />
         ) : (
-          <EmptyState
+          <DataState
             title="No page matches these filters."
             description="Clear the filters or review the active Search Console connection."
             actionLabel="Review connection"

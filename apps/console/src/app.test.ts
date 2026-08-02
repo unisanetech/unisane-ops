@@ -723,7 +723,7 @@ describe('marketing console', () => {
       expect(state.seo.opportunities).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            title: 'Improve Executive template for searches already finding it',
+            title: 'Improve Executive template search click-through',
             kind: 'quick-win',
           }),
         ]),

@@ -1,5 +1,5 @@
 import type { ConsoleScreenProps } from '../../contracts.js';
-import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
+import { ContentSection, DataState, Summary } from '../../shared/content.js';
 import { RecommendationList } from '../../shared/recommendation-list.js';
 import { advertisingConnectionPath } from './view.js';
 
@@ -25,7 +25,8 @@ export function AdvertisingRecommendations(props: ConsoleScreenProps) {
         {recommendations.length ? (
           <RecommendationList items={recommendations} {...props} />
         ) : (
-          <EmptyState
+          <DataState
+            kind="stale"
             title="Refresh the evidence before optimizing spend."
             description="Recommendations appear only when the cross-channel evidence supports a specific next action."
             actionLabel="Review connection"

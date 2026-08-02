@@ -5,7 +5,7 @@ import { TextField } from '@unisane/ui/text-field';
 import type { ConsoleScreenProps } from '../../contracts.js';
 import { formatCompactNumber, formatNumber } from '../../lib/format.js';
 import { ContentSection, MetricCard, MetricGrid, Summary } from '../../shared/content.js';
-import { FilterBar } from '../../shared/controls.js';
+import { FilterToolbar } from '../../shared/controls.js';
 import {
   ClusterTable,
   CompetitorTables,
@@ -85,7 +85,17 @@ export function SeoResearchScreen({ state }: ConsoleScreenProps) {
       {view === 'keywords' ? (
         <>
           <ContentSection>
-            <FilterBar>
+            <FilterToolbar
+              resultCount={rows.length}
+              totalCount={research.matrix.length}
+              resultLabel="keywords"
+              isFiltered={Boolean(search.trim()) || market !== 'all' || cluster !== 'all'}
+              onClear={() => {
+                setSearch('');
+                setMarket('all');
+                setCluster('all');
+              }}
+            >
               <TextField
                 label="Search keywords"
                 placeholder="Search keyword or cluster"
@@ -127,7 +137,7 @@ export function SeoResearchScreen({ state }: ConsoleScreenProps) {
                   { value: 'keyword', label: 'Keyword A–Z' },
                 ]}
               />
-            </FilterBar>
+            </FilterToolbar>
           </ContentSection>
           <ContentSection>
             <KeywordTable rows={rows} />

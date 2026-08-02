@@ -1,0 +1,109 @@
+.ops-metric-grid-four-up {
+  container-type: inline-size;
+}
+
+.ops-console-scroll-region {
+  scrollbar-gutter: stable;
+}
+
+.ops-metric-grid-four-up__items {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+@container (min-width: 36rem) {
+  .ops-metric-grid-four-up__items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container (min-width: 52rem) {
+  .ops-metric-grid-four-up__items {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.ops-expanded-detail {
+  container-type: inline-size;
+  min-width: 0;
+  border-top: 1px solid var(--color-outline-weak);
+  background: var(--color-surface-container-low);
+}
+
+.ops-expanded-detail__header {
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--color-outline-weak);
+}
+
+.ops-expanded-detail__sections {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.ops-expanded-detail__section {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--color-outline-weak);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-container-lowest);
+}
+
+.ops-expanded-detail__section-content {
+  margin-top: 0.625rem;
+  line-height: 1.625;
+  overflow-wrap: anywhere;
+}
+
+.ops-expanded-detail__inline-list {
+  margin: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.ops-expanded-detail__list {
+  display: grid;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ops-expanded-detail__list li {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.ops-expanded-detail__list li::before {
+  position: absolute;
+  top: 0.72em;
+  left: 0;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  content: '';
+}
+
+@container (min-width: 46rem) {
+  .ops-expanded-detail__sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ops-expanded-detail__section[data-span='full'] {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 40rem) {
+  .ops-expanded-detail__header {
+    padding: 1rem;
+  }
+
+  .ops-expanded-detail__sections {
+    padding: 0.75rem 1rem 1rem;
+  }
+}

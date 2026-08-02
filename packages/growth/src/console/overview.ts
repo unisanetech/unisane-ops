@@ -194,10 +194,11 @@ function buildFunnel(
   const candidates = [
     {
       title: 'Advertising journey',
-      summary: 'How paid visibility moved toward a reported conversion.',
-      sourceLabel: 'Google Ads',
+      summary:
+        'How paid visibility moved toward provider-attributed advertising conversions. These are separate from canonical measured outcomes.',
+      sourceLabel: 'Advertising provider evidence',
       ids: ['paid-impressions', 'paid-clicks', 'paid-conversions'],
-      labels: ['Impressions', 'Clicks', 'Conversions'],
+      labels: ['Impressions', 'Clicks', 'Ad-attributed conversions'],
     },
     {
       title: 'Search journey',
@@ -208,10 +209,10 @@ function buildFunnel(
     },
     {
       title: 'Visitor journey',
-      summary: 'How measured visits moved toward a reported conversion.',
+      summary: 'How measured visits moved toward outcomes recorded by Google Analytics.',
       sourceLabel: 'Google Analytics',
       ids: ['sessions', 'analytics-conversions'],
-      labels: ['Sessions', 'Conversions'],
+      labels: ['Sessions', 'Analytics conversions'],
     },
   ];
   for (const candidate of candidates) {
@@ -358,7 +359,7 @@ export function buildMarketingConsoleOverview(args: {
     headline = `${connectionIssue.label} needs attention, while working services remain available.`;
     detail =
       connectionIssue.issue ??
-      'Review the affected Google service without interrupting the services that are still working.';
+      'Review the affected service without interrupting the services that are still working.';
   } else if (staleSources > 0 && hasHistoricalData) {
     status = 'warn';
     headline = 'Your growth results are available, but some sources need an update.';

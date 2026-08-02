@@ -212,7 +212,7 @@ function pageOpportunity(
       page.averagePosition !== undefined && page.averagePosition <= 20
         ? 'quick-win'
         : 'high-impact',
-    title: `Improve ${page.title} for searches already finding it`,
+    title: `Improve ${page.title} search click-through`,
     expectedOutcome: 'Turn existing search visibility into more qualified organic visits.',
     reason: `${page.searchViews} search views produced ${page.clicks} organic click${page.clicks === 1 ? '' : 's'} in the available period.`,
     affectedLabel: `1 page · ${page.topQueries.length} known search${page.topQueries.length === 1 ? '' : 'es'}`,

@@ -1,18 +1,16 @@
 import { useMemo, useState } from 'react';
 import type { MarketingConsoleSeoQuery } from '@unisane/growth/console';
-import { Button } from '@unisane/ui/button';
 import { SelectField } from '@unisane/ui/select-field';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@unisane/ui/table';
 import { TextField } from '@unisane/ui/text-field';
 import type { ConsoleScreenProps } from '../../contracts.js';
-import { formatNumber } from '../../lib/format.js';
-import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
-import { FilterBar, TableFrame } from '../../shared/controls.js';
+import { ContentSection, DataState, Summary } from '../../shared/content.js';
+import { FilterToolbar } from '../../shared/controls.js';
+import { SeoQueriesDataTable } from './seo-performance-data-tables.js';
 import { SeoSourceNote } from './source-note.js';
 
 type QuerySort = 'clicks' | 'views' | 'position';
 
-export function SeoQueriesScreen({ state, openOverlay, navigate }: ConsoleScreenProps) {
+export function SeoQueriesScreen({ state, navigate }: ConsoleScreenProps) {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<QuerySort>('clicks');
   const queries = useMemo(
@@ -33,7 +31,13 @@ export function SeoQueriesScreen({ state, openOverlay, navigate }: ConsoleScreen
         detail={state.seo.comparisonLabel}
       />
       <ContentSection>
-        <FilterBar>
+        <FilterToolbar
+          resultCount={queries.length}
+          totalCount={state.seo.queries.length}
+          resultLabel="queries"
+          isFiltered={Boolean(search.trim())}
+          onClear={() => setSearch('')}
+        >
           <TextField
             label="Search queries"
             placeholder="Search query text"
@@ -50,52 +54,13 @@ export function SeoQueriesScreen({ state, openOverlay, navigate }: ConsoleScreen
               { value: 'position', label: 'Average position' },
             ]}
           />
-        </FilterBar>
+        </FilterToolbar>
       </ContentSection>
       <ContentSection>
         {queries.length ? (
-          <TableFrame label="Search queries">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Search</TableHead>
-                  <TableHead>Clicks</TableHead>
-                  <TableHead>Search views</TableHead>
-                  <TableHead>CTR</TableHead>
-                  <TableHead>Average position</TableHead>
-                  <TableHead>Best page</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {queries.map((query) => (
-                  <TableRow key={query.id}>
-                    <TableCell>
-                      <Button
-                        variant="text"
-                        size="sm"
-                        onClick={() =>
-                          openOverlay({ kind: 'seo', detail: { kind: 'query', id: query.id } })
-                        }
-                      >
-                        {query.query}
-                      </Button>
-                    </TableCell>
-                    <TableCell>{formatNumber(query.clicks)}</TableCell>
-                    <TableCell>{formatNumber(query.searchViews)}</TableCell>
-                    <TableCell>
-                      {query.clickThroughRate === undefined
-                        ? 'Not available'
-                        : `${query.clickThroughRate}%`}
-                    </TableCell>
-                    <TableCell>{query.averagePosition ?? 'Not available'}</TableCell>
-                    <TableCell>{query.bestPage?.title ?? 'Not available'}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableFrame>
+          <SeoQueriesDataTable queries={queries} />
         ) : (
-          <EmptyState
+          <DataState
             title="No query matches this search."
             description="Clear the search or review the active Search Console connection."
             actionLabel="Review connection"

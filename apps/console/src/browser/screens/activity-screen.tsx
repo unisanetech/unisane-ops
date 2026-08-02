@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { SelectField } from '@unisane/ui/select-field';
 import type { ConsoleScreenProps } from '../contracts.js';
-import { ContentSection, EmptyState, Summary } from '../shared/content.js';
-import { FilterBar } from '../shared/controls.js';
+import { ContentSection, DataState, Summary } from '../shared/content.js';
+import { FilterToolbar } from '../shared/controls.js';
 import { ActivityItemCard } from '../shared/activity-item-card.js';
 
 export function ActivityScreen({ state }: ConsoleScreenProps) {
@@ -22,7 +22,16 @@ export function ActivityScreen({ state }: ConsoleScreenProps) {
     <>
       <Summary headline={state.activity.headline} detail={state.activity.summary} />
       <ContentSection>
-        <FilterBar>
+        <FilterToolbar
+          resultCount={visible.length}
+          totalCount={state.activity.items.length}
+          resultLabel="events"
+          isFiltered={category !== 'all' || provider !== 'all'}
+          onClear={() => {
+            setCategory('all');
+            setProvider('all');
+          }}
+        >
           <SelectField
             label="Activity type"
             value={category}
@@ -44,7 +53,7 @@ export function ActivityScreen({ state }: ConsoleScreenProps) {
               ...providerOptions.map((label) => ({ value: label, label })),
             ]}
           />
-        </FilterBar>
+        </FilterToolbar>
       </ContentSection>
       <ContentSection title="History" description={`${visible.length} matching events.`}>
         {visible.length ? (
@@ -54,7 +63,7 @@ export function ActivityScreen({ state }: ConsoleScreenProps) {
             ))}
           </div>
         ) : (
-          <EmptyState
+          <DataState
             title="No activity matches these filters."
             description="Choose a different activity type or provider to review the available history."
           />

@@ -34,7 +34,7 @@ function ConnectionCard({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <Typography variant="panelTitle">{connection.label}</Typography>
-          <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
+          <Typography variant="bodyMedium" className="text-on-surface-variant mt-1">
             {connection.summary}
           </Typography>
         </div>
@@ -50,7 +50,7 @@ function ConnectionCard({
       <div className="mt-5">
         {connection.connected ? (
           <Button
-            variant="tonal"
+            variant="outlined"
             size="sm"
             onClick={() => navigate(`/connections/${connection.provider}/overview`)}
           >
@@ -74,7 +74,7 @@ function ServiceRow({ service }: { service: MarketingConsoleConnectionService })
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div>
         <Typography variant="labelLarge">{service.label}</Typography>
-        <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
+        <Typography variant="bodyMedium" className="text-on-surface-variant mt-1">
           {service.purpose}
         </Typography>
       </div>

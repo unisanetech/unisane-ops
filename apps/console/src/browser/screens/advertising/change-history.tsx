@@ -3,7 +3,7 @@ import { Card } from '@unisane/ui/card';
 import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../../contracts.js';
 import { formatDateTime, outcomeStatusLabel, statusColor } from '../../lib/format.js';
-import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
+import { ContentSection, DataState, Summary } from '../../shared/content.js';
 import { advertisingView } from './view.js';
 
 export function AdvertisingChangeHistory({ state, route }: ConsoleScreenProps) {
@@ -50,7 +50,7 @@ export function AdvertisingChangeHistory({ state, route }: ConsoleScreenProps) {
             ))}
           </div>
         ) : (
-          <EmptyState
+          <DataState
             title="No change history is available."
             description="Approved advertising changes will appear here with their recorded outcome."
           />

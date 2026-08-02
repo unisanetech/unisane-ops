@@ -3,7 +3,7 @@ import type { ConsoleOverlay } from './contracts.js';
 import { readConsoleBootData } from './bootstrap.js';
 import { useConsoleRoute } from './routing/use-console-route.js';
 import { ConsoleShell } from './shell/console-shell.js';
-import { PageHeader } from './shared/content.js';
+import { PageContent, PageHeader, type PageDensity } from './shared/content.js';
 import { ConsoleOverlayDialog } from './shared/overlays.js';
 import { RouteTabs } from './shared/route-tabs.js';
 import { AdvertisingPlatformSelector } from './shared/advertising-platform-selector.js';
@@ -26,6 +26,18 @@ export function App() {
     navigate,
     openOverlay: setOverlay,
   };
+  const density: PageDensity =
+    route.id === 'help' || route.id === 'settings'
+      ? 'reading'
+      : route.id === 'activity' ||
+          route.id === 'seo.pages' ||
+          route.id === 'seo.queries' ||
+          route.id === 'seo.research' ||
+          route.advertisingSection === 'campaigns' ||
+          route.advertisingSection === 'ad-sets' ||
+          route.advertisingSection === 'ads-creatives'
+        ? 'data-dense'
+        : 'standard';
   return (
     <>
       <ConsoleShell state={boot.state} shell={boot.shell} route={route} navigate={navigate}>
@@ -35,25 +47,27 @@ export function App() {
           actions={<AdvertisingPlatformSelector route={route} navigate={navigate} />}
         />
         <RouteTabs route={route} navigate={navigate} />
-        {route.family === 'overview' ? <OverviewScreen {...screenProps} /> : null}
-        {route.family === 'seo' ? <SeoScreen {...screenProps} /> : null}
-        {route.family === 'advertising' ? <AdvertisingScreen {...screenProps} /> : null}
-        {route.family === 'analytics' ? <AnalyticsScreen {...screenProps} /> : null}
-        {route.family === 'experiments' ? <ExperimentsScreen {...screenProps} /> : null}
-        {route.family === 'connections' || route.family === 'connection-detail' ? (
-          <ConnectionsScreen {...screenProps} />
-        ) : null}
-        {![
-          'overview',
-          'seo',
-          'advertising',
-          'analytics',
-          'experiments',
-          'connections',
-          'connection-detail',
-        ].includes(route.family) ? (
-          <SupportScreen {...screenProps} />
-        ) : null}
+        <PageContent density={density}>
+          {route.family === 'overview' ? <OverviewScreen {...screenProps} /> : null}
+          {route.family === 'seo' ? <SeoScreen {...screenProps} /> : null}
+          {route.family === 'advertising' ? <AdvertisingScreen {...screenProps} /> : null}
+          {route.family === 'analytics' ? <AnalyticsScreen {...screenProps} /> : null}
+          {route.family === 'experiments' ? <ExperimentsScreen {...screenProps} /> : null}
+          {route.family === 'connections' || route.family === 'connection-detail' ? (
+            <ConnectionsScreen {...screenProps} />
+          ) : null}
+          {![
+            'overview',
+            'seo',
+            'advertising',
+            'analytics',
+            'experiments',
+            'connections',
+            'connection-detail',
+          ].includes(route.family) ? (
+            <SupportScreen {...screenProps} />
+          ) : null}
+        </PageContent>
       </ConsoleShell>
       <ConsoleOverlayDialog
         overlay={overlay}

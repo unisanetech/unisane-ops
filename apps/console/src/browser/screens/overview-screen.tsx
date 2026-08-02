@@ -1,11 +1,13 @@
-import { Badge } from '@unisane/ui/badge';
-import { Button } from '@unisane/ui/button';
-import { Card } from '@unisane/ui/card';
-import { CardGrid } from '@unisane/ui/card-grid';
-import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../contracts.js';
-import { statusColor } from '../lib/format.js';
-import { ContentSection, MetricCard, MetricGrid, EmptyState, Summary } from '../shared/content.js';
+import {
+  ConsoleCardGrid,
+  ContentSection,
+  MetricCard,
+  MetricGrid,
+  DataState,
+  InsightCard,
+  Summary,
+} from '../shared/content.js';
 import { OverviewFunnel, RecentOutcomes } from './overview-insights.js';
 
 export function OverviewScreen({ state, navigate }: ConsoleScreenProps) {
@@ -17,7 +19,7 @@ export function OverviewScreen({ state, navigate }: ConsoleScreenProps) {
       <Summary headline={state.overview.headline} detail={state.overview.detail} />
       <ContentSection title="Growth snapshot" description={metrics[0]?.comparisonLabel}>
         {metrics.length ? (
-          <MetricGrid minItemWidth="lg">
+          <MetricGrid layout="four-up">
             {metrics.map((metric) => (
               <MetricCard
                 key={metric.id}
@@ -25,11 +27,17 @@ export function OverviewScreen({ state, navigate }: ConsoleScreenProps) {
                 value={metric.value}
                 helper={metric.definition}
                 context={`${metric.sourceLabel} · ${metric.freshnessLabel}`}
+                comparison={
+                  metric.comparisonLabel.includes('not available')
+                    ? undefined
+                    : metric.comparisonLabel
+                }
               />
             ))}
           </MetricGrid>
         ) : (
-          <EmptyState
+          <DataState
+            kind="unavailable"
             title="No usable growth metrics are available yet."
             description="The console waits for real provider evidence instead of presenting unavailable values as zero."
             actionLabel="Review connections"
@@ -42,34 +50,22 @@ export function OverviewScreen({ state, navigate }: ConsoleScreenProps) {
         description="Prioritized from the evidence available now."
       >
         {state.priorities.length ? (
-          <CardGrid minItemWidth="md">
+          <ConsoleCardGrid minItemWidth="md">
             {state.priorities.slice(0, 3).map((item) => (
-              <Card variant="low" padding="md" key={item.id}>
-                <Badge variant="tonal" color="primary" size="sm">
-                  {item.priorityLabel}
-                </Badge>
-                <Typography variant="cardTitle" className="mt-3">
-                  {item.title}
-                </Typography>
-                <Typography variant="bodySmall" className="text-on-surface-variant mt-2">
-                  {item.reason}
-                </Typography>
-                <Typography variant="labelSmall" className="text-on-surface-variant mt-3">
-                  {item.confidenceLabel} · {item.effortLabel}
-                </Typography>
-                <Button
-                  className="mt-5"
-                  variant="tonal"
-                  size="sm"
-                  onClick={() => navigate(item.action.path)}
-                >
-                  {item.action.label}
-                </Button>
-              </Card>
+              <InsightCard
+                key={item.id}
+                badge={item.priorityLabel}
+                title={item.title}
+                description={item.expectedOutcome}
+                evidence={item.reason}
+                metadata={`${item.confidenceLabel} · ${item.effortLabel} · ${item.freshnessLabel}`}
+                actionLabel={item.action.label}
+                onAction={() => navigate(item.action.path)}
+              />
             ))}
-          </CardGrid>
+          </ConsoleCardGrid>
         ) : (
-          <EmptyState
+          <DataState
             title="No immediate action needs attention."
             description="Review the capability summaries below or refresh a source when you need newer evidence."
           />
@@ -81,29 +77,19 @@ export function OverviewScreen({ state, navigate }: ConsoleScreenProps) {
         title="Growth areas"
         description="Open a channel to review its evidence and next actions."
       >
-        <CardGrid minItemWidth="md">
+        <ConsoleCardGrid minItemWidth="md">
           {state.overview.capabilitySummaries.map((capability) => (
-            <Card variant="outlined" padding="md" key={capability.id}>
-              <div className="flex items-start justify-between gap-3">
-                <Typography variant="cardTitle">{capability.label}</Typography>
-                <Badge variant="tonal" color={statusColor(capability.status)} size="sm">
-                  {capability.statusLabel}
-                </Badge>
-              </div>
-              <Typography variant="bodySmall" className="text-on-surface-variant mt-3">
-                {capability.summary}
-              </Typography>
-              <Button
-                className="mt-5"
-                variant="tonal"
-                size="sm"
-                onClick={() => navigate(capability.path)}
-              >
-                Open {capability.label}
-              </Button>
-            </Card>
+            <InsightCard
+              key={capability.id}
+              badge={capability.statusLabel}
+              tone={capability.status === 'ready' ? 'success' : 'warning'}
+              title={capability.label}
+              description={capability.summary}
+              actionLabel={`Open ${capability.label}`}
+              onAction={() => navigate(capability.path)}
+            />
           ))}
-        </CardGrid>
+        </ConsoleCardGrid>
       </ContentSection>
     </>
   );

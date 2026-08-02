@@ -1,14 +1,12 @@
 import { Badge } from '@unisane/ui/badge';
 import { Card } from '@unisane/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@unisane/ui/table';
 import { Typography } from '@unisane/ui/typography';
-import type { MarketingConsoleAnalyticsRow } from '@unisane/growth/console';
 import type { ConsoleScreenProps } from '../../contracts.js';
-import { formatNumber, healthStatusLabel, humanize, statusColor } from '../../lib/format.js';
-import { ContentSection, EmptyState, Summary } from '../../shared/content.js';
+import { healthStatusLabel, humanize, statusColor } from '../../lib/format.js';
+import { ContentSection, DataState, EvidenceRow, Summary } from '../../shared/content.js';
 import { RecommendationList } from '../../shared/recommendation-list.js';
-import { TableFrame } from '../../shared/controls.js';
-import { ChannelMetrics, formatMoney, SourceSummary } from '../channels/shared.js';
+import { ChannelMetrics, SourceSummary } from '../channels/shared.js';
+import { AnalyticsDataTable } from './analytics-data-table.js';
 import { TagManagerWorkspace } from './tag-manager-workspace.js';
 
 export function AnalyticsScreen(props: ConsoleScreenProps) {
@@ -38,7 +36,8 @@ function AnalyticsOverview({ state, navigate }: ConsoleScreenProps) {
         />
       ) : (
         <ContentSection>
-          <EmptyState
+          <DataState
+            kind="unavailable"
             title="Visitor reporting is unavailable."
             description="The latest Analytics reports contain no usable rows, so this page does not display misleading zero metrics or an empty chart."
             actionLabel="Review Analytics connection"
@@ -47,19 +46,15 @@ function AnalyticsOverview({ state, navigate }: ConsoleScreenProps) {
         </ContentSection>
       )}
       <ContentSection title="Measurement confidence">
-        <Card variant="outlined" padding="sm">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <Typography variant="labelLarge">{analytics.trackingHealth.headline}</Typography>
-              <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
-                {analytics.trackingHealth.detail}
-              </Typography>
-            </div>
+        <EvidenceRow
+          title={analytics.trackingHealth.headline}
+          detail={analytics.trackingHealth.detail}
+          status={
             <Badge variant="tonal" color={statusColor(analytics.trackingHealth.status)} size="sm">
               {healthStatusLabel(analytics.trackingHealth.status)}
             </Badge>
-          </div>
-        </Card>
+          }
+        />
       </ContentSection>
       <SourceSummary source={analytics.source} />
     </>
@@ -101,7 +96,7 @@ function AnalyticsRows({
       <Summary headline={labels.headline} detail={labels.detail} />
       {kind === 'conversions' && rows.length > 0 && !hasMeasuredConversions ? (
         <ContentSection>
-          <EmptyState
+          <DataState
             title="Confirm that the intended outcome is being measured."
             description="Tracking health separates Analytics access, report freshness, and Tag Manager configuration so you can repair the missing signal safely."
             actionLabel="Review tracking health"
@@ -118,11 +113,12 @@ function AnalyticsRows({
           }
           description={`Results for ${state.dateWindow.label.toLowerCase()}; previous-period comparison is not available yet.`}
         >
-          <AnalyticsTable rows={rows} firstColumn={labels.firstColumn} />
+          <AnalyticsDataTable rows={rows} firstColumn={labels.firstColumn} />
         </ContentSection>
       ) : (
         <ContentSection>
-          <EmptyState
+          <DataState
+            kind="stale"
             title={`No ${kind} rows are available.`}
             description="Refresh the selected Google Analytics property before using this report to make a decision."
             actionLabel={
@@ -143,45 +139,6 @@ function AnalyticsRows({
   );
 }
 
-function AnalyticsTable({
-  rows,
-  firstColumn,
-}: {
-  rows: MarketingConsoleAnalyticsRow[];
-  firstColumn: string;
-}) {
-  return (
-    <TableFrame label={`${firstColumn} analytics`}>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>{firstColumn}</TableHead>
-            <TableHead>Sessions</TableHead>
-            <TableHead>Visitors</TableHead>
-            <TableHead>Conversions</TableHead>
-            <TableHead>Revenue</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.label}</TableCell>
-              <TableCell>{formatOptional(row.sessions)}</TableCell>
-              <TableCell>{formatOptional(row.visitors)}</TableCell>
-              <TableCell>{formatOptional(row.conversions)}</TableCell>
-              <TableCell>
-                {row.revenue === undefined
-                  ? 'Not available'
-                  : formatMoney(row.revenue, row.currencyCode)}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableFrame>
-  );
-}
-
 function TrackingHealth(props: ConsoleScreenProps) {
   const { state, navigate } = props;
   const health = state.analytics.trackingHealth;
@@ -193,7 +150,7 @@ function TrackingHealth(props: ConsoleScreenProps) {
         title="Observed measurement"
         description={`${health.audit.evidenceLabel}. This audit is read-only and does not install scripts or change provider configuration.`}
       >
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Card variant="outlined" padding="sm">
             <Typography variant="labelMedium" className="text-on-surface-variant">
               Expected events observed
@@ -217,7 +174,7 @@ function TrackingHealth(props: ConsoleScreenProps) {
         description="These systems can send browser or server measurement events for the current project."
       >
         {health.audit.emitters.length ? (
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             {health.audit.emitters.map((emitter) => (
               <Card key={emitter.id} variant="outlined" padding="sm">
                 <div className="flex items-start justify-between gap-3">
@@ -235,7 +192,8 @@ function TrackingHealth(props: ConsoleScreenProps) {
             ))}
           </div>
         ) : (
-          <EmptyState
+          <DataState
+            kind="error"
             title="No event emitter was detected."
             description="The audit could not find Web Runtime, Tag Manager, direct gtag, Meta Pixel, or supported server conversion transports in the scanned project source."
           />
@@ -302,7 +260,7 @@ function TrackingHealth(props: ConsoleScreenProps) {
         </ContentSection>
       ) : null}
       <ContentSection>
-        <EmptyState
+        <DataState
           title="Need to repair measurement?"
           description="Connections keeps access and resource selection in one place; this page only explains measurement confidence."
           actionLabel="Review connections"
@@ -311,8 +269,4 @@ function TrackingHealth(props: ConsoleScreenProps) {
       </ContentSection>
     </>
   );
-}
-
-function formatOptional(value: number | undefined): string {
-  return value === undefined ? 'Not available' : formatNumber(value);
 }

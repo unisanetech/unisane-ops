@@ -2,7 +2,14 @@ import { Button } from '@unisane/ui/button';
 import { Card } from '@unisane/ui/card';
 import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../../contracts.js';
-import { ContentSection, EmptyState, StatusBadge, Summary } from '../../shared/content.js';
+import {
+  ConsoleCardGrid,
+  ContentSection,
+  EvidenceRow,
+  InsightCard,
+  StatusBadge,
+  Summary,
+} from '../../shared/content.js';
 
 export function SeoHealthScreen({ state, navigate }: ConsoleScreenProps) {
   const health = state.seo.siteHealth;
@@ -14,23 +21,25 @@ export function SeoHealthScreen({ state, navigate }: ConsoleScreenProps) {
         title="Coverage checked"
         description={`Current search-page evidence · ${state.seo.freshnessLabel}.`}
       >
-        <Card variant="outlined" padding="md">
-          <div className="grid gap-4">
-            {health.groups.map((group) => (
-              <div className="flex flex-wrap items-center justify-between gap-3" key={group.id}>
-                <Typography variant="labelLarge">{group.label}</Typography>
+        <ConsoleCardGrid minItemWidth="md">
+          {health.groups.map((group) => (
+            <EvidenceRow
+              key={group.id}
+              title={group.label}
+              detail={
+                group.issues.length
+                  ? 'Supported evidence needs review.'
+                  : 'Latest checks found no supported issue.'
+              }
+              status={
                 <StatusBadge
                   status={group.issues.length ? 'warn' : 'current'}
-                  label={
-                    group.issues.length
-                      ? `${group.issues.length} to review`
-                      : 'No supported issue detected'
-                  }
+                  label={group.issues.length ? `${group.issues.length} to review` : 'Clear'}
                 />
-              </div>
-            ))}
-          </div>
-        </Card>
+              }
+            />
+          ))}
+        </ConsoleCardGrid>
       </ContentSection>
       {affectedGroups.length ? (
         <ContentSection
@@ -60,25 +69,23 @@ export function SeoHealthScreen({ state, navigate }: ConsoleScreenProps) {
                     </div>
                   ))}
                 </div>
-                <Button
-                  className="mt-4"
-                  variant="outlined"
-                  size="sm"
-                  onClick={() => navigate('/seo/pages')}
-                >
-                  Review affected pages
-                </Button>
+                <div className="mt-4">
+                  <Button variant="outlined" size="sm" onClick={() => navigate('/seo/pages')}>
+                    Review affected pages
+                  </Button>
+                </div>
               </Card>
             ))}
           </div>
         </ContentSection>
       ) : (
         <ContentSection>
-          <EmptyState
+          <InsightCard
             title="No supported search-health issue is visible."
             description="The latest available checks did not find an indexing, crawling, sitemap, structured-data, or linking problem. Continue monitoring after important site changes."
             actionLabel="Review search pages"
             onAction={() => navigate('/seo/pages')}
+            density="compact"
           />
         </ContentSection>
       )}
