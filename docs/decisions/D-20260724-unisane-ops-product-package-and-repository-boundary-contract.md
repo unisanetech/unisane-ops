@@ -14,6 +14,9 @@ status: accepted
 
 ## Changelog
 
+- `2026-08-02`: Removed the Framework aggregate regeneration root. The Framework pack
+  now contributes `dev`, `build`, specialist generate/LLM commands, and the sole
+  executable compiler at `app compile --write|--check`.
 - `2026-07-29`: Applied the later onboarding decision's command refinement:
   `unisane ops init` is the sole existing-project Ops adoption path, bare
   `unisane init` is prohibited, and `create-unisane` remains the Framework scaffolder.
@@ -196,7 +199,7 @@ The primary command groups are:
   `doctor`, `status`, `inspect`
 - capability suites: `cloud`, `growth`
 - provider expert lane: `provider`
-- Framework integration: reserved root `sync`, `dev`, `build`, `generate`, `llm`, plus
+- Framework integration: reserved root `dev`, `build`, `generate`, `llm`, plus
   `app`
 
 Capability-first commands are the default. Provider commands exist only for concepts that
@@ -219,10 +222,11 @@ extension API.
 Core owns `ops init` and root dispatch; packs own their namespaces and registered item
 types. `create-unisane` creates a new Framework application, while `unisane ops init`
 adopts Ops in an existing project. Bare `unisane init` is not an alias or supported
-command. The Framework pack preserves the public
-`unisane sync|dev|build|doctor` spine, workspace profiles, and
-`unisane app compile --write|--check`; a generic project without that pack reports the
-reserved Framework commands unavailable.
+command. The Framework pack preserves public `unisane dev|build`, workspace profiles,
+and the sole executable compiler `unisane app compile --write|--check`; aggregate
+doctor remains core-owned. A generic project without that pack reports reserved
+Framework commands unavailable. Provider state and local Project Memory use their
+explicit specialist commands and are not compiler phases.
 
 ### Engine and effect contract
 
