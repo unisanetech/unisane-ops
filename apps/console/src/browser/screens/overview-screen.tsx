@@ -11,12 +11,17 @@ import {
 import { OverviewFunnel, RecentOutcomes } from './overview-insights.js';
 
 export function OverviewScreen({ state, navigate }: ConsoleScreenProps) {
+  const healthPresentation = state.overview.healthReview.workflow.presentation;
   const metrics = state.overview.metricIds
     .map((id) => state.metrics.find((metric) => metric.id === id))
     .filter((metric): metric is NonNullable<typeof metric> => Boolean(metric));
   return (
     <>
-      <Summary headline={state.overview.headline} detail={state.overview.detail} />
+      <Summary
+        headline={healthPresentation.headline}
+        detail={healthPresentation.whyItMatters}
+        context={`Next: ${healthPresentation.nextStep.label}`}
+      />
       <ContentSection title="Growth snapshot" description={metrics[0]?.comparisonLabel}>
         {metrics.length ? (
           <MetricGrid layout="four-up">

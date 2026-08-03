@@ -110,13 +110,39 @@
       "artifactClasses": [],
       "riskGuards": [],
       "json": true
+    },
+    {
+      "id": "core.mcp-serve",
+      "path": ["mcp", "serve"],
+      "handler": {
+        "exportPath": "./handlers/mcp",
+        "exportName": "runMcpServe"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": ["security-sensitive"],
+      "json": false
+    },
+    {
+      "id": "core.mcp-configure-codex",
+      "path": ["mcp", "configure", "codex"],
+      "handler": {
+        "exportPath": "./handlers/mcp",
+        "exportName": "runMcpConfigureCodex"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project"],
+      "artifactClasses": [],
+      "riskGuards": ["security-sensitive"],
+      "json": true
     }
   ],
   "configNamespaces": [],
   "addItemTypes": [],
   "capabilities": [],
   "providerBindings": [],
-  "reservedRootNames": ["add", "app", "build", "check", "connect", "dev", "disconnect", "doctor", "generate", "inspect", "llm", "ops", "remove", "sync"],
+  "reservedRootNames": ["add", "app", "build", "check", "connect", "dev", "disconnect", "doctor", "generate", "inspect", "llm", "mcp", "ops", "remove", "sync"],
   "reservedRootContributors": [
     {
       "root": "app",
@@ -161,6 +187,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "9988a087dc4b562b8455f54afe8e8ec03295373fa276e771fdace743f3458bee"
+    "manifestHash": "94e67bab895b333e1c064c425435b2865889ba618772e6694a78eb3547f77651"
   }
 }

@@ -21,8 +21,112 @@
       "json": true
     },
     {
+      "id": "growth.health.review",
+      "path": ["growth", "health", "review"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.campaign.pause.plan",
+      "path": ["growth", "campaign", "pause", "plan"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project"],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.campaign.pause.show",
+      "path": ["growth", "campaign", "pause", "show"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.campaign.pause.approve",
+      "path": ["growth", "campaign", "pause", "approve"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project"],
+      "artifactClasses": [],
+      "riskGuards": ["security-sensitive"],
+      "json": true
+    },
+    {
+      "id": "growth.campaign.pause.apply",
+      "path": ["growth", "campaign", "pause", "apply"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "spend-impact",
+      "writeTargets": ["project", "remote"],
+      "artifactClasses": [],
+      "riskGuards": ["production", "security-sensitive"],
+      "json": true
+    },
+    {
+      "id": "growth.campaign.pause.verify",
+      "path": ["growth", "campaign", "pause", "verify"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": ["project"],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
       "id": "growth.marketing.audit",
       "path": ["growth", "marketing", "audit"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.measurement.audit",
+      "path": ["growth", "measurement", "audit"],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.seo.opportunities.review",
+      "path": ["growth", "seo", "opportunities", "review"],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
@@ -60,6 +164,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "86291a209142258bcd5cc6e64765b9ea1cc89fc1f06a59c6bd9bcc3440cdcee7"
+    "manifestHash": "884432d2f8ac26eab32c3f7283925d5c426151816566b68adc8932a9a82790e9"
   }
 }

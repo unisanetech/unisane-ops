@@ -4,10 +4,15 @@ import { createServer } from 'node:http';
 import path from 'node:path';
 import { buildMarketingConsoleApp } from './build.js';
 import type { MarketingConsoleServeResult } from './contracts.js';
+import {
+  handleCampaignPauseApprovalRequest,
+  type CampaignPauseApprovalHandler,
+} from './campaign-pause-approval-action.js';
 import type {
   MarketingGoogleConnectionStatus,
   MarketingMetaConnectionStatus,
 } from '@unisane/growth/marketing';
+import type { MarketingConsoleCampaignPauseReview } from '@unisane/growth/console';
 
 export type ServeMarketingConsoleAppOptions = {
   cwd?: string;
@@ -18,6 +23,9 @@ export type ServeMarketingConsoleAppOptions = {
   maxAgeDays?: number;
   googleAuth?: MarketingGoogleConnectionStatus;
   metaAuth?: MarketingMetaConnectionStatus;
+  campaignPauseApprovalAvailable?: boolean;
+  campaignPauseReviews?: readonly MarketingConsoleCampaignPauseReview[];
+  approveCampaignPause?: CampaignPauseApprovalHandler;
   createHttpServer?: typeof createServer;
 };
 
@@ -25,6 +33,16 @@ export async function serveMarketingConsoleApp(
   options: ServeMarketingConsoleAppOptions = {},
 ): Promise<MarketingConsoleServeResult> {
   const host = options.host ?? '127.0.0.1';
+  if (
+    options.approveCampaignPause &&
+    host !== '127.0.0.1' &&
+    host !== 'localhost' &&
+    host !== '::1'
+  ) {
+    throw new Error(
+      '[OPS_CONSOLE_APPROVAL_HOST_INVALID] Campaign approval is available only from a loopback console host.',
+    );
+  }
   const port = options.port ?? 4174;
   const buildResult = await buildMarketingConsoleApp({
     cwd: options.cwd,
@@ -32,10 +50,23 @@ export async function serveMarketingConsoleApp(
     maxAgeDays: options.maxAgeDays,
     googleAuth: options.googleAuth,
     metaAuth: options.metaAuth,
+    campaignPauseApprovalAvailable: options.campaignPauseApprovalAvailable,
+    campaignPauseReviews: options.campaignPauseReviews,
   });
   const serverFactory = options.createHttpServer ?? createServer;
   const server = serverFactory(async (request, response) => {
     try {
+      if (
+        await handleCampaignPauseApprovalRequest(request, response, options.approveCampaignPause)
+      ) {
+        return;
+      }
+      if (request.method !== 'GET' && request.method !== 'HEAD') {
+        response.statusCode = 405;
+        response.setHeader('Allow', 'GET, HEAD');
+        response.end();
+        return;
+      }
       const requestUrl = new URL(request.url ?? '/', `http://${host}:${port}`);
       const requestedPath = decodeURIComponent(requestUrl.pathname);
       const candidate = resolveFilePath(buildResult.outputDirectory, requestedPath);
@@ -45,7 +76,8 @@ export async function serveMarketingConsoleApp(
       response.setHeader('Content-Type', contentTypeFor(filePath));
       response.setHeader('Content-Length', String(fileStat.size));
       response.setHeader('Cache-Control', 'no-cache');
-      createReadStream(filePath).pipe(response);
+      if (request.method === 'HEAD') response.end();
+      else createReadStream(filePath).pipe(response);
     } catch (error) {
       response.statusCode = 500;
       response.setHeader('Content-Type', 'text/plain; charset=utf-8');

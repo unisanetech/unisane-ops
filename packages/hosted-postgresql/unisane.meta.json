@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooling",
+  "id": "@unisane/ops-hosted-postgresql",
+  "edition": "oss",
+  "maturity": "beta",
+  "supportedModes": [
+    "full-platform",
+    "headless"
+  ],
+  "requiresPackages": [
+    "@unisane/ops-engine"
+  ],
+  "requiresTokens": [],
+  "runtimeProfiles": [
+    "local-minimal",
+    "standard-production",
+    "distributed-production"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "exports": [
+    ".",
+    "./migrations"
+  ]
+}

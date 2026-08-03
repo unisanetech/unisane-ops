@@ -6,11 +6,28 @@ import {
   type SeoOpportunityStatusCliOptions,
 } from '../index.js';
 import { addSharedSeoOptions, runSeoCommand } from './helpers.js';
+import {
+  seoOpportunitiesReview,
+  type SeoOpportunityReviewCliOptions,
+} from '../opportunities/review.js';
 
 export function registerSeoOpportunityCommands(seo: Command): void {
   const opportunities = seo
     .command('opportunities')
     .description('SEO page opportunity planning commands');
+
+  opportunities
+    .command('review')
+    .description('Rank recorded SEO opportunities and preserve evidence limitations')
+    .option('--cwd <path>', 'Platform app directory')
+    .option('--environment <id>', 'Growth environment')
+    .option('--market <market>', 'Exact recorded country and language market')
+    .option('--limit <count>', 'Maximum ranked opportunities to return', '10')
+    .option('--max-age-days <days>', 'Freshness threshold for recorded research', '30')
+    .option('--json', 'Emit the canonical machine-readable workflow result')
+    .action(async (options: SeoOpportunityReviewCliOptions) => {
+      process.exitCode = await seoOpportunitiesReview(options);
+    });
 
   addSharedSeoOptions(
     opportunities.command('plan').description('Plan SEO pages from keyword clusters'),

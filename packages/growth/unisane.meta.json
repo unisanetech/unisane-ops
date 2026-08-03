@@ -22,6 +22,7 @@
   ],
   "exports": [
     ".",
+    "./actions",
     "./cli",
     "./console",
     "./contracts",
@@ -29,6 +30,7 @@
     "./handlers/growth",
     "./marketing",
     "./pack-manifest",
+    "./playbooks",
     "./seo"
   ]
 }

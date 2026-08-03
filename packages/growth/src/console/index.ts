@@ -20,9 +20,14 @@ export {
 } from './recommendations.js';
 export { buildMarketingConsoleTagManager } from './tag-manager.js';
 export { resolveGrowthConsoleAuthContext } from './auth-context.js';
+export {
+  createGrowthConsoleCampaignPauseApprovalController,
+  type GrowthConsoleCampaignPauseApprovalController,
+} from './campaign-pause-approval.js';
 export type {
   MarketingConsoleArtifactLink,
   MarketingConsoleAdvertising,
+  MarketingConsoleCampaignPauseReview,
   MarketingConsoleAdvertisingCampaign,
   MarketingConsoleAdvertisingChange,
   MarketingConsoleAdvertisingConversion,

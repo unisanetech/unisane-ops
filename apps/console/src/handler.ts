@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { parseArgs } from 'node:util';
 import {
+  createGrowthConsoleCampaignPauseApprovalController,
   resolveGrowthConsoleAuthContext,
   runWithGrowthConsoleRuntime,
 } from '@unisane/growth/console';
@@ -32,11 +33,16 @@ export async function runGrowthConsole(context: PackCommandContext): Promise<Pac
       port: { type: 'string' },
       out: { type: 'string' },
       'max-age-days': { type: 'string' },
+      operator: { type: 'string' },
     },
   });
   const cwd = path.resolve(context.cwd, values.cwd ?? '.');
   const result = await runWithGrowthConsoleRuntime(context.runtime, cwd, async () => {
     const auth = await resolveGrowthConsoleAuthContext();
+    const approvalController = await createGrowthConsoleCampaignPauseApprovalController({
+      cwd,
+      approvedBy: values.operator?.trim() || 'user.local-console',
+    });
     return serveMarketingConsoleApp({
       cwd,
       host: values.host,
@@ -45,6 +51,10 @@ export async function runGrowthConsole(context: PackCommandContext): Promise<Pac
       maxAgeDays: parsePositiveInteger(values['max-age-days'], 3, '--max-age-days'),
       googleAuth: auth.googleAuth,
       metaAuth: auth.metaAuth,
+      campaignPauseApprovalAvailable: Boolean(approvalController),
+      approveCampaignPause: approvalController
+        ? ({ runId, planHash }) => approvalController.approve({ runId, confirmPlanHash: planHash })
+        : undefined,
     });
   });
 

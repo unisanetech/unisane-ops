@@ -1,0 +1,20 @@
+{
+  "extends": "../../../unisane/packages/foundation/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "module": "ESNext",
+    "target": "ES2022",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@unisane/ops-mcp": ["src/index.ts"],
+      "@unisane/ops-mcp/stdio": ["src/stdio.ts"]
+    },
+    "types": ["node"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

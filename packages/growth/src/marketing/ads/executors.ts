@@ -147,10 +147,7 @@ export async function executeMarketingAdsLiveOperation(
         'UNISANE_MARKETING_ADS_LIVE_MUTATION=enabled is required for live provider mutation.',
     });
   }
-  if (
-    options.operation.actionType !== 'pause_campaign' &&
-    options.operation.actionType !== 'create_campaign'
-  ) {
+  if (options.operation.actionType !== 'create_campaign') {
     return liveOperationResult(options.operation, {
       attemptedAt,
       environment,
@@ -167,16 +164,6 @@ export async function executeMarketingAdsLiveOperation(
       status: 'blocked',
       liveMutationSent: false,
       message: 'Live campaign creation requires a reviewed ads plan candidate.',
-    });
-  }
-  if (options.operation.actionType === 'pause_campaign' && !candidate?.campaignIds[0]) {
-    return liveOperationResult(options.operation, {
-      attemptedAt,
-      environment,
-      status: 'blocked',
-      liveMutationSent: false,
-      message:
-        'Live pause requires the reviewed ads plan candidate to include a provider campaign id.',
     });
   }
   const providerExecutor = options.providerExecutors?.[options.operation.provider];

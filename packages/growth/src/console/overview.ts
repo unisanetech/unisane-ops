@@ -1,4 +1,5 @@
 import type { GrowthCapability } from '../config.js';
+import type { GrowthHealthReviewOutput } from '../actions/health-review.js';
 import type {
   MarketingConsoleConnection,
   MarketingConsoleFreshnessCell,
@@ -310,6 +311,7 @@ function capabilityStatus(args: {
 }
 
 export function buildMarketingConsoleOverview(args: {
+  healthReview: GrowthHealthReviewOutput;
   connections: readonly MarketingConsoleConnection[];
   freshness: readonly MarketingConsoleFreshnessCell[];
   metrics: readonly MarketingConsoleMetric[];
@@ -321,58 +323,12 @@ export function buildMarketingConsoleOverview(args: {
   priorities: MarketingConsolePriority[];
 } {
   const priorities = buildPriorities(args);
-  const connected = args.connections.some((connection) => connection.connected);
   const metricIds = overviewMetricOrder.filter((id) =>
     metricKnown(args.metrics.find((metric) => metric.id === id)),
   );
-  const hasHistoricalData = metricIds.length > 0;
-  const connectionIssue = args.connections
-    .flatMap((connection) => connection.services)
-    .find((service) => service.state !== 'current');
-  const staleSources = new Set(
-    args.freshness
-      .filter(
-        (cell) =>
-          ['searchConsole', 'googleAds', 'ga4'].includes(cell.provider) && cell.status !== 'ready',
-      )
-      .map((cell) => cell.provider),
-  ).size;
-
-  let status: MarketingConsoleStatus;
-  let headline: string;
-  let detail: string;
-  if (!connected && hasHistoricalData) {
-    status = 'warn';
-    headline = 'Historical growth results are available, but Google is not connected.';
-    detail =
-      'You can review the retained results below. Connect Google before treating them as current or expecting new updates.';
-  } else if (!connected) {
-    status = 'blocked';
-    headline = 'Connect Google to start seeing trusted growth results.';
-    detail =
-      'The console will show real search, visitor, measurement, and advertising outcomes after the selected services begin providing data.';
-  } else if (connectionIssue) {
-    status =
-      connectionIssue.state === 'failed' || connectionIssue.state === 'expired-access'
-        ? 'blocked'
-        : 'warn';
-    headline = `${connectionIssue.label} needs attention, while working services remain available.`;
-    detail =
-      connectionIssue.issue ??
-      'Review the affected service without interrupting the services that are still working.';
-  } else if (staleSources > 0 && hasHistoricalData) {
-    status = 'warn';
-    headline = 'Your growth results are available, but some sources need an update.';
-    detail = `${staleSources} source${staleSources === 1 ? '' : 's'} should be refreshed before the next decision.`;
-  } else if (hasHistoricalData) {
-    status = 'ready';
-    headline = 'Your latest growth results are ready to review.';
-    detail = 'Start with the priorities and capability summaries below.';
-  } else {
-    status = 'warn';
-    headline = 'Your sources are connected and the first results are still arriving.';
-    detail = 'No metric or chart is shown until usable source data exists.';
-  }
+  const status: MarketingConsoleStatus =
+    args.healthReview.status === 'attention' ? 'warn' : args.healthReview.status;
+  const presentation = args.healthReview.workflow.presentation;
 
   const connection = args.connections.find((item) => item.provider === 'google');
   const capabilitySummaries = capabilityDefinitions
@@ -393,9 +349,10 @@ export function buildMarketingConsoleOverview(args: {
   return {
     priorities,
     overview: {
+      healthReview: args.healthReview,
       status,
-      headline,
-      detail,
+      headline: presentation.headline,
+      detail: presentation.whyItMatters,
       metricIds,
       recentOutcomes: buildRecentOutcomes(args.receipts),
       ...(funnel ? { funnel } : {}),

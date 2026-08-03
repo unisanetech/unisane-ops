@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooling",
+  "id": "@unisane/ops-hosted-runtime",
+  "edition": "oss",
+  "maturity": "beta",
+  "supportedModes": [
+    "full-platform",
+    "headless"
+  ],
+  "requiresPackages": [
+    "@unisane/ops-engine",
+    "@unisane/ops-hosted-postgresql"
+  ],
+  "requiresTokens": [],
+  "runtimeProfiles": [
+    "local-minimal",
+    "standard-production",
+    "distributed-production"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "exports": [
+    ".",
+    "./config",
+    "./gateway",
+    "./gateway/process",
+    "./worker",
+    "./worker/process"
+  ]
+}

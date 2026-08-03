@@ -73,19 +73,6 @@
       "json": true
     },
     {
-      "id": "framework.create",
-      "path": ["create"],
-      "handler": {
-        "exportPath": "./handlers/framework",
-        "exportName": "runFrameworkCommand"
-      },
-      "maximumEffect": "write",
-      "writeTargets": ["project"],
-      "artifactClasses": [],
-      "riskGuards": [],
-      "json": true
-    },
-    {
       "id": "framework.db",
       "path": ["db"],
       "handler": {
@@ -255,19 +242,6 @@
       "json": true
     },
     {
-      "id": "framework.sync",
-      "path": ["sync"],
-      "handler": {
-        "exportPath": "./handlers/framework",
-        "exportName": "runFrameworkCommand"
-      },
-      "maximumEffect": "write",
-      "writeTargets": ["project"],
-      "artifactClasses": [],
-      "riskGuards": [],
-      "json": true
-    },
-    {
       "id": "framework.upgrade",
       "path": ["upgrade"],
       "handler": {
@@ -327,6 +301,6 @@
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "b2589c863a93bd53bab65e122dcc5a51d4c85fa3ffeae51d3d5c1bc914c1ce99"
+    "manifestHash": "75fc8ad9d37fb5e7b47fc4d3f95317befdd17f82b29702706d90f3e5c4a75b54"
   }
 }

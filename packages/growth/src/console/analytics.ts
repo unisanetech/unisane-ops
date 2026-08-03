@@ -10,6 +10,7 @@ import type {
   MarketingConsoleStatus,
   MarketingConsoleTagManager,
 } from './contracts.js';
+import type { GrowthMeasurementAuditOutput } from '../actions/measurement-audit.js';
 
 export type BuildMarketingConsoleAnalyticsInput = {
   metrics: MarketingConsoleMetric[];
@@ -20,6 +21,7 @@ export type BuildMarketingConsoleAnalyticsInput = {
   connections: MarketingConsoleConnection[];
   tagManager: MarketingConsoleTagManager;
   trackingAudit: MarketingTrackingAuditReport;
+  measurementAudit: GrowthMeasurementAuditOutput;
 };
 
 const analyticsMetricIds = new Set(['sessions', 'users', 'analytics-conversions', 'revenue']);
@@ -96,6 +98,7 @@ export function buildMarketingConsoleAnalytics(
     traffic,
     visitors,
     conversions,
+    measurementAudit: input.measurementAudit,
     trackingHealth: {
       status: trackingStatus,
       headline:

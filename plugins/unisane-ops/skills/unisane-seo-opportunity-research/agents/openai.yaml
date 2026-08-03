@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Unisane SEO Research'
+  short_description: 'Find evidence-backed SEO priorities'
+  default_prompt: 'Use $unisane-seo-opportunity-research to find where we should focus next using recorded SEO evidence.'

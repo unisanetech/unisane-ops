@@ -1,0 +1,75 @@
+{
+  "name": "@unisane/ops-hosted-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Internal modular-monolith composition for Unisane Ops hosted gateway and worker roles",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "unisane.meta.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./gateway": {
+      "types": "./dist/gateway.d.ts",
+      "import": "./dist/gateway.js",
+      "default": "./dist/gateway.js"
+    },
+    "./gateway/process": {
+      "types": "./dist/gateway-process.d.ts",
+      "import": "./dist/gateway-process.js",
+      "default": "./dist/gateway-process.js"
+    },
+    "./worker": {
+      "types": "./dist/worker.d.ts",
+      "import": "./dist/worker.js",
+      "default": "./dist/worker.js"
+    },
+    "./worker/process": {
+      "types": "./dist/worker-process.d.ts",
+      "import": "./dist/worker-process.js",
+      "default": "./dist/worker-process.js"
+    },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "import": "./dist/config.js",
+      "default": "./dist/config.js"
+    },
+    "./meta": "./unisane.meta.json"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/config.ts src/gateway.ts src/gateway-process.ts src/worker.ts src/worker-process.ts --format esm --dts --clean",
+    "lint": "eslint src --max-warnings 0",
+    "test": "vitest run",
+    "check-types": "tsc --noEmit",
+    "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
+  },
+  "dependencies": {
+    "@unisane/ops-engine": "workspace:*",
+    "@unisane/ops-hosted-postgresql": "workspace:*",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.1",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.16"
+  },
+  "unisane": {
+    "kind": "tooling",
+    "edition": "oss",
+    "meta": "./unisane.meta.json"
+  }
+}

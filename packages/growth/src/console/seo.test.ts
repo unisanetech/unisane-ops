@@ -6,6 +6,12 @@ import type {
   MarketingConsoleSeoIntelligenceSummary,
 } from './contracts.js';
 import { buildMarketingConsoleSeo } from './seo.js';
+import type { GrowthSeoOpportunityResearchOutput } from '../actions/seo-opportunity-research.js';
+
+const opportunityReview = {
+  status: 'blocked',
+  opportunities: [],
+} as unknown as GrowthSeoOpportunityResearchOutput;
 
 const missingKeywordResearch: MarketingConsoleKeywordResearchSummary = {
   status: 'missing',
@@ -142,6 +148,7 @@ describe('Growth console SEO projection', () => {
       competitorResearch: missingCompetitorResearch,
       faqResearch: missingFaqResearch,
       intelligence: missingIntelligence,
+      opportunityReview,
     });
 
     expect(result.overview).toEqual(
@@ -278,6 +285,7 @@ describe('Growth console SEO projection', () => {
           ],
         },
       },
+      opportunityReview,
     });
 
     expect(result.siteHealth).toEqual(

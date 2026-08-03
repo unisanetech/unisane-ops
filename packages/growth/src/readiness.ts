@@ -156,31 +156,41 @@ export function buildGrowthConfigReadiness(input: {
       (observation) => observation.environmentId === environmentId,
     );
     const dataState = dataObservation?.state ?? 'no-signal';
+    const instrumentationReady =
+      input.config.runtime.integration !== 'none' && dataObservation?.state === 'ready';
     findings.push(
       defineOpsReadinessFinding({
         schemaVersion: 1,
-        code: `growth.instrumentation.${input.config.runtime.integration}`,
+        code: `growth.instrumentation.${instrumentationReady ? 'ready' : input.config.runtime.integration}`,
         dimension: 'instrumentation',
-        state: input.config.runtime.integration === 'none' ? 'not-selected' : 'no-signal',
-        severity: 'warning',
+        state:
+          input.config.runtime.integration === 'none'
+            ? 'not-selected'
+            : instrumentationReady
+              ? 'ready'
+              : 'no-signal',
+        severity: instrumentationReady ? 'info' : 'warning',
         projectId: input.projectId,
         environmentId,
-        summary:
-          input.config.runtime.integration === 'none'
+        summary: instrumentationReady
+          ? 'Configured Growth instrumentation has current observed evidence.'
+          : input.config.runtime.integration === 'none'
             ? 'No Growth runtime integration is selected.'
             : 'Runtime intent is selected; observed instrumentation proof is still pending.',
         blocking: false,
         observedAt: input.observedAt,
         evidence: [
           {
-            kind: 'project-config',
-            source: 'unisane.config.ts',
-            observedAt: input.observedAt,
+            kind: instrumentationReady ? 'growth-data' : 'project-config',
+            source: instrumentationReady ? dataObservation.source : 'unisane.config.ts',
+            observedAt: instrumentationReady ? dataObservation.observedAt : input.observedAt,
             freshness: 'fresh',
-            summary: `Runtime integration is ${input.config.runtime.integration}.`,
+            summary: instrumentationReady
+              ? dataObservation.summary
+              : `Runtime integration is ${input.config.runtime.integration}.`,
           },
         ],
-        ...(input.config.runtime.integration !== 'none'
+        ...(!instrumentationReady && input.config.runtime.integration !== 'none'
           ? {
               nextAction: {
                 id: 'growth.instrumentation.verify',
@@ -196,16 +206,18 @@ export function buildGrowthConfigReadiness(input: {
                 requiresApproval: false,
               },
             }
-          : {
-              nextAction: {
-                id: 'growth.instrumentation.select',
-                label: 'Select Growth instrumentation',
-                description: 'Choose the project runtime integration in canonical Growth intent.',
-                file: 'unisane.config.ts',
-                requiresConfirmation: false,
-                requiresApproval: false,
-              },
-            }),
+          : !instrumentationReady
+            ? {
+                nextAction: {
+                  id: 'growth.instrumentation.select',
+                  label: 'Select Growth instrumentation',
+                  description: 'Choose the project runtime integration in canonical Growth intent.',
+                  file: 'unisane.config.ts',
+                  requiresConfirmation: false,
+                  requiresApproval: false,
+                },
+              }
+            : {}),
       }),
       defineOpsReadinessFinding({
         schemaVersion: 1,
@@ -261,11 +273,10 @@ export function buildGrowthConfigReadiness(input: {
         code: `growth.mutation.${input.config.policy.mutation}`,
         dimension: 'mutation',
         state:
-          input.config.policy.mutation === 'disabled'
-            ? 'not-selected'
-            : input.config.policy.mutation === 'plan-only'
-              ? 'ready'
-              : 'approval-required',
+          input.config.policy.mutation === 'disabled' ||
+          input.config.policy.mutation === 'plan-only'
+            ? 'ready'
+            : 'approval-required',
         severity: input.config.policy.mutation === 'disabled' ? 'info' : 'warning',
         projectId: input.projectId,
         environmentId,

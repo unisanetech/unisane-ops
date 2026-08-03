@@ -13,6 +13,7 @@ import type {
   MarketingConsoleSeoResearchIdea,
   MarketingConsoleStatus,
 } from './contracts.js';
+import type { GrowthSeoOpportunityResearchOutput } from '../actions/seo-opportunity-research.js';
 
 export type MarketingConsoleSeoSourceRow = {
   id: string;
@@ -541,6 +542,7 @@ export function buildMarketingConsoleSeo(args: {
   competitorResearch: MarketingConsoleCompetitorResearchSummary;
   faqResearch: MarketingConsoleFaqResearchSummary;
   intelligence: MarketingConsoleSeoIntelligenceSummary;
+  opportunityReview: GrowthSeoOpportunityResearchOutput;
 }): MarketingConsoleSeo {
   const sourceFreshness = freshnessContext(args.freshness);
   const pages = buildPages(args.rows, args.intelligence);
@@ -565,6 +567,7 @@ export function buildMarketingConsoleSeo(args: {
     freshnessLabel: sourceFreshness.label,
     comparisonAvailable: false,
     comparisonLabel,
+    opportunityReview: args.opportunityReview,
     overview: {
       status,
       headline,

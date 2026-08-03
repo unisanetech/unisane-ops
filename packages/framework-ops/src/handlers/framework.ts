@@ -8,7 +8,9 @@ import type { PackCommandContext, PackCommandResult } from '@unisane/ops-engine/
 
 export type FrameworkCommandBridge = (
   request: FrameworkCommandRequest,
-) => FrameworkCommandExecution;
+) => FrameworkCommandExecution | Promise<FrameworkCommandExecution>;
+
+const INTERACTIVE_COMMAND_ROOTS = new Set(['dev', 'start', 'watch']);
 
 function parseOutput(stdout: string): unknown {
   const trimmed = stdout.trim();
@@ -20,10 +22,10 @@ function parseOutput(stdout: string): unknown {
   }
 }
 
-export function executeFrameworkCommand(
+export async function executeFrameworkCommand(
   context: PackCommandContext,
   bridge: FrameworkCommandBridge,
-): PackCommandResult {
+): Promise<PackCommandResult> {
   const selection = context.selection;
   if (!selection) {
     throw new Error(
@@ -36,12 +38,20 @@ export function executeFrameworkCommand(
       `[FRAMEWORK_OPS_COMMAND_UNSUPPORTED] Unsupported Framework command root '${root ?? ''}'.`,
     );
   }
-  const execution = bridge({
+  const interactive = INTERACTIVE_COMMAND_ROOTS.has(root);
+  if (interactive && context.json) {
+    throw new Error(
+      `[FRAMEWORK_OPS_INTERACTIVE_JSON_UNSUPPORTED] Framework command '${root}' owns an interactive terminal and does not support --json.`,
+    );
+  }
+  const execution = await bridge({
     root,
     argv: context.json ? [...context.argv, '--json'] : context.argv,
     cwd: context.cwd,
     json: context.json ?? false,
+    mode: interactive ? 'interactive' : 'captured',
   });
+  const gracefullyStopped = interactive && [130, 143].includes(execution.exitCode);
   const result: PackCommandResult = {
     schemaVersion: 1,
     command: selection.command.id,
@@ -50,7 +60,7 @@ export function executeFrameworkCommand(
     actualEffect: selection.command.maximumEffect,
     writeTargets: selection.command.writeTargets,
     riskGuards: selection.command.riskGuards,
-    status: execution.exitCode === 0 ? 'ok' : 'failed',
+    status: execution.exitCode === 0 || gracefullyStopped ? 'ok' : 'failed',
     result: {
       exitCode: execution.exitCode,
       output: parseOutput(execution.stdout),
@@ -63,14 +73,14 @@ export function executeFrameworkCommand(
       ? {}
       : {
           presentation: {
-            stdout: execution.stdout,
-            stderr: execution.stderr,
+            stdout: interactive ? '' : execution.stdout,
+            stderr: interactive ? '' : execution.stderr,
           },
         }),
   };
   return result;
 }
 
-export function runFrameworkCommand(context: PackCommandContext): PackCommandResult {
+export function runFrameworkCommand(context: PackCommandContext): Promise<PackCommandResult> {
   return executeFrameworkCommand(context, runDevtoolsFrameworkCommand);
 }

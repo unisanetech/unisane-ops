@@ -6,6 +6,10 @@ import type {
   MarketingStatusReport,
 } from '@unisane/growth/marketing';
 import type { GrowthCapability } from '../config.js';
+import type { GrowthHealthReviewOutput } from '../actions/health-review.js';
+import type { GrowthMeasurementAuditOutput } from '../actions/measurement-audit.js';
+import type { GrowthSeoOpportunityResearchOutput } from '../actions/seo-opportunity-research.js';
+import type { GrowthCampaignPauseReview } from '../playbooks/campaign-pause-review.js';
 import type {
   MarketingProviderReportType,
   MarketingReportMetrics,
@@ -127,6 +131,7 @@ export type MarketingConsolePriority = {
 };
 
 export type MarketingConsoleOverview = {
+  healthReview: GrowthHealthReviewOutput;
   status: MarketingConsoleStatus;
   headline: string;
   detail: string;
@@ -333,6 +338,12 @@ export type MarketingConsoleAdvertising = {
     status: MarketingConsoleStatus;
     summary: string;
   }>;
+  campaignPauseApprovalAvailable: boolean;
+  campaignPauseReviews: MarketingConsoleCampaignPauseReview[];
+};
+
+export type MarketingConsoleCampaignPauseReview = GrowthCampaignPauseReview & {
+  runId: string;
 };
 
 export type MarketingConsoleAnalyticsRow = {
@@ -413,6 +424,7 @@ export type MarketingConsoleAnalytics = {
   traffic: MarketingConsoleAnalyticsRow[];
   visitors: MarketingConsoleAnalyticsRow[];
   conversions: MarketingConsoleAnalyticsRow[];
+  measurementAudit: GrowthMeasurementAuditOutput;
   trackingHealth: {
     status: MarketingConsoleStatus;
     headline: string;
@@ -532,6 +544,7 @@ export type MarketingConsoleSeo = {
   freshnessLabel: string;
   comparisonAvailable: boolean;
   comparisonLabel: string;
+  opportunityReview: GrowthSeoOpportunityResearchOutput;
   overview: {
     status: MarketingConsoleStatus;
     headline: string;

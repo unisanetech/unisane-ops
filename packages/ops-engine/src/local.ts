@@ -26,6 +26,13 @@ import {
   type OpsLockLease,
   type OpsMutationReceipt,
 } from './safety.js';
+import {
+  opsMutationRunQuerySchema,
+  parseOpsMutationRun,
+  type OpsMutationRun,
+  type OpsMutationRunQuery,
+  type OpsMutationRunStore,
+} from './runs.js';
 
 const loadedEnvironmentDirectories = new Set<string>();
 const LOCAL_ENVIRONMENT_FILES = ['.env.local', '.env'] as const;
@@ -210,6 +217,83 @@ export class LocalApprovalStore implements ApprovalStore {
     const value = await readJsonFile(stateFile(this.directory, approvalId));
     if (value === null) return null;
     return opsApprovalRecordSchema.parse(value);
+  }
+}
+
+export class LocalOpsMutationRunStore implements OpsMutationRunStore {
+  readonly durability = 'local' as const;
+  readonly atomic = true;
+
+  constructor(private readonly directory: string) {}
+
+  async get<TActionState = unknown>(runId: string): Promise<OpsMutationRun<TActionState> | null> {
+    const value = await readJsonFile(stateFile(this.directory, runId));
+    return value === null ? null : parseOpsMutationRun<TActionState>(value);
+  }
+
+  async list<TActionState = unknown>(
+    queryInput: OpsMutationRunQuery,
+  ): Promise<Array<OpsMutationRun<TActionState>>> {
+    const query = opsMutationRunQuerySchema.parse(queryInput);
+    const names = await fs.readdir(this.directory).catch((error: unknown) => {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
+      throw error;
+    });
+    const runs = await Promise.all(
+      names
+        .filter((name) => name.endsWith('.json') && !name.endsWith('.lock.json'))
+        .map(async (name) => {
+          const value = await readJsonFile(path.join(this.directory, name));
+          return value === null ? null : parseOpsMutationRun<TActionState>(value);
+        }),
+    );
+    return runs
+      .filter((run): run is OpsMutationRun<TActionState> => run !== null)
+      .filter(
+        (run) =>
+          run.actionId === query.actionId &&
+          run.projectId === query.projectId &&
+          run.environmentId === query.environmentId,
+      )
+      .sort(
+        (left, right) =>
+          Date.parse(right.updatedAt) - Date.parse(left.updatedAt) ||
+          left.runId.localeCompare(right.runId),
+      )
+      .slice(0, query.limit);
+  }
+
+  async compareAndSet<TActionState>(
+    runInput: OpsMutationRun<TActionState>,
+    expectedRevision: number | null,
+  ): Promise<'stored' | 'conflict'> {
+    const run = parseOpsMutationRun<TActionState>(runInput);
+    if (run.revision !== (expectedRevision ?? 0) + 1) {
+      throw new Error('[OPS_RUN_REVISION_INVALID] Mutation run revision must advance by one.');
+    }
+    await ensureDirectory(this.directory);
+    const filePath = stateFile(this.directory, run.runId);
+    const lockPath = `${filePath}.lock`;
+    let lock: Awaited<ReturnType<typeof fs.open>>;
+    try {
+      lock = await fs.open(lockPath, 'wx', 0o600);
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'EEXIST') return 'conflict';
+      throw error;
+    }
+    try {
+      const currentInput = await readJsonFile(filePath);
+      const current =
+        currentInput === null ? null : parseOpsMutationRun<TActionState>(currentInput);
+      if ((current?.revision ?? null) !== expectedRevision) return 'conflict';
+      await writeJsonAtomic(filePath, run);
+      return 'stored';
+    } finally {
+      await lock.close();
+      await fs.unlink(lockPath).catch((error: unknown) => {
+        if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+      });
+    }
   }
 }
 

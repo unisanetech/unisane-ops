@@ -15,6 +15,7 @@ import {
 import { NarrativeDataTable } from '../../shared/narrative-data-table.js';
 import { formatMoney, SourceSummaries } from '../channels/shared.js';
 import { advertisingConnectionPath, advertisingView } from './view.js';
+import { CampaignPauseReviewPanel, selectCampaignPauseReviews } from './campaign-pause-review.js';
 
 export function AdvertisingCampaigns({ state, route, navigate }: ConsoleScreenProps) {
   const advertising = advertisingView(state, route);
@@ -37,6 +38,11 @@ export function AdvertisingCampaigns({ state, route, navigate }: ConsoleScreenPr
         )
         .sort((left, right) => compareCampaigns(left, right, sort)),
     [advertising.campaigns, delivery, search, sort],
+  );
+  const pauseReviews = selectCampaignPauseReviews(
+    state.advertising.campaignPauseReviews,
+    route.advertisingPlatform,
+    advertising.campaigns,
   );
   const columns = useMemo<Column<Campaign>[]>(
     () => [
@@ -101,6 +107,22 @@ export function AdvertisingCampaigns({ state, route, navigate }: ConsoleScreenPr
         headline={advertising.headline}
         detail="Campaign rows retain the provider-reported zeroes while freshness explains whether they are current or historical."
       />
+      {pauseReviews.length ? (
+        <ContentSection
+          title="Campaign change reviews"
+          description="Review the exact target, evidence, approval, provider receipt, and verification result. This view cannot apply changes."
+        >
+          <div className="grid gap-4">
+            {pauseReviews.map((review) => (
+              <CampaignPauseReviewPanel
+                key={review.action.planHash}
+                review={review}
+                approvalAvailable={state.advertising.campaignPauseApprovalAvailable}
+              />
+            ))}
+          </div>
+        </ContentSection>
+      ) : null}
       {advertising.campaigns.length ? (
         <ContentSection>
           <FilterToolbar

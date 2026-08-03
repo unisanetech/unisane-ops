@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Unisane Measurement Audit'
+  short_description: 'Check whether growth numbers are trustworthy'
+  default_prompt: 'Use $unisane-growth-measurement-audit to determine whether these growth numbers can be trusted before scaling.'

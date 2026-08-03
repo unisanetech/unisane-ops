@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Unisane Campaign Pause'
+  short_description: 'Safely pause one approved ad campaign'
+  default_prompt: 'Use $unisane-campaign-pause to plan one exact campaign pause, continue after human approval, and verify the result.'

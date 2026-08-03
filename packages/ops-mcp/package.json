@@ -1,0 +1,58 @@
+{
+  "name": "@unisane/ops-mcp",
+  "version": "0.1.0",
+  "description": "Project-scoped local MCP access to proven Unisane Ops workflows",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "unisane.meta.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./stdio": {
+      "types": "./dist/stdio.d.ts",
+      "import": "./dist/stdio.js",
+      "default": "./dist/stdio.js"
+    },
+    "./meta": "./unisane.meta.json"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/stdio.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts src/stdio.ts --format esm --dts --watch",
+    "lint": "eslint src --max-warnings 0",
+    "test": "vitest run",
+    "eval:agents": "vitest run src/__tests__/evaluation",
+    "check-types": "tsc --noEmit",
+    "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "@unisane/growth": "workspace:*",
+    "@unisane/ops-engine": "workspace:*",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "^2.0.0",
+    "eslint": "^9.39.1",
+    "tsup": "^8.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.16"
+  },
+  "unisane": {
+    "kind": "tooling",
+    "edition": "oss",
+    "meta": "./unisane.meta.json"
+  }
+}

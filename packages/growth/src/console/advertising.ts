@@ -8,6 +8,7 @@ import type {
   MarketingConsoleAdvertising,
   MarketingConsoleAdvertisingCampaign,
   MarketingConsoleAdvertisingChange,
+  MarketingConsoleCampaignPauseReview,
   MarketingConsoleAdvertisingConversion,
   MarketingConsoleAdvertisingEntity,
   MarketingConsoleAdvertisingView,
@@ -34,6 +35,8 @@ export type BuildMarketingConsoleAdvertisingInput = {
   freshness: MarketingConsoleFreshnessCell[];
   receipts: MarketingConsoleReceiptEvent[];
   audit?: MarketingAdsAuditReport;
+  campaignPauseApprovalAvailable?: boolean;
+  campaignPauseReviews?: MarketingConsoleCampaignPauseReview[];
 };
 
 const providerLabels: Record<AdvertisingProvider, string> = {
@@ -51,6 +54,8 @@ export function buildMarketingConsoleAdvertising(
   return {
     combined,
     providers: [google, meta],
+    campaignPauseApprovalAvailable: input.campaignPauseApprovalAvailable ?? false,
+    campaignPauseReviews: input.campaignPauseReviews ?? [],
     auditSections: (input.audit?.sections ?? []).map((section) => ({
       id: section.id,
       label: section.label,

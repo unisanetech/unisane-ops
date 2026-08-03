@@ -1,0 +1,20 @@
+{
+  "name": "unisane-local",
+  "interface": {
+    "displayName": "Unisane Local"
+  },
+  "plugins": [
+    {
+      "name": "unisane-ops",
+      "source": {
+        "source": "local",
+        "path": "./plugins/unisane-ops"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

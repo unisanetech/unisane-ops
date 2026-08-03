@@ -3,6 +3,7 @@ import type {
   MarketingAdsLiveProviderExecutor,
   MarketingProviderApiPullDriver,
 } from '../contracts.js';
+import type { GrowthCampaignPauseProviderAdapters } from '../actions/campaign-pause.js';
 import {
   executeGrowthProviderCommand,
   type GrowthProviderCommandOperation,
@@ -25,6 +26,48 @@ export const executeMetaAdsLiveOperation: MarketingAdsLiveProviderExecutor = (in
 
 export const uploadMetaAdsAsset: MarketingAdsAssetProviderUploader = (input) =>
   executeGrowthProviderCommand('meta.marketing.upload-asset', input);
+
+export function createCliCampaignPauseProviderAdapters(input: {
+  environment: string;
+  googleConnection?: string;
+  metaConnection?: string;
+  apiVersion?: string;
+}): GrowthCampaignPauseProviderAdapters {
+  const shared = {
+    environment: input.environment,
+    ...(input.apiVersion ? { apiVersion: input.apiVersion } : {}),
+  };
+  return {
+    googleAds: {
+      pauseCampaign: async (request) =>
+        await executeGrowthProviderCommand('google.marketing.pause-campaign', {
+          ...shared,
+          ...(input.googleConnection ? { connection: input.googleConnection } : {}),
+          ...request,
+        }),
+      readCampaignStatus: async (request) =>
+        await executeGrowthProviderCommand('google.marketing.read-campaign-status', {
+          ...shared,
+          ...(input.googleConnection ? { connection: input.googleConnection } : {}),
+          ...request,
+        }),
+    },
+    metaAds: {
+      pauseCampaign: async (request) =>
+        await executeGrowthProviderCommand('meta.marketing.pause-campaign', {
+          ...shared,
+          ...(input.metaConnection ? { connection: input.metaConnection } : {}),
+          ...request,
+        }),
+      readCampaignStatus: async (request) =>
+        await executeGrowthProviderCommand('meta.marketing.read-campaign-status', {
+          ...shared,
+          ...(input.metaConnection ? { connection: input.metaConnection } : {}),
+          ...request,
+        }),
+    },
+  };
+}
 
 export type SearchConsoleDimension =
   | 'query'

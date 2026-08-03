@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooling",
+  "id": "@unisane/ops-mcp",
+  "edition": "oss",
+  "maturity": "beta",
+  "supportedModes": [
+    "full-platform",
+    "headless"
+  ],
+  "requiresPackages": [
+    "@unisane/growth",
+    "@unisane/ops-engine"
+  ],
+  "requiresTokens": [],
+  "runtimeProfiles": [
+    "local-minimal",
+    "standard-production",
+    "distributed-production"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "exports": [
+    ".",
+    "./stdio"
+  ]
+}

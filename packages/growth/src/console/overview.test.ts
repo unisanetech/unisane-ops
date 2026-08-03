@@ -5,6 +5,23 @@ import type {
   MarketingConsoleMetric,
 } from './contracts.js';
 import { buildMarketingConsoleOverview } from './overview.js';
+import type { GrowthHealthReviewOutput } from '../actions/health-review.js';
+
+function healthReview(
+  status: GrowthHealthReviewOutput['status'],
+  headline: string,
+): GrowthHealthReviewOutput {
+  return {
+    status,
+    workflow: {
+      presentation: {
+        headline,
+        whyItMatters: `${headline} explanation`,
+        nextStep: { label: 'Review evidence', reason: 'Review the primary finding.' },
+      },
+    },
+  } as unknown as GrowthHealthReviewOutput;
+}
 
 function metric(
   id: string,
@@ -43,6 +60,7 @@ function freshness(
 describe('Growth console Overview projection', () => {
   it('keeps historical metrics honest when Google is not connected', () => {
     const result = buildMarketingConsoleOverview({
+      healthReview: healthReview('blocked', 'Growth guidance is blocked for now.'),
       connections: [
         {
           provider: 'google',
@@ -83,8 +101,8 @@ describe('Growth console Overview projection', () => {
 
     expect(result.overview).toEqual(
       expect.objectContaining({
-        status: 'warn',
-        headline: 'Historical growth results are available, but Google is not connected.',
+        status: 'blocked',
+        headline: 'Growth guidance is blocked for now.',
         metricIds: ['organic-clicks'],
         funnel: expect.objectContaining({
           title: 'Search journey',
@@ -162,6 +180,7 @@ describe('Growth console Overview projection', () => {
     };
 
     const result = buildMarketingConsoleOverview({
+      healthReview: healthReview('attention', 'Some Growth evidence needs attention.'),
       connections: [connection],
       freshness: [
         freshness('searchConsole', 'warn', 4),
@@ -180,7 +199,7 @@ describe('Growth console Overview projection', () => {
     expect(result.overview).toEqual(
       expect.objectContaining({
         status: 'warn',
-        headline: 'Search Console needs attention, while working services remain available.',
+        headline: 'Some Growth evidence needs attention.',
         funnel: expect.objectContaining({ title: 'Visitor journey' }),
       }),
     );

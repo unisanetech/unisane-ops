@@ -1,5 +1,21 @@
 import { describe, expect, it } from 'vitest';
+import type { GrowthMeasurementAuditOutput } from '../actions/measurement-audit.js';
 import { buildMarketingConsoleAnalytics } from './analytics.js';
+
+const measurementAudit = {
+  status: 'attention',
+  workflow: {
+    presentation: {
+      headline: 'Measurement needs review before scaling.',
+      whyItMatters: 'Tracking observations are incomplete.',
+      nextStep: {
+        label: 'Review measurement evidence',
+        reason: 'Capture browser and server observations.',
+        deepLink: '/analytics/tracking-health',
+      },
+    },
+  },
+} as GrowthMeasurementAuditOutput;
 
 const trackingAudit = {
   kind: 'unisane.growth.tracking-audit' as const,
@@ -99,6 +115,7 @@ describe('Growth console Analytics projection', () => {
         technical: {},
       },
       trackingAudit,
+      measurementAudit,
     });
 
     expect(result).toMatchObject({

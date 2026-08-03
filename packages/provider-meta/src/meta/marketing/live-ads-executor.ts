@@ -6,6 +6,47 @@ import type {
   MarketingMetaAdsBuildout,
 } from '@unisane/growth/contracts';
 
+export interface MetaAdsCampaignControlInput {
+  providerAccountId: string;
+  campaignId: string;
+  accessToken: string;
+  fetcher: FetchLike;
+  apiVersion?: string;
+}
+
+export interface MetaAdsCampaignPauseResult {
+  outcome: 'succeeded' | 'rejected' | 'outcome-unknown';
+  providerOperationId?: string;
+  safeMessage: string;
+}
+
+export interface MetaAdsCampaignControlAdapterOptions {
+  accessToken: string;
+  fetcher: FetchLike;
+  apiVersion?: string;
+}
+
+export function createMetaAdsCampaignControlAdapter(options: MetaAdsCampaignControlAdapterOptions) {
+  return {
+    pauseCampaign(input: { providerAccountId: string; campaignId: string }) {
+      return pauseMetaAdsCampaign({
+        ...input,
+        accessToken: options.accessToken,
+        fetcher: options.fetcher,
+        ...(options.apiVersion ? { apiVersion: options.apiVersion } : {}),
+      });
+    },
+    readCampaignStatus(input: { providerAccountId: string; campaignId: string }) {
+      return readMetaAdsCampaignStatus({
+        ...input,
+        accessToken: options.accessToken,
+        fetcher: options.fetcher,
+        ...(options.apiVersion ? { apiVersion: options.apiVersion } : {}),
+      });
+    },
+  };
+}
+
 function absoluteFinalUrl(origin: string | undefined, value: string): string {
   if (/^https?:\/\//i.test(value)) return value;
   const base = origin?.trim() || 'https://trueresume.io';
@@ -55,33 +96,58 @@ async function readProviderResponse(
   return body;
 }
 
-async function pauseMetaCampaign(args: {
-  campaignId: string;
-  accessToken: string;
-  fetcher: FetchLike;
-  apiVersion?: string;
-}): Promise<{ providerOperationId?: string; message: string }> {
+export async function pauseMetaAdsCampaign(
+  args: MetaAdsCampaignControlInput,
+): Promise<MetaAdsCampaignPauseResult> {
+  if (!args.providerAccountId.trim() || !args.campaignId.trim() || !args.accessToken.trim()) {
+    return {
+      outcome: 'rejected',
+      safeMessage: 'Meta Ads campaign control requires a valid account, campaign, and connection.',
+    };
+  }
   const apiVersion = args.apiVersion ?? 'v23.0';
   const body = new URLSearchParams();
   body.set('status', 'PAUSED');
   body.set('access_token', args.accessToken);
-  const response = await args.fetcher(
-    `https://graph.facebook.com/${apiVersion}/${args.campaignId}`,
-    {
+  let response: Response;
+  try {
+    response = await args.fetcher(`https://graph.facebook.com/${apiVersion}/${args.campaignId}`, {
       method: 'POST',
       body,
-    },
-  );
+    });
+  } catch {
+    return {
+      outcome: 'outcome-unknown',
+      safeMessage: 'Meta Ads did not confirm whether the campaign pause was applied.',
+    };
+  }
   const parsed = await parseProviderResponse(response);
   if (!response.ok) {
-    throw new Error(
-      `[ADS_LIVE_META_PAUSE_FAILED] Meta Ads pause failed: ${JSON.stringify(parsed)}`,
-    );
+    return { outcome: 'rejected', safeMessage: 'Meta Ads rejected the campaign pause.' };
   }
+  void parsed;
   return {
+    outcome: 'succeeded',
     providerOperationId: args.campaignId,
-    message: 'Meta Ads campaign pause mutation sent.',
+    safeMessage: 'Meta Ads confirmed the campaign pause request.',
   };
+}
+
+export async function readMetaAdsCampaignStatus(
+  args: MetaAdsCampaignControlInput,
+): Promise<'paused' | 'active' | 'unknown'> {
+  if (!args.providerAccountId.trim() || !args.campaignId.trim() || !args.accessToken.trim()) {
+    return 'unknown';
+  }
+  const apiVersion = args.apiVersion ?? 'v23.0';
+  const query = new URLSearchParams({ fields: 'id,status', access_token: args.accessToken });
+  const response = await args.fetcher(
+    `https://graph.facebook.com/${apiVersion}/${args.campaignId}?${query.toString()}`,
+  );
+  if (!response.ok) return 'unknown';
+  const status = asRecord(await parseProviderResponse(response)).status;
+  if (status === 'PAUSED') return 'paused';
+  return typeof status === 'string' ? 'active' : 'unknown';
 }
 
 async function mutateMetaAds(args: {
@@ -336,10 +402,13 @@ export async function executeMetaAdsLiveOperation(
       '[ADS_LIVE_META_CONNECTION_INCOMPLETE] Meta Ads pause requires a canonical connection credential.',
     );
   }
-  return pauseMetaCampaign({
+  const result = await pauseMetaAdsCampaign({
+    providerAccountId: options.credentials?.accountId ?? '',
     campaignId,
     accessToken,
     fetcher: options.fetch,
     apiVersion: options.apiVersion,
   });
+  if (result.outcome !== 'succeeded') throw new Error(result.safeMessage);
+  return { providerOperationId: result.providerOperationId, message: result.safeMessage };
 }

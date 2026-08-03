@@ -8,6 +8,8 @@ export type GrowthProviderCommandOperation =
   | 'growth.project.context'
   | 'google.connection.resolve-credentials'
   | 'google.marketing.execute-live'
+  | 'google.marketing.pause-campaign'
+  | 'google.marketing.read-campaign-status'
   | 'google.marketing.pull-ga4'
   | 'google.marketing.pull-report'
   | 'google.marketing.pull-search-console'
@@ -23,6 +25,8 @@ export type GrowthProviderCommandOperation =
   | 'gtm.provider.rollback'
   | 'meta.connection.resolve-token'
   | 'meta.marketing.execute-live'
+  | 'meta.marketing.pause-campaign'
+  | 'meta.marketing.read-campaign-status'
   | 'meta.marketing.pull-report'
   | 'meta.marketing.upload-asset';
 

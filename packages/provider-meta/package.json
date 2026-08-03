@@ -34,6 +34,7 @@
     "lint": "eslint src --max-warnings 0",
     "test": "vitest run",
     "check-types": "tsc --noEmit",
+    "validate": "pnpm check-types && pnpm test",
     "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
   },
   "dependencies": {

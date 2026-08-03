@@ -26,6 +26,7 @@ export function addFrameworkItem(
     argv: context.json ? [...context.argv, '--json'] : context.argv,
     cwd: context.cwd,
     json: context.json,
+    mode: 'captured',
   });
   return defineOpsLifecycleContributionResult({
     schemaVersion: 1,

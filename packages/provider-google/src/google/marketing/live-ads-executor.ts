@@ -7,6 +7,59 @@ import type {
 } from '@unisane/growth/contracts';
 import { asArray, asRecord } from './transport-utils.js';
 
+export interface GoogleAdsCampaignControlInput {
+  customerId: string;
+  campaignId: string;
+  accessToken: string;
+  developerToken: string;
+  loginCustomerId?: string;
+  fetcher: FetchLike;
+  apiVersion?: string;
+}
+
+export interface GoogleAdsCampaignPauseResult {
+  outcome: 'succeeded' | 'rejected' | 'outcome-unknown';
+  providerOperationId?: string;
+  safeMessage: string;
+}
+
+export interface GoogleAdsCampaignControlAdapterOptions {
+  accessToken: string;
+  developerToken: string;
+  loginCustomerId?: string;
+  fetcher: FetchLike;
+  apiVersion?: string;
+}
+
+export function createGoogleAdsCampaignControlAdapter(
+  options: GoogleAdsCampaignControlAdapterOptions,
+) {
+  return {
+    pauseCampaign(input: { providerAccountId: string; campaignId: string }) {
+      return pauseGoogleAdsCampaign({
+        customerId: input.providerAccountId,
+        campaignId: input.campaignId,
+        accessToken: options.accessToken,
+        developerToken: options.developerToken,
+        ...(options.loginCustomerId ? { loginCustomerId: options.loginCustomerId } : {}),
+        fetcher: options.fetcher,
+        ...(options.apiVersion ? { apiVersion: options.apiVersion } : {}),
+      });
+    },
+    readCampaignStatus(input: { providerAccountId: string; campaignId: string }) {
+      return readGoogleAdsCampaignStatus({
+        customerId: input.providerAccountId,
+        campaignId: input.campaignId,
+        accessToken: options.accessToken,
+        developerToken: options.developerToken,
+        ...(options.loginCustomerId ? { loginCustomerId: options.loginCustomerId } : {}),
+        fetcher: options.fetcher,
+        ...(options.apiVersion ? { apiVersion: options.apiVersion } : {}),
+      });
+    },
+  };
+}
+
 function normalizeGoogleAdsCustomerId(value: string): string {
   return value.replaceAll('-', '');
 }
@@ -447,62 +500,109 @@ async function createGoogleAdsCampaignAssets(args: {
   return linkedAssets;
 }
 
-async function pauseGoogleAdsCampaign(args: {
-  campaignId: string;
-  credentials?: MarketingAdsLiveProviderExecutionOptions['credentials'];
-  env: Record<string, string | undefined>;
-  fetcher: FetchLike;
-  apiVersion?: string;
-}): Promise<{ providerOperationId?: string; message: string }> {
-  const customerId = args.credentials?.accountId;
-  const loginCustomerId = args.credentials?.loginCustomerId;
-  const developerToken = args.credentials?.developerToken;
-  const accessToken = args.credentials?.accessToken;
-  if (!customerId || !developerToken || !accessToken) {
-    throw new Error(
-      '[ADS_LIVE_GOOGLE_CONNECTION_INCOMPLETE] Google Ads live pause requires a selected customer, OAuth access, and approved developer access.',
-    );
+export async function pauseGoogleAdsCampaign(
+  args: GoogleAdsCampaignControlInput,
+): Promise<GoogleAdsCampaignPauseResult> {
+  if (
+    !args.customerId.trim() ||
+    !/^\d+$/.test(args.campaignId) ||
+    !args.accessToken.trim() ||
+    !args.developerToken.trim()
+  ) {
+    return {
+      outcome: 'rejected',
+      safeMessage:
+        'Google Ads campaign control requires a valid account, campaign, and connection.',
+    };
   }
   const apiVersion = args.apiVersion ?? 'v24';
-  const normalizedCustomerId = normalizeGoogleAdsCustomerId(customerId);
-  const response = await args.fetcher(
-    `https://googleads.googleapis.com/${apiVersion}/customers/${normalizedCustomerId}/campaigns:mutate`,
-    {
-      method: 'POST',
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-        'content-type': 'application/json',
-        'developer-token': developerToken,
-        ...(loginCustomerId
-          ? { 'login-customer-id': normalizeGoogleAdsCustomerId(loginCustomerId) }
-          : {}),
-      },
-      body: JSON.stringify({
-        operations: [
-          {
-            updateMask: 'status',
-            update: {
-              resourceName: `customers/${normalizedCustomerId}/campaigns/${args.campaignId}`,
-              status: 'PAUSED',
+  const normalizedCustomerId = normalizeGoogleAdsCustomerId(args.customerId);
+  let response: Response;
+  try {
+    response = await args.fetcher(
+      `https://googleads.googleapis.com/${apiVersion}/customers/${normalizedCustomerId}/campaigns:mutate`,
+      {
+        method: 'POST',
+        headers: {
+          authorization: `Bearer ${args.accessToken}`,
+          'content-type': 'application/json',
+          'developer-token': args.developerToken,
+          ...(args.loginCustomerId
+            ? { 'login-customer-id': normalizeGoogleAdsCustomerId(args.loginCustomerId) }
+            : {}),
+        },
+        body: JSON.stringify({
+          operations: [
+            {
+              updateMask: 'status',
+              update: {
+                resourceName: `customers/${normalizedCustomerId}/campaigns/${args.campaignId}`,
+                status: 'PAUSED',
+              },
             },
-          },
-        ],
-      }),
-    },
-  );
+          ],
+        }),
+      },
+    );
+  } catch {
+    return {
+      outcome: 'outcome-unknown',
+      safeMessage: 'Google Ads did not confirm whether the campaign pause was applied.',
+    };
+  }
   const body = await parseProviderResponse(response);
   if (!response.ok) {
-    throw new Error(
-      `[ADS_LIVE_GOOGLE_PAUSE_FAILED] Google Ads pause failed: ${JSON.stringify(body)}`,
-    );
+    return { outcome: 'rejected', safeMessage: 'Google Ads rejected the campaign pause.' };
   }
   const result = Array.isArray((body as { results?: unknown[] }).results)
     ? (body as { results: Array<{ resourceName?: string }> }).results[0]?.resourceName
     : undefined;
   return {
+    outcome: 'succeeded',
     providerOperationId: result,
-    message: 'Google Ads campaign pause mutation sent.',
+    safeMessage: 'Google Ads confirmed the campaign pause request.',
   };
+}
+
+export async function readGoogleAdsCampaignStatus(
+  args: GoogleAdsCampaignControlInput,
+): Promise<'paused' | 'active' | 'unknown'> {
+  if (
+    !args.customerId.trim() ||
+    !/^\d+$/.test(args.campaignId) ||
+    !args.accessToken.trim() ||
+    !args.developerToken.trim()
+  ) {
+    return 'unknown';
+  }
+  const apiVersion = args.apiVersion ?? 'v24';
+  const normalizedCustomerId = normalizeGoogleAdsCustomerId(args.customerId);
+  const response = await args.fetcher(
+    `https://googleads.googleapis.com/${apiVersion}/customers/${normalizedCustomerId}/googleAds:searchStream`,
+    {
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${args.accessToken}`,
+        'content-type': 'application/json',
+        'developer-token': args.developerToken,
+        ...(args.loginCustomerId
+          ? { 'login-customer-id': normalizeGoogleAdsCustomerId(args.loginCustomerId) }
+          : {}),
+      },
+      body: JSON.stringify({
+        query: `SELECT campaign.id, campaign.status FROM campaign WHERE campaign.id = ${args.campaignId} LIMIT 1`,
+      }),
+    },
+  );
+  if (!response.ok) return 'unknown';
+  const payload = await parseProviderResponse(response);
+  const batches = Array.isArray(payload) ? payload : [payload];
+  const status = batches
+    .flatMap((batch) => asArray(asRecord(batch).results))
+    .map((result) => asRecord(asRecord(result).campaign).status)
+    .find((value): value is string => typeof value === 'string');
+  if (status === 'PAUSED') return 'paused';
+  return status ? 'active' : 'unknown';
 }
 
 async function createPausedGoogleAdsSearchCampaign(args: {
@@ -712,11 +812,17 @@ export async function executeGoogleAdsLiveOperation(
       '[ADS_LIVE_GOOGLE_CAMPAIGN_ID_REQUIRED] Google Ads pause requires a reviewed provider campaign id.',
     );
   }
-  return pauseGoogleAdsCampaign({
+  const result = await pauseGoogleAdsCampaign({
     campaignId,
-    credentials: options.credentials,
-    env: options.env,
+    customerId: options.credentials?.accountId ?? '',
+    accessToken: options.credentials?.accessToken ?? '',
+    developerToken: options.credentials?.developerToken ?? '',
+    ...(options.credentials?.loginCustomerId
+      ? { loginCustomerId: options.credentials.loginCustomerId }
+      : {}),
     fetcher: options.fetch,
     apiVersion: options.apiVersion,
   });
+  if (result.outcome !== 'succeeded') throw new Error(result.safeMessage);
+  return { providerOperationId: result.providerOperationId, message: result.safeMessage };
 }

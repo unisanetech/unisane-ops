@@ -32,11 +32,11 @@
     "unisane.meta.json"
   ],
   "engines": {
-    "node": ">=18.17.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --clean",
-    "dev": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts --format esm --dts --watch",
+    "build": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts src/handlers/mcp.ts --format esm --dts --clean",
+    "dev": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts src/handlers/mcp.ts --format esm --dts --watch",
     "lint": "eslint src --max-warnings 0",
     "check-types": "tsc --noEmit",
     "test": "pnpm build && node --test test/*.test.mjs",
@@ -45,6 +45,7 @@
   "dependencies": {
     "@unisane/cloud": "workspace:*",
     "@unisane/growth": "workspace:*",
+    "@unisane/ops-mcp": "workspace:*",
     "@unisane/ops-engine": "workspace:*",
     "@unisane/provider-cloudflare": "workspace:*",
     "tsx": "^4.21.0",
@@ -72,6 +73,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "@modelcontextprotocol/client": "^2.0.0",
     "@unisane/framework-ops": "workspace:*",
     "@unisane/provider-aws": "workspace:*",
     "@unisane/provider-google": "workspace:*",
@@ -90,6 +92,11 @@
       "types": "./dist/handlers/inspect-packs.d.ts",
       "import": "./dist/handlers/inspect-packs.js",
       "default": "./dist/handlers/inspect-packs.js"
+    },
+    "./handlers/mcp": {
+      "types": "./dist/handlers/mcp.d.ts",
+      "import": "./dist/handlers/mcp.js",
+      "default": "./dist/handlers/mcp.js"
     },
     "./handlers/init": {
       "types": "./dist/handlers/init.d.ts",

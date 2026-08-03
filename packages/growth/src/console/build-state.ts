@@ -31,6 +31,7 @@ import type {
 } from '@unisane/growth/marketing';
 import type {
   MarketingConsoleArtifactLink,
+  MarketingConsoleCampaignPauseReview,
   MarketingConsoleComparisonRow,
   MarketingConsoleCompetitorResearchSummary,
   MarketingConsoleConnection,
@@ -62,6 +63,15 @@ import {
   type MarketingConsoleTagManagerArtifact,
 } from './tag-manager.js';
 import { resolveSeoResearchWorkspacePaths } from '../seo/workspace/paths.js';
+import { executeGrowthMeasurementAudit } from '../workflows/measurement-audit-execution.js';
+import { executeGrowthSeoOpportunityResearch } from '../workflows/seo-opportunity-execution.js';
+import { executeGrowthHealthReview } from '../workflows/health-review-execution.js';
+import { growthCampaignPauseReviewSchema } from '../playbooks/campaign-pause-review.js';
+import {
+  listGrowthCampaignPauseRunReviewEntries,
+  resolveGrowthCampaignPauseRunDirectory,
+} from '../playbooks/campaign-pause-run.js';
+import { LocalOpsMutationRunStore } from '@unisane/ops-engine/local';
 
 export type BuildMarketingConsoleStateOptions = {
   cwd?: string;
@@ -70,6 +80,8 @@ export type BuildMarketingConsoleStateOptions = {
   now?: Date;
   googleAuth?: MarketingGoogleConnectionStatus;
   metaAuth?: MarketingMetaConnectionStatus;
+  campaignPauseApprovalAvailable?: boolean;
+  campaignPauseReviews?: readonly MarketingConsoleCampaignPauseReview[];
 };
 
 type ProviderFreshnessCell = MarketingConsoleFreshnessCell & {
@@ -192,8 +204,27 @@ export async function buildMarketingConsoleState(
   });
   const adsAudit = readAdsAuditSummary(cwd);
   const trackingAudit = await auditMarketingTrackingSource(config, { cwd, now });
+  const measurementAudit = await executeGrowthMeasurementAudit({
+    cwd,
+    config,
+    principal: { kind: 'service', id: 'service.growth-console', displayName: 'Growth Console' },
+    maxAgeDays,
+    now,
+    requestId: `request.measurement-audit.console.${now.getTime()}`,
+    trackingAudit,
+  });
   const researchStatus = readMarketingResearchStatus(config, { cwd });
   const freshness = buildFreshness(config, cwd, now, maxAgeDays);
+  const healthReview = await executeGrowthHealthReview({
+    cwd,
+    config: projectContext.growth,
+    projectId: projectContext.projectId,
+    environmentId: config.defaultEnvironment,
+    principal: { kind: 'service', id: 'service.growth-console', displayName: 'Growth Console' },
+    maxAgeDays,
+    now,
+    requestId: `request.health-review.console.${now.getTime()}`,
+  });
   const connections = buildMarketingConsoleConnections({
     context: connectionContext,
     capabilities: projectContext.growth.capabilities,
@@ -206,6 +237,17 @@ export async function buildMarketingConsoleState(
     cwd,
     projectContext.growth.manifests.research,
   ).root;
+  const seoOpportunityReview = await executeGrowthSeoOpportunityResearch({
+    cwd,
+    researchRoot: projectContext.growth.manifests.research,
+    projectId: projectContext.projectId,
+    environmentId: config.defaultEnvironment,
+    principal: { kind: 'service', id: 'service.growth-console', displayName: 'Growth Console' },
+    opportunityLimit: 10,
+    maxAgeDays: 30,
+    now,
+    requestId: `request.seo-opportunities.console.${now.getTime()}`,
+  });
   const keywordResearch = readKeywordResearchSummary(seoResearchRoot);
   const competitorResearch = readCompetitorResearchSummary(seoResearchRoot);
   const faqResearch = readFaqResearchSummary(seoResearchRoot);
@@ -219,6 +261,7 @@ export async function buildMarketingConsoleState(
     competitorResearch,
     faqResearch,
     intelligence: seoIntelligence,
+    opportunityReview: seoOpportunityReview,
   });
   const gtmArtifacts = collectGtmArtifactLinks(cwd, config.appId, config.defaultEnvironment);
   const tagManagerArtifacts = readTagManagerArtifacts(cwd, config.appId, config.defaultEnvironment);
@@ -240,6 +283,26 @@ export async function buildMarketingConsoleState(
   const recommendationDecisions = recommendationDecisionEvidence.map(
     (evidence) => evidence.receipt,
   );
+  const campaignPauseReviews = options.campaignPauseReviews
+    ? options.campaignPauseReviews.map((review) => ({
+        ...growthCampaignPauseReviewSchema.parse(review),
+        runId: review.runId,
+      }))
+    : (
+        await listGrowthCampaignPauseRunReviewEntries({
+          store: new LocalOpsMutationRunStore(
+            resolveGrowthCampaignPauseRunDirectory({
+              cwd,
+              projectId: projectContext.projectId,
+              environmentId: config.defaultEnvironment,
+            }),
+          ),
+          projectId: projectContext.projectId,
+          environmentId: config.defaultEnvironment,
+          limit: 50,
+          now: generatedAt,
+        })
+      ).map(({ runId, review }) => ({ ...review, runId }));
   const recommendations = buildMarketingConsoleRecommendations({
     ...(recommendationEvidence
       ? {
@@ -272,6 +335,7 @@ export async function buildMarketingConsoleState(
     now,
   });
   const { overview, priorities } = buildMarketingConsoleOverview({
+    healthReview,
     connections,
     freshness,
     metrics,
@@ -304,6 +368,8 @@ export async function buildMarketingConsoleState(
     },
     freshness,
     receipts,
+    campaignPauseApprovalAvailable: options.campaignPauseApprovalAvailable,
+    campaignPauseReviews,
     ...(adsAudit ? { audit: adsAudit } : {}),
   });
   const analytics = buildMarketingConsoleAnalytics({
@@ -321,6 +387,7 @@ export async function buildMarketingConsoleState(
     connections,
     tagManager,
     trackingAudit,
+    measurementAudit,
   });
   const experiments = buildMarketingConsoleExperiments(seoIntelligence.metadata.experiments);
   const paidProviderEvidenceReady = freshness.some(
@@ -345,10 +412,7 @@ export async function buildMarketingConsoleState(
     tracking: analytics.trackingHealth.status,
     automations: automations.status,
   };
-  const readiness = buildReadiness(
-    readinessStatuses,
-    priorities[0]?.expectedOutcome ?? 'Review the latest growth results.',
-  );
+  const readiness = buildReadiness(readinessStatuses, healthReview);
 
   return {
     kind: 'unisane.growth.console-state',
@@ -2282,35 +2346,17 @@ function buildTrends(freshness: MarketingConsoleFreshnessCell[]): {
 
 function buildReadiness(
   statusesByCapability: MarketingConsoleReadinessStatuses,
-  nextAction: string,
+  healthReview: import('../actions/health-review.js').GrowthHealthReviewOutput,
 ): MarketingConsoleState['readiness'] {
   const statuses = Object.values(statusesByCapability);
   const readyCount = statuses.filter((status) => status === 'ready').length;
   const score = Math.round((readyCount / statuses.length) * 100);
-  const blockedCapability = Object.entries(statusesByCapability).find(
-    ([, status]) => status === 'blocked',
-  )?.[0] as keyof MarketingConsoleReadinessStatuses | undefined;
-  const attentionCapability = Object.entries(statusesByCapability).find(
-    ([, status]) => status === 'warn' || status === 'missing',
-  )?.[0] as keyof MarketingConsoleReadinessStatuses | undefined;
-  const attentionLabel: Record<keyof MarketingConsoleReadinessStatuses, string> = {
-    connections: 'provider connection',
-    overview: 'current data',
-    advertising: 'advertising evidence',
-    analytics: 'analytics evidence',
-    seo: 'search evidence',
-    tracking: 'tracking configuration',
-    automations: 'automation setup',
-  };
+  const presentation = healthReview.workflow.presentation;
   return {
-    status: blockedCapability ? 'blocked' : score >= 75 ? 'ready' : 'warn',
+    status: healthReview.status === 'attention' ? 'warn' : healthReview.status,
     score,
-    label: blockedCapability
-      ? `Needs attention: ${attentionLabel[blockedCapability]}`
-      : attentionCapability
-        ? `Needs attention: ${attentionLabel[attentionCapability]}`
-        : 'Core growth data is current',
-    nextWorkflowStep: nextAction,
+    label: presentation.headline,
+    nextWorkflowStep: presentation.nextStep.label,
   };
 }
 

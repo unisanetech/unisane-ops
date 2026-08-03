@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { loadFirstPartyPackGraph, runCanonicalCli } from '../dist/host.js';
 
-test('Framework roots select the exact Framework pack', async () => {
+test('canonical Framework app root selects the exact Framework pack', async () => {
   let selectedCommand = null;
-  const code = await runCanonicalCli(['sync', '--help'], {
+  const code = await runCanonicalCli(['app', 'compile', '--help'], {
     loadGraph: loadFirstPartyPackGraph,
     loadHandler: async (command) => {
       selectedCommand = command.id;
@@ -27,7 +27,23 @@ test('Framework roots select the exact Framework pack', async () => {
   });
 
   assert.equal(code, 0);
-  assert.equal(selectedCommand, 'framework.sync');
+  assert.equal(selectedCommand, 'framework.app');
+});
+
+test('retired Framework roots fail closed', async () => {
+  let selectedCommand = null;
+  const code = await runCanonicalCli(['sync', '--help'], {
+    loadGraph: loadFirstPartyPackGraph,
+    loadHandler: async (command) => {
+      selectedCommand = command.id;
+      return async () => {
+        throw new Error('retired Framework roots must not resolve a handler');
+      };
+    },
+  });
+
+  assert.equal(code, 1);
+  assert.equal(selectedCommand, null);
 });
 
 test('Growth roots select the exact Growth pack', async () => {

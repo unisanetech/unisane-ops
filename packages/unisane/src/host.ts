@@ -172,6 +172,20 @@ async function loadExactHandler(command: PackCommandDescriptor): Promise<PackCom
     const module = await import('./handlers/inspect-packs.js');
     return module.runInspectPacks;
   }
+  if (
+    command.handler.exportPath === './handlers/mcp' &&
+    command.handler.exportName === 'runMcpServe'
+  ) {
+    const module = await import('./handlers/mcp.js');
+    return module.runMcpServe;
+  }
+  if (
+    command.handler.exportPath === './handlers/mcp' &&
+    command.handler.exportName === 'runMcpConfigureCodex'
+  ) {
+    const module = await import('./handlers/mcp.js');
+    return module.runMcpConfigureCodex;
+  }
   if (command.handler.exportPath === './handlers/dns') {
     const module = await import('@unisane/cloud/handlers/dns');
     if (command.handler.exportName === 'runCloudDnsInventory') {
@@ -332,6 +346,8 @@ Canonical commands:
   unisane ops migrate growth-config --input <path> --yes [--json]
   unisane status [--json]
   unisane inspect packs [--json]
+  unisane mcp serve --project <absolute-path> --environment <id> --actor <id>
+  unisane mcp configure codex --project <absolute-path> --environment <id> --actor <id> [--write]
   unisane connect cloudflare check [--connection <id>] [--json]
   unisane cloud dns inventory [--target <id>] [--env <id>] [--json]
   unisane cloud dns import --inventory <path> --zone <zone-id> [--zone <zone-id>] [--json]

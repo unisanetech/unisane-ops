@@ -20,10 +20,16 @@
   ],
   "exports": [
     ".",
+    "./actions",
+    "./execution",
+    "./hosted",
+    "./hosted/sqlite",
     "./lifecycle",
     "./local",
     "./pack",
     "./readiness",
-    "./testing"
+    "./runs",
+    "./testing",
+    "./workflows"
   ]
 }

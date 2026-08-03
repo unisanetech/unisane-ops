@@ -3,8 +3,8 @@ import type { PackCommandContext, PackCommandDescriptor } from '@unisane/ops-eng
 import { executeFrameworkCommand } from '../handlers/framework.js';
 
 const descriptor: PackCommandDescriptor = {
-  id: 'framework.sync',
-  path: ['sync'],
+  id: 'framework.app',
+  path: ['app'],
   handler: {
     exportPath: './handlers/framework',
     exportName: 'runFrameworkCommand',
@@ -30,34 +30,35 @@ function context(json = false): PackCommandContext {
 }
 
 describe('Framework Ops handler', () => {
-  it('routes exact selection context through the narrow Framework bridge', () => {
+  it('routes exact selection context through the captured Framework bridge', async () => {
     const bridge = vi.fn(() => ({
       schemaVersion: 1 as const,
-      root: 'sync' as const,
+      root: 'app' as const,
       exitCode: 0,
-      stdout: 'Framework sync help\n',
+      stdout: 'Framework app help\n',
       stderr: '',
     }));
-    const result = executeFrameworkCommand(context(), bridge);
+    const result = await executeFrameworkCommand(context(), bridge);
     expect(bridge).toHaveBeenCalledWith({
-      root: 'sync',
+      root: 'app',
       argv: ['--help'],
       cwd: '/tmp/framework-project',
       json: false,
+      mode: 'captured',
     });
     expect(result).toMatchObject({
-      command: 'framework.sync',
+      command: 'framework.app',
       pack: 'framework',
       status: 'ok',
       actualEffect: 'write',
-      presentation: { stdout: 'Framework sync help\n', stderr: '' },
+      presentation: { stdout: 'Framework app help\n', stderr: '' },
     });
   });
 
-  it('wraps JSON output without emitting human presentation', () => {
-    const result = executeFrameworkCommand(context(true), () => ({
+  it('wraps JSON output without emitting human presentation', async () => {
+    const result = await executeFrameworkCommand(context(true), () => ({
       schemaVersion: 1,
-      root: 'sync',
+      root: 'app',
       exitCode: 0,
       stdout: '{"ok":true}\n',
       stderr: '',
@@ -66,15 +67,62 @@ describe('Framework Ops handler', () => {
     expect(result.presentation).toBeUndefined();
   });
 
-  it('fails closed without exact host selection context', () => {
-    expect(() =>
+  it('streams interactive commands without replaying captured presentation', async () => {
+    const interactiveDescriptor = { ...descriptor, id: 'framework.dev', path: ['dev'] };
+    const bridge = vi.fn(async () => ({
+      schemaVersion: 1 as const,
+      root: 'dev' as const,
+      exitCode: 0,
+      stdout: '',
+      stderr: '',
+    }));
+    const result = await executeFrameworkCommand(
+      {
+        ...context(),
+        selection: { command: interactiveDescriptor, packId: 'framework' },
+      },
+      bridge,
+    );
+
+    expect(bridge).toHaveBeenCalledWith({
+      root: 'dev',
+      argv: ['--help'],
+      cwd: '/tmp/framework-project',
+      json: false,
+      mode: 'interactive',
+    });
+    expect(result.presentation).toEqual({ stdout: '', stderr: '' });
+  });
+
+  it('treats an interactive signal shutdown as a successful cancellation', async () => {
+    const interactiveDescriptor = { ...descriptor, id: 'framework.dev', path: ['dev'] };
+    const result = await executeFrameworkCommand(
+      {
+        ...context(),
+        selection: { command: interactiveDescriptor, packId: 'framework' },
+      },
+      async () => ({
+        schemaVersion: 1,
+        root: 'dev',
+        exitCode: 130,
+        stdout: '',
+        stderr: '',
+      }),
+    );
+
+    expect(result.status).toBe('ok');
+    expect(result.result).toEqual({ exitCode: 130, output: null });
+  });
+
+  it('fails closed without exact host selection context', async () => {
+    await expect(
       executeFrameworkCommand({ argv: [], cwd: '/tmp', manifests: [] }, () => ({
         schemaVersion: 1,
-        root: 'sync',
+        root: 'app',
         exitCode: 0,
         stdout: '',
         stderr: '',
       })),
-    ).toThrow('FRAMEWORK_OPS_SELECTION_MISSING');
+    ).rejects.toThrow('FRAMEWORK_OPS_SELECTION_MISSING');
   });
 });

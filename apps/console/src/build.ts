@@ -8,6 +8,7 @@ import type {
   MarketingGoogleConnectionStatus,
   MarketingMetaConnectionStatus,
 } from '@unisane/growth/marketing';
+import type { MarketingConsoleCampaignPauseReview } from '@unisane/growth/console';
 
 export type BuildMarketingConsoleAppOptions = {
   cwd?: string;
@@ -18,6 +19,8 @@ export type BuildMarketingConsoleAppOptions = {
   now?: Date;
   googleAuth?: MarketingGoogleConnectionStatus;
   metaAuth?: MarketingMetaConnectionStatus;
+  campaignPauseApprovalAvailable?: boolean;
+  campaignPauseReviews?: readonly MarketingConsoleCampaignPauseReview[];
 };
 
 export async function buildMarketingConsoleApp(
@@ -29,6 +32,8 @@ export async function buildMarketingConsoleApp(
     maxAgeDays: options.maxAgeDays,
     googleAuth: options.googleAuth,
     metaAuth: options.metaAuth,
+    campaignPauseApprovalAvailable: options.campaignPauseApprovalAvailable,
+    campaignPauseReviews: options.campaignPauseReviews,
     now: options.now,
   });
   const outputDirectory = path.resolve(cwd, options.outputDirectory ?? '.unisane/console');

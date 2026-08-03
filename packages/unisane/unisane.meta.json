@@ -13,6 +13,7 @@
     "@unisane/framework-ops",
     "@unisane/growth",
     "@unisane/ops-engine",
+    "@unisane/ops-mcp",
     "@unisane/provider-aws",
     "@unisane/provider-cloudflare",
     "@unisane/provider-google",
@@ -36,6 +37,7 @@
     "./handlers/disconnect",
     "./handlers/init",
     "./handlers/inspect-packs",
+    "./handlers/mcp",
     "./handlers/migrate-growth-config",
     "./handlers/status"
   ]

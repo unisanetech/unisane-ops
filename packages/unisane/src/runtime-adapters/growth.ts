@@ -245,8 +245,13 @@ async function executeGoogleSeo(operation: string, input: unknown): Promise<unkn
   throw new Error(`[GROWTH_GOOGLE_SEO_OPERATION_UNKNOWN] Unsupported operation '${operation}'.`);
 }
 
-async function executeGoogleMarketing(operation: string, input: unknown): Promise<unknown> {
+async function executeGoogleMarketing(
+  cwd: string,
+  operation: string,
+  input: unknown,
+): Promise<unknown> {
   const provider = await import('@unisane/provider-google/marketing');
+  const record = recordOf(input);
   switch (operation) {
     case 'google.marketing.pull-report':
       return provider.pullGoogleAdsReport(input as never);
@@ -256,6 +261,38 @@ async function executeGoogleMarketing(operation: string, input: unknown): Promis
       return provider.pullSearchConsoleReport(input as never);
     case 'google.marketing.execute-live':
       return provider.executeGoogleAdsLiveOperation(input as never);
+    case 'google.marketing.pause-campaign':
+    case 'google.marketing.read-campaign-status': {
+      const credentials = recordOf(
+        await resolveGoogleConnectionCredentials(cwd, {
+          environment: record.environment,
+          connection: record.connection,
+          service: 'ads',
+          requiredScope: 'https://www.googleapis.com/auth/adwords',
+        }),
+      );
+      if (
+        typeof record.providerAccountId !== 'string' ||
+        typeof record.campaignId !== 'string' ||
+        typeof credentials.accessToken !== 'string' ||
+        typeof credentials.developerToken !== 'string'
+      ) {
+        throw new Error(
+          '[GOOGLE_ADS_CAMPAIGN_CONTROL_CONNECTION_INCOMPLETE] Exact campaign control requires a canonical Ads connection and developer token.',
+        );
+      }
+      const request = {
+        customerId: record.providerAccountId,
+        campaignId: record.campaignId,
+        accessToken: credentials.accessToken,
+        developerToken: credentials.developerToken,
+        fetcher: fetch,
+        ...(typeof record.apiVersion === 'string' ? { apiVersion: record.apiVersion } : {}),
+      };
+      return operation === 'google.marketing.pause-campaign'
+        ? provider.pauseGoogleAdsCampaign(request)
+        : provider.readGoogleAdsCampaignStatus(request);
+    }
     default:
       throw new Error(
         `[GROWTH_GOOGLE_MARKETING_OPERATION_UNKNOWN] Unsupported operation '${operation}'.`,
@@ -309,13 +346,20 @@ async function executeGoogleTagManager(operation: string, input: unknown): Promi
   }
 }
 
-async function executeMeta(operation: string, input: unknown): Promise<unknown> {
+async function resolveMetaConnectionToken(cwd: string, input: unknown): Promise<string> {
+  void cwd;
+  void input;
+  throw new Error(
+    '[META_CONNECTION_REQUIRED] Meta operations require a canonical provider connection; the retired token-profile path is unavailable.',
+  );
+}
+
+async function executeMeta(cwd: string, operation: string, input: unknown): Promise<unknown> {
   if (operation === 'meta.connection.resolve-token') {
-    throw new Error(
-      '[META_CONNECTION_REQUIRED] Meta operations require a canonical provider connection; the retired token-profile path is unavailable.',
-    );
+    return resolveMetaConnectionToken(cwd, input);
   }
   const provider = await import('@unisane/provider-meta/marketing');
+  const record = recordOf(input);
   switch (operation) {
     case 'meta.marketing.pull-report':
       return provider.pullMetaAdsReport(input as never);
@@ -323,6 +367,25 @@ async function executeMeta(operation: string, input: unknown): Promise<unknown> 
       return provider.executeMetaAdsLiveOperation(input as never);
     case 'meta.marketing.upload-asset':
       return provider.uploadMetaAdsAsset(input as never);
+    case 'meta.marketing.pause-campaign':
+    case 'meta.marketing.read-campaign-status': {
+      const accessToken = await resolveMetaConnectionToken(cwd, input);
+      if (typeof record.providerAccountId !== 'string' || typeof record.campaignId !== 'string') {
+        throw new Error(
+          '[META_ADS_CAMPAIGN_CONTROL_TARGET_INVALID] Exact campaign control requires one account and campaign.',
+        );
+      }
+      const request = {
+        providerAccountId: record.providerAccountId,
+        campaignId: record.campaignId,
+        accessToken,
+        fetcher: fetch,
+        ...(typeof record.apiVersion === 'string' ? { apiVersion: record.apiVersion } : {}),
+      };
+      return operation === 'meta.marketing.pause-campaign'
+        ? provider.pauseMetaAdsCampaign(request)
+        : provider.readMetaAdsCampaignStatus(request);
+    }
     default:
       throw new Error(`[GROWTH_META_OPERATION_UNKNOWN] Unsupported operation '${operation}'.`);
   }
@@ -332,12 +395,12 @@ export function isGrowthProviderBinding(bindingId: string): boolean {
   return bindingId === GROWTH_PROVIDER_COMMAND_BINDING;
 }
 
-export async function resolveGrowthProviderBinding(
-  runtime: PackCommandRuntime,
+export async function executeGrowthProviderOperation(
+  cwd: string,
+  operation: string,
   input: unknown,
 ): Promise<unknown> {
-  void runtime;
-  const request = requestOf(input);
+  const request: GrowthProviderCommandRequest = { cwd, operation, input };
   if (request.operation === 'growth.connections.context') {
     return resolveGrowthConnectionsContext(request.cwd, request.input);
   }
@@ -351,15 +414,24 @@ export async function resolveGrowthProviderBinding(
     return executeGoogleSeo(request.operation, request.input);
   }
   if (request.operation.startsWith('google.marketing.')) {
-    return executeGoogleMarketing(request.operation, request.input);
+    return executeGoogleMarketing(request.cwd, request.operation, request.input);
   }
   if (request.operation.startsWith('gtm.')) {
     return executeGoogleTagManager(request.operation, request.input);
   }
   if (request.operation.startsWith('meta.')) {
-    return executeMeta(request.operation, request.input);
+    return executeMeta(request.cwd, request.operation, request.input);
   }
   throw new Error(
     `[GROWTH_PROVIDER_COMMAND_OPERATION_UNKNOWN] Unsupported operation '${request.operation}'.`,
   );
+}
+
+export async function resolveGrowthProviderBinding(
+  runtime: PackCommandRuntime,
+  input: unknown,
+): Promise<unknown> {
+  void runtime;
+  const request = requestOf(input);
+  return executeGrowthProviderOperation(request.cwd, request.operation, request.input);
 }

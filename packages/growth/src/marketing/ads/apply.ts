@@ -239,15 +239,6 @@ function liveOperationConfirmation(args: {
 }
 
 function isLiveExecutableOperation(operation: MarketingAdsApplyOperation): boolean {
-  if (
-    operation.actionType === 'pause_campaign' &&
-    operation.approvalTier === 'standard' &&
-    operation.mutationIntent === 'pause_or_archive' &&
-    !operation.blocksApply &&
-    !operation.destructiveAllowed
-  ) {
-    return true;
-  }
   return (
     (operation.provider === 'googleAds' || operation.provider === 'metaAds') &&
     operation.actionType === 'create_campaign' &&

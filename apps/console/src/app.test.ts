@@ -7,7 +7,18 @@ import {
   loadGrowthConsoleExecutionContext,
   runWithGrowthConsoleRuntime,
 } from '@unisane/growth/console';
+import { createGrowthCampaignPauseAction } from '@unisane/growth/actions';
+import {
+  createGrowthCampaignPauseRunCoordinator,
+  resolveGrowthCampaignPauseRunDirectory,
+} from '@unisane/growth/playbooks';
 import { writeMarketingProviderReportPull } from '@unisane/growth/marketing';
+import { LocalOpsMutationRunStore } from '@unisane/ops-engine/local';
+import {
+  InMemoryApprovalStore,
+  InMemoryArtifactStore,
+  InMemoryLockStore,
+} from '@unisane/ops-engine/testing';
 import { buildMarketingConsoleApp } from './build.js';
 import { renderMarketingConsoleHtml } from './app.js';
 
@@ -655,6 +666,17 @@ describe('marketing console', () => {
 
       expect(state.kind).toBe('unisane.growth.console-state');
       expect(state.platformId).toBe('true-resume');
+      expect(state.analytics.measurementAudit).toMatchObject({
+        status: 'blocked',
+        safeToScale: false,
+        canonicalOutcomes: [],
+        workflow: {
+          presentation: {
+            headline: 'Do not scale acquisition yet.',
+            nextStep: { deepLink: '/analytics/tracking-health' },
+          },
+        },
+      });
       expect(state.metrics).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -746,13 +768,19 @@ describe('marketing console', () => {
       );
       expect(state.overview).toEqual(
         expect.objectContaining({
-          status: 'warn',
-          headline: 'Historical growth results are available, but Google is not connected.',
+          status: 'blocked',
+          headline: 'Growth guidance is blocked for now.',
           metricIds: expect.arrayContaining(['organic-clicks', 'spend', 'conversions']),
           capabilitySummaries: expect.arrayContaining([
             expect.objectContaining({ id: 'seo', statusLabel: 'Historical data' }),
           ]),
         }),
+      );
+      expect(state.overview.headline).toBe(
+        state.overview.healthReview.workflow.presentation.headline,
+      );
+      expect(state.readiness.label).toBe(
+        state.overview.healthReview.workflow.presentation.headline,
       );
       expect(state.priorities).toEqual([
         expect.objectContaining({
@@ -923,6 +951,85 @@ describe('marketing console', () => {
     });
   });
 
+  it('loads bounded campaign pause reviews from the canonical local run store', async () => {
+    const cwd = createTempProject();
+    tempProjects.push(cwd);
+    await runWithTestProjectContext(cwd, async () => {
+      const runStore = new LocalOpsMutationRunStore(
+        resolveGrowthCampaignPauseRunDirectory({
+          cwd,
+          projectId: 'true-resume',
+          environmentId: 'production',
+        }),
+      );
+      const executionState = {
+        artifacts: new InMemoryArtifactStore(),
+        approvals: new InMemoryApprovalStore(),
+        locks: new InMemoryLockStore(),
+      };
+      const now = new Date('2026-05-21T01:00:00.000Z');
+      const action = createGrowthCampaignPauseAction({
+        state: executionState,
+        lockOwner: 'worker.growth',
+        actor: 'developer',
+        production: false,
+        multiProcess: false,
+        pauseCampaign: async () => ({ outcome: 'succeeded' }),
+        readCampaignStatus: async () => 'paused',
+        now: () => now,
+        createPlanId: () => 'plan.console-campaign-pause',
+      });
+      const parameters = {
+        provider: 'googleAds' as const,
+        providerAccountId: 'account-7',
+        campaignId: 'campaign-42',
+        evidenceRevision: 'evidence-revision-3',
+        verificationDelayMs: 30_000,
+        verificationTtlMs: 300_000,
+      };
+      const actionContext = {
+        requestId: 'request.console-campaign-pause',
+        scopeId: 'scope.true-resume',
+        projectId: 'true-resume',
+        environmentId: 'production',
+        targetId: parameters.campaignId,
+        principal: { kind: 'agent' as const, id: 'agent.codex' },
+        requestedAt: now.toISOString(),
+      };
+      const plan = await action.plan(
+        {
+          ...parameters,
+          generatedAt: now.toISOString(),
+          expiresAt: '2026-05-21T02:00:00.000Z',
+        },
+        actionContext,
+      );
+      const coordinator = createGrowthCampaignPauseRunCoordinator({
+        store: runStore,
+        actor: 'developer',
+        production: false,
+        multiProcess: false,
+        now: () => now,
+      });
+      await coordinator.recordPlan({
+        context: actionContext,
+        parameters,
+        currentEvidenceRevision: parameters.evidenceRevision,
+        plan,
+      });
+
+      const consoleState = await buildMarketingConsoleState({ cwd, now });
+
+      expect(consoleState.advertising.campaignPauseReviews).toMatchObject([
+        {
+          status: 'approval-required',
+          target: { provider: 'googleAds', campaignId: 'campaign-42' },
+          nextStep: { id: 'request-approval' },
+        },
+      ]);
+    });
+  });
+
   it('renders the component-app boot shell and serialized console state', async () => {
     const cwd = createTempProject();
     tempProjects.push(cwd);
@@ -956,6 +1063,7 @@ describe('marketing console', () => {
       expect(html).toContain('href="/assets/console.css"');
       expect(html).toContain('src="/assets/console.js"');
       expect(html).toContain('unisane-ops-state');
+      expect(html).toContain('"headline":"Do not scale acquisition yet.');
       expect(html).toContain('"path":"/overview"');
       expect(html).toContain('"path":"/seo/opportunities"');
       expect(html).toContain('"path":"/advertising/all/change-history"');

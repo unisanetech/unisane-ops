@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Unisane Growth Health'
+  short_description: 'Review trustworthy growth evidence'
+  default_prompt: 'Use $unisane-growth-health to review what needs attention and identify the safest next step.'
