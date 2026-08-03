@@ -15,6 +15,15 @@ Canonical product, package, repository, command, and extension boundaries for Un
 
 ## Changelog
 
+- `2026-08-04`: Added independently runnable authenticated gateway and worker artifacts
+  for the private hosted read spine. The gateway exposes a bounded internal HTTP
+  transport, verifies OIDC bearer identity against one exact issuer and audience, and
+  retains admission-only authority; the worker loads an explicit action module and
+  retains execution-only authority. Both fail closed on schema drift, emit payload-free
+  lifecycle telemetry, and honor bounded signal shutdown. A real PostgreSQL integration
+  proof starts the roles as separate operating-system processes and exercises admission,
+  dispatch, execution, retrieval, and shutdown. This is not remote MCP, managed OAuth or
+  secret custody, backup/restore certification, scheduler deployment, or hosted mutation.
 - `2026-08-03`: Added standalone PostgreSQL persistence and role-process lifecycle
   contracts for the hosted read spine. Explicit migrations, database transactions,
   `SKIP LOCKED` dispatch claims, fenced job leases, retry/dead-letter classification,
@@ -699,9 +708,18 @@ gateway role owns authorization and admission but receives no action executor; i
 worker role receives registered read actions and durable persistence but no admission
 authority. SQLite WAL and transactions prove multi-connection admission, worker
 execution, restart recovery, stale-worker fencing, one terminal audit fact, and durable
-result lookup. SQLite is not the production database selection. No public HTTP/MCP
-route, managed connection, provider token, scheduler, mutation, or production topology
-is implied by this proof.
+result lookup. SQLite is not the production database selection.
+
+The same package builds independently runnable Node.js gateway and worker executables.
+The gateway owns one bounded private HTTP read-action transport, validates OIDC bearer
+tokens through issuer- and audience-bound JWKS verification, maps workload claims to an
+engine authorization, and re-authorizes result reads against principal and `scopeId`.
+The worker loads registered read actions only through one explicit deployment module;
+it has no route or admission authority. Both binaries assert the exact PostgreSQL schema
+revision before readiness, emit payload-free JSON-line lifecycle observations, and use
+bounded `SIGINT`/`SIGTERM` shutdown. The gateway exposes only liveness, readiness,
+read-action admission, and same-principal job retrieval. It is an internal deployment
+boundary, not a public hosted API or remote MCP contract.
 
 `@unisane/ops-hosted-postgresql` is the standalone production-database adapter. It
 depends only on `@unisane/ops-engine` and `pg`, owns explicit repeatable migrations, and
@@ -714,7 +732,31 @@ startup probes, role readiness, structured payload-free events, bounded polling,
 expired-lease recovery, retry scheduling, terminal poison-dispatch recording, and
 `AbortSignal` shutdown. Transport and deployment hosts remain injected: these
 contracts do not expose a public HTTP or remote MCP service and do not establish
-managed service identity, secret custody, backup/restore, scheduler, or mutation.
+managed service-identity provisioning, secret custody, backup/restore certification,
+scheduler deployment, or mutation.
+
+### Hosted read-spine deployment runbook
+
+Schema migration is a distinct release operation. Gateway and worker startup only
+assert compatibility and must fail before readiness when migration history differs from
+the exact adapter revision. Deployments route traffic only after the gateway readiness
+probe succeeds, remove traffic before termination, and allow the configured shutdown
+window for in-flight role cleanup. Worker replicas use distinct stable worker ids and
+may scale independently because dispatch claiming, job revision, and fencing remain in
+PostgreSQL.
+
+Gateway identity configuration names one HTTPS issuer, one audience, and one JWKS URL.
+Bearer credentials are accepted only in the authorization header, never in action input,
+stored job state, logs, probes, or error bodies. Deployments inject the PostgreSQL URL and
+OIDC settings through their secret/configuration system; the runtime does not own secret
+distribution. Worker action selection is explicit through a deployment-owned module
+exporting `createHostedWorkerActions()`; it is not inferred from the workspace.
+
+Operators monitor structured lifecycle events, `/live`, `/ready`, PostgreSQL availability,
+queued-job age, retry/dead-letter outcomes, and shutdown completion. The current proof
+does not certify backup/restore, safe rollout/rollback in a managed environment, tenant
+isolation under adversarial load, incident ownership, or remote/public exposure; those
+remain release gates.
 
 Hosted action admission atomically binds authenticated principal, `scopeId`, project,
 environment, target/resource, action schema version, immutable plan revision, approval,
