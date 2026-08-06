@@ -15,6 +15,72 @@ Canonical product, package, repository, command, and extension boundaries for Un
 
 ## Changelog
 
+- `2026-08-05`: Defined and implemented truthful local-console temporal queries. Routes
+  distinguish performance ranges, event ranges, coverage ranges, recorded snapshots,
+  evidence context, and current state. Selectable ranges are URL-preserved and resolved
+  server-side from the local history catalog; complete non-overlapping artifacts may be
+  composed, while gaps, overlaps, partial pulls, or missing artifacts produce an explicit
+  unavailable state. Date changes never trigger a provider pull, and DataTable remains a
+  presentation component rather than a domain-filter owner.
+- `2026-08-05`: Added decision-ready local history collection and presentation. A
+  provider-neutral backfill planner slices requested ranges into bounded exact one-day
+  report windows, exposes continuation state, and stops safely on provider failure;
+  ordinary provider ingestion remains the sole evidence writer. The console now
+  separates dated evidence coverage from operational Activity and explains gaps,
+  retention, and unavailable comparisons in plain language. Retention deletion and
+  hosted scheduling remain separately gated.
+- `2026-08-05`: Added the local Growth historical-evidence contract. Timestamped raw
+  provider pulls remain immutable provenance; a derived local catalog indexes bounded
+  period observations, revisions, coverage, gaps, currencies, partial state, and metric
+  totals. Previous-period comparisons require equal, non-overlapping, complete windows
+  with compatible units. The default retention layers are 90 days of raw pulls, 24
+  months of normalized daily facts, 60 months of monthly rollups, 13 months of research
+  snapshots, and project-lifetime milestone and action receipts. This is local product
+  infrastructure and does not authorize hosted storage or SaaS implementation.
+- `2026-08-04`: Finalized the SEO-first product contract and the local-to-hosted
+  sequencing gate. Automatic work prepares bounded, freshness-aware evidence without an
+  always-running model; users start meaningful research through plain-language goals;
+  recommendations remain source-bound through implementation and measurement. Further
+  hosted SaaS product implementation is deferred until the complete local SEO loop is
+  proven and the user replies with the exact documented confirmation phrase.
+- `2026-08-04`: Added the provider-neutral hosted credential-custody boundary. Versioned
+  connection credentials are envelope-encrypted before PostgreSQL persistence, bind
+  ciphertext authentication to immutable scope/project/connection/provider/version
+  identity, rotate and revoke atomically, and resolve only through a worker-scoped
+  short-lived callback that zeroes decrypted bytes. Gateway, worker, and scheduler
+  database grants keep encrypted writes, decryption reads, and timing authority separate.
+  A production KMS adapter, workload-identity provisioning, OAuth callbacks, and managed
+  recovery remain deployment-specific gates.
+- `2026-08-04`: Added the portable hosted read scheduler boundary: credential-free
+  versioned schedules, PostgreSQL due leases and fencing, atomic canonical job
+  materialization, interruption recovery, a distinct least-privilege database role, and
+  an independent scheduler process/Deployment with no action executor or public Service.
+
+- `2026-08-04`: Added the portable hosted release-trust boundary. One BuildKit Bake
+  target produces a multi-platform runtime index with maximum SLSA v1 provenance and an
+  SPDX SBOM; verification requires an immutable digest plus exact Cosign identity and
+  issuer; Kubernetes migration, gateway, worker, and rollback-check workloads use the
+  same digest; and rollback candidates run their own schema probe before replacement.
+  Signing keys and registry credentials remain outside the runtime. Managed registry
+  identity, admission enforcement, and rollout evidence remain production gates.
+- `2026-08-04`: Bound hosted OIDC identity and PostgreSQL retrieval to exact principal,
+  `scopeId`, and project claims so cross-project reads return the same absence shape as
+  missing jobs. Added separate migration-owner, gateway, and worker database credential
+  references with explicit least-privilege runtime grants. A separate PostgreSQL
+  maintenance image now proves secret-file-only custom-format backup, refusal to restore
+  over an existing database, fresh-database restore, and logical equality across schema
+  revisions, jobs, dispatch, audit, and results. Managed secret custody, provider PITR,
+  encrypted artifact custody, signing/provenance, managed rollout, remote MCP, scheduler,
+  and mutation remain production gates.
+- `2026-08-04`: Added the portable OCI deployment foundation for the authenticated
+  hosted read spine. One non-root production image contains only the hosted runtime,
+  PostgreSQL adapter, engine, and production dependencies; explicit gateway, worker,
+  migration, and schema-probe commands preserve role authority. PostgreSQL credentials
+  support deployment secret-file references, Kubernetes templates gate runtime rollout
+  on a one-shot migration and define probes, resource bounds, restricted security, and
+  independent scaling, and an isolated Compose proof exercises the full authenticated
+  cross-container path. Managed secret custody, backup/restore, tenant isolation,
+  signing/provenance, managed rollout, remote MCP, scheduler, and mutation remain gates.
 - `2026-08-04`: Added independently runnable authenticated gateway and worker artifacts
   for the private hosted read spine. The gateway exposes a bounded internal HTTP
   transport, verifies OIDC bearer identity against one exact issuer and audience, and
@@ -611,6 +677,272 @@ is not a released-host support promise and does not cover approved provider appl
 provider verification, desktop lifecycle, public plugin installation, remote transport,
 hosted authorization, or later CLI/model behavior.
 
+## SEO-First Product Contract
+
+SEO is the primary product wedge for Unisane Ops Growth. The product is not a generic
+chat wrapper and not a collection of disconnected SEO dashboards. It maintains
+trustworthy site and search evidence, lets a user direct research in ordinary language,
+turns supported findings into reviewable work, and preserves the measurement loop after
+publication.
+
+The canonical user journey is:
+
+```text
+connect the site -> prepare current evidence -> ask a business question
+-> run only the missing targeted research -> explain and rank supported opportunities
+-> prepare a brief or implementation packet -> review and implement
+-> record publication -> measure the declared verification window -> retain the result
+```
+
+### Automatic preparation versus agent research
+
+Automatic work is a bounded evidence-maintenance layer, not a continuously running AI
+agent. Deterministic jobs may incrementally synchronize provider data, inspect sitemap
+or content changes, refresh selected site pages, evaluate fixed technical rules, mark
+evidence stale, and schedule an already authorized verification window. Those jobs do
+not ask a model to re-analyze the whole project on every cadence.
+
+Meaningful synthesis begins from one of these explicit authorities:
+
+- a user asks the agent a research or diagnosis question;
+- a user selects a goal or opportunity in the console;
+- a user has deliberately enabled a versioned recurring workflow; or
+- a material deterministic signal creates a suggestion to investigate.
+
+A signal such as a visibility change may say `Would you like me to investigate?`; it is
+not itself permission to purchase broad research data, run an unbounded crawl, invoke a
+model repeatedly, publish content, or mutate a provider. Broad keyword, market,
+competitor, and SERP research remains on-demand unless an explicit automation and budget
+admit it.
+
+### Evidence sources and truth boundaries
+
+The local and eventual hosted products use the same evidence kinds:
+
+| Evidence kind                    | Product use                                                                                                                      | Required limitation                                                                            |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| public site crawl                | URL inventory, rendered page content, status, canonicals, directives, structure, schema, links, duplicates, and change detection | respect site policy and rate limits; distinguish fetched HTML from rendered output             |
+| sitemap and robots               | discovery and crawl guidance                                                                                                     | neither proves that Google indexed or ranked a page                                            |
+| Search Console                   | recorded Google query/page clicks, impressions, CTR, and position                                                                | preserve provider aggregation, sampling/bounds, date, property, country, device, and freshness |
+| Analytics and canonical outcomes | visits and business-result measurement                                                                                           | provider events do not replace the business system of record                                   |
+| keyword-planning provider        | estimated ideas, demand, competition, and market targeting                                                                       | label estimates and provider/model/date; never present them as observed site traffic           |
+| SERP snapshot                    | recorded rankings, result types, domains, pages, and features for one market/device/time                                         | use a compliant source; a snapshot is not universal or permanent ranking truth                 |
+| public competitor page           | observable page type, structure, topics, schema, links, and positioning                                                          | never infer private traffic, conversion, revenue, authority, or strategy as fact               |
+| repository or CMS                | implementation context and publication state                                                                                     | access is optional, scoped, and separate from research evidence                                |
+
+Every promoted observation retains source identity, project/site, timeframe,
+observation time, market, language, device where applicable, evidence kind, freshness,
+confidence, limitations, and sample-data state. Raw provider payloads and full page
+corpora stay in bounded storage; an agent receives only the structured evidence needed
+for the current goal.
+
+### Historical evidence, retention, and comparison
+
+The current result and the historical record are separate projections over the same
+source-bound evidence. A provider refresh never turns `latest.json` into the only source
+of truth. Every provider pull first preserves one timestamped raw artifact and then
+records a compact historical observation containing project, provider resource, report
+family, source, observation time, exact report window, partial/sample state, currencies,
+record count, metric totals, raw-artifact reference, and content digest.
+
+The local historical catalog is a rebuildable derived index under
+`.unisane/marketing/history/catalog.json`; timestamped provider artifacts remain its
+provenance owner. Re-importing identical content is idempotent. A corrected pull for the
+same project, provider resource, report family, and date window supersedes the earlier
+observation for ordinary queries without deleting the earlier fact. Catalog writes are
+atomic within the admitted single-process local runtime. Multi-process and hosted
+delivery require an injected durable store and are outside the local file adapter.
+
+The default retention policy is:
+
+| Layer                         | Default                    | Reason                                                                      |
+| ----------------------------- | -------------------------- | --------------------------------------------------------------------------- |
+| raw provider artifacts        | 90 days                    | bounded provenance, debugging, and short-horizon reprocessing               |
+| normalized daily facts        | 24 rolling months          | previous-period, seasonality, and year-over-year analysis                   |
+| monthly aggregates            | 60 rolling months          | low-cost long-term growth context                                           |
+| crawl/SERP/research snapshots | 13 rolling months          | one full annual comparison plus the current period                          |
+| named milestone snapshots     | project lifetime           | preserve launches, migrations, and deliberately retained campaign baselines |
+| approvals/actions/receipts    | project lifetime or delete | explain authority, actual changes, verification, and measured outcomes      |
+
+Retention is explicit and configurable. The local product does not silently prune
+evidence merely because the default policy exists; an admitted maintenance operation
+must preview affected records, preserve required rollups and receipts, and record a
+deletion receipt before applying retention. Hosted retention remains separately gated.
+
+Scheduled ingestion uses bounded lookback to capture provider corrections, but stored
+facts must be keyed at the finest trustworthy grain returned by the provider. Overlap is
+never summed. A same-window correction creates a newer revision; a multi-day aggregate
+remains a window observation unless the provider supplied genuine day-level rows.
+Backfill is bounded, paginated, resumable, provider-limit-aware, and explicit about gaps.
+The local daily backfill planner uses the ordinary provider report path with
+`startDate === endDate` for each requested day. It defaults to at most 90 windows per
+batch and never admits more than 366. A failed provider call stops the batch and returns
+the last completed day as its continuation cursor. The provider host retains connection,
+credential, throttling, and report execution authority; history owns neither a second
+provider client nor a second evidence writer.
+
+A comparison is supported only when current and baseline observations use the same
+project, provider resource, report family, entity/dimensions, metric meaning, window
+length, and compatible currency/unit; both windows must be complete and non-overlapping.
+The console and agent return an unavailable reason when those conditions fail. A chart
+is chronological only when its points are genuine period observations. Provider-family
+or account comparisons must not be labelled as trends.
+
+Historical queries are bounded by period, series, metric, and result limit. They return
+coverage, gaps, overlap count, partial state, truncation, provenance references, and an
+optional supported comparison. Agents receive this structured projection and relevant
+action/publication receipts, not the full raw archive or conversation history.
+
+### Console temporal-query semantics
+
+The console must not use one generic “date-aware” flag. Every route declares one exact
+temporal mode:
+
+| Mode              | Meaning                                                       | Examples                                                    |
+| ----------------- | ------------------------------------------------------------- | ----------------------------------------------------------- |
+| performance range | aggregate outcomes whose report window matches the selection  | Growth/SEO/Ads/Analytics performance pages                  |
+| event range       | include events by their occurrence timestamp                  | Activity, advertising change history, experiment results    |
+| coverage range    | calculate recorded coverage and gaps inside the selection     | Data History                                                |
+| snapshot          | show one explicitly recorded observation and capture context  | keyword/competitor/SERP research and search-site health     |
+| evidence context  | explain the evidence window behind a recommendation           | SEO opportunities and advertising recommendations           |
+| current           | show present configuration or health, not historical outcomes | Tracking health, Connections, running experiments, Settings |
+
+Only performance, event, and coverage modes expose the shared reporting-period control.
+The selection is an inclusive pair of ISO calendar dates, persists in `from` and `to`
+URL parameters, and propagates only between routes with the same temporal mode. Provider
+or project time-zone identity owns day boundaries; the browser time zone never silently
+changes a query.
+
+Applying a range issues one read-only request to the local console host. That request
+queries already recorded history and cannot invoke a provider adapter. A selected period
+may compose artifacts only when their windows are entirely inside the selection, cover
+every requested day exactly once, are complete, refer to one provider resource, and retain
+compatible dimensions and units. Otherwise the page shows why the range is unavailable;
+it must never relabel `latest.json`, crop a multi-day aggregate, sum overlapping windows,
+or client-filter already aggregated rows. Search, sort, pagination, density, and row
+presentation remain DataTable responsibilities; temporal evidence selection remains a
+Growth query responsibility.
+
+### SEO analysis and opportunity rules
+
+The system may support these user goals without turning each into a separate engine:
+
+- review technical search health;
+- explain a visibility or outcome change;
+- research keyword clusters and markets;
+- compare recorded competitor and SERP patterns;
+- find missing-page, weak-page, cannibalization, internal-link, and technical gaps;
+- audit one page against its intended search outcome;
+- prepare a content brief or implementation packet; and
+- measure a published change.
+
+An opportunity is not admitted because a model finds a plausible topic or a competitor
+mentions it. Ranking requires recorded evidence appropriate to the claim: business fit,
+query or estimated demand, intent coherence, current site coverage, competitor/SERP
+support, measurement readiness, freshness, expected effort, and important limitations.
+Missing evidence lowers confidence or blocks the recommendation; it is never filled with
+invented demand, ranking, traffic, or conversion claims.
+
+The principal gap classes are:
+
+- `missing page`: supported intent exists and no suitable current page serves it;
+- `weak page`: a page exists but recorded performance, intent coverage, presentation,
+  linking, or technical evidence supports improvement;
+- `cannibalization`: multiple current pages conflict for the same supported intent;
+- `competitor pattern`: repeated public patterns suggest a testable difference without
+  claiming competitor private performance;
+- `technical`: discovery, indexing directives, canonicalization, rendering, linking, or
+  page behavior prevents an otherwise appropriate page from working; and
+- `measurement`: the result cannot be trusted, so measurement repair precedes
+  optimization or additional spend.
+
+Every recommendation presents the opportunity, why it matters now, supporting evidence,
+affected pages/queries/markets, confidence, limitations, expected effort/risk, one safe
+next step, and the future verification signal. Console, CLI, MCP, Help, and agent output
+lower from the same structured result.
+
+### Agent, implementation, and measurement loop
+
+The model interprets the user's goal, selects a small admitted tool set, asks only for
+scope that changes the answer, and explains returned evidence. Application code performs
+the authorized crawl, provider query, evidence retrieval, scoring, storage, approval,
+and operation. The model is not the database, crawler, scheduler, policy engine, or
+publisher.
+
+The product supports three explicit delivery levels:
+
+1. `analyze`: explain findings and recommendations without producing a change;
+2. `prepare`: create a content brief, page specification, metadata/internal-link/schema
+   proposal, or coding-agent implementation packet; and
+3. `apply`: create a CMS draft or repository change only through an admitted connector,
+   required human review, canonical receipt, and later verification.
+
+Repository work is handed to a coding agent through a bounded implementation packet
+containing the selected opportunity, target identity, evidence references, constraints,
+acceptance criteria, measurement plan, and safe deep links. The coding agent edits and
+validates the repository through its own authorized surface; Growth does not become a
+second coding engine. Direct production publication is never the default.
+
+### Refresh and cost-control policy
+
+Evidence refresh is incremental, priority-aware, and plan-bounded. Each source and
+workflow declares an evidence time-to-live, `nextEligibleAt`, maximum page/query/SERP
+scope, concurrency, retry policy, and usage class. Workspaces receive crawl, SERP,
+provider, storage, and model allowances with a hard spend ceiling and a visible usage
+ledger.
+
+The scheduler must prefer, in order: reuse still-valid evidence; perform a cheap change
+check; refresh only affected identities; run deterministic analysis; and invoke a model
+only when synthesis or user-facing reasoning adds value. Identical source-bound work is
+deduplicated, provider cursors are incremental, retries back off, and a user is shown the
+scope or required additional allowance before an unusually expensive research job.
+
+### Local completion and hosted SaaS admission gate
+
+The next product milestone is the complete local SEO system. Existing hosted read-spine
+feasibility code and contracts remain frozen architectural evidence; they do not admit
+additional hosted SaaS product implementation.
+
+Local end-to-end readiness requires direct evidence, using a real non-sample site, that
+one installation can:
+
+1. initialize the project and bind one explicit site, market, language, and environment;
+2. connect or import the required first-party sources without placing secrets in project
+   config, prompts, logs, or evidence;
+3. crawl and render the selected site incrementally and preserve provenance, freshness,
+   limitations, and invalidation;
+4. run the health review, measurement audit, and SEO opportunity research through the
+   same headless, CLI, console, local MCP, and private-skill contracts;
+5. complete targeted keyword, market, SERP, competitor, page, and content-gap research
+   without seeded claims or invented demand;
+6. produce one ranked recommendation and a reviewable content brief or coding-agent
+   implementation packet;
+7. record the chosen decision, publication/handoff, verification window, and measured
+   result or honest no-change outcome;
+8. prove bounded jobs, cancellation/recovery, evidence reuse, usage accounting, and the
+   automatic-versus-on-demand cost policy; and
+9. pass the focused security, usability, cross-surface parity, and owner validations
+   selected by its closing Skopos Tasks.
+
+Only after those requirements close may an agent present the user with this exact gate:
+
+```text
+The complete local Unisane Ops SEO system is proven end to end. Hosted SaaS implementation is still locked. To authorize the hosted SaaS build, reply with exactly:
+
+START UNISANE OPS HOSTED SAAS
+
+Any other reply will be treated as no authorization, and hosted SaaS implementation will not begin.
+```
+
+Hosted SaaS implementation is authorized only when the user's entire reply is exactly
+`START UNISANE OPS HOSTED SAAS`, excluding surrounding whitespace. `Yes`, `continue`,
+`proceed`, `next`, approval of this plan, a paraphrase, or silence is not authorization.
+Without the exact confirmation, agents ignore hosted implementation work and continue
+only admitted local-system work. Discussion, architecture review, documentation, and
+read-only feasibility analysis do not cross the gate; creating or changing hosted
+product source, infrastructure, deployment, remote MCP, hosted identity, billing,
+managed connections, or SaaS UI does.
+
 ## AI-Native And Hosted Delivery Contract
 
 > Target steady state: bounded Skopos Tasks own implementation and closure. MCP servers,
@@ -730,10 +1062,11 @@ stale completion; terminal results remain idempotent and content-bound. The priv
 hosted runtime adds separately invokable gateway and worker process lifecycles with
 startup probes, role readiness, structured payload-free events, bounded polling,
 expired-lease recovery, retry scheduling, terminal poison-dispatch recording, and
-`AbortSignal` shutdown. Transport and deployment hosts remain injected: these
-contracts do not expose a public HTTP or remote MCP service and do not establish
-managed service-identity provisioning, secret custody, backup/restore certification,
-scheduler deployment, or mutation.
+`AbortSignal` shutdown. The adapter also owns encrypted credential records and versions,
+atomic create/rotate/revoke lifecycle, and exact active-version lookup. Transport and
+deployment hosts remain injected: these contracts do not expose a public HTTP or remote
+MCP service and do not establish managed service-identity provisioning, a cloud KMS
+implementation, provider OAuth callbacks, or hosted mutation.
 
 ### Hosted read-spine deployment runbook
 
@@ -754,9 +1087,69 @@ exporting `createHostedWorkerActions()`; it is not inferred from the workspace.
 
 Operators monitor structured lifecycle events, `/live`, `/ready`, PostgreSQL availability,
 queued-job age, retry/dead-letter outcomes, and shutdown completion. The current proof
-does not certify backup/restore, safe rollout/rollback in a managed environment, tenant
-isolation under adversarial load, incident ownership, or remote/public exposure; those
-remain release gates.
+does not certify provider point-in-time recovery, safe rollout/rollback in a managed
+environment, tenant isolation under adversarial load, incident ownership, or
+remote/public exposure; those remain release gates.
+
+The portable artifact is one multi-command OCI image, not separate source or service
+implementations. Its production stage runs as a non-root user and contains only the
+runtime, hosted PostgreSQL adapter, Ops engine, and their production dependency closure.
+Gateway, worker, scheduler, migration, and schema-probe workloads select exact commands from that
+image. Product action registration stays outside the generic runtime: a downstream
+immutable image adds one bundled action module, while mutable ConfigMap-mounted code and
+workspace inference are forbidden.
+
+Deployment credentials may enter through an orchestrator-mounted
+`OPS_HOSTED_POSTGRES_URL_FILE`; direct URL configuration remains a local controlled path,
+and configuring both or neither fails closed. The migration command is the only schema
+writer and must complete before a runtime rollout. Kubernetes gateway, worker, and
+scheduler roles run independently, use restricted non-root/read-only security, resource bounds,
+readiness/startup probes, termination grace, and a gateway disruption budget. The
+integration-only image target and Compose issuer/action fixtures are never promotable
+artifacts.
+
+The release build is one checked-in multi-platform Bake target. It attaches maximum SLSA
+v1 provenance and an SPDX SBOM to the pushed OCI index and records source, revision, and
+version annotations. Credentials never enter build arguments or provenance. A release
+runner signs the resolved index digest through a short-lived OIDC identity; the runtime
+contains no Cosign binary, signing key, registry credential, or verification policy.
+
+Deployment verification accepts only `repository@sha256:digest`, exact signer identity,
+and exact HTTPS issuer; it verifies the Cosign signature and requires both provenance and
+SBOM before rollout. Migration, gateway, worker, scheduler, and rollback-check manifests must render
+the same digest. A rollback candidate runs its own `dist/bin/probe.js` against the
+current database before any runtime replacement, so compatibility comes from the
+candidate artifact's migration contract rather than a duplicated release label.
+
+The hosted read scheduler owns timing only. A versioned schedule freezes scope, project,
+service principal, exact read action/schema/input, evidence revision, interval, and next
+due time without credential material. PostgreSQL uses `SKIP LOCKED`, expiring leases, and
+fencing tokens; one transaction creates the canonical job, dispatch, audit, and
+occurrence records and advances the schedule. The scheduler has a distinct database role,
+secret reference, process, and Deployment, loads no action module, exposes no Service,
+and cannot schedule mutation actions.
+
+Hosted provider credentials use one provider-neutral envelope-cipher port. The public
+record contains only scope, project, connection, provider, secret kind, KMS key identity,
+lifecycle state, version, timestamps, and validated non-secret metadata. Encryption
+happens before persistence. The authenticated-encryption context is derived from the
+immutable credential, scope, project, connection, provider, secret kind, and version, so
+an envelope cannot be transplanted to another customer, connection, or revision.
+PostgreSQL stores ciphertext, nonce, wrapped data key, and algorithm only; the gateway
+may insert versions but cannot read encrypted version rows, the worker may read exact
+active versions but cannot manage lifecycle, and the scheduler receives no credential
+table grant.
+
+Decryption is available only through a worker credential resolver bound to allowed
+`scopeId` and project sets. It verifies the exact connection/provider/secret-kind context,
+rejects stale and revoked versions, invokes a bounded callback with the decrypted byte
+buffer, rejects credential-shaped or credential-containing callback results, and zeroes
+that buffer when the callback settles. It never returns credentials
+through a job, schedule, action result, tool response, audit event, or public route. The
+repository supplies the port and persistence contract, not a development master key or
+cloud-specific KMS adapter. A production deployment must bind the cipher to its managed
+KMS through workload identity and separately prove key policy, rotation, revocation,
+availability, audit, backup interaction, and incident recovery.
 
 Hosted action admission atomically binds authenticated principal, `scopeId`, project,
 environment, target/resource, action schema version, immutable plan revision, approval,

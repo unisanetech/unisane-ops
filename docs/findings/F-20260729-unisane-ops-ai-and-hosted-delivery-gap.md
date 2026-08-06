@@ -15,6 +15,21 @@ severity: MUST
 
 ## Changelog
 
+- `2026-08-04`: Added canonical local first-party site and target-market intake to the
+  versioned SEO workspace config. Setup now requires ownership/authorization
+  confirmation, preserves unrelated settings, and supplies site identity and bounded
+  crawl defaults to later crawl runs without repeated flags. Real-site usability and
+  the complete evidence-to-outcome loop remain open.
+- `2026-08-04`: Added the first versioned local first-party crawl evidence slice with
+  conservative robots handling, same-origin and hard resource limits, sitemap and
+  internal-link discovery, conditional refresh, cancellation, workspace persistence,
+  and explicit static-HTML limitations. Real-site proof and the wider research,
+  analysis, decision, publication, and verification loop remain open.
+- `2026-08-04`: Rebased the open gap on current proof. The action contract, three local
+  read workflows, local MCP, private Codex skills, controlled campaign-pause lifecycle,
+  and hosted read-spine feasibility now exist. The remaining MUST is a complete
+  non-seeded local SEO loop. Hosted product expansion is explicitly frozen until that
+  loop closes and the user supplies the exact SaaS confirmation phrase.
 - `2026-08-02`: Added the missing production execution kernel and clarified that
   local/private AI-host bindings may precede SaaS while public hosted plugins depend on
   durable identity, execution, recovery, privacy, support, and compatibility gates.
@@ -31,40 +46,43 @@ severity: MUST
 
 - Severity: `MUST`
 - Status: `open`
-- Owner: `architecture-program`
-- Target Pack: `P121-W1 (unopened)`
+- Owner: `unisane`
 
 ## Symptom
 
-Unisane Ops has the correct package direction and plans one CLI, one headless engine,
-provider packs, agent-safe JSON, and a human-first console. It does not yet define or
-implement:
+Unisane Ops now has the transport-neutral action foundation, three executable local
+Growth read workflows, project-scoped local MCP, private Codex skills, one controlled
+campaign-pause lifecycle, and substantial private hosted read-spine feasibility proof.
+Those slices validate important reasoning and architecture boundaries, but they do not
+yet prove the primary SEO product end to end on one real non-sample site.
 
-- one public transport-neutral action contract
-- local or remote MCP transport
-- goal-oriented AI tool schemas
-- versioned Growth goals/playbooks shared by Help, console, CLI, MCP, and skills
-- evidence-bound, actor-scoped context briefs and resumable handoffs
-- a durable distinction between accepted business context, transient run state, model
-  output, and raw conversation text
-- thin skill bindings that reference actions/playbooks without owning workflow or safety
-- Codex/ChatGPT or Claude AI-host distribution
-- hosted identity, project, connection, action, job, and tenant boundaries
-- separate audience-bound MCP identity and downstream provider OAuth identity
-- managed OAuth/secret custody
-- transactional action admission and durable dispatch
-- durable remote jobs, schedules, alerts, and shared activity
-- at-least-once provider execution, operation receipts, and ambiguous-outcome
-  reconciliation
-- backup/restore, dead-letter recovery, observability, incident ownership, retention,
-  deletion, and tenant-isolation proof
-- remote agent authorization, service identity, quotas, and audit
-- hosted usage, entitlement, billing, retention, or enterprise boundaries
+The remaining local gap is:
 
-Agents can eventually invoke CLI JSON, but shell access alone does not provide adequate
-tool discovery, remote authentication, cross-host distribution, bounded context
-responses, or a normal installation experience. A local-only console also does not meet
-the needs of non-technical, team, agency, scheduled, or remote-agent users.
+- real-site usability proof for the new project/site/market intake and its evidence
+  source connections;
+- real-site proof for the new incremental static-HTML crawler, plus targeted browser
+  rendering only where static evidence is insufficient;
+- first-party search, analytics, and canonical-outcome ingestion without sample-data
+  ambiguity;
+- bounded compliant keyword, market, SERP, and public competitor research;
+- one canonical SEO evidence model spanning pages, queries, clusters, markets, SERP
+  snapshots, competitors, findings, opportunities, decisions, publication, and results;
+- page audit, missing/weak/cannibalized-page, internal-link, technical, measurement, and
+  competitor-pattern analysis over recorded evidence;
+- agent-initiated targeted research with async progress, cancellation, evidence reuse,
+  honest blocked states, and no always-running model loop;
+- ranked recommendation, content brief or coding-agent implementation packet, human
+  decision, publication/handoff record, verification window, and measured outcome;
+- source TTLs, incremental cursors, deduplication, bounded retries, usage accounting,
+  workspace ceilings, and predictable local research cost; and
+- direct usability, security, and cross-surface parity proof for the complete loop.
+
+The hosted gap remains real—managed identity, OAuth callbacks, production secret/KMS
+custody, remote MCP, durable team workflows, metering/billing, SaaS UI, tenant operations,
+and production deployment—but it is deliberately not the current implementation target.
+Existing hosted feasibility code is frozen. Further hosted product work is inadmissible
+until local end-to-end closure and exact user confirmation through
+`START UNISANE OPS HOSTED SAAS`.
 
 ## Impact
 
@@ -87,35 +105,45 @@ Without an explicit boundary, future work could:
 - make users learn internal readiness, evidence, action, or receipt terminology
 - repeat research and project explanation because agent sessions cannot resume through
   authoritative references
+- mistake completed infrastructure feasibility for evidence that the SEO product itself
+  creates, implements, and verifies useful work
+- spend continuously on crawling, SERP data, or model calls when no evidence changed and
+  no user requested research
+- begin hosted product work from a casual `continue`, `next`, or plan approval before
+  local value and product economics are proven
 
 ## Fix Plan
 
-1. Complete P120 prerequisites for onboarding, connection, readiness, and console truth.
-2. Freeze Growth goal/playbook descriptors and engine-owned workflow run, context brief,
-   decision, handoff, verification, and evidence-invalidation semantics.
-3. Freeze `@unisane/ops-engine/actions` as the one action contract.
-4. Prove Growth health, SEO research, and measurement-audit pilots across headless,
-   CLI/JSON, console, and plain-language guidance projections.
-5. Add `@unisane/ops-mcp` with one local/remote tool registry.
-6. Validate goal-oriented tools and resumable context with Codex, Claude, Gemini, and CI
-   scenarios.
-7. Freeze the hosted execution spine: principal and tenant boundary, transactional
-   admission, outbox dispatch, versioned jobs, secret custody, reconciliation, audit,
-   retention, backup/restore, and incident ownership.
-8. Ship thin local/private Codex/ChatGPT and admitted Claude bindings over evaluated
-   local MCP without a public hosted claim.
-9. Add hosted identity, `scopeId`, connections, durable stores/jobs, workers, and remote
-   MCP; prove one read-only action before one approved mutation.
-10. Publish public hosted plugins only after production remote-MCP and operational gates
-    pass.
-11. Add team, schedule, alert, commercial, retention, and enterprise capability only in
-    later bounded workpacks.
-12. Enforce zero duplicate engine/config/readiness/approval/receipt/provider/workflow
-    owner.
+1. Complete real-site local intake, crawl/render, first-party ingestion, and bounded
+   keyword/SERP/competitor evidence acquisition.
+2. Complete the canonical SEO evidence records, source limitations, freshness,
+   invalidation, sample-data separation, and incremental reuse.
+3. Extend the current playbook/action model through page and content-gap analysis,
+   competitor comparison, content brief, and implementation-packet outcomes without a
+   second workflow owner.
+4. Prove the user-directed research loop across headless, CLI/JSON, console, local MCP,
+   and private skills, including async progress, cancellation, blocked/no-evidence
+   outcomes, and bounded model context.
+5. Prove one real decision through implementation handoff, publication recording,
+   verification scheduling, and a measured or honest no-change outcome.
+6. Prove cost and operational controls: TTLs, change detection, deduplication,
+   incremental cursors, quotas, hard ceilings, retries, recovery, and usage reporting.
+7. Close the local end-to-end gate with focused security, usability, parity, and owner
+   evidence selected by bounded Skopos Tasks.
+8. Keep hosted feasibility source frozen except for correctness/security maintenance.
+9. After local closure, ask for the exact reply `START UNISANE OPS HOSTED SAAS`; treat
+   every other reply as no authorization.
+10. Only after exact confirmation, admit bounded hosted Tasks for managed identity,
+    connections, durable jobs, remote MCP, team console, billing, and production
+    operations in the dependency order defined by the accepted plan.
+11. Enforce zero duplicate engine/config/readiness/approval/receipt/provider/workflow
+    owner throughout both phases.
 
 ## Verification
 
 - action contract and adapter-parity tests
+- one real non-sample site completing intake, research, decision, handoff/publication,
+  and verification through the local product
 - playbook/action reference integrity and cross-surface guidance-parity tests
 - context minimization, evidence invalidation, handoff/resume, and raw-transcript denial
   tests
@@ -134,6 +162,8 @@ Without an explicit boundary, future work could:
 - repository-wide owner/import/secret-schema detectors
 - `pnpm docs:core:check`
 - Project Memory validation selected by the owning Skopos Task
+- an explicit no-hosted-change check until both local closure and the exact confirmation
+  phrase exist in authoritative task context
 
 ## Linked Docs
 

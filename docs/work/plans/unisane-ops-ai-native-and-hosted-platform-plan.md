@@ -24,6 +24,54 @@ configuration model, or safety lifecycle.
 
 ## Changelog
 
+- `2026-08-04`: Finalized the SEO-first product delivery sequence. The immediate
+  objective is a complete real-site local loop from evidence preparation and
+  conversational research through an implementation packet and measured result.
+  Existing hosted feasibility work is frozen; further SaaS product implementation
+  starts only after local closure and the exact user reply
+  `START UNISANE OPS HOSTED SAAS`.
+- `2026-08-04`: Added the provider-neutral credential-custody proof. The engine now owns
+  strict public credential metadata, an injected envelope-cipher port, identity-bound
+  authenticated encryption, atomic rotation/revocation, and a short-lived worker
+  resolver; PostgreSQL stores encrypted versions and separates gateway lifecycle,
+  worker resolution, and scheduler timing grants. Managed KMS/workload identity, OAuth
+  callback/session handling, and cloud recovery evidence remain environment gates.
+- `2026-08-04`: Added the portable hosted read scheduler role. Versioned schedules bind
+  exact read action and evidence context without credentials; PostgreSQL due claiming,
+  fencing, occurrence creation, canonical job/dispatch/audit materialization, and cadence
+  advancement are transactional; and an independent least-privilege scheduler process
+  and Kubernetes Deployment own timing without executing actions or exposing a Service.
+  Schedule management UX/API, scheduled mutation, managed secrets, and public hosted
+  delivery remain later gates.
+
+- `2026-08-04`: Added the cloud-neutral hosted release trust contract. The production
+  Bake target now attaches maximum SLSA v1 provenance and an SPDX SBOM, the release
+  verifier requires one digest plus an exact Cosign signer identity and OIDC issuer,
+  every migration/gateway/worker/rollback-check workload is digest-only, and a candidate
+  rollback digest must pass its own schema probe before rollout. Real managed registry
+  signing, cluster admission enforcement, and rollout evidence remain environment gates.
+- `2026-08-04`: Proved the portable data-safety layer for the hosted read spine. OIDC
+  identities now bind both scope and project access, PostgreSQL retrieval applies the
+  full identity predicate without disclosing cross-project existence, runtime database
+  roles receive separate least-privilege grants, and a separate maintenance image proves
+  secret-file custom-format backup plus exact fresh-database restore comparison. Managed
+  provider PITR, encrypted artifact custody, workload identity, signing/provenance,
+  managed rollout and incident ownership remain environment-specific gates.
+- `2026-08-04`: Added the portable OCI and Kubernetes deployment foundation for the
+  authenticated hosted read spine. A non-root, production-closure image now exposes
+  exact gateway, worker, migration, and probe commands; mounted secret-file resolution,
+  migration-gated rollout templates, probes, resource bounds, independent scaling, and
+  an isolated authenticated cross-container proof are current. Product action modules
+  remain downstream immutable-image composition. Managed secrets and workload identity,
+  backup/restore, tenant isolation, artifact signing, managed rollout and incidents,
+  remote MCP, scheduler, and mutation remain open production gates.
+- `2026-08-04`: Proved independently runnable private gateway and worker artifacts for
+  the hosted read spine. Exact-issuer/audience OIDC admission, bounded internal HTTP,
+  explicit worker action loading, schema-revision startup checks, payload-free lifecycle
+  telemetry, and bounded signal shutdown now run across separate operating-system
+  processes against PostgreSQL. Managed identity provisioning and secret custody,
+  backup/restore exercises, managed rollout/rollback, scheduler deployment, remote MCP,
+  tenant-isolation certification, and mutation remain open production gates.
 - `2026-08-03`: Added the standalone PostgreSQL hosted-read adapter and private
   gateway/worker process lifecycles. Real PostgreSQL integration proof now covers
   explicit repeatable migration, atomic admission, conflicting idempotency rejection,
@@ -154,6 +202,12 @@ plugins, remote MCP/APIs, managed OAuth, and hosted SaaS remain target state. Cu
 package READMEs, pack manifests, and implemented CLI behavior remain executable
 authority.
 
+The current delivery lane is the complete local SEO system defined below. Existing
+hosted feasibility source is frozen except for required correctness or security
+maintenance. No managed-platform, remote-MCP, SaaS identity, billing, hosted UI, or
+deployment expansion is admitted before local end-to-end closure and the exact user
+confirmation required by the accepted decision.
+
 The current Growth product architecture remains responsible for clean onboarding,
 provider connections, derived readiness, instrumentation reconciliation, and the
 human-first console. AI-native and hosted delivery must consume those results and must
@@ -183,17 +237,17 @@ planning direction until their bounded Skopos Tasks close with direct Evidence.
 
 Unisane Ops supports six real user contexts through one operational system:
 
-| User context                    | Primary experience                  | Required value                                                                                    |
-| ------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------- |
-| local developer                 | package and CLI                     | inspect, configure, audit, plan, apply, and verify in the current project                         |
-| marketer or founder             | hosted console                      | understand performance, connections, priorities, and safe next actions without terminal knowledge |
-| team or agency                  | hosted workspace                    | share projects, connections, roles, approvals, schedules, and activity safely                     |
-| CI or automation                | JSON/action API                     | deterministic non-interactive checks and approved operations                                      |
-| AI-agent user                   | MCP plus AI-host plugin/skills      | natural-language analysis and controlled action with explicit context and evidence                |
-| enterprise/self-hosted operator | packages plus controlled deployment | data-boundary, identity, audit, and deployment control                                            |
+| User context                    | Primary experience                                              | Required value                                                                                    |
+| ------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| local developer                 | package and CLI                                                 | inspect, configure, audit, plan, apply, and verify in the current project                         |
+| marketer or founder             | local console now; hosted console after the SaaS gate           | understand performance, connections, priorities, and safe next actions without terminal knowledge |
+| team or agency                  | local project handoff now; hosted workspace after the SaaS gate | share projects, connections, roles, approvals, schedules, and activity safely                     |
+| CI or automation                | JSON/action API                                                 | deterministic non-interactive checks and approved operations                                      |
+| AI-agent user                   | MCP plus AI-host plugin/skills                                  | natural-language analysis and controlled action with explicit context and evidence                |
+| enterprise/self-hosted operator | packages plus controlled deployment                             | data-boundary, identity, audit, and deployment control                                            |
 
-Package-only operation remains valuable and supported. Hosted SaaS is optional. Both use
-the same project intent and engine contracts.
+Package-only operation remains valuable and supported. Hosted SaaS is optional, later,
+and explicitly gated. Both use the same project intent and engine contracts.
 
 Ordinary users do not assemble the internal package graph. Local developers install one
 CLI product entrypoint; hosted-console users install nothing; agent users install or
@@ -216,6 +270,8 @@ into one source package.
 9. Host integrations are thin, replaceable adapters.
 10. Future capability is admitted through versioned contracts, not speculative
     abstractions or empty packages.
+11. Complete local SEO value precedes hosted product implementation; only the exact
+    confirmation phrase defined by the canonical decision can admit the SaaS phase.
 
 ## Target Architecture
 
@@ -491,7 +547,54 @@ Admit a new wrapper only when:
 
 Do not create empty parity packages for every AI brand.
 
+## Current Delivery Priority: Complete Local SEO Loop
+
+The immediate product objective is not another hosted-runtime slice. It is one complete,
+repeatable local SEO workflow over a real site and non-seeded evidence. Existing hosted
+feasibility contracts remain available to prevent later architectural rework, but their
+presence does not change current delivery priority.
+
+The local sequence is:
+
+1. **Project and site intake**: one install initializes an explicit project, site,
+   environment, market, language, business outcome, and canonical measurement target.
+2. **Evidence acquisition**: production-quality local adapters incrementally crawl and
+   render the site, ingest authorized first-party search and analytics evidence, and
+   acquire bounded keyword, SERP, and public competitor evidence through compliant
+   sources.
+3. **Evidence memory**: page, query, cluster, market, SERP, competitor, finding,
+   opportunity, decision, publication, and verification records preserve provenance,
+   freshness, confidence, limitations, and sample-data state without using chat as
+   storage.
+4. **Automatic preparation**: cheap deterministic synchronization, change detection,
+   invalidation, and scheduled verification keep evidence ready. Broad research and AI
+   synthesis remain user-requested or explicitly automated and budgeted.
+5. **Conversational research**: local MCP and private skills let a user ask health,
+   measurement, opportunity, competitor, page, and gap questions. The agent requests
+   only the missing bounded actions and returns the shared structured result.
+6. **Decision and preparation**: supported opportunities are ranked; the selected one
+   produces a content brief or coding-agent implementation packet with target, evidence,
+   constraints, acceptance criteria, safe next step, and measurement plan.
+7. **Implementation handoff**: a coding agent or admitted local connector prepares the
+   repository/CMS change without making Growth a second code or publication engine.
+   Human review remains authoritative.
+8. **Verification**: publication or an explicit external handoff is recorded, the
+   declared measurement window is scheduled, and the workflow closes with a measured
+   result, an honest no-change outcome, or a source-bound limitation.
+9. **Economics and quality**: caching, incremental cursors, evidence TTLs, bounded job
+   scope, retries, cancellation, usage accounting, hard ceilings, security, usability,
+   and cross-surface parity are directly proven.
+
+Local completion requires all nine steps to work together, not isolated demonstrations.
+At least one real non-sample site must complete the loop from initialization to measured
+verification through the canonical headless, CLI, console, local MCP, and private-skill
+contracts. Skopos Tasks own the bounded implementation and closure evidence.
+
 ## Hosted Platform Capability Sequence
+
+This sequence remains the accepted later architecture, not current implementation
+authority. No item below may begin as product implementation until the local completion
+gate closes and the exact SaaS confirmation is received.
 
 ### Managed foundation
 
@@ -554,7 +657,41 @@ These phases describe strategic dependency order only. They are not executable w
 items, task identifiers, or a parallel readiness system. Each implementation increment
 must be admitted, evidenced, and closed through a bounded Skopos Task.
 
+### Local SEO end-to-end completion
+
+1. close real-site intake, crawl/render, first-party provider ingestion, keyword/SERP
+   acquisition, and public competitor evidence with explicit source limitations
+2. close canonical evidence memory, freshness, invalidation, sample-data separation,
+   bounded artifacts, and incremental reuse
+3. extend the existing three pilots through page audit, content/page-gap analysis,
+   competitor comparison, content brief, and implementation-packet outcomes without
+   creating parallel workflow owners
+4. prove agent-initiated targeted research, honest blocked/no-evidence results, async
+   progress and cancellation, and one useful ranked decision
+5. prove local implementation handoff, publication recording, verification scheduling,
+   and measured or honest no-change closure
+6. prove cost controls, usage accounting, security, usability, and headless/CLI/console/
+   MCP/private-skill parity over one real non-sample site
+
+Exit: the canonical local completion requirements in the Ops product architecture
+baseline are closed with direct source-bound evidence.
+
+Only at this exit may an agent show the exact confirmation prompt. Hosted implementation
+remains blocked unless the user's complete trimmed reply is exactly:
+
+```text
+START UNISANE OPS HOSTED SAAS
+```
+
+Any other response is treated as no authorization. The agent continues local work or
+stops; it does not infer SaaS permission from plan approval, `yes`, `continue`,
+`proceed`, `next`, silence, or a paraphrase.
+
 ### Hosted-runtime feasibility spine
+
+This phase records already completed feasibility proof and the accepted future hosted
+shape. It is frozen while local SEO completion is active. Correctness and security
+maintenance are allowed; new hosted product capability is not.
 
 1. freeze the hosted principal, `scopeId`, project, connection, action request, immutable
    plan revision, approval, job, operation receipt, audit event, and retention boundaries
@@ -575,12 +712,42 @@ must be admitted, evidenced, and closed through a bounded Skopos Task.
    migrations, transactional admission, competing `SKIP LOCKED` dispatch claims,
    retry/dead-letter classification, role readiness and structured observation,
    bounded polling, and graceful shutdown without a Framework dependency
+8. retain the completed independent-artifact proof: separate gateway and worker Node.js
+   executables, exact-issuer/audience OIDC workload identity, bounded private read HTTP,
+   explicit action-module loading, schema-revision startup checks, payload-free telemetry,
+   and real cross-process PostgreSQL admission-to-result execution with signal shutdown
+9. retain the completed portable deployment foundation: one non-root production-closure
+   OCI image with exact gateway, worker, migration, and probe commands; deployment
+   secret-file resolution; migration-gated Kubernetes role templates; independent
+   scaling, probes, resource and disruption bounds; and an isolated authenticated
+   cross-container proof. Product action modules remain downstream immutable composition
+10. retain the completed portable data-safety proof: OIDC principal, scope, and project
+    claims constrain admission and PostgreSQL retrieval; distinct externally provisioned
+    gateway and worker roles receive least-privilege grants; and a separate maintenance
+    image performs credential-safe custom-format backup, fresh-database restore, and
+    logical state comparison without expanding the application runtime image
+11. retain the completed portable release-trust contract: one multi-platform BuildKit
+    target attaches maximum SLSA v1 provenance and an SPDX SBOM; exact Cosign identity
+    and issuer verification accepts only an image digest; migration, gateway, worker,
+    and rollback-check workloads share that digest; and a candidate rollback image must
+    pass its own schema-revision probe before runtime replacement
+12. retain the portable read-scheduler contract: exact versioned read schedules,
+    credential-free snapshots, fenced due claiming, atomic canonical job materialization,
+    interruption recovery, and an independently deployable least-privilege timing role
+13. retain the provider-neutral credential-custody contract: strict non-secret records,
+    identity-bound encrypted envelopes, atomic rotation and revocation, exact active
+    version resolution, short-lived worker use, and separate gateway/worker/scheduler
+    database authority without a repository-owned development key store
 
 Exit: the internal read-only contracts, transactional adapter, separate role composition,
-production-database adapter, process lifecycles, and interruption/retry proof are
-current. This phase remains open until independently deployed gateway and worker
-artifacts prove the same semantics with managed workload identity, operational
-telemetry, backup/restore exercises, safe rollout/rollback, and incident ownership.
+production-database adapter, independent artifacts, OIDC authorization, project-isolated
+retrieval, least-privilege runtime database roles, internal transport, portable
+OCI/Kubernetes deployment foundation, logical backup/restore, release attestations,
+signature policy, digest locking, schema-aware rollback preflight, process lifecycles,
+and interruption/retry proof are current. This phase remains open until a managed
+deployment proves identity provisioning and secret custody, provider PITR and encrypted
+backup custody, real registry signing identity and admission enforcement, safe
+rollout/rollback, infrastructure-level tenant isolation, and incident ownership.
 
 ### Guided workflow, action contract, and adapter parity
 
@@ -709,6 +876,9 @@ plane.
 - Hosted feasibility constrains hosted execution before guided workflows freeze public
   action semantics; it does not make hosted behavior current product truth or authorize
   broad infrastructure work.
+- Further hosted product work requires both closed local SEO end-to-end evidence and the
+  exact user confirmation `START UNISANE OPS HOSTED SAAS`; either condition missing is a
+  hard stop.
 - Local MCP may ship before SaaS.
 - Local/private AI-host bindings may ship over evaluated STDIO MCP before SaaS. Public
   hosted plugin listing waits for managed-control-plane production gates and commercial

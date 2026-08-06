@@ -14,6 +14,11 @@ status: accepted
 
 ## Changelog
 
+- `2026-08-04`: Accepted SEO-first, local-completion-first sequencing. Existing hosted
+  read-spine feasibility proof remains frozen, while further SaaS product implementation
+  is inadmissible until the complete local SEO loop closes and the user replies with the
+  exact phrase `START UNISANE OPS HOSTED SAAS`. General approval, `continue`, `next`, or
+  other conversational wording does not cross this gate.
 - `2026-08-03`: Accepted bounded real-host evidence for the private campaign-pause
   skill on Codex CLI `0.146.0-alpha.9.2`. A fresh task loaded the cache-busted plugin,
   created one exact non-production plan, explained that no provider effect occurred,
@@ -328,6 +333,23 @@ The term `plugin` must always be qualified:
 The hosted platform is an optional managed host of the same Ops engine, not a replacement
 engine and not a requirement for local/self-hosted use.
 
+Hosted delivery is a deferred product phase. The completed private read-spine,
+PostgreSQL, process, scheduler, deployment, release-trust, and credential-custody slices
+remain architectural feasibility evidence and may receive correctness or security fixes,
+but they do not authorize further hosted product expansion. Local end-to-end SEO value
+must be proven first through real evidence collection, research, recommendation,
+implementation handoff, and post-publication measurement across the admitted local
+surfaces.
+
+After the local completion requirements in the canonical Ops product architecture
+baseline are closed, an agent must show the prescribed readiness statement and request
+the exact reply `START UNISANE OPS HOSTED SAAS`. Only a reply whose complete trimmed
+content equals that phrase authorizes implementation of hosted identity, managed
+connections, remote MCP, hosted jobs, billing, SaaS UI, deployment, or related product
+infrastructure. Plan approval, discussion, silence, `yes`, `continue`, `proceed`, `next`,
+or a paraphrase is not authorization. Without the exact reply, hosted implementation is
+ignored and work remains within the local product boundary.
+
 It may own:
 
 - user and team onboarding
@@ -522,6 +544,8 @@ Future bounded Skopos Tasks must prove:
 10. exact audit evidence for human, agent, and service actors
 11. AI-host plugin terminology and manifests remain outside Framework plugin ownership
 12. no SaaS-only fork of project config, readiness, domain logic, or provider behavior
+13. no hosted SaaS product change before local end-to-end closure and exact user
+    confirmation through `START UNISANE OPS HOSTED SAAS`
 
 Required validation includes focused engine/action tests, protocol conformance,
 cross-host scenario evaluations, auth/permission tests, mutation denial and replay
