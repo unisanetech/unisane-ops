@@ -13,7 +13,9 @@ import {
   growthCampaignPauseVerifyToolInputSchema,
   growthHealthReviewToolInputSchema,
   growthMeasurementAuditToolInputSchema,
+  growthSeoImplementationPrepareToolInputSchema,
   growthSeoOpportunityToolInputSchema,
+  growthSeoPublicationVerifyToolInputSchema,
   prepareBoundWorkflowResume,
   validateLocalOpsMcpBinding,
   type LocalOpsMcpBinding,
@@ -27,6 +29,8 @@ import { createOpsMcpErrorResult, createOpsMcpToolResult } from './tool-result.j
 export const OPS_MCP_TOOL_NAMES = Object.freeze([
   'review_growth_health',
   'research_seo_opportunities',
+  'prepare_seo_implementation',
+  'verify_seo_publication',
   'audit_growth_measurement',
   'plan_campaign_pause',
   'review_campaign_pause',
@@ -48,6 +52,13 @@ const readAnnotations = {
 } as const;
 
 const planAnnotations = {
+  readOnlyHint: false,
+  destructiveHint: false,
+  idempotentHint: false,
+  openWorldHint: false,
+} as const;
+
+const localArtifactAnnotations = {
   readOnlyHint: false,
   destructiveHint: false,
   idempotentHint: false,
@@ -160,6 +171,54 @@ export function createLocalOpsMcpServer(
           attachWorkflowResume(output, resume.handoff),
           binding.maximumResultBytes,
         );
+      } catch (error) {
+        return createOpsMcpErrorResult(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    'prepare_seo_implementation',
+    {
+      title: 'Prepare an SEO implementation',
+      description:
+        'Create an evidence-bound implementation packet for one exact approved SEO opportunity. This writes only canonical local preparation artifacts and does not edit or publish a page.',
+      inputSchema: growthSeoImplementationPrepareToolInputSchema,
+      annotations: localArtifactAnnotations,
+    },
+    async (input) => {
+      try {
+        assertBoundTarget(binding, input);
+        const output = await workflows.seoOpportunity.prepare({
+          opportunityId: input.opportunityId,
+          audience: input.audience,
+          notBeforeDaysAfterPublication: input.notBeforeDaysAfterPublication,
+          expiresDaysAfterPublication: input.expiresDaysAfterPublication,
+        });
+        return createOpsMcpToolResult(output, binding.maximumResultBytes);
+      } catch (error) {
+        return createOpsMcpErrorResult(error);
+      }
+    },
+  );
+
+  server.registerTool(
+    'verify_seo_publication',
+    {
+      title: 'Verify an SEO publication',
+      description:
+        'Measure one already human-recorded SEO publication in its declared verification window using current exact-opportunity evidence. This cannot record approval or publish content.',
+      inputSchema: growthSeoPublicationVerifyToolInputSchema,
+      annotations: localArtifactAnnotations,
+    },
+    async (input) => {
+      try {
+        assertBoundTarget(binding, input);
+        const output = await workflows.seoOpportunity.verify({
+          publicationId: input.publicationId,
+          maxAgeDays: input.maxAgeDays,
+        });
+        return createOpsMcpToolResult(output, binding.maximumResultBytes);
       } catch (error) {
         return createOpsMcpErrorResult(error);
       }

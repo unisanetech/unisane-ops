@@ -9,6 +9,8 @@ The package exposes these bounded, goal-oriented tools:
 
 - `review_growth_health`
 - `research_seo_opportunities`
+- `prepare_seo_implementation`
+- `verify_seo_publication`
 - `audit_growth_measurement`
 - `plan_campaign_pause`
 - `review_campaign_pause`
@@ -21,6 +23,13 @@ calls must repeat the same project and environment. The server rejects mismatche
 does not accept arbitrary paths, prompts, commands, secrets, provider credentials, or
 generic provider operations.
 
+The two SEO artifact tools extend the research loop without widening authority.
+Preparation accepts one exact opportunity selected from recorded research and writes
+the canonical local implementation packet; it does not change a page or publish
+content. Verification accepts one exact publication id that a human already recorded
+through the canonical CLI workflow, re-runs current evidence, and writes the canonical
+verification artifact. MCP deliberately has no publication-record or approval tool.
+
 The campaign-pause tools expose four deliberately separate stages. Planning creates a
 stored, evidence-bound proposal; review reads that exact lifecycle; apply accepts only
 an already approved plan; verification performs the later status read. MCP has no tool
@@ -29,13 +38,18 @@ authoritative approval, and the immutable receipt records the agent principal th
 executed it. Repeating a successful apply returns the stored lifecycle instead of
 calling the provider again.
 
-Every successful workflow returns a bounded actor-scoped context brief and structured
-handoff. A later session using the same configured actor can pass that handoff back as
-`resumeFrom` to the same tool. The adapter re-runs current evidence under the original
+Every successful read workflow returns a bounded actor-scoped context brief and
+structured handoff. A later session using the same configured actor can pass that
+handoff back as `resumeFrom` to the same read tool. The adapter re-runs current evidence under the original
 run identity and returns whether the handoff is still current, the workflow changed, or
 supporting evidence changed. A different project, environment, actor, goal, or playbook
 is rejected before Growth execution. Raw conversation history and secret or provider
 payload fields are not part of the handoff schema.
+
+Preparation and publication verification are bounded local artifact operations, not
+resumable read workflows. Each call refreshes a canonical artifact from current
+evidence and time, so callers should use the returned artifact rather than replaying a
+call merely to reread it.
 
 `createLocalOpsMcpServer(...)` builds the transport-neutral server.
 `serveLocalOpsMcpStdio(...)` serves the same factory over local STDIO. STDOUT remains

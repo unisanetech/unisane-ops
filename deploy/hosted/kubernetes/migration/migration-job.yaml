@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: unisane-ops-hosted-migrate
+  labels:
+    app.kubernetes.io/name: unisane-ops-hosted
+    app.kubernetes.io/component: migration
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: unisane-ops-hosted
+        app.kubernetes.io/component: migration
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: unisane-ops-hosted
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: migration
+          image: unisane-ops-hosted-runtime
+          imagePullPolicy: IfNotPresent
+          command: ['node', 'dist/bin/migrate.js']
+          env:
+            - name: OPS_HOSTED_POSTGRES_URL_FILE
+              value: /run/secrets/database/postgres-url
+            - name: OPS_HOSTED_GATEWAY_DB_ROLE
+              value: unisane_ops_gateway
+            - name: OPS_HOSTED_WORKER_DB_ROLE
+              value: unisane_ops_worker
+            - name: OPS_HOSTED_SCHEDULER_DB_ROLE
+              value: unisane_ops_scheduler
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ['ALL']
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: database
+              mountPath: /run/secrets/database
+              readOnly: true
+      volumes:
+        - name: database
+          secret:
+            secretName: unisane-ops-hosted-database-owner
+            items:
+              - key: postgres-url
+                path: postgres-url

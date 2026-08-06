@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unisane-ops-hosted-worker
+  labels:
+    app.kubernetes.io/name: unisane-ops-hosted
+    app.kubernetes.io/component: worker
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: unisane-ops-hosted
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: unisane-ops-hosted
+        app.kubernetes.io/component: worker
+    spec:
+      serviceAccountName: unisane-ops-hosted
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 35
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: worker
+          image: unisane-ops-hosted-runtime
+          imagePullPolicy: IfNotPresent
+          command: ['node', 'dist/bin/worker.js']
+          env:
+            - name: OPS_HOSTED_ROLE
+              value: worker
+            - name: OPS_HOSTED_WORKER_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPS_HOSTED_ACTION_MODULE
+              valueFrom:
+                configMapKeyRef:
+                  name: unisane-ops-hosted
+                  key: worker-action-module
+            - name: OPS_HOSTED_POSTGRES_URL_FILE
+              value: /run/secrets/database/postgres-url
+          startupProbe:
+            exec:
+              command: ['node', 'dist/bin/probe.js']
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            exec:
+              command: ['node', 'dist/bin/probe.js']
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: '1'
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ['ALL']
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: database
+              mountPath: /run/secrets/database
+              readOnly: true
+      volumes:
+        - name: database
+          secret:
+            secretName: unisane-ops-hosted-database-worker
+            items:
+              - key: postgres-url
+                path: postgres-url

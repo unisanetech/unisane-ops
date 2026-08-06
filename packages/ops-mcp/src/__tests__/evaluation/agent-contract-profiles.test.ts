@@ -199,6 +199,10 @@ function evaluationWorkflows(): OpsMcpGrowthWorkflows {
     throw new Error('Campaign mutation is outside the read-only evaluation scenario.');
   };
   return {
+    seoOpportunity: {
+      prepare: unavailable,
+      verify: unavailable,
+    },
     campaignPause: {
       plan: unavailable,
       show: unavailable,

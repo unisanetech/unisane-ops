@@ -79,72 +79,76 @@ async function googlePullContext(options: MarketingCliOptions): Promise<{
   };
 }
 
+export async function pullMarketingProviderApiReport(options: MarketingCliOptions) {
+  if (!options.provider) {
+    throw new Error('[MARKETING_PULL_PROVIDER_REQUIRED] Pass --provider <provider>.');
+  }
+  if (!options.startDate || !options.endDate) {
+    throw new Error('[MARKETING_PULL_DATE_RANGE_REQUIRED] Pass --start-date and --end-date.');
+  }
+  const loaded = await loadMarketingExecutionContext();
+  const env = { ...process.env };
+  const google =
+    options.provider === 'googleAds' ||
+    options.provider === 'ga4' ||
+    options.provider === 'searchConsole'
+      ? await googlePullContext(options)
+      : undefined;
+  const meta =
+    options.provider === 'metaAds'
+      ? {
+          resource: resolveGrowthResource({
+            context: await loadGrowthProjectContext(),
+            environment: options.environment,
+            provider: 'meta',
+            service: 'ads',
+            resourceType: 'ad-account',
+          }),
+          accessToken: await resolveGrowthMetaConnectionToken({
+            connection: options.connection,
+            environment: options.environment,
+          }),
+        }
+      : undefined;
+  return writeMarketingProviderApiReportPull(loaded.config, {
+    cwd: options.cwd,
+    provider: options.provider,
+    driver:
+      options.provider === 'googleAds'
+        ? pullGoogleAdsReport
+        : options.provider === 'ga4'
+          ? pullGa4Report
+          : options.provider === 'searchConsole'
+            ? pullSearchConsoleReport
+            : options.provider === 'metaAds'
+              ? pullMetaAdsReport
+              : undefined,
+    env,
+    accountId: google?.accountId ?? meta?.resource.resourceId ?? options.accountId,
+    credentials: google
+      ? {
+          accessToken: google.accessToken,
+          ...(google.developerToken ? { developerToken: google.developerToken } : {}),
+        }
+      : meta
+        ? {
+            accountId: meta.resource.resourceId,
+            accessToken: meta.accessToken,
+          }
+        : undefined,
+    startDate: options.startDate,
+    endDate: options.endDate,
+    timeZone: options.timeZone,
+    apiVersion: options.apiVersion,
+    reportType: options.report,
+    maxPages: parsePositiveInteger(options.maxPages, '--max-pages'),
+    pageSize: parsePositiveInteger(options.pageSize, '--page-size'),
+  });
+}
+
 export async function marketingPullApi(options: MarketingCliOptions): Promise<number> {
   try {
-    if (!options.provider) {
-      throw new Error('[MARKETING_PULL_PROVIDER_REQUIRED] Pass --provider <provider>.');
-    }
-    if (!options.startDate || !options.endDate) {
-      throw new Error('[MARKETING_PULL_DATE_RANGE_REQUIRED] Pass --start-date and --end-date.');
-    }
-    const loaded = await loadMarketingExecutionContext();
-    const env = { ...process.env };
-    const google =
-      options.provider === 'googleAds' ||
-      options.provider === 'ga4' ||
-      options.provider === 'searchConsole'
-        ? await googlePullContext(options)
-        : undefined;
-    const meta =
-      options.provider === 'metaAds'
-        ? {
-            resource: resolveGrowthResource({
-              context: await loadGrowthProjectContext(),
-              environment: options.environment,
-              provider: 'meta',
-              service: 'ads',
-              resourceType: 'ad-account',
-            }),
-            accessToken: await resolveGrowthMetaConnectionToken({
-              connection: options.connection,
-              environment: options.environment,
-            }),
-          }
-        : undefined;
-    const result = await writeMarketingProviderApiReportPull(loaded.config, {
-      cwd: options.cwd,
-      provider: options.provider,
-      driver:
-        options.provider === 'googleAds'
-          ? pullGoogleAdsReport
-          : options.provider === 'ga4'
-            ? pullGa4Report
-            : options.provider === 'searchConsole'
-              ? pullSearchConsoleReport
-              : options.provider === 'metaAds'
-                ? pullMetaAdsReport
-                : undefined,
-      env,
-      accountId: google?.accountId ?? meta?.resource.resourceId ?? options.accountId,
-      credentials: google
-        ? {
-            accessToken: google.accessToken,
-            ...(google.developerToken ? { developerToken: google.developerToken } : {}),
-          }
-        : meta
-          ? {
-              accountId: meta.resource.resourceId,
-              accessToken: meta.accessToken,
-            }
-          : undefined,
-      startDate: options.startDate,
-      endDate: options.endDate,
-      timeZone: options.timeZone,
-      apiVersion: options.apiVersion,
-      reportType: options.report,
-      maxPages: parsePositiveInteger(options.maxPages, '--max-pages'),
-      pageSize: parsePositiveInteger(options.pageSize, '--page-size'),
-    });
+    const result = await pullMarketingProviderApiReport(options);
     if (options.json) printJson(result);
     else printMarketingProviderPullResult(result);
     return result.ok ? 0 : 1;

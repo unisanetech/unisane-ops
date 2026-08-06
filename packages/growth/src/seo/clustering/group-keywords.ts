@@ -49,6 +49,7 @@ export function groupKeywordClusters(options: GroupKeywordClustersOptions): Keyw
   const metricsByTerm = new Map(
     (options.metricFile?.metrics ?? []).map((metric) => [metric.normalizedTerm, metric]),
   );
+  assertMetricMarket(options.metricFile);
   const grouped = new Map<string, CandidateWithMetric[]>();
 
   for (const candidate of options.candidateFile.candidates) {
@@ -69,6 +70,7 @@ export function groupKeywordClusters(options: GroupKeywordClustersOptions): Keyw
         platformId: options.candidateFile.platformId,
         patternPack: options.candidateFile.patternPack,
         pageType: options.pageType,
+        metricFile: options.metricFile,
       }),
     )
     .sort(sortClusters);
@@ -77,9 +79,22 @@ export function groupKeywordClusters(options: GroupKeywordClustersOptions): Keyw
     version: 1,
     platformId: options.candidateFile.platformId,
     sourcePatternPack: options.candidateFile.patternPack,
-    metricSource: options.metricFile?.provider,
     clusters,
   });
+}
+
+function assertMetricMarket(metricFile?: KeywordMetricFile): void {
+  if (!metricFile) return;
+  const mismatch = metricFile.metrics.find(
+    (metric) =>
+      metric.country.toUpperCase() !== metricFile.country.toUpperCase() ||
+      metric.language.toLowerCase() !== metricFile.language.toLowerCase(),
+  );
+  if (mismatch) {
+    throw new Error(
+      `Metric ${mismatch.normalizedTerm} does not match file market ${metricFile.country}/${metricFile.language}.`,
+    );
+  }
 }
 
 function assertMatchingPlatform(
@@ -113,6 +128,7 @@ function buildCluster(options: {
   platformId: string;
   patternPack: string;
   pageType?: KeywordClusterPageType;
+  metricFile?: KeywordMetricFile;
 }): KeywordCluster {
   const sortedEntries = [...options.entries].sort(sortEntriesForPrimary);
   const primary = sortedEntries[0];
@@ -126,6 +142,8 @@ function buildCluster(options: {
   const totalVolume = sumKnownVolume(sortedEntries);
   const intent = classifyClusterIntent(sortedEntries);
   const pageType = options.pageType ?? inferPageType(options.patternPack);
+  const matchedMetrics = sortedEntries.flatMap((entry) => (entry.metric ? [entry.metric] : []));
+  const observedAt = oldestObservation(matchedMetrics);
 
   return {
     id: createKeywordId([options.platformId, 'cluster', options.clusterKey]),
@@ -136,11 +154,34 @@ function buildCluster(options: {
     primaryKeyword: primary.candidate.normalizedTerm,
     secondaryKeywords,
     totalVolume,
+    ...(options.metricFile && observedAt
+      ? {
+          metricEvidence: {
+            provider: options.metricFile.provider,
+            country: options.metricFile.country.toUpperCase(),
+            language: options.metricFile.language.toLowerCase(),
+            observedAt,
+            matchedMetricCount: matchedMetrics.length,
+            keywordCount: sortedEntries.length,
+            ...(primary.metric?.competitionIndex !== undefined
+              ? { primaryCompetitionIndex: primary.metric.competitionIndex }
+              : {}),
+            ...(options.metricFile.runId ? { sourceRunId: options.metricFile.runId } : {}),
+            sampleData: false,
+          },
+        }
+      : {}),
     priority: classifyPriority(totalVolume),
     rationale: createClusterRationale(options.clusterKey, sortedEntries.length, totalVolume),
     fit: classifyFit(totalVolume, sortedEntries.length),
     status: 'candidate',
   };
+}
+
+function oldestObservation(metrics: readonly KeywordMetric[]): string | undefined {
+  return metrics
+    .map((metric) => metric.fetchedAt)
+    .sort((left, right) => new Date(left).getTime() - new Date(right).getTime())[0];
 }
 
 function sortEntriesForPrimary(left: CandidateWithMetric, right: CandidateWithMetric): number {

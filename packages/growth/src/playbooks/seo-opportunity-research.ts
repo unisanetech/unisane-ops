@@ -14,6 +14,13 @@ import { defineGrowthGoal, defineGrowthPlaybook } from './contracts.js';
 const stableIdSchema = z.string().regex(/^[a-z0-9]+(?:[.-][a-z0-9]+)*$/);
 const conciseTextSchema = z.string().trim().min(1).max(280);
 
+export const seoOpportunityEvidenceIssueSchema = z.enum([
+  'ambiguous-page',
+  'crawl-failed',
+  'market-mismatch',
+  'search-performance-missing',
+]);
+
 export const growthSeoOpportunityGoal = defineGrowthGoal({
   id: 'growth.opportunity-discovery',
   version: 1,
@@ -77,6 +84,9 @@ export const seoOpportunityEvidenceSchema = z
     observedAt: z.string().datetime({ offset: true }),
     freshness: z.enum(['fresh', 'stale', 'unknown']),
     summary: conciseTextSchema,
+    sampleData: z.boolean().default(false),
+    limitations: z.array(conciseTextSchema).max(8).default([]),
+    issues: z.array(seoOpportunityEvidenceIssueSchema).max(8).default([]),
     status: z.enum(['current', 'conflicting']).default('current'),
   })
   .strict();
@@ -96,6 +106,9 @@ export const seoOpportunityCandidateSchema = z
         estimatedMonthlySearches: z.number().int().nonnegative().optional(),
         competitionIndex: z.number().min(0).max(100).optional(),
         currentPosition: z.number().positive().optional(),
+        currentClicks: z.number().int().nonnegative().optional(),
+        currentImpressions: z.number().int().nonnegative().optional(),
+        currentCtr: z.number().min(0).max(1).optional(),
         marketFit: z.enum(['strong', 'medium', 'weak']).optional(),
       })
       .strict(),
@@ -153,7 +166,11 @@ export type GrowthSeoOpportunityWorkflowProjection = z.infer<
 >;
 
 function confidenceFor(candidate: SeoOpportunityCandidate): RankedSeoOpportunity['confidence'] {
-  if (candidate.evidence.some((item) => item.status === 'conflicting')) return 'low';
+  if (
+    candidate.evidence.some((item) => item.status === 'conflicting' || item.sampleData === true)
+  ) {
+    return 'low';
+  }
   const kinds = new Set(candidate.evidence.map((item) => item.kind)).size;
   const current = candidate.evidence.filter((item) => item.freshness === 'fresh').length;
   if (kinds >= 3 && current === candidate.evidence.length) return 'high';
@@ -180,10 +197,16 @@ function limitationsFor(candidate: SeoOpportunityCandidate): string[] {
   if (candidate.evidence.some((item) => item.status === 'conflicting')) {
     limitations.push('Recorded sources disagree and need review.');
   }
+  if (candidate.evidence.some((item) => item.sampleData === true)) {
+    limitations.push('Sample data supports presentation only and cannot justify a live decision.');
+  }
   if (new Set(candidate.evidence.map((item) => item.kind)).size < 2) {
     limitations.push('Only one evidence type supports this opportunity.');
   }
-  return limitations;
+  for (const evidence of candidate.evidence) {
+    for (const limitation of evidence.limitations) limitations.push(limitation);
+  }
+  return [...new Set(limitations)].slice(0, 8);
 }
 
 function scoreCandidate(candidate: SeoOpportunityCandidate): number {
@@ -209,6 +232,7 @@ function scoreCandidate(candidate: SeoOpportunityCandidate): number {
   const visibilityScore =
     position === undefined ? 0 : position > 20 ? 15 : position > 10 ? 10 : position > 3 ? 4 : 0;
   const conflictPenalty = candidate.evidence.some((item) => item.status === 'conflicting') ? 15 : 0;
+  const samplePenalty = candidate.evidence.some((item) => item.sampleData === true) ? 20 : 0;
   const stalePenalty = candidate.evidence.every((item) => item.freshness !== 'fresh') ? 10 : 0;
   return Math.max(
     0,
@@ -221,6 +245,7 @@ function scoreCandidate(candidate: SeoOpportunityCandidate): number {
           competitionScore +
           visibilityScore -
           conflictPenalty -
+          samplePenalty -
           stalePenalty,
       ),
     ),

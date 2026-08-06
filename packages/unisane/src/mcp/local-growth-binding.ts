@@ -1,6 +1,11 @@
 import path from 'node:path';
 import {
   createGrowthCampaignPauseWorkflow,
+  executeGrowthSeoOpportunityResearch,
+  findSeoPublicationRecord,
+  prepareSeoOpportunityArtifacts,
+  resolveSeoResearchWorkspacePaths,
+  verifySeoPublicationArtifacts,
   type GrowthCampaignPauseExecutionResult,
   type GrowthCampaignPauseProviderAdapters,
 } from '@unisane/growth';
@@ -147,7 +152,62 @@ export async function createLocalGrowthMcpRuntime(
     ...(growth.manifests.research ? { researchRoot: growth.manifests.research } : {}),
     ...(options.maximumResultBytes ? { maximumResultBytes: options.maximumResultBytes } : {}),
   };
+  const researchPaths = resolveSeoResearchWorkspacePaths(loaded.projectRoot, binding.researchRoot);
   const workflows: OpsMcpGrowthWorkflows = {
+    seoOpportunity: {
+      prepare: async (input) => {
+        const review = await executeGrowthSeoOpportunityResearch({
+          cwd: loaded.projectRoot,
+          ...(binding.researchRoot ? { researchRoot: binding.researchRoot } : {}),
+          projectId: binding.projectId,
+          environmentId: binding.environmentId,
+          principal: binding.principal,
+          opportunityId: input.opportunityId,
+          opportunityLimit: 1,
+        });
+        return prepareSeoOpportunityArtifacts({
+          cwd: loaded.projectRoot,
+          opportunitySource: path.join(researchPaths.opportunities, 'pages.json'),
+          outputDir: researchPaths.prepared,
+          opportunityId: input.opportunityId,
+          review,
+          audience: input.audience,
+          notBeforeDaysAfterPublication: input.notBeforeDaysAfterPublication,
+          expiresDaysAfterPublication: input.expiresDaysAfterPublication,
+        });
+      },
+      verify: async (input) => {
+        const found = await findSeoPublicationRecord({
+          directory: researchPaths.publications,
+          publicationId: input.publicationId,
+        });
+        if (!found) {
+          throw new Error(
+            `Publication ${input.publicationId} was not found in the canonical publication directory.`,
+          );
+        }
+        const review = await executeGrowthSeoOpportunityResearch({
+          cwd: loaded.projectRoot,
+          ...(binding.researchRoot ? { researchRoot: binding.researchRoot } : {}),
+          projectId: binding.projectId,
+          environmentId: binding.environmentId,
+          principal: binding.principal,
+          opportunityId: found.publication.opportunity.id,
+          ...(found.publication.opportunity.market
+            ? { market: found.publication.opportunity.market }
+            : {}),
+          opportunityLimit: 1,
+          maxAgeDays: input.maxAgeDays,
+        });
+        return verifySeoPublicationArtifacts({
+          cwd: loaded.projectRoot,
+          publicationPath: found.filePath,
+          outputPath: path.join(researchPaths.verifications, `${input.publicationId}.latest.json`),
+          publication: found.publication,
+          review,
+        });
+      },
+    },
     campaignPause: createGrowthCampaignPauseWorkflow({
       state: createLocalOpsExecutionState(
         executionStateRoot({

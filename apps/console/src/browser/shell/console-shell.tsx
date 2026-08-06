@@ -4,6 +4,7 @@ import { Badge } from '@unisane/ui/badge';
 import { Button } from '@unisane/ui/button';
 import { Icon } from '@unisane/ui/icon';
 import type { NavigationItem, NavigationLinkProps } from '@unisane/ui/navigation';
+import { SupportingPaneLayout } from '@unisane/ui/canonical-layouts';
 import {
   Sidebar,
   SidebarDrawer,
@@ -13,7 +14,7 @@ import {
 } from '@unisane/ui/sidebar';
 import { TopAppBar } from '@unisane/ui/top-app-bar';
 import { Typography } from '@unisane/ui/typography';
-import type { ConsoleShellModel } from '../contracts.js';
+import type { ConsoleShellModel, ConsoleSupportingPane } from '../contracts.js';
 import type { ConsoleRoute } from '../../routes.js';
 import { humanize } from '../lib/format.js';
 
@@ -22,12 +23,18 @@ export function ConsoleShell({
   shell,
   route,
   navigate,
+  primaryNavigation,
+  supportingPane,
+  onCloseSupportingPane,
   children,
 }: {
   state: MarketingConsoleState;
   shell: ConsoleShellModel;
   route: ConsoleRoute;
   navigate: (path: string) => void;
+  primaryNavigation?: React.ReactNode;
+  supportingPane?: ConsoleSupportingPane;
+  onCloseSupportingPane: () => void;
   children: React.ReactNode;
 }) {
   const navigationItems = buildNavigation(shell);
@@ -44,6 +51,7 @@ export function ConsoleShell({
       storageKey="unisane-ops-sidebar"
       drawerWidth={232}
       railWidth={80}
+      mobileInsetOffset={0}
       onItemSelect={(item) => {
         if (item.href) navigate(item.href);
       }}
@@ -91,9 +99,32 @@ export function ConsoleShell({
                   </Button>
                 }
               />
-              <div className="ops-console-scroll-region min-h-0 flex-1 overflow-y-auto">
-                {children}
-              </div>
+              <SupportingPaneLayout
+                isRoot
+                open={Boolean(supportingPane)}
+                onOpenChange={(open) => {
+                  if (!open) onCloseSupportingPane();
+                }}
+                title={supportingPane?.title ?? 'Details'}
+                subtitle={supportingPane?.subtitle}
+                showCloseButtonOnDesktop
+                mainScrollable={false}
+                supportingScrollable={false}
+                className={
+                  supportingPane
+                    ? 'ops-console-supporting-pane'
+                    : 'ops-console-supporting-pane ops-console-supporting-pane--closed'
+                }
+                main={
+                  <div className="flex h-full min-h-0 flex-col">
+                    {primaryNavigation}
+                    <div className="ops-console-scroll-region min-h-0 flex-1 overflow-y-auto">
+                      {children}
+                    </div>
+                  </div>
+                }
+                supporting={supportingPane?.content ?? null}
+              />
             </section>
           </SidebarInset>
         </Sidebar>

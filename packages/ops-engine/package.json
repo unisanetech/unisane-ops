@@ -36,6 +36,16 @@
       "import": "./dist/hosted-read.js",
       "default": "./dist/hosted-read.js"
     },
+    "./hosted/credentials": {
+      "types": "./dist/hosted-credentials.d.ts",
+      "import": "./dist/hosted-credentials.js",
+      "default": "./dist/hosted-credentials.js"
+    },
+    "./hosted/scheduler": {
+      "types": "./dist/hosted-scheduler.d.ts",
+      "import": "./dist/hosted-scheduler.js",
+      "default": "./dist/hosted-scheduler.js"
+    },
     "./hosted/sqlite": {
       "types": "./dist/hosted-sqlite.d.ts",
       "import": "./dist/hosted-sqlite.js",
@@ -79,8 +89,8 @@
     "./meta": "./unisane.meta.json"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/actions.ts src/execution.ts src/hosted-read.ts src/hosted-sqlite.ts src/lifecycle.ts src/local.ts src/pack.ts src/readiness.ts src/runs.ts src/testing.ts src/workflows.ts --format esm --dts --clean",
-    "dev": "tsup src/index.ts src/actions.ts src/execution.ts src/hosted-read.ts src/hosted-sqlite.ts src/lifecycle.ts src/local.ts src/pack.ts src/readiness.ts src/runs.ts src/testing.ts src/workflows.ts --format esm --dts --watch",
+    "build": "tsup src/index.ts src/actions.ts src/execution.ts src/hosted-credentials.ts src/hosted-read.ts src/hosted-scheduler.ts src/hosted-sqlite.ts src/lifecycle.ts src/local.ts src/pack.ts src/readiness.ts src/runs.ts src/testing.ts src/workflows.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts src/actions.ts src/execution.ts src/hosted-credentials.ts src/hosted-read.ts src/hosted-scheduler.ts src/hosted-sqlite.ts src/lifecycle.ts src/local.ts src/pack.ts src/readiness.ts src/runs.ts src/testing.ts src/workflows.ts --format esm --dts --watch",
     "lint": "eslint src --max-warnings 0",
     "test": "vitest run",
     "check-types": "tsc --noEmit",

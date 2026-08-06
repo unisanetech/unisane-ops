@@ -11,7 +11,6 @@ export type MapGa4RowsToPerformanceRecordsOptions = {
   platformId: string;
   dimensions: string[];
   metrics: string[];
-  fetchedAt: string;
 };
 
 export function mapGa4RowsToPerformanceRecords(
@@ -35,7 +34,6 @@ export function mapGa4RowsToPerformanceRecords(
         platformId: options.platformId,
         source: 'ga4',
         pagePath,
-        fetchedAt: options.fetchedAt,
       };
       assignIfDefined(record, 'sessions', readMetricInteger(row, options.metrics, ['sessions']));
       assignIfDefined(
@@ -45,12 +43,12 @@ export function mapGa4RowsToPerformanceRecords(
       );
       assignIfDefined(
         record,
-        'conversions',
+        'analyticsConversions',
         readMetricNumber(row, options.metrics, ['conversions', 'keyEvents']),
       );
       assignIfDefined(
         record,
-        'revenue',
+        'analyticsRevenue',
         readMetricNumber(row, options.metrics, ['totalRevenue', 'purchaseRevenue']),
       );
       return record;

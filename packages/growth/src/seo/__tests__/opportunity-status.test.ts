@@ -25,6 +25,19 @@ describe('updateOpportunityStatus', () => {
     });
   });
 
+  it('matches a normalized reviewed id to its colon-delimited source id', () => {
+    const result = updateOpportunityStatus({
+      opportunityFile: createOpportunityFile(),
+      match: { id: 'true-resume-cluster-data-analyst-page' },
+      status: 'approved',
+    });
+
+    expect(result.updated).toMatchObject({
+      id: 'true-resume:cluster:data-analyst:page',
+      status: 'approved',
+    });
+  });
+
   it('throws when no match selector is provided', () => {
     expect(() =>
       updateOpportunityStatus({

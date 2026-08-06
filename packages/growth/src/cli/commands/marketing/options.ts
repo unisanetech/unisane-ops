@@ -1,5 +1,6 @@
 export type MarketingCliOptions = {
   accountId?: string;
+  afterDate?: string;
   apiVersion?: string;
   connection?: string;
   environment?: string;
@@ -19,6 +20,7 @@ export type MarketingCliOptions = {
   decision?: 'accepted' | 'rejected' | 'ship' | 'iterate' | 'stop' | 'rerun' | 'inconclusive';
   decidedBy?: string;
   maxAgeDays?: string;
+  maxDays?: string;
   maxPages?: string;
   observations?: string;
   pageSize?: string;
@@ -38,4 +40,5 @@ export type MarketingCliOptions = {
   timeZone?: string;
   unified?: boolean;
   windowDays?: string;
+  yes?: boolean;
 };

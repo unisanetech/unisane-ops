@@ -7,6 +7,7 @@ import { printFetchSearchConsolePerformanceFileResult } from '../format-output.j
 import { resolveSeoGoogleConnectionToken } from '../google-connection.js';
 import type { SeoPerformanceFetchSearchConsoleCliOptions } from '../options.js';
 import { loadGrowthProjectContext, resolveGrowthResource } from '../../../project-context.js';
+import { resolveSeoPerformanceContext } from '@unisane/growth/seo';
 
 const allowedDimensions = new Set<SearchConsoleDimension>([
   'query',
@@ -25,9 +26,6 @@ export async function seoPerformanceFetchSearchConsole(
     if (!options.platform) {
       throw new Error('Missing required --platform id.');
     }
-    if (!options.out) {
-      throw new Error('Missing required --out path.');
-    }
     if (!options.startDate || !options.endDate) {
       throw new Error('Missing required --start-date and --end-date.');
     }
@@ -45,13 +43,22 @@ export async function seoPerformanceFetchSearchConsole(
       service: 'search-console',
       resourceType: 'site',
     });
-    const result = await fetchSearchConsolePerformanceFile({
+    const performanceContext = await resolveSeoPerformanceContext({
       cwd: options.cwd,
       platformId: options.platform,
-      output: options.out,
+      source: 'google-search-console',
+      property: site.resourceId,
+    });
+    const result = await fetchSearchConsolePerformanceFile({
+      cwd: performanceContext.cwd,
+      platformId: performanceContext.platformId,
+      output: options.out ?? performanceContext.defaultOutput,
       env: process.env,
       accessToken,
       siteUrl: site.resourceId,
+      configuredSiteUrl: performanceContext.siteUrl,
+      targetMarkets: performanceContext.targetMarkets,
+      freshnessHours: performanceContext.freshnessHours,
       startDate: options.startDate,
       endDate: options.endDate,
       dimensions: parseDimensions(options.dimensions ?? 'query,page'),

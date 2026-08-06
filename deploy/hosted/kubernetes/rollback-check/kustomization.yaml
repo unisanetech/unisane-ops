@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: unisane-ops
+resources:
+  - ../shared
+  - rollback-check-job.yaml
+images:
+  - name: unisane-ops-hosted-runtime
+    newName: registry.example.invalid/unisane-ops-hosted-runtime
+    digest: sha256:0000000000000000000000000000000000000000000000000000000000000000

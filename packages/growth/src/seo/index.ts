@@ -10,8 +10,69 @@ export type {
   LoadSeoResearchConfigOptions,
   LoadSeoResearchConfigResult,
 } from './workspace/config.js';
-export { createDefaultSeoResearchConfig, seoResearchConfigSchema } from './schema/config.js';
+export {
+  createDefaultSeoResearchConfig,
+  seoResearchConfigSchema,
+  seoSiteUrlSchema,
+} from './schema/config.js';
 export type { SeoResearchConfig } from './schema/config.js';
+export { configureSeoResearchWorkspace, parseSeoTargetMarket } from './workspace/configure.js';
+export type {
+  ConfigureSeoResearchWorkspaceOptions,
+  ConfigureSeoResearchWorkspaceResult,
+  SeoTargetMarketInput,
+} from './workspace/configure.js';
+export {
+  siteCrawlDiscoverySourceSchema,
+  siteCrawlFailureCodeSchema,
+  siteCrawlFailureSchema,
+  siteCrawlFailureStageSchema,
+  siteCrawlFetchStateSchema,
+  siteCrawlPageSchema,
+  siteCrawlSnapshotSchema,
+} from './schema/site-crawl.js';
+export type {
+  SiteCrawlDiscoverySource,
+  SiteCrawlFailure,
+  SiteCrawlPage,
+  SiteCrawlSnapshot,
+} from './schema/site-crawl.js';
+export {
+  siteRenderFailureCodeSchema,
+  siteRenderFailureSchema,
+  siteRenderPageSchema,
+  siteRenderReasonSchema,
+  siteRenderSnapshotSchema,
+} from './schema/site-render.js';
+export type {
+  SiteRenderFailure,
+  SiteRenderFailureCode,
+  SiteRenderPage,
+  SiteRenderReason,
+  SiteRenderSnapshot,
+} from './schema/site-render.js';
+export { extractSitePageEvidence } from './site-crawl/extract-page.js';
+export type {
+  ExtractSitePageEvidenceOptions,
+  ExtractSitePageEvidenceResult,
+} from './site-crawl/extract-page.js';
+export { isRobotsAllowed, parseRobotsText } from './site-crawl/robots.js';
+export type { RobotsGroup, RobotsPolicy, RobotsRule } from './site-crawl/robots.js';
+export { parseSitemapXml } from './site-crawl/sitemap.js';
+export type { ParsedSitemap } from './site-crawl/sitemap.js';
+export { crawlSite, SiteCrawlCancelledError } from './site-crawl/crawl-site.js';
+export type { CrawlSiteOptions, SiteCrawlFetch } from './site-crawl/crawl-site.js';
+export { crawlSiteFile } from './site-crawl/crawl-file.js';
+export type { CrawlSiteFileOptions, CrawlSiteFileResult } from './site-crawl/crawl-file.js';
+export { renderSite, SiteRenderCancelledError } from './site-render/render-site.js';
+export type {
+  RenderSiteOptions,
+  SitePageRenderer,
+  SitePageRenderRequest,
+  SitePageRenderResponse,
+} from './site-render/render-site.js';
+export { renderSiteFile } from './site-render/render-file.js';
+export type { RenderSiteFileOptions, RenderSiteFileResult } from './site-render/render-file.js';
 export {
   getSeoOpportunityPatternPack,
   getSeoOpportunityPatternPackForKeywordPack,
@@ -58,8 +119,16 @@ export {
   competitorOnPageSignalsSchema,
   competitorPageSchema,
   competitorPageSourceSchema,
+  competitorResearchEvidenceSchema,
   competitorResearchFileSchema,
 } from './schema/competitor.js';
+export {
+  serpOrganicResultSchema,
+  serpResearchFileSchema,
+  serpResearchSourceSchema,
+  serpSnapshotSchema,
+} from './schema/serp.js';
+export type { SerpResearchFile, SerpSnapshot } from './schema/serp.js';
 export {
   faqEvidenceSchema,
   faqInternalLinkSchema,
@@ -236,10 +305,40 @@ export type {
 export { planInternalLinks } from './internal-links/plan-links.js';
 export type { PlanInternalLinksOptions } from './internal-links/plan-links.js';
 export { importSeoPerformanceFile } from './performance/import-file.js';
+export { resolveSeoPerformanceContext } from './performance/context.js';
 export type {
   ImportSeoPerformanceFileOptions,
   ImportSeoPerformanceFileResult,
 } from './performance/import-file.js';
+export type { SeoPerformanceContext } from './performance/context.js';
+export {
+  seoPageAnalyticsEvidenceSchema,
+  seoPageCanonicalStateSchema,
+  seoPageContentEvidenceSchema,
+  seoPageCrawlEvidenceSchema,
+  seoPageEvidenceFileSchema,
+  seoPageEvidencePresenceSchema,
+  seoPageEvidenceSchema,
+  seoPageIndexabilitySchema,
+  seoPageSearchEvidenceSchema,
+  seoPageRenderEvidenceSchema,
+} from './schema/page-evidence.js';
+export type {
+  SeoPageAnalyticsEvidence,
+  SeoPageContentEvidence,
+  SeoPageCrawlEvidence,
+  SeoPageEvidence,
+  SeoPageEvidenceFile,
+  SeoPageSearchEvidence,
+  SeoPageRenderEvidence,
+} from './schema/page-evidence.js';
+export { buildSeoPageEvidence } from './page-evidence/build-inventory.js';
+export type { BuildSeoPageEvidenceOptions } from './page-evidence/build-inventory.js';
+export { generateSeoPageEvidenceFile } from './page-evidence/generate-file.js';
+export type {
+  GenerateSeoPageEvidenceFileOptions,
+  GenerateSeoPageEvidenceFileResult,
+} from './page-evidence/generate-file.js';
 export { generateSeoPerformanceReportFile } from './performance/report-file.js';
 export type {
   GenerateSeoPerformanceReportFileOptions,

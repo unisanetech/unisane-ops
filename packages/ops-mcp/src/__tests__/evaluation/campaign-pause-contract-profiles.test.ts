@@ -117,7 +117,16 @@ async function harness() {
     createReceiptId: () => 'receipt.mcp.contract-profile',
     createApprovalId: () => 'approval.mcp.contract-profile',
   });
-  const workflows: OpsMcpGrowthWorkflows = { campaignPause };
+  const seoArtifactUnavailable = async () => {
+    throw new Error('SEO artifact workflows are outside the campaign-pause evaluation.');
+  };
+  const workflows: OpsMcpGrowthWorkflows = {
+    seoOpportunity: {
+      prepare: seoArtifactUnavailable,
+      verify: seoArtifactUnavailable,
+    },
+    campaignPause,
+  };
   const server = createLocalOpsMcpServer(binding, workflows, readExecutors);
   const client = new Client({ name: 'ops-mcp-campaign-evaluation', version: '1.0.0' });
   const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();

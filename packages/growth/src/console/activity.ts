@@ -161,11 +161,19 @@ function syncItem(cell: MarketingConsoleFreshnessCell): MarketingConsoleActivity
 export function buildMarketingConsoleActivity(input: {
   receipts: readonly MarketingConsoleReceiptEvent[];
   freshness: readonly MarketingConsoleFreshnessCell[];
+  dateWindow?: { startDate: string; endDate: string };
 }): MarketingConsoleActivity {
   const items = [
     ...input.receipts.map(receiptItem),
     ...input.freshness.map(syncItem).filter((item): item is MarketingConsoleActivityItem => !!item),
   ]
+    .filter((item) => {
+      if (!input.dateWindow) return true;
+      const date = item.occurredAt?.slice(0, 10);
+      return (
+        date !== undefined && date >= input.dateWindow.startDate && date <= input.dateWindow.endDate
+      );
+    })
     .sort((left, right) => (right.occurredAt ?? '').localeCompare(left.occurredAt ?? ''))
     .slice(0, 50);
   const errorCount = items.filter((item) => item.category === 'errors').length;

@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { writeJson } from '../../../utils/fs.js';
+import type { SeoPerformanceTargetMarket } from '@unisane/growth/contracts';
 import type { FetchLike } from '../google-ads/transport.js';
 import { querySearchConsolePerformance, type SearchConsoleDimension } from './query.js';
 
@@ -9,6 +10,8 @@ export type FetchSearchConsolePerformanceFileOptions = {
   output: string;
   accessToken: string;
   siteUrl: string;
+  configuredSiteUrl: string;
+  targetMarkets: SeoPerformanceTargetMarket[];
   startDate: string;
   endDate: string;
   dimensions: SearchConsoleDimension[];
@@ -18,6 +21,8 @@ export type FetchSearchConsolePerformanceFileOptions = {
   searchType?: string;
   dataState?: string;
   fetchImpl?: FetchLike;
+  freshnessHours?: number;
+  observedAt?: string;
   dryRun?: boolean;
 };
 
@@ -25,6 +30,9 @@ export type FetchSearchConsolePerformanceFileResult = {
   output: string;
   platformId: string;
   siteUrl: string;
+  configuredSiteUrl: string;
+  sampleData: false;
+  freshUntil: string;
   startDate: string;
   endDate: string;
   dimensions: SearchConsoleDimension[];
@@ -45,6 +53,8 @@ export async function fetchSearchConsolePerformanceFile(
     platformId: options.platformId,
     accessToken: options.accessToken,
     siteUrl: options.siteUrl,
+    configuredSiteUrl: options.configuredSiteUrl,
+    targetMarkets: options.targetMarkets,
     startDate: options.startDate,
     endDate: options.endDate,
     dimensions: options.dimensions,
@@ -54,6 +64,8 @@ export async function fetchSearchConsolePerformanceFile(
     searchType: options.searchType,
     dataState: options.dataState,
     fetchImpl: options.fetchImpl,
+    freshnessHours: options.freshnessHours,
+    observedAt: options.observedAt,
   });
 
   if (!options.dryRun) {
@@ -64,6 +76,9 @@ export async function fetchSearchConsolePerformanceFile(
     output: path.relative(cwd, outputPath),
     platformId: performanceFile.platformId,
     siteUrl: options.siteUrl,
+    configuredSiteUrl: performanceFile.siteUrl,
+    sampleData: false,
+    freshUntil: performanceFile.evidence.freshUntil,
     startDate: options.startDate,
     endDate: options.endDate,
     dimensions: options.dimensions,

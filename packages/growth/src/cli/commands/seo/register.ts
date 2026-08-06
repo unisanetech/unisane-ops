@@ -8,11 +8,15 @@ import { registerSeoOpportunityCommands } from './register/opportunities.js';
 import { registerSeoPerformanceCommands } from './register/performance.js';
 import { registerSeoReportCommands } from './register/reports.js';
 import { registerSeoTrendCommands } from './register/trends.js';
+import { registerSeoSiteCommands } from './register/site.js';
+import { registerSeoPageCommands } from './register/pages.js';
 
 export function registerSeoCommands(program: Command): void {
   const seo = program.command('seo').description('SEO research and acquisition planning');
 
   registerSeoAdsCommands(seo);
+  registerSeoSiteCommands(seo);
+  registerSeoPageCommands(seo);
   registerSeoKeywordCommands(seo);
   registerSeoCompetitorCommands(seo);
   registerSeoOpportunityCommands(seo);

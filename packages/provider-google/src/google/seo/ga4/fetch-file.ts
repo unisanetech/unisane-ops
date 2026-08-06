@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { writeJson } from '../../../utils/fs.js';
+import type { SeoPerformanceTargetMarket } from '@unisane/growth/contracts';
 import type { FetchLike } from '../google-ads/transport.js';
 import { runGa4PerformanceReport } from './run-report.js';
 
@@ -9,6 +10,8 @@ export type FetchGa4PerformanceFileOptions = {
   output: string;
   accessToken: string;
   propertyId: string;
+  configuredSiteUrl: string;
+  targetMarkets: SeoPerformanceTargetMarket[];
   startDate: string;
   endDate: string;
   dimensions: string[];
@@ -17,6 +20,8 @@ export type FetchGa4PerformanceFileOptions = {
   offset?: number;
   maxRows?: number;
   fetchImpl?: FetchLike;
+  freshnessHours?: number;
+  observedAt?: string;
   dryRun?: boolean;
 };
 
@@ -24,6 +29,9 @@ export type FetchGa4PerformanceFileResult = {
   output: string;
   platformId: string;
   propertyId: string;
+  configuredSiteUrl: string;
+  sampleData: false;
+  freshUntil: string;
   startDate: string;
   endDate: string;
   dimensions: string[];
@@ -42,6 +50,8 @@ export async function fetchGa4PerformanceFile(
     platformId: options.platformId,
     accessToken: options.accessToken,
     propertyId: options.propertyId,
+    configuredSiteUrl: options.configuredSiteUrl,
+    targetMarkets: options.targetMarkets,
     startDate: options.startDate,
     endDate: options.endDate,
     dimensions: options.dimensions,
@@ -50,6 +60,8 @@ export async function fetchGa4PerformanceFile(
     offset: options.offset,
     maxRows: options.maxRows,
     fetchImpl: options.fetchImpl,
+    freshnessHours: options.freshnessHours,
+    observedAt: options.observedAt,
   });
 
   if (!options.dryRun) {
@@ -60,6 +72,9 @@ export async function fetchGa4PerformanceFile(
     output: path.relative(cwd, outputPath),
     platformId: performanceFile.platformId,
     propertyId: options.propertyId,
+    configuredSiteUrl: performanceFile.siteUrl,
+    sampleData: false,
+    freshUntil: performanceFile.evidence.freshUntil,
     startDate: options.startDate,
     endDate: options.endDate,
     dimensions: options.dimensions,

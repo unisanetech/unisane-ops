@@ -27,6 +27,19 @@ function decisionColor(
   return 'info';
 }
 
+function RecommendationFact({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="min-w-0">
+      <Typography variant="labelSmall" component="p" className="text-on-surface-variant">
+        {label}
+      </Typography>
+      <Typography variant="bodySmall" component="p" className="mt-1 font-medium break-words">
+        {value}
+      </Typography>
+    </div>
+  );
+}
+
 export function RecommendationList({
   items,
   route,
@@ -50,21 +63,30 @@ export function RecommendationList({
               <Typography variant="cardTitle" className="mt-3">
                 {item.title}
               </Typography>
-              <Typography variant="bodyMedium" className="mt-2">
+              <Typography
+                variant="labelSmall"
+                component="p"
+                className="text-on-surface-variant mt-3"
+              >
+                Expected result
+              </Typography>
+              <Typography variant="bodyMedium" component="p" className="mt-1 font-medium">
                 {item.expectedOutcome}
               </Typography>
-              <Typography variant="bodySmall" className="text-on-surface-variant mt-2">
+              <Typography
+                variant="bodySmall"
+                component="p"
+                className="text-on-surface-variant mt-2"
+              >
                 {item.rationale}
               </Typography>
-              <Typography variant="labelSmall" className="text-on-surface-variant mt-3">
-                {item.evidenceLabel}
-              </Typography>
-              <Typography variant="labelSmall" className="text-on-surface-variant mt-1">
-                {item.confidenceLabel} · {item.effortLabel} · {item.riskLabel}
-              </Typography>
-              <Typography variant="labelSmall" className="text-on-surface-variant mt-1">
-                {item.approvalLabel}
-              </Typography>
+              <div className="border-outline-subtle mt-4 grid gap-3 border-t pt-4 sm:grid-cols-2 lg:grid-cols-5">
+                <RecommendationFact label="Evidence" value={item.evidenceLabel} />
+                <RecommendationFact label="Confidence" value={item.confidenceLabel} />
+                <RecommendationFact label="Effort" value={item.effortLabel} />
+                <RecommendationFact label="Risk" value={item.riskLabel} />
+                <RecommendationFact label="Approval" value={item.approvalLabel} />
+              </div>
             </div>
           </div>
           <ActionCluster align="start" className="mt-5">
@@ -76,24 +98,34 @@ export function RecommendationList({
             {item.acceptAction ? (
               <Button
                 size="sm"
-                onClick={() => openOverlay({ kind: 'command', action: item.acceptAction! })}
+                onClick={() =>
+                  openOverlay({
+                    kind: 'command',
+                    action: { ...item.acceptAction!, label: 'Choose as next step' },
+                  })
+                }
               >
-                {item.acceptAction.label}
+                Choose as next step
               </Button>
             ) : null}
             {item.dismissAction ? (
               <Button
                 variant="text"
                 size="sm"
-                onClick={() => openOverlay({ kind: 'command', action: item.dismissAction! })}
+                onClick={() =>
+                  openOverlay({
+                    kind: 'command',
+                    action: { ...item.dismissAction!, label: 'Dismiss recommendation' },
+                  })
+                }
               >
-                {item.dismissAction.label}
+                Dismiss recommendation
               </Button>
             ) : null}
           </ActionCluster>
           <details className="border-outline-subtle mt-4 border-t pt-3">
             <summary className="text-primary cursor-pointer text-sm font-medium">
-              View technical details
+              View evidence details
             </summary>
             <div className="mt-3 grid gap-1">
               <Typography variant="bodySmall">

@@ -28,46 +28,59 @@ export function SeoQueriesScreen({ state, navigate }: ConsoleScreenProps) {
             ? `${state.seo.queries.length} searches are visible in the available data.`
             : 'No search query evidence is available yet.'
         }
-        detail={state.seo.comparisonLabel}
+        detail={
+          state.seo.queries.length
+            ? 'Compare search views with clicks and average position to find queries that need attention.'
+            : 'Choose another reporting period or update Search Console data to add query evidence.'
+        }
       />
       <ContentSection>
-        <FilterToolbar
-          resultCount={queries.length}
-          totalCount={state.seo.queries.length}
-          resultLabel="queries"
-          isFiltered={Boolean(search.trim())}
-          onClear={() => setSearch('')}
-        >
-          <TextField
-            label="Search queries"
-            placeholder="Search query text"
-            value={search}
-            onValueChange={setSearch}
-          />
-          <SelectField
-            label="Sort by"
-            value={sort}
-            onValueChange={(value) => setSort(value as QuerySort)}
-            options={[
-              { value: 'clicks', label: 'Clicks' },
-              { value: 'views', label: 'Search views' },
-              { value: 'position', label: 'Average position' },
-            ]}
-          />
-        </FilterToolbar>
-      </ContentSection>
-      <ContentSection>
-        {queries.length ? (
-          <SeoQueriesDataTable queries={queries} />
+        {state.seo.queries.length ? (
+          <>
+            <FilterToolbar
+              resultCount={queries.length}
+              totalCount={state.seo.queries.length}
+              resultLabel="queries"
+              isFiltered={Boolean(search.trim())}
+              onClear={() => setSearch('')}
+            >
+              <TextField
+                label="Search queries"
+                placeholder="Search query text"
+                value={search}
+                onValueChange={setSearch}
+              />
+              <SelectField
+                label="Sort by"
+                value={sort}
+                onValueChange={(value) => setSort(value as QuerySort)}
+                options={[
+                  { value: 'clicks', label: 'Clicks' },
+                  { value: 'views', label: 'Search views' },
+                  { value: 'position', label: 'Average position' },
+                ]}
+              />
+            </FilterToolbar>
+            <div className="mt-4">
+              {queries.length ? (
+                <SeoQueriesDataTable queries={queries} />
+              ) : (
+                <DataState
+                  title="No query matches this search."
+                  description="Clear the search to review the available queries."
+                />
+              )}
+              <SeoSourceNote state={state} />
+            </div>
+          </>
         ) : (
           <DataState
-            title="No query matches this search."
-            description="Clear the search or review the active Search Console connection."
+            title="No query evidence is recorded for this period."
+            description="Choose another reporting period or update Search Console data to fill this range."
             actionLabel="Review connection"
             onAction={() => navigate('/connections')}
           />
         )}
-        <SeoSourceNote state={state} />
       </ContentSection>
     </>
   );

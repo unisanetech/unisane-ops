@@ -5,7 +5,12 @@ import {
   auditMarketingTrackingSource,
   buildMarketingEvidenceStatus,
   buildMarketingStatusReport,
+  compareLatestMarketingHistoryPeriods,
+  DEFAULT_MARKETING_HISTORY_RETENTION_POLICY,
   deriveMarketingMetrics,
+  MARKETING_HISTORY_CATALOG_PATH,
+  queryMarketingHistory,
+  readMarketingHistoryReportWindow,
   readMarketingResearchStatus,
   readMarketingProviderReportStatus,
   marketingProviderReportArtifactSchema,
@@ -13,11 +18,13 @@ import {
   marketingRecommendationDecisionReceiptSchema,
   type MarketingProviderReportStatus,
   type MarketingProviderReportRecord,
+  type MarketingProviderReportArtifact,
   type MarketingGoogleConnectionStatus,
   type MarketingMetaConnectionStatus,
   type MarketingAdsAuditReport,
   type MarketingRecommendationArtifact,
   type MarketingRecommendationDecisionReceipt,
+  type MarketingHistoryMetric,
 } from '@unisane/growth/marketing';
 import {
   loadGrowthConnectionsContext,
@@ -37,6 +44,7 @@ import type {
   MarketingConsoleConnection,
   MarketingConsoleFaqResearchSummary,
   MarketingConsoleFreshnessCell,
+  MarketingConsoleHistory,
   MarketingConsoleMetric,
   MarketingConsoleKeywordClusterSummary,
   MarketingConsoleKeywordResearchSummary,
@@ -44,11 +52,16 @@ import type {
   MarketingConsoleSeoIntelligenceSummary,
   MarketingConsoleState,
   MarketingConsoleStatus,
+  MarketingConsoleTemporalQuery,
   MarketingConsoleTrendPoint,
 } from './contracts.js';
 import { buildMarketingConsoleConnections } from './connections.js';
 import { buildMarketingConsoleOverview } from './overview.js';
-import { buildMarketingConsoleSeo, type MarketingConsoleSeoSourceRow } from './seo.js';
+import {
+  buildMarketingConsoleSeo,
+  type MarketingConsoleSeoSourceRow,
+  type MarketingConsoleSeoWorkflowArtifacts,
+} from './seo.js';
 import { buildMarketingConsoleAdvertising } from './advertising.js';
 import { buildMarketingConsoleAnalytics } from './analytics.js';
 import { buildMarketingConsoleExperiments } from './experiments.js';
@@ -63,6 +76,12 @@ import {
   type MarketingConsoleTagManagerArtifact,
 } from './tag-manager.js';
 import { resolveSeoResearchWorkspacePaths } from '../seo/workspace/paths.js';
+import { pageOpportunityFileSchema } from '../seo/schema/opportunity.js';
+import { seoImplementationPacketSchema } from '../playbooks/seo-opportunity-preparation.js';
+import {
+  seoPublicationRecordSchema,
+  seoPublicationVerificationSchema,
+} from '../playbooks/seo-publication-verification.js';
 import { executeGrowthMeasurementAudit } from '../workflows/measurement-audit-execution.js';
 import { executeGrowthSeoOpportunityResearch } from '../workflows/seo-opportunity-execution.js';
 import { executeGrowthHealthReview } from '../workflows/health-review-execution.js';
@@ -82,11 +101,24 @@ export type BuildMarketingConsoleStateOptions = {
   metaAuth?: MarketingMetaConnectionStatus;
   campaignPauseApprovalAvailable?: boolean;
   campaignPauseReviews?: readonly MarketingConsoleCampaignPauseReview[];
+  temporalQuery?: MarketingConsoleTemporalQuery;
 };
 
 type ProviderFreshnessCell = MarketingConsoleFreshnessCell & {
   provider: MarketingReportProvider;
 };
+
+type TemporalReportSelection = Map<
+  string,
+  | { status: 'available'; artifact: MarketingProviderReportArtifact; artifactPaths: string[] }
+  | {
+      status: 'partial';
+      artifact: MarketingProviderReportArtifact;
+      artifactPaths: string[];
+      reason: string;
+    }
+  | { status: 'unavailable'; reason: string }
+>;
 
 type MarketingConsoleReadinessStatuses = {
   connections: MarketingConsoleStatus;
@@ -125,6 +157,37 @@ const reportFamilies: Array<{
   { provider: 'searchConsole', reportType: 'page' },
   { provider: 'searchConsole', reportType: 'query' },
 ];
+
+function reportFamilyKey(
+  provider: MarketingReportProvider,
+  reportType: MarketingProviderReportType,
+): string {
+  return `${provider}:${reportType}`;
+}
+
+function buildTemporalReportSelection(
+  cwd: string,
+  query: MarketingConsoleTemporalQuery | undefined,
+): TemporalReportSelection | undefined {
+  if (!query) return undefined;
+  return new Map(
+    reportFamilies.map(({ provider, reportType }) => [
+      reportFamilyKey(provider, reportType),
+      readMarketingHistoryReportWindow({ cwd, provider, reportType, window: query }),
+    ]),
+  );
+}
+
+function selectedArtifact(
+  selection: TemporalReportSelection | undefined,
+  provider: MarketingReportProvider,
+  reportType: MarketingProviderReportType,
+): MarketingProviderReportArtifact | undefined {
+  const result = selection?.get(reportFamilyKey(provider, reportType));
+  return result?.status === 'available' || result?.status === 'partial'
+    ? result.artifact
+    : undefined;
+}
 
 function providerLabel(
   provider: MarketingReportProvider | 'confirmedConversions' | 'strategyMap',
@@ -214,7 +277,8 @@ export async function buildMarketingConsoleState(
     trackingAudit,
   });
   const researchStatus = readMarketingResearchStatus(config, { cwd });
-  const freshness = buildFreshness(config, cwd, now, maxAgeDays);
+  const temporalReports = buildTemporalReportSelection(cwd, options.temporalQuery);
+  const freshness = buildFreshness(config, cwd, now, maxAgeDays, temporalReports);
   const healthReview = await executeGrowthHealthReview({
     cwd,
     config: projectContext.growth,
@@ -231,12 +295,13 @@ export async function buildMarketingConsoleState(
     evidence: proof.providers,
     freshness,
   });
-  const channelRows = buildChannelRows(freshness);
-  const seoRows = buildSeoRows(freshness);
-  const seoResearchRoot = resolveSeoResearchWorkspacePaths(
+  const channelRows = buildChannelRows(freshness, temporalReports);
+  const seoRows = buildSeoRows(freshness, temporalReports);
+  const seoWorkspacePaths = resolveSeoResearchWorkspacePaths(
     cwd,
     projectContext.growth.manifests.research,
-  ).root;
+  );
+  const seoResearchRoot = seoWorkspacePaths.root;
   const seoOpportunityReview = await executeGrowthSeoOpportunityResearch({
     cwd,
     researchRoot: projectContext.growth.manifests.research,
@@ -252,7 +317,7 @@ export async function buildMarketingConsoleState(
   const competitorResearch = readCompetitorResearchSummary(seoResearchRoot);
   const faqResearch = readFaqResearchSummary(seoResearchRoot);
   const seoIntelligence = readSeoIntelligenceSummary(seoResearchRoot);
-  const metrics = buildMetrics(freshness);
+  const metrics = buildMetrics(freshness, temporalReports);
   const seo = buildMarketingConsoleSeo({
     rows: seoRows,
     metrics,
@@ -262,6 +327,22 @@ export async function buildMarketingConsoleState(
     faqResearch,
     intelligence: seoIntelligence,
     opportunityReview: seoOpportunityReview,
+    workflowArtifacts: readSeoWorkflowArtifacts({
+      cwd,
+      projectId: projectContext.projectId,
+      environmentId: config.defaultEnvironment,
+      paths: seoWorkspacePaths,
+    }),
+    workflowPaths: {
+      opportunitySource: path.relative(
+        cwd,
+        path.join(seoWorkspacePaths.opportunities, 'pages.json'),
+      ),
+      preparedDirectory: path.relative(cwd, seoWorkspacePaths.prepared),
+      publicationsDirectory: path.relative(cwd, seoWorkspacePaths.publications),
+      verificationsDirectory: path.relative(cwd, seoWorkspacePaths.verifications),
+    },
+    now,
   });
   const gtmArtifacts = collectGtmArtifactLinks(cwd, config.appId, config.defaultEnvironment);
   const tagManagerArtifacts = readTagManagerArtifacts(cwd, config.appId, config.defaultEnvironment);
@@ -313,11 +394,14 @@ export async function buildMarketingConsoleState(
     receipts: recommendationDecisions,
     experimentsAvailable: projectContext.growth.capabilities.includes('experiments'),
   });
-  const receipts = [
-    ...collectReceipts(cwd, config.defaultEnvironment, now),
-    ...collectGtmReceiptEvents(cwd, config.appId, config.defaultEnvironment, now),
-    ...recommendationDecisionEvidence.map(recommendationDecisionEvent),
-  ];
+  const receipts = filterReceiptWindow(
+    [
+      ...collectReceipts(cwd, config.defaultEnvironment, now),
+      ...collectGtmReceiptEvents(cwd, config.appId, config.defaultEnvironment, now),
+      ...recommendationDecisionEvidence.map(recommendationDecisionEvent),
+    ],
+    options.temporalQuery,
+  );
   const artifacts = buildArtifactLinks(
     freshness,
     receipts,
@@ -327,7 +411,11 @@ export async function buildMarketingConsoleState(
     recommendationEvidence?.path,
   );
   const schedule = readSchedulePlan(cwd, config.defaultEnvironment);
-  const activity = buildMarketingConsoleActivity({ receipts, freshness });
+  const activity = buildMarketingConsoleActivity({
+    receipts,
+    freshness,
+    ...(options.temporalQuery ? { dateWindow: options.temporalQuery } : {}),
+  });
   const automations = buildMarketingConsoleAutomations({
     ...(schedule ? { schedule: schedule.parsed, schedulePath: schedule.path } : {}),
     connections,
@@ -347,23 +435,29 @@ export async function buildMarketingConsoleState(
     googleAds: {
       campaigns: readProviderRows(
         freshness.find((cell) => cell.provider === 'googleAds' && cell.reportType === 'campaign'),
+        temporalReports,
       ),
       conversions: readProviderRows(
         freshness.find((cell) => cell.provider === 'googleAds' && cell.reportType === 'conversion'),
+        temporalReports,
       ),
     },
     metaAds: {
       campaigns: readProviderRows(
         freshness.find((cell) => cell.provider === 'metaAds' && cell.reportType === 'campaign'),
+        temporalReports,
       ),
       adSets: readProviderRows(
         freshness.find((cell) => cell.provider === 'metaAds' && cell.reportType === 'adSet'),
+        temporalReports,
       ),
       ads: readProviderRows(
         freshness.find((cell) => cell.provider === 'metaAds' && cell.reportType === 'ad'),
+        temporalReports,
       ),
       creatives: readProviderRows(
         freshness.find((cell) => cell.provider === 'metaAds' && cell.reportType === 'creative'),
+        temporalReports,
       ),
     },
     freshness,
@@ -376,12 +470,15 @@ export async function buildMarketingConsoleState(
     metrics,
     traffic: readProviderRows(
       freshness.find((cell) => cell.provider === 'ga4' && cell.reportType === 'channel'),
+      temporalReports,
     ),
     visitors: readProviderRows(
       freshness.find((cell) => cell.provider === 'ga4' && cell.reportType === 'landingPage'),
+      temporalReports,
     ),
     conversions: readProviderRows(
       freshness.find((cell) => cell.provider === 'ga4' && cell.reportType === 'sourceMedium'),
+      temporalReports,
     ),
     freshness,
     connections,
@@ -413,6 +510,7 @@ export async function buildMarketingConsoleState(
     automations: automations.status,
   };
   const readiness = buildReadiness(readinessStatuses, healthReview);
+  const history = buildMarketingConsoleHistory(cwd, options.temporalQuery);
 
   return {
     kind: 'unisane.growth.console-state',
@@ -424,12 +522,17 @@ export async function buildMarketingConsoleState(
     environment: config.defaultEnvironment,
     capabilities: [...projectContext.growth.capabilities],
     connections,
-    dateWindow: inferDateWindow(marketingStatus.providerFreshness),
+    dateWindow: inferDateWindow(
+      marketingStatus.providerFreshness,
+      options.temporalQuery,
+      temporalReports,
+    ),
     readiness,
     metrics,
     overview,
     priorities,
-    trends: buildTrends(freshness),
+    history,
+    trends: buildTrends(history),
     comparisons: {
       channels: channelRows,
     },
@@ -1841,8 +1944,41 @@ function buildFreshness(
   cwd: string,
   now: Date,
   maxAgeDays: number,
+  temporalReports?: TemporalReportSelection,
 ): MarketingConsoleFreshnessCell[] {
   return reportFamilies.map(({ provider, reportType }) => {
+    const temporalResult = temporalReports?.get(reportFamilyKey(provider, reportType));
+    if (temporalResult) {
+      const artifact =
+        temporalResult.status === 'available' || temporalResult.status === 'partial'
+          ? temporalResult.artifact
+          : undefined;
+      return {
+        id: `${provider}.${reportType}`,
+        provider,
+        reportType,
+        status: temporalResult.status === 'available' ? 'ready' : artifact ? 'warn' : 'missing',
+        label: reportLabel(provider, reportType),
+        message:
+          temporalResult.status === 'available'
+            ? `${reportLabel(provider, reportType)} covers the selected period.`
+            : temporalResult.reason,
+        ...((temporalResult.status === 'available' || temporalResult.status === 'partial') &&
+        temporalResult.artifactPaths[0]
+          ? { path: temporalResult.artifactPaths[0] }
+          : {}),
+        ...(artifact
+          ? {
+              pulledAt: artifact.pulledAt,
+              recordCount: artifact.records.length,
+              sourceKind: artifact.source,
+              ...(artifact.records.find((record) => record.currency)?.currency
+                ? { currencyCode: artifact.records.find((record) => record.currency)!.currency }
+                : {}),
+            }
+          : {}),
+      };
+    }
     const status = readMarketingProviderReportStatus({
       cwd,
       provider,
@@ -1900,6 +2036,7 @@ function freshnessMessageFor(
 
 function buildChannelRows(
   freshness: MarketingConsoleFreshnessCell[],
+  temporalReports?: TemporalReportSelection,
 ): MarketingConsoleComparisonRow[] {
   return freshness
     .filter(
@@ -1907,7 +2044,7 @@ function buildChannelRows(
         cell.provider !== 'confirmedConversions' && cell.provider !== 'strategyMap',
     )
     .map((cell) => {
-      const metrics = readMetricsFromFreshnessCell(cell);
+      const metrics = readMetricsFromFreshnessCell(cell, temporalReports);
       return {
         id: cell.id,
         label: cell.reportType
@@ -1925,31 +2062,48 @@ function buildChannelRows(
     .slice(0, 8);
 }
 
-function buildSeoRows(freshness: MarketingConsoleFreshnessCell[]): MarketingConsoleSeoSourceRow[] {
+function buildSeoRows(
+  freshness: MarketingConsoleFreshnessCell[],
+  temporalReports?: TemporalReportSelection,
+): MarketingConsoleSeoSourceRow[] {
   const queryPageRows = readSeoRowsFromCell(
     freshness.find((cell) => cell.provider === 'searchConsole' && cell.reportType === 'queryPage'),
+    temporalReports,
   );
   if (queryPageRows.length > 0) return queryPageRows;
   return readSeoRowsFromCell(
     freshness.find((cell) => cell.provider === 'searchConsole' && cell.reportType === 'query'),
+    temporalReports,
   );
 }
 
 function readSeoRowsFromCell(
   cell: MarketingConsoleFreshnessCell | undefined,
+  temporalReports?: TemporalReportSelection,
 ): MarketingConsoleSeoSourceRow[] {
-  if (!cell?.path || !existsSync(cell.path)) return [];
   try {
-    const parsed = JSON.parse(readFileSync(cell.path, 'utf8')) as {
-      records?: Array<{
-        id?: string;
-        query?: string;
-        pageUrl?: string;
-        metrics?: MarketingReportMetrics;
-        ctr?: number;
-        position?: number;
-      }>;
-    };
+    if (!cell) return [];
+    const temporalArtifact = selectedArtifact(
+      temporalReports,
+      cell.provider as MarketingReportProvider,
+      cell.reportType as MarketingProviderReportType,
+    );
+    const parsed = (temporalArtifact ??
+      (cell.path && existsSync(cell.path)
+        ? JSON.parse(readFileSync(cell.path, 'utf8'))
+        : undefined)) as
+      | {
+          records?: Array<{
+            id?: string;
+            query?: string;
+            pageUrl?: string;
+            metrics?: MarketingReportMetrics;
+            ctr?: number;
+            position?: number;
+          }>;
+        }
+      | undefined;
+    if (!parsed) return [];
     return (parsed.records ?? [])
       .map((record, index): MarketingConsoleSeoSourceRow | undefined => {
         if (!record.query) return undefined;
@@ -1983,9 +2137,17 @@ function readSeoRowsFromCell(
 
 function readProviderRows(
   cell: MarketingConsoleFreshnessCell | undefined,
+  temporalReports?: TemporalReportSelection,
 ): MarketingProviderReportRecord[] {
-  if (!cell?.path || !existsSync(cell.path)) return [];
   try {
+    if (!cell) return [];
+    const temporalArtifact = selectedArtifact(
+      temporalReports,
+      cell.provider as MarketingReportProvider,
+      cell.reportType as MarketingProviderReportType,
+    );
+    if (temporalReports) return temporalArtifact?.records ?? [];
+    if (!cell.path || !existsSync(cell.path)) return [];
     return marketingProviderReportArtifactSchema.parse(JSON.parse(readFileSync(cell.path, 'utf8')))
       .records;
   } catch {
@@ -1998,12 +2160,25 @@ function normalizeSearchConsoleCtr(value: number | undefined): number | undefine
   return value <= 1 ? value * 100 : value;
 }
 
-function readMetricsFromFreshnessCell(cell: MarketingConsoleFreshnessCell): MarketingReportMetrics {
-  if (!cell.path || !existsSync(cell.path)) return {};
+function readMetricsFromFreshnessCell(
+  cell: MarketingConsoleFreshnessCell,
+  temporalReports?: TemporalReportSelection,
+): MarketingReportMetrics {
   try {
-    const parsed = JSON.parse(readFileSync(cell.path, 'utf8')) as {
-      records?: Array<{ metrics?: MarketingReportMetrics }>;
-    };
+    const temporalArtifact = selectedArtifact(
+      temporalReports,
+      cell.provider as MarketingReportProvider,
+      cell.reportType as MarketingProviderReportType,
+    );
+    const parsed = (temporalArtifact ??
+      (cell.path && existsSync(cell.path)
+        ? JSON.parse(readFileSync(cell.path, 'utf8'))
+        : undefined)) as
+      | {
+          records?: Array<{ metrics?: MarketingReportMetrics }>;
+        }
+      | undefined;
+    if (!parsed) return {};
     const totals: MarketingReportMetrics = {};
     for (const record of parsed.records ?? []) {
       addMetric(totals, 'impressions', record.metrics?.impressions);
@@ -2058,6 +2233,7 @@ function addMetric(
 
 function selectProviderMetricCell(
   cells: MarketingConsoleFreshnessCell[],
+  temporalReports?: TemporalReportSelection,
 ): MarketingConsoleFreshnessCell | undefined {
   const provider = cells[0]?.provider;
   const priority =
@@ -2072,20 +2248,29 @@ function selectProviderMetricCell(
             : [];
   for (const reportType of priority) {
     const cell = cells.find((candidate) => candidate.reportType === reportType);
-    if (cell && Object.keys(readMetricsFromFreshnessCell(cell)).length > 0) return cell;
+    if (cell && Object.keys(readMetricsFromFreshnessCell(cell, temporalReports)).length > 0)
+      return cell;
   }
-  return cells.find((cell) => Object.keys(readMetricsFromFreshnessCell(cell)).length > 0);
+  return cells.find(
+    (cell) => Object.keys(readMetricsFromFreshnessCell(cell, temporalReports)).length > 0,
+  );
 }
 
-function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingConsoleMetric[] {
+function buildMetrics(
+  freshness: MarketingConsoleFreshnessCell[],
+  temporalReports?: TemporalReportSelection,
+): MarketingConsoleMetric[] {
   const searchCell = selectProviderMetricCell(
     freshness.filter((cell) => cell.provider === 'searchConsole'),
+    temporalReports,
   );
   const googleAdsCell = selectProviderMetricCell(
     freshness.filter((cell) => cell.provider === 'googleAds'),
+    temporalReports,
   );
   const metaAdsCell = selectProviderMetricCell(
     freshness.filter((cell) => cell.provider === 'metaAds'),
+    temporalReports,
   );
   const adsCells = [googleAdsCell, metaAdsCell].filter(
     (cell): cell is MarketingConsoleFreshnessCell => cell !== undefined,
@@ -2096,11 +2281,12 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
     adsCells[0];
   const analyticsCell = selectProviderMetricCell(
     freshness.filter((cell) => cell.provider === 'ga4'),
+    temporalReports,
   );
-  const search = searchCell ? readMetricsFromFreshnessCell(searchCell) : {};
+  const search = searchCell ? readMetricsFromFreshnessCell(searchCell, temporalReports) : {};
   const adsReports = adsCells.map((cell) => ({
     cell,
-    metrics: readMetricsFromFreshnessCell(cell),
+    metrics: readMetricsFromFreshnessCell(cell, temporalReports),
   }));
   const advertisingCurrencies = [
     ...new Set(
@@ -2122,7 +2308,9 @@ function buildMetrics(freshness: MarketingConsoleFreshnessCell[]): MarketingCons
   }, {});
   const adsSourceLabel =
     adsCells.map((cell) => providerLabel(cell.provider)).join(' + ') || 'Advertising';
-  const analytics = analyticsCell ? readMetricsFromFreshnessCell(analyticsCell) : {};
+  const analytics = analyticsCell
+    ? readMetricsFromFreshnessCell(analyticsCell, temporalReports)
+    : {};
   const analyticsConversions = analytics.keyEvents ?? analytics.conversions ?? analytics.purchases;
   const conversions = analyticsConversions ?? ads.conversions;
   const conversionSource = analyticsConversions !== undefined ? analyticsCell : adsCell;
@@ -2311,36 +2499,162 @@ function statusForMetric(
   return 'ready';
 }
 
-function buildTrends(freshness: MarketingConsoleFreshnessCell[]): {
+function buildTrends(history: MarketingConsoleHistory): {
   spend: MarketingConsoleTrendPoint[];
   conversions: MarketingConsoleTrendPoint[];
   cpa: MarketingConsoleTrendPoint[];
 } {
-  const rows = freshness
-    .map((cell) => {
-      const metrics = readMetricsFromFreshnessCell(cell);
-      const label = cell.reportType
-        ? reportLabel(cell.provider, cell.reportType)
-        : providerLabel(cell.provider);
-      const cost = metrics.cost ?? 0;
-      const conversions = metrics.conversions ?? 0;
-      return {
-        label,
-        cost,
-        conversions,
-        cpa: conversions > 0 ? cost / conversions : 0,
-        currencyCode: cell.currencyCode,
-      };
-    })
-    .slice(0, 8);
+  const spend = history.series.find((series) => series.metric === 'cost')?.points ?? [];
+  const conversions =
+    history.series.find((series) => series.metric === 'conversions')?.points ?? [];
   return {
-    spend: rows.map((row) => ({
-      label: row.label,
-      value: row.cost,
-      ...(row.currencyCode ? { currencyCode: row.currencyCode } : {}),
-    })),
-    conversions: rows.map((row) => ({ label: row.label, value: row.conversions })),
-    cpa: rows.map((row) => ({ label: row.label, value: row.cpa })),
+    spend,
+    conversions,
+    cpa: [],
+  };
+}
+
+const consoleHistorySeries: Array<{
+  id: string;
+  label: string;
+  provider: MarketingReportProvider;
+  reportType: MarketingProviderReportType;
+  metric: MarketingHistoryMetric;
+}> = [
+  {
+    id: 'google-ads-spend',
+    label: 'Google Ads spend',
+    provider: 'googleAds',
+    reportType: 'campaign',
+    metric: 'cost',
+  },
+  {
+    id: 'google-ads-conversions',
+    label: 'Google Ads attributed conversions',
+    provider: 'googleAds',
+    reportType: 'campaign',
+    metric: 'conversions',
+  },
+  {
+    id: 'meta-ads-spend',
+    label: 'Meta Ads spend',
+    provider: 'metaAds',
+    reportType: 'campaign',
+    metric: 'cost',
+  },
+  {
+    id: 'meta-ads-conversions',
+    label: 'Meta Ads attributed conversions',
+    provider: 'metaAds',
+    reportType: 'campaign',
+    metric: 'conversions',
+  },
+  {
+    id: 'analytics-sessions',
+    label: 'Analytics sessions',
+    provider: 'ga4',
+    reportType: 'channel',
+    metric: 'sessions',
+  },
+  {
+    id: 'search-clicks',
+    label: 'Search Console clicks',
+    provider: 'searchConsole',
+    reportType: 'queryPage',
+    metric: 'clicks',
+  },
+  {
+    id: 'search-impressions',
+    label: 'Search Console impressions',
+    provider: 'searchConsole',
+    reportType: 'queryPage',
+    metric: 'impressions',
+  },
+];
+
+function buildMarketingConsoleHistory(
+  cwd: string,
+  temporalQuery?: MarketingConsoleTemporalQuery,
+): MarketingConsoleHistory {
+  const series = consoleHistorySeries.flatMap((definition) => {
+    const result = queryMarketingHistory({
+      cwd,
+      query: {
+        ...definition,
+        ...(temporalQuery
+          ? { startDate: temporalQuery.startDate, endDate: temporalQuery.endDate }
+          : {}),
+        limit: 120,
+      },
+    });
+    if (result.points.length === 0) return [];
+    const comparison = compareLatestMarketingHistoryPeriods(result);
+    return [
+      {
+        id: definition.id,
+        label: definition.label,
+        provider: definition.provider,
+        reportType: definition.reportType,
+        metric: definition.metric,
+        points: result.points.map((point) => ({
+          label: point.label,
+          value: point.value,
+          ...(point.currencyCode ? { currencyCode: point.currencyCode } : {}),
+          startDate: point.startDate,
+          endDate: point.endDate,
+          provider: definition.provider,
+          reportType: definition.reportType,
+        })),
+        coverage: {
+          status: result.coverage.status,
+          ...(result.coverage.earliestStartDate
+            ? { earliestStartDate: result.coverage.earliestStartDate }
+            : {}),
+          ...(result.coverage.latestEndDate
+            ? { latestEndDate: result.coverage.latestEndDate }
+            : {}),
+          expectedDayCount: result.coverage.expectedDayCount,
+          coveredDayCount: result.coverage.coveredDayCount,
+          gapRanges: result.coverage.gapRanges,
+          overlappingWindowCount: result.coverage.overlappingWindowCount,
+        },
+        comparison:
+          comparison.status === 'available'
+            ? {
+                status: 'available' as const,
+                currentStartDate: comparison.current.startDate,
+                currentEndDate: comparison.current.endDate,
+                baselineStartDate: comparison.baseline.startDate,
+                baselineEndDate: comparison.baseline.endDate,
+                absoluteChange: comparison.absoluteChange,
+                ...(comparison.percentageChange !== undefined
+                  ? { percentageChange: comparison.percentageChange }
+                  : {}),
+              }
+            : { status: 'unavailable' as const, reason: comparison.reason },
+      },
+    ];
+  });
+  const starts = series.flatMap((item) => item.points.map((point) => point.startDate ?? ''));
+  const ends = series.flatMap((item) => item.points.map((point) => point.endDate ?? ''));
+  const earliestStartDate = starts.filter(Boolean).sort()[0];
+  const latestEndDate = ends.filter(Boolean).sort().at(-1);
+  return {
+    available: series.length > 0,
+    catalogPath: path.join(cwd, MARKETING_HISTORY_CATALOG_PATH),
+    ...(earliestStartDate ? { earliestStartDate } : {}),
+    ...(latestEndDate ? { latestEndDate } : {}),
+    retention: {
+      rawArtifactDays: DEFAULT_MARKETING_HISTORY_RETENTION_POLICY.rawArtifactDays,
+      normalizedDailyMonths: DEFAULT_MARKETING_HISTORY_RETENTION_POLICY.normalizedDailyMonths,
+      monthlyRollupMonths: DEFAULT_MARKETING_HISTORY_RETENTION_POLICY.monthlyRollupMonths,
+      researchSnapshotMonths: DEFAULT_MARKETING_HISTORY_RETENTION_POLICY.researchSnapshotMonths,
+    },
+    message:
+      series.length > 0
+        ? `${series.length} chronological provider series are indexed. Comparisons remain unavailable when windows overlap, differ in length, are partial, or use incompatible currencies.`
+        : 'No provider history has been indexed yet. Rebuild the catalog from existing timestamped pulls or record a new provider pull.',
+    series,
   };
 }
 
@@ -2598,6 +2912,52 @@ function statusForGtmPreview(artifact: LocalJsonArtifact | undefined): Marketing
   return artifact.parsed?.compilerError === true ? 'blocked' : 'ready';
 }
 
+function readSeoWorkflowArtifacts(input: {
+  cwd: string;
+  projectId: string;
+  environmentId: string;
+  paths: ReturnType<typeof resolveSeoResearchWorkspacePaths>;
+}): MarketingConsoleSeoWorkflowArtifacts {
+  const relativePath = (filePath: string) => path.relative(input.cwd, filePath);
+  const opportunityRecords = collectJsonArtifacts(input.paths.opportunities).flatMap((artifact) => {
+    const parsed = pageOpportunityFileSchema.safeParse(artifact.parsed);
+    return parsed.success && parsed.data.platformId === input.projectId
+      ? parsed.data.opportunities.map((opportunity) => ({
+          path: relativePath(artifact.filePath),
+          opportunity,
+        }))
+      : [];
+  });
+  const approvedOpportunityIds = opportunityRecords
+    .filter((item) => item.opportunity.status === 'approved')
+    .map((item) => item.opportunity.id);
+  const packets = collectJsonArtifacts(input.paths.prepared).flatMap((artifact) => {
+    const parsed = seoImplementationPacketSchema.safeParse(artifact.parsed);
+    return parsed.success &&
+      parsed.data.projectId === input.projectId &&
+      parsed.data.environmentId === input.environmentId
+      ? [{ path: relativePath(artifact.filePath), packet: parsed.data }]
+      : [];
+  });
+  const publications = collectJsonArtifacts(input.paths.publications).flatMap((artifact) => {
+    const parsed = seoPublicationRecordSchema.safeParse(artifact.parsed);
+    return parsed.success &&
+      parsed.data.projectId === input.projectId &&
+      parsed.data.environmentId === input.environmentId
+      ? [{ path: relativePath(artifact.filePath), publication: parsed.data }]
+      : [];
+  });
+  const verifications = collectJsonArtifacts(input.paths.verifications).flatMap((artifact) => {
+    const parsed = seoPublicationVerificationSchema.safeParse(artifact.parsed);
+    return parsed.success &&
+      parsed.data.projectId === input.projectId &&
+      parsed.data.environmentId === input.environmentId
+      ? [{ path: relativePath(artifact.filePath), verification: parsed.data }]
+      : [];
+  });
+  return { approvedOpportunityIds, opportunityRecords, packets, publications, verifications };
+}
+
 function collectJsonArtifacts(directory: string): LocalJsonArtifact[] {
   if (!existsSync(directory)) return [];
   return readdirSync(directory)
@@ -2824,15 +3184,77 @@ function readSchedulePlan(
 
 function inferDateWindow(
   statuses: MarketingProviderReportStatus[],
+  temporalQuery?: MarketingConsoleTemporalQuery,
+  temporalReports?: TemporalReportSelection,
 ): MarketingConsoleState['dateWindow'] {
-  const windows = statuses.map((status) => status.window).filter(Boolean);
-  const latest = windows[0];
-  if (!latest) return { label: 'No report window yet' };
+  if (temporalQuery) {
+    const results = [...(temporalReports?.values() ?? [])];
+    const visibleCount = results.filter((result) => result.status !== 'unavailable').length;
+    const hasPartial = results.some((result) => result.status === 'partial');
+    const status =
+      visibleCount === 0
+        ? 'unavailable'
+        : hasPartial || visibleCount < results.length
+          ? 'partial'
+          : 'available';
+    return {
+      label: `${temporalQuery.startDate} to ${temporalQuery.endDate}`,
+      startDate: temporalQuery.startDate,
+      endDate: temporalQuery.endDate,
+      status,
+      ...(status === 'unavailable'
+        ? { message: 'No local provider evidence is available for this range.' }
+        : status === 'partial'
+          ? { message: 'Available data is shown; some dates or sources have not been recorded.' }
+          : {}),
+    };
+  }
+  const windows = statuses
+    .map((status) => status.window)
+    .filter(
+      (window): window is NonNullable<MarketingProviderReportStatus['window']> =>
+        window !== undefined,
+    );
+  if (windows.length === 0) return { label: 'No report window yet', status: 'unavailable' };
+  const grouped = new Map<
+    string,
+    { window: NonNullable<MarketingProviderReportStatus['window']>; count: number }
+  >();
+  for (const window of windows) {
+    const key = `${window.startDate}:${window.endDate}`;
+    const current = grouped.get(key);
+    grouped.set(key, { window, count: (current?.count ?? 0) + 1 });
+  }
+  const selected = [...grouped.values()].sort(
+    (left, right) =>
+      right.count - left.count || right.window.endDate.localeCompare(left.window.endDate),
+  )[0]!;
+  const latest = selected.window;
+  const mixed = grouped.size > 1;
   return {
     label: `${latest.startDate} to ${latest.endDate}`,
     startDate: latest.startDate,
     endDate: latest.endDate,
+    ...(latest.timeZone ? { timeZone: latest.timeZone } : {}),
+    status: mixed ? 'partial' : 'available',
+    ...(mixed
+      ? {
+          message:
+            'Providers contain different report periods. The displayed range is the most common recorded window; use provider views before comparing totals.',
+        }
+      : {}),
   };
+}
+
+function filterReceiptWindow(
+  receipts: MarketingConsoleReceiptEvent[],
+  temporalQuery: MarketingConsoleTemporalQuery | undefined,
+): MarketingConsoleReceiptEvent[] {
+  if (!temporalQuery) return receipts;
+  return receipts.filter((receipt) => {
+    const date = receipt.timestamp?.slice(0, 10);
+    return date !== undefined && date >= temporalQuery.startDate && date <= temporalQuery.endDate;
+  });
 }
 
 function number(value: number | undefined): string {

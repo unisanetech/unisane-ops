@@ -81,6 +81,9 @@ export interface FetchGa4PerformanceFileResult {
   output: string;
   platformId: string;
   propertyId: string;
+  configuredSiteUrl: string;
+  sampleData: false;
+  freshUntil: string;
   startDate: string;
   endDate: string;
   dimensions: string[];
@@ -94,6 +97,9 @@ export interface FetchSearchConsolePerformanceFileResult {
   output: string;
   platformId: string;
   siteUrl: string;
+  configuredSiteUrl: string;
+  sampleData: false;
+  freshUntil: string;
   startDate: string;
   endDate: string;
   dimensions: SearchConsoleDimension[];

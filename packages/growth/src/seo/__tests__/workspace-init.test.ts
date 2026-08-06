@@ -19,6 +19,7 @@ describe('initSeoResearchWorkspace', () => {
       expect(result.created).toContain('docs/domains/seo/keyword-research/serp');
       expect(result.created).toContain('docs/domains/seo/keyword-research/metadata');
       expect(result.created).toContain('docs/domains/seo/keyword-research/page-audits');
+      expect(result.created).toContain('docs/domains/seo/keyword-research/site-crawls');
 
       const config = JSON.parse(
         await readFile(
@@ -27,12 +28,11 @@ describe('initSeoResearchWorkspace', () => {
         ),
       );
       expect(config).toMatchObject({
-        version: 1,
+        version: 2,
         platformId: 'true-resume',
         seoPatternPack: 'true-resume',
         keywordPatternPack: 'resume-examples',
-        defaultCountry: 'US',
-        defaultLanguage: 'en',
+        markets: [{ country: 'US', language: 'en' }],
         opportunities: {
           basePath: 'resume-examples',
           ctaLabel: 'Start with this example',

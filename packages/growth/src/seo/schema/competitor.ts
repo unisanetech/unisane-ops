@@ -43,6 +43,20 @@ export const competitorOnPageSignalsSchema = z.object({
   ctaPatterns: z.array(z.string().min(1)),
 });
 
+export const competitorResearchEvidenceSchema = z.object({
+  observedAt: z.string().min(1),
+  sampleData: z.boolean(),
+  limitations: z.array(z.string().min(1)).default([]),
+  failures: z
+    .array(
+      z.object({
+        url: z.string().url(),
+        reason: z.string().min(1),
+      }),
+    )
+    .default([]),
+});
+
 export const competitorPageSchema = z.object({
   id: z.string().min(1),
   platformId: z.string().min(1),
@@ -70,6 +84,7 @@ export const competitorResearchFileSchema = z.object({
   platformId: z.string().min(1),
   market: z.string().min(1).optional(),
   source: competitorPageSourceSchema,
+  evidence: competitorResearchEvidenceSchema.optional(),
   pages: z.array(competitorPageSchema),
 });
 

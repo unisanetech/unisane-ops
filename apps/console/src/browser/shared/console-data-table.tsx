@@ -11,6 +11,7 @@ type ConsoleDataTableProps<T extends { id: string }> = Pick<
   | 'renderExpandedRow'
   | 'expandedRow'
   | 'getRowCanExpand'
+  | 'activeRowId'
   | 'callbacks'
   | 'rowClassName'
   | 'className'

@@ -145,7 +145,9 @@ export function createOpsReadActionRuntime(input: {
   leaseMs?: number;
 }): OpsReadActionRuntime {
   if (input.store.durability !== 'durable') {
-    throw new Error('[OPS_ACTION_DURABLE_STORE_REQUIRED] Hosted action execution requires durable state.');
+    throw new Error(
+      '[OPS_ACTION_DURABLE_STORE_REQUIRED] Hosted action execution requires durable state.',
+    );
   }
   const actions = new Map(input.actions.map((action) => [action.id, action]));
   if (actions.size !== input.actions.length) {
@@ -160,7 +162,9 @@ export function createOpsReadActionRuntime(input: {
       const parsed = opsReadActionRequestSchema.parse(request);
       const action = actions.get(parsed.actionId);
       if (!action || action.schemaVersion !== parsed.actionSchemaVersion) {
-        throw new Error('[OPS_ACTION_UNAVAILABLE] The requested action id or schema version is unavailable.');
+        throw new Error(
+          '[OPS_ACTION_UNAVAILABLE] The requested action id or schema version is unavailable.',
+        );
       }
       const normalizedRequest: OpsReadActionRequest = {
         ...parsed,

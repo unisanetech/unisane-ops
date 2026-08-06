@@ -30,6 +30,9 @@ function candidate(index: number, freshness: 'fresh' | 'stale' = 'fresh'): SeoOp
         observedAt,
         freshness,
         summary: 'Recorded keyword estimate.',
+        sampleData: false,
+        limitations: [],
+        issues: [],
         status: 'current',
       },
       {
@@ -40,6 +43,9 @@ function candidate(index: number, freshness: 'fresh' | 'stale' = 'fresh'): SeoOp
         observedAt,
         freshness,
         summary: 'Recorded search-result pattern.',
+        sampleData: false,
+        limitations: [],
+        issues: [],
         status: 'current',
       },
     ],
@@ -88,6 +94,10 @@ describe('SEO opportunity research action', () => {
     });
     expect(output.opportunities.every((item) => item.market === 'US / en')).toBe(true);
     expect(output.evidence).toHaveLength(6);
+    expect(output.researchPlan).toMatchObject({
+      status: 'recommended',
+      executionPolicy: 'explicit-user-or-automation-authority-required',
+    });
     expect(output.workflow.contextBrief.presentation).toEqual(output.workflow.presentation);
     expect(output.workflow.run.evidence).toEqual(
       output.evidence.map((item) =>
@@ -112,10 +122,25 @@ describe('SEO opportunity research action', () => {
     const output = growthSeoOpportunityResearchOutputSchema.parse(completed?.result?.output);
 
     expect(output).toMatchObject({ status: 'blocked', opportunities: [] });
+    expect(output.researchPlan).toMatchObject({ status: 'not-applicable', requests: [] });
     expect(output.workflow.presentation).toMatchObject({
       headline: 'SEO opportunity guidance needs recorded research.',
       nextStep: { deepLink: '/seo/research' },
     });
+  });
+
+  it('selects one exact opportunity before ranking for preparation and verification', async () => {
+    const action = createGrowthSeoOpportunityResearchAction({
+      loadCandidates: () => [candidate(1), candidate(2), candidate(3)],
+      now: () => new Date(observedAt),
+    });
+    const output = await action.execute(
+      { opportunityId: 'opportunity-3', opportunityLimit: 10 },
+      request(action).context,
+    );
+
+    expect(output).toMatchObject({ totalCandidateCount: 1, returnedOpportunityCount: 1 });
+    expect(output.opportunities.map((item) => item.id)).toEqual(['opportunity-3']);
   });
 
   it('surfaces stale evidence as attention instead of a confident recommendation', async () => {
@@ -134,6 +159,7 @@ describe('SEO opportunity research action', () => {
     const output = growthSeoOpportunityResearchOutputSchema.parse(completed?.result?.output);
 
     expect(output.status).toBe('attention');
+    expect(output.researchPlan.status).toBe('required');
     expect(output.opportunities[0]).toMatchObject({ confidence: 'low' });
     expect(output.opportunities[0]?.limitations).toContain('Some supporting research is stale.');
   });

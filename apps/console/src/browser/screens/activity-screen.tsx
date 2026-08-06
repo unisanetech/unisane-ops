@@ -64,8 +64,16 @@ export function ActivityScreen({ state }: ConsoleScreenProps) {
           </div>
         ) : (
           <DataState
-            title="No activity matches these filters."
-            description="Choose a different activity type or provider to review the available history."
+            title={
+              state.activity.items.length === 0
+                ? 'No activity was recorded in this period.'
+                : 'No activity matches these filters.'
+            }
+            description={
+              state.activity.items.length === 0
+                ? 'Choose another reporting period to review older changes, updates, approvals, and failures.'
+                : 'Choose a different activity type or provider to review the available history.'
+            }
           />
         )}
       </ContentSection>

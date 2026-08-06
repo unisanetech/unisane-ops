@@ -4,3 +4,6 @@ export * from './campaign-pause-run.js';
 export * from './health-review.js';
 export * from './measurement-audit.js';
 export * from './seo-opportunity-research.js';
+export * from './seo-opportunity-research-plan.js';
+export * from './seo-opportunity-preparation.js';
+export * from './seo-publication-verification.js';

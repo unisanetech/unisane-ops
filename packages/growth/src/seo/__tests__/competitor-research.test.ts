@@ -138,26 +138,34 @@ describe('competitor research', () => {
           position: 1,
         },
       ],
-      fetchImpl: async () =>
-        new Response(
-          [
-            '<html><head>',
-            '<title>Data Analyst Resume Examples</title>',
-            '<meta name="description" content="Review strong data analyst examples.">',
-            '</head><body>',
-            '<h1>Data Analyst Resume Examples</h1>',
-            '<h2>Entry-level data analyst resume</h2>',
-            '<h2>Senior data analyst resume</h2>',
-            '<a href="/templates">Resume templates</a>',
-            '</body></html>',
-          ].join(''),
-          { headers: { 'content-type': 'text/html; charset=utf-8' } },
-        ),
+      now: () => new Date('2026-08-04T20:00:00.000Z'),
+      fetchImpl: async (url) =>
+        String(url).endsWith('/robots.txt')
+          ? new Response('', { status: 404 })
+          : new Response(
+              [
+                '<html><head>',
+                '<title>Data Analyst Resume Examples</title>',
+                '<meta name="description" content="Review strong data analyst examples.">',
+                '</head><body>',
+                '<h1>Data Analyst Resume Examples</h1>',
+                '<h2>Entry-level data analyst resume</h2>',
+                '<h2>Senior data analyst resume</h2>',
+                '<a href="/templates">Resume templates</a>',
+                '</body></html>',
+              ].join(''),
+              { headers: { 'content-type': 'text/html; charset=utf-8' } },
+            ),
     });
 
     expect(result.failedUrls).toEqual([]);
     expect(result.competitorFile).toMatchObject({
       source: 'url-fetch',
+      evidence: {
+        observedAt: '2026-08-04T20:00:00.000Z',
+        sampleData: false,
+        failures: [],
+      },
       pages: [
         {
           domain: 'competitor.test',
@@ -196,11 +204,13 @@ describe('competitor research', () => {
       platformId: 'true-resume',
       input: 'competitor-urls.csv',
       output: 'competitors.json',
-      fetchImpl: async () =>
-        new Response(
-          '<html><head><title>Resume Examples</title></head><body><h1>Resume Examples</h1><h2>Popular examples</h2></body></html>',
-          { headers: { 'content-type': 'text/html' } },
-        ),
+      fetchImpl: async (url) =>
+        String(url).endsWith('/robots.txt')
+          ? new Response('', { status: 404 })
+          : new Response(
+              '<html><head><title>Resume Examples</title></head><body><h1>Resume Examples</h1><h2>Popular examples</h2></body></html>',
+              { headers: { 'content-type': 'text/html' } },
+            ),
     });
     const artifact = await readJson(output);
 
@@ -216,6 +226,29 @@ describe('competitor research', () => {
       source: 'url-fetch',
       pages: [{ domain: 'example.com', title: 'Resume Examples' }],
     });
+  });
+
+  it('records a failure instead of fetching a robots-disallowed competitor page', async () => {
+    const requested: string[] = [];
+    const result = await fetchCompetitorUrls({
+      platformId: 'true-resume',
+      urls: [{ url: 'https://competitor.test/private/page' }],
+      fetchImpl: async (url) => {
+        requested.push(String(url));
+        return new Response('User-agent: *\nDisallow: /private/', {
+          headers: { 'content-type': 'text/plain' },
+        });
+      },
+    });
+
+    expect(requested).toEqual(['https://competitor.test/robots.txt']);
+    expect(result.competitorFile.pages).toEqual([]);
+    expect(result.competitorFile.evidence?.failures).toEqual([
+      {
+        url: 'https://competitor.test/private/page',
+        reason: 'Robots policy disallows this URL.',
+      },
+    ]);
   });
 
   it('renders a readable competitor research report', () => {

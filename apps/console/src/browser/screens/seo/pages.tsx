@@ -33,56 +33,70 @@ export function SeoPagesScreen({ state, navigate }: ConsoleScreenProps) {
             ? `${state.seo.pages.length} pages have current search evidence.`
             : 'No page-level search evidence is available yet.'
         }
-        detail={state.seo.comparisonLabel}
+        detail={state.dateWindow.message ?? state.seo.comparisonLabel}
       />
-      <ContentSection>
-        <FilterToolbar
-          resultCount={pages.length}
-          totalCount={state.seo.pages.length}
-          resultLabel="pages"
-          isFiltered={Boolean(search.trim()) || status !== 'all'}
-          onClear={() => {
-            setSearch('');
-            setStatus('all');
-          }}
-        >
-          <TextField
-            label="Search pages"
-            placeholder="Search page title or URL"
-            value={search}
-            onValueChange={setSearch}
-          />
-          <SelectField
-            label="Status"
-            value={status}
-            onValueChange={setStatus}
-            options={[
-              { value: 'all', label: 'All statuses' },
-              { value: 'Review', label: 'Review' },
-              { value: 'Not indexed', label: 'Not indexed' },
-            ]}
-          />
-          <SelectField
-            label="Sort by"
-            value={sort}
-            onValueChange={(value) => setSort(value as PageSort)}
-            options={[
-              { value: 'clicks', label: 'Clicks' },
-              { value: 'views', label: 'Search views' },
-              { value: 'position', label: 'Average position' },
-            ]}
-          />
-        </FilterToolbar>
-      </ContentSection>
+      {state.seo.pages.length ? (
+        <ContentSection>
+          <FilterToolbar
+            resultCount={pages.length}
+            totalCount={state.seo.pages.length}
+            resultLabel="pages"
+            isFiltered={Boolean(search.trim()) || status !== 'all'}
+            onClear={() => {
+              setSearch('');
+              setStatus('all');
+            }}
+          >
+            <TextField
+              label="Search pages"
+              placeholder="Search page title or URL"
+              value={search}
+              onValueChange={setSearch}
+            />
+            <SelectField
+              label="Status"
+              value={status}
+              onValueChange={setStatus}
+              options={[
+                { value: 'all', label: 'All statuses' },
+                { value: 'Review', label: 'Review' },
+                { value: 'Not indexed', label: 'Not indexed' },
+              ]}
+            />
+            <SelectField
+              label="Sort by"
+              value={sort}
+              onValueChange={(value) => setSort(value as PageSort)}
+              options={[
+                { value: 'clicks', label: 'Clicks' },
+                { value: 'views', label: 'Search views' },
+                { value: 'position', label: 'Average position' },
+              ]}
+            />
+          </FilterToolbar>
+        </ContentSection>
+      ) : null}
       <ContentSection>
         {pages.length ? (
           <SeoPagesDataTable pages={pages} />
         ) : (
           <DataState
-            title="No page matches these filters."
-            description="Clear the filters or review the active Search Console connection."
-            actionLabel="Review connection"
-            onAction={() => navigate('/connections')}
+            title={
+              state.seo.pages.length === 0
+                ? 'No page evidence is recorded for this period.'
+                : 'No page matches these filters.'
+            }
+            description={
+              state.seo.pages.length === 0
+                ? 'Choose another reporting period or update Search Console data to fill this range.'
+                : 'Clear the filters to review the available pages.'
+            }
+            {...(state.seo.pages.length === 0
+              ? {
+                  actionLabel: 'Review connection',
+                  onAction: () => navigate('/connections'),
+                }
+              : {})}
           />
         )}
         <SeoSourceNote state={state} />

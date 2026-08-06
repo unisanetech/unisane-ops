@@ -2,6 +2,8 @@ export { marketingAudit } from './audit/run.js';
 export { marketingAlertAcknowledge } from './alerts/acknowledge.js';
 export { marketingConversionPull } from './conversion-pull/run.js';
 export { marketingExperimentDecide } from './experiments/decide.js';
+export { marketingEvidenceDiscardFixtures } from './evidence/discard-fixtures.js';
+export { marketingHistoryBackfill } from './history-backfill/run.js';
 export { marketingPull } from './pull/run.js';
 export { marketingPullApi } from './pull-api/run.js';
 export { marketingRecommend } from './recommend/run.js';

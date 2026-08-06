@@ -15,6 +15,7 @@ export type ImportCompetitorCsvOptions = {
   source: CompetitorPageSource;
   sourceFile?: string;
   market?: string;
+  observedAt?: string;
 };
 
 export function importCompetitorCsv(options: ImportCompetitorCsvOptions): CompetitorResearchFile {
@@ -27,6 +28,16 @@ export function importCompetitorCsv(options: ImportCompetitorCsvOptions): Compet
     platformId: options.platformId,
     market: cleanOptional(options.market),
     source: options.source,
+    ...(options.observedAt
+      ? {
+          evidence: {
+            observedAt: options.observedAt,
+            sampleData: false,
+            limitations: ['Imported evidence preserves the supplied source observation time.'],
+            failures: [],
+          },
+        }
+      : {}),
     pages,
   });
 }

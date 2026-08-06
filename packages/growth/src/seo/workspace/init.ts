@@ -29,6 +29,8 @@ const researchDirectories = [
   'serp',
   'metadata',
   'pageAudits',
+  'siteCrawls',
+  'siteRenders',
   'opportunities',
   'briefs',
   'internalLinks',

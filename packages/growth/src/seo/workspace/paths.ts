@@ -13,11 +13,16 @@ export type SeoResearchWorkspacePaths = {
   serp: string;
   metadata: string;
   pageAudits: string;
+  siteCrawls: string;
+  siteRenders: string;
   opportunities: string;
   briefs: string;
   internalLinks: string;
   ads: string;
   reports: string;
+  prepared: string;
+  publications: string;
+  verifications: string;
   manualSeeds: string;
 };
 
@@ -39,11 +44,16 @@ export function resolveSeoResearchWorkspacePaths(
     serp: path.join(root, 'serp'),
     metadata: path.join(root, 'metadata'),
     pageAudits: path.join(root, 'page-audits'),
+    siteCrawls: path.join(root, 'site-crawls'),
+    siteRenders: path.join(root, 'site-renders'),
     opportunities: path.join(root, 'opportunities'),
     briefs: path.join(root, 'briefs'),
     internalLinks: path.join(root, 'internal-links'),
     ads: path.join(root, 'ads'),
     reports: path.join(root, 'reports'),
+    prepared: path.join(root, 'prepared'),
+    publications: path.join(root, 'publications'),
+    verifications: path.join(root, 'verifications'),
     manualSeeds: path.join(root, 'seeds', 'manual.seed.json'),
   };
 }

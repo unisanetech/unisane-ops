@@ -4,6 +4,7 @@ import {
   type PageOpportunity,
   type PageOpportunityFile,
 } from '../schema/opportunity.js';
+import { seoOpportunityIdsMatch } from '../identifiers.js';
 
 export type OpportunityStatus = KeywordCluster['status'];
 
@@ -74,6 +75,9 @@ function matchesOpportunity(
   opportunity: PageOpportunity,
   match: ReturnType<typeof normalizeMatch>,
 ): boolean {
+  if (match.kind === 'id') {
+    return seoOpportunityIdsMatch(opportunity.id, match.value);
+  }
   return opportunity[match.kind] === match.value;
 }
 

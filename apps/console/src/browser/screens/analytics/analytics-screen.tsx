@@ -8,6 +8,7 @@ import { RecommendationList } from '../../shared/recommendation-list.js';
 import { ChannelMetrics, SourceSummary } from '../channels/shared.js';
 import { AnalyticsDataTable } from './analytics-data-table.js';
 import { TagManagerWorkspace } from './tag-manager-workspace.js';
+import { MeasurementOutcomeComparisons } from './measurement-comparison-charts.js';
 
 export function AnalyticsScreen(props: ConsoleScreenProps) {
   switch (props.route.id) {
@@ -112,7 +113,7 @@ function AnalyticsRows({
               ? 'Sources receiving traffic without recorded outcomes'
               : `${humanize(kind)} evidence`
           }
-          description={`Results for ${state.dateWindow.label.toLowerCase()}; previous-period comparison is not available yet.`}
+          description={`Results for ${state.dateWindow.label.toLowerCase()}. ${state.dateWindow.message ?? 'A previous-period comparison is not available yet.'}`}
         >
           <AnalyticsDataTable rows={rows} firstColumn={labels.firstColumn} />
         </ContentSection>
@@ -120,8 +121,11 @@ function AnalyticsRows({
         <ContentSection>
           <DataState
             kind="stale"
-            title={`No ${kind} rows are available.`}
-            description="Refresh the selected Google Analytics property before using this report to make a decision."
+            title={`No ${kind} evidence is recorded for this period.`}
+            description={
+              state.dateWindow.message ??
+              'Record the selected Google Analytics report for this period before using it to make a decision.'
+            }
             actionLabel={
               kind === 'conversions' ? 'Review tracking health' : 'Review Analytics connection'
             }
@@ -169,65 +173,15 @@ function TrackingHealth(props: ConsoleScreenProps) {
         title="Outcome reconciliation"
         description="Canonical outcomes are authoritative. Advertising-provider conversions remain separately labelled attribution evidence."
       >
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div className="grid content-start gap-3">
-            <Typography variant="titleSmall">Canonical outcomes</Typography>
-            {audit.canonicalOutcomes.length ? (
-              audit.canonicalOutcomes.map((outcome) => (
-                <Card key={outcome.outcomeId} variant="outlined" padding="sm">
-                  <Typography variant="labelLarge">{outcome.label}</Typography>
-                  <Typography variant="headlineSmall" className="mt-2">
-                    {outcome.count}
-                  </Typography>
-                  <Typography variant="bodySmall" className="text-on-surface-variant mt-1">
-                    {outcome.source} · {humanize(outcome.freshness)}
-                  </Typography>
-                </Card>
-              ))
-            ) : (
-              <DataState
-                kind="error"
-                title="Canonical outcomes are unavailable."
-                description="Provider-attributed conversions cannot substitute for server-confirmed business outcomes."
-              />
-            )}
-          </div>
-          <div className="grid content-start gap-3">
-            <Typography variant="titleSmall">Provider-attributed conversions</Typography>
-            {audit.attributionComparisons.length ? (
-              audit.attributionComparisons.map((comparison) => (
-                <Card
-                  key={`${comparison.providerId}.${comparison.outcomeId}`}
-                  variant="outlined"
-                  padding="sm"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <Typography variant="labelLarge">
-                        {humanize(comparison.providerId)}
-                      </Typography>
-                      <Typography variant="headlineSmall" className="mt-2">
-                        {comparison.attributedCount}
-                      </Typography>
-                    </div>
-                    <Badge variant="tonal" color="info" size="sm">
-                      Attributed
-                    </Badge>
-                  </div>
-                  <Typography variant="bodySmall" className="text-on-surface-variant mt-2">
-                    {comparison.explanation}
-                  </Typography>
-                </Card>
-              ))
-            ) : (
-              <DataState
-                kind="unavailable"
-                title="No provider attribution is available."
-                description="The canonical outcome remains usable when provider comparison evidence is not recorded."
-              />
-            )}
-          </div>
-        </div>
+        {audit.canonicalOutcomes.length || audit.attributionComparisons.length ? (
+          <MeasurementOutcomeComparisons audit={audit} />
+        ) : (
+          <DataState
+            kind="error"
+            title="Outcome comparison is unavailable."
+            description="No canonical outcome or provider-attributed conversion was recorded for the selected period."
+          />
+        )}
       </ContentSection>
       <ContentSection
         title="Observed measurement"

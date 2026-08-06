@@ -23,6 +23,8 @@
     "./actions",
     "./execution",
     "./hosted",
+    "./hosted/credentials",
+    "./hosted/scheduler",
     "./hosted/sqlite",
     "./lifecycle",
     "./local",

@@ -4,6 +4,7 @@ import { printFetchGa4PerformanceFileResult } from '../format-output.js';
 import { resolveSeoGoogleConnectionToken } from '../google-connection.js';
 import type { SeoPerformanceFetchGa4CliOptions } from '../options.js';
 import { loadGrowthProjectContext, resolveGrowthResource } from '../../../project-context.js';
+import { resolveSeoPerformanceContext } from '@unisane/growth/seo';
 
 const defaultDimensions = ['landingPagePlusQueryString'];
 const defaultMetrics = ['sessions', 'totalUsers', 'conversions', 'totalRevenue'];
@@ -15,9 +16,6 @@ export async function seoPerformanceFetchGa4(
   try {
     if (!options.platform) {
       throw new Error('Missing required --platform id.');
-    }
-    if (!options.out) {
-      throw new Error('Missing required --out path.');
     }
     if (!options.startDate || !options.endDate) {
       throw new Error('Missing required --start-date and --end-date.');
@@ -36,13 +34,22 @@ export async function seoPerformanceFetchGa4(
       service: 'analytics',
       resourceType: 'property',
     });
-    const result = await fetchGa4PerformanceFile({
+    const performanceContext = await resolveSeoPerformanceContext({
       cwd: options.cwd,
       platformId: options.platform,
-      output: options.out,
+      source: 'ga4',
+      property: property.resourceId,
+    });
+    const result = await fetchGa4PerformanceFile({
+      cwd: performanceContext.cwd,
+      platformId: performanceContext.platformId,
+      output: options.out ?? performanceContext.defaultOutput,
       env: process.env,
       accessToken,
       propertyId: property.resourceId,
+      configuredSiteUrl: performanceContext.siteUrl,
+      targetMarkets: performanceContext.targetMarkets,
+      freshnessHours: performanceContext.freshnessHours,
       startDate: options.startDate,
       endDate: options.endDate,
       dimensions: parseCsvList(options.dimensions, defaultDimensions),

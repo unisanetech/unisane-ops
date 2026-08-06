@@ -11,9 +11,35 @@ import type {
   MarketingConsoleSeoPage,
   MarketingConsoleSeoQuery,
   MarketingConsoleSeoResearchIdea,
+  MarketingConsoleSeoWorkflowItem,
   MarketingConsoleStatus,
 } from './contracts.js';
 import type { GrowthSeoOpportunityResearchOutput } from '../actions/seo-opportunity-research.js';
+import type { SeoImplementationPacket } from '../playbooks/seo-opportunity-preparation.js';
+import type {
+  SeoPublicationRecord,
+  SeoPublicationVerification,
+} from '../playbooks/seo-publication-verification.js';
+import type { PageOpportunity } from '../seo/schema/opportunity.js';
+import { normalizeSeoOpportunityId, seoOpportunityIdsMatch } from '../seo/identifiers.js';
+
+export type MarketingConsoleSeoWorkflowArtifacts = {
+  approvedOpportunityIds: readonly string[];
+  opportunityRecords?: ReadonlyArray<{ path: string; opportunity: PageOpportunity }>;
+  packets: ReadonlyArray<{ path: string; packet: SeoImplementationPacket }>;
+  publications: ReadonlyArray<{ path: string; publication: SeoPublicationRecord }>;
+  verifications: ReadonlyArray<{
+    path: string;
+    verification: SeoPublicationVerification;
+  }>;
+};
+
+export type MarketingConsoleSeoWorkflowPaths = {
+  opportunitySource: string;
+  preparedDirectory: string;
+  publicationsDirectory: string;
+  verificationsDirectory: string;
+};
 
 export type MarketingConsoleSeoSourceRow = {
   id: string;
@@ -26,6 +52,254 @@ export type MarketingConsoleSeoSourceRow = {
 };
 
 const comparisonLabel = 'Previous-period comparison is not available yet.';
+
+function shellArgument(value: string): string {
+  return `'${value.replaceAll("'", "'\\''")}'`;
+}
+
+function command(lines: readonly string[]): string {
+  return lines.join(' \\\n  ');
+}
+
+function artifactBaseName(filePath: string): string {
+  const name = filePath.split('/').at(-1) ?? 'seo-opportunity';
+  return name.replace(/\.implementation\.json$/u, '').replace(/\.json$/u, '');
+}
+
+function buildSeoOpportunityWorkflows(input: {
+  review: GrowthSeoOpportunityResearchOutput;
+  artifacts: MarketingConsoleSeoWorkflowArtifacts;
+  paths: MarketingConsoleSeoWorkflowPaths;
+  now: Date;
+}): MarketingConsoleSeoWorkflowItem[] {
+  const approved = new Set(input.artifacts.approvedOpportunityIds.map(normalizeSeoOpportunityId));
+  const evidence = new Map(input.review.evidence.map((item) => [item.evidenceId, item]));
+  return input.review.opportunities.map((opportunity) => {
+    const sourceOpportunityArtifact = input.artifacts.opportunityRecords?.find((item) =>
+      seoOpportunityIdsMatch(item.opportunity.id, opportunity.id),
+    );
+    const sourceOpportunity = sourceOpportunityArtifact?.opportunity;
+    const opportunitySource = sourceOpportunityArtifact?.path ?? input.paths.opportunitySource;
+    const selectionReview = sourceOpportunity
+      ? {
+          routePath: sourceOpportunity.routePath,
+          title: sourceOpportunity.title,
+          h1: sourceOpportunity.h1,
+          metaDescription: sourceOpportunity.metaDescription,
+          primaryKeyword: sourceOpportunity.primaryKeyword,
+          supportingKeywords: sourceOpportunity.supportingKeywords,
+          sections: sourceOpportunity.sections.map((section) => ({
+            heading: section.heading,
+            purpose: section.purpose,
+            required: section.required,
+          })),
+          internalLinks: sourceOpportunity.internalLinks.map((link) => ({ ...link })),
+          cta: { ...sourceOpportunity.cta },
+          rationale: sourceOpportunity.rationale,
+        }
+      : undefined;
+    const packetArtifact = input.artifacts.packets.find(
+      (item) =>
+        seoOpportunityIdsMatch(item.packet.selection.opportunityId, opportunity.id) &&
+        item.packet.source.opportunityReviewObservedAt === input.review.observedAt,
+    );
+    const publicationArtifact = packetArtifact
+      ? input.artifacts.publications.find(
+          (item) =>
+            seoOpportunityIdsMatch(item.publication.opportunity.id, opportunity.id) &&
+            item.publication.packet.packetId === packetArtifact.packet.packetId,
+        )
+      : undefined;
+    const verificationArtifact = publicationArtifact
+      ? input.artifacts.verifications.find(
+          (item) =>
+            item.verification.publicationId === publicationArtifact.publication.publicationId,
+        )
+      : undefined;
+    const supportingEvidence = opportunity.evidenceIds
+      .map((id) => evidence.get(id))
+      .filter((item) => item !== undefined);
+    const requiredResearch = input.review.researchPlan.requests.some(
+      (request) => request.opportunityId === opportunity.id && request.priority === 'required',
+    );
+    const unreliable =
+      opportunity.confidence === 'low' ||
+      supportingEvidence.length !== opportunity.evidenceIds.length ||
+      supportingEvidence.some(
+        (item) => item.sampleData || item.freshness !== 'fresh' || item.status === 'conflicting',
+      );
+
+    if (requiredResearch || unreliable) {
+      return {
+        opportunityId: opportunity.id,
+        ...(selectionReview ? { selectionReview } : {}),
+        stage: 'research-required',
+        status: 'blocked',
+        stageLabel: 'Research needs attention',
+        summary:
+          'Resolve required, stale, sample, conflicting, or low-confidence evidence before preparing this opportunity.',
+      };
+    }
+
+    if (!packetArtifact) {
+      if (!approved.has(normalizeSeoOpportunityId(opportunity.id))) {
+        return {
+          opportunityId: opportunity.id,
+          ...(selectionReview ? { selectionReview } : {}),
+          stage: 'approval-required',
+          status: 'warn',
+          stageLabel: 'Selection review required',
+          summary:
+            'Review the exact route, market, evidence, and limitations before marking this opportunity approved.',
+          nextAction: {
+            id: `seo.approve.${opportunity.id}`,
+            label: 'Approve selection',
+            description:
+              'This command records the human opportunity-selection decision only. It does not prepare, edit, publish, or deploy a page.',
+            command: command([
+              'unisane growth seo opportunities status',
+              `--opportunities ${shellArgument(opportunitySource)}`,
+              `--out ${shellArgument(opportunitySource)}`,
+              `--id ${shellArgument(opportunity.id)}`,
+              '--status approved',
+            ]),
+          },
+        };
+      }
+      return {
+        opportunityId: opportunity.id,
+        ...(selectionReview ? { selectionReview } : {}),
+        stage: 'ready-to-prepare',
+        status: 'ready',
+        stageLabel: 'Ready to prepare',
+        summary:
+          'The exact opportunity is approved and its recorded evidence supports an implementation packet.',
+        nextAction: {
+          id: `seo.prepare.${opportunity.id}`,
+          label: 'Prepare implementation brief',
+          description:
+            'This creates a local evidence-bound packet for a coding agent. It does not edit, approve, publish, or deploy a page.',
+          command: command([
+            'unisane growth seo opportunities prepare',
+            `--opportunities ${shellArgument(opportunitySource)}`,
+            `--id ${shellArgument(opportunity.id)}`,
+            `--out-dir ${shellArgument(input.paths.preparedDirectory)}`,
+            '--audience coding-agent',
+          ]),
+        },
+      };
+    }
+
+    const packet = packetArtifact.packet;
+    const packetView: NonNullable<MarketingConsoleSeoWorkflowItem['packet']> = {
+      packetId: packet.packetId,
+      preparedAt: packet.preparedAt,
+      audience: packet.delivery.audience,
+      jsonPath: packetArtifact.path,
+      markdownPath: packetArtifact.path.replace(/\.json$/u, '.md'),
+      baselineStatus: packet.measurementPlan.baseline.status,
+      notBeforeDaysAfterPublication:
+        packet.measurementPlan.verificationWindow.notBeforeDaysAfterPublication,
+      expiresDaysAfterPublication:
+        packet.measurementPlan.verificationWindow.expiresDaysAfterPublication,
+    };
+    const baseName = artifactBaseName(packetArtifact.path);
+    const proposedPublicationPath = `${input.paths.publicationsDirectory}/${baseName}.json`;
+    if (!publicationArtifact) {
+      return {
+        opportunityId: opportunity.id,
+        ...(selectionReview ? { selectionReview } : {}),
+        stage: 'prepared',
+        status: 'ready',
+        stageLabel: 'Implementation packet ready',
+        summary:
+          'Use the packet with a coding or content agent, review the resulting page, publish it through the owning workflow, then record that external publication.',
+        packet: packetView,
+        nextAction: {
+          id: `seo.record-publication.${opportunity.id}`,
+          label: 'Record publication',
+          description:
+            'Use this only after the exact page was reviewed and published externally. The command records that human-confirmed fact; it cannot publish the page.',
+          command: command([
+            'unisane growth seo opportunities record-publication',
+            `--packet ${shellArgument(packetArtifact.path)}`,
+            `--published-url ${shellArgument('REPLACE_WITH_PUBLISHED_URL')}`,
+            `--published-at ${shellArgument('REPLACE_WITH_ISO_8601_TIME')}`,
+            `--recorded-by ${shellArgument('REPLACE_WITH_OPERATOR_ID')}`,
+            '--confirm-reviewed',
+            `--out ${shellArgument(proposedPublicationPath)}`,
+          ]),
+        },
+      };
+    }
+
+    const publication = publicationArtifact.publication;
+    const publicationView: NonNullable<MarketingConsoleSeoWorkflowItem['publication']> = {
+      publicationId: publication.publicationId,
+      publishedUrl: publication.publishedUrl,
+      publishedAt: publication.publishedAt,
+      recordedAt: publication.recordedAt,
+      recordedBy: publication.review.recordedBy,
+      path: publicationArtifact.path,
+      notBeforeAt: publication.verification.notBeforeAt,
+      expiresAt: publication.verification.expiresAt,
+    };
+    const proposedVerificationPath = `${input.paths.verificationsDirectory}/${baseName}.json`;
+    const verificationCommand = {
+      id: `seo.verify-publication.${opportunity.id}`,
+      label: verificationArtifact ? 'Refresh measurement' : 'Verify result',
+      description:
+        'This refreshes the exact opportunity evidence and records an observed result. It does not establish causation or guarantee an outcome.',
+      command: command([
+        'unisane growth seo opportunities verify-publication',
+        `--publication ${shellArgument(publicationArtifact.path)}`,
+        `--out ${shellArgument(proposedVerificationPath)}`,
+      ]),
+    };
+    if (!verificationArtifact) {
+      const waiting =
+        input.now.getTime() < new Date(publication.verification.notBeforeAt).getTime();
+      return {
+        opportunityId: opportunity.id,
+        ...(selectionReview ? { selectionReview } : {}),
+        stage: waiting ? 'waiting-to-verify' : 'ready-to-verify',
+        status: 'warn',
+        stageLabel: waiting ? 'Waiting for measurement window' : 'Ready to verify',
+        summary: waiting
+          ? `The declared measurement window starts ${publication.verification.notBeforeAt}. No performance conclusion is available yet.`
+          : 'The declared measurement window is open. Refresh the exact opportunity evidence before deciding what changed.',
+        packet: packetView,
+        publication: publicationView,
+        nextAction: verificationCommand,
+      };
+    }
+
+    const verification = verificationArtifact.verification;
+    const needsAttention = ['declined', 'mixed', 'not-measurable'].includes(verification.outcome);
+    return {
+      opportunityId: opportunity.id,
+      ...(selectionReview ? { selectionReview } : {}),
+      stage: needsAttention ? 'needs-attention' : 'verified',
+      status: needsAttention ? 'warn' : 'ready',
+      stageLabel: needsAttention ? 'Measured result needs review' : 'Measured result recorded',
+      summary: verification.summary,
+      packet: packetView,
+      publication: publicationView,
+      verification: {
+        verificationId: verification.verificationId,
+        observedAt: verification.observedAt,
+        outcome: verification.outcome,
+        windowState: verification.windowState,
+        summary: verification.summary,
+        limitations: verification.limitations,
+        nextStep: verification.nextStep,
+        causalClaim: verification.causalClaim,
+        path: verificationArtifact.path,
+      },
+      nextAction: verificationCommand,
+    };
+  });
+}
 
 function rounded(value: number | undefined, digits = 1): number | undefined {
   if (value === undefined || !Number.isFinite(value)) return undefined;
@@ -543,6 +817,9 @@ export function buildMarketingConsoleSeo(args: {
   faqResearch: MarketingConsoleFaqResearchSummary;
   intelligence: MarketingConsoleSeoIntelligenceSummary;
   opportunityReview: GrowthSeoOpportunityResearchOutput;
+  workflowArtifacts?: MarketingConsoleSeoWorkflowArtifacts;
+  workflowPaths?: MarketingConsoleSeoWorkflowPaths;
+  now?: Date;
 }): MarketingConsoleSeo {
   const sourceFreshness = freshnessContext(args.freshness);
   const pages = buildPages(args.rows, args.intelligence);
@@ -568,6 +845,15 @@ export function buildMarketingConsoleSeo(args: {
     comparisonAvailable: false,
     comparisonLabel,
     opportunityReview: args.opportunityReview,
+    opportunityWorkflows:
+      args.workflowArtifacts && args.workflowPaths
+        ? buildSeoOpportunityWorkflows({
+            review: args.opportunityReview,
+            artifacts: args.workflowArtifacts,
+            paths: args.workflowPaths,
+            now: args.now ?? new Date(),
+          })
+        : [],
     overview: {
       status,
       headline,

@@ -6,7 +6,9 @@ import {
   marketingAlertAcknowledge,
   marketingAudit,
   marketingConversionPull,
+  marketingEvidenceDiscardFixtures,
   marketingExperimentDecide,
+  marketingHistoryBackfill,
   marketingPull,
   marketingPullApi,
   marketingRecommend,
@@ -133,6 +135,44 @@ export function registerMarketingCommands(program: Command): void {
     )
     .action(async (options: MarketingCliOptions) => {
       await runMarketingCommand(options, marketingReport);
+    });
+
+  const evidence = marketing.command('evidence').description('Local provider evidence commands');
+  addSharedOptions(
+    evidence
+      .command('discard-fixtures')
+      .description('Preview or remove fixture-origin provider artifacts and rebuild history'),
+  )
+    .requiredOption('--provider <provider>', 'Provider: googleAds, metaAds, ga4, or searchConsole')
+    .option('--yes', 'Apply the fixture-only cleanup after reviewing the preview')
+    .action(async (options: MarketingCliOptions) => {
+      await runMarketingCommand(options, marketingEvidenceDiscardFixtures);
+    });
+
+  const history = marketing.command('history').description('Local historical evidence commands');
+  addSharedOptions(
+    history
+      .command('backfill')
+      .description('Record bounded daily provider history through exact one-day report pulls'),
+  )
+    .requiredOption('--provider <provider>', 'Provider: googleAds, metaAds, ga4, or searchConsole')
+    .requiredOption('--report <type>', 'Provider report family to record')
+    .requiredOption('--start-date <date>', 'Backfill start date, YYYY-MM-DD')
+    .requiredOption('--end-date <date>', 'Backfill end date, YYYY-MM-DD')
+    .option('--after-date <date>', 'Resume after this completed date, YYYY-MM-DD')
+    .option('--max-days <count>', 'Maximum daily windows in this batch', '90')
+    .option(
+      '--dry-run',
+      'Preview daily windows without contacting the provider or writing evidence',
+    )
+    .option('--account-id <id>', 'Provider account/property/site identifier')
+    .option('--time-zone <zone>', 'Report window time zone')
+    .option('--api-version <version>', 'Provider API version override')
+    .option('--connection <id>', 'Canonical provider connection id')
+    .option('--max-pages <count>', 'Maximum API pages for each daily pull')
+    .option('--page-size <count>', 'Provider page size or row limit where supported')
+    .action(async (options: MarketingCliOptions) => {
+      await runMarketingCommand(options, marketingHistoryBackfill);
     });
 
   const schedule = marketing

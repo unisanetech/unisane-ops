@@ -23,9 +23,12 @@ export function registerSeoPerformanceCommands(seo: Command): void {
       .description('Import Google Search Console performance CSV export'),
   )
     .requiredOption('--input <path>', 'Search Console CSV file')
-    .requiredOption('--out <path>', 'Normalized SEO performance output path')
-    .option('--property <property>', 'Search Console property label')
-    .option('--date-range <range>', 'Source report date range label')
+    .option('--out <path>', 'Normalized SEO performance output path')
+    .requiredOption('--property <property>', 'Search Console property')
+    .requiredOption('--start-date <date>', 'Report start date in YYYY-MM-DD format')
+    .requiredOption('--end-date <date>', 'Report end date in YYYY-MM-DD format')
+    .requiredOption('--data-kind <kind>', 'Evidence kind: live or sample')
+    .option('--freshness-hours <hours>', 'Evidence freshness window')
     .option('--dry-run', 'Preview performance import without writing')
     .action(async (options: SeoPerformanceImportCliOptions) => {
       await runSeoCommand(options, seoPerformanceImportSearchConsole);
@@ -38,7 +41,7 @@ export function registerSeoPerformanceCommands(seo: Command): void {
   )
     .requiredOption('--start-date <date>', 'Start date in YYYY-MM-DD format')
     .requiredOption('--end-date <date>', 'End date in YYYY-MM-DD format')
-    .requiredOption('--out <path>', 'Normalized SEO performance output path')
+    .option('--out <path>', 'Normalized SEO performance output path')
     .option('--dimensions <list>', 'Comma-separated GA4 dimensions', 'landingPagePlusQueryString')
     .option(
       '--metrics <list>',
@@ -62,7 +65,7 @@ export function registerSeoPerformanceCommands(seo: Command): void {
   )
     .requiredOption('--start-date <date>', 'Start date in YYYY-MM-DD format')
     .requiredOption('--end-date <date>', 'End date in YYYY-MM-DD format')
-    .requiredOption('--out <path>', 'Normalized SEO performance output path')
+    .option('--out <path>', 'Normalized SEO performance output path')
     .option('--dimensions <list>', 'Comma-separated Search Console dimensions', 'query,page')
     .option('--row-limit <count>', 'Maximum rows to fetch')
     .option('--start-row <offset>', 'Zero-based Search Console start row')
@@ -80,9 +83,12 @@ export function registerSeoPerformanceCommands(seo: Command): void {
     performance.command('import-ga4').description('Import GA4 landing page performance CSV export'),
   )
     .requiredOption('--input <path>', 'GA4 CSV file')
-    .requiredOption('--out <path>', 'Normalized SEO performance output path')
-    .option('--property <property>', 'GA4 property label')
-    .option('--date-range <range>', 'Source report date range label')
+    .option('--out <path>', 'Normalized SEO performance output path')
+    .requiredOption('--property <property>', 'GA4 property id')
+    .requiredOption('--start-date <date>', 'Report start date in YYYY-MM-DD format')
+    .requiredOption('--end-date <date>', 'Report end date in YYYY-MM-DD format')
+    .requiredOption('--data-kind <kind>', 'Evidence kind: live or sample')
+    .option('--freshness-hours <hours>', 'Evidence freshness window')
     .option('--dry-run', 'Preview performance import without writing')
     .action(async (options: SeoPerformanceImportCliOptions) => {
       await runSeoCommand(options, seoPerformanceImportGa4);

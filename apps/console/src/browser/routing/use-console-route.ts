@@ -3,6 +3,7 @@ import type { MarketingConsoleState } from '@unisane/growth/console';
 import { resolveConsoleRoute } from '../../routes.js';
 import { readConsoleHomePath } from '../preferences.js';
 import { rememberHelpSource } from './help-context.js';
+import { pathWithRememberedTemporalQuery } from './use-console-temporal-query.js';
 
 export function useConsoleRoute(capabilities: MarketingConsoleState['capabilities']) {
   const [pathname, setPathname] = useState(() =>
@@ -34,12 +35,16 @@ export function useConsoleRoute(capabilities: MarketingConsoleState['capabilitie
       initialRender.current = false;
       return;
     }
-    const frame = requestAnimationFrame(() => document.querySelector<HTMLElement>('h1')?.focus());
+    const frame = requestAnimationFrame(() =>
+      document.querySelector<HTMLElement>('h1')?.focus({ preventScroll: true }),
+    );
     return () => cancelAnimationFrame(frame);
   }, [pathname, route.title]);
 
   function navigate(path: string) {
-    window.history.pushState({}, '', path);
+    const nextRoute = resolveConsoleRoute(path, capabilities);
+    const nextPath = pathWithRememberedTemporalQuery(path, nextRoute);
+    window.history.pushState({}, '', nextPath);
     setPathname(path);
   }
 

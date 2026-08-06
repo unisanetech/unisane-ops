@@ -1,0 +1,194 @@
+x-runtime: &runtime
+  image: ${OPS_HOSTED_TEST_IMAGE:-unisane-ops-hosted-runtime:integration}
+  build:
+    context: ../../..
+    dockerfile: unisane-ops/apps/hosted-runtime/Dockerfile
+    target: integration
+
+x-role: &role
+  <<: *runtime
+  init: true
+  read_only: true
+  tmpfs:
+    - /tmp:size=16m,mode=1777
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  secrets:
+    - postgres-url
+  environment:
+    OPS_HOSTED_POSTGRES_URL_FILE: /run/secrets/postgres-url
+    OPS_HOSTED_SHUTDOWN_MS: '10000'
+  stop_grace_period: 15s
+  networks:
+    - hosted
+
+x-postgres-tools: &postgres-tools
+  image: ${OPS_HOSTED_TEST_POSTGRES_TOOLS_IMAGE:-unisane-ops-postgres-tools:integration}
+  build:
+    context: ../../..
+    dockerfile: unisane-ops/deploy/hosted/postgres-tools/Dockerfile
+  read_only: true
+  tmpfs:
+    - /tmp:size=16m,mode=1777
+  cap_drop:
+    - ALL
+  security_opt:
+    - no-new-privileges:true
+  networks:
+    - hosted
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ops
+      POSTGRES_USER: ops
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-password
+    secrets:
+      - postgres-password
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ops -d ops']
+      interval: 2s
+      timeout: 2s
+      retries: 30
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - hosted
+
+  oidc:
+    <<: *runtime
+    command: ['node', 'test-fixtures/oidc-server.mjs']
+    environment:
+      OPS_HOSTED_TEST_OIDC_ISSUER: http://oidc:8090
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:8090/live').then((r)=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+    networks:
+      - hosted
+
+  migrate:
+    <<: *role
+    command: ['node', 'dist/bin/migrate.js']
+    depends_on:
+      postgres:
+        condition: service_healthy
+      oidc:
+        condition: service_healthy
+
+  gateway:
+    <<: *role
+    command: ['node', 'dist/bin/gateway.js']
+    environment:
+      OPS_HOSTED_POSTGRES_URL_FILE: /run/secrets/postgres-url
+      OPS_HOSTED_ROLE: gateway
+      OPS_HOSTED_HTTP_HOST: 0.0.0.0
+      OPS_HOSTED_HTTP_PORT: '8080'
+      OPS_HOSTED_OIDC_ISSUER: http://oidc:8090
+      OPS_HOSTED_OIDC_JWKS_URL: http://oidc:8090/jwks.json
+      OPS_HOSTED_SHUTDOWN_MS: '10000'
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      oidc:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:8080/ready').then((r)=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  worker:
+    <<: *role
+    command: ['node', 'dist/bin/worker.js']
+    environment:
+      OPS_HOSTED_POSTGRES_URL_FILE: /run/secrets/postgres-url
+      OPS_HOSTED_ROLE: worker
+      OPS_HOSTED_WORKER_ID: worker.container
+      OPS_HOSTED_ACTION_MODULE: /app/test-fixtures/hosted-actions.mjs
+      OPS_HOSTED_POLL_MS: '50'
+      OPS_HOSTED_SHUTDOWN_MS: '10000'
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ['CMD', 'node', 'dist/bin/probe.js']
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
+  verify:
+    <<: *runtime
+    command: ['node', 'test-fixtures/verify-container.mjs']
+    depends_on:
+      gateway:
+        condition: service_healthy
+      worker:
+        condition: service_healthy
+    networks:
+      - hosted
+
+  backup:
+    <<: *postgres-tools
+    command: ['sh', '/opt/unisane-ops/backup.sh']
+    environment:
+      OPS_HOSTED_POSTGRES_URL_FILE: /run/secrets/postgres-url
+      OPS_HOSTED_BACKUP_PATH: /backup/hosted.dump
+    secrets:
+      - postgres-url
+    volumes:
+      - postgres-backup:/backup
+
+  restore:
+    <<: *postgres-tools
+    command: ['sh', '/opt/unisane-ops/restore.sh']
+    environment:
+      OPS_HOSTED_RECOVERY_ADMIN_URL_FILE: /run/secrets/postgres-recovery-admin-url
+      OPS_HOSTED_BACKUP_PATH: /backup/hosted.dump
+      OPS_HOSTED_RECOVERY_DATABASE: ops_recovery
+    secrets:
+      - postgres-recovery-admin-url
+    volumes:
+      - postgres-backup:/backup:ro
+
+  verify-restore:
+    <<: *postgres-tools
+    command: ['sh', '/opt/unisane-ops/verify-restore.sh']
+    environment:
+      OPS_HOSTED_POSTGRES_URL_FILE: /run/secrets/postgres-url
+      OPS_HOSTED_RECOVERY_ADMIN_URL_FILE: /run/secrets/postgres-recovery-admin-url
+      OPS_HOSTED_RECOVERY_DATABASE: ops_recovery
+    secrets:
+      - postgres-url
+      - postgres-recovery-admin-url
+
+secrets:
+  postgres-password:
+    file: ${OPS_HOSTED_TEST_POSTGRES_PASSWORD_FILE:?set OPS_HOSTED_TEST_POSTGRES_PASSWORD_FILE}
+  postgres-url:
+    file: ${OPS_HOSTED_TEST_POSTGRES_URL_FILE:?set OPS_HOSTED_TEST_POSTGRES_URL_FILE}
+  postgres-recovery-admin-url:
+    file: ${OPS_HOSTED_TEST_POSTGRES_RECOVERY_ADMIN_URL_FILE:?set OPS_HOSTED_TEST_POSTGRES_RECOVERY_ADMIN_URL_FILE}
+
+networks:
+  hosted:
+
+volumes:
+  postgres-data:
+  postgres-backup:

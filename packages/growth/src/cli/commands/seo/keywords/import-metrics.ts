@@ -25,13 +25,17 @@ export async function seoKeywordsImportMetrics(
       cwd: options.cwd,
       platformId: options.platform,
     });
+    const primaryMarket = config.markets[0];
+    if (!primaryMarket) {
+      throw new Error('SEO research config must contain at least one target market.');
+    }
     const result = await importCsvKeywordMetrics({
       cwd: options.cwd,
       platformId: options.platform,
       input: options.input,
       output: options.out,
-      country: options.country ?? config.defaultCountry,
-      language: options.language ?? config.defaultLanguage,
+      country: options.country ?? primaryMarket.country,
+      language: options.language ?? primaryMarket.language,
       provider: keywordMetricProviderSchema.parse(options.provider ?? 'csv-import'),
       dryRun: options.dryRun,
     });

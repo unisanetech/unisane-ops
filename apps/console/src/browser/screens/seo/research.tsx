@@ -17,7 +17,11 @@ import {
 
 type ResearchView = 'clusters' | 'keywords' | 'markets' | 'questions' | 'competitors' | 'serp';
 
-export function SeoResearchScreen({ state }: ConsoleScreenProps) {
+export function SeoResearchScreen({
+  state,
+  openSupportingPane,
+  closeSupportingPane,
+}: ConsoleScreenProps) {
   const [view, setView] = useState<ResearchView>('clusters');
   const [search, setSearch] = useState('');
   const [market, setMarket] = useState('all');
@@ -71,7 +75,14 @@ export function SeoResearchScreen({ state }: ConsoleScreenProps) {
         </MetricGrid>
       </ContentSection>
       <ContentSection>
-        <Tabs value={view} size="sm" onValueChange={(value) => setView(value as ResearchView)}>
+        <Tabs
+          value={view}
+          size="sm"
+          onValueChange={(value) => {
+            closeSupportingPane();
+            setView(value as ResearchView);
+          }}
+        >
           <TabsList className="gap-1" aria-label="Research views">
             <TabsTrigger value="clusters">Clusters</TabsTrigger>
             <TabsTrigger value="keywords">All keywords</TabsTrigger>
@@ -149,7 +160,7 @@ export function SeoResearchScreen({ state }: ConsoleScreenProps) {
           title="Where to focus next"
           description="Start with clusters that combine meaningful demand, market fit, and a clear page or campaign use."
         >
-          <ClusterTable research={research} />
+          <ClusterTable research={research} openSupportingPane={openSupportingPane} />
         </ContentSection>
       ) : null}
       {view === 'markets' ? (
@@ -157,7 +168,7 @@ export function SeoResearchScreen({ state }: ConsoleScreenProps) {
           title="Market comparison"
           description="Compare provider-estimated demand before reusing the same keyword and content strategy in every country."
         >
-          <MarketTable research={research} />
+          <MarketTable research={research} openSupportingPane={openSupportingPane} />
         </ContentSection>
       ) : null}
       {view === 'questions' ? (
@@ -173,7 +184,10 @@ export function SeoResearchScreen({ state }: ConsoleScreenProps) {
           title="Competitor landscape"
           description="Patterns and gaps are drawn from recorded pages, not assumed from brand reputation."
         >
-          <CompetitorTables research={state.competitorResearch} />
+          <CompetitorTables
+            research={state.competitorResearch}
+            openSupportingPane={openSupportingPane}
+          />
         </ContentSection>
       ) : null}
       {view === 'serp' ? (
@@ -181,7 +195,10 @@ export function SeoResearchScreen({ state }: ConsoleScreenProps) {
           title="SERP and page experiments"
           description="Recorded result landscapes validate intent; proposed metadata remains a hypothesis until measured."
         >
-          <SerpTables intelligence={state.seoIntelligence} />
+          <SerpTables
+            intelligence={state.seoIntelligence}
+            openSupportingPane={openSupportingPane}
+          />
         </ContentSection>
       ) : null}
     </>

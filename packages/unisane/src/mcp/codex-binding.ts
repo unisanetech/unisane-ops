@@ -15,6 +15,8 @@ const SERVER_NAME = 'unisane_ops';
 const TOOL_NAMES = [
   'review_growth_health',
   'research_seo_opportunities',
+  'prepare_seo_implementation',
+  'verify_seo_publication',
   'audit_growth_measurement',
   'plan_campaign_pause',
   'review_campaign_pause',

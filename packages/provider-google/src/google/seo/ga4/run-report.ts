@@ -1,5 +1,10 @@
 import type { SeoPerformanceFile } from '@unisane/growth/contracts';
-import { seoPerformanceFileSchema } from '@unisane/growth/contracts';
+import {
+  createSeoPerformanceEvidence,
+  normalizeGa4Property,
+  seoPerformanceFileSchema,
+  type SeoPerformanceTargetMarket,
+} from '@unisane/growth/contracts';
 import type { FetchLike } from '../google-ads/transport.js';
 import { mapGa4RowsToPerformanceRecords, type Ga4ResponseRow } from './map-report.js';
 
@@ -7,6 +12,8 @@ export type RunGa4PerformanceReportOptions = {
   platformId: string;
   accessToken: string;
   propertyId: string;
+  configuredSiteUrl: string;
+  targetMarkets: SeoPerformanceTargetMarket[];
   startDate: string;
   endDate: string;
   dimensions: string[];
@@ -15,7 +22,8 @@ export type RunGa4PerformanceReportOptions = {
   offset?: number;
   maxRows?: number;
   fetchImpl?: FetchLike;
-  fetchedAt?: string;
+  observedAt?: string;
+  freshnessHours?: number;
 };
 
 export async function runGa4PerformanceReport(
@@ -26,17 +34,28 @@ export async function runGa4PerformanceReport(
   const rows = await fetchAllRows({ options, fetchImpl, accessToken });
 
   return seoPerformanceFileSchema.parse({
-    version: 1,
+    version: 2,
     platformId: options.platformId,
     source: 'ga4',
-    property: normalizePropertyName(options.propertyId),
-    dateRange: `${options.startDate}..${options.endDate}`,
+    siteUrl: options.configuredSiteUrl,
+    targetMarkets: options.targetMarkets,
+    property: normalizeGa4Property(options.propertyId),
+    dateRange: { startDate: options.startDate, endDate: options.endDate },
+    evidence: createSeoPerformanceEvidence({
+      acquisition: 'api',
+      sampleData: false,
+      observedAt: options.observedAt,
+      freshnessHours: options.freshnessHours,
+      limitations: [
+        'Target markets are project context; the provider report is not filtered by market.',
+        'Analytics conversions and revenue are provider-measured and are not canonical business outcomes.',
+      ],
+    }),
     records: mapGa4RowsToPerformanceRecords({
       rows,
       platformId: options.platformId,
       dimensions: options.dimensions,
       metrics: options.metrics,
-      fetchedAt: options.fetchedAt ?? new Date().toISOString(),
     }),
   });
 }
@@ -136,8 +155,7 @@ function readErrorMessage(payload: unknown): string {
 }
 
 function normalizePropertyName(propertyId: string): string {
-  const normalized = propertyId.trim();
-  return normalized.startsWith('properties/') ? normalized : `properties/${normalized}`;
+  return normalizeGa4Property(propertyId);
 }
 
 function clampLimit(value: number): number {

@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unisane-ops-hosted-gateway
+  labels:
+    app.kubernetes.io/name: unisane-ops-hosted
+    app.kubernetes.io/component: gateway
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: unisane-ops-hosted
+      app.kubernetes.io/component: gateway
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: unisane-ops-hosted
+        app.kubernetes.io/component: gateway
+    spec:
+      serviceAccountName: unisane-ops-hosted
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 35
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: gateway
+          image: unisane-ops-hosted-runtime
+          imagePullPolicy: IfNotPresent
+          command: ['node', 'dist/bin/gateway.js']
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: OPS_HOSTED_ROLE
+              value: gateway
+            - name: OPS_HOSTED_HTTP_HOST
+              value: 0.0.0.0
+            - name: OPS_HOSTED_HTTP_PORT
+              value: '8080'
+            - name: OPS_HOSTED_POSTGRES_URL_FILE
+              value: /run/secrets/database/postgres-url
+            - name: OPS_HOSTED_OIDC_ISSUER
+              valueFrom:
+                configMapKeyRef:
+                  name: unisane-ops-hosted
+                  key: oidc-issuer
+            - name: OPS_HOSTED_OIDC_JWKS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: unisane-ops-hosted
+                  key: oidc-jwks-url
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: '1'
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ['ALL']
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: database
+              mountPath: /run/secrets/database
+              readOnly: true
+      volumes:
+        - name: database
+          secret:
+            secretName: unisane-ops-hosted-database-gateway
+            items:
+              - key: postgres-url
+                path: postgres-url

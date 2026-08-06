@@ -26,6 +26,10 @@ export function printImportSeoPerformanceFileResult(
   log.kv('Output', result.output);
   log.kv('Platform', result.platformId);
   log.kv('Source', result.source);
+  log.kv('Site', result.siteUrl);
+  log.kv('Property', result.property);
+  log.kv('Data', result.sampleData ? 'Sample' : 'Live');
+  log.kv('Fresh until', result.freshUntil);
   log.kv('Pages', String(result.pageCount));
   log.kv('Queries', String(result.queryCount));
 }
@@ -47,6 +51,9 @@ export function printFetchGa4PerformanceFileResult(
   log.kv('Output', result.output);
   log.kv('Platform', result.platformId);
   log.kv('Property', result.propertyId);
+  log.kv('Site', result.configuredSiteUrl);
+  log.kv('Data', 'Live');
+  log.kv('Fresh until', result.freshUntil);
   log.kv('Date range', `${result.startDate}..${result.endDate}`);
   log.kv('Dimensions', result.dimensions.join(', '));
   log.kv('Metrics', result.metrics.join(', '));
@@ -69,7 +76,10 @@ export function printFetchSearchConsolePerformanceFileResult(
   );
   log.kv('Output', result.output);
   log.kv('Platform', result.platformId);
-  log.kv('Site URL', result.siteUrl);
+  log.kv('Property', result.siteUrl);
+  log.kv('Site', result.configuredSiteUrl);
+  log.kv('Data', 'Live');
+  log.kv('Fresh until', result.freshUntil);
   log.kv('Date range', `${result.startDate}..${result.endDate}`);
   log.kv('Dimensions', result.dimensions.join(', '));
   log.kv('Pages', String(result.pageCount));

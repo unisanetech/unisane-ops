@@ -1,7 +1,7 @@
 {
   "name": "@unisane/ops-hosted-postgresql",
   "version": "0.1.0",
-  "description": "PostgreSQL persistence for the Unisane Ops hosted runtime",
+  "description": "PostgreSQL job, schedule, and encrypted credential persistence for the Unisane Ops hosted runtime",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,

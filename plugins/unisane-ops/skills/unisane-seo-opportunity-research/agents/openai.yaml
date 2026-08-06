@@ -1,4 +1,4 @@
 interface:
-  display_name: 'Unisane SEO Research'
-  short_description: 'Find evidence-backed SEO priorities'
-  default_prompt: 'Use $unisane-seo-opportunity-research to find where we should focus next using recorded SEO evidence.'
+  display_name: 'Unisane SEO Workflow'
+  short_description: 'Research, prepare, and verify SEO work'
+  default_prompt: 'Use $unisane-seo-opportunity-research to research SEO priorities, prepare one selected opportunity, or verify an already recorded publication.'

@@ -1,9 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 import { OpsActionExecutionError } from '@unisane/ops-engine/actions';
 import type { HostedReadDispatchStore } from '@unisane/ops-hosted-postgresql';
-import { readHostedGatewayProcessConfig, readHostedWorkerProcessConfig } from './config.js';
+import {
+  readHostedGatewayProcessConfig,
+  readHostedSchedulerProcessConfig,
+  readHostedWorkerProcessConfig,
+} from './config.js';
 import { createHostedGatewayProcess } from './gateway-process.js';
 import type { HostedRoleEvent } from './observability.js';
+import { createHostedSchedulerProcess } from './scheduler-process.js';
 import { createHostedWorkerProcess } from './worker-process.js';
 
 function dispatchStore(overrides: Partial<HostedReadDispatchStore> = {}): HostedReadDispatchStore {
@@ -23,6 +28,8 @@ describe('hosted process configuration', () => {
       readHostedGatewayProcessConfig({
         OPS_HOSTED_ROLE: 'gateway',
         OPS_HOSTED_POSTGRES_URL: 'postgresql://example.invalid/ops',
+        OPS_HOSTED_OIDC_ISSUER: 'https://identity.example.com',
+        OPS_HOSTED_OIDC_JWKS_URL: 'https://identity.example.com/.well-known/jwks.json',
       }),
     ).toMatchObject({ OPS_HOSTED_ROLE: 'gateway' });
     expect(
@@ -30,6 +37,7 @@ describe('hosted process configuration', () => {
         OPS_HOSTED_ROLE: 'worker',
         OPS_HOSTED_POSTGRES_URL: 'postgresql://example.invalid/ops',
         OPS_HOSTED_WORKER_ID: 'worker.1',
+        OPS_HOSTED_ACTION_MODULE: './hosted-actions.mjs',
       }),
     ).toMatchObject({
       OPS_HOSTED_ROLE: 'worker',
@@ -37,6 +45,63 @@ describe('hosted process configuration', () => {
       OPS_HOSTED_LEASE_MS: 30_000,
     });
     expect(() => readHostedWorkerProcessConfig({ OPS_HOSTED_ROLE: 'worker' })).toThrow();
+    expect(
+      readHostedSchedulerProcessConfig({
+        OPS_HOSTED_ROLE: 'scheduler',
+        OPS_HOSTED_POSTGRES_URL: 'postgresql://example.invalid/ops',
+        OPS_HOSTED_SCHEDULER_ID: 'scheduler.1',
+      }),
+    ).toMatchObject({ OPS_HOSTED_ROLE: 'scheduler', OPS_HOSTED_LEASE_MS: 30_000 });
+  });
+});
+
+describe('hosted scheduler process', () => {
+  it('recovers expired claims and materializes one due occurrence without executing it', async () => {
+    const events: HostedRoleEvent[] = [];
+    const claim = {
+      occurrenceId: 'schedule.health.1785801600000',
+      dueAt: '2026-08-04T00:00:00.000Z',
+      fencingToken: 'scheduler.1.claim',
+      schedule: { scheduleId: 'schedule.health', revision: 1 },
+    };
+    const materialize = vi.fn(async () => ({
+      occurrenceId: claim.occurrenceId,
+      scheduleId: 'schedule.health',
+      dueAt: claim.dueAt,
+      nextDueAt: '2026-08-04T01:00:00.000Z',
+      request: {},
+    }));
+    const process = createHostedSchedulerProcess({
+      owner: 'scheduler.1',
+      pollMs: 1_000,
+      leaseMs: 30_000,
+      recoveryLimit: 100,
+      schedules: {
+        durability: 'durable',
+        atomicMaterialization: true,
+        save: vi.fn(),
+        recoverExpired: vi.fn(async () => 1),
+        claimDue: vi.fn(async () => claim),
+        materialize,
+      } as never,
+      probe: vi.fn(),
+      observer: {
+        emit(event) {
+          events.push(event);
+        },
+      },
+      now: () => new Date('2026-08-04T00:00:00.000Z'),
+    });
+
+    await expect(process.workOnce()).resolves.toBe(true);
+    expect(materialize).toHaveBeenCalledWith({
+      claim,
+      materializedAt: '2026-08-04T00:00:00.000Z',
+    });
+    expect(events.map((event) => event.kind)).toEqual([
+      'schedule.recovered',
+      'schedule.materialized',
+    ]);
   });
 });
 
@@ -45,7 +110,7 @@ describe('hosted gateway process', () => {
     const events: HostedRoleEvent[] = [];
     const transport = { serve: vi.fn(async () => {}) };
     const process = createHostedGatewayProcess({
-      gateway: { admit: vi.fn() },
+      gateway: { admit: vi.fn(), get: vi.fn() },
       transport,
       probe: vi.fn(async () => {}),
       observer: {

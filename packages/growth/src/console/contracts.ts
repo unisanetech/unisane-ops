@@ -103,6 +103,54 @@ export type MarketingConsoleTrendPoint = {
   label: string;
   value: number;
   currencyCode?: string;
+  startDate?: string;
+  endDate?: string;
+  provider?: MarketingReportProvider;
+  reportType?: MarketingProviderReportType;
+};
+
+export type MarketingConsoleHistorySeries = {
+  id: string;
+  label: string;
+  provider: MarketingReportProvider;
+  reportType: MarketingProviderReportType;
+  metric: string;
+  points: MarketingConsoleTrendPoint[];
+  coverage: {
+    status: 'none' | 'complete' | 'gapped' | 'partial';
+    earliestStartDate?: string;
+    latestEndDate?: string;
+    expectedDayCount: number;
+    coveredDayCount: number;
+    gapRanges: Array<{ startDate: string; endDate: string }>;
+    overlappingWindowCount: number;
+  };
+  comparison:
+    | {
+        status: 'available';
+        currentStartDate: string;
+        currentEndDate: string;
+        baselineStartDate: string;
+        baselineEndDate: string;
+        absoluteChange: number;
+        percentageChange?: number;
+      }
+    | { status: 'unavailable'; reason: string };
+};
+
+export type MarketingConsoleHistory = {
+  available: boolean;
+  catalogPath: string;
+  earliestStartDate?: string;
+  latestEndDate?: string;
+  retention: {
+    rawArtifactDays: number;
+    normalizedDailyMonths: number;
+    monthlyRollupMonths: number;
+    researchSnapshotMonths: number;
+  };
+  message: string;
+  series: MarketingConsoleHistorySeries[];
 };
 
 export type MarketingConsolePriorityLane =
@@ -539,12 +587,92 @@ export type MarketingConsoleSeoResearchIdea = {
   language?: string;
 };
 
+export type MarketingConsoleSeoWorkflowStage =
+  | 'research-required'
+  | 'approval-required'
+  | 'ready-to-prepare'
+  | 'prepared'
+  | 'waiting-to-verify'
+  | 'ready-to-verify'
+  | 'verified'
+  | 'needs-attention';
+
+export type MarketingConsoleSeoWorkflowItem = {
+  opportunityId: string;
+  stage: MarketingConsoleSeoWorkflowStage;
+  status: MarketingConsoleStatus;
+  stageLabel: string;
+  summary: string;
+  selectionReview?: {
+    routePath: string;
+    title: string;
+    h1: string;
+    metaDescription: string;
+    primaryKeyword: string;
+    supportingKeywords: string[];
+    sections: Array<{
+      heading: string;
+      purpose: string;
+      required: boolean;
+    }>;
+    internalLinks: Array<{
+      label: string;
+      path: string;
+    }>;
+    cta: {
+      label: string;
+      target: string;
+    };
+    rationale: string;
+  };
+  nextAction?: MarketingConsoleConnectionAction;
+  packet?: {
+    packetId: string;
+    preparedAt: string;
+    audience: 'content-team' | 'coding-agent';
+    jsonPath: string;
+    markdownPath: string;
+    baselineStatus: 'recorded' | 'not-available';
+    notBeforeDaysAfterPublication: number;
+    expiresDaysAfterPublication: number;
+  };
+  publication?: {
+    publicationId: string;
+    publishedUrl: string;
+    publishedAt: string;
+    recordedAt: string;
+    recordedBy: string;
+    path: string;
+    notBeforeAt: string;
+    expiresAt: string;
+  };
+  verification?: {
+    verificationId: string;
+    observedAt: string;
+    outcome:
+      | 'waiting'
+      | 'improved'
+      | 'declined'
+      | 'mixed'
+      | 'no-change'
+      | 'baseline-established'
+      | 'not-measurable';
+    windowState: 'waiting' | 'eligible' | 'late';
+    summary: string;
+    limitations: string[];
+    nextStep: string;
+    causalClaim: 'not-established';
+    path: string;
+  };
+};
+
 export type MarketingConsoleSeo = {
   sourceLabel: string;
   freshnessLabel: string;
   comparisonAvailable: boolean;
   comparisonLabel: string;
   opportunityReview: GrowthSeoOpportunityResearchOutput;
+  opportunityWorkflows: MarketingConsoleSeoWorkflowItem[];
   overview: {
     status: MarketingConsoleStatus;
     headline: string;
@@ -943,6 +1071,11 @@ export type MarketingConsoleArtifactLink = {
   status: MarketingConsoleStatus;
 };
 
+export type MarketingConsoleTemporalQuery = {
+  startDate: string;
+  endDate: string;
+};
+
 export type MarketingConsoleState = {
   kind: 'unisane.growth.console-state';
   version: 1;
@@ -957,6 +1090,9 @@ export type MarketingConsoleState = {
     label: string;
     startDate?: string;
     endDate?: string;
+    timeZone?: string;
+    status: 'available' | 'partial' | 'unavailable';
+    message?: string;
   };
   readiness: {
     status: MarketingConsoleStatus;
@@ -967,6 +1103,7 @@ export type MarketingConsoleState = {
   metrics: MarketingConsoleMetric[];
   overview: MarketingConsoleOverview;
   priorities: MarketingConsolePriority[];
+  history: MarketingConsoleHistory;
   trends: {
     spend: MarketingConsoleTrendPoint[];
     conversions: MarketingConsoleTrendPoint[];

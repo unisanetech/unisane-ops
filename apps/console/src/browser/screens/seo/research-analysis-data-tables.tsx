@@ -1,17 +1,19 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import type { MarketingConsoleState } from '@unisane/growth/console';
 import type { Column } from '@unisane/data-table';
 import { Badge } from '@unisane/ui/badge';
+import type { ConsoleScreenProps } from '../../contracts.js';
+import { ConsoleDataTable } from '../../shared/console-data-table.js';
 import {
   DataTableListPreview,
   DataTablePrimaryText,
   DataTableWrappedText,
-  ExpandedDataInlineList,
-  ExpandedDataList,
-  ExpandedDataSection,
-  ExpandedDataTableRow,
 } from '../../shared/data-table-content.js';
-import { NarrativeDataTable } from '../../shared/narrative-data-table.js';
+import {
+  CompetitorResearchDetailsPane,
+  MetadataExperimentDetailsPane,
+  SerpResearchDetailsPane,
+} from './research-detail-panes.js';
 
 type CompetitorResearch = MarketingConsoleState['competitorResearch'];
 type SeoIntelligence = MarketingConsoleState['seoIntelligence'];
@@ -19,7 +21,14 @@ type CompetitorRow = CompetitorResearch['domains'][number] & { id: string };
 type SerpRow = SeoIntelligence['serp']['snapshots'][number];
 type MetadataRow = SeoIntelligence['metadata']['experiments'][number];
 
-export function CompetitorAnalysisDataTable({ research }: { research: CompetitorResearch }) {
+export function CompetitorAnalysisDataTable({
+  research,
+  openSupportingPane,
+}: {
+  research: CompetitorResearch;
+  openSupportingPane: ConsoleScreenProps['openSupportingPane'];
+}) {
+  const [selectedRowId, setSelectedRowId] = useState<string>();
   const rows = useMemo<CompetitorRow[]>(
     () => research.domains.map((item) => ({ ...item, id: item.domain })),
     [research.domains],
@@ -77,35 +86,39 @@ export function CompetitorAnalysisDataTable({ research }: { research: Competitor
     ],
     [],
   );
+  const showCompetitorDetails = (row: CompetitorRow) => {
+    setSelectedRowId(row.id);
+    openSupportingPane({
+      id: `seo.competitor.${row.id}`,
+      title: row.domain,
+      subtitle: `${row.pageCount} recorded page${row.pageCount === 1 ? '' : 's'} · ${row.keywordCount} keyword${row.keywordCount === 1 ? '' : 's'}`,
+      content: <CompetitorResearchDetailsPane competitor={row} />,
+      onClose: () => setSelectedRowId(undefined),
+    });
+  };
 
   return (
-    <NarrativeDataTable
+    <ConsoleDataTable
       tableId="ops-seo-competitor-landscape"
       data={rows}
       columns={columns}
       emptyMessage="No competitor domains were recorded"
       emptyIcon="travel_explore"
-      renderExpandedRow={(row) => (
-        <ExpandedDataTableRow
-          title={`${row.domain} analysis`}
-          description="Complete recorded patterns and evidence-backed opportunities for this domain."
-        >
-          <ExpandedDataSection title="Content patterns">
-            <ExpandedDataInlineList items={row.topPatterns} />
-          </ExpandedDataSection>
-          <ExpandedDataSection title="Opportunities">
-            <ExpandedDataList
-              items={row.opportunities}
-              emptyMessage="No specific opportunity was supported for this domain."
-            />
-          </ExpandedDataSection>
-        </ExpandedDataTableRow>
-      )}
+      activeRowId={selectedRowId}
+      callbacks={{ onRowClick: showCompetitorDetails }}
     />
   );
 }
 
-export function SerpLandscapeDataTable({ intelligence }: { intelligence: SeoIntelligence }) {
+export function SerpLandscapeDataTable({
+  intelligence,
+  activeRowId,
+  onSelect,
+}: {
+  intelligence: SeoIntelligence;
+  activeRowId?: string;
+  onSelect: (row: SerpRow) => void;
+}) {
   const columns = useMemo<Column<SerpRow>[]>(
     () => [
       {
@@ -150,36 +163,27 @@ export function SerpLandscapeDataTable({ intelligence }: { intelligence: SeoInte
   );
 
   return (
-    <NarrativeDataTable
+    <ConsoleDataTable
       tableId="ops-seo-serp-landscapes"
       data={intelligence.serp.snapshots}
       columns={columns}
       emptyMessage="No search-result landscape was recorded"
       emptyIcon="manage_search"
-      renderExpandedRow={(row) => (
-        <ExpandedDataTableRow
-          title={`${row.keyword} search landscape`}
-          description={`${row.country} · ${row.language} · Complete recorded evidence.`}
-        >
-          <ExpandedDataSection title="Observed intent" span="full">
-            <p>{row.intent}</p>
-          </ExpandedDataSection>
-          <ExpandedDataSection title="Top domains">
-            <ExpandedDataInlineList items={row.topDomains} />
-          </ExpandedDataSection>
-          <ExpandedDataSection title="People also ask">
-            <ExpandedDataList items={row.peopleAlsoAsk} />
-          </ExpandedDataSection>
-          <ExpandedDataSection title="Opportunities">
-            <ExpandedDataList items={row.opportunities} />
-          </ExpandedDataSection>
-        </ExpandedDataTableRow>
-      )}
+      activeRowId={activeRowId}
+      callbacks={{ onRowClick: onSelect }}
     />
   );
 }
 
-export function MetadataExperimentsDataTable({ intelligence }: { intelligence: SeoIntelligence }) {
+export function MetadataExperimentsDataTable({
+  intelligence,
+  activeRowId,
+  onSelect,
+}: {
+  intelligence: SeoIntelligence;
+  activeRowId?: string;
+  onSelect: (row: MetadataRow) => void;
+}) {
   const columns = useMemo<Column<MetadataRow>[]>(
     () => [
       {
@@ -227,25 +231,42 @@ export function MetadataExperimentsDataTable({ intelligence }: { intelligence: S
   );
 
   return (
-    <NarrativeDataTable
+    <ConsoleDataTable
       tableId="ops-seo-metadata-experiments"
       data={intelligence.metadata.experiments}
       columns={columns}
       emptyMessage="No metadata experiment was recorded"
       emptyIcon="experiment"
-      renderExpandedRow={(row) => (
-        <ExpandedDataTableRow
-          title={row.proposedTitle}
-          description={`${row.routePath} · ${row.primaryKeyword}`}
-        >
-          <ExpandedDataSection title="Rationale">
-            <p>{row.rationale}</p>
-          </ExpandedDataSection>
-          <ExpandedDataSection title="Expected impact">
-            <p>{row.expectedImpact}</p>
-          </ExpandedDataSection>
-        </ExpandedDataTableRow>
-      )}
+      activeRowId={activeRowId}
+      callbacks={{ onRowClick: onSelect }}
     />
   );
+}
+
+export function openSerpDetailsPane(
+  row: SerpRow,
+  openSupportingPane: ConsoleScreenProps['openSupportingPane'],
+  onClose: () => void,
+) {
+  openSupportingPane({
+    id: `seo.serp.${row.id}`,
+    title: row.keyword,
+    subtitle: `${row.country} · ${row.language} · Recorded search landscape`,
+    content: <SerpResearchDetailsPane snapshot={row} />,
+    onClose,
+  });
+}
+
+export function openMetadataDetailsPane(
+  row: MetadataRow,
+  openSupportingPane: ConsoleScreenProps['openSupportingPane'],
+  onClose: () => void,
+) {
+  openSupportingPane({
+    id: `seo.metadata.${row.id}`,
+    title: row.routePath,
+    subtitle: `${row.priority.toUpperCase()} · Proposed metadata experiment`,
+    content: <MetadataExperimentDetailsPane experiment={row} />,
+    onClose,
+  });
 }

@@ -7,7 +7,7 @@ import { CardGrid } from '@unisane/ui/card-grid';
 import { Icon } from '@unisane/ui/icon';
 import { PageSection } from '@unisane/ui/page-section';
 import { Typography } from '@unisane/ui/typography';
-import { humanize, statusColor } from '../lib/format.js';
+import { statusColor } from '../lib/format.js';
 import type { ConsoleRoute } from '../../routes.js';
 
 export type PageDensity = 'reading' | 'standard' | 'data-dense';
@@ -30,43 +30,21 @@ export function PageContent({
   );
 }
 
-export function PageHeader({
-  actions,
-  route,
-  state,
-}: {
-  actions?: ReactNode;
-  route: ConsoleRoute;
-  state: MarketingConsoleState;
-}) {
+export function PageHeader({ route }: { route: ConsoleRoute; state: MarketingConsoleState }) {
   return (
-    <PageSection rhythm="none" className="medium:py-5 flex shrink-0 justify-center py-4">
-      <div className="flex w-full flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-        <div className="min-w-0">
-          <Typography
-            variant="headlineMedium"
-            component="h1"
-            className="font-semibold tracking-tight"
-            tabIndex={-1}
-          >
-            {route.title}
-          </Typography>
-          <Typography variant="bodyLarge" className="text-on-surface-variant mt-1.5 max-w-4xl">
-            {route.description}
-          </Typography>
-          <Typography
-            variant="labelMedium"
-            className="text-on-surface-variant mt-2 flex flex-wrap items-center gap-x-3 gap-y-1"
-          >
-            <span className="whitespace-nowrap">
-              {humanize(state.platformId)} · {humanize(state.environment)}
-            </span>
-            {route.timeAnalysis ? (
-              <span className="whitespace-nowrap">{state.dateWindow.label}</span>
-            ) : null}
-          </Typography>
-        </div>
-        {actions}
+    <PageSection rhythm="none" className="medium:pt-5 flex shrink-0 justify-center pt-4 pb-2">
+      <div className="w-full min-w-0">
+        <Typography
+          variant="headlineMedium"
+          component="h1"
+          className="font-semibold tracking-tight focus:outline-none"
+          tabIndex={-1}
+        >
+          {route.title}
+        </Typography>
+        <Typography variant="bodyLarge" className="text-on-surface-variant mt-1.5 max-w-4xl">
+          {route.description}
+        </Typography>
       </div>
     </PageSection>
   );
@@ -232,6 +210,7 @@ export function InsightCard({
   actionLabel,
   onAction,
   density = 'comfortable',
+  selected = false,
 }: {
   badge?: string;
   tone?: InsightTone;
@@ -242,12 +221,16 @@ export function InsightCard({
   actionLabel?: string;
   onAction?: () => void;
   density?: 'compact' | 'comfortable';
+  selected?: boolean;
 }) {
   return (
     <Card
       variant="outlined"
       padding="md"
-      className={density === 'comfortable' ? 'min-h-48' : undefined}
+      className={
+        `${density === 'comfortable' ? 'min-h-48' : ''}${selected ? 'border-primary bg-surface-container-low shadow-1' : ''}`.trim() ||
+        undefined
+      }
     >
       {badge ? (
         <div>

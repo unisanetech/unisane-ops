@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { MarketingProviderReportArtifact, MarketingReportProvider } from '../schema/report.js';
+import { recordMarketingHistoryArtifact } from '../history/catalog.js';
 import { providerLatestPullPath, providerPullCacheDir } from './paths.js';
 
 export type MarketingProviderCacheWriteResult = {
@@ -12,6 +13,8 @@ export type MarketingProviderCacheWriteResult = {
   recordCount: number;
   pulledAt: string;
   window: MarketingProviderReportArtifact['window'];
+  historyObservationId: string;
+  historyCatalogPath: string;
 };
 
 function safeTimestamp(iso: string): string {
@@ -29,6 +32,12 @@ export function cacheMarketingProviderReportArtifact(
   const serialized = `${JSON.stringify(artifact, null, 2)}\n`;
   writeFileSync(outputPath, serialized, 'utf8');
   writeFileSync(latestPath, serialized, 'utf8');
+  const history = recordMarketingHistoryArtifact({
+    cwd,
+    artifact,
+    artifactPath: outputPath,
+    serialized,
+  });
   return {
     ok: true,
     provider: artifact.provider,
@@ -38,5 +47,7 @@ export function cacheMarketingProviderReportArtifact(
     recordCount: artifact.records.length,
     pulledAt: artifact.pulledAt,
     window: artifact.window,
+    historyObservationId: history.observation.id,
+    historyCatalogPath: history.catalogPath,
   };
 }

@@ -97,6 +97,28 @@ export const growthSeoOpportunityToolInputSchema = resumableProjectTarget
   })
   .strict();
 
+export const growthSeoImplementationPrepareToolInputSchema = projectTarget
+  .extend({
+    opportunityId: stableId.describe('Exact approved opportunity id returned by SEO research.'),
+    audience: z.enum(['content-team', 'coding-agent']).default('coding-agent'),
+    notBeforeDaysAfterPublication: z.number().int().min(1).max(90).default(14),
+    expiresDaysAfterPublication: z.number().int().min(2).max(180).default(28),
+  })
+  .strict()
+  .refine((input) => input.expiresDaysAfterPublication > input.notBeforeDaysAfterPublication, {
+    message: 'expiresDaysAfterPublication must be after notBeforeDaysAfterPublication',
+    path: ['expiresDaysAfterPublication'],
+  });
+
+export const growthSeoPublicationVerifyToolInputSchema = projectTarget
+  .extend({
+    publicationId: stableId.describe(
+      'Exact publication id from an already human-recorded publication artifact.',
+    ),
+    maxAgeDays: z.number().int().min(1).max(90).default(30),
+  })
+  .strict();
+
 export const growthMeasurementAuditToolInputSchema = resumableProjectTarget
   .extend({
     startDate: date.optional(),
@@ -141,6 +163,12 @@ export const growthCampaignPauseVerifyToolInputSchema = projectTarget.extend({ r
 
 export type GrowthHealthReviewToolInput = z.infer<typeof growthHealthReviewToolInputSchema>;
 export type GrowthSeoOpportunityToolInput = z.infer<typeof growthSeoOpportunityToolInputSchema>;
+export type GrowthSeoImplementationPrepareToolInput = z.infer<
+  typeof growthSeoImplementationPrepareToolInputSchema
+>;
+export type GrowthSeoPublicationVerifyToolInput = z.infer<
+  typeof growthSeoPublicationVerifyToolInputSchema
+>;
 export type GrowthMeasurementAuditToolInput = z.infer<typeof growthMeasurementAuditToolInputSchema>;
 export type GrowthCampaignPausePlanToolInput = z.infer<
   typeof growthCampaignPausePlanToolInputSchema
@@ -173,6 +201,15 @@ export type OpsMcpGrowthExecutors = {
 };
 
 export type OpsMcpGrowthWorkflows = {
+  seoOpportunity: {
+    prepare(input: {
+      opportunityId: string;
+      audience: 'content-team' | 'coding-agent';
+      notBeforeDaysAfterPublication: number;
+      expiresDaysAfterPublication: number;
+    }): Promise<Record<string, unknown>>;
+    verify(input: { publicationId: string; maxAgeDays: number }): Promise<Record<string, unknown>>;
+  };
   campaignPause: GrowthCampaignPauseWorkflow;
 };
 

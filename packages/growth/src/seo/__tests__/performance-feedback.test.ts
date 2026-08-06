@@ -3,6 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  configureSeoResearchWorkspace,
   generateSeoPerformanceReportFile,
   importSeoPerformanceFile,
   renderSeoPerformanceReport,
@@ -14,6 +15,7 @@ describe('SEO performance feedback', () => {
   it('imports Google Search Console CSV exports into normalized performance records', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'unisane-search-console-'));
     try {
+      await configurePerformanceWorkspace(cwd);
       await writeFile(
         join(cwd, 'gsc.csv'),
         [
@@ -28,8 +30,11 @@ describe('SEO performance feedback', () => {
         source: 'google-search-console',
         input: 'gsc.csv',
         output: 'normalized/gsc.json',
-        property: 'https://true-resume.test',
-        dateRange: 'last-28-days',
+        property: 'https://true-resume.test/',
+        startDate: '2026-04-19',
+        endDate: '2026-05-16',
+        sampleData: false,
+        now: () => new Date('2026-05-17T00:00:00.000Z'),
       });
       const artifact = JSON.parse(await readFile(join(cwd, 'normalized/gsc.json'), 'utf8'));
 
@@ -46,6 +51,16 @@ describe('SEO performance feedback', () => {
         ctr: 0.035,
         position: 4.2,
       });
+      expect(artifact).toMatchObject({
+        version: 2,
+        siteUrl: 'https://true-resume.test/',
+        property: 'https://true-resume.test/',
+        evidence: {
+          acquisition: 'csv-import',
+          sampleData: false,
+          observedAt: '2026-05-17T00:00:00.000Z',
+        },
+      });
     } finally {
       await rm(cwd, { recursive: true, force: true });
     }
@@ -54,6 +69,7 @@ describe('SEO performance feedback', () => {
   it('imports GA4 landing page CSV exports into normalized performance records', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'unisane-ga4-'));
     try {
+      await configurePerformanceWorkspace(cwd);
       await writeFile(
         join(cwd, 'ga4.csv'),
         [
@@ -68,6 +84,10 @@ describe('SEO performance feedback', () => {
         source: 'ga4',
         input: 'ga4.csv',
         output: 'normalized/ga4.json',
+        property: 'properties/123456',
+        startDate: '2026-04-19',
+        endDate: '2026-05-16',
+        sampleData: true,
       });
       const artifact = JSON.parse(await readFile(join(cwd, 'normalized/ga4.json'), 'utf8'));
 
@@ -80,9 +100,10 @@ describe('SEO performance feedback', () => {
         pagePath: '/resume-examples/data-analyst',
         sessions: 320,
         users: 210,
-        conversions: 12,
-        revenue: 49.5,
+        analyticsConversions: 12,
+        analyticsRevenue: 49.5,
       });
+      expect(artifact.evidence.sampleData).toBe(true);
     } finally {
       await rm(cwd, { recursive: true, force: true });
     }
@@ -91,6 +112,7 @@ describe('SEO performance feedback', () => {
   it('supports dry-run import without writing output', async () => {
     const cwd = await mkdtemp(join(tmpdir(), 'unisane-performance-dry-run-'));
     try {
+      await configurePerformanceWorkspace(cwd);
       await writeFile(
         join(cwd, 'gsc.csv'),
         ['Query,Page,Clicks', 'resume examples,/resume-examples,10'].join('\n'),
@@ -102,10 +124,40 @@ describe('SEO performance feedback', () => {
         source: 'google-search-console',
         input: 'gsc.csv',
         output: 'normalized/gsc.json',
+        property: 'https://true-resume.test/',
+        startDate: '2026-04-19',
+        endDate: '2026-05-16',
+        sampleData: false,
         dryRun: true,
       });
 
       await expect(stat(join(cwd, 'normalized/gsc.json'))).rejects.toThrow();
+    } finally {
+      await rm(cwd, { recursive: true, force: true });
+    }
+  });
+
+  it('rejects evidence from a provider resource outside the configured site context', async () => {
+    const cwd = await mkdtemp(join(tmpdir(), 'unisane-performance-mismatch-'));
+    try {
+      await configurePerformanceWorkspace(cwd);
+      await writeFile(
+        join(cwd, 'gsc.csv'),
+        ['Query,Page,Clicks', 'resume examples,/resume-examples,10'].join('\n'),
+      );
+
+      await expect(
+        importSeoPerformanceFile({
+          cwd,
+          platformId: 'true-resume',
+          source: 'google-search-console',
+          input: 'gsc.csv',
+          property: 'sc-domain:other.test',
+          startDate: '2026-04-19',
+          endDate: '2026-05-16',
+          sampleData: false,
+        }),
+      ).rejects.toThrow('does not match the configured resource');
     } finally {
       await rm(cwd, { recursive: true, force: true });
     }
@@ -121,8 +173,21 @@ describe('SEO performance feedback', () => {
     expect(markdown).toContain('# SEO Performance Report: true-resume');
     expect(markdown).toContain('- data analyst resume example: 42 clicks, 1200 impressions');
     expect(markdown).toContain(
-      '- Data Analyst Resume Examples (built/p0): 42 clicks, 1200 impressions, 320 sessions, 12 conversions',
+      '- Data Analyst Resume Examples (built/p0): 42 clicks, 1200 impressions, 320 sessions, 12 Analytics conversions',
     );
+    expect(markdown).toContain('Search Console evidence: api; live; fresh until');
+  });
+
+  it('rejects report inputs from different sites', () => {
+    const ga4File = createGa4File();
+    ga4File.siteUrl = 'https://other.test/';
+
+    expect(() =>
+      renderSeoPerformanceReport({
+        searchConsoleFile: createSearchConsoleFile(),
+        ga4File,
+      }),
+    ).toThrow('same platform and site');
   });
 
   it('writes a performance report artifact', async () => {
@@ -158,9 +223,14 @@ describe('SEO performance feedback', () => {
 
 function createSearchConsoleFile(): SeoPerformanceFile {
   return {
-    version: 1,
+    version: 2,
     platformId: 'true-resume',
     source: 'google-search-console',
+    siteUrl: 'https://true-resume.test/',
+    targetMarkets: [{ country: 'US', language: 'en' }],
+    property: 'https://true-resume.test/',
+    dateRange: { startDate: '2026-04-19', endDate: '2026-05-16' },
+    evidence: createEvidence(),
     records: [
       {
         id: 'perf-gsc',
@@ -172,7 +242,6 @@ function createSearchConsoleFile(): SeoPerformanceFile {
         impressions: 1200,
         ctr: 0.035,
         position: 4.2,
-        fetchedAt: '2026-05-17T00:00:00.000Z',
       },
     ],
   };
@@ -180,9 +249,14 @@ function createSearchConsoleFile(): SeoPerformanceFile {
 
 function createGa4File(): SeoPerformanceFile {
   return {
-    version: 1,
+    version: 2,
     platformId: 'true-resume',
     source: 'ga4',
+    siteUrl: 'https://true-resume.test/',
+    targetMarkets: [{ country: 'US', language: 'en' }],
+    property: 'properties/123456',
+    dateRange: { startDate: '2026-04-19', endDate: '2026-05-16' },
+    evidence: createEvidence(),
     records: [
       {
         id: 'perf-ga4',
@@ -191,12 +265,34 @@ function createGa4File(): SeoPerformanceFile {
         pagePath: '/resume-examples/data-analyst',
         sessions: 320,
         users: 210,
-        conversions: 12,
-        revenue: 49.5,
-        fetchedAt: '2026-05-17T00:00:00.000Z',
+        analyticsConversions: 12,
+        analyticsRevenue: 49.5,
       },
     ],
   };
+}
+
+function createEvidence(): SeoPerformanceFile['evidence'] {
+  return {
+    acquisition: 'api',
+    sampleData: false,
+    observedAt: '2026-05-17T00:00:00.000Z',
+    freshUntil: '2026-05-18T00:00:00.000Z',
+    limitations: [],
+  };
+}
+
+async function configurePerformanceWorkspace(cwd: string): Promise<void> {
+  await configureSeoResearchWorkspace({
+    cwd,
+    platformId: 'true-resume',
+    siteUrl: 'https://true-resume.test/',
+    markets: [{ country: 'US', language: 'en' }],
+    ownershipConfirmed: true,
+    searchConsoleProperty: 'https://true-resume.test/',
+    ga4Property: '123456',
+    now: () => new Date('2026-05-16T00:00:00.000Z'),
+  });
 }
 
 function createOpportunityFile(): PageOpportunityFile {

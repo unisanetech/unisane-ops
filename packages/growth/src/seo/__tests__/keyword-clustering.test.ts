@@ -18,7 +18,6 @@ describe('groupKeywordClusters', () => {
       version: 1,
       platformId: 'true-resume',
       sourcePatternPack: 'resume-examples',
-      metricSource: 'csv-import',
     });
     expect(clusters.clusters).toHaveLength(2);
     expect(clusters.clusters[0]).toMatchObject({
@@ -29,6 +28,15 @@ describe('groupKeywordClusters', () => {
       pageType: 'role-page',
       status: 'candidate',
       totalVolume: 1770,
+      metricEvidence: {
+        provider: 'csv-import',
+        country: 'US',
+        language: 'en',
+        observedAt: '2026-05-17T00:00:00.000Z',
+        matchedMetricCount: 4,
+        keywordCount: 4,
+        sampleData: false,
+      },
     });
     expect(clusters.clusters[0]?.secondaryKeywords).toEqual([
       'data analyst resume',
@@ -59,6 +67,14 @@ describe('groupKeywordClusters', () => {
         },
       }),
     ).toThrow('does not match candidate platform');
+  });
+
+  it('rejects metrics that do not match the declared file market', () => {
+    const metricFile = createMetricFile();
+    metricFile.metrics[0] = { ...metricFile.metrics[0]!, country: 'IN' };
+    expect(() =>
+      groupKeywordClusters({ candidateFile: createCandidateFile(), metricFile }),
+    ).toThrow('does not match file market US/en');
   });
 });
 

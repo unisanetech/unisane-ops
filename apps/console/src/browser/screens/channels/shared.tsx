@@ -17,9 +17,18 @@ export function ChannelMetrics({
     .map((id) => metrics.find((metric) => metric.id === id))
     .filter((metric): metric is MarketingConsoleMetric => metric !== undefined);
   if (!selected.length) return null;
+  const comparisonUnavailable = selected.some((metric) =>
+    /not available|without a previous-period baseline/i.test(metric.comparisonLabel),
+  );
   return (
-    <ContentSection>
-      <MetricGrid>
+    <ContentSection
+      description={
+        comparisonUnavailable
+          ? 'Showing the selected period. Add a previous period to see what changed.'
+          : undefined
+      }
+    >
+      <MetricGrid layout="four-up">
         {selected.map((metric) => (
           <MetricCard
             key={metric.id}
@@ -28,7 +37,9 @@ export function ChannelMetrics({
             helper={metric.definition}
             context={`${metric.sourceLabel} · ${metric.freshnessLabel}`}
             comparison={
-              metric.comparisonLabel.includes('not available') ? undefined : metric.comparisonLabel
+              /not available|without a previous-period baseline/i.test(metric.comparisonLabel)
+                ? undefined
+                : metric.comparisonLabel
             }
           />
         ))}

@@ -309,6 +309,10 @@ function campaignResult(
 
 function workflows() {
   return {
+    seoOpportunity: {
+      prepare: vi.fn(async () => ({ kind: 'seo-implementation-packet' })),
+      verify: vi.fn(async () => ({ kind: 'seo-publication-verification' })),
+    },
     campaignPause: {
       plan: vi.fn(async () => campaignResult()),
       show: vi.fn(async () => campaignResult()),
@@ -372,7 +376,7 @@ describe('local Ops MCP server', () => {
     });
   });
 
-  it('advertises read-only workflows and the separated campaign-pause lifecycle', async () => {
+  it('advertises bounded local artifacts and the separated campaign-pause lifecycle', async () => {
     const { client } = await harness();
     const result = await client.listTools();
     expect(result.tools.map((tool) => tool.name)).toEqual(OPS_MCP_TOOL_NAMES);
@@ -382,6 +386,22 @@ describe('local Ops MCP server', () => {
       readOnlyHint: true,
       destructiveHint: false,
       idempotentHint: true,
+      openWorldHint: false,
+    });
+    expect(
+      result.tools.find((tool) => tool.name === 'prepare_seo_implementation')?.annotations,
+    ).toMatchObject({
+      readOnlyHint: false,
+      destructiveHint: false,
+      idempotentHint: false,
+      openWorldHint: false,
+    });
+    expect(
+      result.tools.find((tool) => tool.name === 'verify_seo_publication')?.annotations,
+    ).toMatchObject({
+      readOnlyHint: false,
+      destructiveHint: false,
+      idempotentHint: false,
       openWorldHint: false,
     });
     expect(
@@ -404,6 +424,45 @@ describe('local Ops MCP server', () => {
       openWorldHint: true,
     });
     expect(result.tools.some((tool) => tool.name === 'approve_campaign_pause')).toBe(false);
+    expect(result.tools.some((tool) => tool.name === 'record_seo_publication')).toBe(false);
+  });
+
+  it('prepares and verifies only exact bound SEO artifacts', async () => {
+    const customWorkflows = workflows();
+    const { client } = await harness(binding(), executors(), customWorkflows);
+    const prepared = await client.callTool({
+      name: 'prepare_seo_implementation',
+      arguments: {
+        projectId,
+        environmentId,
+        opportunityId: 'opportunity.templates',
+        audience: 'coding-agent',
+        notBeforeDaysAfterPublication: 14,
+        expiresDaysAfterPublication: 28,
+      },
+    });
+    expect(prepared.isError).not.toBe(true);
+    expect(customWorkflows.seoOpportunity.prepare).toHaveBeenCalledWith({
+      opportunityId: 'opportunity.templates',
+      audience: 'coding-agent',
+      notBeforeDaysAfterPublication: 14,
+      expiresDaysAfterPublication: 28,
+    });
+
+    const verified = await client.callTool({
+      name: 'verify_seo_publication',
+      arguments: {
+        projectId,
+        environmentId,
+        publicationId: 'publication.templates',
+        maxAgeDays: 21,
+      },
+    });
+    expect(verified.isError).not.toBe(true);
+    expect(customWorkflows.seoOpportunity.verify).toHaveBeenCalledWith({
+      publicationId: 'publication.templates',
+      maxAgeDays: 21,
+    });
   });
 
   it('binds campaign planning and approved apply to the target and agent principal', async () => {
@@ -505,6 +564,23 @@ describe('local Ops MCP server', () => {
     });
     expect(result.isError).toBe(true);
     expect(customExecutors.auditMeasurement).not.toHaveBeenCalled();
+  });
+
+  it('rejects arbitrary paths and publication confirmation fields from SEO artifact tools', async () => {
+    const customWorkflows = workflows();
+    const { client } = await harness(binding(), executors(), customWorkflows);
+    const result = await client.callTool({
+      name: 'verify_seo_publication',
+      arguments: {
+        projectId,
+        environmentId,
+        publicationId: 'publication.templates',
+        publicationPath: '/tmp/publication.json',
+        confirmedReviewed: true,
+      },
+    });
+    expect(result.isError).toBe(true);
+    expect(customWorkflows.seoOpportunity.verify).not.toHaveBeenCalled();
   });
 
   it('blocks oversized and secret-bearing executor output', async () => {

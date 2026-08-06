@@ -75,7 +75,7 @@ test('writes a new project-scoped binding with exact target and tool bounds', ()
   assert.match(config, /"--actor","codex\.local"/);
   assert.match(
     config,
-    /enabled_tools = \["review_growth_health","research_seo_opportunities","audit_growth_measurement","plan_campaign_pause","review_campaign_pause","apply_approved_campaign_pause","verify_campaign_pause"\]/,
+    /enabled_tools = \["review_growth_health","research_seo_opportunities","prepare_seo_implementation","verify_seo_publication","audit_growth_measurement","plan_campaign_pause","review_campaign_pause","apply_approved_campaign_pause","verify_campaign_pause"\]/,
   );
 
   const removed = run([

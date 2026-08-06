@@ -7,7 +7,6 @@ export type MapSeoPerformanceCsvOptions = {
   platformId: string;
   source: SeoPerformanceSource;
   sourceFile?: string;
-  fetchedAt?: string;
 };
 
 const pageColumns = ['page', 'page path', 'page path + query string', 'landing page', 'url'];
@@ -22,7 +21,6 @@ const conversionColumns = ['conversions', 'key events'];
 const revenueColumns = ['revenue', 'total revenue'];
 
 export function mapSeoPerformanceCsv(options: MapSeoPerformanceCsvOptions): SeoPerformanceRecord[] {
-  const fetchedAt = options.fetchedAt ?? new Date().toISOString();
   const performanceRecords: SeoPerformanceRecord[] = [];
 
   options.records.forEach((record, index) => {
@@ -43,7 +41,6 @@ export function mapSeoPerformanceCsv(options: MapSeoPerformanceCsvOptions): SeoP
       source: options.source,
       pagePath,
       sourceRow: index + 2,
-      fetchedAt,
     };
 
     assignIfDefined(performanceRecord, 'query', query);
@@ -75,12 +72,12 @@ export function mapSeoPerformanceCsv(options: MapSeoPerformanceCsvOptions): SeoP
     );
     assignIfDefined(
       performanceRecord,
-      'conversions',
+      'analyticsConversions',
       parseNumber(readAliasedColumn(record, conversionColumns)),
     );
     assignIfDefined(
       performanceRecord,
-      'revenue',
+      'analyticsRevenue',
       parseCurrency(readAliasedColumn(record, revenueColumns)),
     );
     assignIfDefined(performanceRecord, 'sourceFile', options.sourceFile);

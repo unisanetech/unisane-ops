@@ -7,6 +7,12 @@ export type ConsoleCapability =
   | 'recommendations';
 
 export type AdvertisingPlatform = 'all' | 'googleAds' | 'metaAds';
+export type ConsoleTemporalMode =
+  | 'performance-range'
+  | 'event-range'
+  | 'snapshot'
+  | 'evidence-context'
+  | 'current';
 
 export type ConsoleRoute = {
   id: string;
@@ -15,7 +21,7 @@ export type ConsoleRoute = {
   label: string;
   title: string;
   description: string;
-  timeAnalysis: boolean;
+  temporalMode: ConsoleTemporalMode;
   advertisingPlatform?: AdvertisingPlatform;
   advertisingSection?: AdvertisingSection;
 };
@@ -54,8 +60,8 @@ const route = (
   label: string,
   title: string,
   description: string,
-  timeAnalysis = false,
-): ConsoleRoute => ({ id, path, family, label, title, description, timeAnalysis });
+  temporalMode: ConsoleTemporalMode = 'current',
+): ConsoleRoute => ({ id, path, family, label, title, description, temporalMode });
 
 const advertisingPlatformPaths: Record<AdvertisingPlatform, string> = {
   all: 'all',
@@ -75,7 +81,11 @@ const advertisingRoute = (
   label: string,
   title: string,
   description: string,
-  timeAnalysis = true,
+  temporalMode: ConsoleTemporalMode = section === 'recommendations'
+    ? 'evidence-context'
+    : section === 'change-history'
+      ? 'event-range'
+      : 'performance-range',
 ): ConsoleRoute => ({
   ...route(
     `advertising.${platform}.${section}`,
@@ -84,7 +94,7 @@ const advertisingRoute = (
     label,
     title,
     description,
-    timeAnalysis,
+    temporalMode,
   ),
   advertisingPlatform: platform,
   advertisingSection: section,
@@ -154,7 +164,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Overview',
     'Growth overview',
     'See what changed, what needs attention, and the most useful next step.',
-    true,
+    'performance-range',
   ),
   route(
     'seo.overview',
@@ -163,7 +173,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Overview',
     'SEO overview',
     'Understand search performance and the best opportunities to improve.',
-    true,
+    'performance-range',
   ),
   route(
     'seo.opportunities',
@@ -172,7 +182,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Opportunities',
     'SEO opportunities',
     'Review the search improvements most likely to produce a useful outcome.',
-    true,
+    'evidence-context',
   ),
   route(
     'seo.pages',
@@ -181,7 +191,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Pages',
     'Search pages',
     'Compare page search performance and find pages that need attention.',
-    true,
+    'performance-range',
   ),
   route(
     'seo.queries',
@@ -190,7 +200,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Queries',
     'Search queries',
     'Understand what people search for and where the site currently appears.',
-    true,
+    'performance-range',
   ),
   route(
     'seo.site-health',
@@ -199,6 +209,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Site health',
     'Search site health',
     'Find problems that may prevent important pages from appearing in search.',
+    'snapshot',
   ),
   route(
     'seo.research',
@@ -207,7 +218,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Research',
     'Keyword research',
     'Find and prioritize keywords using provider-estimated demand, markets, intent, questions, competitors, and search-result evidence.',
-    true,
+    'snapshot',
   ),
   ...advertisingRoutes('all'),
   ...advertisingRoutes('googleAds'),
@@ -219,7 +230,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Overview',
     'Analytics overview',
     'Understand visitors, traffic, conversions, and data freshness.',
-    true,
+    'performance-range',
   ),
   route(
     'analytics.traffic',
@@ -228,7 +239,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Traffic',
     'Traffic',
     'Compare the channels bringing people to the active site.',
-    true,
+    'performance-range',
   ),
   route(
     'analytics.visitors',
@@ -237,7 +248,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Visitors',
     'Visitors',
     'See where measured visitors begin and which landing pages bring them into the site.',
-    true,
+    'performance-range',
   ),
   route(
     'analytics.conversions',
@@ -246,7 +257,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Conversions',
     'Analytics conversions',
     'See whether measured journeys produce outcomes and repair measurement when they do not.',
-    true,
+    'performance-range',
   ),
   route(
     'analytics.tracking-health',
@@ -263,7 +274,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Overview',
     'Experiments overview',
     'Understand active learning, recent outcomes, and the next question to test.',
-    true,
+    'current',
   ),
   route(
     'experiments.running',
@@ -272,7 +283,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Running',
     'Running experiments',
     'Monitor experiments that are currently collecting evidence.',
-    true,
+    'current',
   ),
   route(
     'experiments.results',
@@ -281,7 +292,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Results',
     'Experiment results',
     'Review completed experiments and the decisions they support.',
-    true,
+    'event-range',
   ),
   route(
     'experiments.ideas',
@@ -306,7 +317,7 @@ export const CONSOLE_ROUTES: readonly ConsoleRoute[] = [
     'Activity',
     'Activity',
     'Review changes, syncs, approvals, and failures in plain language.',
-    true,
+    'event-range',
   ),
   route(
     'settings',

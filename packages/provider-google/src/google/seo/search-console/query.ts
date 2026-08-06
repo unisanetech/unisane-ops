@@ -1,6 +1,12 @@
 import { createHash } from 'node:crypto';
 import type { SeoPerformanceFile, SeoPerformanceRecord } from '@unisane/growth/contracts';
-import { seoPerformanceFileSchema } from '@unisane/growth/contracts';
+import {
+  createSeoPerformanceEvidence,
+  normalizeSearchConsoleProperty,
+  searchConsolePropertyMatchesSite,
+  seoPerformanceFileSchema,
+  type SeoPerformanceTargetMarket,
+} from '@unisane/growth/contracts';
 import type { FetchLike } from '../google-ads/transport.js';
 
 export type SearchConsoleDimension =
@@ -15,6 +21,8 @@ export type QuerySearchConsolePerformanceOptions = {
   platformId: string;
   accessToken: string;
   siteUrl: string;
+  configuredSiteUrl: string;
+  targetMarkets: SeoPerformanceTargetMarket[];
   startDate: string;
   endDate: string;
   dimensions: SearchConsoleDimension[];
@@ -24,7 +32,8 @@ export type QuerySearchConsolePerformanceOptions = {
   searchType?: string;
   dataState?: string;
   fetchImpl?: FetchLike;
-  fetchedAt?: string;
+  observedAt?: string;
+  freshnessHours?: number;
 };
 
 export async function querySearchConsolePerformance(
@@ -32,6 +41,10 @@ export async function querySearchConsolePerformance(
 ): Promise<SeoPerformanceFile> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const accessToken = options.accessToken;
+  const property = normalizeSearchConsoleProperty(options.siteUrl);
+  if (!searchConsolePropertyMatchesSite(property, options.configuredSiteUrl)) {
+    throw new Error('Search Console property does not cover the configured site.');
+  }
   const rows = await fetchAllRows({
     options,
     fetchImpl,
@@ -39,16 +52,26 @@ export async function querySearchConsolePerformance(
   });
 
   return seoPerformanceFileSchema.parse({
-    version: 1,
+    version: 2,
     platformId: options.platformId,
     source: 'google-search-console',
-    property: options.siteUrl,
-    dateRange: `${options.startDate}..${options.endDate}`,
+    siteUrl: options.configuredSiteUrl,
+    targetMarkets: options.targetMarkets,
+    property,
+    dateRange: { startDate: options.startDate, endDate: options.endDate },
+    evidence: createSeoPerformanceEvidence({
+      acquisition: 'api',
+      sampleData: false,
+      observedAt: options.observedAt,
+      freshnessHours: options.freshnessHours,
+      limitations: [
+        'Target markets are project context; the provider report is not filtered by market.',
+      ],
+    }),
     records: mapRowsToPerformanceRecords({
       rows,
       platformId: options.platformId,
       dimensions: options.dimensions,
-      fetchedAt: options.fetchedAt ?? new Date().toISOString(),
     }),
   });
 }
@@ -120,7 +143,6 @@ function mapRowsToPerformanceRecords(options: {
   rows: SearchConsoleResponseRow[];
   platformId: string;
   dimensions: SearchConsoleDimension[];
-  fetchedAt: string;
 }): SeoPerformanceRecord[] {
   return options.rows
     .map((row, index) => {
@@ -152,7 +174,6 @@ function mapRowsToPerformanceRecords(options: {
         impressions: Math.round(row.impressions ?? 0),
         ctr: row.ctr,
         position: row.position,
-        fetchedAt: options.fetchedAt,
       };
       if (query) {
         record.query = query;

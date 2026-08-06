@@ -11,6 +11,8 @@ describe('Search Console performance provider', () => {
       platformId: 'true-resume',
       accessToken: 'access-token',
       siteUrl: 'https://true-resume.test/',
+      configuredSiteUrl: 'https://true-resume.test/',
+      targetMarkets: [{ country: 'US', language: 'en' }],
       startDate: '2026-04-19',
       endDate: '2026-05-16',
       dimensions: ['query', 'page'],
@@ -20,7 +22,7 @@ describe('Search Console performance provider', () => {
         requests.push({ url: requestUrl, init });
         return searchConsoleResponse();
       },
-      fetchedAt: '2026-05-17T00:00:00.000Z',
+      observedAt: '2026-05-17T00:00:00.000Z',
     });
 
     expect(requests).toHaveLength(1);
@@ -37,7 +39,9 @@ describe('Search Console performance provider', () => {
     expect(artifact).toMatchObject({
       source: 'google-search-console',
       property: 'https://true-resume.test/',
-      dateRange: '2026-04-19..2026-05-16',
+      siteUrl: 'https://true-resume.test/',
+      dateRange: { startDate: '2026-04-19', endDate: '2026-05-16' },
+      evidence: { acquisition: 'api', sampleData: false },
       records: [
         {
           pagePath: '/resume-examples/data-analyst',
@@ -58,6 +62,8 @@ describe('Search Console performance provider', () => {
         output: 'normalized/gsc-api.json',
         accessToken: 'access-token',
         siteUrl: 'sc-domain:true-resume.test',
+        configuredSiteUrl: 'https://true-resume.test/',
+        targetMarkets: [{ country: 'US', language: 'en' }],
         startDate: '2026-04-19',
         endDate: '2026-05-16',
         dimensions: ['page'],
@@ -92,6 +98,8 @@ describe('Search Console performance provider', () => {
       platformId: 'true-resume',
       accessToken: 'access-token',
       siteUrl: 'https://true-resume.test/',
+      configuredSiteUrl: 'https://true-resume.test/',
+      targetMarkets: [{ country: 'US', language: 'en' }],
       startDate: '2026-04-19',
       endDate: '2026-05-16',
       dimensions: ['page'],
@@ -116,6 +124,22 @@ describe('Search Console performance provider', () => {
       '/resume-examples/0',
       '/resume-examples/1',
     ]);
+  });
+
+  it('rejects a Search Console property that does not cover the configured site', async () => {
+    await expect(
+      querySearchConsolePerformance({
+        platformId: 'true-resume',
+        accessToken: 'access-token',
+        siteUrl: 'sc-domain:other.test',
+        configuredSiteUrl: 'https://true-resume.test/',
+        targetMarkets: [{ country: 'US', language: 'en' }],
+        startDate: '2026-04-19',
+        endDate: '2026-05-16',
+        dimensions: ['page'],
+        fetchImpl: async () => searchConsoleResponse(),
+      }),
+    ).rejects.toThrow('does not cover the configured site');
   });
 });
 

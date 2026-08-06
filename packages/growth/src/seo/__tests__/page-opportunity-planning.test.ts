@@ -123,7 +123,6 @@ function createClusterFile(): KeywordClusterFile {
     version: 1,
     platformId: 'true-resume',
     sourcePatternPack: 'resume-examples',
-    metricSource: 'csv-import',
     clusters: [
       {
         id: 'true-resume:cluster:data-analyst',

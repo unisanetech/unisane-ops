@@ -13,6 +13,7 @@ import type {
   MarketingMetaConnectionStatus,
 } from '@unisane/growth/marketing';
 import type { MarketingConsoleCampaignPauseReview } from '@unisane/growth/console';
+import { handleTemporalStateRequest } from './temporal-state.js';
 
 export type ServeMarketingConsoleAppOptions = {
   cwd?: string;
@@ -56,18 +57,19 @@ export async function serveMarketingConsoleApp(
   const serverFactory = options.createHttpServer ?? createServer;
   const server = serverFactory(async (request, response) => {
     try {
+      const requestUrl = new URL(request.url ?? '/', `http://${host}:${port}`);
       if (
         await handleCampaignPauseApprovalRequest(request, response, options.approveCampaignPause)
       ) {
         return;
       }
+      if (await handleTemporalStateRequest(request, response, requestUrl, options)) return;
       if (request.method !== 'GET' && request.method !== 'HEAD') {
         response.statusCode = 405;
         response.setHeader('Allow', 'GET, HEAD');
         response.end();
         return;
       }
-      const requestUrl = new URL(request.url ?? '/', `http://${host}:${port}`);
       const requestedPath = decodeURIComponent(requestUrl.pathname);
       const candidate = resolveFilePath(buildResult.outputDirectory, requestedPath);
       const filePath = (await readableFile(candidate)) ? candidate : buildResult.entryHtmlPath;

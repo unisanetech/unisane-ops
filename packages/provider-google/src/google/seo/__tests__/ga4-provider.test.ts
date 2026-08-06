@@ -11,6 +11,8 @@ describe('GA4 performance provider', () => {
       platformId: 'true-resume',
       accessToken: 'access-token',
       propertyId: '123456',
+      configuredSiteUrl: 'https://true-resume.test/',
+      targetMarkets: [{ country: 'US', language: 'en' }],
       startDate: '2026-04-19',
       endDate: '2026-05-16',
       dimensions: ['landingPagePlusQueryString'],
@@ -21,7 +23,7 @@ describe('GA4 performance provider', () => {
         requests.push({ url: requestUrl, init });
         return ga4Response();
       },
-      fetchedAt: '2026-05-17T00:00:00.000Z',
+      observedAt: '2026-05-17T00:00:00.000Z',
     });
 
     expect(requests).toHaveLength(1);
@@ -43,14 +45,16 @@ describe('GA4 performance provider', () => {
     expect(artifact).toMatchObject({
       source: 'ga4',
       property: 'properties/123456',
-      dateRange: '2026-04-19..2026-05-16',
+      siteUrl: 'https://true-resume.test/',
+      dateRange: { startDate: '2026-04-19', endDate: '2026-05-16' },
+      evidence: { acquisition: 'api', sampleData: false },
       records: [
         {
           pagePath: '/resume-examples/data-analyst',
           sessions: 320,
           users: 210,
-          conversions: 12,
-          revenue: 49.5,
+          analyticsConversions: 12,
+          analyticsRevenue: 49.5,
         },
       ],
     });
@@ -65,6 +69,8 @@ describe('GA4 performance provider', () => {
         output: 'normalized/ga4-api.json',
         accessToken: 'access-token',
         propertyId: 'properties/123456',
+        configuredSiteUrl: 'https://true-resume.test/',
+        targetMarkets: [{ country: 'US', language: 'en' }],
         startDate: '2026-04-19',
         endDate: '2026-05-16',
         dimensions: ['landingPagePlusQueryString'],
@@ -87,8 +93,8 @@ describe('GA4 performance provider', () => {
         pagePath: '/resume-examples',
         sessions: 100,
         users: 80,
-        conversions: 4,
-        revenue: 10.25,
+        analyticsConversions: 4,
+        analyticsRevenue: 10.25,
       });
     } finally {
       await rm(cwd, { recursive: true, force: true });
@@ -101,6 +107,8 @@ describe('GA4 performance provider', () => {
       platformId: 'true-resume',
       accessToken: 'access-token',
       propertyId: '123456',
+      configuredSiteUrl: 'https://true-resume.test/',
+      targetMarkets: [{ country: 'US', language: 'en' }],
       startDate: '2026-04-19',
       endDate: '2026-05-16',
       dimensions: ['landingPagePlusQueryString'],

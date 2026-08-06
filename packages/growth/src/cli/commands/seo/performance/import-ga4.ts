@@ -20,8 +20,11 @@ export async function importPerformance(
     if (!options.input) {
       throw new Error('Missing required --input CSV path.');
     }
-    if (!options.out) {
-      throw new Error('Missing required --out path.');
+    if (!options.property || !options.startDate || !options.endDate || !options.dataKind) {
+      throw new Error('Missing required property, date range, or data-kind evidence context.');
+    }
+    if (options.dataKind !== 'live' && options.dataKind !== 'sample') {
+      throw new Error('Invalid --data-kind; expected live or sample.');
     }
 
     const result = await importSeoPerformanceFile({
@@ -31,7 +34,10 @@ export async function importPerformance(
       input: options.input,
       output: options.out,
       property: options.property,
-      dateRange: options.dateRange,
+      startDate: options.startDate,
+      endDate: options.endDate,
+      sampleData: options.dataKind === 'sample',
+      freshnessHours: parsePositiveInteger(options.freshnessHours),
       dryRun: options.dryRun,
     });
     printImportSeoPerformanceFileResult(result, { json: options.json });
@@ -45,4 +51,15 @@ export async function importPerformance(
     }
     return 1;
   }
+}
+
+function parsePositiveInteger(value: string | undefined): number | undefined {
+  if (!value) {
+    return undefined;
+  }
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isInteger(parsed) || parsed < 1) {
+    throw new Error('Invalid --freshness-hours; expected a positive integer.');
+  }
+  return parsed;
 }

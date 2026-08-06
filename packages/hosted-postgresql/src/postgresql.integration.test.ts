@@ -10,6 +10,14 @@ import {
   type HostedReadAuthorization,
   type HostedReadClaim,
 } from '@unisane/ops-engine/hosted';
+import {
+  createHostedCredential,
+  createHostedWorkerCredentialResolver,
+  revokeHostedCredential,
+  rotateHostedCredential,
+  type HostedCredentialEnvelopeCipher,
+} from '@unisane/ops-engine/hosted/credentials';
+import { createHostedReadSchedule } from '@unisane/ops-engine/hosted/scheduler';
 import { createPostgresHostedReadPersistence } from './index.js';
 import { migratePostgresHostedReadPersistence } from './migrations.js';
 
@@ -30,6 +38,36 @@ const authorization: HostedReadAuthorization = {
   principalId: 'user.alice',
   allowedScopeIds: ['workspace.acme'],
 };
+
+function credentialCipher(): HostedCredentialEnvelopeCipher {
+  const values = new Map<string, { plaintext: Uint8Array; aad: Uint8Array }>();
+  return {
+    async encrypt({ keyId, plaintext, additionalAuthenticatedData }) {
+      const ciphertext = Buffer.from(`integration-${values.size + 1}`).toString('base64url');
+      values.set(ciphertext, {
+        plaintext: new Uint8Array(plaintext),
+        aad: new Uint8Array(additionalAuthenticatedData),
+      });
+      return {
+        algorithm: 'test-envelope-v1',
+        keyId,
+        wrappedDataKey: Buffer.from('wrapped-key').toString('base64url'),
+        nonce: Buffer.from(`nonce-${values.size}`).toString('base64url'),
+        ciphertext,
+      };
+    },
+    async decrypt({ envelope, additionalAuthenticatedData }) {
+      const value = values.get(envelope.ciphertext);
+      if (
+        !value ||
+        Buffer.compare(Buffer.from(value.aad), Buffer.from(additionalAuthenticatedData)) !== 0
+      ) {
+        throw new Error('authenticated data mismatch');
+      }
+      return new Uint8Array(value.plaintext);
+    },
+  };
+}
 
 function request(): HostedReadAdmissionRequest {
   return {
@@ -220,5 +258,192 @@ integration('PostgreSQL hosted read persistence', () => {
         limit: 10,
       }),
     ).resolves.toEqual([]);
+  });
+
+  it('fences due schedules, materializes one canonical occurrence, and recovers interruption', async () => {
+    if (!gatewayPool || !workerPool) throw new Error('PostgreSQL test pool is unavailable.');
+    const first = createPostgresHostedReadPersistence(gatewayPool).schedules;
+    const second = createPostgresHostedReadPersistence(workerPool).schedules;
+    const base = createHostedReadSchedule({
+      schemaVersion: 1,
+      kind: 'ops.hosted-read-schedule',
+      scheduleId: 'schedule.health.hourly',
+      revision: 1,
+      enabled: true,
+      evidenceRevision: 'evidence.42',
+      action: {
+        schemaVersion: 1,
+        actionId: 'growth.health.review',
+        actionSchemaVersion: 1,
+        context: {
+          scopeId: 'workspace.acme',
+          projectId: 'project.acme',
+          environmentId: 'production',
+          principal: { kind: 'service', id: 'scheduler.acme' },
+        },
+        input: { project: 'acme' },
+      },
+      cadence: { kind: 'interval', milliseconds: 86_400_000 },
+      nextDueAt: '2026-08-04T00:00:00.000Z',
+      lease: null,
+      createdAt: '2026-08-03T00:00:00.000Z',
+      updatedAt: '2026-08-03T00:00:00.000Z',
+    });
+    await expect(first.save(base)).resolves.toBe('stored');
+    const claims = await Promise.all([
+      first.claimDue({
+        owner: 'scheduler.1',
+        now: '2026-08-04T00:00:00.000Z',
+        expiresAt: '2026-08-04T00:00:30.000Z',
+      }),
+      second.claimDue({
+        owner: 'scheduler.2',
+        now: '2026-08-04T00:00:00.000Z',
+        expiresAt: '2026-08-04T00:00:30.000Z',
+      }),
+    ]);
+    expect(claims.filter(Boolean)).toHaveLength(1);
+    const claim = claims.find(Boolean);
+    if (!claim) throw new Error('Schedule claim is unavailable.');
+    await expect(
+      first.materialize({ claim, materializedAt: '2026-08-04T00:00:01.000Z' }),
+    ).resolves.toMatchObject({ occurrenceId: 'schedule.health.hourly.1785801600000' });
+    expect(await count(gatewayPool, 'ops_hosted_read_schedule_occurrence')).toBe(1);
+
+    const interrupted = createHostedReadSchedule({
+      ...base,
+      scheduleId: 'schedule.measurement.daily',
+      nextDueAt: '2026-08-04T02:00:00.000Z',
+    });
+    await first.save(interrupted);
+    const stale = await first.claimDue({
+      owner: 'scheduler.stale',
+      now: '2026-08-04T02:00:00.000Z',
+      expiresAt: '2026-08-04T02:00:01.000Z',
+    });
+    expect(stale).not.toBeNull();
+    await expect(
+      second.recoverExpired({ now: '2026-08-04T02:00:02.000Z', limit: 10 }),
+    ).resolves.toBe(1);
+    const recovered = await second.claimDue({
+      owner: 'scheduler.recovery',
+      now: '2026-08-04T02:00:02.000Z',
+      expiresAt: '2026-08-04T02:00:32.000Z',
+    });
+    expect(recovered?.fencingToken).not.toBe(stale?.fencingToken);
+    if (!stale || !recovered) throw new Error('Recovery schedule claim is unavailable.');
+    await expect(
+      first.materialize({ claim: stale, materializedAt: '2026-08-04T02:00:03.000Z' }),
+    ).resolves.toBe('conflict');
+    await expect(
+      second.materialize({ claim: recovered, materializedAt: '2026-08-04T02:00:03.000Z' }),
+    ).resolves.toMatchObject({ scheduleId: interrupted.scheduleId });
+  });
+
+  it('atomically rotates and revokes encrypted provider credentials with exact project binding', async () => {
+    if (!gatewayPool || !workerPool) throw new Error('PostgreSQL test pool is unavailable.');
+    const gateway = createPostgresHostedReadPersistence(gatewayPool).credentials;
+    const workerStore = createPostgresHostedReadPersistence(workerPool).credentials;
+    const cipher = credentialCipher();
+    const context = {
+      scopeId: 'workspace.acme',
+      projectId: 'project.acme',
+      connectionId: 'connection.google',
+      provider: 'google',
+      secretKind: 'oauth-refresh',
+    };
+    const created = await createHostedCredential({
+      credentialId: 'credential.google.primary',
+      ...context,
+      keyId: 'kms.primary',
+      metadata: { accountLabel: 'Primary Google account' },
+      plaintext: Buffer.from('first-provider-secret'),
+      cipher,
+      store: gateway,
+      now: new Date('2026-08-04T03:00:00.000Z'),
+    });
+    const persisted = await gatewayPool.query<{ value: string }>(
+      `SELECT row_to_json(credential)::text || row_to_json(credential_version)::text AS value
+       FROM ops_hosted_credential AS credential
+       JOIN ops_hosted_credential_version AS credential_version USING (credential_id)`,
+    );
+    expect(persisted.rows[0]?.value).not.toContain('first-provider-secret');
+
+    const resolver = createHostedWorkerCredentialResolver({
+      workerId: 'worker.primary',
+      allowedScopeIds: ['workspace.acme'],
+      allowedProjectIds: ['project.acme'],
+      store: workerStore,
+      cipher,
+    });
+    await expect(
+      resolver.withCredential({
+        reference: { credentialId: created.credentialId, version: 1 },
+        context,
+        use: async (value) => Buffer.from(value).toString() === 'first-provider-secret',
+      }),
+    ).resolves.toBe(true);
+    await expect(
+      resolver.withCredential({
+        reference: { credentialId: created.credentialId, version: 1 },
+        context: { ...context, projectId: 'project.other' },
+        use: async () => undefined,
+      }),
+    ).rejects.toMatchObject({ code: 'credential-scope-forbidden' });
+
+    const rotationResults = await Promise.allSettled([
+      rotateHostedCredential({
+        current: created,
+        plaintext: Buffer.from('second-provider-secret'),
+        keyId: 'kms.rotated',
+        cipher,
+        store: gateway,
+        now: new Date('2026-08-04T04:00:00.000Z'),
+      }),
+      rotateHostedCredential({
+        current: created,
+        plaintext: Buffer.from('conflicting-provider-secret'),
+        keyId: 'kms.rotated',
+        cipher,
+        store: gateway,
+        now: new Date('2026-08-04T04:00:00.000Z'),
+      }),
+    ]);
+    expect(rotationResults.filter((result) => result.status === 'fulfilled')).toHaveLength(1);
+    const rotatedIndex = rotationResults.findIndex((result) => result.status === 'fulfilled');
+    const rotatedResult = rotationResults[rotatedIndex];
+    if (!rotatedResult || rotatedResult.status !== 'fulfilled') {
+      throw new Error('Credential rotation did not complete.');
+    }
+    const rotated = rotatedResult.value;
+    await expect(
+      resolver.withCredential({
+        reference: { credentialId: created.credentialId, version: 1 },
+        context,
+        use: async () => undefined,
+      }),
+    ).rejects.toMatchObject({ code: 'credential-unavailable' });
+    await expect(
+      resolver.withCredential({
+        reference: { credentialId: rotated.credentialId, version: 2 },
+        context,
+        use: async (value) =>
+          Buffer.from(value).toString() ===
+          (rotatedIndex === 0 ? 'second-provider-secret' : 'conflicting-provider-secret'),
+      }),
+    ).resolves.toBe(true);
+
+    await revokeHostedCredential({
+      current: rotated,
+      store: gateway,
+      now: new Date('2026-08-04T05:00:00.000Z'),
+    });
+    await expect(
+      resolver.withCredential({
+        reference: { credentialId: rotated.credentialId, version: 2 },
+        context,
+        use: async () => undefined,
+      }),
+    ).rejects.toMatchObject({ code: 'credential-unavailable' });
   });
 });

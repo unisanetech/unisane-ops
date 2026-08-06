@@ -2,18 +2,21 @@ import { useState } from 'react';
 import { SelectField } from '@unisane/ui/select-field';
 import { TextField } from '@unisane/ui/text-field';
 import type { ConsoleScreenProps } from '../../contracts.js';
-import {
-  ConsoleCardGrid,
-  ContentSection,
-  DataState,
-  InsightCard,
-  Summary,
-} from '../../shared/content.js';
+import { ConsoleCardGrid, ContentSection, DataState, Summary } from '../../shared/content.js';
 import { FilterToolbar } from '../../shared/controls.js';
+import { SeoOpportunityCard } from './seo-opportunity-card.js';
+import { SeoOpportunityReviewPane } from './seo-opportunity-review-pane.js';
 
-export function SeoOpportunitiesScreen({ state, navigate }: ConsoleScreenProps) {
+export function SeoOpportunitiesScreen({
+  state,
+  navigate,
+  openOverlay,
+  openSupportingPane,
+  closeSupportingPane,
+}: ConsoleScreenProps) {
   const [search, setSearch] = useState('');
   const [confidence, setConfidence] = useState('all');
+  const [selectedOpportunityId, setSelectedOpportunityId] = useState<string>();
   const review = state.seo.opportunityReview;
   const presentation = review.workflow.presentation;
   const visible = review.opportunities.filter(
@@ -23,6 +26,38 @@ export function SeoOpportunitiesScreen({ state, navigate }: ConsoleScreenProps) 
         .toLowerCase()
         .includes(search.toLowerCase()),
   );
+  const closeReview = () => closeSupportingPane();
+  const reviewOpportunity = (opportunityId: string) => {
+    if (selectedOpportunityId === opportunityId) {
+      closeReview();
+      return;
+    }
+    const opportunity = review.opportunities.find((item) => item.id === opportunityId);
+    const workflow = state.seo.opportunityWorkflows.find(
+      (item) => item.opportunityId === opportunityId,
+    );
+    if (!opportunity || !workflow) return;
+    setSelectedOpportunityId(opportunityId);
+    openSupportingPane({
+      id: `seo-opportunity-${opportunityId}`,
+      title: 'Review opportunity',
+      subtitle: `#${opportunity.rank} · ${opportunity.confidence} confidence`,
+      onClose: () => setSelectedOpportunityId(undefined),
+      content: (
+        <SeoOpportunityReviewPane
+          opportunity={opportunity}
+          evidence={review.evidence}
+          workflow={workflow}
+          onReviewAction={(action) => openOverlay({ kind: 'command', action })}
+          onResearch={() => {
+            closeReview();
+            navigate('/seo/research');
+          }}
+          onClose={closeReview}
+        />
+      ),
+    });
+  };
   return (
     <>
       <Summary headline={presentation.headline} detail={presentation.whyItMatters} />
@@ -55,40 +90,34 @@ export function SeoOpportunitiesScreen({ state, navigate }: ConsoleScreenProps) 
             ]}
           />
         </FilterToolbar>
-      </ContentSection>
-      <ContentSection>
-        {visible.length ? (
-          <ConsoleCardGrid minItemWidth="md">
-            {visible.map((item) => (
-              <InsightCard
-                key={item.id}
-                badge={`#${item.rank} · ${item.confidence} confidence`}
-                tone={
-                  item.confidence === 'high'
-                    ? 'success'
-                    : item.confidence === 'low'
-                      ? 'warning'
-                      : 'info'
-                }
-                title={item.title}
-                description={item.rationale}
-                evidence={item.limitations[0] ?? `${item.provenance.length} recorded sources`}
-                metadata={`${item.score}/100 · ${item.market ?? 'Market not recorded'}`}
-              />
-            ))}
-          </ConsoleCardGrid>
-        ) : (
-          <DataState
-            title="No opportunity matches these filters."
-            description={
-              review.status === 'blocked'
-                ? presentation.nextStep.reason
-                : 'Clear the search or confidence filter to review the complete ranked list.'
-            }
-            actionLabel={presentation.nextStep.label}
-            onAction={() => navigate(presentation.nextStep.deepLink ?? '/seo/research')}
-          />
-        )}
+        <div className="mt-4">
+          {visible.length ? (
+            <ConsoleCardGrid minItemWidth="lg">
+              {visible.map((item) => (
+                <SeoOpportunityCard
+                  key={item.id}
+                  opportunity={item}
+                  selected={selectedOpportunityId === item.id}
+                  actionLabel={
+                    selectedOpportunityId === item.id ? 'Close review' : 'Review opportunity'
+                  }
+                  onAction={() => reviewOpportunity(item.id)}
+                />
+              ))}
+            </ConsoleCardGrid>
+          ) : (
+            <DataState
+              title="No opportunity matches these filters."
+              description={
+                review.status === 'blocked'
+                  ? presentation.nextStep.reason
+                  : 'Clear the search or confidence filter to review the complete ranked list.'
+              }
+              actionLabel={presentation.nextStep.label}
+              onAction={() => navigate(presentation.nextStep.deepLink ?? '/seo/research')}
+            />
+          )}
+        </div>
       </ContentSection>
     </>
   );

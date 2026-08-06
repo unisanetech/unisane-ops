@@ -8,7 +8,6 @@ export function AdvertisingRecommendations(props: ConsoleScreenProps) {
     (item) =>
       item.lane === 'advertising' &&
       (props.route.advertisingPlatform === 'all' ||
-        !item.provider ||
         item.provider === props.route.advertisingPlatform),
   );
   return (

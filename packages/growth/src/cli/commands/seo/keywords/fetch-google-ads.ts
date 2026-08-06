@@ -25,6 +25,10 @@ export async function seoKeywordsFetchGoogleAds(
       cwd: options.cwd,
       platformId: options.platform,
     });
+    const primaryMarket = config.markets[0];
+    if (!primaryMarket) {
+      throw new Error('SEO research config must contain at least one target market.');
+    }
     const credentials = await resolveSeoGoogleConnectionCredentials({
       service: 'ads',
       connection: options.connection,
@@ -50,8 +54,8 @@ export async function seoKeywordsFetchGoogleAds(
       seedFile: options.seedFile,
       keywords: parseCsvList(options.keywords),
       pageUrl: options.pageUrl,
-      country: options.country ?? config.defaultCountry,
-      language: options.language ?? config.defaultLanguage,
+      country: options.country ?? primaryMarket.country,
+      language: options.language ?? primaryMarket.language,
       languageId: options.languageId ?? '1000',
       locationIds: parseCsvList(options.locationIds ?? '2840'),
       currencyCode: normalizeCurrencyCode(

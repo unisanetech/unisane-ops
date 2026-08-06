@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import type { MarketingConsoleState } from '@unisane/growth/console';
 import type { Column } from '@unisane/data-table';
 import { Badge } from '@unisane/ui/badge';
+import type { ConsoleScreenProps } from '../../contracts.js';
 import { formatNumber, healthStatusLabel, statusColor } from '../../lib/format.js';
 import { ConsoleDataTable } from '../../shared/console-data-table.js';
 import {
   DataTableListPreview,
   DataTablePrimaryText,
   DataTableWrappedText,
-  ExpandedDataInlineList,
   ExpandedDataSection,
   ExpandedDataTableRow,
 } from '../../shared/data-table-content.js';
@@ -16,8 +16,11 @@ import { NarrativeDataTable } from '../../shared/narrative-data-table.js';
 import {
   CompetitorAnalysisDataTable,
   MetadataExperimentsDataTable,
+  openMetadataDetailsPane,
+  openSerpDetailsPane,
   SerpLandscapeDataTable,
 } from './research-analysis-data-tables.js';
+import { ClusterResearchDetailsPane, MarketResearchDetailsPane } from './research-detail-panes.js';
 
 type KeywordResearch = MarketingConsoleState['keywordResearch'];
 type KeywordRow = KeywordResearch['matrix'][number];
@@ -81,7 +84,14 @@ export function KeywordTable({ rows }: { rows: KeywordRow[] }) {
   );
 }
 
-export function ClusterTable({ research }: { research: KeywordResearch }) {
+export function ClusterTable({
+  research,
+  openSupportingPane,
+}: {
+  research: KeywordResearch;
+  openSupportingPane: ConsoleScreenProps['openSupportingPane'];
+}) {
+  const [selectedRowId, setSelectedRowId] = useState<string>();
   const columns = useMemo<Column<KeywordResearch['clusters'][number]>[]>(
     () => [
       {
@@ -129,28 +139,37 @@ export function ClusterTable({ research }: { research: KeywordResearch }) {
     ],
     [],
   );
+  const showClusterDetails = (row: KeywordResearch['clusters'][number]) => {
+    setSelectedRowId(row.id);
+    openSupportingPane({
+      id: `seo.cluster.${row.id}`,
+      title: row.label,
+      subtitle: `${formatNumber(row.metricCount)} keywords · ${row.bestMarket ?? 'Market unavailable'}`,
+      content: <ClusterResearchDetailsPane cluster={row} />,
+      onClose: () => setSelectedRowId(undefined),
+    });
+  };
   return (
-    <NarrativeDataTable
+    <ConsoleDataTable
       tableId="ops-seo-keyword-clusters"
       data={research.clusters}
       columns={columns}
       emptyMessage="No keyword clusters were recorded"
       emptyIcon="account_tree"
-      renderExpandedRow={(row) => (
-        <ExpandedDataTableRow title={row.label} description="Complete cluster planning evidence.">
-          <ExpandedDataSection title="Leading keywords">
-            <ExpandedDataInlineList items={row.topKeywords.map((item) => item.term)} />
-          </ExpandedDataSection>
-          <ExpandedDataSection title="Recommended use" span="full">
-            <p>{row.recommendedUse}</p>
-          </ExpandedDataSection>
-        </ExpandedDataTableRow>
-      )}
+      activeRowId={selectedRowId}
+      callbacks={{ onRowClick: showClusterDetails }}
     />
   );
 }
 
-export function MarketTable({ research }: { research: KeywordResearch }) {
+export function MarketTable({
+  research,
+  openSupportingPane,
+}: {
+  research: KeywordResearch;
+  openSupportingPane: ConsoleScreenProps['openSupportingPane'];
+}) {
+  const [selectedRowId, setSelectedRowId] = useState<string>();
   const rows = useMemo(
     () => research.markets.map((row) => ({ ...row, id: row.market })),
     [research.markets],
@@ -195,6 +214,25 @@ export function MarketTable({ research }: { research: KeywordResearch }) {
     ],
     [],
   );
+  const showMarketDetails = (row: (typeof rows)[number]) => {
+    const totalDemand = research.markets.reduce((total, item) => total + item.totalKnownVolume, 0);
+    const demandRank = [...research.markets]
+      .sort(
+        (left, right) =>
+          right.totalKnownVolume - left.totalKnownVolume || left.market.localeCompare(right.market),
+      )
+      .findIndex((item) => item.market === row.market);
+    const demandShare =
+      totalDemand > 0 ? `${((row.totalKnownVolume / totalDemand) * 100).toFixed(1)}%` : undefined;
+    setSelectedRowId(row.id);
+    openSupportingPane({
+      id: `seo.market.${row.id}`,
+      title: row.market,
+      subtitle: `${demandRank >= 0 ? `#${demandRank + 1} by demand` : 'Demand rank unavailable'}${demandShare ? ` · ${demandShare} of recorded demand` : ''}`,
+      content: <MarketResearchDetailsPane market={row} markets={research.markets} />,
+      onClose: () => setSelectedRowId(undefined),
+    });
+  };
   return (
     <ConsoleDataTable
       tableId="ops-seo-keyword-markets"
@@ -202,6 +240,8 @@ export function MarketTable({ research }: { research: KeywordResearch }) {
       columns={columns}
       emptyMessage="No keyword markets were recorded"
       emptyIcon="public"
+      activeRowId={selectedRowId}
+      callbacks={{ onRowClick: showMarketDetails }}
     />
   );
 }
@@ -269,15 +309,44 @@ export function QuestionTable({ research }: { research: FaqResearch }) {
   );
 }
 
-export function CompetitorTables({ research }: { research: CompetitorResearch }) {
-  return <CompetitorAnalysisDataTable research={research} />;
+export function CompetitorTables({
+  research,
+  openSupportingPane,
+}: {
+  research: CompetitorResearch;
+  openSupportingPane: ConsoleScreenProps['openSupportingPane'];
+}) {
+  return (
+    <CompetitorAnalysisDataTable research={research} openSupportingPane={openSupportingPane} />
+  );
 }
 
-export function SerpTables({ intelligence }: { intelligence: SeoIntelligence }) {
+export function SerpTables({
+  intelligence,
+  openSupportingPane,
+}: {
+  intelligence: SeoIntelligence;
+  openSupportingPane: ConsoleScreenProps['openSupportingPane'];
+}) {
+  const [selection, setSelection] = useState<{ kind: 'serp' | 'metadata'; id: string }>();
   return (
     <div className="grid gap-6">
-      <SerpLandscapeDataTable intelligence={intelligence} />
-      <MetadataExperimentsDataTable intelligence={intelligence} />
+      <SerpLandscapeDataTable
+        intelligence={intelligence}
+        activeRowId={selection?.kind === 'serp' ? selection.id : undefined}
+        onSelect={(row) => {
+          setSelection({ kind: 'serp', id: row.id });
+          openSerpDetailsPane(row, openSupportingPane, () => setSelection(undefined));
+        }}
+      />
+      <MetadataExperimentsDataTable
+        intelligence={intelligence}
+        activeRowId={selection?.kind === 'metadata' ? selection.id : undefined}
+        onSelect={(row) => {
+          setSelection({ kind: 'metadata', id: row.id });
+          openMetadataDetailsPane(row, openSupportingPane, () => setSelection(undefined));
+        }}
+      />
     </div>
   );
 }

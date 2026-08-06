@@ -44,12 +44,69 @@ describe('hosted runtime roles', () => {
       audience: 'unisane.ops' as const,
       principalId: 'user.alice',
       allowedScopeIds: ['workspace.acme'],
+      allowedProjectIds: ['project.acme'],
     }));
-    const gateway = createHostedGatewayRole({ store, authorize });
+    const gateway = createHostedGatewayRole({ store, identity: { authorize } });
 
-    await gateway.admit(request);
-    expect(authorize).toHaveBeenCalledWith(request);
+    const authentication = { scheme: 'bearer' as const, token: 'identity-token' };
+    await gateway.admit({ request, authentication });
+    expect(authorize).toHaveBeenCalledWith(authentication);
     expect(admit).toHaveBeenCalledTimes(1);
+  });
+
+  it('rejects a project not carried by the verified workload identity', async () => {
+    const admit = vi.fn();
+    const store = {
+      durability: 'durable' as const,
+      atomic: true as const,
+      admit,
+    } as unknown as HostedReadJobStore;
+    const authorize = vi.fn(async () => ({
+      authenticated: true as const,
+      audience: 'unisane.ops' as const,
+      principalId: 'user.alice',
+      allowedScopeIds: ['workspace.acme'],
+      allowedProjectIds: ['project.other'],
+    }));
+    const gateway = createHostedGatewayRole({ store, identity: { authorize } });
+
+    await expect(
+      gateway.admit({
+        request,
+        authentication: { scheme: 'bearer', token: 'identity-token' },
+      }),
+    ).rejects.toMatchObject({ code: 'project-forbidden' });
+    expect(admit).not.toHaveBeenCalled();
+  });
+
+  it('pushes the complete identity boundary into an authorization-aware store read', async () => {
+    const getAuthorized = vi.fn(async () => null);
+    const store = {
+      durability: 'durable' as const,
+      atomic: true as const,
+      getAuthorized,
+    } as unknown as HostedReadJobStore & { getAuthorized: typeof getAuthorized };
+    const authorize = vi.fn(async () => ({
+      authenticated: true as const,
+      audience: 'unisane.ops' as const,
+      principalId: 'user.alice',
+      allowedScopeIds: ['workspace.acme'],
+      allowedProjectIds: ['project.acme'],
+    }));
+    const gateway = createHostedGatewayRole({ store, identity: { authorize } });
+
+    await expect(
+      gateway.get({
+        jobId: 'read.request.1',
+        authentication: { scheme: 'bearer', token: 'identity-token' },
+      }),
+    ).resolves.toBeNull();
+    expect(getAuthorized).toHaveBeenCalledWith({
+      jobId: 'read.request.1',
+      principalId: 'user.alice',
+      allowedScopeIds: ['workspace.acme'],
+      allowedProjectIds: ['project.acme'],
+    });
   });
 
   it('constructs a worker role without gateway authorization authority', () => {

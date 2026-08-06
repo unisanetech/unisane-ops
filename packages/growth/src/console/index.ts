@@ -64,6 +64,7 @@ export type {
   MarketingConsoleState,
   MarketingConsoleStatus,
   MarketingConsoleTagManager,
+  MarketingConsoleTemporalQuery,
   MarketingConsoleSourceSummary,
   MarketingConsoleTrackingCheck,
   MarketingConsoleTrackingAudit,

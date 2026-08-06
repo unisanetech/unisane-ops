@@ -4,6 +4,8 @@ import {
   type CompetitorPage,
   type CompetitorResearchFile,
 } from '../schema/competitor.js';
+import { fetchSiteCrawlResponse, readSiteCrawlResponseText } from '../site-crawl/request.js';
+import { isRobotsAllowed, parseRobotsText, type RobotsPolicy } from '../site-crawl/robots.js';
 import { extractCompetitorHtmlMetadata } from './extract-html.js';
 
 export type CompetitorUrlInput = {
@@ -25,6 +27,8 @@ export type FetchCompetitorUrlsOptions = {
   timeoutMs?: number;
   userAgent?: string;
   maxPages?: number;
+  maxResponseBytes?: number;
+  now?: () => Date;
 };
 
 export type FetchCompetitorUrlsResult = {
@@ -37,17 +41,33 @@ export async function fetchCompetitorUrls(
 ): Promise<FetchCompetitorUrlsResult> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const maxPages = options.maxPages ?? 25;
+  const userAgent = options.userAgent ?? 'UnisaneOpsSEOResearch/1.0';
+  const maxResponseBytes = options.maxResponseBytes ?? 2_000_000;
   const requestedUrls = options.urls.slice(0, maxPages);
   const pages: CompetitorPage[] = [];
   const failedUrls: Array<{ url: string; message: string }> = [];
+  const robotsByOrigin = new Map<string, Promise<RobotsPolicy>>();
 
   for (const [index, input] of requestedUrls.entries()) {
     try {
+      const targetUrl = new URL(input.url);
+      const robotsPolicy = await loadRobotsPolicy({
+        origin: targetUrl.origin,
+        fetchImpl,
+        timeoutMs: options.timeoutMs ?? 10_000,
+        userAgent,
+        maxResponseBytes: Math.min(maxResponseBytes, 500_000),
+        cache: robotsByOrigin,
+      });
+      if (!isRobotsAllowed(robotsPolicy, targetUrl, userAgent)) {
+        throw new Error('Robots policy disallows this URL.');
+      }
       const html = await fetchHtml({
         url: input.url,
         fetchImpl,
         timeoutMs: options.timeoutMs ?? 10_000,
-        userAgent: options.userAgent,
+        userAgent,
+        maxResponseBytes,
       });
       const metadata = extractCompetitorHtmlMetadata({ html, url: input.url });
       pages.push(
@@ -73,6 +93,18 @@ export async function fetchCompetitorUrls(
       platformId: options.platformId,
       market: cleanOptional(options.market),
       source: 'url-fetch',
+      evidence: {
+        observedAt: (options.now ?? (() => new Date()))().toISOString(),
+        sampleData: false,
+        limitations: [
+          `Static HTML metadata fetch was bounded to ${maxPages} pages and ${maxResponseBytes} bytes per response.`,
+          'robots.txt retrieval and policy evaluation were attempted per origin before page retrieval.',
+          ...(failedUrls.length > 0
+            ? [`${failedUrls.length} URL fetch failure(s) were recorded.`]
+            : []),
+        ],
+        failures: failedUrls.map((failure) => ({ url: failure.url, reason: failure.message })),
+      },
       pages,
     }),
     failedUrls,
@@ -83,29 +115,49 @@ async function fetchHtml(options: {
   url: string;
   fetchImpl: FetchLike;
   timeoutMs: number;
-  userAgent?: string;
+  userAgent: string;
+  maxResponseBytes: number;
 }): Promise<string> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), options.timeoutMs);
-  try {
-    const response = await options.fetchImpl(options.url, {
-      headers: {
-        accept: 'text/html,application/xhtml+xml',
-        ...(options.userAgent ? { 'user-agent': options.userAgent } : {}),
-      },
-      signal: controller.signal,
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    const contentType = response.headers.get('content-type') ?? '';
-    if (contentType && !contentType.toLowerCase().includes('html')) {
-      throw new Error(`Expected HTML response, received ${contentType}`);
-    }
-    return response.text();
-  } finally {
-    clearTimeout(timeout);
+  const response = await fetchSiteCrawlResponse(options.url, {
+    fetchImpl: options.fetchImpl,
+    timeoutMs: options.timeoutMs,
+    headers: {
+      accept: 'text/html,application/xhtml+xml',
+      'user-agent': options.userAgent,
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
   }
+  const contentType = response.headers.get('content-type') ?? '';
+  if (contentType && !contentType.toLowerCase().includes('html')) {
+    throw new Error(`Expected HTML response, received ${contentType}`);
+  }
+  return readSiteCrawlResponseText(response, options.maxResponseBytes);
+}
+
+async function loadRobotsPolicy(options: {
+  origin: string;
+  fetchImpl: FetchLike;
+  timeoutMs: number;
+  userAgent: string;
+  maxResponseBytes: number;
+  cache: Map<string, Promise<RobotsPolicy>>;
+}): Promise<RobotsPolicy> {
+  const cached = options.cache.get(options.origin);
+  if (cached) return cached;
+  const pending = (async () => {
+    const response = await fetchSiteCrawlResponse(`${options.origin}/robots.txt`, {
+      fetchImpl: options.fetchImpl,
+      timeoutMs: options.timeoutMs,
+      headers: { accept: 'text/plain,*/*', 'user-agent': options.userAgent },
+    });
+    if (response.status === 404) return parseRobotsText('');
+    if (!response.ok) throw new Error(`robots.txt request failed with HTTP ${response.status}.`);
+    return parseRobotsText(await readSiteCrawlResponseText(response, options.maxResponseBytes));
+  })();
+  options.cache.set(options.origin, pending);
+  return pending;
 }
 
 function createCompetitorPage(options: {

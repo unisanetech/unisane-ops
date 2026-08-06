@@ -20,4 +20,6 @@ export {
   type ExecuteGrowthSeoOpportunityOptions,
   type GrowthSeoOpportunityExecutionDependencies,
 } from './seo-opportunity-execution.js';
+export * from './seo-opportunity-preparation.js';
+export * from './seo-publication-verification.js';
 export * from './campaign-pause-execution.js';

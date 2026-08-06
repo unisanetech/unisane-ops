@@ -96,6 +96,35 @@ export type SeoOpportunityStatusCliOptions = SeoCliOptions & {
   status?: string;
 };
 
+export type SeoOpportunityPrepareCliOptions = SeoCliOptions & {
+  opportunities?: string;
+  outDir?: string;
+  id?: string;
+  environment?: string;
+  market?: string;
+  maxAgeDays?: string;
+  audience?: 'content-team' | 'coding-agent';
+  notBeforeDays?: string;
+  expiresDays?: string;
+};
+
+export type SeoPublicationRecordCliOptions = SeoCliOptions & {
+  packet?: string;
+  out?: string;
+  publishedUrl?: string;
+  publishedAt?: string;
+  recordedBy?: string;
+  confirmReviewed?: boolean;
+  environment?: string;
+};
+
+export type SeoPublicationVerifyCliOptions = SeoCliOptions & {
+  publication?: string;
+  out?: string;
+  environment?: string;
+  maxAgeDays?: string;
+};
+
 export type SeoBriefGenerateCliOptions = SeoCliOptions & {
   opportunities?: string;
   outDir?: string;
@@ -114,7 +143,10 @@ export type SeoPerformanceImportCliOptions = SeoCliOptions & {
   input?: string;
   out?: string;
   property?: string;
-  dateRange?: string;
+  startDate?: string;
+  endDate?: string;
+  dataKind?: 'live' | 'sample';
+  freshnessHours?: string;
 };
 
 export type SeoPerformanceFetchSearchConsoleCliOptions = SeoCliOptions & {
@@ -163,5 +195,58 @@ export type SeoTrendImportCliOptions = SeoCliOptions & {
 export type SeoReportGenerateCliOptions = SeoCliOptions & {
   opportunities?: string;
   internalLinks?: string;
+  out?: string;
+};
+
+export type SeoSiteCrawlCliOptions = SeoCliOptions & {
+  site?: string;
+  out?: string;
+  previous?: string;
+  incremental?: boolean;
+  sitemaps?: boolean;
+  userAgent?: string;
+  maxPages?: string;
+  maxDepth?: string;
+  maxSitemaps?: string;
+  maxDiscoveredUrls?: string;
+  maxResponseBytes?: string;
+  timeoutMs?: string;
+  freshnessHours?: string;
+};
+
+export type SeoSiteRenderCliOptions = SeoCliOptions & {
+  crawl?: string;
+  out?: string;
+  url?: string[];
+  maxPages?: string;
+  timeoutMs?: string;
+  settleMs?: string;
+  minStaticWordCount?: string;
+  freshnessHours?: string;
+  browserChannel?: string;
+  browserExecutable?: string;
+};
+
+export type SeoSiteConfigureCliOptions = SeoCliOptions & {
+  site?: string;
+  market?: string[];
+  confirmOwnership?: boolean;
+  searchConsoleProperty?: string;
+  ga4Property?: string;
+  maxPages?: string;
+  maxDepth?: string;
+  maxSitemaps?: string;
+  maxDiscoveredUrls?: string;
+  maxResponseBytes?: string;
+  timeoutMs?: string;
+  freshnessHours?: string;
+  sitemaps?: boolean;
+};
+
+export type SeoPagesInventoryCliOptions = SeoCliOptions & {
+  crawl?: string;
+  render?: string;
+  searchConsole?: string;
+  ga4?: string;
   out?: string;
 };

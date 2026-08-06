@@ -9,10 +9,19 @@ import {
   seoOpportunityEvidenceSchema,
   type SeoOpportunityCandidate,
 } from '../playbooks/seo-opportunity-research.js';
+import {
+  planSeoOpportunityResearch,
+  seoOpportunityResearchPlanSchema,
+  type SeoOpportunityResearchPlan,
+} from '../playbooks/seo-opportunity-research-plan.js';
 
 export const growthSeoOpportunityResearchInputSchema = z
   .object({
     market: z.string().trim().min(1).max(80).optional(),
+    opportunityId: z
+      .string()
+      .regex(/^[a-z0-9]+(?:[.-][a-z0-9]+)*$/)
+      .optional(),
     opportunityLimit: z.number().int().min(1).max(10).default(10),
   })
   .strict();
@@ -32,6 +41,7 @@ export const growthSeoOpportunityResearchOutputSchema = z
     truncated: z.boolean(),
     opportunities: growthSeoOpportunitySnapshotSchema.shape.opportunities,
     evidence: z.array(seoOpportunityEvidenceSchema).max(50),
+    researchPlan: seoOpportunityResearchPlanSchema,
     workflow: growthSeoOpportunityWorkflowProjectionSchema,
   })
   .strict();
@@ -60,9 +70,11 @@ function uniqueEvidence(candidates: readonly SeoOpportunityCandidate[]) {
 function snapshotStatus(input: {
   opportunities: ReturnType<typeof rankSeoOpportunityCandidates>;
   candidates: readonly SeoOpportunityCandidate[];
+  researchPlan: SeoOpportunityResearchPlan;
 }) {
   if (input.opportunities.length === 0) return 'blocked' as const;
   if (
+    input.researchPlan.status === 'required' ||
     input.opportunities[0]?.confidence === 'low' ||
     input.candidates.some((candidate) =>
       candidate.evidence.some(
@@ -91,7 +103,9 @@ export function createGrowthSeoOpportunityResearchAction(
         .parse(await dependencies.loadCandidates(context));
       const normalizedMarket = input.market?.toLowerCase();
       const candidates = allCandidates.filter(
-        (candidate) => !normalizedMarket || candidate.market?.toLowerCase() === normalizedMarket,
+        (candidate) =>
+          (!input.opportunityId || candidate.id === input.opportunityId) &&
+          (!normalizedMarket || candidate.market?.toLowerCase() === normalizedMarket),
       );
       const opportunities = rankSeoOpportunityCandidates({
         candidates,
@@ -99,13 +113,17 @@ export function createGrowthSeoOpportunityResearchAction(
       });
       const returnedIds = new Set(opportunities.map((opportunity) => opportunity.id));
       const returnedCandidates = candidates.filter((candidate) => returnedIds.has(candidate.id));
+      const researchPlan = planSeoOpportunityResearch({
+        candidates: returnedCandidates,
+        opportunities,
+      });
       const observedAt = (dependencies.now ?? (() => new Date()))().toISOString();
       const snapshot = growthSeoOpportunitySnapshotSchema.parse({
         schemaVersion: 1,
         projectId: context.projectId,
         environmentId: context.environmentId,
         observedAt,
-        status: snapshotStatus({ opportunities, candidates: returnedCandidates }),
+        status: snapshotStatus({ opportunities, candidates: returnedCandidates, researchPlan }),
         totalCandidateCount: candidates.length,
         returnedOpportunityCount: opportunities.length,
         truncated: opportunities.length < candidates.length,
@@ -114,6 +132,7 @@ export function createGrowthSeoOpportunityResearchAction(
       });
       return growthSeoOpportunityResearchOutputSchema.parse({
         ...snapshot,
+        researchPlan,
         workflow: createGrowthSeoOpportunityWorkflowProjection({
           runId: `workflow.${context.requestId}`,
           briefId: `brief.${context.requestId}`,
