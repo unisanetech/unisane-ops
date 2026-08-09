@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "state": "valid-with-exact-external-blockers",
-  "generatedFromPolicySha256": "2e86364127f7f8f47d179d226c8a597eca59efb6892577ed3c43551c82b859db",
+  "generatedFromPolicySha256": "657a2ac53db399eb3b4df447e1a26a6894dad6c6c34da7bda13de38dd196f7c9",
   "source": {
-    "fileCount": 947,
-    "digest": "44807c4427cd1f370ee8a7d0c3e77785a572f14e540c91c32ce85d531e2f5f96",
+    "fileCount": 949,
+    "digest": "0c5b2e57ab3f943341143b239ba8fb81c70aacfae69f18acba0f1762b6564580",
     "excludedGeneratedAndTaskMemory": [
       "docs/reference/generated/**",
       "docs/work/tasks/**",
@@ -71,13 +71,6 @@
     "manifestCount": 14,
     "foreignWorkspaceEdges": [
       {
-        "consumer": "@unisane/framework-ops",
-        "dependency": "@unisane/devtools",
-        "specifier": "workspace:*",
-        "section": "dependencies",
-        "path": "packages/framework-ops/package.json"
-      },
-      {
         "consumer": "@unisane/ops-console",
         "dependency": "@unisane/data-table",
         "specifier": "workspace:*",
@@ -93,12 +86,6 @@
       }
     ],
     "exactExternalBlockers": [
-      {
-        "id": "OPS-R04-FRAMEWORK-DEVTOOLS",
-        "consumer": "@unisane/framework-ops",
-        "dependency": "@unisane/devtools",
-        "specifier": "workspace:*"
-      },
       {
         "id": "OPS-R03-DATA-TABLE",
         "consumer": "@unisane/ops-console",

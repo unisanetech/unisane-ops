@@ -176,7 +176,7 @@ workspace. The following current edges cross the intended repository boundary:
 | Consumer | Current dependency | Final rule | Gate |
 | --- | --- | --- | --- |
 | `@unisane/ops-console` | `@unisane/ui`, `@unisane/data-table` | consume released or immutable admitted UI candidates; no sibling source | UI package visibility/release is unresolved; block shadow certification |
-| `@unisane/framework-ops` | `@unisane/devtools@workspace:*` | consume the released semver-governed `./framework-integration` subpath only | umbrella architecture gate still requires the workspace edge; its owner must admit the immutable Framework candidate and gate cutover |
+| `@unisane/framework-ops` | `@unisane/devtools@0.1.0` | consume the exact admitted semver-governed `./framework-integration` subpath only | converged; package-owned source, packed runtime/declaration, and root architecture proof reject workspace/file/link fallbacks and private Devtools surfaces |
 | `@unisane/provider-aws` | provider-local dependency-free output adapter | retain provider-owned presentation with no private Tooling dependency | converged; focused package proof required |
 | `@unisane/provider-google` | provider-local dependency-free output adapter | retain provider-owned presentation with no private Tooling dependency | converged; focused package proof required |
 | `unisane` host | dynamically resolves UI-owned `@unisane/ui-cli` | keep discovery-only structural pack contract; never depend on UI source | require a released/admitted UI CLI candidate and trust/compatibility proof |

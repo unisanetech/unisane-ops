@@ -33,12 +33,6 @@
       "consumer": "@unisane/ops-console",
       "dependency": "@unisane/data-table",
       "specifier": "workspace:*"
-    },
-    {
-      "id": "OPS-R04-FRAMEWORK-DEVTOOLS",
-      "consumer": "@unisane/framework-ops",
-      "dependency": "@unisane/devtools",
-      "specifier": "workspace:*"
     }
   ],
   "acceptedPublicPackages": [
