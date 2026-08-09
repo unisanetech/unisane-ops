@@ -24,15 +24,12 @@ until an approved cutover records otherwise.
    [Standalone Repository Transition Readiness](standards/01-standalone-repository-transition-readiness.md)
    before source convergence, history filtering, remote creation, publication, or
    deployment work.
-3. Inspect the generated [source disposition ledger](reference/generated/repository/source-disposition-ledger.json),
-   [history filter specification](reference/generated/repository/history-filter-spec.json),
-   and [public-safety scan specification](reference/generated/repository/public-safety-scan-spec.json)
-   for the current no-shadow convergence checkpoint.
-4. For the disposable extraction proof, inspect the
-   [provenance receipt](reference/generated/repository/extraction-proof/T-b222cdbf/provenance-receipt.json),
-   [commit map](reference/generated/repository/extraction-proof/T-b222cdbf/commit-map.json),
-   [redacted safety receipt](reference/generated/repository/extraction-proof/T-b222cdbf/public-safety-scan-receipt.json),
-   and [owner-decision ledger](reference/generated/repository/extraction-proof/T-b222cdbf/owner-decision-ledger.json).
+3. Use the transition Standard for the safe no-shadow convergence and disposable-proof
+   summaries. Detailed lineage, scanner, locator, and Task receipts are private
+   Infrastructure-owned audit Evidence and are deliberately not linked into this future
+   public product boundary.
+4. The current controlled receipt ID is `OPS-EXTRACTION-T-b222cdbf`. It is not a public
+   provenance record, approval, or materialization authority.
 
 ## Authority During Transition
 

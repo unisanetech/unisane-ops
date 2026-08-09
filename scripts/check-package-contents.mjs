@@ -3,7 +3,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const policy = JSON.parse(readFileSync(join(root, 'tools/repository/source-boundary-policy.json'), 'utf8'));
+const policy = JSON.parse(readFileSync(join(root, 'tools/repository/standalone-integrity-policy.json'), 'utf8'));
 const manifests = [];
 for (const group of ['apps', 'packages']) {
   for (const entry of readdirSync(join(root, group), { withFileTypes: true })) {

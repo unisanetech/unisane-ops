@@ -1,15 +1,25 @@
 {
   "schemaVersion": 1,
   "state": "valid-with-exact-external-blockers",
-  "generatedFromPolicySha256": "47af74f9e5852326445ef516dc3d0fb5b5213d230bce7a7b9c469c4d8aaf185f",
+  "generatedFromPolicySha256": "2e86364127f7f8f47d179d226c8a597eca59efb6892577ed3c43551c82b859db",
   "source": {
-    "fileCount": 953,
-    "digest": "c2b0bd7da7782251002e1577b793dbec0a05fccb1f0a0784d0982c2e6720efce",
+    "fileCount": 946,
+    "digest": "5deda416da193601376aca189a715ce1f4ad7fbbb6f97f072724bf3da8df0012",
     "excludedGeneratedAndTaskMemory": [
       "docs/reference/generated/**",
       "docs/work/tasks/**",
       "docs/work/archive/tasks/**"
     ]
+  },
+  "generatedOutputs": {
+    "expected": [
+      "docs/reference/generated/repository/standalone-repository-integrity.json"
+    ],
+    "observed": [
+      "docs/reference/generated/repository/standalone-repository-integrity.json"
+    ],
+    "unexpected": [],
+    "missing": []
   },
   "repositoryShape": {
     "expectedTopLevel": [

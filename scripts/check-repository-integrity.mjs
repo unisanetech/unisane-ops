@@ -7,7 +7,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const policyPath = join(root, 'tools/repository/standalone-integrity-policy.json');
 const policy = JSON.parse(readFileSync(policyPath, 'utf8'));
 const outputPath = join(root, policy.generatedOutput);
-const mode = process.argv.includes('--write') ? 'write' : 'check';
+const mode = process.argv.includes('--write') ? 'write' : process.argv.includes('--check-generated') ? 'generated' : 'check';
 const ignoredDirectories = new Set(['.git', '.skopos', '.unisane', '.turbo', 'node_modules', 'dist', 'coverage']);
 
 function sha256(value) {
@@ -33,6 +33,10 @@ function sourceEligible(path) {
 }
 
 const allPaths = walk(root);
+const generatedPaths = allPaths.filter((path) => path.startsWith('docs/reference/generated/'));
+const expectedGeneratedPaths = [...policy.generatedOutputs].sort();
+const unexpectedGeneratedPaths = generatedPaths.filter((path) => !expectedGeneratedPaths.includes(path));
+const missingGeneratedPaths = expectedGeneratedPaths.filter((path) => !generatedPaths.includes(path));
 const sourcePaths = allPaths.filter(sourceEligible);
 const sourceRecords = sourcePaths.map((path) => {
   const absolute = join(root, path);
@@ -69,6 +73,9 @@ const topLevel = readdirSync(root).filter((name) => !ignoredDirectories.has(name
 const missingTopLevel = policy.expectedTopLevel.filter((path) => !topLevel.includes(path));
 const unexpectedTopLevel = topLevel.filter((path) => !policy.expectedTopLevel.includes(path) && path !== 'pnpm-lock.yaml');
 const violations = [
+  ...(expectedGeneratedPaths.includes(policy.generatedOutput) ? [] : ['generated receipt output is absent from the exact generated-output allowlist']),
+  ...unexpectedGeneratedPaths.map((path) => `generated output is not owned by the exact allowlist: ${path}`),
+  ...missingGeneratedPaths.map((path) => `required generated output is missing: ${path}`),
   ...(JSON.stringify(blockerProjection) === JSON.stringify(expectedProjection) ? [] : ['foreign workspace blockers differ from the exact accepted set']),
   ...fileOrLinkEdges.map(({ consumer, dependency }) => `file/link dependency is forbidden: ${consumer} -> ${dependency}`),
   ...foreignRelativeReferences.map((path) => `foreign relative source reference: ${path}`),
@@ -84,6 +91,12 @@ const receipt = {
     fileCount: sourceRecords.length,
     digest: sha256(sourceRecords.map(({ path, mode: fileMode, sha256: digest }) => `${path}\0${fileMode}\0${digest}`).join('\n')),
     excludedGeneratedAndTaskMemory: policy.excludedSourcePatterns,
+  },
+  generatedOutputs: {
+    expected: expectedGeneratedPaths,
+    observed: generatedPaths,
+    unexpected: unexpectedGeneratedPaths,
+    missing: missingGeneratedPaths,
   },
   repositoryShape: {
     expectedTopLevel: policy.expectedTopLevel,
@@ -111,4 +124,4 @@ if (violations.length > 0) {
   for (const violation of violations) console.error(violation);
   process.exitCode = 1;
 }
-if (!process.exitCode) console.log(`Standalone repository integrity verified with ${sourceRecords.length} source files and ${foreignWorkspaceEdges.length} exact external blockers.`);
+if (!process.exitCode) console.log(`${mode === 'generated' ? 'Generated output drift' : 'Standalone repository integrity'} verified with ${sourceRecords.length} source files, ${generatedPaths.length} exact generated output, and ${foreignWorkspaceEdges.length} exact external blockers.`);

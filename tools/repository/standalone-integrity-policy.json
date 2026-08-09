@@ -41,7 +41,48 @@
       "specifier": "workspace:*"
     }
   ],
+  "acceptedPublicPackages": [
+    "unisane",
+    "@unisane/cloud",
+    "@unisane/framework-ops",
+    "@unisane/growth",
+    "@unisane/ops-engine",
+    "@unisane/provider-aws",
+    "@unisane/provider-cloudflare",
+    "@unisane/provider-google",
+    "@unisane/provider-meta",
+    "@unisane/web-runtime"
+  ],
+  "packageAdmissions": {
+    "@unisane/ops-console": {
+      "kind": "public-source-deployable-app",
+      "registryAdmission": "not-admitted",
+      "requiredPrivate": true,
+      "authority": "docs/standards/01-standalone-repository-transition-readiness.md"
+    },
+    "@unisane/ops-hosted-runtime": {
+      "kind": "private-hosted-runtime",
+      "registryAdmission": "not-admitted",
+      "requiredPrivate": true,
+      "authority": "docs/standards/01-standalone-repository-transition-readiness.md"
+    },
+    "@unisane/ops-mcp": {
+      "kind": "local-mcp-adapter",
+      "registryAdmission": "owner-decision",
+      "requiredPrivate": null,
+      "authority": "docs/standards/01-standalone-repository-transition-readiness.md"
+    },
+    "@unisane/ops-hosted-postgresql": {
+      "kind": "hosted-postgresql-adapter",
+      "registryAdmission": "owner-decision",
+      "requiredPrivate": null,
+      "authority": "docs/standards/01-standalone-repository-transition-readiness.md"
+    }
+  },
   "generatedOutput": "docs/reference/generated/repository/standalone-repository-integrity.json",
+  "generatedOutputs": [
+    "docs/reference/generated/repository/standalone-repository-integrity.json"
+  ],
   "excludedSourcePatterns": [
     "docs/reference/generated/**",
     "docs/work/tasks/**",

@@ -75,5 +75,8 @@ required by the current umbrella gate. Redacted scan findings plus scanner, secu
 privacy, legal, contributor, asset, license, signing, and remote-governance decisions
 remain unresolved. It is not certified for standalone CI, public history, remote
 authority, public package release, or production deployment.
+Detailed extraction and scanner receipts remain Infrastructure-owned private audit
+Evidence outside this future public product boundary; target Memory retains only safe
+receipt IDs, hashes, counts, and summaries.
 The canonical gate status is in
 [Standalone Repository Transition Readiness](standards/01-standalone-repository-transition-readiness.md).

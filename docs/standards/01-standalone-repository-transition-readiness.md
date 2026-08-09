@@ -502,17 +502,13 @@ archived umbrella Git is allowed; a filtered current fallback is not.
 ## No-Shadow Source-Convergence Checkpoint
 
 Task `T-287702f0` converges source from certified umbrella `dev` commit
-`50f13fcc35e95aad3b8ad3c5dc7b271810946a34`. The generated
-[source disposition ledger](../reference/generated/repository/source-disposition-ledger.json)
-covers every concrete target file except its three self-referential outputs and the two
-source-convergence/extraction-proof Task artifact families; those five surfaces have
-explicit pattern records. It also records every matching canonical umbrella docs surface and
-every declared root/tool/config disposition. The current Task's root snapshot pattern
-is recorded and excluded from canonical-Memory hashing because it is Skopos-managed
-Evidence and hashing it would create a ledger/snapshot cycle. Both Task snapshot
-patterns receive that disposition. The authored source is
-`tools/repository/source-boundary-policy.json`; `pnpm generate:source-boundary` is its
-only generator and `pnpm check:source-boundary` rejects drift.
+`50f13fcc35e95aad3b8ad3c5dc7b271810946a34`. Its generated source disposition ledger
+covers every concrete target file except Skopos-managed Task artifact patterns and
+records every matching canonical umbrella docs surface and declared root/tool/config
+disposition. The detailed ledger, exact history specification, and safety specification
+are controlled Infrastructure audit Evidence, not target repository outputs. Their
+frozen digests remain source-bound under receipt ID `OPS-EXTRACTION-T-b222cdbf`; they
+must not enter a future public current-path filter.
 
 The checkpoint establishes these facts:
 
@@ -533,12 +529,12 @@ The checkpoint establishes these facts:
 - the sole umbrella `pnpm-lock.yaml` removes only the two retired CLI-core importer
   edges and remains the pre-cutover install authority; target lockfile generation is
   still deferred to disposable extracted proof;
-- the [history filter specification](../reference/generated/repository/history-filter-spec.json)
-  freezes 507 source-to-target lineage mappings and 91 direct additions, with explicit
+- the controlled history filter specification freezes 507 source-to-target lineage
+  mappings and 91 direct additions, with explicit
   include/rename/exclude, tag, tool, and provenance receipt requirements; it was not
   executed;
-- the [public-safety scan specification](../reference/generated/repository/public-safety-scan-spec.json)
-  defines the complete commit/blob/ref input, required detector categories, fail-closed
+- the controlled public-safety scan specification defines the complete commit/blob/ref
+  input, required detector categories, fail-closed
   rules, and redacted receipt; it was not executed and grants no public-history approval.
 
 No shadow, filtered history, target lockfile, target Skopos state, remote, release,
@@ -550,8 +546,8 @@ Task `T-b222cdbf` used exact integrated umbrella `dev` commit
 `616344017db70385d966d3b4a0197614b5b1bca3` as its immutable filter input. The
 approved freeze checkpoint remained
 `50f13fcc35e95aad3b8ad3c5dc7b271810946a34`; the integrated filter and safety
-specification digests are recorded in the
-[provenance receipt](../reference/generated/repository/extraction-proof/T-b222cdbf/provenance-receipt.json).
+specification digests are recorded under controlled receipt ID
+`OPS-EXTRACTION-T-b222cdbf`.
 The proof exists only at
 `/tmp/unisane-ops-extraction-T-b222cdbf/repository`. It is disposable Evidence, not a
 final repository, remote, or writable authority.
@@ -560,16 +556,18 @@ The technical extraction established these facts:
 
 - `git-filter-repo` executable version `a40bce548d2c`, executable digest, callback
   digest, 507 source-to-target mappings, 481 unique historical origins, 91 direct
-  additions, and the complete 503-entry source-to-filtered
-  [commit map](../reference/generated/repository/extraction-proof/T-b222cdbf/commit-map.json)
-  are frozen;
+  additions, and the complete 503-entry source-to-filtered commit map are frozen in the
+  controlled audit bundle;
 - filtered base `a9d3ce795a3cd7ba4fd3a91711f2be2c9436bef6` has exact content and mode parity
   across 951 current paths with source commit `616344017`; 1,036 filtered historical
   paths contain zero excluded paths;
-- a disposable proof overlay corrected Corepack-before-pnpm-cache ordering, replaced
-  the umbrella-only transition gate with a target-local repository-integrity and
-  generated-drift gate, and aligned the repository-system manifest and root typecheck
-  implementation on `turbo run check-types`;
+- the corrected staged CI uses `pnpm/action-setup` before `actions/setup-node` requests
+  pnpm caching, keeps frozen install after both setup steps, and aligns the
+  repository-system manifest and root typecheck implementation on
+  `turbo run check-types`;
+- the target-local generated check owns an exact one-file generated-output allowlist
+  and rejects every additional `docs/reference/generated/**` path; detailed transition
+  and audit receipts are not target generated outputs;
 - overlay tip `f6de44d92b95413bafb52607a7a70cf2ac512791` and tree
   `2f413b92e7e5c0dda857dcfa428b859fda60c248` contain 84 commits, 2,182 reachable
   blobs, 1,487 trees, one local branch, and no admitted tags;
@@ -577,18 +575,27 @@ The technical extraction established these facts:
   refs, and unreachable objects; strict Git integrity and the clean working tree pass;
 - the deterministic technical scan covered every reachable commit, blob, ref,
   historical path, commit message, contributor identity, and the final working tree.
-  Its [redacted receipt](../reference/generated/repository/extraction-proof/T-b222cdbf/public-safety-scan-receipt.json)
-  contains 1,027 opaque finding identifiers: 1 secret-rule, 958 privacy-rule, 20
+  Its controlled receipt contains 1,027 opaque finding identifiers: 1 secret-rule, 958 privacy-rule, 20
   binary/size, 43 generated/cache/provider-state-path, and 5 license/provenance
-  findings. No suspected value is recorded.
+  findings. Committed correction metadata adds per-category, per-rule, and subject-type
+  counts and digests. A deterministic task-local mode-`0600` bundle maps every finding
+  ID to its rule, subject type, blob OID, and private historical path/commit locators;
+  no matched value or suspected secret content is written.
 
 Technical scanning is complete; public-history certification is not. Scanner choices,
 versions, thresholds, entropy policy, allowlists, every redacted finding, contributor
 publication, source-copy provenance, license, NOTICE, assets, fixtures, provider terms,
 trademarks, signing, remote governance, and remediation policy require accountable
-owner approval. The
-[owner-decision ledger](../reference/generated/repository/extraction-proof/T-b222cdbf/owner-decision-ledger.json)
-keeps those decisions and the three exact dependency blockers fail-closed.
+owner approval. The controlled owner-decision ledger keeps those decisions and the
+three exact dependency blockers fail-closed.
+
+Detailed receipts, the full commit map, scanner output, private locators, and
+task-specific executor/policy sources remain outside `unisane-ops/**` under
+Infrastructure-owned private audit control. Only safe receipt IDs, hashes, counts, and
+summaries belong in target Memory. Durable receipt validation checks tracked schemas,
+digests, and fail-closed state without `/tmp`; the separate task-local live verifier
+recomputes HEAD/tree, exact refs and reachable object inventory, strict no-reflog
+unreachable-object hygiene, cleanup residue, scan aggregates, and the private bundle.
 
 The staged repository-integrity check is a real deterministic target-local gate. It is
 not a substitute for the public-package-product profile's still-missing approved
@@ -606,7 +613,7 @@ certified.
 | OPS-R04 | open | local shadow | root-owned umbrella policy still requires the Framework Devtools workspace edge, and bridge plus starter/template release ordering are not proved outside the workspace | Framework and Ops release owners; admitted gate cutover, packed candidates, and cycle-free clean installs |
 | OPS-R05 | open | local shadow | Platforms retain seven `workspace:*` Ops edges | Platforms owner; later consumer Tasks against immutable candidates |
 | OPS-R06 | open | package release | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved | product and release owners; explicit package admission or privatization |
-| OPS-R07 | open | local shadow | Corepack ordering, standalone integrity/generated drift, and typecheck declarations are corrected, but target lockfile generation, clean install, Node matrix, hosted CI, and target-local Skopos adoption remain deliberately deferred | Ops tooling owner; approved later materialization proof only |
+| OPS-R07 | open | local shadow | pnpm setup ordering, exact generated-output ownership, standalone integrity, and typecheck declarations are corrected, but target lockfile generation, clean install, Node matrix, hosted CI, security/license gates, and target-local Skopos adoption remain deliberately deferred | Ops tooling owner; approved later materialization proof only |
 | OPS-R08 | technical execution complete; approval open | local shadow/public history | exact filter, commit map, parity, excluded-path, ref/tag/signature, integrity, and cleanup receipts pass in the disposable candidate; tool approval and final materialization remain absent | migration owner and reviewer; approve receipts and a new immutable source before materialization |
 | OPS-R09 | technical scan complete; certification blocked | public history | deterministic full-history scan produced 1,027 redacted findings, but scanner policy, findings, allowlists, remediation, security, privacy, and legal approvals are absent | security/legal/privacy/provider-data owners; resolve redacted ledger and rerun approved scanners |
 | OPS-R10 | open | public release | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved | legal and release owners; approved text, policy, registry, package and provenance proof |

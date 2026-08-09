@@ -5,16 +5,12 @@
   "description": "Standalone workspace declaration for the staged Unisane Ops repository boundary",
   "scripts": {
     "build": "turbo run build",
-    "check:generated": "node scripts/check-repository-integrity.mjs --check",
+    "check:generated": "node scripts/check-repository-integrity.mjs --check-generated",
     "check:repository-integrity": "node scripts/check-repository-integrity.mjs --check",
-    "check:source-boundary": "node scripts/check-source-boundary.mjs --check",
     "generate:repository-integrity": "node scripts/check-repository-integrity.mjs --write",
-    "generate:source-boundary": "node scripts/check-source-boundary.mjs --write",
     "lint": "turbo run lint",
     "package:check": "node scripts/check-package-contents.mjs",
-    "proof:extraction:check": "node scripts/execute-disposable-extraction-proof.mjs --check",
-    "proof:extraction:execute": "node scripts/execute-disposable-extraction-proof.mjs --execute",
-    "test": "turbo run test && node --test tests/source-boundary.test.mjs",
+    "test": "turbo run test",
     "typecheck": "turbo run check-types",
     "verify": "pnpm check:generated && pnpm check:repository-integrity && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm package:check"
   },
