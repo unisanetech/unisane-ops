@@ -9,7 +9,7 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { writeAwsJsonArtifact } from './artifacts.js';
 import { resolveAwsCommandContext } from './context.js';
 import type {
@@ -278,13 +278,13 @@ export async function runAwsS3Inventory(
 }
 
 function printHumanInventory(report: AwsS3InventoryReport): void {
-  log.info(`AWS S3 inventory: ${report.environment}`);
+  providerOutput.info(`AWS S3 inventory: ${report.environment}`);
   for (const bucket of report.buckets) {
     const state = bucket.exists ? 'exists' : 'missing';
     const suffix = bucket.errors.length > 0 ? ` (${bucket.errors.length} read error(s))` : '';
-    log.info(`- ${bucket.key}: ${bucket.name} [${state}]${suffix}`);
+    providerOutput.info(`- ${bucket.key}: ${bucket.name} [${state}]${suffix}`);
   }
-  if (report.artifact) log.info(`Artifact: ${report.artifact.relativePath}`);
+  if (report.artifact) providerOutput.info(`Artifact: ${report.artifact.relativePath}`);
 }
 
 export async function awsS3Inventory(options: AwsS3InventoryOptions): Promise<number> {
@@ -301,7 +301,7 @@ export async function awsS3Inventory(options: AwsS3InventoryOptions): Promise<nu
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

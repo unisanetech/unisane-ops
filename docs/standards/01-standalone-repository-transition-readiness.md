@@ -15,6 +15,9 @@ lastUpdated: '2026-08-09'
 
 ## Changelog
 
+- `2026-08-09`: Froze the no-shadow source-convergence checkpoint, removed private
+  CLI-core and Framework source/config edges, staged inert target-local repository
+  declarations, and defined exact generated boundary, history, and safety specifications.
 - `2026-08-09`: Corrected pre-cutover lockfile and Skopos sequencing, registered the
   temporary umbrella child Memory Scope, and bound its docs to canonical validation.
 - `2026-08-09`: Established the source-bound candidate inventory, target repository
@@ -68,8 +71,8 @@ were added. It contains 921 tracked paths under `unisane-ops/**`; the sorted
 `62d35b6a7b493be90eef255f2d1f7dce035d7c70b855d00f910032b92e458b3e`.
 The Task adds only this router, overview, and Standard to that candidate boundary.
 
-Evidence commands are read-only and source-bound. A later convergence Task must rerun
-them at its own freeze rather than treating these observations as live state.
+Evidence commands are read-only and source-bound. These observations remain the audit
+baseline; the later source-convergence checkpoint is recorded separately below.
 
 | Evidence | Command or source | Observed result |
 | --- | --- | --- |
@@ -112,8 +115,9 @@ At E1, the exact tracked staging boundary is:
 | `packages/web-runtime/**` | 77 | keep as accepted public package `@unisane/web-runtime` |
 | `plugins/unisane-ops/**` | 9 | keep as the thin current private Codex distribution source; public plugin admission remains separate |
 
-The three documents created by this Task add `docs/00-start-here.md`,
-`docs/overview.md`, and this Standard. No other path is admitted by this audit.
+The readiness audit added `docs/00-start-here.md`, `docs/overview.md`, and this Standard.
+The later no-shadow convergence checkpoint and its exact additional paths are owned by
+the generated disposition ledger rather than this historical table.
 
 ### Canonical public package set
 
@@ -124,15 +128,15 @@ The accepted public package contract contains exactly:
 | user-facing | `unisane`, `@unisane/cloud`, `@unisane/growth`, `@unisane/web-runtime` |
 | technical | `@unisane/ops-engine`, `@unisane/provider-aws`, `@unisane/provider-cloudflare`, `@unisane/provider-google`, `@unisane/provider-meta`, `@unisane/framework-ops` |
 
-Three additional current manifests are non-private but absent from that public package
-table: `@unisane/ops-console`, `@unisane/ops-mcp`, and
-`@unisane/ops-hosted-postgresql`. They do not become public merely because their
-manifests say `private: false` or `license: MIT`.
+The accepted extraction Plan classifies `@unisane/ops-console` as a public-source
+deployable app, not a registry package. Its staging manifest is therefore private.
+`@unisane/ops-hosted-runtime` remains explicitly private.
 
-**Owner decisions:** For each of those three coordinates, select exactly one of:
-public package with audience/version/support/release proof; private workspace package;
-app-internal folder; or deletion after consumer migration. Until then, public package
-release is blocked. `@unisane/ops-hosted-runtime` remains explicitly private.
+**Owner decisions:** Neither existing authority nor current package metadata admits
+`@unisane/ops-mcp` or `@unisane/ops-hosted-postgresql` to the public registry package
+set. Their current non-private manifests are preserved as factual staging state, not an
+admission. Product and release owners must select public package, private workspace
+package, app-internal source, or deletion after consumer migration before release.
 
 ### Apps, deploy, plugins, and tools
 
@@ -168,9 +172,9 @@ workspace. The following current edges cross the intended repository boundary:
 | Consumer | Current dependency | Final rule | Gate |
 | --- | --- | --- | --- |
 | `@unisane/ops-console` | `@unisane/ui`, `@unisane/data-table` | consume released or immutable admitted UI candidates; no sibling source | UI package visibility/release is unresolved; block shadow certification |
-| `@unisane/framework-ops` | `@unisane/devtools` | consume the released semver-governed `./framework-integration` subpath only | Framework public package/adopter proof and release ordering required |
-| `@unisane/provider-aws` | private `@unisane/cli-core` | remove provider-to-CLI logging coupling; absorb any retained presentation helper under the Ops CLI owner | block standalone install and package release |
-| `@unisane/provider-google` | private `@unisane/cli-core` | same disposition as AWS | block standalone install and package release |
+| `@unisane/framework-ops` | `@unisane/devtools@workspace:*` | consume the released semver-governed `./framework-integration` subpath only | umbrella architecture gate still requires the workspace edge; its owner must admit the immutable Framework candidate and gate cutover |
+| `@unisane/provider-aws` | provider-local dependency-free output adapter | retain provider-owned presentation with no private Tooling dependency | converged; focused package proof required |
+| `@unisane/provider-google` | provider-local dependency-free output adapter | retain provider-owned presentation with no private Tooling dependency | converged; focused package proof required |
 | `unisane` host | dynamically resolves UI-owned `@unisane/ui-cli` | keep discovery-only structural pack contract; never depend on UI source | require a released/admitted UI CLI candidate and trust/compatibility proof |
 
 The accepted Framework bridge is the only Framework integration. Do not pull Framework
@@ -491,52 +495,85 @@ artifact writer, full canonical doc, source import, package workspace edge, writ
 or release/deploy authority survives in both repositories. Historical recovery in the
 archived umbrella Git is allowed; a filtered current fallback is not.
 
-## Blocker Ledger
+## No-Shadow Source-Convergence Checkpoint
 
-| ID | Gate | Blocker | Required owner/proof |
-| --- | --- | --- | --- |
-| OPS-R01 | source convergence | exact final file/docs/tool/root-config inventory and owner dispositions are not frozen | Ops maintainers; deterministic source ledger at a new commit |
-| OPS-R02 | source convergence | private `@unisane/cli-core` still enters AWS and Google provider packages | Ops maintainers; dependency removal and focused package proof |
-| OPS-R03 | local shadow | console depends on unreleased/private UI packages and the CLI discovers UI CLI without standalone candidate proof | UI and Ops release owners; immutable UI candidates and cross-repo contract tests |
-| OPS-R04 | local shadow | Framework bridge and Framework starter/template release ordering are not proved outside the workspace | Framework and Ops release owners; packed candidates and cycle-free clean installs |
-| OPS-R05 | local shadow | Platforms retain seven `workspace:*` Ops edges | Platforms owner; later consumer Tasks against immutable candidates |
-| OPS-R06 | package release | public/internal disposition of console, Ops MCP, and hosted PostgreSQL is unresolved | product and release owners; explicit package admission or privatization |
-| OPS-R07 | local shadow | target-local package manager, lockfile, config, CI, Actions/Guards, conventional commands, and Node support matrix do not yet exist | Ops tooling owner; deterministic standalone clean install/check/build/package proof |
-| OPS-R08 | local shadow/public history | final history include/rename/exclude map and provenance method are unresolved; `unisane-ops` alone omits detected earlier origins | migration owner; versioned filter spec, commit map, comparison, and tag decision |
-| OPS-R09 | public history | complete imported-history secret/privacy/customer/provider/binary/license/asset/contributor scan is absent | security/legal owners; redacted immutable receipts and rotations where needed |
-| OPS-R10 | public release | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved | legal and release owners; approved text, policy, registry, package and provenance proof |
-| OPS-R11 | remote authority | founder/recovery owner, Git identities, target remote, visibility, rulesets, CODEOWNERS, security settings, signed tags, and cutover receipt are unresolved | founder/security/migration owners; authenticated reviewed plan/apply Evidence |
-| OPS-R12 | production deployment | console/hosted deployment ownership, registry, identities, KMS, state, migrations, rollback, observability, recovery, privacy, incident/SLO and cost policy are unresolved | Ops operators and Infrastructure; environment-specific production certification |
-| OPS-R13 | authority cutover | target-local docs/Skopos adoption and every active Task/Memory disposition are not complete | migration and docs owners; strict target-local verification and one-writable-authority receipt |
+Task `T-287702f0` converges source from certified umbrella `dev` commit
+`50f13fcc35e95aad3b8ad3c5dc7b271810946a34`. The generated
+[source disposition ledger](../reference/generated/repository/source-disposition-ledger.json)
+covers every concrete target file except its three self-referential outputs and the
+current Task's dynamic target-local Skopos artifacts; those four surfaces have explicit
+pattern records. It also records every matching canonical umbrella docs surface and
+every declared root/tool/config disposition. The current Task's root snapshot pattern
+is recorded and excluded from canonical-Memory hashing because it is Skopos-managed
+Evidence and hashing it would create a ledger/snapshot cycle. The authored source is
+`tools/repository/source-boundary-policy.json`; `pnpm generate:source-boundary` is its
+only generator and `pnpm check:source-boundary` rejects drift.
 
-Every listed gate fails closed. Local documentation work may continue, but no blocker is
-waived by a recommendation, current green tests, staged source, or a future remote name.
+The checkpoint establishes these facts:
 
-## Safest Next Bounded Convergence Task
+- the 14 app/package manifests contain ten accepted public packages, two accepted
+  private apps, and two unresolved registry-admission owner decisions;
+- AWS and Google no longer import or depend on private `@unisane/cli-core`; each owns a
+  dependency-free provider presentation adapter, with no compatibility export, alias,
+  shim, or fallback;
+- all package/app TypeScript configurations extend the staged target-local base rather
+  than Framework source, and no foreign relative source/config path remains;
+- the exact smallest foreign workspace blocker set is three edges: the console's edges
+  to private `@unisane/ui` and `@unisane/data-table`, plus the Framework bridge edge to
+  `@unisane/devtools` that the root-owned umbrella architecture gate still requires;
+  the dynamic UI CLI discovery contract also awaits an immutable UI-owned candidate;
+- the target-local package/workspace/TypeScript/lint/format/test/build/release/CI and
+  reviewed Skopos Action/Guard source declarations are staged under `unisane-ops/**`;
+  they neither add a target lockfile nor activate target Skopos in the umbrella;
+- the sole umbrella `pnpm-lock.yaml` removes only the two retired CLI-core importer
+  edges and remains the pre-cutover install authority; target lockfile generation is
+  still deferred to disposable extracted proof;
+- the [history filter specification](../reference/generated/repository/history-filter-spec.json)
+  freezes 507 source-to-target lineage mappings and 91 direct additions, with explicit
+  include/rename/exclude, tag, tool, and provenance receipt requirements; it was not
+  executed;
+- the [public-safety scan specification](../reference/generated/repository/public-safety-scan-spec.json)
+  defines the complete commit/blob/ref input, required detector categories, fail-closed
+  rules, and redacted receipt; it was not executed and grants no public-history approval.
 
-After reviewer approval, start one high-impact source-convergence Task:
+No shadow, filtered history, target lockfile, target Skopos state, remote, release,
+consumer cutover, or external mutation is part of this checkpoint.
 
-> **Freeze and converge the authoritative Unisane Ops standalone source boundary without
-> creating a shadow.**
+## Gate And Blocker Ledger
 
-Bound it to the target-owned source plus exact root surfaces admitted by ownership
-expansion. Its acceptance criteria should:
+| ID | Status | Gate | Blocker or closure | Required owner/proof |
+| --- | --- | --- | --- | --- |
+| OPS-R01 | closed at checkpoint | source convergence | exact file/docs/tool/root-config disposition is generated from reviewed source policy | Ops maintainers; current ledger check and immutable checkpoint commit |
+| OPS-R02 | closed at checkpoint | source convergence | private CLI-core dependencies and imports are absent from AWS and Google | Ops maintainers; focused provider and boundary proof |
+| OPS-R03 | open | local shadow | console retains exactly two private UI workspace edges and the CLI discovers UI CLI without standalone candidate proof | UI and Ops release owners; immutable UI candidates and cross-repo contract tests |
+| OPS-R04 | open | local shadow | root-owned umbrella policy still requires the Framework Devtools workspace edge, and bridge plus starter/template release ordering are not proved outside the workspace | Framework and Ops release owners; admitted gate cutover, packed candidates, and cycle-free clean installs |
+| OPS-R05 | open | local shadow | Platforms retain seven `workspace:*` Ops edges | Platforms owner; later consumer Tasks against immutable candidates |
+| OPS-R06 | open | package release | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved | product and release owners; explicit package admission or privatization |
+| OPS-R07 | open | local shadow | repo-local declarations are staged, but target lockfile generation, clean install, Node matrix, and target-local Skopos adoption/proof are deliberately deferred | Ops tooling owner; disposable extracted proof checkout only |
+| OPS-R08 | open for execution | local shadow/public history | exact filter and provenance spec exists but has not been executed or certified | migration owner; filtered disposable checkout, commit map, comparison, and tag receipt |
+| OPS-R09 | open for execution | public history | exact full-history scan spec exists but approved tools, policy, execution, and receipts are absent | security/legal owners; redacted immutable receipts and rotations where needed |
+| OPS-R10 | open | public release | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved | legal and release owners; approved text, policy, registry, package and provenance proof |
+| OPS-R11 | open | remote authority | founder/recovery owner, Git identities, target remote, visibility, rulesets, CODEOWNERS, security settings, signed tags, and cutover receipt are unresolved | founder/security/migration owners; authenticated reviewed plan/apply Evidence |
+| OPS-R12 | open | production deployment | console/hosted deployment ownership, registry, identities, KMS, state, migrations, rollback, observability, recovery, privacy, incident/SLO and cost policy are unresolved | Ops operators and Infrastructure; environment-specific production certification |
+| OPS-R13 | open | authority cutover | target-local docs/Skopos adoption and every active Task/Memory disposition are not complete | migration and docs owners; strict target-local verification and one-writable-authority receipt |
 
-1. generate an exact all-file and docs/tool/root-config disposition ledger
-2. resolve `@unisane/cli-core` and package-admission decisions without compatibility
-   shims
-3. define immutable Framework/UI candidate contracts and leave Platforms consumer
-   changes to their owners
-4. stage only target-owned package/workspace/config/CI declarations, conventional-check
-   sources, and reviewed Action/Guard source declarations inside `unisane-ops/**`; keep
-   the umbrella root lockfile and umbrella Skopos as the sole pre-cutover authorities
-5. defer target `pnpm-lock.yaml` generation and verification plus target-local Skopos
-   initialization and testing to the later disposable extracted proof checkout or
-   shadow Task; this no-shadow convergence Task performs neither proof step
-6. define, but not execute, the exact history filter/provenance and full public-safety
-   scan specification
-7. freeze a new umbrella commit with zero foreign workspace/source edges and explicit
-   remaining legal, remote, release, and deployment blockers
+Every open gate fails closed. No blocker is waived by a recommendation, current green
+tests, staged source, or a future remote name.
 
-Do not start that Task, filter history, create a shadow, or mutate any external system
-until this audit is reviewed and its ownership expansion is explicitly approved.
+## Safest Next Bounded Task After Checkpoint Review
+
+After this source checkpoint is reviewed, the next authorized Task may create one
+disposable extracted proof checkout or local shadow. It must:
+
+1. apply and receipt the exact history specification in a disposable clone
+2. materialize and verify the target-only lockfile there, never in umbrella staging
+3. perform target-local existing-project Skopos adoption and retrieval proof there
+4. resolve or preserve OPS-R03 as an exact external-owner blocker without copying UI
+5. pack immutable Framework/Ops/UI candidates and prove clean installs only after their
+   accountable owners admit them
+6. run the approved complete public-history scan and retain only redacted receipts
+7. delete the disposable checkout after evidence capture unless a separately approved
+   local-shadow lifecycle says otherwise
+
+This section defines bounded sequencing only. It does not start that Task or authorize
+filtering, shadow creation, package admission, external mutation, or publication.

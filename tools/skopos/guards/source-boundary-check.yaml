@@ -1,0 +1,25 @@
+id: unisane.ops.source-boundary-check
+title: Ops source changes require standalone boundary proof
+description: Select the exact source-disposition and foreign-edge check for repository-shaped Ops changes.
+owner: unisane-ops
+scope:
+  - unisane-ops
+strength: required
+appliesTo:
+  paths:
+    - apps/**
+    - packages/**
+    - deploy/**
+    - plugins/**
+    - docs/**
+    - scripts/**
+    - tools/**
+    - package.json
+    - pnpm-workspace.yaml
+    - tsconfig.base.json
+  phases: [iteration, closure]
+  risks: [light, standard, high-impact]
+requires:
+  actionIds:
+    - unisane.ops.source-boundary-check
+  evidence: source-bound-action

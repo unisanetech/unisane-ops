@@ -1,0 +1,16 @@
+schemaVersion: 1
+scopes:
+  - id: unisane-ops
+    title: Unisane Ops
+    kind: product
+    path: .
+    memoryRoot: docs
+    codeRoots:
+      - .
+    parent: null
+    profile: public-package-product
+    dependsOn: []
+    owners:
+      - unisane-ops
+    aliases:
+      - ops

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { writeAwsJsonArtifact } from './artifacts.js';
 import {
   collectAwsCloudFrontInventory,
@@ -500,16 +500,16 @@ export async function runAwsCloudFrontPlan(
 }
 
 function printHumanPlan(report: AwsCloudFrontPlanReport): void {
-  log.info(`AWS CloudFront plan: ${report.environment}`);
-  log.info(
+  providerOutput.info(`AWS CloudFront plan: ${report.environment}`);
+  providerOutput.info(
     `Summary: create=${report.summary.create}, update=${report.summary.update}, blocked=${report.summary.blocked}, no-op=${report.summary['no-op']}`,
   );
   for (const operation of report.operations) {
-    log.info(
+    providerOutput.info(
       `- [${operation.action}] ${operation.cdnKey}.${operation.check}: ${operation.message}`,
     );
   }
-  if (report.artifact) log.info(`Artifact: ${report.artifact.relativePath}`);
+  if (report.artifact) providerOutput.info(`Artifact: ${report.artifact.relativePath}`);
 }
 
 export async function awsCloudFrontPlan(options: AwsCloudFrontPlanOptions): Promise<number> {
@@ -526,7 +526,7 @@ export async function awsCloudFrontPlan(options: AwsCloudFrontPlanOptions): Prom
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

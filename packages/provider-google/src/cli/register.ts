@@ -1,5 +1,5 @@
 import type { Command } from 'commander';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from '../cli-output.js';
 import {
   loadLocalEnvironment,
   resolveControlPlaneWorkingDirectory,
@@ -31,7 +31,7 @@ async function runGoogleCommand<TOptions extends { cwd?: string; json?: boolean 
   options: TOptions,
   handler: (options: TOptions) => Promise<number>,
 ): Promise<void> {
-  if (!options.json) log.banner('Unisane');
+  if (!options.json) providerOutput.banner('Unisane');
   const resolvedOptions = {
     ...options,
     cwd: options.cwd ? resolveControlPlaneWorkingDirectory(options.cwd) : options.cwd,

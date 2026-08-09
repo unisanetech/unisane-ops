@@ -1,4 +1,4 @@
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import path from 'node:path';
 import { loadAwsOpsConfig } from './config-loader.js';
 import { isPlaceholderAccountId } from './context.js';
@@ -249,16 +249,16 @@ export async function runAwsDoctor(
 }
 
 function printHumanReport(report: AwsDoctorReport): void {
-  log.info(`AWS environment: ${report.environment}`);
-  if (report.configPath) log.info(`Config: ${report.configPath}`);
-  log.info(`Credential source: ${report.credentialSource}`);
+  providerOutput.info(`AWS environment: ${report.environment}`);
+  if (report.configPath) providerOutput.info(`Config: ${report.configPath}`);
+  providerOutput.info(`Credential source: ${report.credentialSource}`);
   for (const check of report.checks) {
     const label = check.status === 'ok' ? 'OK' : check.status === 'warn' ? 'WARN' : 'ERROR';
-    log.info(`[${label}] ${check.id}: ${check.message}`);
+    providerOutput.info(`[${label}] ${check.id}: ${check.message}`);
   }
   if (report.nextSteps.length > 0) {
-    log.info('Next steps:');
-    for (const step of report.nextSteps) log.info(`- ${step}`);
+    providerOutput.info('Next steps:');
+    for (const step of report.nextSteps) providerOutput.info(`- ${step}`);
   }
 }
 

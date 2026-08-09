@@ -1,0 +1,35 @@
+id: unisane.ops.source-boundary-check
+title: Check the standalone Unisane Ops source boundary
+description: Verify the exact source disposition, dependency, history-spec, and public-safety-spec checkpoint.
+category: quality-check
+scope:
+  - unisane-ops
+command: pnpm check:source-boundary
+cwd: .
+inputs:
+  - .
+sourceExcludes:
+  - .skopos/**
+  - node_modules/**
+  - '**/dist/**'
+  - '**/coverage/**'
+outputs: []
+affects: []
+capabilities:
+  process: required
+  network: none
+  browser: none
+  tools: [node, git, pnpm]
+  secrets: []
+  services: []
+effects:
+  workspace: none
+  artifacts: none
+  external: none
+concurrency: shared
+workspaceMode: overlay-safe
+safety: read-only
+requiresApproval: false
+phases: [iteration, closure]
+risks: [light, standard, high-impact]
+owner: unisane-ops

@@ -1,0 +1,17 @@
+schemaVersion: 1
+project:
+  id: unisane-ops
+  title: Unisane Ops
+memory:
+  root: docs
+scopes:
+  source: tools/skopos/scopes.yaml
+actions:
+  roots:
+    - tools/skopos/actions
+guards:
+  roots:
+    - tools/skopos/guards
+adoption:
+  mode: existing-project
+  state: staged-not-active

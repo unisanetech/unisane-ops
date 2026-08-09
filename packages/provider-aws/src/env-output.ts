@@ -1,4 +1,4 @@
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { writeAwsJsonArtifact } from './artifacts.js';
 import {
   collectAwsCloudFrontInventory,
@@ -231,7 +231,7 @@ export async function awsEnvOutput(options: AwsEnvOutputOptions): Promise<number
       console.log(JSON.stringify(report, null, 2));
     } else {
       printDotEnv(report);
-      if (report.artifact) log.info(`Artifact: ${report.artifact.relativePath}`);
+      if (report.artifact) providerOutput.info(`Artifact: ${report.artifact.relativePath}`);
     }
     return report.ok ? 0 : 2;
   } catch (error) {
@@ -239,7 +239,7 @@ export async function awsEnvOutput(options: AwsEnvOutputOptions): Promise<number
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

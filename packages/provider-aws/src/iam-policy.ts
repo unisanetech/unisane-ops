@@ -1,4 +1,4 @@
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { writeAwsJsonArtifact } from './artifacts.js';
 import { configuredCloudFrontForEnvironment } from './cloudfront-inventory.js';
 import { resolveAwsCommandContext } from './context.js';
@@ -217,7 +217,7 @@ export async function awsIamPolicy(options: AwsIamPolicyOptions): Promise<number
       console.log(JSON.stringify(report, null, 2));
     } else {
       console.log(JSON.stringify(report.policy, null, 2));
-      if (report.artifact) log.info(`Artifact: ${report.artifact.relativePath}`);
+      if (report.artifact) providerOutput.info(`Artifact: ${report.artifact.relativePath}`);
     }
     return 0;
   } catch (error) {
@@ -225,7 +225,7 @@ export async function awsIamPolicy(options: AwsIamPolicyOptions): Promise<number
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

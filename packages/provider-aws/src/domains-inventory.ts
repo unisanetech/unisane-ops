@@ -21,7 +21,7 @@ import {
 } from '@aws-sdk/client-sesv2';
 import { ListSubscriptionsByTopicCommand, SNSClient } from '@aws-sdk/client-sns';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { writeAwsJsonArtifact } from './artifacts.js';
 import {
   configuredCloudFrontForEnvironment,
@@ -650,21 +650,21 @@ export async function runAwsDomainsInventory(
 }
 
 function printHumanInventory(report: AwsDomainsInventoryReport): void {
-  log.info(`AWS domains inventory: ${report.environment}`);
+  providerOutput.info(`AWS domains inventory: ${report.environment}`);
   for (const identity of report.mailIdentities) {
-    log.info(
+    providerOutput.info(
       `- mail ${identity.key}: ${identity.exists ? (identity.verificationStatus ?? 'exists') : 'missing'}`,
     );
   }
   for (const certificate of report.certificates) {
-    log.info(
+    providerOutput.info(
       `- cert ${certificate.key}: ${certificate.certificateArn ? (certificate.status ?? 'exists') : 'missing'}`,
     );
   }
   for (const zone of report.dnsZones) {
-    log.info(`- zone ${zone.key}: ${zone.exists ? (zone.hostedZoneId ?? 'exists') : 'missing'}`);
+    providerOutput.info(`- zone ${zone.key}: ${zone.exists ? (zone.hostedZoneId ?? 'exists') : 'missing'}`);
   }
-  if (report.artifact) log.info(`Artifact: ${report.artifact.relativePath}`);
+  if (report.artifact) providerOutput.info(`Artifact: ${report.artifact.relativePath}`);
 }
 
 export async function awsDomainsInventory(options: AwsDomainsInventoryOptions): Promise<number> {
@@ -681,7 +681,7 @@ export async function awsDomainsInventory(options: AwsDomainsInventoryOptions): 
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

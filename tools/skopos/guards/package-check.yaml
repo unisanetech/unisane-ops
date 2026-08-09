@@ -1,0 +1,19 @@
+id: unisane.ops.package-check
+title: Ops package changes require package-content proof
+description: Select package-content verification for admitted package manifests and exports.
+owner: unisane-ops
+scope:
+  - unisane-ops
+strength: required
+appliesTo:
+  paths:
+    - apps/**/package.json
+    - packages/**/package.json
+    - packages/**/pack.manifest.json
+    - packages/**/unisane.meta.json
+  phases: [closure]
+  risks: [standard, high-impact]
+requires:
+  actionIds:
+    - unisane.ops.package-check
+  evidence: source-bound-action

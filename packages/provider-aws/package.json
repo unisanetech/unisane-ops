@@ -52,7 +52,6 @@
     "@aws-sdk/client-sns": "3.971.0",
     "@aws-sdk/client-sts": "3.971.0",
     "@aws-sdk/credential-provider-ini": "3.971.0",
-    "@unisane/cli-core": "workspace:*",
     "@unisane/cloud": "workspace:*",
     "@unisane/ops-engine": "workspace:*",
     "commander": "^12.0.0",

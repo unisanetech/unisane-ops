@@ -1,0 +1,32 @@
+id: unisane.ops.package-check
+title: Check Unisane Ops package contents
+description: Verify admitted package manifests and package-content declarations without publication.
+category: quality-check
+scope:
+  - unisane-ops
+command: pnpm package:check
+cwd: .
+inputs:
+  - apps
+  - packages
+  - scripts/check-package-contents.mjs
+outputs: []
+affects: []
+capabilities:
+  process: required
+  network: none
+  browser: none
+  tools: [node]
+  secrets: []
+  services: []
+effects:
+  workspace: none
+  artifacts: none
+  external: none
+concurrency: shared
+workspaceMode: overlay-safe
+safety: read-only
+requiresApproval: false
+phases: [closure]
+risks: [standard, high-impact]
+owner: unisane-ops

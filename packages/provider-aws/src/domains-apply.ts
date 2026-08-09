@@ -19,7 +19,7 @@ import {
 } from '@aws-sdk/client-sesv2';
 import { SNSClient, SubscribeCommand } from '@aws-sdk/client-sns';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { awsSafeArtifactStamp, writeAwsJsonArtifact } from './artifacts.js';
 import {
   certificateRegion,
@@ -701,13 +701,13 @@ export async function runAwsDomainsApply(
 }
 
 function printHumanApply(report: AwsDomainsApplyReport): void {
-  log.info(`AWS domains apply: ${report.receipt.environment}`);
+  providerOutput.info(`AWS domains apply: ${report.receipt.environment}`);
   for (const result of report.receipt.results) {
-    log.info(
+    providerOutput.info(
       `- [${result.status}] ${result.operation.resourceType}.${result.operation.resourceKey}.${result.operation.check}: ${result.message}`,
     );
   }
-  log.info(`Receipt: ${report.artifact.relativePath}`);
+  providerOutput.info(`Receipt: ${report.artifact.relativePath}`);
 }
 
 export async function awsDomainsApply(options: AwsDomainsApplyOptions): Promise<number> {
@@ -724,7 +724,7 @@ export async function awsDomainsApply(options: AwsDomainsApplyOptions): Promise<
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

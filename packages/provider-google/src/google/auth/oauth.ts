@@ -1,7 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { createServer, type Server } from 'node:http';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from '../../cli-output.js';
 import {
   DEFAULT_OAUTH_TIMEOUT_MS,
   GOOGLE_AUTHORIZATION_URL,
@@ -288,15 +288,15 @@ export async function waitForAuthorizationCode(args: {
               `${JSON.stringify({ authorizationUrl: authUrl.href, redirectUri })}\n`,
             );
           } else {
-            log.section('Google OAuth');
+            providerOutput.section('Google OAuth');
             void openAuthorizationUrl(authUrl.href, args.runtime).then((opened) => {
               if (opened) {
-                log.info('Opened authorization URL in your browser.');
+                providerOutput.info('Opened authorization URL in your browser.');
               } else {
-                log.info(`Open this URL in your browser:\n${authUrl.href}`);
+                providerOutput.info(`Open this URL in your browser:\n${authUrl.href}`);
               }
             });
-            log.info('Waiting for Google OAuth callback...');
+            providerOutput.info('Waiting for Google OAuth callback...');
           }
         });
       },

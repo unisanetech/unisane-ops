@@ -1,5 +1,5 @@
 import type { Command } from 'commander';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from '../cli-output.js';
 import { loadLocalEnvironment } from '@unisane/ops-engine/local';
 import {
   awsCloudFrontApply,
@@ -60,7 +60,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--cwd <path>', 'Working directory to execute from')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsDoctor({
         cwd: options.cwd,
@@ -80,7 +80,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--output <path>', 'Optional JSON artifact output path inside cwd')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsAudit({
         cwd: options.cwd,
@@ -102,7 +102,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--output <path>', 'Optional JSON artifact output path inside cwd')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsEnvOutput({
         cwd: options.cwd,
@@ -126,7 +126,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--output <path>', 'Optional JSON artifact output path inside cwd')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsIamPolicy({
         cwd: options.cwd,
@@ -148,7 +148,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--output <path>', 'Artifact output path inside cwd')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsS3Inventory({
         cwd: options.cwd,
@@ -169,7 +169,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--output <path>', 'Plan output path inside cwd')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsS3Plan({
         cwd: options.cwd,
@@ -198,7 +198,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--yes', 'Confirm the reviewed S3 plan should be applied')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsS3Apply({
         cwd: options.cwd,
@@ -228,7 +228,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--output <path>', 'Artifact output path inside cwd')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsCloudFrontInventory({
         cwd: options.cwd,
@@ -253,7 +253,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--output <path>', 'Plan output path inside cwd')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsCloudFrontPlan({
         cwd: options.cwd,
@@ -283,7 +283,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--yes', 'Confirm the reviewed CloudFront plan should be applied')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsCloudFrontApply({
         cwd: options.cwd,
@@ -320,7 +320,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--yes', 'Confirm the CloudFront invalidation should be requested')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsCloudFrontInvalidate({
         cwd: options.cwd,
@@ -350,7 +350,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--output <path>', 'Artifact output path inside cwd')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsDomainsInventory({
         cwd: options.cwd,
@@ -375,7 +375,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--output <path>', 'Plan output path inside cwd')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsDomainsPlan({
         cwd: options.cwd,
@@ -407,7 +407,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--yes', 'Confirm the reviewed domains plan should be applied')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsDomainsApply({
         cwd: options.cwd,
@@ -437,7 +437,7 @@ export function registerAwsCommands(program: Command): void {
     .option('--yes', 'Confirm the unused certificate should be deleted')
     .option('--json', 'Emit machine-readable JSON output')
     .action(async (options: AwsCliOptions) => {
-      if (!options.json) log.banner('Unisane');
+      if (!options.json) providerOutput.banner('Unisane');
       loadLocalEnvironment({ appDir: options.cwd });
       const code = await awsDomainsCertificateDelete({
         cwd: options.cwd,

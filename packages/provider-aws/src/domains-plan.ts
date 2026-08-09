@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { writeAwsJsonArtifact } from './artifacts.js';
 import {
   collectAwsDomainsInventory,
@@ -1114,13 +1114,13 @@ export async function runAwsDomainsPlan(
 }
 
 function printHumanPlan(report: AwsDomainsPlanReport): void {
-  log.info(`AWS domains plan: ${report.environment}`);
+  providerOutput.info(`AWS domains plan: ${report.environment}`);
   for (const operation of report.operations) {
-    log.info(
+    providerOutput.info(
       `- [${operation.action}] ${operation.resourceType}.${operation.resourceKey}.${operation.check}`,
     );
   }
-  if (report.artifact) log.info(`Artifact: ${report.artifact.relativePath}`);
+  if (report.artifact) providerOutput.info(`Artifact: ${report.artifact.relativePath}`);
 }
 
 export async function awsDomainsPlan(options: AwsDomainsPlanOptions): Promise<number> {
@@ -1137,7 +1137,7 @@ export async function awsDomainsPlan(options: AwsDomainsPlanOptions): Promise<nu
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

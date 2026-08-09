@@ -24,6 +24,10 @@ until an approved cutover records otherwise.
    [Standalone Repository Transition Readiness](standards/01-standalone-repository-transition-readiness.md)
    before source convergence, history filtering, remote creation, publication, or
    deployment work.
+3. Inspect the generated [source disposition ledger](reference/generated/repository/source-disposition-ledger.json),
+   [history filter specification](reference/generated/repository/history-filter-spec.json),
+   and [public-safety scan specification](reference/generated/repository/public-safety-scan-spec.json)
+   for the current no-shadow convergence checkpoint.
 
 ## Authority During Transition
 

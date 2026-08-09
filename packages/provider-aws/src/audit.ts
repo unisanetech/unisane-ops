@@ -1,4 +1,4 @@
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { writeAwsJsonArtifact } from './artifacts.js';
 import { configuredCloudFrontForEnvironment } from './cloudfront-inventory.js';
 import { resolveAwsCommandContext } from './context.js';
@@ -306,14 +306,14 @@ export async function runAwsAudit(
 }
 
 function printHumanAudit(report: AwsAuditReport): void {
-  log.info(`AWS audit: ${report.environment}`);
-  log.info(
+  providerOutput.info(`AWS audit: ${report.environment}`);
+  providerOutput.info(
     `Summary: ok=${report.summary.ok}, warn=${report.summary.warn}, error=${report.summary.error}`,
   );
   for (const check of report.checks) {
-    log.info(`- [${check.status}] ${check.scope} ${check.id}: ${check.message}`);
+    providerOutput.info(`- [${check.status}] ${check.scope} ${check.id}: ${check.message}`);
   }
-  if (report.artifact) log.info(`Artifact: ${report.artifact.relativePath}`);
+  if (report.artifact) providerOutput.info(`Artifact: ${report.artifact.relativePath}`);
 }
 
 export async function awsAudit(options: AwsAuditOptions): Promise<number> {
@@ -330,7 +330,7 @@ export async function awsAudit(options: AwsAuditOptions): Promise<number> {
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

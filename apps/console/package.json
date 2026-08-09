@@ -1,6 +1,7 @@
 {
   "name": "@unisane/ops-console",
   "version": "0.1.0",
+  "private": true,
   "description": "Human-first local console for Unisane Ops",
   "license": "MIT",
   "type": "module",

@@ -4,7 +4,7 @@ import {
   DescribeCertificateCommand,
 } from '@aws-sdk/client-acm';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { awsSafeArtifactStamp, writeAwsJsonArtifact } from './artifacts.js';
 import { resolveAwsCommandContext } from './context.js';
 import { withAwsOperationLock } from './lock.js';
@@ -194,11 +194,11 @@ export async function runAwsDomainsCertificateDelete(
 }
 
 function printHumanReport(report: AwsDomainsCertificateDeleteReport): void {
-  log.info(`AWS domains certificate delete: ${report.receipt.environment}`);
-  log.info(`Certificate: ${report.receipt.certificateArn}`);
-  log.info(`Domain: ${report.receipt.domainName ?? 'unknown'}`);
-  log.info(`Status: ${report.receipt.status}`);
-  log.info(`Receipt: ${report.artifact.relativePath}`);
+  providerOutput.info(`AWS domains certificate delete: ${report.receipt.environment}`);
+  providerOutput.info(`Certificate: ${report.receipt.certificateArn}`);
+  providerOutput.info(`Domain: ${report.receipt.domainName ?? 'unknown'}`);
+  providerOutput.info(`Status: ${report.receipt.status}`);
+  providerOutput.info(`Receipt: ${report.artifact.relativePath}`);
 }
 
 export async function awsDomainsCertificateDelete(
@@ -218,7 +218,7 @@ export async function awsDomainsCertificateDelete(
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

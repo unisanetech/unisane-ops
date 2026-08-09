@@ -65,7 +65,11 @@ rollback, observability, recovery, privacy, and accountable deployment ownership
 
 ## Current Readiness
 
-The candidate is documentation-ready for bounded source convergence planning only. It
-is not ready for a filtered shadow, remote authority, public package release, or
-production deployment. The canonical gate status and exact blockers are in
+The no-shadow source-convergence candidate now has a generated disposition ledger,
+target-local inert repository declarations, no private CLI-core or foreign relative
+source/config edges, and exact unexecuted history and safety specifications. It remains
+blocked from a disposable shadow by three externally owned workspace edges: two private
+UI dependencies and the Framework Devtools edge required by the current umbrella gate.
+It is not ready for remote authority, public package release, or production deployment.
+The canonical gate status is in
 [Standalone Repository Transition Readiness](standards/01-standalone-repository-transition-readiness.md).

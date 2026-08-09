@@ -1,4 +1,4 @@
-import { log } from '@unisane/cli-core';
+import { providerOutput } from '../../cli-output.js';
 import {
   applyGoogleApisPlan,
   buildGoogleApisInventory,
@@ -16,33 +16,33 @@ function printJson(value: unknown): void {
 
 function printInventory(inventory: GoogleProviderInventoryArtifact): void {
   const apiCount = inventory.resources.filter((resource) => resource.type === 'api').length;
-  log.success('Google API inventory completed');
-  log.kv('Project', inventory.projectId);
-  log.kv('Enabled APIs', `${apiCount}`);
-  if (inventory.artifact) log.kv('Artifact', inventory.artifact.relativePath);
-  for (const warning of inventory.warnings) log.warn(warning);
+  providerOutput.success('Google API inventory completed');
+  providerOutput.kv('Project', inventory.projectId);
+  providerOutput.kv('Enabled APIs', `${apiCount}`);
+  if (inventory.artifact) providerOutput.kv('Artifact', inventory.artifact.relativePath);
+  for (const warning of inventory.warnings) providerOutput.warn(warning);
 }
 
 function printProductsInventory(inventory: GoogleProviderProductsInventoryArtifact): void {
   const count = (type: string) =>
     inventory.resources.filter((resource) => resource.type === type).length;
-  log.success('Google product inventory completed');
-  log.kv('GTM containers', `${count('gtmContainer')}`);
-  log.kv('GA4 properties', `${count('ga4Property')}`);
-  log.kv('Search Console sites', `${count('searchConsoleSite')}`);
-  log.kv('Google Ads customers', `${count('googleAdsCustomer')}`);
-  if (inventory.artifact) log.kv('Artifact', inventory.artifact.relativePath);
-  for (const warning of inventory.warnings) log.warn(warning);
+  providerOutput.success('Google product inventory completed');
+  providerOutput.kv('GTM containers', `${count('gtmContainer')}`);
+  providerOutput.kv('GA4 properties', `${count('ga4Property')}`);
+  providerOutput.kv('Search Console sites', `${count('searchConsoleSite')}`);
+  providerOutput.kv('Google Ads customers', `${count('googleAdsCustomer')}`);
+  if (inventory.artifact) providerOutput.kv('Artifact', inventory.artifact.relativePath);
+  for (const warning of inventory.warnings) providerOutput.warn(warning);
 }
 
 function printPlan(plan: GoogleProviderPlanArtifact): void {
-  log.success(plan.summary.create > 0 ? 'Google API plan has actions' : 'Google API plan is clean');
-  log.kv('Project', plan.projectId);
-  log.kv('Enable APIs', `${plan.summary.create}`);
-  log.kv('Already enabled', `${plan.summary.noOp}`);
-  if (plan.artifact) log.kv('Artifact', plan.artifact.relativePath);
+  providerOutput.success(plan.summary.create > 0 ? 'Google API plan has actions' : 'Google API plan is clean');
+  providerOutput.kv('Project', plan.projectId);
+  providerOutput.kv('Enable APIs', `${plan.summary.create}`);
+  providerOutput.kv('Already enabled', `${plan.summary.noOp}`);
+  if (plan.artifact) providerOutput.kv('Artifact', plan.artifact.relativePath);
   for (const action of plan.actions.filter((entry) => entry.type === 'create')) {
-    log.kv(`  ${action.id}`, `${action.risk}: ${action.summary}`);
+    providerOutput.kv(`  ${action.id}`, `${action.risk}: ${action.summary}`);
   }
 }
 
@@ -55,7 +55,7 @@ export async function googleApisInventory(options: GoogleProviderCliOptions): Pr
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown Google API inventory error';
     if (options.json) printJson({ ok: false, error: message });
-    else log.error(message);
+    else providerOutput.error(message);
     return 1;
   }
 }
@@ -70,7 +70,7 @@ export async function googleProductsInventory(options: GoogleProviderCliOptions)
     const message =
       error instanceof Error ? error.message : 'Unknown Google product inventory error';
     if (options.json) printJson({ ok: false, error: message });
-    else log.error(message);
+    else providerOutput.error(message);
     return 1;
   }
 }
@@ -84,7 +84,7 @@ export async function googleApisPlan(options: GoogleProviderCliOptions): Promise
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown Google API plan error';
     if (options.json) printJson({ ok: false, error: message });
-    else log.error(message);
+    else providerOutput.error(message);
     return 1;
   }
 }
@@ -94,20 +94,20 @@ export async function googleApisApply(options: GoogleProviderCliOptions): Promis
     const receipt = await applyGoogleApisPlan(options);
     if (options.json) printJson(receipt);
     else {
-      log.success(
+      providerOutput.success(
         receipt.status === 'succeeded'
           ? 'Google API apply completed'
           : 'Google API apply partially completed',
       );
-      log.kv('Project', receipt.projectId);
-      log.kv('Status', receipt.status);
-      log.kv('Receipt', receipt.artifact?.relativePath ?? 'not written');
+      providerOutput.kv('Project', receipt.projectId);
+      providerOutput.kv('Status', receipt.status);
+      providerOutput.kv('Receipt', receipt.artifact?.relativePath ?? 'not written');
     }
     return receipt.status === 'succeeded' ? 0 : 1;
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown Google API apply error';
     if (options.json) printJson({ ok: false, error: message });
-    else log.error(message);
+    else providerOutput.error(message);
     return 1;
   }
 }

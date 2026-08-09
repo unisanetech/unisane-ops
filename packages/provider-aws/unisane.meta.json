@@ -9,7 +9,6 @@
     "headless"
   ],
   "requiresPackages": [
-    "@unisane/cli-core",
     "@unisane/cloud",
     "@unisane/ops-engine"
   ],

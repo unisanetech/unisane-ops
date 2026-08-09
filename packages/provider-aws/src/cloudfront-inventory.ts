@@ -17,7 +17,7 @@ import {
 } from '@aws-sdk/client-cloudfront';
 import { GetBucketPolicyCommand, S3Client } from '@aws-sdk/client-s3';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { writeAwsJsonArtifact } from './artifacts.js';
 import { resolveAwsCommandContext } from './context.js';
 import type {
@@ -690,14 +690,14 @@ export async function runAwsCloudFrontInventory(
 }
 
 function printHumanInventory(report: AwsCloudFrontInventoryReport): void {
-  log.info(`AWS CloudFront inventory: ${report.environment}`);
+  providerOutput.info(`AWS CloudFront inventory: ${report.environment}`);
   for (const distribution of report.distributions) {
     const state = distribution.distributionId ? distribution.distributionId : 'missing';
     const suffix =
       distribution.errors.length > 0 ? ` (${distribution.errors.length} read error(s))` : '';
-    log.info(`- ${distribution.key}: ${state}${suffix}`);
+    providerOutput.info(`- ${distribution.key}: ${state}${suffix}`);
   }
-  if (report.artifact) log.info(`Artifact: ${report.artifact.relativePath}`);
+  if (report.artifact) providerOutput.info(`Artifact: ${report.artifact.relativePath}`);
 }
 
 export async function awsCloudFrontInventory(
@@ -717,7 +717,7 @@ export async function awsCloudFrontInventory(
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

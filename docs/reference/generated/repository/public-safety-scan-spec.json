@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "state": "specified-not-executed",
+  "executionAuthority": "security-and-legal-approved-disposable-filtered-checkout-only",
+  "scanInput": {
+    "commitSet": "every commit reachable in the filtered Ops history candidate",
+    "blobSet": "every unique blob reachable from that commit set, including deleted paths",
+    "refs": "only refs admitted by the approved history filter receipt",
+    "workingTreeAndGitMetadata": "scan the final checkout, refs, commit messages, authors, committers, notes, and tags"
+  },
+  "requiredDetectors": [
+    {
+      "category": "secrets",
+      "checks": [
+        "provider and cloud credential signatures",
+        "private keys and tokens",
+        "high-entropy candidates with reviewed allowlist"
+      ]
+    },
+    {
+      "category": "privacy",
+      "checks": [
+        "customer or user PII",
+        "raw phone/email/address data",
+        "provider account and tenant identifiers",
+        "production URLs and internal topology"
+      ]
+    },
+    {
+      "category": "binary-and-size",
+      "checks": [
+        "all binary MIME types",
+        "archives and database files",
+        "large blobs with explicit threshold receipt"
+      ]
+    },
+    {
+      "category": "generated-cache-state",
+      "checks": [
+        "cache and build outputs",
+        "provider state, plans, receipts, reports and locks",
+        "vendored dependency trees"
+      ]
+    },
+    {
+      "category": "license-and-provenance",
+      "checks": [
+        "source dependency licenses",
+        "copied code provenance",
+        "asset, font, fixture and dataset rights",
+        "provider terms and trademark use"
+      ]
+    },
+    {
+      "category": "contributors",
+      "checks": [
+        "author and committer identities",
+        "email publication consent",
+        "contributor terms and sign-off policy"
+      ]
+    }
+  ],
+  "failClosedRules": [
+    "Any unresolved detector hit blocks public-history admission.",
+    "A redaction requires an approved remediation map, a repeated full scan, and a new provenance receipt.",
+    "No hit details containing suspected secrets or personal data may be committed; receipts contain redacted identifiers and digests only.",
+    "Tool selection, versions, entropy thresholds, allowlists, license policy, and contributor policy require security or legal owner approval before execution.",
+    "This specification grants no permission to rotate credentials, rewrite history, publish, or create a remote."
+  ],
+  "receiptSchema": {
+    "sourceCommit": "full SHA",
+    "filteredTip": "full SHA",
+    "commitAndBlobCounts": "integers",
+    "scannerTools": "name, exact version, configuration digest, executable/container digest",
+    "categoryResults": "pass or redacted finding IDs",
+    "allowlist": "reviewed redacted entries and policy digest",
+    "remediations": "redacted finding IDs and replacement-map digest",
+    "approvals": "security/legal owner and timestamp"
+  }
+}

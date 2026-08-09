@@ -23,7 +23,7 @@ import {
 } from '@aws-sdk/client-cloudfront';
 import { GetBucketPolicyCommand, PutBucketPolicyCommand, S3Client } from '@aws-sdk/client-s3';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { awsSafeArtifactStamp, writeAwsJsonArtifact } from './artifacts.js';
 import {
   desiredCloudFrontAccessLogging,
@@ -898,13 +898,13 @@ export async function runAwsCloudFrontApply(
 }
 
 function printHumanApply(report: AwsCloudFrontApplyReport): void {
-  log.info(`AWS CloudFront apply: ${report.receipt.environment}`);
+  providerOutput.info(`AWS CloudFront apply: ${report.receipt.environment}`);
   for (const result of report.receipt.results) {
-    log.info(
+    providerOutput.info(
       `- [${result.status}] ${result.operation.cdnKey}.${result.operation.check}: ${result.message}`,
     );
   }
-  log.info(`Receipt: ${report.artifact.relativePath}`);
+  providerOutput.info(`Receipt: ${report.artifact.relativePath}`);
 }
 
 export async function awsCloudFrontApply(options: AwsCloudFrontApplyOptions): Promise<number> {
@@ -921,7 +921,7 @@ export async function awsCloudFrontApply(options: AwsCloudFrontApplyOptions): Pr
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

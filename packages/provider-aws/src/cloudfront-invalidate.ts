@@ -1,6 +1,6 @@
 import { CreateInvalidationCommand, CloudFrontClient } from '@aws-sdk/client-cloudfront';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { awsSafeArtifactStamp, writeAwsJsonArtifact } from './artifacts.js';
 import {
   collectAwsCloudFrontInventory,
@@ -224,12 +224,12 @@ export async function runAwsCloudFrontInvalidate(
 }
 
 function printHumanInvalidate(report: AwsCloudFrontInvalidationReport): void {
-  log.info(`AWS CloudFront invalidation: ${report.receipt.environment}`);
-  log.info(`CDN: ${report.receipt.cdnKey}`);
-  log.info(`Distribution: ${report.receipt.distributionId}`);
-  log.info(`Paths: ${report.receipt.paths.join(', ')}`);
-  log.info(`Status: ${report.receipt.status}`);
-  log.info(`Receipt: ${report.artifact.relativePath}`);
+  providerOutput.info(`AWS CloudFront invalidation: ${report.receipt.environment}`);
+  providerOutput.info(`CDN: ${report.receipt.cdnKey}`);
+  providerOutput.info(`Distribution: ${report.receipt.distributionId}`);
+  providerOutput.info(`Paths: ${report.receipt.paths.join(', ')}`);
+  providerOutput.info(`Status: ${report.receipt.status}`);
+  providerOutput.info(`Receipt: ${report.artifact.relativePath}`);
 }
 
 export async function awsCloudFrontInvalidate(
@@ -249,7 +249,7 @@ export async function awsCloudFrontInvalidate(
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }

@@ -13,7 +13,7 @@ import {
   type BucketLocationConstraint,
 } from '@aws-sdk/client-s3';
 import { fromIni } from '@aws-sdk/credential-provider-ini';
-import { log } from '@unisane/cli-core';
+import { providerOutput } from './cli-output.js';
 import { awsSafeArtifactStamp, writeAwsJsonArtifact } from './artifacts.js';
 import { resolveAwsCommandContext } from './context.js';
 import { withAwsOperationLock } from './lock.js';
@@ -456,13 +456,13 @@ export async function runAwsS3Apply(
 }
 
 function printHumanApply(report: AwsS3ApplyReport): void {
-  log.info(`AWS S3 apply: ${report.receipt.environment}`);
+  providerOutput.info(`AWS S3 apply: ${report.receipt.environment}`);
   for (const result of report.receipt.results) {
-    log.info(
+    providerOutput.info(
       `- [${result.status}] ${result.operation.bucketKey}.${result.operation.check}: ${result.message}`,
     );
   }
-  log.info(`Receipt: ${report.artifact.relativePath}`);
+  providerOutput.info(`Receipt: ${report.artifact.relativePath}`);
 }
 
 export async function awsS3Apply(options: AwsS3ApplyOptions): Promise<number> {
@@ -479,7 +479,7 @@ export async function awsS3Apply(options: AwsS3ApplyOptions): Promise<number> {
     if (options.json) {
       console.log(JSON.stringify({ ok: false, error: message }, null, 2));
     } else {
-      log.error(message);
+      providerOutput.error(message);
     }
     return 2;
   }
