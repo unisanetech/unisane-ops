@@ -10,7 +10,7 @@
     "generate:repository-integrity": "node scripts/check-repository-integrity.mjs --write",
     "lint": "turbo run lint",
     "package:check": "node scripts/check-package-contents.mjs",
-    "test": "turbo run test",
+    "test": "node --test tests/*.test.mjs && turbo run test",
     "typecheck": "turbo run check-types",
     "verify": "pnpm check:generated && pnpm check:repository-integrity && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm package:check"
   },
