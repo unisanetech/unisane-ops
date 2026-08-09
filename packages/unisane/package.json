@@ -35,8 +35,8 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts src/handlers/mcp.ts --format esm --dts --clean",
-    "dev": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/inspect-packs.ts src/handlers/mcp.ts --format esm --dts --watch",
+    "build": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/info.ts src/handlers/doctor.ts src/handlers/inspect-packs.ts src/handlers/mcp.ts --format esm --dts --clean",
+    "dev": "tsup src/cli.ts src/host.ts src/config/index.ts src/handlers/init.ts src/handlers/add.ts src/handlers/connect.ts src/handlers/disconnect.ts src/handlers/check.ts src/handlers/migrate-growth-config.ts src/handlers/status.ts src/handlers/info.ts src/handlers/doctor.ts src/handlers/inspect-packs.ts src/handlers/mcp.ts --format esm --dts --watch",
     "lint": "eslint src --max-warnings 0",
     "check-types": "tsc --noEmit",
     "test": "pnpm build && node --test test/*.test.mjs",
@@ -132,6 +132,16 @@
       "types": "./dist/handlers/status.d.ts",
       "import": "./dist/handlers/status.js",
       "default": "./dist/handlers/status.js"
+    },
+    "./handlers/info": {
+      "types": "./dist/handlers/info.d.ts",
+      "import": "./dist/handlers/info.js",
+      "default": "./dist/handlers/info.js"
+    },
+    "./handlers/doctor": {
+      "types": "./dist/handlers/doctor.d.ts",
+      "import": "./dist/handlers/doctor.js",
+      "default": "./dist/handlers/doctor.js"
     },
     "./meta": "./unisane.meta.json"
   },

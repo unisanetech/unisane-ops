@@ -229,22 +229,35 @@ test('wrapper forwards "generate --help"', () => {
   assert.match(result.stdout, /Generate code/);
 });
 
-test('wrapper forwards "sync --help"', () => {
+test('retired Framework sync root fails closed', () => {
   const result = runCli(['sync', '--help']);
-  assert.equal(result.status, 0, result.stderr || result.stdout);
-  assert.match(result.stdout, /Refresh framework-owned local surfaces and run doctor/);
+  assert.equal(result.status, 1, result.stderr || result.stdout);
+  assert.match(result.stderr, /Unknown command: sync --help/);
 });
 
-test('wrapper forwards "doctor --help"', () => {
+test('canonical doctor help is owned by CLI core', () => {
   const result = runCli(['doctor', '--help']);
   assert.equal(result.status, 0, result.stderr || result.stdout);
-  assert.match(result.stdout, /Run health checks on your project/);
+  assert.match(result.stdout, /Run aggregate diagnostics selected for this project/);
 });
 
-test('wrapper forwards "create --help"', () => {
+test('canonical doctor wraps the selected Framework diagnostic in the core envelope', () => {
+  const projectRoot = mkdtempSync(resolve(tmpdir(), 'unisane-doctor-owner-'));
+  const result = runCli(['doctor', '--json'], { cwd: projectRoot });
+  assert.equal(result.status, 1, result.stderr || result.stdout);
+  const output = JSON.parse(result.stdout);
+  assert.equal(output.command, 'core.doctor');
+  assert.equal(output.pack, 'core');
+  assert.equal(output.result.components[0].id, 'framework');
+  assert.equal(output.result.components[0].owner, '@unisane/framework-ops');
+  assert.equal(output.result.components[0].report.exitCode, 1);
+  assert.equal(output.result.components[0].report.output.status, 'error');
+});
+
+test('retired create root fails closed in favor of create-unisane', () => {
   const result = runCli(['create', '--help']);
-  assert.equal(result.status, 0, result.stderr || result.stdout);
-  assert.match(result.stdout, /Create a new Unisane project/);
+  assert.equal(result.status, 1, result.stderr || result.stdout);
+  assert.match(result.stderr, /Unknown command: create --help/);
 });
 
 test('canonical status returns one structured JSON document', () => {
@@ -265,6 +278,49 @@ test('canonical status returns one structured JSON document', () => {
       'provider-google',
       'framework',
     ],
+  );
+});
+
+test('canonical info reports CLI and project package versions in JSON', () => {
+  const projectRoot = mkdtempSync(resolve(tmpdir(), 'unisane-info-'));
+  writeFileSync(
+    resolve(projectRoot, 'package.json'),
+    `${JSON.stringify({
+      dependencies: {
+        '@unisane/platform': '^0.4.0',
+        unisane: '^0.1.0',
+      },
+      devDependencies: {
+        '@unisane/devtools': '^0.4.0',
+      },
+    })}\n`,
+  );
+
+  const result = runCli(['info', '--json'], { cwd: projectRoot });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  const output = JSON.parse(result.stdout);
+  assert.equal(output.command, 'core.info');
+  assert.equal(output.maximumEffect, 'offline');
+  assert.deepEqual(output.result.cli, { name: 'unisane', version: '0.1.0' });
+  assert.deepEqual(output.result.project.packages, [
+    { name: '@unisane/devtools', version: '^0.4.0', scope: 'devDependency' },
+    { name: '@unisane/platform', version: '^0.4.0', scope: 'dependency' },
+    { name: 'unisane', version: '^0.1.0', scope: 'dependency' },
+  ]);
+});
+
+test('canonical info renders deterministic human output', () => {
+  const projectRoot = mkdtempSync(resolve(tmpdir(), 'unisane-info-human-'));
+  writeFileSync(
+    resolve(projectRoot, 'package.json'),
+    `${JSON.stringify({ dependencies: { '@unisane/platform': '^0.4.0' } })}\n`,
+  );
+
+  const result = runCli(['info'], { cwd: projectRoot });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+  assert.equal(
+    result.stdout,
+    'Unisane CLI 0.1.0\n\nInstalled Unisane packages:\n  @unisane/platform ^0.4.0 (dependency)\n',
   );
 });
 

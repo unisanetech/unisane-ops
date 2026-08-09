@@ -21,6 +21,7 @@ const TRUSTED_PACKAGES = [
   '@unisane/framework-ops',
   '@unisane/growth',
   '@unisane/ops-console',
+  '@unisane/ui-cli',
   '@unisane/provider-aws',
   '@unisane/provider-cloudflare',
   '@unisane/provider-google',
@@ -82,6 +83,7 @@ export function loadFirstPartyPackGraph(): readonly PackManifest[] {
     '@unisane/ops-console',
     '@unisane/provider-aws',
     '@unisane/provider-google',
+    '@unisane/ui-cli',
   ] as const) {
     try {
       const manifestPath = require.resolve(`${packageName}/pack-manifest`);
@@ -171,6 +173,66 @@ async function loadExactHandler(command: PackCommandDescriptor): Promise<PackCom
   ) {
     const module = await import('./handlers/inspect-packs.js');
     return module.runInspectPacks;
+  }
+  if (
+    command.handler.exportPath === './handlers/info' &&
+    command.handler.exportName === 'runInfo'
+  ) {
+    const module = await import('./handlers/info.js');
+    return module.runInfo;
+  }
+  if (
+    command.handler.exportPath === './handlers/doctor' &&
+    command.handler.exportName === 'runDoctor'
+  ) {
+    const module = await import('./handlers/doctor.js');
+    return async (context) => {
+      const contributors = context.manifests.flatMap((manifest) =>
+        manifest.commands
+          .filter((candidate) => candidate.path[0] === 'doctor' && candidate.path.length > 1)
+          .map(
+            (candidate) => async (contributionContext: Parameters<typeof module.runDoctor>[0]) => {
+              const contributionHandler = await loadExactHandler(candidate);
+              const contribution = assertPackCommandResult(
+                candidate,
+                await contributionHandler({
+                  ...contributionContext,
+                  selection: { command: candidate, packId: manifest.packId },
+                }),
+              );
+              if (contribution.command !== candidate.id || contribution.pack !== manifest.packId) {
+                throw new Error(
+                  '[OPS_DOCTOR_CONTRIBUTION_IDENTITY_MISMATCH] Doctor contribution identity is invalid.',
+                );
+              }
+              return {
+                id: manifest.packId,
+                owner: manifest.packageName,
+                status: contribution.status === 'ok' ? ('ok' as const) : ('failed' as const),
+                actualEffect: contribution.actualEffect,
+                report: contribution.result,
+                diagnostics: contribution.diagnostics,
+                ...(contribution.presentation ? { presentation: contribution.presentation } : {}),
+              };
+            },
+          ),
+      );
+      for (const manifest of context.manifests) {
+        for (const candidate of manifest.commands) {
+          if (
+            candidate.path[0] === 'doctor' &&
+            candidate.path.length > 1 &&
+            candidate.maximumEffect !== 'offline' &&
+            candidate.maximumEffect !== 'read-network'
+          ) {
+            throw new Error(
+              `[OPS_DOCTOR_CONTRIBUTION_EFFECT_INVALID] ${candidate.id} exceeds aggregate doctor effect policy.`,
+            );
+          }
+        }
+      }
+      return module.runDoctor(context, contributors);
+    };
   }
   if (
     command.handler.exportPath === './handlers/mcp' &&
@@ -274,6 +336,18 @@ async function loadExactHandler(command: PackCommandDescriptor): Promise<PackCom
     return module.runFrameworkCommand;
   }
   if (
+    command.handler.exportPath === './handlers/ui' &&
+    command.handler.exportName === 'runUiCommand'
+  ) {
+    const handlerPath = require.resolve('@unisane/ui-cli/handlers/ui');
+    const module = (await import(pathToFileURL(handlerPath).href)) as Record<string, unknown>;
+    const handler = module.runUiCommand;
+    if (typeof handler !== 'function') {
+      throw new Error('[OPS_PACK_HANDLER_INVALID] @unisane/ui-cli does not export runUiCommand.');
+    }
+    return handler as PackCommandHandler;
+  }
+  if (
     command.handler.exportPath === './handlers/growth' &&
     command.handler.exportName === 'runGrowthCommand'
   ) {
@@ -345,6 +419,8 @@ Canonical commands:
   unisane check [--environment <id>] [--json]
   unisane ops migrate growth-config --input <path> --yes [--json]
   unisane status [--json]
+  unisane info [--json]
+  unisane doctor [--cwd <path>] [--json]
   unisane inspect packs [--json]
   unisane mcp serve --project <absolute-path> --environment <id> --actor <id>
   unisane mcp configure codex --project <absolute-path> --environment <id> --actor <id> [--write]

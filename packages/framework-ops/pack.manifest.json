@@ -113,7 +113,7 @@
     },
     {
       "id": "framework.doctor",
-      "path": ["doctor"],
+      "path": ["doctor", "framework"],
       "handler": {
         "exportPath": "./handlers/framework",
         "exportName": "runFrameworkCommand"
@@ -255,19 +255,6 @@
       "json": true
     },
     {
-      "id": "framework.ui",
-      "path": ["ui"],
-      "handler": {
-        "exportPath": "./handlers/framework",
-        "exportName": "runFrameworkCommand"
-      },
-      "maximumEffect": "write",
-      "writeTargets": ["project"],
-      "artifactClasses": [],
-      "riskGuards": [],
-      "json": true
-    },
-    {
       "id": "framework.verify",
       "path": ["verify"],
       "handler": {
@@ -301,6 +288,6 @@
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "75fc8ad9d37fb5e7b47fc4d3f95317befdd17f82b29702706d90f3e5c4a75b54"
+    "manifestHash": "9f56a64022ce3f228d649151f7a270b88b07366cf55accb824109d99fddfc9a4"
   }
 }

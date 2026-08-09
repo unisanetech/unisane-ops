@@ -35,6 +35,8 @@
     "./handlers/check",
     "./handlers/connect",
     "./handlers/disconnect",
+    "./handlers/doctor",
+    "./handlers/info",
     "./handlers/init",
     "./handlers/inspect-packs",
     "./handlers/mcp",

@@ -10,6 +10,7 @@ export function commandResult(
     diagnostics?: string[];
     artifacts?: string[];
     nextActions?: string[];
+    presentation?: PackCommandResult['presentation'];
   },
 ): PackCommandResult {
   const selection = context.selection;
@@ -29,5 +30,6 @@ export function commandResult(
     diagnostics: input.diagnostics ?? [],
     artifacts: input.artifacts ?? [],
     nextActions: input.nextActions ?? [],
+    ...(input.presentation ? { presentation: input.presentation } : {}),
   };
 }

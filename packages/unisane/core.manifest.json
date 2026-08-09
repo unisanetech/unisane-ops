@@ -99,6 +99,32 @@
       "json": true
     },
     {
+      "id": "core.info",
+      "path": ["info"],
+      "handler": {
+        "exportPath": "./handlers/info",
+        "exportName": "runInfo"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "core.doctor",
+      "path": ["doctor"],
+      "handler": {
+        "exportPath": "./handlers/doctor",
+        "exportName": "runDoctor"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
       "id": "core.inspect-packs",
       "path": ["inspect", "packs"],
       "handler": {
@@ -142,7 +168,7 @@
   "addItemTypes": [],
   "capabilities": [],
   "providerBindings": [],
-  "reservedRootNames": ["add", "app", "build", "check", "connect", "dev", "disconnect", "doctor", "generate", "inspect", "llm", "mcp", "ops", "remove", "sync"],
+  "reservedRootNames": ["add", "app", "build", "check", "connect", "dev", "disconnect", "doctor", "generate", "inspect", "llm", "mcp", "ops", "remove", "sync", "ui"],
   "reservedRootContributors": [
     {
       "root": "app",
@@ -183,10 +209,14 @@
     {
       "root": "sync",
       "packId": "framework"
+    },
+    {
+      "root": "ui",
+      "packId": "ui"
     }
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "94e67bab895b333e1c064c425435b2865889ba618772e6694a78eb3547f77651"
+    "manifestHash": "52fe29331db2e6ff3dc6f462ca45e2e4fa9a634dcc96d2026c0f9212949fd3bc"
   }
 }

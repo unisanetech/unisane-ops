@@ -107,7 +107,7 @@ test('provider, GTM, and UI routes select exact owner packs', async () => {
     [['provider', 'aws', 'doctor'], 'provider.aws'],
     [['provider', 'google', 'doctor'], 'provider.google'],
     [['growth', 'gtm', 'validate'], 'growth.gtm'],
-    [['ui', 'list'], 'framework.ui'],
+    [['ui', 'appearance', 'list'], 'ui.appearance-list'],
   ];
   for (const [argv, expected] of cases) {
     let selectedCommand = null;
