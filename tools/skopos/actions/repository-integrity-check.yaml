@@ -1,0 +1,19 @@
+schemaVersion: 1
+id: unisane-ops.repository-integrity.check
+title: Check standalone repository integrity and generated drift
+category: quality-check
+safety: read-only
+command: pnpm check:repository-integrity
+cwd: .
+timeoutMs: 120000
+capabilities:
+  - node
+  - pnpm
+inputs:
+  - package.json
+  - apps/**
+  - packages/**
+  - scripts/check-repository-integrity.mjs
+  - tools/repository/standalone-integrity-policy.json
+  - docs/reference/generated/repository/standalone-repository-integrity.json
+outputs: []

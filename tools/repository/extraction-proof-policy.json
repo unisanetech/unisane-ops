@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "taskId": "T-b222cdbf",
+  "sourceCommit": "616344017db70385d966d3b4a0197614b5b1bca3",
+  "freezeCheckpoint": "50f13fcc35e95aad3b8ad3c5dc7b271810946a34",
+  "stagingIntroductionCommit": "4c9eab6eb8239986e14b4b1479f099fcfc8603ed",
+  "candidateRoot": "/tmp/unisane-ops-extraction-T-b222cdbf",
+  "filterExecutable": "/usr/local/bin/git-filter-repo",
+  "historySpec": "docs/reference/generated/repository/history-filter-spec.json",
+  "safetySpec": "docs/reference/generated/repository/public-safety-scan-spec.json",
+  "receiptDirectory": "docs/reference/generated/repository/extraction-proof/T-b222cdbf",
+  "proofOverlayPaths": [
+    ".github/workflows/ci.yml",
+    "docs/reference/generated/repository/standalone-repository-integrity.json",
+    "package.json",
+    "scripts/check-repository-integrity.mjs",
+    "tools/repository/standalone-integrity-policy.json",
+    "tools/skopos/actions/repository-integrity-check.yaml",
+    "tools/skopos/guards/repository-integrity-check.yaml"
+  ],
+  "scanPolicy": {
+    "largeBlobThresholdBytes": 102400,
+    "entropyTokenMinimumLength": 32,
+    "entropyThresholdBitsPerCharacter": 4.5,
+    "approvalState": "technical-defaults-not-security-or-legal-approved",
+    "secretRules": [
+      { "id": "private-key", "pattern": "-----BEGIN (?:RSA |EC |OPENSSH |DSA )?PRIVATE KEY-----" },
+      { "id": "aws-access-key", "pattern": "(?:AKIA|ASIA)[A-Z0-9]{16}" },
+      { "id": "github-token", "pattern": "gh[pousr]_[A-Za-z0-9]{20,}" },
+      { "id": "google-api-key", "pattern": "AIza[0-9A-Za-z_-]{35}" },
+      { "id": "stripe-live-key", "pattern": "(?:sk|rk)_live_[0-9A-Za-z]{16,}" },
+      { "id": "slack-token", "pattern": "xox[baprs]-[0-9A-Za-z-]{10,}" }
+    ],
+    "privacyRules": [
+      { "id": "email-shaped", "pattern": "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}" },
+      { "id": "phone-shaped", "pattern": "(?:\\+?[1-9][0-9 .()/-]{7,}[0-9])" },
+      { "id": "provider-account-key", "pattern": "(?:account|customer|tenant|property|container)[_-]?(?:id|number)\\s*[:=]" },
+      { "id": "url-shaped", "pattern": "https?://[^\\s\\\"'<>]+" }
+    ],
+    "sensitivePathRules": [
+      { "id": "environment-or-secret-path", "pattern": "(?:^|/)(?:\\.env(?:\\.|$)|secrets?|credentials?)(?:/|\\.|$)" },
+      { "id": "provider-state-path", "pattern": "(?:^|/)(?:terraform\\.tfstate|[^/]+\\.tfstate(?:\\.backup)?|state|plans?|receipts?|reports?|locks?)(?:/|\\.|$)" },
+      { "id": "cache-generated-path", "pattern": "(?:^|/)(?:node_modules|dist|coverage|\\.turbo|\\.skopos|\\.unisane|\\.cache)(?:/|$)" },
+      { "id": "archive-or-database-path", "pattern": "\\.(?:zip|tar|tgz|gz|7z|rar|sqlite|sqlite3|db|dump)$" },
+      { "id": "asset-fixture-dataset-path", "pattern": "(?:^|/)(?:assets?|fixtures?|datasets?|fonts?)(?:/|$)|\\.(?:png|jpe?g|gif|webp|svg|ico|woff2?|ttf|otf|pdf)$" },
+      { "id": "license-notice-path", "pattern": "(?:^|/)(?:LICENSE|NOTICE|COPYING)(?:\\.[^/]*)?$" }
+    ]
+  }
+}

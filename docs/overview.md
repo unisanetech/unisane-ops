@@ -65,11 +65,15 @@ rollback, observability, recovery, privacy, and accountable deployment ownership
 
 ## Current Readiness
 
-The no-shadow source-convergence candidate now has a generated disposition ledger,
+The no-shadow source-convergence candidate has a generated disposition ledger,
 target-local inert repository declarations, no private CLI-core or foreign relative
-source/config edges, and exact unexecuted history and safety specifications. It remains
-blocked from a disposable shadow by three externally owned workspace edges: two private
-UI dependencies and the Framework Devtools edge required by the current umbrella gate.
-It is not ready for remote authority, public package release, or production deployment.
+source/config edges, and exact history and safety specifications. A disposable proof
+has now executed the filter with exact current-tree parity, clean Git residue removal,
+and deterministic full-history technical scanning. It retains three externally owned
+workspace blockers: two private UI dependencies and the Framework Devtools edge
+required by the current umbrella gate. Redacted scan findings plus scanner, security,
+privacy, legal, contributor, asset, license, signing, and remote-governance decisions
+remain unresolved. It is not certified for standalone CI, public history, remote
+authority, public package release, or production deployment.
 The canonical gate status is in
 [Standalone Repository Transition Readiness](standards/01-standalone-repository-transition-readiness.md).

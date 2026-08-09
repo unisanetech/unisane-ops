@@ -15,6 +15,10 @@ lastUpdated: '2026-08-09'
 
 ## Changelog
 
+- `2026-08-09`: Executed the approved history filter in a disposable candidate,
+  certified exact current-tree parity and Git cleanup, completed deterministic
+  full-history technical scanning, staged proof-only standalone CI corrections, and
+  retained public promotion as fail-closed on redacted findings and owner decisions.
 - `2026-08-09`: Froze the no-shadow source-convergence checkpoint, removed private
   CLI-core and Framework source/config edges, staged inert target-local repository
   declarations, and defined exact generated boundary, history, and safety specifications.
@@ -500,12 +504,13 @@ archived umbrella Git is allowed; a filtered current fallback is not.
 Task `T-287702f0` converges source from certified umbrella `dev` commit
 `50f13fcc35e95aad3b8ad3c5dc7b271810946a34`. The generated
 [source disposition ledger](../reference/generated/repository/source-disposition-ledger.json)
-covers every concrete target file except its three self-referential outputs and the
-current Task's dynamic target-local Skopos artifacts; those four surfaces have explicit
-pattern records. It also records every matching canonical umbrella docs surface and
+covers every concrete target file except its three self-referential outputs and the two
+source-convergence/extraction-proof Task artifact families; those five surfaces have
+explicit pattern records. It also records every matching canonical umbrella docs surface and
 every declared root/tool/config disposition. The current Task's root snapshot pattern
 is recorded and excluded from canonical-Memory hashing because it is Skopos-managed
-Evidence and hashing it would create a ledger/snapshot cycle. The authored source is
+Evidence and hashing it would create a ledger/snapshot cycle. Both Task snapshot
+patterns receive that disposition. The authored source is
 `tools/repository/source-boundary-policy.json`; `pnpm generate:source-boundary` is its
 only generator and `pnpm check:source-boundary` rejects drift.
 
@@ -539,6 +544,58 @@ The checkpoint establishes these facts:
 No shadow, filtered history, target lockfile, target Skopos state, remote, release,
 consumer cutover, or external mutation is part of this checkpoint.
 
+## Disposable Extraction Technical Proof
+
+Task `T-b222cdbf` used exact integrated umbrella `dev` commit
+`616344017db70385d966d3b4a0197614b5b1bca3` as its immutable filter input. The
+approved freeze checkpoint remained
+`50f13fcc35e95aad3b8ad3c5dc7b271810946a34`; the integrated filter and safety
+specification digests are recorded in the
+[provenance receipt](../reference/generated/repository/extraction-proof/T-b222cdbf/provenance-receipt.json).
+The proof exists only at
+`/tmp/unisane-ops-extraction-T-b222cdbf/repository`. It is disposable Evidence, not a
+final repository, remote, or writable authority.
+
+The technical extraction established these facts:
+
+- `git-filter-repo` executable version `a40bce548d2c`, executable digest, callback
+  digest, 507 source-to-target mappings, 481 unique historical origins, 91 direct
+  additions, and the complete 503-entry source-to-filtered
+  [commit map](../reference/generated/repository/extraction-proof/T-b222cdbf/commit-map.json)
+  are frozen;
+- filtered base `a9d3ce795a3cd7ba4fd3a91711f2be2c9436bef6` has exact content and mode parity
+  across 951 current paths with source commit `616344017`; 1,036 filtered historical
+  paths contain zero excluded paths;
+- a disposable proof overlay corrected Corepack-before-pnpm-cache ordering, replaced
+  the umbrella-only transition gate with a target-local repository-integrity and
+  generated-drift gate, and aligned the repository-system manifest and root typecheck
+  implementation on `turbo run check-types`;
+- overlay tip `f6de44d92b95413bafb52607a7a70cf2ac512791` and tree
+  `2f413b92e7e5c0dda857dcfa428b859fda60c248` contain 84 commits, 2,182 reachable
+  blobs, 1,487 trees, one local branch, and no admitted tags;
+- post-filter cleanup removed filter metadata, remotes, reflogs, alternates, original
+  refs, and unreachable objects; strict Git integrity and the clean working tree pass;
+- the deterministic technical scan covered every reachable commit, blob, ref,
+  historical path, commit message, contributor identity, and the final working tree.
+  Its [redacted receipt](../reference/generated/repository/extraction-proof/T-b222cdbf/public-safety-scan-receipt.json)
+  contains 1,027 opaque finding identifiers: 1 secret-rule, 958 privacy-rule, 20
+  binary/size, 43 generated/cache/provider-state-path, and 5 license/provenance
+  findings. No suspected value is recorded.
+
+Technical scanning is complete; public-history certification is not. Scanner choices,
+versions, thresholds, entropy policy, allowlists, every redacted finding, contributor
+publication, source-copy provenance, license, NOTICE, assets, fixtures, provider terms,
+trademarks, signing, remote governance, and remediation policy require accountable
+owner approval. The
+[owner-decision ledger](../reference/generated/repository/extraction-proof/T-b222cdbf/owner-decision-ledger.json)
+keeps those decisions and the three exact dependency blockers fail-closed.
+
+The staged repository-integrity check is a real deterministic target-local gate. It is
+not a substitute for the public-package-product profile's still-missing approved
+security and license checks. No target lockfile, clean install, hosted CI run,
+target-local Skopos activation, public release, or authority promotion was performed or
+certified.
+
 ## Gate And Blocker Ledger
 
 | ID | Status | Gate | Blocker or closure | Required owner/proof |
@@ -549,9 +606,9 @@ consumer cutover, or external mutation is part of this checkpoint.
 | OPS-R04 | open | local shadow | root-owned umbrella policy still requires the Framework Devtools workspace edge, and bridge plus starter/template release ordering are not proved outside the workspace | Framework and Ops release owners; admitted gate cutover, packed candidates, and cycle-free clean installs |
 | OPS-R05 | open | local shadow | Platforms retain seven `workspace:*` Ops edges | Platforms owner; later consumer Tasks against immutable candidates |
 | OPS-R06 | open | package release | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved | product and release owners; explicit package admission or privatization |
-| OPS-R07 | open | local shadow | repo-local declarations are staged, but target lockfile generation, clean install, Node matrix, and target-local Skopos adoption/proof are deliberately deferred | Ops tooling owner; disposable extracted proof checkout only |
-| OPS-R08 | open for execution | local shadow/public history | exact filter and provenance spec exists but has not been executed or certified | migration owner; filtered disposable checkout, commit map, comparison, and tag receipt |
-| OPS-R09 | open for execution | public history | exact full-history scan spec exists but approved tools, policy, execution, and receipts are absent | security/legal owners; redacted immutable receipts and rotations where needed |
+| OPS-R07 | open | local shadow | Corepack ordering, standalone integrity/generated drift, and typecheck declarations are corrected, but target lockfile generation, clean install, Node matrix, hosted CI, and target-local Skopos adoption remain deliberately deferred | Ops tooling owner; approved later materialization proof only |
+| OPS-R08 | technical execution complete; approval open | local shadow/public history | exact filter, commit map, parity, excluded-path, ref/tag/signature, integrity, and cleanup receipts pass in the disposable candidate; tool approval and final materialization remain absent | migration owner and reviewer; approve receipts and a new immutable source before materialization |
+| OPS-R09 | technical scan complete; certification blocked | public history | deterministic full-history scan produced 1,027 redacted findings, but scanner policy, findings, allowlists, remediation, security, privacy, and legal approvals are absent | security/legal/privacy/provider-data owners; resolve redacted ledger and rerun approved scanners |
 | OPS-R10 | open | public release | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved | legal and release owners; approved text, policy, registry, package and provenance proof |
 | OPS-R11 | open | remote authority | founder/recovery owner, Git identities, target remote, visibility, rulesets, CODEOWNERS, security settings, signed tags, and cutover receipt are unresolved | founder/security/migration owners; authenticated reviewed plan/apply Evidence |
 | OPS-R12 | open | production deployment | console/hosted deployment ownership, registry, identities, KMS, state, migrations, rollback, observability, recovery, privacy, incident/SLO and cost policy are unresolved | Ops operators and Infrastructure; environment-specific production certification |
@@ -560,20 +617,27 @@ consumer cutover, or external mutation is part of this checkpoint.
 Every open gate fails closed. No blocker is waived by a recommendation, current green
 tests, staged source, or a future remote name.
 
-## Safest Next Bounded Task After Checkpoint Review
+## Safest Next Bounded Task After Proof Review
 
-After this source checkpoint is reviewed, the next authorized Task may create one
-disposable extracted proof checkout or local shadow. It must:
+No final materialization Task may start until a reviewer accepts the technical receipts
+and one of these conditions holds: the three dependency blockers are resolved, or an
+accountable owner explicitly approves a fail-closed materialization contract that keeps
+them unresolved without fallbacks. Security and legal owners must also disposition the
+redacted scan ledger or explicitly bound a later non-public local-only proof.
 
-1. apply and receipt the exact history specification in a disposable clone
-2. materialize and verify the target-only lockfile there, never in umbrella staging
-3. perform target-local existing-project Skopos adoption and retrieval proof there
-4. resolve or preserve OPS-R03 as an exact external-owner blocker without copying UI
-5. pack immutable Framework/Ops/UI candidates and prove clean installs only after their
-   accountable owners admit them
-6. run the approved complete public-history scan and retain only redacted receipts
-7. delete the disposable checkout after evidence capture unless a separately approved
-   local-shadow lifecycle says otherwise
+The next authorized route is:
 
-This section defines bounded sequencing only. It does not start that Task or authorize
-filtering, shadow creation, package admission, external mutation, or publication.
+1. review the filter, commit map, parity, cleanup, scan, and owner-decision receipts
+2. integrate the proof-overlay CI/integrity/typecheck corrections into umbrella `dev`
+3. resolve or preserve `@unisane/ui`, `@unisane/data-table`, and `@unisane/devtools`
+   only through their accountable owners; never invent versions or copy sibling source
+4. approve scanner, license, NOTICE, contributor, asset, fixture, provider-term,
+   signing, and remediation policy, then rerun the complete scan from a newly approved
+   immutable `dev` commit
+5. only under a separate approved Task, materialize the final local repository,
+   generate its lockfile, adopt target-local Skopos, and prove clean install/CI while
+   preserving one writable authority
+
+This section defines sequencing only. It does not authorize final repository creation,
+lockfile generation, Skopos activation, remote creation, publication, deployment, or
+cutover.

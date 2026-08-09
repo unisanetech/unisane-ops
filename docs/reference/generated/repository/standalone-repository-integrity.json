@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "state": "valid-with-exact-external-blockers",
+  "generatedFromPolicySha256": "47af74f9e5852326445ef516dc3d0fb5b5213d230bce7a7b9c469c4d8aaf185f",
+  "source": {
+    "fileCount": 953,
+    "digest": "c2b0bd7da7782251002e1577b793dbec0a05fccb1f0a0784d0982c2e6720efce",
+    "excludedGeneratedAndTaskMemory": [
+      "docs/reference/generated/**",
+      "docs/work/tasks/**",
+      "docs/work/archive/tasks/**"
+    ]
+  },
+  "repositoryShape": {
+    "expectedTopLevel": [
+      ".changeset",
+      ".agents",
+      ".github",
+      ".gitignore",
+      ".node-version",
+      "apps",
+      "deploy",
+      "docs",
+      "eslint.config.mjs",
+      "package.json",
+      "packages",
+      "plugins",
+      "pnpm-workspace.yaml",
+      "prettier.config.mjs",
+      "scripts",
+      "tests",
+      "tools",
+      "tsconfig.base.json",
+      "turbo.json"
+    ],
+    "observedTopLevel": [
+      ".agents",
+      ".changeset",
+      ".github",
+      ".gitignore",
+      ".node-version",
+      "apps",
+      "deploy",
+      "docs",
+      "eslint.config.mjs",
+      "package.json",
+      "packages",
+      "plugins",
+      "pnpm-workspace.yaml",
+      "prettier.config.mjs",
+      "scripts",
+      "tests",
+      "tools",
+      "tsconfig.base.json",
+      "turbo.json"
+    ],
+    "targetLockfilePresent": false,
+    "rootGitMetadataIgnored": true
+  },
+  "packageBoundary": {
+    "manifestCount": 14,
+    "foreignWorkspaceEdges": [
+      {
+        "consumer": "@unisane/framework-ops",
+        "dependency": "@unisane/devtools",
+        "specifier": "workspace:*",
+        "section": "dependencies",
+        "path": "packages/framework-ops/package.json"
+      },
+      {
+        "consumer": "@unisane/ops-console",
+        "dependency": "@unisane/data-table",
+        "specifier": "workspace:*",
+        "section": "dependencies",
+        "path": "apps/console/package.json"
+      },
+      {
+        "consumer": "@unisane/ops-console",
+        "dependency": "@unisane/ui",
+        "specifier": "workspace:*",
+        "section": "dependencies",
+        "path": "apps/console/package.json"
+      }
+    ],
+    "exactExternalBlockers": [
+      {
+        "id": "OPS-R04-FRAMEWORK-DEVTOOLS",
+        "consumer": "@unisane/framework-ops",
+        "dependency": "@unisane/devtools",
+        "specifier": "workspace:*"
+      },
+      {
+        "id": "OPS-R03-DATA-TABLE",
+        "consumer": "@unisane/ops-console",
+        "dependency": "@unisane/data-table",
+        "specifier": "workspace:*"
+      },
+      {
+        "id": "OPS-R03-UI",
+        "consumer": "@unisane/ops-console",
+        "dependency": "@unisane/ui",
+        "specifier": "workspace:*"
+      }
+    ],
+    "fileOrLinkEdges": [],
+    "foreignRelativeReferences": []
+  },
+  "prohibitedTrackedPaths": [],
+  "violations": []
+}

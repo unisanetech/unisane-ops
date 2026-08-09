@@ -4,11 +4,11 @@
   "sourceCheckpoint": "50f13fcc35e95aad3b8ad3c5dc7b271810946a34",
   "sourceCheckpointTrackedPathCount": 924,
   "sourceCheckpointTreeDigest": "6934855055c9d9bac95aaab631f96649ac47f28e9a6d9b6a7e6f3b19bb9d2384",
-  "generatedFromPolicySha256": "41fa542f4708080341e68302faf40182dc972863756220d72c3110967a3f096b",
+  "generatedFromPolicySha256": "2d858aa35b4491340b18f961c46adbda0f8512b624ea32ae32d95db2d0f49b1f",
   "inventory": {
-    "concreteFileCount": 947,
-    "coveredRecordCount": 951,
-    "concreteInventoryDigest": "336c6568cf1f28c15e2d160f748d08fe56fab6725c5a6b8244b070835cad12bd",
+    "concreteFileCount": 959,
+    "coveredRecordCount": 964,
+    "concreteInventoryDigest": "44e5ea30218731b7d19a54192e7fdd500dd993c7ad8b8591366f1c681bbd5025",
     "excludedEphemeralPatterns": [
       {
         "pattern": "**/node_modules/**",
@@ -24,12 +24,13 @@
       }
     ],
     "dispositionCounts": {
-      "activate-only-after-extracted-adoption": 7,
-      "migrate-or-archive-through-existing-project-adoption": 1,
+      "activate-only-after-extracted-adoption": 9,
+      "migrate-or-archive-through-existing-project-adoption": 2,
       "regenerate-from-source-policy": 3,
+      "regenerate-target-reference": 6,
       "retain-source-deployment-contract-no-provider-state": 30,
       "retain-target-memory": 3,
-      "retain-target-source": 907
+      "retain-target-source": 911
     },
     "files": [
       {
@@ -49,7 +50,7 @@
       {
         "path": ".github/workflows/ci.yml",
         "mode": "regular",
-        "sha256": "6865937d8e6cd2d0fd2520e3876bdeb4015768a6c92043feb143e66da88447b1",
+        "sha256": "6198f845e2817fc39eec9d19445d2925262a39e0bc84fe2aa04cb78a94c69aa4",
         "owner": "unisane-ops-repository-root",
         "disposition": "retain-target-source"
       },
@@ -1211,16 +1212,51 @@
       {
         "path": "docs/00-start-here.md",
         "mode": "regular",
-        "sha256": "e0bb629812d3adf4eba6a42bf074689cb34ee239d6baec19aba58618c2ae1bec",
+        "sha256": "c40a5fe6b0e6a016ba16ff4baddbcd6cb2e59c10bb3873e11f35535ba023a001",
         "owner": "unisane-ops-memory",
         "disposition": "retain-target-memory"
       },
       {
         "path": "docs/overview.md",
         "mode": "regular",
-        "sha256": "99b454316be364d22b990e218759cea18cca4f5dbde047cc9e5bc22b3e3e8828",
+        "sha256": "0697f46e5190da88bc09cef1b010f042d685af873d34efc9de7b1bb19d443bdf",
         "owner": "unisane-ops-memory",
         "disposition": "retain-target-memory"
+      },
+      {
+        "path": "docs/reference/generated/repository/extraction-proof/T-b222cdbf/commit-map.json",
+        "mode": "regular",
+        "sha256": "4249d0c58e965513edd08d48c63b0003643d019ba50c38d27943ae14dafa1a90",
+        "owner": "unisane-ops-memory",
+        "disposition": "regenerate-target-reference"
+      },
+      {
+        "path": "docs/reference/generated/repository/extraction-proof/T-b222cdbf/owner-decision-ledger.json",
+        "mode": "regular",
+        "sha256": "521005b042a2b2ebe0b948b2643647a266aff011eab362454dc218f2ce05315b",
+        "owner": "unisane-ops-memory",
+        "disposition": "regenerate-target-reference"
+      },
+      {
+        "path": "docs/reference/generated/repository/extraction-proof/T-b222cdbf/provenance-receipt.json",
+        "mode": "regular",
+        "sha256": "8b73d319a46668abfda35164df0113ba23558e1333617d309f70247eed3728e7",
+        "owner": "unisane-ops-memory",
+        "disposition": "regenerate-target-reference"
+      },
+      {
+        "path": "docs/reference/generated/repository/extraction-proof/T-b222cdbf/public-safety-scan-receipt.json",
+        "mode": "regular",
+        "sha256": "ffbd1bf2eb06d01cf1986ba16016c473e8275f7efbb9936040a5309d8d937a57",
+        "owner": "unisane-ops-memory",
+        "disposition": "regenerate-target-reference"
+      },
+      {
+        "path": "docs/reference/generated/repository/extraction-proof/T-b222cdbf/receipt-bundle.json",
+        "mode": "regular",
+        "sha256": "7fbae2c660d605c90996a15a134f9e5952b987984f16829a16282ae125483a11",
+        "owner": "unisane-ops-memory",
+        "disposition": "regenerate-target-reference"
       },
       {
         "path": "docs/reference/generated/repository/history-filter-spec.json",
@@ -1247,14 +1283,29 @@
         "selfReferentialOutput": true
       },
       {
+        "path": "docs/reference/generated/repository/standalone-repository-integrity.json",
+        "mode": "regular",
+        "sha256": "c194f51a1f32687acf232c880f6c14758ff98a9dfc5dba5228e15a6e693e334c",
+        "owner": "unisane-ops-memory",
+        "disposition": "regenerate-target-reference"
+      },
+      {
         "path": "docs/standards/01-standalone-repository-transition-readiness.md",
         "mode": "regular",
-        "sha256": "84396814d0525adfb1be9cc3e0efa9d2017c0d8a119abd0a8b45f062dce55fea",
+        "sha256": "693224fd1600dfa0abcb3aae343b15750064f227c313270827920283310b2665",
         "owner": "unisane-ops-memory",
         "disposition": "retain-target-memory"
       },
       {
         "path": "docs/work/{tasks,archive/tasks,tasks/snapshots}/T-287702f0-*",
+        "mode": "dynamic-skopos-artifact",
+        "sha256": null,
+        "owner": "umbrella-skopos-until-cutover",
+        "disposition": "migrate-or-archive-through-existing-project-adoption",
+        "dynamicTaskArtifact": true
+      },
+      {
+        "path": "docs/work/{tasks,archive/tasks,tasks/snapshots}/T-b222cdbf-*",
         "mode": "dynamic-skopos-artifact",
         "sha256": null,
         "owner": "umbrella-skopos-until-cutover",
@@ -1271,7 +1322,7 @@
       {
         "path": "package.json",
         "mode": "regular",
-        "sha256": "011d810d15481a91278432cb72d9adfc513550ace0cd1109b8a33dd5ec6d6de1",
+        "sha256": "54ddc03c590897b0c70491b1be1d550e5f393b56ff14128ee33dc283c7e78759",
         "owner": "unisane-ops-repository-root",
         "disposition": "retain-target-source"
       },
@@ -6610,23 +6661,51 @@
         "disposition": "retain-target-source"
       },
       {
+        "path": "scripts/check-repository-integrity.mjs",
+        "mode": "regular",
+        "sha256": "ac800cba905d41d6e928ac3c851437fb385a5242831445280d2c88a8239c1607",
+        "owner": "unisane-ops-checks",
+        "disposition": "retain-target-source"
+      },
+      {
         "path": "scripts/check-source-boundary.mjs",
         "mode": "regular",
-        "sha256": "d57773e933b4d12e954bf7a9d7b147cab3e7ea704a9dcf5fbb5f4f27efa6b314",
+        "sha256": "b04764f754b65b85b13c4dc883ff953ad8d511cd64a0c59c5096471cb346dfc9",
+        "owner": "unisane-ops-checks",
+        "disposition": "retain-target-source"
+      },
+      {
+        "path": "scripts/execute-disposable-extraction-proof.mjs",
+        "mode": "regular",
+        "sha256": "2834cab358cba0c3df9d78396b4aa66af49f33886f8586dac64ae4145391dcb4",
         "owner": "unisane-ops-checks",
         "disposition": "retain-target-source"
       },
       {
         "path": "tests/source-boundary.test.mjs",
         "mode": "regular",
-        "sha256": "f838c6ee313a8fb3409edaedff16a54500cc4f04b4e11c0bf9387c1dad5dcbf0",
+        "sha256": "4ec17b65157252c3487ffe8c805457d7522bd53960c2555ae06933a3b3ad2908",
         "owner": "unisane-ops-checks",
+        "disposition": "retain-target-source"
+      },
+      {
+        "path": "tools/repository/extraction-proof-policy.json",
+        "mode": "regular",
+        "sha256": "05349f665a72a08650778b61eb4a1e08d4f12bd32420c46653ebf5038874e14e",
+        "owner": "unisane-ops-tooling",
         "disposition": "retain-target-source"
       },
       {
         "path": "tools/repository/source-boundary-policy.json",
         "mode": "regular",
-        "sha256": "41fa542f4708080341e68302faf40182dc972863756220d72c3110967a3f096b",
+        "sha256": "2d858aa35b4491340b18f961c46adbda0f8512b624ea32ae32d95db2d0f49b1f",
+        "owner": "unisane-ops-tooling",
+        "disposition": "retain-target-source"
+      },
+      {
+        "path": "tools/repository/standalone-integrity-policy.json",
+        "mode": "regular",
+        "sha256": "47af74f9e5852326445ef516dc3d0fb5b5213d230bce7a7b9c469c4d8aaf185f",
         "owner": "unisane-ops-tooling",
         "disposition": "retain-target-source"
       },
@@ -6634,6 +6713,13 @@
         "path": "tools/skopos/actions/package-check.yaml",
         "mode": "regular",
         "sha256": "7fcaea291d628b7cdb8c4ce565de0a69afac31a5da2587cbea0324ec703a4212",
+        "owner": "unisane-ops-staged-skopos",
+        "disposition": "activate-only-after-extracted-adoption"
+      },
+      {
+        "path": "tools/skopos/actions/repository-integrity-check.yaml",
+        "mode": "regular",
+        "sha256": "742fb335f397d3155fefe0ccc8a8593d1bbf123253228f5923fb4c6687c27de6",
         "owner": "unisane-ops-staged-skopos",
         "disposition": "activate-only-after-extracted-adoption"
       },
@@ -6655,6 +6741,13 @@
         "path": "tools/skopos/guards/package-check.yaml",
         "mode": "regular",
         "sha256": "92f44c669152322381ae5c3c395a43e80352dc10ba49ab4884caaa720462e100",
+        "owner": "unisane-ops-staged-skopos",
+        "disposition": "activate-only-after-extracted-adoption"
+      },
+      {
+        "path": "tools/skopos/guards/repository-integrity-check.yaml",
+        "mode": "regular",
+        "sha256": "737a78a3dcf515ffc0903bbb73aec47d2c24097ee5cb4f3ab6b6fb48a2d69db5",
         "owner": "unisane-ops-staged-skopos",
         "disposition": "activate-only-after-extracted-adoption"
       },
@@ -8879,7 +8972,10 @@
     "independentTargetSkoposActive": false,
     "umbrellaLockfileAuthority": true,
     "umbrellaSkoposAuthority": true,
-    "excludedUmbrellaTaskArtifactPattern": "docs/work/tasks/snapshots/T-287702f0-* (Skopos-managed Evidence, not canonical Project Memory)"
+    "excludedUmbrellaTaskArtifactPatterns": [
+      "docs/work/tasks/snapshots/T-287702f0-* (Skopos-managed Evidence, not canonical Project Memory)",
+      "docs/work/tasks/snapshots/T-b222cdbf-* (Skopos-managed Evidence, not canonical Project Memory)"
+    ]
   },
   "violations": []
 }

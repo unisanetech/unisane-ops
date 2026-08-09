@@ -23,13 +23,15 @@ test('source boundary is frozen only with its exact external blockers', () => {
   ]);
   assert.equal(ledger.authoritySafety.targetLockfilePresent, false);
   assert.equal(ledger.authoritySafety.independentTargetSkoposActive, false);
-  assert.match(ledger.authoritySafety.excludedUmbrellaTaskArtifactPattern, /Skopos-managed Evidence/);
+  assert.equal(ledger.authoritySafety.excludedUmbrellaTaskArtifactPatterns.length, 2);
+  assert.ok(ledger.authoritySafety.excludedUmbrellaTaskArtifactPatterns.every((pattern) => pattern.includes('Skopos-managed Evidence')));
 });
 
-test('history and public-safety work are specified but not executed', () => {
-  assert.equal(history.state, 'specified-not-executed');
+test('history and public-safety work are executed only in the recorded disposable proof', () => {
+  assert.equal(history.state, 'executed-in-disposable-proof');
   assert.equal(history.discovery.originMappingCount, 507);
   assert.equal(history.discovery.additionCount, 91);
-  assert.equal(safety.state, 'specified-not-executed');
-  assert.match(safety.executionAuthority, /disposable-filtered-checkout-only/);
+  assert.equal(history.execution.candidateTip, 'f6de44d92b95413bafb52607a7a70cf2ac512791');
+  assert.equal(safety.state, 'technical-scan-executed-owner-certification-blocked');
+  assert.equal(safety.execution.publicHistorySafe, false);
 });

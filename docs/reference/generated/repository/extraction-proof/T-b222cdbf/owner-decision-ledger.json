@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "state": "fail-closed",
+  "sourceCommit": "616344017db70385d966d3b4a0197614b5b1bca3",
+  "candidateTip": "f6de44d92b95413bafb52607a7a70cf2ac512791",
+  "decisions": [
+    {
+      "id": "OPS-PROOF-R01",
+      "owner": "security-owner",
+      "state": "unresolved",
+      "subject": "Approve scanner tools, versions, thresholds, entropy policy, and allowlist.",
+      "evidence": {
+        "redactedFindingCount": 1027,
+        "digest": "0d2eac637a7b1cc8d1754268db6c62647c3ab50bfeba47bd50ac79d9ee43d5fe"
+      }
+    },
+    {
+      "id": "OPS-PROOF-R02",
+      "owner": "security-owner",
+      "state": "unresolved",
+      "subject": "Review redacted secret and private-data detector findings and authorize any remediation.",
+      "evidence": {
+        "redactedFindingCount": 1,
+        "digest": "c0082ee9ccadb55a12f7f9821b11f8d1dc4af1550802ed022f4f28f035bd8d9e"
+      }
+    },
+    {
+      "id": "OPS-PROOF-R03",
+      "owner": "privacy-and-provider-data-owner",
+      "state": "unresolved",
+      "subject": "Review PII, provider account, tenant, URL, fixture, and topology findings.",
+      "evidence": {
+        "redactedFindingCount": 958,
+        "digest": "3aaa5ead96f1d3464ae71ef733032f6504b04a9130c870f37f94edd0d9e04d72"
+      }
+    },
+    {
+      "id": "OPS-PROOF-R04",
+      "owner": "security-and-repository-owner",
+      "state": "unresolved",
+      "subject": "Approve binary, large-object, cache, generated-output, and provider-state dispositions.",
+      "evidence": {
+        "binaryAndSizeFindings": 20,
+        "generatedStateFindings": 43
+      }
+    },
+    {
+      "id": "OPS-PROOF-R05",
+      "owner": "legal-owner",
+      "state": "unresolved",
+      "subject": "Approve LICENSE, NOTICE, dependency/source-copy provenance, provider terms, trademarks, assets, fixtures, fonts, and datasets.",
+      "evidence": {
+        "redactedFindingCount": 5,
+        "digest": "23bc5d6f13b2d228cacd10f1992865e7f77a0e9cbe87445f8ab714db32b1373f"
+      }
+    },
+    {
+      "id": "OPS-PROOF-R06",
+      "owner": "legal-owner",
+      "state": "unresolved",
+      "subject": "Approve contributor identities, email publication, terms, and sign-off policy.",
+      "evidence": {
+        "identityCount": 4,
+        "identityDigest": "dd510e5a8fb98408cc68e586194327d30ae903c223fd1558a0defded38726592",
+        "signedOffCommitCount": 0
+      }
+    },
+    {
+      "id": "OPS-PROOF-R07",
+      "owner": "migration-owner",
+      "state": "unresolved",
+      "subject": "Approve git-filter-repo executable/version digest and the exact technical filter receipt for materialization."
+    },
+    {
+      "id": "OPS-PROOF-R08",
+      "owner": "founder-and-release-owner",
+      "state": "unresolved",
+      "subject": "Approve remote visibility, signing, rulesets, CODEOWNERS, target authority, and final materialization route."
+    },
+    {
+      "id": "OPS-PROOF-R09",
+      "owner": "ops-tooling-security-legal",
+      "state": "unresolved",
+      "subject": "Implement and approve real generated-drift, security, and license CI gates before standalone CI or public readiness certification."
+    },
+    {
+      "id": "OPS-R03-UI",
+      "owner": "unisane-ui",
+      "state": "open",
+      "subject": "@unisane/ops-console -> @unisane/ui workspace:*"
+    },
+    {
+      "id": "OPS-R03-DATA-TABLE",
+      "owner": "unisane-ui",
+      "state": "open",
+      "subject": "@unisane/ops-console -> @unisane/data-table workspace:*"
+    },
+    {
+      "id": "OPS-R04-FRAMEWORK-DEVTOOLS",
+      "owner": "unisane-framework",
+      "state": "open",
+      "subject": "@unisane/framework-ops -> @unisane/devtools workspace:*"
+    }
+  ],
+  "prohibitedConclusions": [
+    "Do not certify public-history, public-release, standalone-CI, remote-authority, or production readiness.",
+    "Do not invent dependency versions, copy sibling source, add file/link/workspace fallbacks, or weaken the exact blockers.",
+    "Do not materialize a final repository without separate reviewer approval and resolved blockers or an explicitly approved fail-closed materialization contract."
+  ]
+}

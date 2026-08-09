@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "state": "technical-extraction-certified-public-promotion-blocked",
+  "taskId": "T-b222cdbf",
+  "source": {
+    "integratedCommit": "616344017db70385d966d3b4a0197614b5b1bca3",
+    "freezeCheckpoint": "50f13fcc35e95aad3b8ad3c5dc7b271810946a34",
+    "stagingIntroductionCommit": "4c9eab6eb8239986e14b4b1479f099fcfc8603ed",
+    "currentTreePathCount": 951,
+    "currentTreeDigest": "4f9f5e1c8547558d8264a79c26b2cfff4bd20735df6ce840d50532bb933b0b15",
+    "refInventoryAtExecution": {
+      "count": 39,
+      "typeCounts": {
+        "commit": 26,
+        "tree": 13
+      },
+      "digest": "966e5dc4d55dc9042871729f141a653b07c38b77ba2d0e302a9e3537bcb4673b"
+    },
+    "tagInventoryAtExecution": {
+      "count": 0,
+      "typeCounts": {},
+      "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "signatureInventory": {
+      "inspectedCommitCount": 503,
+      "statusCounts": {
+        "N": 503
+      }
+    }
+  },
+  "filter": {
+    "input": {
+      "sourceCommit": "616344017db70385d966d3b4a0197614b5b1bca3",
+      "sourceTreeDigest": "4f9f5e1c8547558d8264a79c26b2cfff4bd20735df6ce840d50532bb933b0b15",
+      "freezeCheckpoint": "50f13fcc35e95aad3b8ad3c5dc7b271810946a34",
+      "introductionCommit": "4c9eab6eb8239986e14b4b1479f099fcfc8603ed",
+      "historySpecSha256": "0224f8ec6c906fb2df92d778a881d198e53ead5380478c1a3c91742449e3465e",
+      "safetySpecSha256": "b73f7cd598f491687901bc416f1fac3b7c7ba530243a8937a7e678e16854a6c7",
+      "filterExecutable": "/usr/local/bin/git-filter-repo",
+      "filterExecutableSha256": "67447413e273fc76809289111748870b6f6072f08b17efe94863a92d810b7d94",
+      "filterVersion": "a40bce548d2c",
+      "callbackSha256": "09408319a448f5d1cf594d84473adc973779347940862cd4e837bfdd1d960e14",
+      "mappingCount": 507,
+      "uniqueOriginCount": 481,
+      "directAdditionCount": 91,
+      "tags": "none-admitted"
+    },
+    "inputDigest": "b9fda3db8ac6e192973b60d4cd7ff1ea1ca4eadee89b316a6d9add691720e697",
+    "normalizedCommand": "/usr/local/bin/git-filter-repo --force --commit-callback <callback:09408319a448f5d1cf594d84473adc973779347940862cd4e837bfdd1d960e14>",
+    "commitMap": {
+      "path": "commit-map.json",
+      "sha256": "4249d0c58e965513edd08d48c63b0003643d019ba50c38d27943ae14dafa1a90"
+    },
+    "filteredBaseTip": "a9d3ce795a3cd7ba4fd3a91711f2be2c9436bef6",
+    "filteredBaseTree": "a2fc4e8330103a5a0c7a1a827c0b2a8c6eba1bc0",
+    "filteredCurrentTreeDigest": "4f9f5e1c8547558d8264a79c26b2cfff4bd20735df6ce840d50532bb933b0b15",
+    "currentParity": {
+      "state": "exact",
+      "mismatchCount": 0,
+      "contentAndModePathCount": 951
+    },
+    "excludedPathAbsence": {
+      "state": "pass",
+      "historicalPathCount": 1036,
+      "excludedPathCount": 0
+    },
+    "tags": {
+      "admittedCount": 0,
+      "sourceTagInventory": {
+        "count": 0,
+        "typeCounts": {},
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "candidateTagInventory": {
+        "count": 0,
+        "typeCounts": {},
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "proofOverlay": {
+    "state": "disposable-candidate-only-not-authority",
+    "base": "a9d3ce795a3cd7ba4fd3a91711f2be2c9436bef6",
+    "tip": "f6de44d92b95413bafb52607a7a70cf2ac512791",
+    "tree": "2f413b92e7e5c0dda857dcfa428b859fda60c248",
+    "paths": [
+      ".github/workflows/ci.yml",
+      "docs/reference/generated/repository/standalone-repository-integrity.json",
+      "package.json",
+      "scripts/check-repository-integrity.mjs",
+      "tools/repository/standalone-integrity-policy.json",
+      "tools/skopos/actions/repository-integrity-check.yaml",
+      "tools/skopos/guards/repository-integrity-check.yaml"
+    ],
+    "patchSha256": "2c29d1a22a40666ea1c8ced294eabfbb1db9fe88cb00e83679fdb95bea39b6d2",
+    "purpose": "Correct CI Corepack ordering, replace the umbrella-only transition gate with a standalone integrity/generated-drift gate, and preserve the check-types command contract for proof."
+  },
+  "candidate": {
+    "path": "/tmp/unisane-ops-extraction-T-b222cdbf/repository",
+    "head": "f6de44d92b95413bafb52607a7a70cf2ac512791",
+    "tree": "2f413b92e7e5c0dda857dcfa428b859fda60c248",
+    "branch": "extraction-proof",
+    "preCleanup": {
+      "filterMetadataPresent": true,
+      "remoteCount": 0,
+      "refInventory": {
+        "count": 1,
+        "typeCounts": {
+          "commit": 1
+        },
+        "digest": "c6e83a3f95a40ef16a35df1808ae76fa419eaf3354fdeefdbe40395366360b40"
+      },
+      "tagInventory": {
+        "count": 0,
+        "typeCounts": {},
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "signatureInventory": {
+        "inspectedCommitCount": 84,
+        "statusCounts": {
+          "N": 84
+        }
+      },
+      "objectInventory": {
+        "reachableObjectCount": 3753,
+        "typeCounts": {
+          "blob": 2182,
+          "tree": 1487,
+          "commit": 84
+        },
+        "totalInflatedBytes": 17777505,
+        "digest": "78a2ee65a98eb25037969525947b260cb6afe422a09adcb5aea288d56b045a88"
+      }
+    },
+    "postCleanup": {
+      "filterMetadataPresent": false,
+      "remoteCount": 0,
+      "reflogEntryCount": 0,
+      "alternatesPresent": false,
+      "originalRefCount": 0,
+      "tagInventory": {
+        "count": 0,
+        "typeCounts": {},
+        "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "refInventory": {
+        "count": 1,
+        "typeCounts": {
+          "commit": 1
+        },
+        "digest": "c6e83a3f95a40ef16a35df1808ae76fa419eaf3354fdeefdbe40395366360b40"
+      },
+      "signatureInventory": {
+        "inspectedCommitCount": 84,
+        "statusCounts": {
+          "N": 84
+        }
+      },
+      "objectInventory": {
+        "reachableObjectCount": 3753,
+        "typeCounts": {
+          "blob": 2182,
+          "tree": 1487,
+          "commit": 84
+        },
+        "totalInflatedBytes": 17777505,
+        "digest": "78a2ee65a98eb25037969525947b260cb6afe422a09adcb5aea288d56b045a88"
+      },
+      "fsckOutputDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fsckClean": true,
+      "unreachableOutputDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unreachableObjectCount": 0,
+      "workingTreeClean": true
+    }
+  },
+  "safety": {
+    "receipt": {
+      "path": "public-safety-scan-receipt.json",
+      "sha256": "ffbd1bf2eb06d01cf1986ba16016c473e8275f7efbb9936040a5309d8d937a57"
+    },
+    "ownerDecisionLedger": {
+      "path": "owner-decision-ledger.json",
+      "sha256": "521005b042a2b2ebe0b948b2643647a266aff011eab362454dc218f2ce05315b"
+    },
+    "publicHistorySafe": false,
+    "standaloneCiReady": false,
+    "publicReleaseReady": false
+  },
+  "materializationRoute": [
+    "Obtain reviewer approval for this technical receipt and proof-overlay corrections.",
+    "Resolve the three exact dependency blockers or approve a specific fail-closed materialization contract.",
+    "Obtain security/legal approval for scanners, findings, contributor identities, license/NOTICE, dependencies, assets, fixtures, provider terms, and remediation policy.",
+    "Integrate the proof-overlay source corrections into the umbrella authority and rerun extraction from the newly approved immutable dev commit.",
+    "Only then materialize into the designated final local path, generate its lockfile, adopt target-local Skopos, and verify one-writable-authority cutover under a separately approved Task."
+  ]
+}

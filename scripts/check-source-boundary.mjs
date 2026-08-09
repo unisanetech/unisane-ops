@@ -10,8 +10,9 @@ const policyPath = join(repositoryRoot, 'tools/repository/source-boundary-policy
 const policy = JSON.parse(readFileSync(policyPath, 'utf8'));
 const mode = process.argv.includes('--write') ? 'write' : 'check';
 const ignoredDirectories = new Set(['.git', '.skopos', '.unisane', '.turbo', 'node_modules', 'dist', 'coverage']);
-const taskArtifactPattern = new RegExp(`^docs/work/(?:tasks|archive/tasks|tasks/snapshots)/${policy.taskId}-`);
-const umbrellaTaskArtifactPattern = new RegExp(`^docs/work/tasks/snapshots/${policy.taskId}-`);
+const dynamicTaskIds = policy.dynamicTaskIds ?? [policy.taskId];
+const taskArtifactPatterns = dynamicTaskIds.map((taskId) => new RegExp(`^docs/work/(?:tasks|archive/tasks|tasks/snapshots)/${taskId}-`));
+const umbrellaTaskArtifactPatterns = dynamicTaskIds.map((taskId) => new RegExp(`^docs/work/tasks/snapshots/${taskId}-`));
 
 function sha256(value) {
   return createHash('sha256').update(value).digest('hex');
@@ -86,7 +87,7 @@ function manifestInventory() {
 }
 
 function centralMemoryInventory() {
-  const paths = git(['ls-files', 'docs']).trim().split('\n').filter(Boolean).filter((path) => !umbrellaTaskArtifactPattern.test(path));
+  const paths = git(['ls-files', 'docs']).trim().split('\n').filter(Boolean).filter((path) => !umbrellaTaskArtifactPatterns.some((pattern) => pattern.test(path)));
   const signal = /(?:Unisane Ops|unisane-ops|@unisane\/(?:ops|growth|cloud|provider|web-runtime|framework-ops))/i;
   return paths.filter((path) => signal.test(readFileSync(join(umbrellaRoot, path), 'utf8'))).map((path) => ({
     path,
@@ -138,8 +139,9 @@ function historySpec() {
   }
   return {
     schemaVersion: 1,
-    state: 'specified-not-executed',
-    executionAuthority: 'later-disposable-extracted-proof-task-only',
+    state: 'executed-in-disposable-proof',
+    executionAuthority: 'completed-by-recorded-disposable-proof-no-materialization-authority',
+    execution: policy.extractionProof,
     sourceCheckpoint: policy.sourceCheckpoint,
     introductionCommit: introduction,
     discovery: {
@@ -182,8 +184,9 @@ function historySpec() {
 function safetySpec() {
   return {
     schemaVersion: 1,
-    state: 'specified-not-executed',
-    executionAuthority: 'security-and-legal-approved-disposable-filtered-checkout-only',
+    state: 'technical-scan-executed-owner-certification-blocked',
+    executionAuthority: 'completed-by-recorded-disposable-proof-no-public-certification',
+    execution: policy.extractionProof,
     scanInput: {
       commitSet: 'every commit reachable in the filtered Ops history candidate',
       blobSet: 'every unique blob reachable from that commit set, including deleted paths',
@@ -220,7 +223,7 @@ function safetySpec() {
 
 function ledger() {
   const selfGenerated = new Set(policy.selfGeneratedOutputs);
-  const concretePaths = walk(repositoryRoot).filter((path) => !selfGenerated.has(path) && !taskArtifactPattern.test(path));
+  const concretePaths = walk(repositoryRoot).filter((path) => !selfGenerated.has(path) && !taskArtifactPatterns.some((pattern) => pattern.test(path)));
   const files = concretePaths.map((path) => {
     const absolutePath = join(repositoryRoot, path);
     const content = readFileSync(absolutePath);
@@ -229,14 +232,16 @@ function ledger() {
   for (const path of policy.selfGeneratedOutputs) {
     files.push({ path, mode: 'regular', sha256: null, owner: 'unisane-ops-generated-reference', disposition: 'regenerate-from-source-policy', selfReferentialOutput: true });
   }
-  files.push({
-    path: `docs/work/{tasks,archive/tasks,tasks/snapshots}/${policy.taskId}-*`,
-    mode: 'dynamic-skopos-artifact',
-    sha256: null,
-    owner: 'umbrella-skopos-until-cutover',
-    disposition: 'migrate-or-archive-through-existing-project-adoption',
-    dynamicTaskArtifact: true,
-  });
+  for (const taskId of dynamicTaskIds) {
+    files.push({
+      path: `docs/work/{tasks,archive/tasks,tasks/snapshots}/${taskId}-*`,
+      mode: 'dynamic-skopos-artifact',
+      sha256: null,
+      owner: 'umbrella-skopos-until-cutover',
+      disposition: 'migrate-or-archive-through-existing-project-adoption',
+      dynamicTaskArtifact: true,
+    });
+  }
   files.sort((a, b) => a.path.localeCompare(b.path));
 
   const { manifests, workspaceEdges, externalPackageContracts } = manifestInventory();
@@ -318,7 +323,7 @@ function ledger() {
       independentTargetSkoposActive: false,
       umbrellaLockfileAuthority: true,
       umbrellaSkoposAuthority: true,
-      excludedUmbrellaTaskArtifactPattern: policy.excludedUmbrellaTaskArtifactPattern,
+      excludedUmbrellaTaskArtifactPatterns: policy.excludedUmbrellaTaskArtifactPatterns,
     },
     violations,
   };

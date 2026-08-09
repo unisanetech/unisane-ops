@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "expectedTopLevel": [
+    ".changeset",
+    ".agents",
+    ".github",
+    ".gitignore",
+    ".node-version",
+    "apps",
+    "deploy",
+    "docs",
+    "eslint.config.mjs",
+    "package.json",
+    "packages",
+    "plugins",
+    "pnpm-workspace.yaml",
+    "prettier.config.mjs",
+    "scripts",
+    "tests",
+    "tools",
+    "tsconfig.base.json",
+    "turbo.json"
+  ],
+  "externalBlockers": [
+    {
+      "id": "OPS-R03-UI",
+      "consumer": "@unisane/ops-console",
+      "dependency": "@unisane/ui",
+      "specifier": "workspace:*"
+    },
+    {
+      "id": "OPS-R03-DATA-TABLE",
+      "consumer": "@unisane/ops-console",
+      "dependency": "@unisane/data-table",
+      "specifier": "workspace:*"
+    },
+    {
+      "id": "OPS-R04-FRAMEWORK-DEVTOOLS",
+      "consumer": "@unisane/framework-ops",
+      "dependency": "@unisane/devtools",
+      "specifier": "workspace:*"
+    }
+  ],
+  "generatedOutput": "docs/reference/generated/repository/standalone-repository-integrity.json",
+  "excludedSourcePatterns": [
+    "docs/reference/generated/**",
+    "docs/work/tasks/**",
+    "docs/work/archive/tasks/**"
+  ]
+}

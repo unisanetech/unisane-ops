@@ -28,6 +28,11 @@ until an approved cutover records otherwise.
    [history filter specification](reference/generated/repository/history-filter-spec.json),
    and [public-safety scan specification](reference/generated/repository/public-safety-scan-spec.json)
    for the current no-shadow convergence checkpoint.
+4. For the disposable extraction proof, inspect the
+   [provenance receipt](reference/generated/repository/extraction-proof/T-b222cdbf/provenance-receipt.json),
+   [commit map](reference/generated/repository/extraction-proof/T-b222cdbf/commit-map.json),
+   [redacted safety receipt](reference/generated/repository/extraction-proof/T-b222cdbf/public-safety-scan-receipt.json),
+   and [owner-decision ledger](reference/generated/repository/extraction-proof/T-b222cdbf/owner-decision-ledger.json).
 
 ## Authority During Transition
 

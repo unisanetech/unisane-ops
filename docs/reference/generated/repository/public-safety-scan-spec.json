@@ -1,7 +1,18 @@
 {
   "schemaVersion": 1,
-  "state": "specified-not-executed",
-  "executionAuthority": "security-and-legal-approved-disposable-filtered-checkout-only",
+  "state": "technical-scan-executed-owner-certification-blocked",
+  "executionAuthority": "completed-by-recorded-disposable-proof-no-public-certification",
+  "execution": {
+    "taskId": "T-b222cdbf",
+    "sourceCommit": "616344017db70385d966d3b4a0197614b5b1bca3",
+    "candidateBase": "a9d3ce795a3cd7ba4fd3a91711f2be2c9436bef6",
+    "candidateTip": "f6de44d92b95413bafb52607a7a70cf2ac512791",
+    "historySpecInputSha256": "0224f8ec6c906fb2df92d778a881d198e53ead5380478c1a3c91742449e3465e",
+    "safetySpecInputSha256": "b73f7cd598f491687901bc416f1fac3b7c7ba530243a8937a7e678e16854a6c7",
+    "provenanceReceipt": "docs/reference/generated/repository/extraction-proof/T-b222cdbf/provenance-receipt.json",
+    "safetyReceipt": "docs/reference/generated/repository/extraction-proof/T-b222cdbf/public-safety-scan-receipt.json",
+    "publicHistorySafe": false
+  },
   "scanInput": {
     "commitSet": "every commit reachable in the filtered Ops history candidate",
     "blobSet": "every unique blob reachable from that commit set, including deleted paths",
