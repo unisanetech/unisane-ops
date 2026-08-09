@@ -15,6 +15,11 @@ status: open
 
 ## Changelog
 
+- `2026-08-09`: Removed the remaining direct Framework Devtools dependency/import leak
+  into Ops-owned `@unisane/cli-core` and `@unisane/ops-engine`. Devtools now uses a
+  package-private terminal helper, preserves the 76-command disposition, and is covered
+  by a permanent package/source boundary guard. The finding remains open for durable
+  automation and repository/release readiness.
 - `2026-07-26`: Closed and archived P116-W22 after explicit standalone package
   compatibility, registry-ready template materialization, statistical fleet retirement,
   and complete focused/workspace proof passed. The remaining umbrella scope returns to
@@ -258,7 +263,8 @@ is coupled to the Framework development toolchain or fragmented across packages:
 4. Provider behavior now lives in the AWS, Cloudflare, Google, and Meta provider-family
    packages; Growth owns provider-neutral strategy, reporting, policy, and safety.
 5. the Devtools CLI retains Framework create/dev/build/compiler/codegen/database/UI/LLM
-   and governance commands plus thin compatibility registrars for migrated Ops roots
+   and governance commands plus thin compatibility registrars for migrated Ops roots;
+   its package-private terminal helper imports no Ops CLI or engine package
 6. the generic control-plane core has a clean `@unisane/ops-engine` owner; Cloud, Growth,
    Web Runtime, and all admitted provider families have package and command owners;
    marketing-console presentation is Growth-owned
@@ -286,6 +292,7 @@ release, and authority cutover evidence.
 | Cloudflare transport owner                    | `unisane-ops/packages/provider-cloudflare/**`                                                                           |
 | Google and Meta management owners             | `unisane-ops/packages/provider-google/**`, `unisane-ops/packages/provider-meta/**`                                      |
 | retired Devtools owner zero-residue gate      | `scripts/commands/architecture/ops-package-boundary-check.mjs`                                                          |
+| Devtools-to-Ops dependency/import gate        | `scripts/commands/architecture/ops-package-boundary-check.mjs`, `scripts/__tests__/ops-package-boundary.test.mjs`       |
 | Growth-owned GTM and marketing presentation   | `unisane-ops/packages/growth/src/cli/**`                                                                                |
 | canonical Web Runtime owner                   | `unisane-ops/packages/web-runtime/**`                                                                                   |
 | compatibility-only former package coordinates | `unisane/packages/foundation/web-tracking`, `web-conversions`, `web-seo`; `unisane/packages/adapters/web-conversions-*` |
