@@ -15,6 +15,22 @@ Canonical product, package, repository, command, and extension boundaries for Un
 
 ## Changelog
 
+- `2026-08-09`: Defined the cross-repository UI adopter-tooling extension boundary.
+  UI owns `@unisane/ui-cli` and its eight exact `ui ...` command leaves; the package
+  implements the versioned structural pack protocol, bundles UI registry assets, and contributes
+  to the one canonical executable. Ops explicitly trusts and discovers the installed
+  pack without depending on UI source or the UI package, preserving an acyclic release
+  graph and keeping runtime `@unisane/ui` free of Node/CLI/Ops dependencies.
+- `2026-08-09`: Moved public root `doctor` ownership into the Ops CLI core. Selected
+  diagnostic packs now contribute sealed, effect-bounded `doctor <pack>` descriptors;
+  core aggregates their results under one human/JSON envelope, while Framework
+  Devtools retains the Framework diagnostic implementation behind `doctor framework`.
+  A generic Ops project reports Framework diagnostics as `not-selected`, and the
+  previously advertised but nonfunctional `--fix` option is removed.
+- `2026-08-09`: Moved the root `info` command from Framework Devtools into the
+  Ops-owned CLI core. It now reports the canonical CLI version and project-declared
+  Unisane package versions through one deterministic human/JSON handler; Devtools keeps
+  package inspection only as an internal input to its separate upgrade workflow.
 - `2026-08-05`: Defined and implemented truthful local-console temporal queries. Routes
   distinguish performance ranges, event ranges, coverage ranges, recorded snapshots,
   evidence context, and current state. Selectable ranges are URL-preserved and resolved
@@ -1369,9 +1385,10 @@ Target namespaces:
 
 ```text
 unisane ops init
-unisane add|remove|connect|check|doctor|status|inspect
+unisane add|remove|connect|check|doctor|status|info|inspect
 unisane cloud ...
 unisane growth ...
+unisane ui ...                   # when the UI adopter-tooling pack is installed
 unisane provider ...
 unisane dev|build ...            # when the Framework integration pack is selected
 unisane generate|llm|app ...     # when the Framework integration pack is selected
@@ -1391,15 +1408,24 @@ Rules:
    obsolete command paths and documentation; no public alias or wrapper is part of the
    target contract.
 8. `create-unisane` creates a new Unisane Framework application; `unisane ops init` adopts/configures Unisane Ops in an existing project and must not become a second Framework scaffolder. Bare `unisane init` is not an alias or supported command.
-9. Core owns `ops init` and root primitive dispatch. Packs may contribute namespaced commands and registered `add` item types; duplicate command paths, stable command ids, root names, `add` item types, config namespaces, or capability bindings fail closed.
+9. Core owns `ops init`, `info`, `doctor`, and root primitive dispatch. `info` reports
+   CLI and project-declared Unisane package versions without importing Framework
+   Devtools. Root `doctor` executes only sealed `doctor <pack>` contribution descriptors,
+   preserves their declared effect ceiling and typed results, and emits one core-owned
+   human or JSON envelope. Missing optional diagnostics are explicit `not-selected`
+   state rather than synthesized checks. Doctor is read-only; it has no `--fix` mode.
+   Packs may contribute namespaced commands and registered `add` item types; duplicate
+   command paths, stable command ids, root names, `add` item types, config namespaces,
+   or capability bindings fail closed.
 10. The Framework pack owns the `app` namespace and preserves `unisane app compile --write|--check`. It may contribute Framework-specific `add` item types without taking ownership of root `add`.
 11. Core reserves the root `dev`, `build`, `generate`, and `llm` names for the Framework
     integration pack, preserves `remove` as the peer dispatcher to `add`, and owns
-    aggregate `doctor`/`inspect` dispatch. The Framework pack exposes one executable
+    aggregate `doctor`/`inspect` dispatch. The Framework pack contributes the sealed
+    `doctor framework` descriptor while Framework Devtools owns its checks, and exposes one executable
     compiler at `unisane app compile --write|--check`; it does not contribute a root
     regeneration alias. Local Project Memory generation, provider-state synchronization,
     and doctor remain separate commands with separate ownership.
-12. A generic Ops project without the Framework pack does not synthesize Framework handlers for those reserved names. Help and errors state that the Framework integration is unavailable rather than accepting another pack's conflicting root command.
+12. A generic Ops project without the Framework pack does not synthesize Framework handlers for reserved Framework roots. Root `doctor` instead reports the Framework diagnostic component as `not-selected`; help and errors never accept another pack's conflicting root command.
 13. CLI core has a built-in non-executable JSON manifest for its executable root handlers. Delegated commands merge the core and selected contribution descriptors, use the stricter maximum effect, union their write targets, and cannot weaken JSON, exit, trust, or collision rules.
 14. Stable pack, command, capability, provider, item-type, alias, and config-namespace ids follow the exact lowercase ASCII grammar in `docs/architecture/07-naming-and-pattern-conventions.md`; hosts reject noncanonical values rather than silently normalizing them.
 15. A core reserved root may name an exact first-party contributor pack. The binding is
@@ -1407,6 +1433,15 @@ Rules:
 16. A typed pack result may carry human `stdout`/`stderr` presentation only after handler
     identity, effect, write-target, risk, trust, and integrity checks pass. JSON mode
     remains one structured host result.
+17. The UI repository owns `@unisane/ui-cli`, not Ops or Framework Devtools. It
+    contributes exact `ui init`, `ui add`, `ui diff`, `ui doctor`, `ui theme`, and
+    `ui appearance enable|disable|list` descriptors through the static pack contract.
+    It publishes no binary; exactly one `unisane` executable remains.
+18. The canonical host may resolve the explicitly trusted installed UI pack, but its
+    package manifest does not depend on `@unisane/ui-cli`. The UI pack likewise imports
+    no Ops, Framework, or runtime UI package; its static manifest and handler result
+    implement the versioned structural protocol and are validated by the host. Runtime
+    `@unisane/ui` does not depend on either CLI package.
 
 Canonical operation terms:
 
@@ -1463,6 +1498,8 @@ suite packs -> ops-engine contracts; expose schema-only domain contract subpaths
 growth -> web-runtime/contracts only for application measurement schemas/evidence
 provider packs -> ops-engine contracts + exact suite /contracts subpaths + own SDKs
 framework-ops -> Ops contracts + Framework authoring contracts + @unisane/devtools/framework-integration
+ui-cli -> no ecosystem runtime package; owns its bundled UI registry assets
+unisane CLI -X-> ui-cli package/source; it may discover an explicitly installed trusted pack
 web-runtime -> ecosystem-neutral runtime libraries + declared optional peers only
 Unisane Framework -X-> Unisane Ops
 runtime code -X-> CLI / ops-engine / provider administration SDKs
