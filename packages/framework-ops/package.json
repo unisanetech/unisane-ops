@@ -38,7 +38,7 @@
   "scripts": {
     "build": "tsup src/index.ts src/contributions/add.ts src/handlers/framework.ts --format esm --dts --clean",
     "dev": "tsup src/index.ts src/contributions/add.ts src/handlers/framework.ts --format esm --dts --watch",
-    "lint": "eslint src --max-warnings 0",
+    "lint": "eslint src scripts tests --max-warnings 0",
     "test": "pnpm build && vitest run && node --test tests/*.test.mjs",
     "check-types": "tsc --noEmit",
     "check:boundary": "node scripts/verify-release-boundary.mjs --source-only",

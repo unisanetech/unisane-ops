@@ -20,17 +20,23 @@ const DEPENDENCY_FIELDS = [
 ];
 const RUNTIME_DEPENDENCY_FIELDS = ['dependencies', 'optionalDependencies', 'peerDependencies'];
 const AUTHORED_EXTENSIONS = ['.cjs', '.cts', '.d.ts', '.js', '.jsx', '.mjs', '.mts', '.ts', '.tsx'];
-const REQUIRED_ARCHIVE_FILES = [
+const EXPECTED_PACKED_RUNTIME_DEVTOOLS_IMPORT_COUNT = 2;
+const EXPECTED_PACKED_DECLARATION_DEVTOOLS_IMPORT_COUNT = 2;
+const EXPECTED_PACKED_FIRST_PARTY_IMPORTS = ['@unisane/devtools', '@unisane/ops-engine'];
+const ROOT_ARCHIVE_FILES = [
   'package/README.md',
+  'package/pack.manifest.json',
+  'package/package.json',
+  'package/unisane.meta.json',
+];
+const REQUIRED_ARCHIVE_FILES = [
   'package/dist/contributions/add.d.ts',
   'package/dist/contributions/add.js',
   'package/dist/handlers/framework.d.ts',
   'package/dist/handlers/framework.js',
   'package/dist/index.d.ts',
   'package/dist/index.js',
-  'package/pack.manifest.json',
-  'package/package.json',
-  'package/unisane.meta.json',
+  ...ROOT_ARCHIVE_FILES,
 ];
 
 function readJson(filePath) {
@@ -65,7 +71,9 @@ function walkFiles(root) {
 }
 
 function literalText(node) {
-  return ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node) ? node.text : null;
+  return node && (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node))
+    ? node.text
+    : null;
 }
 
 export function extractModuleSpecifiers(source, fileName = 'fixture.ts') {
@@ -81,6 +89,10 @@ export function extractModuleSpecifiers(source, fileName = 'fixture.ts') {
     const specifier = literalText(node);
     if (specifier) specifiers.push({ kind, specifier });
   };
+  const addLoader = (node, kind) => {
+    const specifier = literalText(node);
+    specifiers.push(specifier ? { kind, specifier } : { kind, staticallyResolved: false });
+  };
   const visit = (node) => {
     if ((ts.isImportDeclaration(node) || ts.isExportDeclaration(node)) && node.moduleSpecifier) {
       add(node.moduleSpecifier, ts.isImportDeclaration(node) ? 'import' : 'export');
@@ -92,18 +104,18 @@ export function extractModuleSpecifiers(source, fileName = 'fixture.ts') {
       add(node.moduleReference.expression, 'import-equals');
     } else if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument)) {
       add(node.argument.literal, 'import-type');
-    } else if (ts.isCallExpression(node) && node.arguments.length > 0) {
+    } else if (ts.isCallExpression(node)) {
       if (node.expression.kind === ts.SyntaxKind.ImportKeyword) {
-        add(node.arguments[0], 'dynamic-import');
+        addLoader(node.arguments[0], 'dynamic-import');
       } else if (ts.isIdentifier(node.expression) && node.expression.text === 'require') {
-        add(node.arguments[0], 'require');
+        addLoader(node.arguments[0], 'require');
       } else if (
         ts.isPropertyAccessExpression(node.expression) &&
         ts.isIdentifier(node.expression.expression) &&
         node.expression.expression.text === 'require' &&
         node.expression.name.text === 'resolve'
       ) {
-        add(node.arguments[0], 'require-resolve');
+        addLoader(node.arguments[0], 'require-resolve');
       }
     }
     ts.forEachChild(node, visit);
@@ -112,12 +124,25 @@ export function extractModuleSpecifiers(source, fileName = 'fixture.ts') {
   return specifiers;
 }
 
+function assertStaticallyResolvedLoaders(records, context) {
+  const unresolved = records.filter(({ staticallyResolved }) => staticallyResolved === false);
+  if (unresolved.length > 0) {
+    throw new Error(
+      `${context} contains non-literal dynamic module loading: ${unresolved
+        .map(({ kind }) => kind)
+        .sort()
+        .join(', ')}.`,
+    );
+  }
+}
+
 function packageCoordinate(specifier) {
   if (!specifier.startsWith('@')) return specifier.split('/')[0];
   return specifier.split('/').slice(0, 2).join('/');
 }
 
 export function assertOnlyFrameworkIntegration(records, context) {
+  assertStaticallyResolvedLoaders(records, context);
   const devtools = records.filter(
     ({ specifier }) => packageCoordinate(specifier) === DEVTOOLS_PACKAGE,
   );
@@ -146,6 +171,7 @@ export function assertManifestContract(manifest, context = 'framework-ops manife
 }
 
 export function assertDeclaredFirstPartyImports(records, manifest, context) {
+  assertStaticallyResolvedLoaders(records, context);
   const declared = new Set(
     RUNTIME_DEPENDENCY_FIELDS.flatMap((field) => Object.keys(manifest[field] ?? {})),
   );
@@ -206,12 +232,124 @@ function parsePackOutput(output) {
 function archiveEntries(tarballPath) {
   return run('tar', ['-tzf', tarballPath])
     .split('\n')
-    .map((entry) => entry.trim().replace(/\/$/u, ''))
-    .filter(Boolean);
+    .map((entry) => entry.trim())
+    .filter((entry) => entry && !entry.endsWith('/'));
 }
 
 function archiveText(tarballPath, entry) {
   return run('tar', ['-xOf', tarballPath, entry]);
+}
+
+function declaredDistRoots(manifest) {
+  const roots = new Set();
+  const visit = (value) => {
+    if (typeof value === 'string') {
+      if (value.startsWith('./dist/')) roots.add(`package/${value.slice(2)}`);
+      return;
+    }
+    if (!value || typeof value !== 'object') return;
+    for (const nested of Object.values(value)) visit(nested);
+  };
+  visit(manifest.main);
+  visit(manifest.types);
+  visit(manifest.exports);
+  return [...roots].sort();
+}
+
+function relativeEmittedTarget(fromEntry, specifier, entrySet) {
+  if (!specifier.startsWith('.')) return null;
+  const base = path.posix.normalize(path.posix.join(path.posix.dirname(fromEntry), specifier));
+  if (!base.startsWith('package/dist/')) {
+    throw new Error(`${fromEntry} references an emitted file outside package/dist: ${specifier}`);
+  }
+  const candidates = [];
+  if (fromEntry.endsWith('.d.ts') && base.endsWith('.js')) {
+    candidates.push(`${base.slice(0, -3)}.d.ts`);
+  }
+  candidates.push(base);
+  if (!path.posix.extname(base)) {
+    candidates.push(`${base}.js`, `${base}.d.ts`, `${base}/index.js`, `${base}/index.d.ts`);
+  }
+  const target = candidates.find((candidate) => entrySet.has(candidate));
+  if (!target) {
+    throw new Error(`${fromEntry} has a dangling emitted import: ${specifier}`);
+  }
+  return target;
+}
+
+export function assertReachableEmittedFiles(entries, manifest, readEntry) {
+  const emittedFiles = entries.filter((entry) => entry.startsWith('package/dist/')).sort();
+  const unsupported = emittedFiles.filter(
+    (entry) => !entry.endsWith('.js') && !entry.endsWith('.d.ts'),
+  );
+  if (unsupported.length > 0) {
+    throw new Error(
+      `Packed framework-ops artifact contains unsupported emitted files: ${unsupported.join(', ')}`,
+    );
+  }
+  const entrySet = new Set(emittedFiles);
+  const roots = declaredDistRoots(manifest);
+  const missingRoots = roots.filter((entry) => !entrySet.has(entry));
+  if (missingRoots.length > 0) {
+    throw new Error(
+      `Packed framework-ops artifact is missing declared emitted roots: ${missingRoots.join(', ')}`,
+    );
+  }
+
+  const reachable = new Set();
+  const records = [];
+  const queue = [...roots];
+  while (queue.length > 0) {
+    const entry = queue.shift();
+    if (reachable.has(entry)) continue;
+    reachable.add(entry);
+    const entryRecords = extractModuleSpecifiers(readEntry(entry), entry).map((record) => ({
+      ...record,
+      path: entry,
+    }));
+    assertStaticallyResolvedLoaders(entryRecords, `Packed emitted file ${entry}`);
+    records.push(...entryRecords);
+    for (const { specifier } of entryRecords) {
+      if (!specifier) continue;
+      const target = relativeEmittedTarget(entry, specifier, entrySet);
+      if (target && !reachable.has(target)) queue.push(target);
+    }
+  }
+
+  const unreferenced = emittedFiles.filter((entry) => !reachable.has(entry));
+  if (unreferenced.length > 0) {
+    throw new Error(
+      `Packed framework-ops artifact contains unreferenced emitted files: ${unreferenced.join(', ')}`,
+    );
+  }
+  return { reachableFiles: [...reachable].sort(), records };
+}
+
+export function assertPackedImportContract(
+  records,
+  manifest,
+  context = 'Packed framework-ops artifact',
+) {
+  const devtools = assertOnlyFrameworkIntegration(records, `${context} runtime/declarations`);
+  const runtimeCount = devtools.filter(({ path: filePath }) => filePath.endsWith('.js')).length;
+  const declarationCount = devtools.filter(({ path: filePath }) =>
+    filePath.endsWith('.d.ts'),
+  ).length;
+  if (
+    runtimeCount !== EXPECTED_PACKED_RUNTIME_DEVTOOLS_IMPORT_COUNT ||
+    declarationCount !== EXPECTED_PACKED_DECLARATION_DEVTOOLS_IMPORT_COUNT
+  ) {
+    throw new Error(
+      `${context} must contain exactly ${EXPECTED_PACKED_RUNTIME_DEVTOOLS_IMPORT_COUNT} runtime and ${EXPECTED_PACKED_DECLARATION_DEVTOOLS_IMPORT_COUNT} declaration Devtools integration imports; found ${runtimeCount} runtime and ${declarationCount} declaration imports.`,
+    );
+  }
+  const firstParty = assertDeclaredFirstPartyImports(records, manifest, context);
+  if (JSON.stringify(firstParty) !== JSON.stringify(EXPECTED_PACKED_FIRST_PARTY_IMPORTS)) {
+    throw new Error(
+      `${context} must contain exactly these first-party imports: ${EXPECTED_PACKED_FIRST_PARTY_IMPORTS.join(', ')}; found ${firstParty.join(', ')}.`,
+    );
+  }
+  return { runtimeCount, declarationCount, firstParty };
 }
 
 export function verifyPackedReleaseBoundary(root = packageRoot) {
@@ -253,34 +391,14 @@ export function verifyPackedReleaseBoundary(root = packageRoot) {
       JSON.parse(archiveText(tarballPath, 'package/package.json')),
       'Packed framework-ops manifest',
     );
-    const emittedRecords = [];
-    for (const entry of entries.filter(
-      (value) => value.endsWith('.js') || value.endsWith('.d.ts'),
-    )) {
-      for (const record of extractModuleSpecifiers(archiveText(tarballPath, entry), entry)) {
-        emittedRecords.push({ ...record, path: entry });
-      }
-    }
-    const emittedDevtools = assertOnlyFrameworkIntegration(
-      emittedRecords,
-      'Packed framework-ops runtime/declarations',
+    const emitted = assertReachableEmittedFiles(entries, packedManifest, (entry) =>
+      archiveText(tarballPath, entry),
     );
-    const runtimeCount = emittedDevtools.filter(({ path: filePath }) =>
-      filePath.endsWith('.js'),
-    ).length;
-    const declarationCount = emittedDevtools.filter(({ path: filePath }) =>
-      filePath.endsWith('.d.ts'),
-    ).length;
-    if (runtimeCount === 0 || declarationCount === 0) {
-      throw new Error(
-        'Packed framework-ops artifact must retain runtime and declaration imports for the Devtools integration subpath.',
-      );
+    const expectedEntries = [...ROOT_ARCHIVE_FILES, ...emitted.reachableFiles].sort();
+    if (JSON.stringify([...entries].sort()) !== JSON.stringify(expectedEntries)) {
+      throw new Error('Packed framework-ops artifact does not match its exact reachable file set.');
     }
-    const emittedFirstPartyPackages = assertDeclaredFirstPartyImports(
-      emittedRecords,
-      packedManifest,
-      'Packed framework-ops artifact',
-    );
+    const packedImports = assertPackedImportContract(emitted.records, packedManifest);
     return {
       schemaVersion: 1,
       package: packedManifest.name,
@@ -290,10 +408,10 @@ export function verifyPackedReleaseBoundary(root = packageRoot) {
       authoredModuleSpecifierCount: authored.authoredModuleSpecifierCount,
       authoredDevtoolsIntegrationImportCount: authored.devtoolsIntegrationImportCount,
       authoredDevtoolsIntegrationImportPaths: authored.devtoolsIntegrationImportPaths,
-      packedEntryCount: entries.filter((entry) => entry !== 'package').length,
-      packedRuntimeDevtoolsImportCount: runtimeCount,
-      packedDeclarationDevtoolsImportCount: declarationCount,
-      packedFirstPartyImports: emittedFirstPartyPackages,
+      packedEntryCount: entries.length,
+      packedRuntimeDevtoolsImportCount: packedImports.runtimeCount,
+      packedDeclarationDevtoolsImportCount: packedImports.declarationCount,
+      packedFirstPartyImports: packedImports.firstParty,
       tarballSha256: createHash('sha256').update(readFileSync(tarballPath)).digest('hex'),
       registryAuthorityMutation: false,
       published: false,
