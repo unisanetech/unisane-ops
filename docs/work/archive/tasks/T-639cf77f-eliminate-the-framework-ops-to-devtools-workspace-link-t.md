@@ -2,15 +2,15 @@
 title:
   'Task: Eliminate the framework-ops to devtools workspace link through the released
   framework-integration boundary'
-status: active
-owner: 'codex-integration-reviewer'
+status: superseded
+owner: 'project'
 id: T-639cf77f
 scope: 'unisane-ops'
 role: task
-lifecycle: active
+lifecycle: historical
 authority: canonical
 provenance: accepted
-view: current
+view: exception
 risk: high-impact
 proofSubject: task-closure
 proofBaseline: baseline-58e0261d3c327ce3
@@ -21,7 +21,7 @@ lastUpdated: 2026-08-09
 
 ## Changelog
 
-- `2026-08-09`: Synchronized Task state `active` from Skopos.
+- `2026-08-09`: Synchronized Task state `superseded` from Skopos.
 
 ## Goal
 
@@ -154,10 +154,10 @@ This machine-readable block is the durable source used to rebuild local Skopos s
   "type": "task",
   "status": "active",
   "generatedAt": "2026-08-09T20:20:39.848Z",
-  "updatedAt": "2026-08-09T21:08:31.645Z",
+  "updatedAt": "2026-08-09T23:39:21.101Z",
   "planIds": [],
   "childTasks": [],
-  "state": "active",
+  "state": "superseded",
   "detail": "detailed",
   "title": "Eliminate the framework-ops to devtools workspace link through the released framework-integration boundary",
   "goal": "Eliminate the framework-ops to devtools workspace link through the released framework-integration boundary",
@@ -480,6 +480,16 @@ This machine-readable block is the durable source used to rebuild local Skopos s
       ]
     }
   ],
+  "disposition": {
+    "kind": "supersede",
+    "reason": "The implementation is committed, but its pre-integration task-closure baseline cannot close portably without completed-task provenance; the fresh project-integration successor certifies the exact combined baseline.",
+    "actorId": "codex-integration-reviewer",
+    "recordedAt": "2026-08-09T23:39:21.101Z",
+    "priorState": "active",
+    "nextState": "superseded",
+    "successorTaskId": "T-8bf22aac"
+  },
+  "supersededByTaskId": "T-8bf22aac",
   "declaredOwnedPaths": [
     "docs/reference/generated/repository-separation/unisane-source-boundary.json",
     "docs/work/plans/unisane-ecosystem-repository-separation-and-git-governance-plan.md",
