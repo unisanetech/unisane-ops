@@ -279,10 +279,40 @@ function collectCssEvidence(root, emittedFiles) {
   const assetReferences = [];
   const unresolvedAssets = [];
   const stylesheetImports = [];
+  const fontFaces = [];
   let fontFaceCount = 0;
   for (const path of cssFiles) {
     const content = readFileSync(path, 'utf8');
     fontFaceCount += [...content.matchAll(/@font-face\b/gu)].length;
+    for (const match of content.matchAll(/@font-face\s*\{([^{}]*)\}/giu)) {
+      const block = match[1];
+      const familyMatch = block.match(
+        /(?:^|;)\s*font-family\s*:\s*(?:"([^"]+)"|'([^']+)'|([^;]+))/iu,
+      );
+      const srcMatch = block.match(/(?:^|;)\s*src\s*:\s*([^;]+)/iu);
+      const family = (familyMatch?.[1] ?? familyMatch?.[2] ?? familyMatch?.[3] ?? '').trim();
+      const sources = [];
+      for (const sourceMatch of (srcMatch?.[1] ?? '').matchAll(/url\(([^)]+)\)/giu)) {
+        const specifier = sourceMatch[1].trim().replace(/^["']|["']$/gu, '');
+        if (/^(?:data:|https?:|#)/u.test(specifier)) {
+          sources.push({ specifier, target: null, resolves: false, fontAsset: false });
+          continue;
+        }
+        const withoutQuery = specifier.split(/[?#]/u)[0];
+        const target = resolve(dirname(path), withoutQuery);
+        sources.push({
+          specifier,
+          target: relative(root, target).split('\\').join('/'),
+          resolves: existsSync(target) && statSync(target).isFile(),
+          fontAsset: /\.(?:woff2?|ttf|otf)$/u.test(target),
+        });
+      }
+      fontFaces.push({
+        from: relative(root, path).split('\\').join('/'),
+        family,
+        sources,
+      });
+    }
     for (const match of content.matchAll(/@import\s+(?:url\()?\s*["']?([^"')\s;]+)["']?\s*\)?/gu)) {
       stylesheetImports.push({
         from: relative(root, path).split('\\').join('/'),
@@ -307,6 +337,7 @@ function collectCssEvidence(root, emittedFiles) {
     cssFileCount: cssFiles.length,
     fontFaceCount,
     fontAssetCount: emittedFiles.filter((path) => /\.(?:woff2?|ttf|otf)$/u.test(path)).length,
+    fontFaces,
     stylesheetImports,
     assetReferences,
     unresolvedAssets,
@@ -340,9 +371,21 @@ function collectEmitted(root, policy) {
   }
   const css = collectCssEvidence(root, emittedFiles);
   if (css.cssFileCount === 0) violations.push('emitted browser CSS is missing');
-  if (css.fontFaceCount === 0)
-    violations.push('emitted Material Symbols @font-face evidence is missing');
-  if (css.fontAssetCount === 0) violations.push('emitted Material Symbols font asset is missing');
+  const materialSymbolsFontFaces = css.fontFaces.filter(
+    ({ family }) => family === policy.materialSymbols.emittedFontFamily,
+  );
+  const resolvedMaterialSymbolsFontSources = materialSymbolsFontFaces.flatMap(({ sources }) =>
+    sources.filter(({ resolves, fontAsset }) => resolves && fontAsset),
+  );
+  if (materialSymbolsFontFaces.length === 0) {
+    violations.push(
+      `emitted Material Symbols @font-face family is missing: ${policy.materialSymbols.emittedFontFamily}`,
+    );
+  } else if (resolvedMaterialSymbolsFontSources.length === 0) {
+    violations.push(
+      `emitted Material Symbols @font-face source does not resolve to a font asset: ${policy.materialSymbols.emittedFontFamily}`,
+    );
+  }
   for (const record of css.stylesheetImports) {
     violations.push(
       `${record.from}: emitted CSS retains an unresolved @import: ${record.specifier}`,
@@ -361,6 +404,11 @@ function collectEmitted(root, policy) {
       bareSpecifierCount: records.length,
       uiDataTableSpecifierCount: foreignBoundaryRecords.length,
       css,
+      materialSymbols: {
+        expectedFontFamily: policy.materialSymbols.emittedFontFamily,
+        fontFaceCount: materialSymbolsFontFaces.length,
+        resolvedFontAssetCount: resolvedMaterialSymbolsFontSources.length,
+      },
       digest: digest(
         emittedFiles.map((path) => ({
           path: relative(root, path).split('\\').join('/'),

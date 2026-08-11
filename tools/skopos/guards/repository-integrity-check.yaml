@@ -1,8 +1,13 @@
-schemaVersion: 1
 id: unisane-ops.repository-integrity.check
 title: Standalone repository changes require integrity and generated-drift proof
-description: Verifies the target-local repository shape, exact external blockers, and generated integrity receipt without consulting an umbrella parent checkout.
-match:
+description:
+  Select the target-local repository shape, exact external blocker, and generated integrity receipt
+  verification.
+owner: unisane-ops
+scope:
+  - unisane-ops
+strength: required
+appliesTo:
   paths:
     - package.json
     - apps/**
@@ -10,6 +15,12 @@ match:
     - scripts/check-repository-integrity.mjs
     - tools/repository/standalone-integrity-policy.json
     - docs/reference/generated/repository/standalone-repository-integrity.json
+  phases:
+    - closure
+  risks:
+    - standard
+    - high-impact
 requires:
-  actions:
+  actionIds:
     - unisane-ops.repository-integrity.check
+  evidence: source-bound-action

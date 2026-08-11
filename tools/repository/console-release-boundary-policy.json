@@ -59,6 +59,7 @@
   "materialSymbols": {
     "currentRange": "^0.40.2",
     "stylesheet": "@material-symbols/font-400/outlined.css",
+    "emittedFontFamily": "Material Symbols Outlined",
     "emittedFontAssetRequired": true
   },
   "requiredPeerExpectations": {

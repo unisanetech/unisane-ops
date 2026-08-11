@@ -160,7 +160,32 @@ test('emitted declarations, CSS, and Material Symbols assets are closed and reso
     assert.equal(report.emitted.uiDataTableSpecifierCount, 0);
     assert.equal(report.emitted.css.fontFaceCount, 1);
     assert.equal(report.emitted.css.fontAssetCount, 1);
+    assert.equal(report.emitted.materialSymbols.fontFaceCount, 1);
+    assert.equal(report.emitted.materialSymbols.resolvedFontAssetCount, 1);
     assert.deepEqual(report.emitted.css.unresolvedAssets, []);
+  });
+
+  withFixture((fixtureRoot) => {
+    createEmittedFixture(fixtureRoot);
+    const browser = join(fixtureRoot, 'apps/console/dist/browser');
+    rmSync(join(browser, 'symbols.woff2'));
+    writeFileSync(
+      join(browser, 'main.css'),
+      '@font-face { font-family: "Unrelated Review Font"; src: url("./unrelated.woff2"); }\n',
+    );
+    writeFileSync(join(browser, 'unrelated.woff2'), 'unrelated-fixture-font');
+    const report = evaluateConsoleReleaseBoundary(fixtureRoot, { checkEmitted: true, policy });
+    assert.match(
+      report.violations.join('\n'),
+      /emitted Material Symbols @font-face family is missing/u,
+    );
+  });
+
+  withFixture((fixtureRoot) => {
+    createEmittedFixture(fixtureRoot);
+    rmSync(join(fixtureRoot, 'apps/console/dist/browser/main.css'));
+    const report = evaluateConsoleReleaseBoundary(fixtureRoot, { checkEmitted: true, policy });
+    assert.match(report.violations.join('\n'), /emitted browser CSS is missing/u);
   });
 
   withFixture((fixtureRoot) => {

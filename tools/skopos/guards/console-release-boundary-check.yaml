@@ -1,10 +1,13 @@
-schemaVersion: 1
-id: unisane-ops.console-release-boundary-check
+id: unisane.ops.console-release-boundary-check
 title: Ops console UI consumer changes require fail-closed release-boundary proof
 description:
   Select the permanent source, emitted, stylesheet, asset, peer, and blocker inventory for the Ops
   console.
-match:
+owner: unisane-ops
+scope:
+  - unisane-ops
+strength: required
+appliesTo:
   paths:
     - package.json
     - apps/console/package.json
@@ -16,6 +19,13 @@ match:
     - tools/repository/console-release-boundary-policy.json
     - tools/skopos/actions/console-release-boundary-check.yaml
     - tools/skopos/guards/console-release-boundary-check.yaml
+  phases:
+    - iteration
+    - closure
+  risks:
+    - standard
+    - high-impact
 requires:
-  actions:
-    - unisane-ops.console-release-boundary-check
+  actionIds:
+    - unisane.ops.console-release-boundary-check
+  evidence: source-bound-action

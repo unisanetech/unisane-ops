@@ -1,19 +1,44 @@
-schemaVersion: 1
 id: unisane-ops.repository-integrity.check
 title: Check standalone repository integrity and generated drift
+description:
+  Verify the target-local repository shape, exact external blockers, and generated integrity receipt
+  without consulting an umbrella parent checkout.
 category: quality-check
-safety: read-only
+scope:
+  - unisane-ops
 command: pnpm check:repository-integrity
 cwd: .
-timeoutMs: 120000
-capabilities:
-  - node
-  - pnpm
 inputs:
   - package.json
-  - apps/**
-  - packages/**
+  - apps
+  - packages
   - scripts/check-repository-integrity.mjs
   - tools/repository/standalone-integrity-policy.json
   - docs/reference/generated/repository/standalone-repository-integrity.json
 outputs: []
+affects: []
+capabilities:
+  process: required
+  network: none
+  browser: none
+  tools: [node, pnpm]
+  secrets: []
+  services: []
+effects:
+  workspace: none
+  artifacts: none
+  external: none
+concurrency: shared
+workspaceMode: overlay-safe
+safety: read-only
+requiresApproval: false
+whenToUse:
+  Run after changing the standalone source shape, blocker policy, integrity generator, or generated
+  receipt.
+phases:
+  - closure
+risks:
+  - standard
+  - high-impact
+recommendedAfter: []
+owner: unisane-ops
