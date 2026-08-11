@@ -1,0 +1,26 @@
+schemaVersion: 1
+id: unisane-ops.console-release-boundary-check
+title: Verify the Ops console UI consumer release boundary
+description:
+  Inventory the authored and emitted UI/DataTable consumer boundary and preserve exact fail-closed
+  conversion blockers.
+category: quality-check
+safety: mutating
+command:
+  pnpm check:console-release-boundary && pnpm --filter @unisane/ops-console build && pnpm
+  check:console-release-boundary:emitted
+cwd: .
+timeoutMs: 120000
+capabilities:
+  - node
+  - pnpm
+inputs:
+  - package.json
+  - apps/console/package.json
+  - apps/console/src
+  - apps/console/tsconfig.json
+  - apps/console/tsup.browser.config.ts
+  - scripts/check-console-release-boundary.mjs
+  - tests/console-release-boundary.test.mjs
+  - tools/repository/console-release-boundary-policy.json
+outputs: []

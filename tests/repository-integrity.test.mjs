@@ -15,7 +15,15 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const ignoredDirectoryNames = new Set(['.git', '.skopos', '.unisane', '.turbo', 'node_modules', 'dist', 'coverage']);
+const ignoredDirectoryNames = new Set([
+  '.git',
+  '.skopos',
+  '.unisane',
+  '.turbo',
+  'node_modules',
+  'dist',
+  'coverage',
+]);
 
 function makeFixture() {
   const container = mkdtempSync(join(tmpdir(), 'unisane-ops-integrity-'));
@@ -32,10 +40,14 @@ function makeFixture() {
 }
 
 function runGuard(fixtureRoot, mode = '--check') {
-  return spawnSync(process.execPath, [join(fixtureRoot, 'scripts/check-repository-integrity.mjs'), mode], {
-    cwd: fixtureRoot,
-    encoding: 'utf8',
-  });
+  return spawnSync(
+    process.execPath,
+    [join(fixtureRoot, 'scripts/check-repository-integrity.mjs'), mode],
+    {
+      cwd: fixtureRoot,
+      encoding: 'utf8',
+    },
+  );
 }
 
 function assertGuardFails(result, pattern) {
@@ -62,7 +74,7 @@ function updateManifest(fixtureRoot, path, mutate) {
 test('tracked clean shape satisfies the permanent standalone integrity contract', () => {
   const result = runGuard(root);
   assert.equal(result.status, 0, `${result.stdout}${result.stderr}`);
-  assert.match(result.stdout, /3 exact external blockers/);
+  assert.match(result.stdout, /2 exact external blockers/);
 });
 
 test('generated output allowlist and source drift fail closed', () => {
@@ -79,12 +91,15 @@ test('generated output allowlist and source drift fail closed', () => {
   });
 });
 
-test('the exact three external workspace blockers cannot drift', () => {
+test('the exact two external workspace blockers cannot drift', () => {
   withFixture((fixtureRoot) => {
     updateManifest(fixtureRoot, 'apps/console/package.json', (manifest) => {
       manifest.dependencies['@unisane/ui'] = 'workspace:^';
     });
-    assertGuardFails(runGuard(fixtureRoot), /foreign workspace blockers differ from the exact accepted set/);
+    assertGuardFails(
+      runGuard(fixtureRoot),
+      /foreign workspace blockers differ from the exact accepted set/,
+    );
   });
 });
 
@@ -96,7 +111,10 @@ test('new foreign workspace and file or link edges fail closed', () => {
         '@foreign/workspace': 'workspace:*',
       };
     });
-    assertGuardFails(runGuard(fixtureRoot), /foreign workspace blockers differ from the exact accepted set/);
+    assertGuardFails(
+      runGuard(fixtureRoot),
+      /foreign workspace blockers differ from the exact accepted set/,
+    );
   });
 
   withFixture((fixtureRoot) => {

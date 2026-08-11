@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "paths": {
+    "consoleManifest": "apps/console/package.json",
+    "sourceRoot": "apps/console/src",
+    "authoredConfigFiles": ["apps/console/tsup.browser.config.ts"],
+    "emittedRoot": "apps/console/dist"
+  },
+  "currentDependencies": {
+    "@material-symbols/font-400": "^0.40.2",
+    "@unisane/data-table": "workspace:*",
+    "@unisane/ui": "workspace:*",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "requiredCurrentStylesheets": [
+    "@material-symbols/font-400/outlined.css",
+    "@unisane/ui/styles.css"
+  ],
+  "requiredConversionStylesheet": "@unisane/data-table/styles.css",
+  "authoredInventory": {
+    "declarationCount": 152,
+    "sourceFileCount": 53,
+    "digest": "2204bb43c25c42cf5486780fbe2afe59b849f1c574dcfcc369dee5bb2013b6e0",
+    "specifiers": [
+      "@unisane/data-table",
+      "@unisane/ui/action-cluster",
+      "@unisane/ui/badge",
+      "@unisane/ui/button",
+      "@unisane/ui/canonical-layouts",
+      "@unisane/ui/card",
+      "@unisane/ui/card-grid",
+      "@unisane/ui/date-range-picker",
+      "@unisane/ui/dialog",
+      "@unisane/ui/icon",
+      "@unisane/ui/icon-button",
+      "@unisane/ui/navigation",
+      "@unisane/ui/page-section",
+      "@unisane/ui/progress",
+      "@unisane/ui/segmented-button",
+      "@unisane/ui/select-field",
+      "@unisane/ui/sidebar",
+      "@unisane/ui/styles.css",
+      "@unisane/ui/switch",
+      "@unisane/ui/tabs",
+      "@unisane/ui/text-field",
+      "@unisane/ui/top-app-bar",
+      "@unisane/ui/typography"
+    ]
+  },
+  "react": {
+    "currentRange": "^19.1.0",
+    "singletonRequired": true
+  },
+  "reactDom": {
+    "currentRange": "^19.1.0",
+    "singletonRequired": true
+  },
+  "materialSymbols": {
+    "currentRange": "^0.40.2",
+    "stylesheet": "@material-symbols/font-400/outlined.css",
+    "emittedFontAssetRequired": true
+  },
+  "requiredPeerExpectations": {
+    "@unisane/ui": {
+      "react": "compatible-with-console-singleton",
+      "react-dom": "compatible-with-console-singleton"
+    },
+    "@unisane/data-table": {
+      "@unisane/ui": "exact-owner-approved-version",
+      "react": "compatible-with-console-singleton",
+      "react-dom": "compatible-with-console-singleton"
+    }
+  },
+  "producerTechnicalEvidence": {
+    "status": "integrated-technical-only",
+    "taskId": "T-b0cfbc09",
+    "snapshotId": "S-94578b4f2066",
+    "freshArtifactRequiredAtConversion": true
+  },
+  "registry": {
+    "uiVersion": null,
+    "dataTableVersion": null,
+    "accessApproved": false
+  },
+  "cleanExternalConsumer": {
+    "proofId": null
+  },
+  "authority": {
+    "publicationAuthorized": false,
+    "consumerConversionAuthorized": false,
+    "licenseAdmission": "owner-decision-open"
+  },
+  "blockers": [
+    {
+      "id": "OPS-CONSOLE-RB01-UI-COORDINATE",
+      "owner": "ui-release-and-ops-consumer",
+      "reason": "@unisane/ui remains a workspace coordinate; no approved registry version may be invented.",
+      "requiredProof": "Approved immutable UI version and clean consumer lock resolution."
+    },
+    {
+      "id": "OPS-CONSOLE-RB02-DATA-TABLE-COORDINATE",
+      "owner": "ui-release-and-ops-consumer",
+      "reason": "@unisane/data-table remains a workspace coordinate; no approved registry version may be invented.",
+      "requiredProof": "Approved immutable DataTable version and clean consumer lock resolution."
+    },
+    {
+      "id": "OPS-CONSOLE-RB03-DATA-TABLE-STYLESHEET",
+      "owner": "ops-console",
+      "reason": "The console does not yet import @unisane/data-table/styles.css at its browser composition root.",
+      "requiredProof": "One composition-root stylesheet import plus emitted CSS and visual regression proof."
+    },
+    {
+      "id": "OPS-CONSOLE-RB04-NODE-FLOOR",
+      "owner": "ops-release",
+      "reason": "The console Node floor differs from the staged standalone repository Node floor.",
+      "requiredProof": "Accepted supported-runtime matrix and clean consumer checks for every retained floor."
+    },
+    {
+      "id": "OPS-CONSOLE-RB05-REGISTRY-VERSION-ACCESS",
+      "owner": "ui-release-and-registry",
+      "reason": "No registry versions or access authority are admitted for the UI packages.",
+      "requiredProof": "Owner-approved package coordinates, visibility, and registry access."
+    },
+    {
+      "id": "OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER",
+      "owner": "ops-release",
+      "reason": "No source-bound clean external Ops consumer proof exists for immutable UI artifacts.",
+      "requiredProof": "Isolated install, lock, TypeScript, browser build, runtime, CSS/assets, and React singleton receipt."
+    },
+    {
+      "id": "OPS-CONSOLE-RB07-RELEASE-AUTHORITY",
+      "owner": "legal-security-release",
+      "reason": "Publication, licensing, and consumer-conversion authority remain explicitly unapproved.",
+      "requiredProof": "Explicit legal, security, publication, and consumer-conversion approval."
+    }
+  ]
+}
