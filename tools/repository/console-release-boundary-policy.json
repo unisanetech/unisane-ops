@@ -14,16 +14,30 @@
     "react-dom": "^19.1.0"
   },
   "requiredCurrentStylesheets": [
-    "@material-symbols/font-400/outlined.css",
-    "@unisane/ui/styles.css"
+    {
+      "file": "apps/console/src/browser/main.tsx",
+      "specifier": "@material-symbols/font-400/outlined.css"
+    },
+    {
+      "file": "apps/console/src/browser/main.tsx",
+      "specifier": "@unisane/ui/styles.css"
+    },
+    {
+      "file": "apps/console/src/browser/main.tsx",
+      "specifier": "@unisane/data-table/styles.css"
+    }
   ],
-  "requiredConversionStylesheet": "@unisane/data-table/styles.css",
+  "dataTableStylesheet": {
+    "specifier": "@unisane/data-table/styles.css",
+    "emittedSelectors": [".cursor-cell", ".group-hover\\/row\\:overflow-visible", ".row-5000"]
+  },
   "authoredInventory": {
-    "declarationCount": 152,
+    "declarationCount": 153,
     "sourceFileCount": 53,
-    "digest": "2204bb43c25c42cf5486780fbe2afe59b849f1c574dcfcc369dee5bb2013b6e0",
+    "digest": "88b887e7798b6f91bc04c47bafd8847355022075084687cf2f64d5d44936f303",
     "specifiers": [
       "@unisane/data-table",
+      "@unisane/data-table/styles.css",
       "@unisane/ui/action-cluster",
       "@unisane/ui/badge",
       "@unisane/ui/button",
@@ -104,12 +118,6 @@
       "owner": "ui-release-and-ops-consumer",
       "reason": "@unisane/data-table remains a workspace coordinate; no approved registry version may be invented.",
       "requiredProof": "Approved immutable DataTable version and clean consumer lock resolution."
-    },
-    {
-      "id": "OPS-CONSOLE-RB03-DATA-TABLE-STYLESHEET",
-      "owner": "ops-console",
-      "reason": "The console does not yet import @unisane/data-table/styles.css at its browser composition root.",
-      "requiredProof": "One composition-root stylesheet import plus emitted CSS and visual regression proof."
     },
     {
       "id": "OPS-CONSOLE-RB04-NODE-FLOOR",

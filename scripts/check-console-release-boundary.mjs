@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { dirname, extname, join, posix, relative, resolve } from 'node:path';
+import { dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import process from 'node:process';
 import ts from 'typescript';
@@ -213,6 +213,12 @@ function collectAuthored(root, policy, consoleManifest) {
         `${right.file}\0${right.kind}\0${right.specifier}`,
       ),
     );
+  const stylesheetRecords = records.filter(
+    ({ kind, specifier }) =>
+      kind === 'import' &&
+      specifier.endsWith('.css') &&
+      relevantPackages.includes(packageName(specifier)),
+  );
   const boundaryRecords = relevantRecords.filter(({ specifier }) =>
     boundaryPackages.includes(packageName(specifier)),
   );
@@ -256,12 +262,7 @@ function collectAuthored(root, policy, consoleManifest) {
         ];
       }),
     ),
-    stylesheets: relevantRecords
-      .filter(({ kind, specifier }) => kind === 'import' && specifier.endsWith('.css'))
-      .map(({ file, specifier }) => ({ file, specifier }))
-      .sort((left, right) =>
-        `${left.file}\0${left.specifier}`.localeCompare(`${right.file}\0${right.specifier}`),
-      ),
+    stylesheets: stylesheetRecords.map(({ file, specifier }) => ({ file, specifier })),
     computedLoaderCount: relevantRecords.filter(({ kind }) =>
       ['import()', 'require()', 'require.resolve()'].includes(kind),
     ).length,
@@ -274,15 +275,17 @@ function collectAuthored(root, policy, consoleManifest) {
   return { inventory, records: relevantRecords, violations };
 }
 
-function collectCssEvidence(root, emittedFiles) {
+function collectCssEvidence(root, emittedFiles, expectedDataTableSelectors) {
   const cssFiles = emittedFiles.filter((path) => extname(path) === '.css');
   const assetReferences = [];
   const unresolvedAssets = [];
   const stylesheetImports = [];
   const fontFaces = [];
+  const stylesheetContents = [];
   let fontFaceCount = 0;
   for (const path of cssFiles) {
     const content = readFileSync(path, 'utf8');
+    stylesheetContents.push(content);
     fontFaceCount += [...content.matchAll(/@font-face\b/gu)].length;
     for (const match of content.matchAll(/@font-face\s*\{([^{}]*)\}/giu)) {
       const block = match[1];
@@ -333,6 +336,11 @@ function collectCssEvidence(root, emittedFiles) {
       if (!existsSync(target) || !statSync(target).isFile()) unresolvedAssets.push(record);
     }
   }
+  const combinedContent = stylesheetContents.join('\n');
+  const dataTableSelectors = expectedDataTableSelectors.map((selector) => ({
+    selector,
+    present: combinedContent.includes(`${selector}{`) || combinedContent.includes(`${selector} {`),
+  }));
   return {
     cssFileCount: cssFiles.length,
     fontFaceCount,
@@ -341,6 +349,7 @@ function collectCssEvidence(root, emittedFiles) {
     stylesheetImports,
     assetReferences,
     unresolvedAssets,
+    dataTableSelectors,
   };
 }
 
@@ -369,7 +378,7 @@ function collectEmitted(root, policy) {
       `${record.file}: emitted UI/DataTable import must be browser-bundled: ${record.specifier}`,
     );
   }
-  const css = collectCssEvidence(root, emittedFiles);
+  const css = collectCssEvidence(root, emittedFiles, policy.dataTableStylesheet.emittedSelectors);
   if (css.cssFileCount === 0) violations.push('emitted browser CSS is missing');
   const materialSymbolsFontFaces = css.fontFaces.filter(
     ({ family }) => family === policy.materialSymbols.emittedFontFamily,
@@ -393,6 +402,9 @@ function collectEmitted(root, policy) {
   }
   for (const record of css.unresolvedAssets) {
     violations.push(`${record.from}: emitted CSS asset does not resolve: ${record.specifier}`);
+  }
+  for (const { selector, present } of css.dataTableSelectors) {
+    if (!present) violations.push(`emitted DataTable stylesheet selector is missing: ${selector}`);
   }
   return {
     report: {
@@ -443,13 +455,11 @@ export function evaluateConsoleReleaseBoundary(
   }
   const authored = collectAuthored(root, policy, consoleManifest);
   violations.push(...authored.violations);
-  const authoredStyles = new Set(authored.inventory.stylesheets.map(({ specifier }) => specifier));
-  for (const stylesheet of policy.requiredCurrentStylesheets) {
-    if (!authoredStyles.has(stylesheet))
-      violations.push(`required current stylesheet import is missing: ${stylesheet}`);
-  }
-  if (!authoredStyles.has(policy.requiredConversionStylesheet)) {
-    blockers.push(blocker(policy, 'OPS-CONSOLE-RB03-DATA-TABLE-STYLESHEET'));
+  if (
+    JSON.stringify(authored.inventory.stylesheets) !==
+    JSON.stringify(policy.requiredCurrentStylesheets)
+  ) {
+    violations.push('current stylesheet composition-root imports or deterministic order differ');
   }
   if (compareVersionFloor(consoleManifest.engines?.node, rootManifest.engines?.node) !== 0) {
     blockers.push(blocker(policy, 'OPS-CONSOLE-RB04-NODE-FLOOR'));

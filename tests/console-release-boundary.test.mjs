@@ -21,7 +21,7 @@ const policy = JSON.parse(
 );
 
 function clone(value) {
-  return structuredClone(value);
+  return JSON.parse(JSON.stringify(value));
 }
 
 function makeFixture() {
@@ -66,19 +66,25 @@ function createEmittedFixture(fixtureRoot) {
   writeFileSync(join(browser, 'main.js'), 'export {};\n');
   writeFileSync(
     join(browser, 'main.css'),
-    '@font-face { font-family: "Material Symbols Outlined"; src: url("./symbols.woff2"); }\n',
+    [
+      '@font-face { font-family: "Material Symbols Outlined"; src: url("./symbols.woff2"); }',
+      '.cursor-cell{cursor:cell}',
+      '.group-hover\\/row\\:overflow-visible{overflow:visible}',
+      '.row-5000{grid-row:5000}',
+      '',
+    ].join('\n'),
   );
   writeFileSync(join(browser, 'symbols.woff2'), 'fixture-font');
 }
 
-test('current source inventory remains blocked on seven exact preconditions', () => {
+test('current source inventory remains blocked on six exact preconditions', () => {
   const report = evaluateConsoleReleaseBoundary(root);
   assert.equal(report.state, 'blocked-with-exact-preconditions');
   assert.equal(report.conversionReady, false);
-  assert.equal(report.authored.declarationCount, 152);
+  assert.equal(report.authored.declarationCount, 153);
   assert.equal(report.authored.sourceFileCount, 53);
   assert.equal(report.authored.packages['@unisane/ui'].declarationCount, 142);
-  assert.equal(report.authored.packages['@unisane/data-table'].declarationCount, 10);
+  assert.equal(report.authored.packages['@unisane/data-table'].declarationCount, 11);
   assert.equal(report.authored.computedLoaderCount, 0);
   assert.deepEqual(
     report.blockers.map(({ id }) => id),
@@ -131,15 +137,28 @@ test('private and undeclared UI runtime surfaces fail closed', () => {
 
 test('stylesheet, Material Symbols, React singleton, and Node facts stay explicit', () => {
   const report = evaluateConsoleReleaseBoundary(root);
-  assert.deepEqual(
-    report.authored.stylesheets.map(({ specifier }) => specifier),
-    ['@material-symbols/font-400/outlined.css', '@unisane/ui/styles.css'],
+  assert.deepEqual(report.authored.stylesheets, policy.requiredCurrentStylesheets);
+  assert.equal(
+    report.blockers.some(({ id }) => id === 'OPS-CONSOLE-RB03-DATA-TABLE-STYLESHEET'),
+    false,
   );
-  assert.ok(report.blockers.some(({ id }) => id === 'OPS-CONSOLE-RB03-DATA-TABLE-STYLESHEET'));
   assert.ok(report.blockers.some(({ id }) => id === 'OPS-CONSOLE-RB04-NODE-FLOOR'));
   assert.deepEqual(report.package.reactSingletons, {
     react: '^19.1.0',
     reactDom: '^19.1.0',
+  });
+
+  withFixture((fixtureRoot) => {
+    const mainPath = join(fixtureRoot, 'apps/console/src/browser/main.tsx');
+    writeFileSync(
+      mainPath,
+      readFileSync(mainPath, 'utf8').replace("import '@unisane/data-table/styles.css';\n", ''),
+    );
+    const drift = evaluateConsoleReleaseBoundary(fixtureRoot, { policy });
+    assert.match(
+      drift.violations.join('\n'),
+      /stylesheet composition-root imports or deterministic order differ/u,
+    );
   });
 
   withFixture((fixtureRoot) => {
@@ -162,7 +181,19 @@ test('emitted declarations, CSS, and Material Symbols assets are closed and reso
     assert.equal(report.emitted.css.fontAssetCount, 1);
     assert.equal(report.emitted.materialSymbols.fontFaceCount, 1);
     assert.equal(report.emitted.materialSymbols.resolvedFontAssetCount, 1);
+    assert.equal(
+      report.emitted.css.dataTableSelectors.every(({ present }) => present),
+      true,
+    );
     assert.deepEqual(report.emitted.css.unresolvedAssets, []);
+  });
+
+  withFixture((fixtureRoot) => {
+    createEmittedFixture(fixtureRoot);
+    const cssPath = join(fixtureRoot, 'apps/console/dist/browser/main.css');
+    writeFileSync(cssPath, readFileSync(cssPath, 'utf8').replace('.row-5000{grid-row:5000}\n', ''));
+    const report = evaluateConsoleReleaseBoundary(fixtureRoot, { checkEmitted: true, policy });
+    assert.match(report.violations.join('\n'), /emitted DataTable stylesheet selector is missing/u);
   });
 
   withFixture((fixtureRoot) => {
