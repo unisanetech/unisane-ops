@@ -1,6 +1,7 @@
 ---
 id: 'DOC-8cd9af7c084b'
 owner: 'unisane'
+repository: unisane-ops
 scope: workspace
 role: guide
 lifecycle: durable
