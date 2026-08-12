@@ -31,6 +31,7 @@ function makeFixture() {
     recursive: true,
   });
   for (const path of [
+    '.node-version',
     'package.json',
     'apps/console/package.json',
     'apps/console/tsup.browser.config.ts',
@@ -77,7 +78,7 @@ function createEmittedFixture(fixtureRoot) {
   writeFileSync(join(browser, 'symbols.woff2'), 'fixture-font');
 }
 
-test('current source inventory remains blocked on six exact preconditions', () => {
+test('current source inventory remains blocked on five exact preconditions', () => {
   const report = evaluateConsoleReleaseBoundary(root);
   assert.equal(report.state, 'blocked-with-exact-preconditions');
   assert.equal(report.conversionReady, false);
@@ -142,7 +143,13 @@ test('stylesheet, Material Symbols, React singleton, and Node facts stay explici
     report.blockers.some(({ id }) => id === 'OPS-CONSOLE-RB03-DATA-TABLE-STYLESHEET'),
     false,
   );
-  assert.ok(report.blockers.some(({ id }) => id === 'OPS-CONSOLE-RB04-NODE-FLOOR'));
+  assert.equal(
+    report.blockers.some(({ id }) => id === 'OPS-CONSOLE-RB04-NODE-FLOOR'),
+    false,
+  );
+  assert.equal(report.package.nodeFloor, '>=24.13.0');
+  assert.equal(report.package.standaloneNodeFloor, '>=24.13.0');
+  assert.equal(report.package.standaloneNodeVersion, '24.13.0');
   assert.deepEqual(report.package.reactSingletons, {
     react: '^19.1.0',
     reactDom: '^19.1.0',
@@ -167,6 +174,29 @@ test('stylesheet, Material Symbols, React singleton, and Node facts stay explici
     });
     const drift = evaluateConsoleReleaseBoundary(fixtureRoot, { policy });
     assert.match(drift.violations.join('\n'), /React singleton dependency ranges differ/u);
+  });
+
+  withFixture((fixtureRoot) => {
+    updateManifest(fixtureRoot, (manifest) => {
+      manifest.engines.node = '>=18.17.0';
+    });
+    const drift = evaluateConsoleReleaseBoundary(fixtureRoot, { policy });
+    assert.match(drift.violations.join('\n'), /console Node engine floor differs/u);
+  });
+
+  withFixture((fixtureRoot) => {
+    const rootManifestPath = join(fixtureRoot, 'package.json');
+    const rootManifest = JSON.parse(readFileSync(rootManifestPath, 'utf8'));
+    rootManifest.engines.node = '>=22.13.0';
+    writeFileSync(rootManifestPath, `${JSON.stringify(rootManifest, null, 2)}\n`);
+    const drift = evaluateConsoleReleaseBoundary(fixtureRoot, { policy });
+    assert.match(drift.violations.join('\n'), /standalone root Node engine floor differs/u);
+  });
+
+  withFixture((fixtureRoot) => {
+    writeFileSync(join(fixtureRoot, '.node-version'), '22.13.0\n');
+    const drift = evaluateConsoleReleaseBoundary(fixtureRoot, { policy });
+    assert.match(drift.violations.join('\n'), /standalone \.node-version differs/u);
   });
 });
 

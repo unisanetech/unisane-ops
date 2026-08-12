@@ -1,0 +1,549 @@
+---
+title: 'Task: Align the Ops console Node floor with the standalone repository contract'
+status: active
+owner: 'codex-ops-console-node-floor'
+id: T-73507855
+scope: 'unisane-ops'
+role: task
+lifecycle: active
+authority: canonical
+provenance: accepted
+view: current
+risk: high-impact
+proofSubject: task-closure
+proofBaseline: baseline-c236ce3ac52ad659
+lastUpdated: 2026-08-12
+---
+
+# Task: Align the Ops console Node floor with the standalone repository contract
+
+## Changelog
+
+- `2026-08-12`: Synchronized Task state `active` from Skopos.
+
+## Goal
+
+Align the Ops console Node floor with the standalone repository contract
+
+## Acceptance
+
+- The console manifest declares the exact standalone Node engine floor >=24.13.0 with no alternate
+  or compatibility floor.
+- The canonical console boundary verifier proves the console engine equals the staged root engine
+  and .node-version runtime identity.
+- OPS-CONSOLE-RB04-NODE-FLOOR is removed while RB01, RB02, RB05, RB06, and RB07 remain exact and
+  conversionReady remains false.
+- Focused source, fixture, emitted, console, integrity, and Task-selected proof passes without
+  lockfile, coordinate, registry, publication, license, authority, remote, or materialization
+  changes.
+
+## Non-Goals
+
+- Do not alter UI coordinates, root lockfile, registry access, release authority, licensing,
+  remotes, or target materialization.
+
+## Constraints
+
+- Own only the declared unisane-ops paths and uniquely generated Task archive/snapshot.
+
+## Admission And Workflow
+
+- Workflow: `strict`
+- Selected risk/detail: `high-impact` / `detailed`
+- Recommended risk/detail: `standard` / `standard`
+- Selection source: `explicit-override`
+- Reason: The work changes multiple paths, durable guidance, configuration, or a normal coordinated
+  surface.
+- Reason: The caller explicitly selected high-impact; Skopos recommended standard and kept both
+  values visible.
+
+## Owned Paths
+
+- `unisane-ops/apps/console/package.json`
+- `unisane-ops/docs/reference/generated/repository/standalone-repository-integrity.json`
+- `unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md`
+- `unisane-ops/scripts/check-console-release-boundary.mjs`
+- `unisane-ops/tests/console-release-boundary.test.mjs`
+- `unisane-ops/tools/repository/console-release-boundary-policy.json`
+
+## Ownership Expansions
+
+- None recorded.
+
+## Steps
+
+- [x] **Review the current pattern in Unisane Ops** (implementation, complete) — Use the compact
+      references to confirm the current scope, command surface, and docs entrypoints before editing
+      code.
+- [x] **Implement the smallest scoped change** (implementation, complete) — Carry out "Align the Ops
+      console Node floor with the standalone repository contract" inside the resolved scope before
+      widening impact to adjacent areas.
+- [x] **Sync docs and instruction surfaces if touched** (docs, complete) — Keep docs, instruction
+      mirrors, and generated project knowledge aligned with the implementation.
+- [x] **Check canonical Unisane core docs** (action, complete) — Required by Guard
+      unisane.docs.check-core.
+- [x] **Check Unisane Ops package architecture** (action, complete) — Required by Guard
+      unisane.ops.architecture-check.
+- [x] **Validate the Unisane Ops console** (action, complete) — Required by Guard
+      unisane.ops.console.validate.
+- [x] **Check generated Unisane package metadata** (action, complete) — Required by Guard
+      unisane.packages-meta.check.
+- [x] **Check the Unisane symbol reference** (action, complete) — Required by Guard
+      unisane.symbol-reference.check.
+- [ ] **Verify packed UI producer artifacts** (action, pending) — Required by Guard
+      unisane.ui.packed-producer-certificate.
+
+## Actions And Guards
+
+- Action `unisane.docs.check-core`: Required by Guard unisane.docs.check-core.
+- Action `unisane.ops.architecture-check`: Required by Guard unisane.ops.architecture-check.
+- Action `unisane.ops.console.validate`: Required by Guard unisane.ops.console.validate.
+- Action `unisane.packages-meta.check`: Required by Guard unisane.packages-meta.check.
+- Action `unisane.symbol-reference.check`: Required by Guard unisane.symbol-reference.check.
+- Action `unisane.ui.packed-producer-certificate`: Required by Guard
+  unisane.ui.packed-producer-certificate.
+- Guard `quality.focused-behavior-proof`
+- Guard `unisane.docs.check-core`
+- Guard `unisane.ops.architecture-check`
+- Guard `unisane.ops.console.validate`
+- Guard `unisane.packages-meta.check`
+- Guard `unisane.symbol-reference.check`
+- Guard `unisane.ui.packed-producer-certificate`
+
+## Evidence And Readiness
+
+- The console manifest declares the exact standalone Node engine floor >=24.13.0 with no alternate
+  or compatibility floor. (closure, agent-observation)
+- The canonical console boundary verifier proves the console engine equals the staged root engine
+  and .node-version runtime identity. (closure, agent-observation)
+- OPS-CONSOLE-RB04-NODE-FLOOR is removed while RB01, RB02, RB05, RB06, and RB07 remain exact and
+  conversionReady remains false. (closure, agent-observation)
+- Focused source, fixture, emitted, console, integrity, and Task-selected proof passes without
+  lockfile, coordinate, registry, publication, license, authority, remote, or materialization
+  changes. (closure, agent-observation)
+- Guard quality.focused-behavior-proof: Behavior changes require focused proof (closure,
+  agent-observation)
+- Guard unisane.docs.check-core: Project Memory changes require docs proof (closure,
+  source-bound-action)
+- Guard unisane.ops.architecture-check: Unisane Ops structural changes require package-boundary
+  proof (closure, source-bound-action)
+- Guard unisane.ops.console.validate: Ops console changes require focused package proof (closure,
+  source-bound-action)
+- Guard unisane.packages-meta.check: Package metadata inputs require freshness proof (closure,
+  source-bound-action)
+- Guard unisane.symbol-reference.check: Symbol reference inputs require freshness proof (closure,
+  source-bound-action)
+- Guard unisane.ui.packed-producer-certificate: UI producer changes require immutable
+  packed-consumer proof (closure, source-bound-action)
+
+## Memory Obligations
+
+- [complete] standard: The declared Task scope owns canonical standard Memory at
+  unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md; review and
+  synchronize it if project truth changes. (target:
+  `unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md`); resolution:
+  memory-updated
+
+## Portable Task State
+
+This machine-readable block is the durable source used to rebuild local Skopos state.
+
+<!-- skopos:task-state:start -->
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "T-73507855",
+  "type": "task",
+  "status": "active",
+  "generatedAt": "2026-08-12T08:13:44.949Z",
+  "updatedAt": "2026-08-12T08:17:19.274Z",
+  "planIds": [],
+  "childTasks": [],
+  "state": "active",
+  "detail": "detailed",
+  "title": "Align the Ops console Node floor with the standalone repository contract",
+  "goal": "Align the Ops console Node floor with the standalone repository contract",
+  "scope": {
+    "query": "unisane-ops",
+    "matchedBy": "id",
+    "scope": {
+      "id": "unisane-ops",
+      "kind": "product",
+      "title": "Unisane Ops",
+      "path": "unisane-ops",
+      "aliases": ["ops"],
+      "summary": "Unisane Ops (platform-product).",
+      "confidence": "high",
+      "parent": "workspace",
+      "ancestorIds": ["workspace"],
+      "profile": "platform-product",
+      "memoryRoot": "unisane-ops/docs",
+      "codeRoots": ["unisane-ops"],
+      "dependsOn": ["workspace"],
+      "owners": ["unisane-ops"]
+    }
+  },
+  "contract": {
+    "acceptanceCriteria": [
+      "The console manifest declares the exact standalone Node engine floor >=24.13.0 with no alternate or compatibility floor.",
+      "The canonical console boundary verifier proves the console engine equals the staged root engine and .node-version runtime identity.",
+      "OPS-CONSOLE-RB04-NODE-FLOOR is removed while RB01, RB02, RB05, RB06, and RB07 remain exact and conversionReady remains false.",
+      "Focused source, fixture, emitted, console, integrity, and Task-selected proof passes without lockfile, coordinate, registry, publication, license, authority, remote, or materialization changes."
+    ],
+    "nonGoals": [
+      "Do not alter UI coordinates, root lockfile, registry access, release authority, licensing, remotes, or target materialization."
+    ],
+    "constraints": [
+      "Own only the declared unisane-ops paths and uniquely generated Task archive/snapshot."
+    ]
+  },
+  "risk": "high-impact",
+  "admission": {
+    "recommendedRisk": "standard",
+    "recommendedDetail": "standard",
+    "selectedRisk": "high-impact",
+    "selectedDetail": "detailed",
+    "selectionSource": "explicit-override",
+    "workflow": "strict",
+    "reasons": [
+      "The work changes multiple paths, durable guidance, configuration, or a normal coordinated surface.",
+      "The caller explicitly selected high-impact; Skopos recommended standard and kept both values visible."
+    ],
+    "signals": {
+      "goalSignals": [],
+      "ownedPathCount": 6,
+      "affectedScopeIds": ["unisane-ops", "workspace"],
+      "impactCategories": ["docs", "scope-source"],
+      "proofSubjectKind": "task-closure"
+    }
+  },
+  "proofSubject": {
+    "kind": "task-closure",
+    "baselineId": "baseline-c236ce3ac52ad659"
+  },
+  "priority": 0,
+  "dependencyTaskIds": [],
+  "steps": [
+    {
+      "id": "step-review-current-pattern",
+      "kind": "implementation",
+      "title": "Review the current pattern in Unisane Ops",
+      "detail": "Use the compact references to confirm the current scope, command surface, and docs entrypoints before editing code.",
+      "status": "complete"
+    },
+    {
+      "id": "step-implement-scoped-change",
+      "kind": "implementation",
+      "title": "Implement the smallest scoped change",
+      "detail": "Carry out \"Align the Ops console Node floor with the standalone repository contract\" inside the resolved scope before widening impact to adjacent areas.",
+      "status": "complete"
+    },
+    {
+      "id": "step-sync-knowledge",
+      "kind": "docs",
+      "title": "Sync docs and instruction surfaces if touched",
+      "detail": "Keep docs, instruction mirrors, and generated project knowledge aligned with the implementation.",
+      "status": "complete"
+    },
+    {
+      "id": "action-unisane.docs.check-core",
+      "kind": "action",
+      "title": "Check canonical Unisane core docs",
+      "detail": "Required by Guard unisane.docs.check-core.",
+      "status": "complete"
+    },
+    {
+      "id": "action-unisane.ops.architecture-check",
+      "kind": "action",
+      "title": "Check Unisane Ops package architecture",
+      "detail": "Required by Guard unisane.ops.architecture-check.",
+      "status": "complete"
+    },
+    {
+      "id": "action-unisane.ops.console.validate",
+      "kind": "action",
+      "title": "Validate the Unisane Ops console",
+      "detail": "Required by Guard unisane.ops.console.validate.",
+      "status": "complete"
+    },
+    {
+      "id": "action-unisane.packages-meta.check",
+      "kind": "action",
+      "title": "Check generated Unisane package metadata",
+      "detail": "Required by Guard unisane.packages-meta.check.",
+      "status": "complete"
+    },
+    {
+      "id": "action-unisane.symbol-reference.check",
+      "kind": "action",
+      "title": "Check the Unisane symbol reference",
+      "detail": "Required by Guard unisane.symbol-reference.check.",
+      "status": "complete"
+    },
+    {
+      "id": "action-unisane.ui.packed-producer-certificate",
+      "kind": "action",
+      "title": "Verify packed UI producer artifacts",
+      "detail": "Required by Guard unisane.ui.packed-producer-certificate.",
+      "status": "pending"
+    }
+  ],
+  "selectedActions": [
+    {
+      "id": "unisane.docs.check-core",
+      "title": "Check canonical Unisane core docs",
+      "category": "docs-validator",
+      "safety": "read-only",
+      "sourcePath": "tools/skopos/actions/unisane-docs-check-core.yaml",
+      "reason": "Required by Guard unisane.docs.check-core.",
+      "matchedPaths": [
+        "unisane-ops/docs/reference/generated/repository/standalone-repository-integrity.json",
+        "unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md"
+      ],
+      "outputPaths": [],
+      "requiresApproval": false
+    },
+    {
+      "id": "unisane.ops.architecture-check",
+      "title": "Check Unisane Ops package architecture",
+      "category": "quality-check",
+      "safety": "read-only",
+      "sourcePath": "tools/skopos/actions/unisane-ops-architecture-check.yaml",
+      "reason": "Required by Guard unisane.ops.architecture-check.",
+      "matchedPaths": ["unisane-ops/apps/console/package.json"],
+      "outputPaths": [],
+      "requiresApproval": false
+    },
+    {
+      "id": "unisane.ops.console.validate",
+      "title": "Validate the Unisane Ops console",
+      "category": "quality-check",
+      "safety": "read-only",
+      "sourcePath": "tools/skopos/actions/unisane-ops-console-validate.yaml",
+      "reason": "Required by Guard unisane.ops.console.validate.",
+      "matchedPaths": ["unisane-ops/apps/console/package.json"],
+      "outputPaths": [],
+      "requiresApproval": false
+    },
+    {
+      "id": "unisane.packages-meta.check",
+      "title": "Check generated Unisane package metadata",
+      "category": "quality-check",
+      "safety": "read-only",
+      "sourcePath": "tools/skopos/actions/unisane-packages-meta-check.yaml",
+      "reason": "Required by Guard unisane.packages-meta.check.",
+      "matchedPaths": ["unisane-ops/apps/console/package.json"],
+      "outputPaths": [],
+      "requiresApproval": false
+    },
+    {
+      "id": "unisane.symbol-reference.check",
+      "title": "Check the Unisane symbol reference",
+      "category": "quality-check",
+      "safety": "read-only",
+      "sourcePath": "tools/skopos/actions/unisane-symbol-reference-check.yaml",
+      "reason": "Required by Guard unisane.symbol-reference.check.",
+      "matchedPaths": ["unisane-ops/apps/console/package.json"],
+      "outputPaths": [],
+      "requiresApproval": false
+    },
+    {
+      "id": "unisane.ui.packed-producer-certificate",
+      "title": "Verify packed UI producer artifacts",
+      "category": "quality-check",
+      "safety": "mutating",
+      "sourcePath": "tools/skopos/actions/unisane-ui-packed-producer-certificate.yaml",
+      "reason": "Required by Guard unisane.ui.packed-producer-certificate.",
+      "matchedPaths": ["unisane-ops/apps/console/package.json"],
+      "outputPaths": ["unisane-ui/packed-producer-certificate.json"],
+      "requiresApproval": false
+    }
+  ],
+  "selectedGuardIds": [
+    "quality.focused-behavior-proof",
+    "unisane.docs.check-core",
+    "unisane.ops.architecture-check",
+    "unisane.ops.console.validate",
+    "unisane.packages-meta.check",
+    "unisane.symbol-reference.check",
+    "unisane.ui.packed-producer-certificate"
+  ],
+  "evidenceRequirements": [
+    {
+      "id": "acceptance-1",
+      "acceptanceCriterion": "The console manifest declares the exact standalone Node engine floor >=24.13.0 with no alternate or compatibility floor.",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": [],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "acceptance-2",
+      "acceptanceCriterion": "The canonical console boundary verifier proves the console engine equals the staged root engine and .node-version runtime identity.",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": [],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "acceptance-3",
+      "acceptanceCriterion": "OPS-CONSOLE-RB04-NODE-FLOOR is removed while RB01, RB02, RB05, RB06, and RB07 remain exact and conversionReady remains false.",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": [],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "acceptance-4",
+      "acceptanceCriterion": "Focused source, fixture, emitted, console, integrity, and Task-selected proof passes without lockfile, coordinate, registry, publication, license, authority, remote, or materialization changes.",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": [],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "guard-quality.focused-behavior-proof",
+      "acceptanceCriterion": "Guard quality.focused-behavior-proof: Behavior changes require focused proof",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": ["quality.focused-behavior-proof"],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "guard-unisane.docs.check-core",
+      "acceptanceCriterion": "Guard unisane.docs.check-core: Project Memory changes require docs proof",
+      "phase": "closure",
+      "actionIds": ["unisane.docs.check-core"],
+      "guardIds": ["unisane.docs.check-core"],
+      "evidence": "source-bound-action"
+    },
+    {
+      "id": "guard-unisane.ops.architecture-check",
+      "acceptanceCriterion": "Guard unisane.ops.architecture-check: Unisane Ops structural changes require package-boundary proof",
+      "phase": "closure",
+      "actionIds": ["unisane.ops.architecture-check"],
+      "guardIds": ["unisane.ops.architecture-check"],
+      "evidence": "source-bound-action"
+    },
+    {
+      "id": "guard-unisane.ops.console.validate",
+      "acceptanceCriterion": "Guard unisane.ops.console.validate: Ops console changes require focused package proof",
+      "phase": "closure",
+      "actionIds": ["unisane.ops.console.validate"],
+      "guardIds": ["unisane.ops.console.validate"],
+      "evidence": "source-bound-action"
+    },
+    {
+      "id": "guard-unisane.packages-meta.check",
+      "acceptanceCriterion": "Guard unisane.packages-meta.check: Package metadata inputs require freshness proof",
+      "phase": "closure",
+      "actionIds": ["unisane.packages-meta.check"],
+      "guardIds": ["unisane.packages-meta.check"],
+      "evidence": "source-bound-action"
+    },
+    {
+      "id": "guard-unisane.symbol-reference.check",
+      "acceptanceCriterion": "Guard unisane.symbol-reference.check: Symbol reference inputs require freshness proof",
+      "phase": "closure",
+      "actionIds": ["unisane.symbol-reference.check"],
+      "guardIds": ["unisane.symbol-reference.check"],
+      "evidence": "source-bound-action"
+    },
+    {
+      "id": "guard-unisane.ui.packed-producer-certificate",
+      "acceptanceCriterion": "Guard unisane.ui.packed-producer-certificate: UI producer changes require immutable packed-consumer proof",
+      "phase": "closure",
+      "actionIds": ["unisane.ui.packed-producer-certificate"],
+      "guardIds": ["unisane.ui.packed-producer-certificate"],
+      "evidence": "source-bound-action"
+    }
+  ],
+  "memoryObligations": [
+    {
+      "id": "memory-standard-ca03a29925",
+      "role": "standard",
+      "reason": "The declared Task scope owns canonical standard Memory at unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md; review and synchronize it if project truth changes.",
+      "status": "complete",
+      "targetPath": "unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md",
+      "resolution": "memory-updated",
+      "resolutionReason": "Updated the transition Standard to record the console hard cut to the standalone Node 24.13.0 contract and the exact remaining five blockers.",
+      "resolvedAt": "2026-08-12T08:16:39.288Z",
+      "resolvedByActorId": "codex-ops-console-node-floor"
+    }
+  ],
+  "questions": [],
+  "recommendations": [
+    {
+      "id": "run-unisane.docs.check-core",
+      "title": "Check canonical Unisane core docs",
+      "summary": "Required by Guard unisane.docs.check-core.",
+      "priority": "medium",
+      "actionKind": "run-action",
+      "actionId": "unisane.docs.check-core",
+      "blocking": false,
+      "status": "complete"
+    },
+    {
+      "id": "run-unisane.ops.architecture-check",
+      "title": "Check Unisane Ops package architecture",
+      "summary": "Required by Guard unisane.ops.architecture-check.",
+      "priority": "medium",
+      "actionKind": "run-action",
+      "actionId": "unisane.ops.architecture-check",
+      "blocking": false,
+      "status": "complete"
+    },
+    {
+      "id": "run-unisane.ops.console.validate",
+      "title": "Validate the Unisane Ops console",
+      "summary": "Required by Guard unisane.ops.console.validate.",
+      "priority": "medium",
+      "actionKind": "run-action",
+      "actionId": "unisane.ops.console.validate",
+      "blocking": false,
+      "status": "complete"
+    },
+    {
+      "id": "run-unisane.packages-meta.check",
+      "title": "Check generated Unisane package metadata",
+      "summary": "Required by Guard unisane.packages-meta.check.",
+      "priority": "medium",
+      "actionKind": "run-action",
+      "actionId": "unisane.packages-meta.check",
+      "blocking": false,
+      "status": "complete"
+    },
+    {
+      "id": "run-unisane.symbol-reference.check",
+      "title": "Check the Unisane symbol reference",
+      "summary": "Required by Guard unisane.symbol-reference.check.",
+      "priority": "medium",
+      "actionKind": "run-action",
+      "actionId": "unisane.symbol-reference.check",
+      "blocking": false,
+      "status": "complete"
+    },
+    {
+      "id": "run-unisane.ui.packed-producer-certificate",
+      "title": "Verify packed UI producer artifacts",
+      "summary": "Required by Guard unisane.ui.packed-producer-certificate.",
+      "priority": "medium",
+      "actionKind": "run-action",
+      "actionId": "unisane.ui.packed-producer-certificate",
+      "blocking": false,
+      "status": "open"
+    }
+  ],
+  "declaredOwnedPaths": [
+    "unisane-ops/apps/console/package.json",
+    "unisane-ops/docs/reference/generated/repository/standalone-repository-integrity.json",
+    "unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md",
+    "unisane-ops/scripts/check-console-release-boundary.mjs",
+    "unisane-ops/tests/console-release-boundary.test.mjs",
+    "unisane-ops/tools/repository/console-release-boundary-policy.json"
+  ]
+}
+```
+
+<!-- skopos:task-state:end -->

@@ -172,20 +172,6 @@ function scanModule(path, root) {
   return { records, violations };
 }
 
-function compareVersionFloor(left, right) {
-  const parse = (value) => {
-    const match = String(value ?? '').match(/(\d+)\.(\d+)\.(\d+)/u);
-    return match ? match.slice(1).map(Number) : null;
-  };
-  const a = parse(left);
-  const b = parse(right);
-  if (!a || !b) return null;
-  for (let index = 0; index < 3; index += 1) {
-    if (a[index] !== b[index]) return a[index] - b[index];
-  }
-  return 0;
-}
-
 function blocker(policy, id) {
   const entry = policy.blockers.find((candidate) => candidate.id === id);
   if (!entry) throw new Error(`Policy does not define blocker ${id}.`);
@@ -439,6 +425,7 @@ export function evaluateConsoleReleaseBoundary(
   const policy = suppliedPolicy ?? readJson(join(root, defaultPolicyPath));
   const consoleManifest = readJson(join(root, policy.paths.consoleManifest));
   const rootManifest = readJson(join(root, 'package.json'));
+  const nodeVersion = readFileSync(join(root, policy.paths.nodeVersionFile), 'utf8').trim();
   const violations = [];
   const blockers = [];
   const dependencies = consoleManifest.dependencies ?? {};
@@ -461,8 +448,16 @@ export function evaluateConsoleReleaseBoundary(
   ) {
     violations.push('current stylesheet composition-root imports or deterministic order differ');
   }
-  if (compareVersionFloor(consoleManifest.engines?.node, rootManifest.engines?.node) !== 0) {
-    blockers.push(blocker(policy, 'OPS-CONSOLE-RB04-NODE-FLOOR'));
+  if (consoleManifest.engines?.node !== policy.nodeRuntime.engineFloor) {
+    violations.push('console Node engine floor differs from the canonical release-boundary policy');
+  }
+  if (rootManifest.engines?.node !== policy.nodeRuntime.engineFloor) {
+    violations.push(
+      'standalone root Node engine floor differs from the canonical release-boundary policy',
+    );
+  }
+  if (nodeVersion !== policy.nodeRuntime.version) {
+    violations.push('standalone .node-version differs from the canonical release-boundary policy');
   }
   if (
     !policy.registry.uiVersion ||
@@ -514,6 +509,7 @@ export function evaluateConsoleReleaseBoundary(
       ),
       nodeFloor: consoleManifest.engines?.node ?? null,
       standaloneNodeFloor: rootManifest.engines?.node ?? null,
+      standaloneNodeVersion: nodeVersion,
       reactSingletons: {
         react: dependencies.react ?? null,
         reactDom: dependencies['react-dom'] ?? null,
