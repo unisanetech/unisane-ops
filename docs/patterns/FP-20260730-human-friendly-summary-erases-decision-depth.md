@@ -1,6 +1,7 @@
 ---
 id: 'PAT-92408382ad1e'
 owner: 'unisane'
+repository: unisane-ops
 scope: workspace
 role: pattern
 lifecycle: durable
