@@ -1,6 +1,7 @@
 ---
 id: 'D-e72ef0e604d0'
 owner: 'unisane'
+repository: unisane-ops
 scope: workspace
 role: decision
 lifecycle: durable

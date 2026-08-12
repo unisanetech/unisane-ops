@@ -1,6 +1,7 @@
 ---
 id: 'D-cfb606b23ccd'
 owner: 'unisane'
+repository: unisane-ops
 scope: workspace
 role: decision
 lifecycle: durable
