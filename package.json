@@ -5,6 +5,7 @@
   "description": "Standalone workspace declaration for the staged Unisane Ops repository boundary",
   "scripts": {
     "build": "turbo run build",
+    "check:console-external-consumer": "node scripts/check-console-external-consumer.mjs",
     "check:console-release-boundary": "node scripts/check-console-release-boundary.mjs --check-source",
     "check:console-release-boundary:emitted": "node scripts/check-console-release-boundary.mjs --check-emitted",
     "check:generated": "node scripts/check-repository-integrity.mjs --check-generated",

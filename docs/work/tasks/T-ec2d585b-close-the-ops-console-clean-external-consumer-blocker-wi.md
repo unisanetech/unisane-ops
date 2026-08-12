@@ -1,0 +1,341 @@
+---
+title:
+  'Task: Close the Ops console clean external consumer blocker with certified packed UI artifacts'
+status: active
+owner: 'codex-ops-external-consumer'
+id: T-ec2d585b
+scope: 'unisane-ops'
+role: task
+lifecycle: active
+authority: canonical
+provenance: accepted
+view: current
+risk: high-impact
+proofSubject: task-closure
+proofBaseline: baseline-9d23de4e93fe28bb
+lastUpdated: 2026-08-12
+---
+
+# Task: Close the Ops console clean external consumer blocker with certified packed UI artifacts
+
+## Changelog
+
+- `2026-08-12`: Synchronized Task state `active` from Skopos.
+
+## Goal
+
+Close the Ops console clean external consumer blocker with certified packed UI artifacts
+
+## Acceptance
+
+- A disposable isolated consumer derived from the exact Ops console UI semantic inventory installs
+  certified UI-family tarballs strictly offline and frozen with no source fallback.
+- The proof binds exact producer content and tarball digests, exact Ops consumer imports and
+  coordinates, React/ReactDOM singleton identity, TypeScript, browser build, runtime imports, CSS,
+  Material Symbols, DataTable assets, and dynamic dependencies.
+- OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER is removed while RB01, RB02, RB05, and RB07 remain exact
+  and conversionReady remains false.
+- Focused fixtures and Task-selected Actions pass without changing live workspace coordinates,
+  locks, registry, publication, licensing, authority, remotes, or materialization.
+
+## Non-Goals
+
+- Do not convert @unisane/ui or @unisane/data-table coordinates or resolve registry, legal,
+  publication, or authority gates.
+
+## Constraints
+
+- Reuse the certified UI packed-producer contract and keep all external effects disabled.
+
+## Admission And Workflow
+
+- Workflow: `strict`
+- Selected risk/detail: `high-impact` / `detailed`
+- Recommended risk/detail: `standard` / `standard`
+- Selection source: `explicit-override`
+- Reason: The work changes multiple paths, durable guidance, configuration, or a normal coordinated
+  surface.
+- Reason: The caller explicitly selected high-impact; Skopos recommended standard and kept both
+  values visible.
+
+## Owned Paths
+
+- `unisane-ops/docs/reference/generated/repository/standalone-repository-integrity.json`
+- `unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md`
+- `unisane-ops/package.json`
+- `unisane-ops/scripts/check-console-external-consumer.mjs`
+- `unisane-ops/scripts/check-console-release-boundary.mjs`
+- `unisane-ops/tests/console-external-consumer.test.mjs`
+- `unisane-ops/tests/console-release-boundary.test.mjs`
+- `unisane-ops/tools/repository/console-release-boundary-policy.json`
+- `unisane-ops/tools/skopos/actions/console-release-boundary-check.yaml`
+- `unisane-ops/tools/skopos/guards/console-release-boundary-check.yaml`
+
+## Ownership Expansions
+
+- None recorded.
+
+## Steps
+
+- [x] **Review the current pattern in Unisane Ops** (implementation, complete) — Use the compact
+      references to confirm the current scope, command surface, and docs entrypoints before editing
+      code.
+- [x] **Implement the smallest scoped change** (implementation, complete) — Carry out "Close the Ops
+      console clean external consumer blocker with certified packed UI artifacts" inside the
+      resolved scope before widening impact to adjacent areas.
+- [x] **Sync docs and instruction surfaces if touched** (docs, complete) — Keep docs, instruction
+      mirrors, and generated project knowledge aligned with the implementation.
+- [ ] **Check canonical Unisane core docs** (action, pending) — Required by Guard
+      unisane.docs.check-core.
+
+## Actions And Guards
+
+- Action `unisane.docs.check-core`: Required by Guard unisane.docs.check-core.
+- Guard `quality.focused-behavior-proof`
+- Guard `unisane.docs.check-core`
+
+## Evidence And Readiness
+
+- A disposable isolated consumer derived from the exact Ops console UI semantic inventory installs
+  certified UI-family tarballs strictly offline and frozen with no source fallback. (closure,
+  agent-observation)
+- The proof binds exact producer content and tarball digests, exact Ops consumer imports and
+  coordinates, React/ReactDOM singleton identity, TypeScript, browser build, runtime imports, CSS,
+  Material Symbols, DataTable assets, and dynamic dependencies. (closure, agent-observation)
+- OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER is removed while RB01, RB02, RB05, and RB07 remain exact
+  and conversionReady remains false. (closure, agent-observation)
+- Focused fixtures and Task-selected Actions pass without changing live workspace coordinates,
+  locks, registry, publication, licensing, authority, remotes, or materialization. (closure,
+  agent-observation)
+- Guard quality.focused-behavior-proof: Behavior changes require focused proof (closure,
+  agent-observation)
+- Guard unisane.docs.check-core: Project Memory changes require docs proof (closure,
+  source-bound-action)
+
+## Memory Obligations
+
+- [complete] standard: The declared Task scope owns canonical standard Memory at
+  unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md; review and
+  synchronize it if project truth changes. (target:
+  `unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md`); resolution:
+  memory-updated
+
+## Portable Task State
+
+This machine-readable block is the durable source used to rebuild local Skopos state.
+
+<!-- skopos:task-state:start -->
+
+```json
+{
+  "schemaVersion": 1,
+  "id": "T-ec2d585b",
+  "type": "task",
+  "status": "active",
+  "generatedAt": "2026-08-12T09:59:31.572Z",
+  "updatedAt": "2026-08-12T10:13:44.620Z",
+  "planIds": [],
+  "childTasks": [],
+  "state": "active",
+  "detail": "detailed",
+  "title": "Close the Ops console clean external consumer blocker with certified packed UI artifacts",
+  "goal": "Close the Ops console clean external consumer blocker with certified packed UI artifacts",
+  "scope": {
+    "query": "unisane-ops",
+    "matchedBy": "id",
+    "scope": {
+      "id": "unisane-ops",
+      "kind": "product",
+      "title": "Unisane Ops",
+      "path": "unisane-ops",
+      "aliases": ["ops"],
+      "summary": "Unisane Ops (platform-product).",
+      "confidence": "high",
+      "parent": "workspace",
+      "ancestorIds": ["workspace"],
+      "profile": "platform-product",
+      "memoryRoot": "unisane-ops/docs",
+      "codeRoots": ["unisane-ops"],
+      "dependsOn": ["workspace"],
+      "owners": ["unisane-ops"]
+    }
+  },
+  "contract": {
+    "acceptanceCriteria": [
+      "A disposable isolated consumer derived from the exact Ops console UI semantic inventory installs certified UI-family tarballs strictly offline and frozen with no source fallback.",
+      "The proof binds exact producer content and tarball digests, exact Ops consumer imports and coordinates, React/ReactDOM singleton identity, TypeScript, browser build, runtime imports, CSS, Material Symbols, DataTable assets, and dynamic dependencies.",
+      "OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER is removed while RB01, RB02, RB05, and RB07 remain exact and conversionReady remains false.",
+      "Focused fixtures and Task-selected Actions pass without changing live workspace coordinates, locks, registry, publication, licensing, authority, remotes, or materialization."
+    ],
+    "nonGoals": [
+      "Do not convert @unisane/ui or @unisane/data-table coordinates or resolve registry, legal, publication, or authority gates."
+    ],
+    "constraints": [
+      "Reuse the certified UI packed-producer contract and keep all external effects disabled."
+    ]
+  },
+  "risk": "high-impact",
+  "admission": {
+    "recommendedRisk": "standard",
+    "recommendedDetail": "standard",
+    "selectedRisk": "high-impact",
+    "selectedDetail": "detailed",
+    "selectionSource": "explicit-override",
+    "workflow": "strict",
+    "reasons": [
+      "The work changes multiple paths, durable guidance, configuration, or a normal coordinated surface.",
+      "The caller explicitly selected high-impact; Skopos recommended standard and kept both values visible."
+    ],
+    "signals": {
+      "goalSignals": [],
+      "ownedPathCount": 10,
+      "affectedScopeIds": ["unisane-ops", "workspace"],
+      "impactCategories": ["docs", "package-manifest", "scope-source"],
+      "proofSubjectKind": "task-closure"
+    }
+  },
+  "proofSubject": {
+    "kind": "task-closure",
+    "baselineId": "baseline-9d23de4e93fe28bb"
+  },
+  "priority": 0,
+  "dependencyTaskIds": [],
+  "steps": [
+    {
+      "id": "step-review-current-pattern",
+      "kind": "implementation",
+      "title": "Review the current pattern in Unisane Ops",
+      "detail": "Use the compact references to confirm the current scope, command surface, and docs entrypoints before editing code.",
+      "status": "complete"
+    },
+    {
+      "id": "step-implement-scoped-change",
+      "kind": "implementation",
+      "title": "Implement the smallest scoped change",
+      "detail": "Carry out \"Close the Ops console clean external consumer blocker with certified packed UI artifacts\" inside the resolved scope before widening impact to adjacent areas.",
+      "status": "complete"
+    },
+    {
+      "id": "step-sync-knowledge",
+      "kind": "docs",
+      "title": "Sync docs and instruction surfaces if touched",
+      "detail": "Keep docs, instruction mirrors, and generated project knowledge aligned with the implementation.",
+      "status": "complete"
+    },
+    {
+      "id": "action-unisane.docs.check-core",
+      "kind": "action",
+      "title": "Check canonical Unisane core docs",
+      "detail": "Required by Guard unisane.docs.check-core.",
+      "status": "pending"
+    }
+  ],
+  "selectedActions": [
+    {
+      "id": "unisane.docs.check-core",
+      "title": "Check canonical Unisane core docs",
+      "category": "docs-validator",
+      "safety": "read-only",
+      "sourcePath": "tools/skopos/actions/unisane-docs-check-core.yaml",
+      "reason": "Required by Guard unisane.docs.check-core.",
+      "matchedPaths": [
+        "unisane-ops/docs/reference/generated/repository/standalone-repository-integrity.json",
+        "unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md"
+      ],
+      "outputPaths": [],
+      "requiresApproval": false
+    }
+  ],
+  "selectedGuardIds": ["quality.focused-behavior-proof", "unisane.docs.check-core"],
+  "evidenceRequirements": [
+    {
+      "id": "acceptance-1",
+      "acceptanceCriterion": "A disposable isolated consumer derived from the exact Ops console UI semantic inventory installs certified UI-family tarballs strictly offline and frozen with no source fallback.",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": [],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "acceptance-2",
+      "acceptanceCriterion": "The proof binds exact producer content and tarball digests, exact Ops consumer imports and coordinates, React/ReactDOM singleton identity, TypeScript, browser build, runtime imports, CSS, Material Symbols, DataTable assets, and dynamic dependencies.",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": [],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "acceptance-3",
+      "acceptanceCriterion": "OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER is removed while RB01, RB02, RB05, and RB07 remain exact and conversionReady remains false.",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": [],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "acceptance-4",
+      "acceptanceCriterion": "Focused fixtures and Task-selected Actions pass without changing live workspace coordinates, locks, registry, publication, licensing, authority, remotes, or materialization.",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": [],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "guard-quality.focused-behavior-proof",
+      "acceptanceCriterion": "Guard quality.focused-behavior-proof: Behavior changes require focused proof",
+      "phase": "closure",
+      "actionIds": [],
+      "guardIds": ["quality.focused-behavior-proof"],
+      "evidence": "agent-observation"
+    },
+    {
+      "id": "guard-unisane.docs.check-core",
+      "acceptanceCriterion": "Guard unisane.docs.check-core: Project Memory changes require docs proof",
+      "phase": "closure",
+      "actionIds": ["unisane.docs.check-core"],
+      "guardIds": ["unisane.docs.check-core"],
+      "evidence": "source-bound-action"
+    }
+  ],
+  "memoryObligations": [
+    {
+      "id": "memory-standard-ca03a29925",
+      "role": "standard",
+      "reason": "The declared Task scope owns canonical standard Memory at unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md; review and synchronize it if project truth changes.",
+      "status": "complete",
+      "targetPath": "unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md",
+      "resolution": "memory-updated",
+      "resolutionReason": "Updated the canonical transition Standard to record the exact offline frozen external-consumer proof and the remaining four fail-closed blockers.",
+      "resolvedAt": "2026-08-12T10:13:44.620Z",
+      "resolvedByActorId": "codex-ops-external-consumer"
+    }
+  ],
+  "questions": [],
+  "recommendations": [
+    {
+      "id": "run-unisane.docs.check-core",
+      "title": "Check canonical Unisane core docs",
+      "summary": "Required by Guard unisane.docs.check-core.",
+      "priority": "medium",
+      "actionKind": "run-action",
+      "actionId": "unisane.docs.check-core",
+      "blocking": false,
+      "status": "open"
+    }
+  ],
+  "declaredOwnedPaths": [
+    "unisane-ops/docs/reference/generated/repository/standalone-repository-integrity.json",
+    "unisane-ops/docs/standards/01-standalone-repository-transition-readiness.md",
+    "unisane-ops/package.json",
+    "unisane-ops/scripts/check-console-external-consumer.mjs",
+    "unisane-ops/scripts/check-console-release-boundary.mjs",
+    "unisane-ops/tests/console-external-consumer.test.mjs",
+    "unisane-ops/tests/console-release-boundary.test.mjs",
+    "unisane-ops/tools/repository/console-release-boundary-policy.json",
+    "unisane-ops/tools/skopos/actions/console-release-boundary-check.yaml",
+    "unisane-ops/tools/skopos/guards/console-release-boundary-check.yaml"
+  ]
+}
+```
+
+<!-- skopos:task-state:end -->

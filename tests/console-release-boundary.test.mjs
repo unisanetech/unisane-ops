@@ -78,7 +78,7 @@ function createEmittedFixture(fixtureRoot) {
   writeFileSync(join(browser, 'symbols.woff2'), 'fixture-font');
 }
 
-test('current source inventory remains blocked on five exact preconditions', () => {
+test('current source inventory remains blocked on four exact preconditions', () => {
   const report = evaluateConsoleReleaseBoundary(root);
   assert.equal(report.state, 'blocked-with-exact-preconditions');
   assert.equal(report.conversionReady, false);
@@ -94,6 +94,10 @@ test('current source inventory remains blocked on five exact preconditions', () 
   assert.deepEqual(report.violations, []);
   assert.equal(report.authority.publicationAuthorized, false);
   assert.equal(report.authority.consumerConversionAuthorized, false);
+  assert.equal(
+    report.blockers.some(({ id }) => id === 'OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER'),
+    false,
+  );
 });
 
 test('nonliteral import, require, and require.resolve loaders fail closed', () => {
@@ -294,5 +298,14 @@ test('authority or blocker drift cannot make conversion appear complete', () => 
   assert.match(
     report.violations.join('\n'),
     /active blocker set differs from the exact fail-closed policy/u,
+  );
+});
+
+test('missing clean external consumer proof fails closed', () => {
+  const changedPolicy = clone(policy);
+  changedPolicy.cleanExternalConsumer.proofId = null;
+  assert.throws(
+    () => evaluateConsoleReleaseBoundary(root, { policy: changedPolicy }),
+    /does not define blocker OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER/u,
   );
 });

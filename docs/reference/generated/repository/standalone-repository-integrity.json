@@ -3,8 +3,8 @@
   "state": "valid-with-exact-external-blockers",
   "generatedFromPolicySha256": "657a2ac53db399eb3b4df447e1a26a6894dad6c6c34da7bda13de38dd196f7c9",
   "source": {
-    "fileCount": 954,
-    "digest": "7247d7afe0120b2c51d56acade4e811a9c5182ab85ff6f0d0711fd2167e30542",
+    "fileCount": 956,
+    "digest": "3c4567ef417710c04615008e14ec612a9d46181e3fe10cc8722eef5a78a91217",
     "excludedGeneratedAndTaskMemory": [
       "docs/reference/generated/**",
       "docs/work/tasks/**",

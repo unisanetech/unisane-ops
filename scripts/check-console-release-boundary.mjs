@@ -466,7 +466,14 @@ export function evaluateConsoleReleaseBoundary(
   ) {
     blockers.push(blocker(policy, 'OPS-CONSOLE-RB05-REGISTRY-VERSION-ACCESS'));
   }
-  if (!policy.cleanExternalConsumer.proofId) {
+  if (
+    !policy.cleanExternalConsumer.proofId ||
+    policy.cleanExternalConsumer.state !== 'verified-offline-frozen-isolated-consumer' ||
+    !policy.cleanExternalConsumer.producerContentDigest ||
+    !policy.cleanExternalConsumer.consumerSemanticInventoryDigest ||
+    Object.keys(policy.cleanExternalConsumer.artifacts ?? {}).length !== 3 ||
+    Object.keys(policy.cleanExternalConsumer.receipt ?? {}).length !== 6
+  ) {
     blockers.push(blocker(policy, 'OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER'));
   }
   if (
@@ -520,14 +527,7 @@ export function evaluateConsoleReleaseBoundary(
     requiredPeerExpectations: policy.requiredPeerExpectations,
     authored: authored.inventory,
     emitted: emitted.report,
-    cleanExternalConsumerInputs: {
-      producerCertificateArtifact: 'required-at-conversion',
-      immutablePackageArtifacts: ['@unisane/tokens', '@unisane/ui', '@unisane/data-table'],
-      exactRegistryCoordinates: 'required-at-conversion',
-      isolatedLockfile: 'required-at-conversion',
-      reactSingletonProof: 'required-at-conversion',
-      browserCssAssetProof: 'required-at-conversion',
-    },
+    cleanExternalConsumerProof: policy.cleanExternalConsumer,
     blockers,
     violations: uniqueViolations,
     authority: policy.authority,

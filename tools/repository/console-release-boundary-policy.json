@@ -104,7 +104,35 @@
     "accessApproved": false
   },
   "cleanExternalConsumer": {
-    "proofId": null
+    "proofId": "OPS-CONSOLE-EXTERNAL-CONSUMER-v1",
+    "state": "verified-offline-frozen-isolated-consumer",
+    "producerContentDigest": "32205fdc968aebbef22c3daec7299d223d34017d34e469354d1b3cb4118f7358",
+    "consumerSemanticInventoryDigest": "042bd54e1702896b90b045e80bed17d7362e594cca07ae40280480732d0d2061",
+    "artifacts": {
+      "@unisane/tokens": {
+        "version": "0.1.0",
+        "contentDigest": "d6816d9f10b140e081839a77f43b016a5e036fe6d2545e795ddb2338d2a4a3d4",
+        "tarballSha256": "f42ff319a6fc0fd54e05f064cde4136f9ab919fa375d83240c34505c75c3464e"
+      },
+      "@unisane/ui": {
+        "version": "0.1.0",
+        "contentDigest": "fe4e85950b0efcc75f88087e45bd4b3abb4495171d15dcece728f4fd650e135a",
+        "tarballSha256": "b4421cb8d70fce0c93228d42bdaaa39f873dbf3ce40a3c87cc5577a6479f4297"
+      },
+      "@unisane/data-table": {
+        "version": "0.1.0",
+        "contentDigest": "013906d4ca6e9995bdcb495d7ddb66606f8d43827df9c8b92fd74c7d174acbde",
+        "tarballSha256": "244e06c545008f1961ccabcf6f79307bef09ad8497077ada91a61dba91c4960b"
+      }
+    },
+    "receipt": {
+      "normalizedLockSha256": "4c8d45b0c4369c4ce5608027d555f3a0c99ee1540bee89b7c1a1a3f8e0cd014c",
+      "reactVersion": "19.2.3",
+      "reactDomVersion": "19.2.3",
+      "runtimeModuleCount": 22,
+      "browserCssSha256": "e67b388efaa1810b68fd39381634f1554bf184164ff40ba2951c0eb39477977e",
+      "materialSymbolsFontSha256": "f7ebbdfac4f5f19c7d4dd7da5b836955fea1e8eda7fc8288d12c8a482a95ed7f"
+    }
   },
   "authority": {
     "publicationAuthorized": false,
@@ -129,12 +157,6 @@
       "owner": "ui-release-and-registry",
       "reason": "No registry versions or access authority are admitted for the UI packages.",
       "requiredProof": "Owner-approved package coordinates, visibility, and registry access."
-    },
-    {
-      "id": "OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER",
-      "owner": "ops-release",
-      "reason": "No source-bound clean external Ops consumer proof exists for immutable UI artifacts.",
-      "requiredProof": "Isolated install, lock, TypeScript, browser build, runtime, CSS/assets, and React singleton receipt."
     },
     {
       "id": "OPS-CONSOLE-RB07-RELEASE-AUTHORITY",
