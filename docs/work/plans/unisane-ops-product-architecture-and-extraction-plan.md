@@ -1,6 +1,7 @@
 ---
 id: 'PLAN-77d6e2c49487'
 owner: 'unisane'
+repository: unisane-ops
 scope: workspace
 role: plan
 lifecycle: durable
