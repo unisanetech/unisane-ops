@@ -1,6 +1,7 @@
 ---
 id: 'F-cc6a4b74dd7e'
 owner: 'unisane'
+repository: unisane-ops
 scope: workspace
 role: finding
 lifecycle: active
