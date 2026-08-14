@@ -16,6 +16,11 @@ status: open
 
 ## Changelog
 
+- `2026-08-15`: Corrected the final owner after the typed-action audit. AWS remains
+  implemented by `@unisane/provider-aws`, but its opaque nested CLI, root-only pack
+  manifest, parallel `config/aws.ops.*` loader, and remaining Devtools registration are
+  not the final contract. Closure now requires typed leaf actions behind the generic Ops
+  host, one canonical config authority, and zero Devtools command ownership.
 - `2026-07-25`: Closed and archived P116-W10 after all declared ownership, compatibility,
   provider, architecture, workspace type, dependency, dead-code, and LLM evaluation
   proof passed. Later AWS capability expansion must use the provider owner.
@@ -48,28 +53,34 @@ status: open
 
 ## Finding
 
-Unisane now has multiple platform products that need AWS storage, public asset delivery, mail sending, domains, certificates, and production-safe environment output. Those AWS resources are still at risk of becoming manual console state, app-local setup memory, or ad hoc scripts instead of a governed framework control plane.
+`@unisane/provider-aws` now owns the proven AWS behavior, but it has not converged onto
+the final Ops extension and action contract:
 
-Without a canonical AWS devtools lane, the repo can drift into:
+1. its pack manifest exposes an opaque root command instead of typed leaf actions with
+   exact input, effect, result, and receipt schemas
+2. its handler instantiates a nested Commander CLI and accepts raw argv beneath the Ops
+   presentation boundary
+3. generic pack execution captures process-global output and process-exit state rather
+   than receiving a structured action result
+4. AWS desired state still has a parallel `config/aws.ops.*` loader instead of one
+   `unisane.config.ts` authority and lowered Ops artifacts
+5. Devtools retains transitional AWS registration/compatibility residue even though
+   Framework tooling is not the provider control plane
 
-1. public buckets for assets instead of private S3 plus CloudFront OAC
-2. unclear dev/staging/prod account boundaries
-3. long-lived access keys as the normal operator path
-4. untagged AWS resources with weak ownership and cost attribution
-5. no deterministic plan/apply receipts for cloud mutations
-6. app env values copied manually from console state
-7. SES identities that miss deliverability and bounce/complaint readiness
-8. legacy buckets lingering as implicit runtime truth
-9. CloudFront invalidations replacing immutable asset versioning
-10. production changes with insufficient account and resource confirmation
+The implemented inventory, doctor, planning, mutation, verification, and receipt
+behavior is valuable and remains with the provider owner. The open gap is architectural
+convergence onto one typed Ops action engine, generic trusted-pack host, canonical config
+authority, and zero Devtools ownership.
 
 ## Target
 
 Preserve the implemented AWS behavior under the archived P116-W10 ownership boundary:
 shared AWS types are published by `@unisane/cloud/aws-contracts`, and AWS-specific
 config, auth/API execution, inventory, planning, mutation, reports, and SDK dependencies
-are owned by `@unisane/provider-aws`. `@unisane/devtools` is only the transitional command
-registration surface.
+are owned by `@unisane/provider-aws`. Every callable capability is one typed Ops
+`ActionDefinition` named by a validated pack manifest. The generic Ops host owns trust,
+dispatch, approval, result rendering, and receipts. Devtools owns no AWS registration,
+transport, config, or compatibility route.
 
 The target system is:
 
@@ -85,21 +96,23 @@ secret-free AWS ops config
 New AWS capability work must extend the provider owner or add a genuinely
 provider-neutral Cloud workflow through
 `unisane-ops-product-architecture-and-extraction-plan.md`. It must not restore a Devtools
-implementation owner.
+implementation owner, nested provider CLI, raw-argv handler, or parallel provider config.
 
 ## Non-Goals
 
-1. no bucket creation in the first workpack
-2. no CloudFront distribution creation in the first workpack
-3. no SES identity creation in the first workpack
-4. no DNS or certificate mutation in the first workpack
-5. no production apply path in the first workpack
-6. no Terraform/CDK replacement
-7. no app runtime adapter changes
+- reimplementing or reducing the AWS behavior already proved by historical workpacks
+- restoring an AWS Devtools lane, nested provider CLI, raw-argv engine, or compatibility
+  command path
+- creating another authored AWS config or a second action/approval/receipt engine
+- moving AWS SDKs into the generic Ops engine, Framework, or application runtime
+- replacing Terraform/CDK or changing unrelated app runtime adapters
+- authorizing a provider mutation, deployment, package publication, repository cutover,
+  or visibility change through this Finding
 
 ## Closure Signal
 
-This finding can close only after the AWS devtools lane reaches production-ready control-plane coverage:
+This finding can close only after the AWS provider pack reaches production-ready
+control-plane coverage through the canonical typed Ops action model:
 
 1. `aws doctor` verifies account, credentials, config, tags, and safety posture
 2. S3 plans and applies manage private buckets, data-class prefixes, lifecycle, and OAC bucket policies safely
@@ -109,5 +122,17 @@ This finding can close only after the AWS devtools lane reaches production-ready
 6. app env output is generated without secrets
 7. production applies require exact account confirmation, locks, and receipts
 8. old buckets/resources are migrated through an explicit legacy migration lane rather than staying implicit
+9. the pack manifest declares typed leaf inputs/effects and handlers return structured
+   results without nested Commander, raw argv, global output capture, or process exit
+10. `unisane.config.ts` and its lowered Ops artifacts are the only desired-state config
+    authority; `config/aws.ops.*` has zero current residue
+11. Devtools has zero AWS registrars, compatibility routes, provider dependencies, or
+    user-facing AWS command documentation
 
-`P86-W1` through `P86-W16` are now historical proof for the opening AWS S3, CloudFront/OAC/cache/logging, app env output, domain/mail planning, guarded domains apply, CloudFront custom certificate foundation, Route 53 CloudFront alias records, external DNS manual output, IAM policy output, CI audit, production-readiness docs, and SES production readiness. The next bounded slice should finish optional KMS policy support, cost doctor output, legacy migration guidance, or real CloudFront asset-resolution proof.
+`P86-W1` through `P86-W16` are historical behavior proof for the opening AWS S3,
+CloudFront/OAC/cache/logging, app env output, domain/mail planning, guarded domains apply,
+CloudFront custom certificate foundation, Route 53 CloudFront alias records, external
+DNS manual output, IAM policy output, CI audit, production-readiness docs, and SES
+production readiness. The next bounded slice is action/manifest/config convergence;
+optional KMS policy, cost doctor, legacy migration guidance, and real asset-resolution
+proof follow only through that owner.

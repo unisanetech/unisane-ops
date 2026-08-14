@@ -8,14 +8,21 @@ lifecycle: active
 authority: supporting
 provenance: accepted
 view: current
-severity: SHOULD
-status: open
+severity: MUST
+status: in-progress
 ---
 
 # F-20260724 Unisane Ops Product Boundary And Devtools Coupling Gap
 
 ## Changelog
 
+- `2026-08-15`: Corrected the apparent closure after standalone Ops resolution exposed
+  the direct `@unisane/devtools` integration dependency and its unavailable 32-package
+  Framework runtime closure. Added the live dual command/action model, nested provider
+  CLIs, process-global output capture, hardcoded host graph, parallel AWS config, and
+  remaining Devtools remote-operation residue. The accepted target is separate product
+  CLIs, one typed Ops action model, and an optional serialized-descriptor adapter with
+  zero Framework package dependencies.
 - `2026-08-09`: Removed the remaining direct Framework Devtools dependency/import leak
   into Ops-owned `@unisane/cli-core` and `@unisane/ops-engine`. Devtools now uses a
   package-private terminal helper, preserves the 76-command disposition, and is covered
@@ -253,39 +260,45 @@ status: open
 
 ## Symptom
 
-Reusable provider, cloud, growth, and web capabilities exist, but their current ownership
-is coupled to the Framework development toolchain or fragmented across packages:
+Reusable provider, cloud, growth, and web packages exist, but the executable boundary
+is not yet the final independent Ops product:
 
-1. `unisane-ops/packages/unisane/package.json` solely owns the canonical `unisane` binary.
-2. `unisane-tools/packages/devtools/package.json` publishes only `unisane-devtools`.
-3. The canonical package has no `@unisane/devtools` dependency or catch-all fallback;
-   all supported roots resolve through exact sealed packs and unknown commands fail
-   closed.
-4. Provider behavior now lives in the AWS, Cloudflare, Google, and Meta provider-family
-   packages; Growth owns provider-neutral strategy, reporting, policy, and safety.
-5. the Devtools CLI retains Framework create/dev/build/compiler/codegen/database/UI/LLM
-   and governance commands plus thin compatibility registrars for migrated Ops roots;
-   its package-private terminal helper imports no Ops CLI or engine package
-6. the generic control-plane core has a clean `@unisane/ops-engine` owner; Cloud, Growth,
-   Web Runtime, and all admitted provider families have package and command owners;
-   marketing-console presentation is Growth-owned
-7. generic web runtime behavior now lives in `@unisane/web-runtime`; the five former
-   package coordinates contain time-boxed compatibility re-exports only
-8. canonical Cloudflare DNS, Queue, and Worker desired state uses versioned
-   `unisane.config.ts`; provider-specific config remains only for the Devtools
-   compatibility/apply window
+1. The Ops package and Framework Devtools still present competing product CLI identities.
+2. The optional `@unisane/framework-ops` package imports and executes
+   `@unisane/devtools/framework-integration`. A standalone Ops install therefore reaches
+   into Framework tooling rather than consuming a passive protocol.
+3. The real registry contains no `@unisane/devtools@0.1.0` artifact and none of its
+   complete 32-package first-party runtime closure; 31 closure members are private. The
+   earlier packed and loopback-registry proof did not establish durable availability.
+4. Typed Ops actions and raw-argv pack handlers coexist with different effect
+   vocabularies, parsing, result, and receipt contracts.
+5. AWS and Google packs expose opaque root commands, instantiate nested Commander CLIs,
+   and hide typed leaf inputs/effects from the host manifest.
+6. The pack bridge captures global `process.stdout.write`, `process.stderr.write`, and
+   `process.exitCode`, then parses CLI output. That is unsafe for concurrent, embedded,
+   MCP, API, console, and test execution.
+7. The Ops host hardcodes the trusted package graph, exact handler switches, and
+   provider/product binding cases, so a new admitted pack still requires host edits.
+8. AWS retains a parallel `config/aws.ops.*` loader despite the accepted single-config
+   contract.
+9. Devtools still contains live billing/provider remote pull, plan, repair, apply, and
+   archive behavior plus remote environment placeholders and dead UI-generation residue.
 
-The target source/package/command boundary now exists and is independently usable. The
-remaining umbrella work is durable production/CI automation composition plus repository,
-release, and authority cutover evidence.
+The completed extraction slices remain useful source-placement proof. They do not close
+the action, CLI, integration-protocol, registry, or standalone-product boundary.
 
 ## Evidence
 
 | Evidence                                      | Repository location                                                                                                     |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| canonical CLI binary declaration              | `unisane-ops/packages/unisane/package.json`                                                                             |
-| unique public binary declaration              | `unisane-ops/packages/unisane/package.json`, `unisane-tools/packages/devtools/package.json`                             |
+| current Ops binary declaration                | `unisane-ops/packages/unisane/package.json`                                                                             |
+| competing current binary declarations         | `unisane-ops/packages/unisane/package.json`, `unisane-tools/packages/devtools/package.json`                             |
 | fail-closed canonical host                    | `unisane-ops/packages/unisane/src/host.ts`                                                                              |
+| duplicate action/effect authorities           | `unisane-ops/packages/ops-engine/src/actions.ts`, `unisane-ops/packages/ops-engine/src/pack.ts`                         |
+| nested provider CLI handlers                  | `unisane-ops/packages/provider-aws/src/cli/handler.ts`, `unisane-ops/packages/provider-google/src/cli/handler.ts`       |
+| process-global CLI capture bridge             | `unisane-ops/packages/ops-engine/src/pack.ts`                                                                           |
+| executable Framework integration              | `unisane-ops/packages/framework-ops`, `unisane-tools/packages/devtools/src/framework-integration.ts`                    |
+| parallel AWS config                           | `unisane-ops/packages/provider-aws/src/config-loader.ts`, `unisane-ops/config/aws.ops.ts`                               |
 | provider-family isolation                     | `unisane-ops/packages/provider-aws`, `provider-cloudflare`, `provider-google`, `provider-meta`                          |
 | mixed top-level command registration          | `unisane-tools/packages/devtools/src/cli.ts`, `unisane-tools/packages/devtools/src/commands/**`                         |
 | provider-neutral control-plane owner          | `unisane-ops/packages/ops-engine/**`                                                                                    |
@@ -298,15 +311,19 @@ release, and authority cutover evidence.
 | canonical Web Runtime owner                   | `unisane-ops/packages/web-runtime/**`                                                                                   |
 | compatibility-only former package coordinates | `unisane/packages/foundation/web-tracking`, `web-conversions`, `web-seo`; `unisane/packages/adapters/web-conversions-*` |
 
-This evidence describes current source placement. Canonical command-host migration,
-duplicate-binary retirement, provider/GTM/UI routing, and console presentation are
-complete. Durable production/automation composition and repository/release readiness
-remain planned.
+This evidence distinguishes completed source placement from the still-open executable
+contract. Provider/Growth/Web Runtime ownership can be preserved while the host, action,
+CLI, and Framework-integration mechanisms are replaced cleanly.
 
 ## Impact
 
 - production/CI mutation still lacks the required durable artifact, approval, and
   distributed lock composition
+- the current optional Framework-enabled Ops profile is not stack-neutral because its
+  adapter executes Devtools
+- global output/process interception prevents safe concurrent and embedded consumers
+- two input/effect/result systems can disagree across CLI, MCP, API, console, and
+  automation
 - repository and registry cutover are not yet proven independently
 - separate config/artifact patterns can drift in terminology, safety, and Git policy
 - web consumers must understand several packages that represent one runtime capability
@@ -333,16 +350,24 @@ frozen as one cross-cutting contract.
    - protect existing read and write behavior with redacted fixtures and parity tests
    - classify network, write, publish, rollback, and spend effects
    - find import-time effects, secret leakage, and non-deterministic discovery
-3. **Headless engine**
+3. **One typed action engine**
+   - make one `ActionDefinition` own input schema, exact target, effect/risk,
+     plan/approval/apply/verify behavior, typed result, artifacts, and receipts
+   - make CLI, MCP, API, console, scheduler, and agents thin adapters over that owner
+   - delete raw argv handlers, duplicate effect vocabularies, nested Commander parsing,
+     output interception, process-exit capture, and CLI-output parsing
+   - expose every provider capability as a manifest-declared typed leaf action
    - extract typed inventory, plan, policy, approval, receipt, drift, redaction, artifact,
      and command-result contracts without Commander or provider SDKs
    - define and prove explicit secret, artifact, approval, and lock ports plus durable
      automation composition
-4. **Canonical CLI and pack protocol**
-   - turn `unisane` into the real CLI
+4. **Independent product CLIs and generic pack protocol**
+   - give Framework and Ops separate binaries; the accepted target is Framework
+     `unisane`, Ops `unisane-ops`, and Framework scaffolder `create-unisane`
    - introduce non-executable JSON manifests, trust/integrity/collision validation, and
      exact lazy handler loading
-   - remove the duplicate Devtools binary only after parity and public migration proof
+   - make the host load accepted exact handlers generically after explicit trust
+     admission instead of switching on package, provider, or product identity
 5. **Cloud proof**
    - establish Cloud, AWS, and Cloudflare boundaries
    - migrate one coherent capability fully and delete its old implementation
@@ -357,8 +382,14 @@ frozen as one cross-cutting contract.
    - retire Meta management, migrate it under an admitted contract, or separately approve
      `@unisane/provider-meta` before cleanup closes
 8. **Framework integration and cleanup**
-   - add the narrow Framework Ops integration
-   - retain Framework assembly/governance in Devtools
+   - make the optional Ops-owned adapter consume a schema-versioned serialized project
+     descriptor, remain outside the default Ops install, and declare zero Framework npm
+     dependencies
+   - do not re-expose Framework developer commands through Ops
+   - move compilation to `@unisane/compiler`; retain CLI/watch/scaffold/doctor behavior
+     in Devtools
+   - move remote billing/provider behavior to typed Ops actions, delete dead UI stubs,
+     and delete remote env placeholders until a provider owner is admitted
    - delete generic Ops code, parallel config loaders, duplicate command owners, and
      dependency leakage from Framework surfaces
 9. **Repository-readiness handoff**
@@ -370,11 +401,16 @@ frozen as one cross-cutting contract.
 
 The finding remains open until all of these are true:
 
-- exactly one published package declares the `unisane` binary
-- the `unisane` package no longer depends directly on `@unisane/devtools`
+- Framework and Ops expose separate product binaries with no CLI-to-CLI delegation
+- the default Ops dependency graph and optional Framework adapter declare no Framework
+  package dependency
 - `unisane`, Ops engine, Cloud, and Growth declare no provider SDK dependencies
 - provider SDKs exist only in the selected provider-family packages
 - the Ops engine can typecheck and test without Commander, Framework, or provider SDKs
+- every pack manifest names typed leaf actions and the host contains no provider/product
+  handler switch
+- raw argv, nested Commander, stdout/stderr interception, process-exit capture, and
+  parsed CLI-output APIs have zero production residue beneath the CLI adapter
 - JSON manifests reject unsupported/untrusted/integrity-mismatched versions, reject
   namespace/id/config/capability collisions, and cannot scan/download/auto-execute code
 - secret, artifact, approval, and lock ports have contract tests; CI/multi-process
@@ -386,15 +422,15 @@ The finding remains open until all of these are true:
 - plain Node/Next fixtures use Cloud, Growth, and Web Runtime without Framework
 - Growth uses only `@unisane/web-runtime/contracts`, provider packages use only exact suite
   `/contracts` subpaths, and suites do not import provider packages
-- Framework integration works through `@unisane/framework-ops` and Framework runtime
-  imports no Ops/CLI package
+- optional Framework context works from a versioned serialized descriptor; Ops core,
+  Framework runtime, Compiler, and Devtools do not import the opposite product
 - old command registrars, config loaders, artifact writers, dependencies, exports, and
   docs are removed for migrated slices
 - no generic Meta management/reporting path remains as terminal legacy in Devtools
 - Web Runtime subpaths pass browser/server, optional peer, package-content, and
   clean-install tests
-- public extraction passes secret, customer-data, provenance, license, package, and
-  registry install audits
+- standalone extraction passes secret, customer-data, provenance, license, package, and
+  registry install audits; public release remains separately gated
 - canonical docs/index/reference checks and workspace architecture/type checks pass
 - the implementation workpacks are archived and older plans are archived or narrowed
   after their durable content is promoted
@@ -409,8 +445,9 @@ on this finding alone.
 Before setting this finding to `done`, record:
 
 - the final package and repository tree
-- published package versions and migration guides
-- the unique binary-owner proof
+- exact private or public package versions where separately authorized and migration
+  guides for real stable releases only
+- separate product-binary proof
 - dependency and clean-install reports
 - command/manifest/config/artifact compatibility test results
 - provider mutation-security test results
@@ -424,3 +461,5 @@ Before setting this finding to `done`, record:
 - `docs/standards/12-provider-control-plane-baseline.md`
 - `docs/work/plans/unisane-ops-product-architecture-and-extraction-plan.md`
 - `docs/decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md`
+- `docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md`
+- `docs/decisions/D-20260815-framework-release-units-compatibility-bom-and-registry-proof-contract.md`
