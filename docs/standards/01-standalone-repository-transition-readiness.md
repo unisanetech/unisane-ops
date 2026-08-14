@@ -15,6 +15,15 @@ lastUpdated: '2026-08-15'
 
 ## Changelog
 
+- `2026-08-15`: Attempted the controlled Ops target sync from authoritative umbrella
+  `fc31756fd9ba82e12bb0a1979079e5916e6adfae`. The target's real resolver returned `404` for
+  `@unisane/devtools@0.1.0`; all 32 packages in its first-party runtime closure lack public registry
+  artifacts and 31 are currently private. The earlier packed and ephemeral-registry proof remains
+  valid package-shape Evidence but is not durable registry-release Evidence. The target
+  product/config delta was restored before any lockfile was created. Only corrected target Memory
+  and deferred Task `T-92463c0e` were committed at `5f565477466528ac49793545b24802fa15d499eb`.
+  `OPS-R04` and `OPS-R07` are reopened; no publication, remote, visibility, deployment, or authority
+  change occurred.
 - `2026-08-15`: Closed `OPS-R03` at the local Ops consumer boundary. The console now consumes the
   released public `@unisane/ui@0.1.1` and `@unisane/data-table@0.1.1` packages through exact
   registry coordinates, and Ops-owned staged source, emitted, repository-integrity, and isolated
@@ -45,9 +54,11 @@ source convergence, local history-shadow proof, remote authority, package releas
 deployment. It is the target-local transition owner; it does not redefine product behavior,
 provider-operation safety, or Framework architecture.
 
-Until authority flips, the umbrella repository remains the sole writable source and Skopos execution
-authority. The temporary umbrella child Scope `unisane-ops` makes `unisane-ops/docs` current
-owner-local Project Memory for transition work; it is not an independent target Skopos authority.
+Until authority flips, the umbrella repository remains the sole writable product-source and
+migration authority. The existing local candidate owns active target-local Skopos state for
+candidate-scoped migration Evidence, but that state is not independent product-source, release, or
+cutover authority. The temporary umbrella child Scope `unisane-ops` keeps the staged
+`unisane-ops/docs` owner-local Project Memory synchronized while the umbrella remains authoritative.
 The following umbrella documents are controlling inputs:
 
 - `docs/standards/13-unisane-ops-product-architecture-baseline.md`
@@ -180,17 +191,20 @@ deletion after consumer migration before release.
 All accepted internal `workspace:*` edges may remain only inside the final Ops workspace. The
 following current edges cross the intended repository boundary:
 
-| Consumer                   | Current dependency                               | Final rule                                                                        | Gate                                                                                                                                                        |
-| -------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@unisane/ops-console`     | `@unisane/ui@0.1.1`, `@unisane/data-table@0.1.1` | consume exact released public UI packages; no sibling or local source             | closed for the local consumer boundary; registry-only standalone proof and repository integrity reject coordinate or fallback drift                         |
-| `@unisane/framework-ops`   | `@unisane/devtools@0.1.0`                        | consume the exact admitted semver-governed `./framework-integration` subpath only | converged; package-owned source, packed runtime/declaration, and root architecture proof reject workspace/file/link fallbacks and private Devtools surfaces |
-| `@unisane/provider-aws`    | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency             | converged; focused package proof required                                                                                                                   |
-| `@unisane/provider-google` | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency             | converged; focused package proof required                                                                                                                   |
-| `unisane` host             | dynamically resolves UI-owned `@unisane/ui-cli`  | keep discovery-only structural pack contract; never depend on UI source           | require a released/admitted UI CLI candidate and trust/compatibility proof                                                                                  |
+| Consumer                   | Current dependency                               | Final rule                                                                      | Gate                                                                                                                                                                |
+| -------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@unisane/ops-console`     | `@unisane/ui@0.1.1`, `@unisane/data-table@0.1.1` | consume exact released public UI packages; no sibling or local source           | closed for the local consumer boundary; registry-only standalone proof and repository integrity reject coordinate or fallback drift                                 |
+| `@unisane/framework-ops`   | `@unisane/devtools@0.1.0`                        | consume an exact real-registry-admitted `./framework-integration` contract only | source/import and candidate-package shape are converged, but real registry admission is blocked because Devtools and its 32-package runtime closure are unavailable |
+| `@unisane/provider-aws`    | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency           | converged; focused package proof required                                                                                                                           |
+| `@unisane/provider-google` | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency           | converged; focused package proof required                                                                                                                           |
+| `unisane` host             | dynamically resolves UI-owned `@unisane/ui-cli`  | keep discovery-only structural pack contract; never depend on UI source         | require a released/admitted UI CLI candidate and trust/compatibility proof                                                                                          |
 
-The accepted Framework bridge is the only Framework integration. Do not pull Framework compiler
-modules, UI source, root Devtools, `create-unisane`, or unrelated Framework product tooling into Ops
-to make a standalone build pass.
+The intended Framework bridge remains the only Framework integration direction. It is not available
+to a standalone Ops install until its exact dependency-light contract or admitted runtime closure
+exists in a real registry with immutable integrity. Do not pull Framework compiler modules, UI
+source, root Devtools, `create-unisane`, or unrelated Framework product tooling into Ops, and do not
+add a sibling, file, link, copied-source, or temporary-registry fallback to make a standalone build
+pass.
 
 ### Current manifest consumers outside Ops
 
@@ -206,8 +220,9 @@ At E1, the exact external package-manifest consumers are:
 
 That is fifteen manifest edges. Platforms also contain direct source imports of Growth, Web Runtime,
 and `unisane/config`; these are consumers, not migration source. The Framework starter/template
-release graph must prove that Ops can consume released Devtools while Framework consumers consume
-released Ops packages without a sibling workspace or circular unpublished release.
+release graph must prove that Ops can consume the selected real-registry-admitted Framework
+integration boundary while Framework consumers consume released Ops packages without a sibling
+workspace or circular unpublished release.
 
 Consumer migration happens in each owning repository after immutable Ops candidates exist. This
 audit does not rewrite consumers.
@@ -344,14 +359,14 @@ capability. The lockfile is generated from only the target workspace and release
 it contains no sibling `workspace:*`, `file:`, `link:`, or absolute locator. Shared umbrella config
 is reduced to the settings actually required by Ops packages, apps, plugins, and deploy proof.
 
-During pre-cutover umbrella staging, the umbrella root lockfile remains the sole install authority
-and umbrella Skopos remains the sole migration and execution authority. A source-convergence Task
-may stage target-owned package/workspace/config/CI declarations and reviewed Action/Guard source
-declarations under `unisane-ops/**`, but it must not create `unisane-ops/pnpm-lock.yaml`, initialize
-or activate an independent target Skopos authority, or claim standalone install proof. Generate and
-verify the target lockfile, and initialize and test target-local Skopos, only in a disposable
-extracted proof checkout or filtered shadow. Because the proposed next convergence Task creates no
-shadow, those proof steps belong to the later shadow Task.
+During the pre-cutover transition, the umbrella root lockfile remains the integrated
+source-workspace install authority and umbrella Skopos remains the migration authority. The
+history-preserved local candidate may own an independently generated target lockfile and active
+target-local Skopos only for candidate-scoped standalone Evidence; neither changes source or release
+authority. The current candidate has active target-local Skopos but no lockfile. Generate its first
+lock only after every external first-party dependency has real-registry admission, then prove it
+through the admitted target-sync Task and a clean frozen install without a sibling or temporary
+fallback.
 
 CI uses immutable/frozen install and least privilege. Pull-request lanes are credential- free and
 cover lint, typecheck, unit/contract tests, build, package contents, generated drift,
@@ -630,21 +645,21 @@ authority cutover. Those gates remain independently fail-closed below.
 
 ## Gate And Blocker Ledger
 
-| ID      | Status                                         | Gate                        | Blocker or closure                                                                                                                                                                                                                                                                                          | Required owner/proof                                                                                                                          |
-| ------- | ---------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| OPS-R01 | closed at checkpoint                           | source convergence          | exact file/docs/tool/root-config disposition is generated from reviewed source policy                                                                                                                                                                                                                       | Ops maintainers; current ledger check and immutable checkpoint commit                                                                         |
-| OPS-R02 | closed at checkpoint                           | source convergence          | private CLI-core dependencies and imports are absent from AWS and Google                                                                                                                                                                                                                                    | Ops maintainers; focused provider and boundary proof                                                                                          |
-| OPS-R03 | closed at local source conversion              | local shadow                | console pins exact released public `@unisane/ui@0.1.1` and `@unisane/data-table@0.1.1`; source, emitted, integrity, and isolated registry-consumer proof reject every local or sibling fallback                                                                                                             | Ops consumer owner; exact source/emitted inventory, registry integrity, frozen isolated install, build, CSS/assets, and React-singleton proof |
-| OPS-R04 | closed at integration                          | local shadow                | Framework bridge consumes exact admitted `@unisane/devtools@0.1.0` through `./framework-integration`, with no workspace/file/link fallback or private surface                                                                                                                                               | Framework and Ops release owners; package-owned and serial integration proof                                                                  |
-| OPS-R05 | open                                           | local shadow                | Platforms retain seven `workspace:*` Ops edges                                                                                                                                                                                                                                                              | Platforms owner; later consumer Tasks against immutable candidates                                                                            |
-| OPS-R06 | open                                           | package release             | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved                                                                                                                                                                                                                | product and release owners; explicit package admission or privatization                                                                       |
-| OPS-R07 | open                                           | local shadow                | local consumer proof and the staged integrity contract are corrected, but the existing target at `4afa21b9553a746dc394af35a3b6da48635b2468` has no lockfile; controlled target sync, target lock generation, clean target install, Node matrix, hosted CI, and target-local Skopos adoption remain deferred | Ops tooling owner; source-bound target-sync and standalone target proof                                                                       |
-| OPS-R08 | technical execution complete; approval open    | local shadow/public history | exact filter, commit map, parity, excluded-path, ref/tag/signature, integrity, and cleanup receipts pass in the disposable candidate; tool approval and final materialization remain absent                                                                                                                 | migration owner and reviewer; approve receipts and a new immutable source before materialization                                              |
-| OPS-R09 | technical scan complete; certification blocked | public history              | deterministic full-history scan produced 1,027 redacted findings, but scanner policy, findings, allowlists, remediation, security, privacy, and legal approvals are absent                                                                                                                                  | security/legal/privacy/provider-data owners; resolve redacted ledger and rerun approved scanners                                              |
-| OPS-R10 | open                                           | public release              | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved                                                                                                                                                 | legal and release owners; approved text, policy, registry, package and provenance proof                                                       |
-| OPS-R11 | open                                           | remote authority            | founder/recovery owner, Git identities, target remote, visibility, rulesets, CODEOWNERS, security settings, signed tags, and cutover receipt are unresolved                                                                                                                                                 | founder/security/migration owners; authenticated reviewed plan/apply Evidence                                                                 |
-| OPS-R12 | open                                           | production deployment       | console/hosted deployment ownership, registry, identities, KMS, state, migrations, rollback, observability, recovery, privacy, incident/SLO and cost policy are unresolved                                                                                                                                  | Ops operators and Infrastructure; environment-specific production certification                                                               |
-| OPS-R13 | open                                           | authority cutover           | target-local docs/Skopos adoption and every active Task/Memory disposition are not complete                                                                                                                                                                                                                 | migration and docs owners; strict target-local verification and one-writable-authority receipt                                                |
+| ID      | Status                                         | Gate                        | Blocker or closure                                                                                                                                                                                                                                                                                                                  | Required owner/proof                                                                                                                            |
+| ------- | ---------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| OPS-R01 | closed at checkpoint                           | source convergence          | exact file/docs/tool/root-config disposition is generated from reviewed source policy                                                                                                                                                                                                                                               | Ops maintainers; current ledger check and immutable checkpoint commit                                                                           |
+| OPS-R02 | closed at checkpoint                           | source convergence          | private CLI-core dependencies and imports are absent from AWS and Google                                                                                                                                                                                                                                                            | Ops maintainers; focused provider and boundary proof                                                                                            |
+| OPS-R03 | closed at local source conversion              | local shadow                | console pins exact released public `@unisane/ui@0.1.1` and `@unisane/data-table@0.1.1`; source, emitted, integrity, and isolated registry-consumer proof reject every local or sibling fallback                                                                                                                                     | Ops consumer owner; exact source/emitted inventory, registry integrity, frozen isolated install, build, CSS/assets, and React-singleton proof   |
+| OPS-R04 | reopened; registry blocked                     | local shadow                | source/import and candidate-package shape are converged, but exact `@unisane/devtools@0.1.0` resolves through an umbrella workspace link and is absent from the real registry; its 32-package first-party runtime closure is also unavailable and 31 members are private                                                            | Framework architecture and release owners; select a release shape, admit immutable real-registry artifacts, and prove a clean external consumer |
+| OPS-R05 | open                                           | local shadow                | Platforms retain seven `workspace:*` Ops edges                                                                                                                                                                                                                                                                                      | Platforms owner; later consumer Tasks against immutable candidates                                                                              |
+| OPS-R06 | open                                           | package release             | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved                                                                                                                                                                                                                                        | product and release owners; explicit package admission or privatization                                                                         |
+| OPS-R07 | open; install registry blocked                 | local shadow                | the existing target at `5f565477466528ac49793545b24802fa15d499eb` has no lockfile; its controlled sync Task is deferred because the Framework edge cannot resolve from a real registry. Target Skopos is active, but setup certification, target sync, lock generation, clean install, Node matrix, and hosted CI proof remain open | Framework release owner first, then Ops tooling owner; close OPS-R04 and rerun source-bound target-sync and standalone proof                    |
+| OPS-R08 | local materialization complete; approval open  | local shadow/public history | the history-preserved local candidate exists and exact filter, commit map, parity, excluded-path, ref/tag/signature, integrity, and cleanup receipts pass; migration-tool/final-history approval and any public-history promotion remain open                                                                                       | migration owner and reviewer; approve the migration route and public-history receipts before external promotion                                 |
+| OPS-R09 | technical scan complete; certification blocked | public history              | deterministic full-history scan produced 1,027 redacted findings, but scanner policy, findings, allowlists, remediation, security, privacy, and legal approvals are absent                                                                                                                                                          | security/legal/privacy/provider-data owners; resolve redacted ledger and rerun approved scanners                                                |
+| OPS-R10 | open                                           | public release              | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved                                                                                                                                                                         | legal and release owners; approved text, policy, registry, package and provenance proof                                                         |
+| OPS-R11 | open                                           | remote authority            | founder/recovery owner, Git identities, target remote, visibility, rulesets, CODEOWNERS, security settings, signed tags, and cutover receipt are unresolved                                                                                                                                                                         | founder/security/migration owners; authenticated reviewed plan/apply Evidence                                                                   |
+| OPS-R12 | open                                           | production deployment       | console/hosted deployment ownership, registry, identities, KMS, state, migrations, rollback, observability, recovery, privacy, incident/SLO and cost policy are unresolved                                                                                                                                                          | Ops operators and Infrastructure; environment-specific production certification                                                                 |
+| OPS-R13 | local activation complete; cutover open        | authority cutover           | the local target owns target-local docs and an active Skopos foundation, but its setup remains uncertified, the integration Task is deferred, and no remote or source-authority cutover is approved                                                                                                                                 | migration and docs owners; final target-local certification plus one-writable-authority receipt                                                 |
 
 Every open gate fails closed. No blocker is waived by a recommendation, current green tests, staged
 source, or a future remote name.
@@ -653,19 +668,22 @@ source, or a future remote name.
 
 The next input is frozen as the existing clean standalone candidate at
 `/Users/bhaskarbarma/Desktop/TOP/unisane-repositories/unisane-ops`, exact local `main`
-`4afa21b9553a746dc394af35a3b6da48635b2468`. It has no configured remote and no target lockfile. It
-must remain untouched by this consumer-boundary Task.
+`5f565477466528ac49793545b24802fa15d499eb`. It has no configured remote and no target lockfile. Its
+latest commit contains only corrected target Memory and the deferred integration Task after the
+attempted product/config sync was restored.
 
-The next bounded Task is a controlled target sync, not a second extraction or an authority flip:
+The next bounded work is upstream Framework release-shape resolution, not another Ops extraction,
+resolver retry, or authority flip:
 
-1. re-prove the target is clean, remote-free, at the exact frozen base, and still lacks a lockfile
-2. freeze a new authoritative umbrella source commit and compute the complete admitted Ops delta
-   against that target base, including the exact `0.1.1` UI consumer coordinates and target-owned
-   boundary checks
-3. apply the delta once to the local candidate with path/content parity and no copied sibling source
-   or parallel writable product work
-4. generate the first target-local lockfile through the real resolver and prove a clean frozen
-   standalone install, focused validation, target-local Skopos adoption, and repository integrity
+1. choose and admit the Framework integration release shape; prefer a dependency-light public
+   contract, while treating release of the current 32-package closure as a larger separately
+   approved alternative
+2. prove the chosen exact Framework coordinate and complete runtime closure through immutable
+   real-registry integrity and a clean external consumer, without local or temporary fallback
+3. re-prove the Ops target is clean, remote-free, at the exact frozen base, and lacks a lockfile;
+   then freeze the authoritative umbrella source and recompute the complete target delta
+4. apply that delta once, adapt target-local Scope bindings, generate the first target lock through
+   the real resolver, and prove a second clean frozen install plus focused target validation
 5. record the new local target commit and receipts while keeping the umbrella the sole writable
    authority
 
