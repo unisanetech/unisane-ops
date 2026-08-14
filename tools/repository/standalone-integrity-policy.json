@@ -6,6 +6,7 @@
     ".github",
     ".gitignore",
     ".node-version",
+    ".npmrc",
     "apps",
     "deploy",
     "docs",
@@ -21,18 +22,21 @@
     "tsconfig.base.json",
     "turbo.json"
   ],
-  "externalBlockers": [
+  "externalBlockers": [],
+  "admittedReleasedEdges": [
     {
-      "id": "OPS-R03-UI",
-      "consumer": "@unisane/ops-console",
-      "dependency": "@unisane/ui",
-      "specifier": "workspace:*"
-    },
-    {
-      "id": "OPS-R03-DATA-TABLE",
       "consumer": "@unisane/ops-console",
       "dependency": "@unisane/data-table",
-      "specifier": "workspace:*"
+      "specifier": "0.1.1",
+      "section": "dependencies",
+      "path": "apps/console/package.json"
+    },
+    {
+      "consumer": "@unisane/ops-console",
+      "dependency": "@unisane/ui",
+      "specifier": "0.1.1",
+      "section": "dependencies",
+      "path": "apps/console/package.json"
     }
   ],
   "acceptedPublicPackages": [
@@ -74,9 +78,7 @@
     }
   },
   "generatedOutput": "docs/reference/generated/repository/standalone-repository-integrity.json",
-  "generatedOutputs": [
-    "docs/reference/generated/repository/standalone-repository-integrity.json"
-  ],
+  "generatedOutputs": ["docs/reference/generated/repository/standalone-repository-integrity.json"],
   "excludedSourcePatterns": [
     "docs/reference/generated/**",
     "docs/work/tasks/**",

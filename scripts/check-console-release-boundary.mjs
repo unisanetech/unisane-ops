@@ -16,6 +16,11 @@ const ignoredDirectories = new Set([
   'node_modules',
 ]);
 const boundaryPackages = ['@unisane/data-table', '@unisane/ui'];
+const exactReleasedVersions = Object.freeze({
+  '@unisane/data-table': '0.1.1',
+  '@unisane/tokens': '0.1.1',
+  '@unisane/ui': '0.1.1',
+});
 const relevantPackages = [
   '@material-symbols/font-400',
   '@unisane/data-table',
@@ -24,7 +29,8 @@ const relevantPackages = [
   'react-dom',
 ];
 const privateSpecifier = /^@unisane\/(?:ui|data-table)\/(?:internal|private|src)(?:\/|$)/u;
-const localLocator = /^(?:file|link|portal|workspace):/u;
+const forbiddenPackageLocator =
+  /^(?:(?:file|link|portal|workspace|git|github):|https?:|git\+|npm:|\.\.?\/|\/)/iu;
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, 'utf8'));
@@ -172,12 +178,6 @@ function scanModule(path, root) {
   return { records, violations };
 }
 
-function blocker(policy, id) {
-  const entry = policy.blockers.find((candidate) => candidate.id === id);
-  if (!entry) throw new Error(`Policy does not define blocker ${id}.`);
-  return entry;
-}
-
 function collectAuthored(root, policy, consoleManifest) {
   const sourceRoot = join(root, policy.paths.sourceRoot);
   const configuredFiles = policy.paths.authoredConfigFiles.map((path) => join(root, path));
@@ -259,6 +259,44 @@ function collectAuthored(root, policy, consoleManifest) {
     }
   }
   return { inventory, records: relevantRecords, violations };
+}
+
+export function collectConsoleConsumerEvidence(
+  root = defaultRoot,
+  { policy: suppliedPolicy } = {},
+) {
+  const policy = suppliedPolicy ?? readJson(join(root, defaultPolicyPath));
+  const consoleManifest = readJson(join(root, policy.paths.consoleManifest));
+  const authored = collectAuthored(root, policy, consoleManifest);
+  const imports = authored.records
+    .filter(({ specifier }) => boundaryPackages.includes(packageName(specifier)))
+    .map(({ file, kind, specifier, runtimeNames, typeNames }, order) => ({
+      file,
+      kind,
+      packageName: packageName(specifier),
+      specifier,
+      types: typeNames,
+      values: runtimeNames,
+      order,
+    }));
+  const semanticInventory = {
+    imports,
+    sourceFiles: [...new Set(imports.map(({ file }) => file))].sort(),
+    coordinates: boundaryPackages.map((name) => ({
+      consumerRoot: 'apps/console',
+      consumerName: consoleManifest.name,
+      consumerPrivate: consoleManifest.private,
+      packageName: name,
+      coordinate: consoleManifest.dependencies?.[name] ?? null,
+      field: 'dependencies',
+    })),
+  };
+  return {
+    authored,
+    semanticInventory,
+    semanticInventoryDigest: digest(semanticInventory),
+    violations: authored.violations,
+  };
 }
 
 function collectCssEvidence(root, emittedFiles, expectedDataTableSelectors) {
@@ -426,22 +464,23 @@ export function evaluateConsoleReleaseBoundary(
   const consoleManifest = readJson(join(root, policy.paths.consoleManifest));
   const rootManifest = readJson(join(root, 'package.json'));
   const nodeVersion = readFileSync(join(root, policy.paths.nodeVersionFile), 'utf8').trim();
+  const pnpmConfig = readFileSync(join(root, policy.paths.pnpmConfig), 'utf8').trim();
   const violations = [];
-  const blockers = [];
+  const blockers = policy.blockers ?? [];
   const dependencies = consoleManifest.dependencies ?? {};
   for (const [dependency, expected] of Object.entries(policy.currentDependencies)) {
     const actual = dependencies[dependency] ?? null;
     if (actual !== expected)
       violations.push(`${dependency} coordinate differs from the reviewed current policy`);
   }
-  if (localLocator.test(dependencies['@unisane/ui'] ?? '')) {
-    blockers.push(blocker(policy, 'OPS-CONSOLE-RB01-UI-COORDINATE'));
+  for (const dependency of boundaryPackages) {
+    if (forbiddenPackageLocator.test(dependencies[dependency] ?? '')) {
+      violations.push(`${dependency} retains a local, aliased, Git, URL, or sibling locator`);
+    }
   }
-  if (localLocator.test(dependencies['@unisane/data-table'] ?? '')) {
-    blockers.push(blocker(policy, 'OPS-CONSOLE-RB02-DATA-TABLE-COORDINATE'));
-  }
-  const authored = collectAuthored(root, policy, consoleManifest);
-  violations.push(...authored.violations);
+  const consumerEvidence = collectConsoleConsumerEvidence(root, { policy });
+  const { authored } = consumerEvidence;
+  violations.push(...consumerEvidence.violations);
   if (
     JSON.stringify(authored.inventory.stylesheets) !==
     JSON.stringify(policy.requiredCurrentStylesheets)
@@ -460,28 +499,74 @@ export function evaluateConsoleReleaseBoundary(
     violations.push('standalone .node-version differs from the canonical release-boundary policy');
   }
   if (
-    !policy.registry.uiVersion ||
-    !policy.registry.dataTableVersion ||
-    !policy.registry.accessApproved
+    policy.toolchain.storeDir !== '.pnpm-store' ||
+    pnpmConfig !== `store-dir=${policy.toolchain.storeDir}`
   ) {
-    blockers.push(blocker(policy, 'OPS-CONSOLE-RB05-REGISTRY-VERSION-ACCESS'));
+    violations.push(
+      'standalone pnpm store configuration differs from the exact local-cache policy',
+    );
+  }
+  const registryVersions = {
+    '@unisane/data-table': policy.registry.dataTableVersion,
+    '@unisane/tokens': policy.registry.tokensVersion,
+    '@unisane/ui': policy.registry.uiVersion,
+  };
+  if (policy.registry.accessApproved !== true) {
+    violations.push('registry access must remain approved for the exact released consumer policy');
+  }
+  if (
+    policy.producerTechnicalEvidence.status !== 'verified-existing-published-artifacts' ||
+    policy.producerTechnicalEvidence.publicationAuthorizedByThisTask !== false ||
+    policy.producerTechnicalEvidence.freshArtifactRequiredAtConversion !== false ||
+    Object.entries(policy.producerTechnicalEvidence.versions ?? {}).some(
+      ([name, version]) => policy.cleanExternalConsumer.artifacts?.[name]?.version !== version,
+    ) ||
+    Object.keys(policy.producerTechnicalEvidence.versions ?? {}).length !== 3
+  ) {
+    violations.push('existing producer publication evidence differs from the exact 0.1.1 policy');
   }
   if (
     !policy.cleanExternalConsumer.proofId ||
     policy.cleanExternalConsumer.state !== 'verified-offline-frozen-isolated-consumer' ||
-    !policy.cleanExternalConsumer.producerContentDigest ||
     !policy.cleanExternalConsumer.consumerSemanticInventoryDigest ||
     Object.keys(policy.cleanExternalConsumer.artifacts ?? {}).length !== 3 ||
     Object.keys(policy.cleanExternalConsumer.receipt ?? {}).length !== 6
   ) {
-    blockers.push(blocker(policy, 'OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER'));
+    violations.push('clean external consumer proof contract is incomplete');
   }
   if (
-    !policy.authority.publicationAuthorized ||
-    !policy.authority.consumerConversionAuthorized ||
-    policy.authority.licenseAdmission !== 'approved'
+    consumerEvidence.semanticInventoryDigest !==
+    policy.cleanExternalConsumer.consumerSemanticInventoryDigest
   ) {
-    blockers.push(blocker(policy, 'OPS-CONSOLE-RB07-RELEASE-AUTHORITY'));
+    violations.push('Ops console semantic consumer inventory differs from policy');
+  }
+  for (const [name, expectedVersion] of Object.entries(exactReleasedVersions)) {
+    const artifact = policy.cleanExternalConsumer.artifacts?.[name];
+    const currentCoordinate = boundaryPackages.includes(name)
+      ? policy.currentDependencies[name]
+      : expectedVersion;
+    if (
+      currentCoordinate !== expectedVersion ||
+      registryVersions[name] !== expectedVersion ||
+      artifact?.version !== expectedVersion ||
+      typeof artifact.registryIntegrity !== 'string' ||
+      !artifact.registryIntegrity.startsWith('sha512-')
+    ) {
+      violations.push(
+        `${name} manifest, registry, artifact, and exact released-version contracts are not identical and integrity-backed`,
+      );
+    }
+  }
+  if (
+    policy.authority.producerPublicationVerified !== true ||
+    policy.authority.consumerConversionAuthorized !== true ||
+    policy.authority.consumerDependencyLicenseAdmission !== 'approved' ||
+    policy.authority.opsPublicationAuthorized !== false ||
+    policy.authority.remoteAuthorized !== false ||
+    policy.authority.deploymentAuthorized !== false ||
+    policy.authority.authorityCutoverAuthorized !== false
+  ) {
+    violations.push('consumer-conversion and retained Ops authority gates differ from policy');
   }
   if (
     dependencies.react !== policy.react.currentRange ||
@@ -496,16 +581,15 @@ export function evaluateConsoleReleaseBoundary(
     ? collectEmitted(root, policy)
     : { report: { status: 'not-requested', root: policy.paths.emittedRoot }, violations: [] };
   violations.push(...emitted.violations);
-  const blockerIds = blockers.map(({ id }) => id).sort();
-  const expectedBlockerIds = policy.blockers.map(({ id }) => id).sort();
-  if (JSON.stringify(blockerIds) !== JSON.stringify(expectedBlockerIds)) {
-    violations.push('active blocker set differs from the exact fail-closed policy');
+  if (blockers.length !== 0) {
+    violations.push('closed console consumer boundary policy must not retain active blockers');
   }
   const uniqueViolations = [...new Set(violations)].sort();
+  const conversionReady = uniqueViolations.length === 0 && blockers.length === 0;
   return {
     schemaVersion: 1,
-    state: uniqueViolations.length > 0 ? 'invalid' : 'blocked-with-exact-preconditions',
-    conversionReady: uniqueViolations.length === 0 && blockers.length === 0,
+    state: conversionReady ? 'conversion-ready' : 'invalid',
+    conversionReady,
     package: {
       name: consoleManifest.name,
       version: consoleManifest.version,
@@ -526,6 +610,7 @@ export function evaluateConsoleReleaseBoundary(
     producerTechnicalEvidence: policy.producerTechnicalEvidence,
     requiredPeerExpectations: policy.requiredPeerExpectations,
     authored: authored.inventory,
+    consumerSemanticInventory: consumerEvidence.semanticInventory,
     emitted: emitted.report,
     cleanExternalConsumerProof: policy.cleanExternalConsumer,
     blockers,

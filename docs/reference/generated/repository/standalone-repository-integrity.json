@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "state": "valid-with-exact-external-blockers",
-  "generatedFromPolicySha256": "657a2ac53db399eb3b4df447e1a26a6894dad6c6c34da7bda13de38dd196f7c9",
+  "state": "valid-with-exact-released-edges",
+  "generatedFromPolicySha256": "60f9f85f2d118f01eaeb32919f4fc62291c4c8de7120015b919fd178b4dcb5d2",
   "source": {
-    "fileCount": 956,
-    "digest": "3c4567ef417710c04615008e14ec612a9d46181e3fe10cc8722eef5a78a91217",
+    "fileCount": 957,
+    "digest": "0d468d528339616d7dd55764558ae842f0a7dfd7accc38cbde3f4e9f58e4db5f",
     "excludedGeneratedAndTaskMemory": [
       "docs/reference/generated/**",
       "docs/work/tasks/**",
@@ -28,6 +28,7 @@
       ".github",
       ".gitignore",
       ".node-version",
+      ".npmrc",
       "apps",
       "deploy",
       "docs",
@@ -49,6 +50,7 @@
       ".github",
       ".gitignore",
       ".node-version",
+      ".npmrc",
       "apps",
       "deploy",
       "docs",
@@ -69,34 +71,38 @@
   },
   "packageBoundary": {
     "manifestCount": 14,
-    "foreignWorkspaceEdges": [
+    "foreignWorkspaceEdges": [],
+    "exactExternalBlockers": [],
+    "admittedReleasedEdges": [
       {
         "consumer": "@unisane/ops-console",
         "dependency": "@unisane/data-table",
-        "specifier": "workspace:*",
+        "specifier": "0.1.1",
         "section": "dependencies",
         "path": "apps/console/package.json"
       },
       {
         "consumer": "@unisane/ops-console",
         "dependency": "@unisane/ui",
-        "specifier": "workspace:*",
+        "specifier": "0.1.1",
         "section": "dependencies",
         "path": "apps/console/package.json"
       }
     ],
-    "exactExternalBlockers": [
+    "exactAdmittedReleasedEdges": [
       {
-        "id": "OPS-R03-DATA-TABLE",
         "consumer": "@unisane/ops-console",
         "dependency": "@unisane/data-table",
-        "specifier": "workspace:*"
+        "specifier": "0.1.1",
+        "section": "dependencies",
+        "path": "apps/console/package.json"
       },
       {
-        "id": "OPS-R03-UI",
         "consumer": "@unisane/ops-console",
         "dependency": "@unisane/ui",
-        "specifier": "workspace:*"
+        "specifier": "0.1.1",
+        "section": "dependencies",
+        "path": "apps/console/package.json"
       }
     ],
     "fileOrLinkEdges": [],

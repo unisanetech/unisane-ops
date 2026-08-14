@@ -1,14 +1,15 @@
 id: unisane.ops.console-release-boundary-check
-title: Ops console UI consumer changes require fail-closed release-boundary proof
+title: Ops console UI consumer changes require exact released-package boundary proof
 description:
-  Select the permanent source, emitted, certified offline consumer, stylesheet, asset, peer, and
-  blocker inventory for the Ops console.
+  Select the permanent source, emitted, exact-registry offline consumer, stylesheet, asset, peer,
+  and conversion-readiness proof for the Ops console.
 owner: unisane-ops
 scope:
   - unisane-ops
 strength: required
 appliesTo:
   paths:
+    - .npmrc
     - package.json
     - apps/console/package.json
     - apps/console/src/**

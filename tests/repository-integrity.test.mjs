@@ -10,6 +10,7 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, relative, resolve, sep } from 'node:path';
+import { execPath } from 'node:process';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
@@ -40,14 +41,10 @@ function makeFixture() {
 }
 
 function runGuard(fixtureRoot, mode = '--check') {
-  return spawnSync(
-    process.execPath,
-    [join(fixtureRoot, 'scripts/check-repository-integrity.mjs'), mode],
-    {
-      cwd: fixtureRoot,
-      encoding: 'utf8',
-    },
-  );
+  return spawnSync(execPath, [join(fixtureRoot, 'scripts/check-repository-integrity.mjs'), mode], {
+    cwd: fixtureRoot,
+    encoding: 'utf8',
+  });
 }
 
 function assertGuardFails(result, pattern) {
@@ -74,7 +71,7 @@ function updateManifest(fixtureRoot, path, mutate) {
 test('tracked clean shape satisfies the permanent standalone integrity contract', () => {
   const result = runGuard(root);
   assert.equal(result.status, 0, `${result.stdout}${result.stderr}`);
-  assert.match(result.stdout, /2 exact external blockers/);
+  assert.match(result.stdout, /0 external blockers, and 2 exact admitted released edges/);
 });
 
 test('generated output allowlist and source drift fail closed', () => {
@@ -91,14 +88,38 @@ test('generated output allowlist and source drift fail closed', () => {
   });
 });
 
-test('the exact two external workspace blockers cannot drift', () => {
+test('the exact two admitted released dependencies cannot drift or disappear', () => {
   withFixture((fixtureRoot) => {
     updateManifest(fixtureRoot, 'apps/console/package.json', (manifest) => {
-      manifest.dependencies['@unisane/ui'] = 'workspace:^';
+      manifest.dependencies['@unisane/ui'] = '0.1.2';
     });
     assertGuardFails(
       runGuard(fixtureRoot),
-      /foreign workspace blockers differ from the exact accepted set/,
+      /admitted released dependency edges differ from the exact accepted set/,
+    );
+  });
+
+  withFixture((fixtureRoot) => {
+    updateManifest(fixtureRoot, 'apps/console/package.json', (manifest) => {
+      delete manifest.dependencies['@unisane/data-table'];
+    });
+    assertGuardFails(
+      runGuard(fixtureRoot),
+      /admitted released dependency edges differ from the exact accepted set/,
+    );
+  });
+});
+
+test('a renewed foreign workspace UI edge fails closed', () => {
+  withFixture((fixtureRoot) => {
+    updateManifest(fixtureRoot, 'apps/console/package.json', (manifest) => {
+      manifest.dependencies['@unisane/ui'] = 'workspace:*';
+    });
+    const result = runGuard(fixtureRoot);
+    assertGuardFails(result, /foreign workspace blockers differ from the exact accepted set/);
+    assert.match(
+      `${result.stdout}${result.stderr}`,
+      /admitted released dependency edges differ from the exact accepted set/,
     );
   });
 });

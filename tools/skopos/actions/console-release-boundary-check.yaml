@@ -2,7 +2,7 @@ id: unisane.ops.console-release-boundary-check
 title: Verify the Ops console UI consumer release boundary
 description:
   Prove the authored, emitted, and certified offline external UI/DataTable consumer boundary while
-  preserving exact fail-closed conversion blockers.
+  requiring the exact released-package conversion to remain ready and fail closed on regression.
 category: quality-check
 scope:
   - unisane-ops
@@ -11,6 +11,7 @@ command:
   @unisane/ops-console build && pnpm check:console-release-boundary:emitted
 cwd: .
 inputs:
+  - .npmrc
   - package.json
   - apps/console/package.json
   - apps/console/src
@@ -28,7 +29,7 @@ capabilities:
   process: required
   network: none
   browser: none
-  tools: [node, pnpm, tar]
+  tools: [node, pnpm]
   secrets: []
   services: []
 effects:
@@ -41,7 +42,7 @@ safety: mutating
 requiresApproval: false
 whenToUse:
   Run when Ops console UI/DataTable source imports, emitted declarations, CSS/assets, package
-  requirements, certified external-consumer proof, or release-boundary policy changes.
+  requirements, exact registry consumer proof, or release-boundary policy changes.
 phases:
   - iteration
   - closure

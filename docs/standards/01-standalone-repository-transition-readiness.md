@@ -8,13 +8,20 @@ authority: canonical
 provenance: accepted
 view: transition
 status: accepted
-lastUpdated: '2026-08-11'
+lastUpdated: '2026-08-15'
 ---
 
 # Standalone Unisane Ops Repository Transition Readiness
 
 ## Changelog
 
+- `2026-08-15`: Closed `OPS-R03` at the local Ops consumer boundary. The console now consumes the
+  released public `@unisane/ui@0.1.1` and `@unisane/data-table@0.1.1` packages through exact
+  registry coordinates, and Ops-owned staged source, emitted, repository-integrity, and isolated
+  registry-consumer proof reject workspace, sibling, copied-source, and local-locator fallbacks. The
+  existing standalone target remains an untouched, local, non-authoritative input at
+  `4afa21b9553a746dc394af35a3b6da48635b2468` with no lockfile; package release, hosted CI,
+  history/security/legal review, remote, deployment, and authority gates remain open.
 - `2026-08-11`: Added the permanent fail-closed Ops console UI consumer release-boundary verifier,
   exact authored/emitted inventory, and seven unresolved conversion preconditions without changing
   package coordinates or authority.
@@ -173,13 +180,13 @@ deletion after consumer migration before release.
 All accepted internal `workspace:*` edges may remain only inside the final Ops workspace. The
 following current edges cross the intended repository boundary:
 
-| Consumer                   | Current dependency                              | Final rule                                                                        | Gate                                                                                                                                                        |
-| -------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@unisane/ops-console`     | `@unisane/ui`, `@unisane/data-table`            | consume released or immutable admitted UI candidates; no sibling source           | UI package visibility/release is unresolved; block shadow certification                                                                                     |
-| `@unisane/framework-ops`   | `@unisane/devtools@0.1.0`                       | consume the exact admitted semver-governed `./framework-integration` subpath only | converged; package-owned source, packed runtime/declaration, and root architecture proof reject workspace/file/link fallbacks and private Devtools surfaces |
-| `@unisane/provider-aws`    | provider-local dependency-free output adapter   | retain provider-owned presentation with no private Tooling dependency             | converged; focused package proof required                                                                                                                   |
-| `@unisane/provider-google` | provider-local dependency-free output adapter   | retain provider-owned presentation with no private Tooling dependency             | converged; focused package proof required                                                                                                                   |
-| `unisane` host             | dynamically resolves UI-owned `@unisane/ui-cli` | keep discovery-only structural pack contract; never depend on UI source           | require a released/admitted UI CLI candidate and trust/compatibility proof                                                                                  |
+| Consumer                   | Current dependency                               | Final rule                                                                        | Gate                                                                                                                                                        |
+| -------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@unisane/ops-console`     | `@unisane/ui@0.1.1`, `@unisane/data-table@0.1.1` | consume exact released public UI packages; no sibling or local source             | closed for the local consumer boundary; registry-only standalone proof and repository integrity reject coordinate or fallback drift                         |
+| `@unisane/framework-ops`   | `@unisane/devtools@0.1.0`                        | consume the exact admitted semver-governed `./framework-integration` subpath only | converged; package-owned source, packed runtime/declaration, and root architecture proof reject workspace/file/link fallbacks and private Devtools surfaces |
+| `@unisane/provider-aws`    | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency             | converged; focused package proof required                                                                                                                   |
+| `@unisane/provider-google` | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency             | converged; focused package proof required                                                                                                                   |
+| `unisane` host             | dynamically resolves UI-owned `@unisane/ui-cli`  | keep discovery-only structural pack contract; never depend on UI source           | require a released/admitted UI CLI candidate and trust/compatibility proof                                                                                  |
 
 The accepted Framework bridge is the only Framework integration. Do not pull Framework compiler
 modules, UI source, root Devtools, `create-unisane`, or unrelated Framework product tooling into Ops
@@ -583,7 +590,7 @@ release, or authority promotion was performed or certified.
 
 ## Ops Console UI Consumer Release Boundary
 
-**Fact:** `pnpm check:console-release-boundary` is the permanent target-owned authored consumer
+**Fact:** `pnpm check:console-release-boundary` is the permanent Ops-owned staged authored consumer
 inventory. At Task `T-5bdf44c9` it records 153 UI/DataTable import declarations across 53 console
 files: 142 `@unisane/ui` declarations across 50 files and 11 `@unisane/data-table` declarations
 across ten files. The inventory contains zero computed loaders and rejects nonliteral `import()`,
@@ -597,69 +604,71 @@ browser composition root imports Material Symbols, UI, then `@unisane/data-table
 exact order. The emitted proof binds three DataTable-only selector markers, resolves every local CSS
 asset, and rejects retained `@import` rules or private/sibling source escapes.
 
-**Accepted contract:** UI Task `T-b0cfbc09` and snapshot `S-94578b4f2066` are an integrated
-technical producer certificate reference only. The Ops clean-consumer proof binds its exact package
-versions, content digests, and tarball digests as technical inputs; those facts do not admit their
-license, registry, publication, or conversion authority. A fresh producer artifact is still required
-at conversion time.
+**Accepted contract:** `@unisane/ui@0.1.1` and `@unisane/data-table@0.1.1` are released public UI
+inputs admitted for this exact Ops consumer conversion. The console manifest pins both versions
+exactly. The standalone integrity owner records them as the only two admitted released UI edges and
+requires zero foreign workspace edges. Any missing package, different version, dependency-section or
+consumer drift, workspace locator, or file/link fallback fails closed.
 
-The source-bound policy keeps four exact preconditions open. The console, staged root manifest, and
-`.node-version` share the exact Node `24.13.0` runtime contract, and the isolated consumer proof
-closes RB06 by verifying a strictly offline frozen install of the certified tarballs against the
-exact 153-declaration/53-file Ops semantic inventory. The proof also verifies one React/ReactDOM
-singleton, TypeScript, browser build, runtime exports and dynamic dependencies, resolved CSS,
-Material Symbols, and DataTable assets:
+The console, staged root manifest, and `.node-version` share the exact Node `24.13.0` runtime
+contract. The isolated consumer proof starts from the Ops-owned authored inventory, resolves the
+exact registry packages without consulting the umbrella or a sibling UI checkout, performs an
+offline lockfile-only resolution and frozen install, and rejects workspace, file, link, portal, Git,
+alias, copied-source, and sibling fallbacks. It binds registry integrity, installed versions and
+realpaths, one React/ReactDOM singleton, TypeScript, the browser build, runtime and dynamic exports,
+resolved CSS, Material Symbols, and DataTable assets to the same 153-declaration/53-file semantic
+inventory.
 
-1. replace `@unisane/ui` only with an owner-approved immutable registry coordinate
-2. replace `@unisane/data-table` only with an owner-approved immutable registry coordinate
-3. approve registry versions, visibility, and access
-4. obtain explicit legal, security, publication, and consumer-conversion authority
+The staged root `.npmrc` pins `store-dir=.pnpm-store`, and `.gitignore` excludes that runtime cache.
+A normal standalone install therefore populates the same repository-local store used by the
+network-free external-consumer Action; the proof does not depend on an umbrella or machine-global
+store.
 
-The verifier passes only when that exact blocked state is reproduced; its separate conversion-ready
-mode fails while any blocker remains. Green source or emitted proof therefore cannot be mistaken for
-permission to change coordinates, publish, or cut over.
+This closes only local Ops consumer conversion. It does not authorize an Ops package publication,
+public-history promotion, hosted CI result, remote or visibility change, deployment, or source-
+authority cutover. Those gates remain independently fail-closed below.
 
 ## Gate And Blocker Ledger
 
-| ID      | Status                                         | Gate                        | Blocker or closure                                                                                                                                                                                                                                                                  | Required owner/proof                                                                                        |
-| ------- | ---------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| OPS-R01 | closed at checkpoint                           | source convergence          | exact file/docs/tool/root-config disposition is generated from reviewed source policy                                                                                                                                                                                               | Ops maintainers; current ledger check and immutable checkpoint commit                                       |
-| OPS-R02 | closed at checkpoint                           | source convergence          | private CLI-core dependencies and imports are absent from AWS and Google                                                                                                                                                                                                            | Ops maintainers; focused provider and boundary proof                                                        |
-| OPS-R03 | open                                           | local shadow                | console retains exactly two private UI workspace edges; producer artifacts, DataTable CSS, the Node floor, and an offline frozen isolated consumer are technically certified, but registry/version access and legal/release authority preconditions remain open                     | UI and Ops release owners; exact four-blocker consumer verifier and approved immutable registry coordinates |
-| OPS-R04 | closed at integration                          | local shadow                | Framework bridge consumes exact admitted `@unisane/devtools@0.1.0` through `./framework-integration`, with no workspace/file/link fallback or private surface                                                                                                                       | Framework and Ops release owners; package-owned and serial integration proof                                |
-| OPS-R05 | open                                           | local shadow                | Platforms retain seven `workspace:*` Ops edges                                                                                                                                                                                                                                      | Platforms owner; later consumer Tasks against immutable candidates                                          |
-| OPS-R06 | open                                           | package release             | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved                                                                                                                                                                                        | product and release owners; explicit package admission or privatization                                     |
-| OPS-R07 | open                                           | local shadow                | pnpm setup ordering, exact generated-output ownership, standalone integrity, and typecheck declarations are corrected, but target lockfile generation, clean install, Node matrix, hosted CI, security/license gates, and target-local Skopos adoption remain deliberately deferred | Ops tooling owner; approved later materialization proof only                                                |
-| OPS-R08 | technical execution complete; approval open    | local shadow/public history | exact filter, commit map, parity, excluded-path, ref/tag/signature, integrity, and cleanup receipts pass in the disposable candidate; tool approval and final materialization remain absent                                                                                         | migration owner and reviewer; approve receipts and a new immutable source before materialization            |
-| OPS-R09 | technical scan complete; certification blocked | public history              | deterministic full-history scan produced 1,027 redacted findings, but scanner policy, findings, allowlists, remediation, security, privacy, and legal approvals are absent                                                                                                          | security/legal/privacy/provider-data owners; resolve redacted ledger and rerun approved scanners            |
-| OPS-R10 | open                                           | public release              | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved                                                                                                                         | legal and release owners; approved text, policy, registry, package and provenance proof                     |
-| OPS-R11 | open                                           | remote authority            | founder/recovery owner, Git identities, target remote, visibility, rulesets, CODEOWNERS, security settings, signed tags, and cutover receipt are unresolved                                                                                                                         | founder/security/migration owners; authenticated reviewed plan/apply Evidence                               |
-| OPS-R12 | open                                           | production deployment       | console/hosted deployment ownership, registry, identities, KMS, state, migrations, rollback, observability, recovery, privacy, incident/SLO and cost policy are unresolved                                                                                                          | Ops operators and Infrastructure; environment-specific production certification                             |
-| OPS-R13 | open                                           | authority cutover           | target-local docs/Skopos adoption and every active Task/Memory disposition are not complete                                                                                                                                                                                         | migration and docs owners; strict target-local verification and one-writable-authority receipt              |
+| ID      | Status                                         | Gate                        | Blocker or closure                                                                                                                                                                                                                                                                                          | Required owner/proof                                                                                                                          |
+| ------- | ---------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| OPS-R01 | closed at checkpoint                           | source convergence          | exact file/docs/tool/root-config disposition is generated from reviewed source policy                                                                                                                                                                                                                       | Ops maintainers; current ledger check and immutable checkpoint commit                                                                         |
+| OPS-R02 | closed at checkpoint                           | source convergence          | private CLI-core dependencies and imports are absent from AWS and Google                                                                                                                                                                                                                                    | Ops maintainers; focused provider and boundary proof                                                                                          |
+| OPS-R03 | closed at local source conversion              | local shadow                | console pins exact released public `@unisane/ui@0.1.1` and `@unisane/data-table@0.1.1`; source, emitted, integrity, and isolated registry-consumer proof reject every local or sibling fallback                                                                                                             | Ops consumer owner; exact source/emitted inventory, registry integrity, frozen isolated install, build, CSS/assets, and React-singleton proof |
+| OPS-R04 | closed at integration                          | local shadow                | Framework bridge consumes exact admitted `@unisane/devtools@0.1.0` through `./framework-integration`, with no workspace/file/link fallback or private surface                                                                                                                                               | Framework and Ops release owners; package-owned and serial integration proof                                                                  |
+| OPS-R05 | open                                           | local shadow                | Platforms retain seven `workspace:*` Ops edges                                                                                                                                                                                                                                                              | Platforms owner; later consumer Tasks against immutable candidates                                                                            |
+| OPS-R06 | open                                           | package release             | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved                                                                                                                                                                                                                | product and release owners; explicit package admission or privatization                                                                       |
+| OPS-R07 | open                                           | local shadow                | local consumer proof and the staged integrity contract are corrected, but the existing target at `4afa21b9553a746dc394af35a3b6da48635b2468` has no lockfile; controlled target sync, target lock generation, clean target install, Node matrix, hosted CI, and target-local Skopos adoption remain deferred | Ops tooling owner; source-bound target-sync and standalone target proof                                                                       |
+| OPS-R08 | technical execution complete; approval open    | local shadow/public history | exact filter, commit map, parity, excluded-path, ref/tag/signature, integrity, and cleanup receipts pass in the disposable candidate; tool approval and final materialization remain absent                                                                                                                 | migration owner and reviewer; approve receipts and a new immutable source before materialization                                              |
+| OPS-R09 | technical scan complete; certification blocked | public history              | deterministic full-history scan produced 1,027 redacted findings, but scanner policy, findings, allowlists, remediation, security, privacy, and legal approvals are absent                                                                                                                                  | security/legal/privacy/provider-data owners; resolve redacted ledger and rerun approved scanners                                              |
+| OPS-R10 | open                                           | public release              | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved                                                                                                                                                 | legal and release owners; approved text, policy, registry, package and provenance proof                                                       |
+| OPS-R11 | open                                           | remote authority            | founder/recovery owner, Git identities, target remote, visibility, rulesets, CODEOWNERS, security settings, signed tags, and cutover receipt are unresolved                                                                                                                                                 | founder/security/migration owners; authenticated reviewed plan/apply Evidence                                                                 |
+| OPS-R12 | open                                           | production deployment       | console/hosted deployment ownership, registry, identities, KMS, state, migrations, rollback, observability, recovery, privacy, incident/SLO and cost policy are unresolved                                                                                                                                  | Ops operators and Infrastructure; environment-specific production certification                                                               |
+| OPS-R13 | open                                           | authority cutover           | target-local docs/Skopos adoption and every active Task/Memory disposition are not complete                                                                                                                                                                                                                 | migration and docs owners; strict target-local verification and one-writable-authority receipt                                                |
 
 Every open gate fails closed. No blocker is waived by a recommendation, current green tests, staged
 source, or a future remote name.
 
 ## Safest Next Bounded Task After Proof Review
 
-No final materialization Task may start until a reviewer accepts the technical receipts and one of
-these conditions holds: the two remaining UI dependency blockers are resolved, or an accountable
-owner explicitly approves a fail-closed materialization contract that keeps them unresolved without
-fallbacks. Security and legal owners must also disposition the redacted scan ledger or explicitly
-bound a later non-public local-only proof.
+The next input is frozen as the existing clean standalone candidate at
+`/Users/bhaskarbarma/Desktop/TOP/unisane-repositories/unisane-ops`, exact local `main`
+`4afa21b9553a746dc394af35a3b6da48635b2468`. It has no configured remote and no target lockfile. It
+must remain untouched by this consumer-boundary Task.
 
-The next authorized route is:
+The next bounded Task is a controlled target sync, not a second extraction or an authority flip:
 
-1. review the filter, commit map, parity, cleanup, scan, and owner-decision receipts
-2. integrate the proof-overlay CI/integrity/typecheck corrections into umbrella `dev`
-3. resolve or preserve `@unisane/ui` and `@unisane/data-table` only through their accountable owners
-   and the exact console consumer release-boundary verifier; never invent versions or copy sibling
-   source
-4. approve scanner, license, NOTICE, contributor, asset, fixture, provider-term, signing, and
-   remediation policy, then rerun the complete scan from a newly approved immutable `dev` commit
-5. only under a separate approved Task, materialize the final local repository, generate its
-   lockfile, adopt target-local Skopos, and prove clean install/CI while preserving one writable
+1. re-prove the target is clean, remote-free, at the exact frozen base, and still lacks a lockfile
+2. freeze a new authoritative umbrella source commit and compute the complete admitted Ops delta
+   against that target base, including the exact `0.1.1` UI consumer coordinates and target-owned
+   boundary checks
+3. apply the delta once to the local candidate with path/content parity and no copied sibling source
+   or parallel writable product work
+4. generate the first target-local lockfile through the real resolver and prove a clean frozen
+   standalone install, focused validation, target-local Skopos adoption, and repository integrity
+5. record the new local target commit and receipts while keeping the umbrella the sole writable
    authority
 
-This section defines sequencing only. It does not authorize final repository creation, lockfile
-generation, Skopos activation, remote creation, publication, deployment, or cutover.
+History/scanner approval, security and legal disposition, package release, hosted CI, remote
+governance, deployment, and authority cutover remain separate gates. This section authorizes none of
+those actions and does not authorize a push, publication, visibility change, deployment, or cutover.

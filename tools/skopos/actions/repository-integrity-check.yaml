@@ -1,14 +1,16 @@
 id: unisane-ops.repository-integrity.check
 title: Check standalone repository integrity and generated drift
 description:
-  Verify the target-local repository shape, exact external blockers, and generated integrity receipt
-  without consulting an umbrella parent checkout.
+  Verify the target-local repository shape, zero foreign workspace blockers, two exact released UI
+  dependency edges, and generated integrity receipt without consulting an umbrella parent checkout.
 category: quality-check
 scope:
   - unisane-ops
 command: pnpm check:repository-integrity
 cwd: .
 inputs:
+  - .gitignore
+  - .npmrc
   - package.json
   - apps
   - packages
@@ -33,8 +35,8 @@ workspaceMode: overlay-safe
 safety: read-only
 requiresApproval: false
 whenToUse:
-  Run after changing the standalone source shape, blocker policy, integrity generator, or generated
-  receipt.
+  Run after changing the standalone source shape, released-edge policy, integrity generator, or
+  generated receipt.
 phases:
   - closure
 risks:

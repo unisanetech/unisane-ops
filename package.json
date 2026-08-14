@@ -6,8 +6,8 @@
   "scripts": {
     "build": "turbo run build",
     "check:console-external-consumer": "node scripts/check-console-external-consumer.mjs",
-    "check:console-release-boundary": "node scripts/check-console-release-boundary.mjs --check-source",
-    "check:console-release-boundary:emitted": "node scripts/check-console-release-boundary.mjs --check-emitted",
+    "check:console-release-boundary": "node scripts/check-console-release-boundary.mjs --check-source --require-conversion-ready",
+    "check:console-release-boundary:emitted": "node scripts/check-console-release-boundary.mjs --check-emitted --require-conversion-ready",
     "check:generated": "node scripts/check-repository-integrity.mjs --check-generated",
     "check:repository-integrity": "node scripts/check-repository-integrity.mjs --check",
     "generate:repository-integrity": "node scripts/check-repository-integrity.mjs --write",
@@ -15,7 +15,7 @@
     "package:check": "node scripts/check-package-contents.mjs",
     "test": "node --test tests/*.test.mjs && turbo run test",
     "typecheck": "turbo run check-types",
-    "verify": "pnpm check:generated && pnpm check:repository-integrity && pnpm check:console-release-boundary && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:console-release-boundary:emitted && pnpm package:check"
+    "verify": "pnpm check:generated && pnpm check:repository-integrity && pnpm check:console-release-boundary && pnpm check:console-external-consumer && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:console-release-boundary:emitted && pnpm package:check"
   },
   "devDependencies": {
     "@changesets/cli": "2.29.8",

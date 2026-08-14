@@ -5,111 +5,134 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 import {
-  assertCertifiedInputs,
+  collectConsoleConsumerEvidence,
+  evaluateConsoleReleaseBoundary,
+} from '../scripts/check-console-release-boundary.mjs';
+import {
+  assertConversionReadyBoundary,
   assertExactSingletons,
   assertFrozenConsumerLock,
+  assertOpsSemanticEvidence,
   assertReceiptContract,
-  hashValue,
   normalizedConsumerLockDigest,
-  selectOpsSemanticInventory,
 } from '../scripts/check-console-external-consumer.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const policy = JSON.parse(
   readFileSync(join(root, 'tools/repository/console-release-boundary-policy.json'), 'utf8'),
 );
+const artifacts = policy.cleanExternalConsumer.artifacts;
 
-function artifact(name) {
-  return { name, ...policy.cleanExternalConsumer.artifacts[name] };
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
 }
 
-function certificate() {
-  const imports = [
-    {
-      file: 'unisane-ops/apps/console/src/browser/main.tsx',
-      packageName: '@unisane/ui',
-      specifier: '@unisane/ui/styles.css',
-      types: [],
-      values: [],
-      order: 0,
-    },
-  ];
-  return {
-    publicationAuthorized: false,
-    consumerConversionAuthorized: false,
-    externalEffects: [],
-    sourceIdentity: {
-      producerContentDigest: policy.cleanExternalConsumer.producerContentDigest,
-    },
-    artifacts: [
-      artifact('@unisane/tokens'),
-      artifact('@unisane/ui'),
-      artifact('@unisane/data-table'),
+function exactLock() {
+  const importerDependencies = Object.entries(artifacts)
+    .map(
+      ([name, artifact]) =>
+        `    '${name}':\n      specifier: ${artifact.version}\n      version: ${artifact.version}\n`,
+    )
+    .join('');
+  const packages = Object.entries(artifacts)
+    .map(
+      ([name, artifact]) =>
+        `  '${name}@${artifact.version}':\n    resolution: {integrity: ${artifact.registryIntegrity}}\n`,
+    )
+    .join('');
+  return `lockfileVersion: '9.0'\n\nimporters:\n\n  .:\n    dependencies:\n${importerDependencies}\npackages:\n${packages}`;
+}
+
+test('Ops-owned semantic evidence is exact and independent of a producer checkout', () => {
+  const evidence = collectConsoleConsumerEvidence(root, { policy });
+  const inventory = assertOpsSemanticEvidence(evidence, policy);
+  assert.equal(inventory.imports.length, 153);
+  assert.equal(inventory.sourceFiles.length, 53);
+  assert.deepEqual(
+    inventory.coordinates.map(({ packageName, coordinate }) => ({ packageName, coordinate })),
+    [
+      { packageName: '@unisane/data-table', coordinate: '0.1.1' },
+      { packageName: '@unisane/ui', coordinate: '0.1.1' },
     ],
-    consumerImports: {
-      semanticInventory: {
-        imports,
-        sourceFiles: [imports[0].file],
-        coordinates: [
-          {
-            consumerRoot: 'unisane-ops/apps/console',
-            consumerName: '@unisane/ops-console',
-            consumerPrivate: true,
-            packageName: '@unisane/data-table',
-            coordinate: 'workspace:*',
-            field: 'dependencies',
-          },
-          {
-            consumerRoot: 'unisane-ops/apps/console',
-            consumerName: '@unisane/ops-console',
-            consumerPrivate: true,
-            packageName: '@unisane/ui',
-            coordinate: 'workspace:*',
-            field: 'dependencies',
-          },
-        ],
-      },
-    },
-  };
-}
-
-test('Ops semantic inventory excludes non-console consumers', () => {
-  const value = certificate();
-  value.consumerImports.semanticInventory.imports.push({
-    ...value.consumerImports.semanticInventory.imports[0],
-    file: 'unisane/starters/saaskit/src/main.tsx',
-  });
-  const inventory = selectOpsSemanticInventory(value);
-  assert.equal(inventory.imports.length, 1);
-  assert.equal(inventory.coordinates.length, 2);
-});
-
-test('certified producer and consumer digest drift fails closed', () => {
-  const value = certificate();
-  value.sourceIdentity.producerContentDigest = '0'.repeat(64);
-  assert.throws(
-    () => assertCertifiedInputs(value, policy, new Map()),
-    /producer content digest differs/u,
-  );
-  assert.notEqual(
-    hashValue(selectOpsSemanticInventory(certificate())),
-    policy.cleanExternalConsumer.consumerSemanticInventoryDigest,
   );
 });
 
-test('lock permits only exact certified tarball locators', () => {
-  const lock = [
-    'file:/private/tmp/proof/tarballs/unisane-tokens-0.1.0.tgz',
-    'file:/private/tmp/proof/tarballs/unisane-ui-0.1.0.tgz',
-    'file:/private/tmp/proof/tarballs/unisane-data-table-0.1.0.tgz',
-  ].join('\n');
-  assert.doesNotThrow(() => assertFrozenConsumerLock(lock));
-  assert.equal(normalizedConsumerLockDigest(lock).length, 64);
-  assert.throws(() => assertFrozenConsumerLock(`${lock}\nworkspace:*\n`), /retained a workspace/u);
+test('semantic inventory or consumer coordinate drift fails closed', () => {
+  const evidence = collectConsoleConsumerEvidence(root, { policy });
+  const changedPolicy = clone(policy);
+  changedPolicy.cleanExternalConsumer.consumerSemanticInventoryDigest = '0'.repeat(64);
   assert.throws(
-    () => assertFrozenConsumerLock(`${lock}\nfile:../source-copy\n`),
-    /retained a workspace/u,
+    () => assertOpsSemanticEvidence(evidence, changedPolicy),
+    /semantic inventory differs/u,
   );
+
+  const changedEvidence = clone(evidence);
+  changedEvidence.semanticInventory.coordinates[0].coordinate = 'workspace:*';
+  assert.throws(
+    () => assertOpsSemanticEvidence(changedEvidence, policy),
+    /non-registry consumer coordinate/u,
+  );
+});
+
+test('lock requires exact registry versions and immutable integrities', () => {
+  const lock = exactLock();
+  assert.doesNotThrow(() => assertFrozenConsumerLock(lock, artifacts));
+  assert.equal(normalizedConsumerLockDigest(lock, artifacts).length, 64);
+  assert.throws(
+    () => assertFrozenConsumerLock(lock.replace('specifier: 0.1.1', 'specifier: 0.1.2'), artifacts),
+    /does not bind/u,
+  );
+  assert.throws(
+    () =>
+      assertFrozenConsumerLock(
+        lock.replace(artifacts['@unisane/ui'].registryIntegrity, 'sha512-drift'),
+        artifacts,
+      ),
+    /integrity differs/u,
+  );
+});
+
+test('lock rejects every local, sibling, copied-source, alias, and Git fallback class', () => {
+  const lock = exactLock();
+  const specifierFallbacks = [
+    'workspace:*',
+    'file:../copied-ui',
+    'link:../unisane-ui',
+    'portal:../unisane-ui',
+    'npm:@unisane/ui@0.1.1',
+    'github:unisane/ui',
+    'https://registry.example.test/@unisane/ui.tgz',
+    '/Users/example/unisane-ui',
+    '../Unisane/unisane-ui',
+  ];
+  for (const fallback of specifierFallbacks) {
+    assert.throws(
+      () => assertFrozenConsumerLock(`${lock}\n      specifier: ${fallback}\n`, artifacts),
+      /retained a workspace, file, link, portal, Git, sibling, copied-source, or local fallback/u,
+    );
+  }
+
+  const lockFragments = [
+    "  'transitive@file:../copied-ui':\n    resolution: {directory: ../copied-ui}",
+    "  'transitive@git+file:../copied-ui':\n    resolution: {repository: git+file:../copied-ui}",
+    "  'transitive@gitlab:owner/repo':\n    resolution: {repository: gitlab:owner/repo}",
+    "  'transitive@bitbucket:owner/repo':\n    resolution: {repository: bitbucket:owner/repo}",
+    "  'transitive@ssh://git@example.test/repo':\n    resolution: {repo: ssh://git@example.test/repo}",
+    "  'transitive@git@example.test:owner/repo':\n    resolution: {repository: git@example.test:owner/repo}",
+  ];
+  for (const fragment of lockFragments) {
+    assert.throws(
+      () => assertFrozenConsumerLock(`${lock}\n${fragment}\n`, artifacts),
+      /retained a workspace, file, link, portal, Git, sibling, copied-source, or local fallback/u,
+    );
+  }
+});
+
+test('standalone proof rejects an authority contract that reopens external effects', () => {
+  const changedPolicy = clone(policy);
+  changedPolicy.authority.opsPublicationAuthorized = true;
+  const boundary = evaluateConsoleReleaseBoundary(root, { policy: changedPolicy });
+  assert.throws(() => assertConversionReadyBoundary(boundary), /not conversion-ready/u);
 });
 
 test('React and ReactDOM must resolve to exact singleton paths', () => {
@@ -122,7 +145,7 @@ test('React and ReactDOM must resolve to exact singleton paths', () => {
   );
 });
 
-test('material receipt drift fails closed', () => {
+test('material receipt drift fails closed and reports refreshable observed values', () => {
   const expected = policy.cleanExternalConsumer.receipt;
   const receipt = {
     install: { normalizedLockSha256: expected.normalizedLockSha256 },
@@ -140,5 +163,5 @@ test('material receipt drift fails closed', () => {
   };
   assert.doesNotThrow(() => assertReceiptContract(receipt, expected));
   receipt.validation.runtimeModuleCount += 1;
-  assert.throws(() => assertReceiptContract(receipt, expected), /receipt differs/u);
+  assert.throws(() => assertReceiptContract(receipt, expected), /expected=.*observed=/u);
 });

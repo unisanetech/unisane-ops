@@ -43,10 +43,10 @@
   },
   "dependencies": {
     "@material-symbols/font-400": "^0.40.2",
-    "@unisane/data-table": "workspace:*",
+    "@unisane/data-table": "0.1.1",
     "@unisane/growth": "workspace:*",
     "@unisane/ops-engine": "workspace:*",
-    "@unisane/ui": "workspace:*",
+    "@unisane/ui": "0.1.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

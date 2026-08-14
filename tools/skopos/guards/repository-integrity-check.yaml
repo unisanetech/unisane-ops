@@ -1,14 +1,16 @@
 id: unisane-ops.repository-integrity.check
 title: Standalone repository changes require integrity and generated-drift proof
 description:
-  Select the target-local repository shape, exact external blocker, and generated integrity receipt
-  verification.
+  Select the target-local repository shape, zero foreign workspace blockers, exact released UI
+  edges, and generated integrity receipt verification.
 owner: unisane-ops
 scope:
   - unisane-ops
 strength: required
 appliesTo:
   paths:
+    - .gitignore
+    - .npmrc
     - package.json
     - apps/**
     - packages/**

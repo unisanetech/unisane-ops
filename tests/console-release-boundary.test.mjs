@@ -13,7 +13,10 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
-import { evaluateConsoleReleaseBoundary } from '../scripts/check-console-release-boundary.mjs';
+import {
+  collectConsoleConsumerEvidence,
+  evaluateConsoleReleaseBoundary,
+} from '../scripts/check-console-release-boundary.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const policy = JSON.parse(
@@ -31,6 +34,7 @@ function makeFixture() {
     recursive: true,
   });
   for (const path of [
+    '.npmrc',
     '.node-version',
     'package.json',
     'apps/console/package.json',
@@ -78,25 +82,36 @@ function createEmittedFixture(fixtureRoot) {
   writeFileSync(join(browser, 'symbols.woff2'), 'fixture-font');
 }
 
-test('current source inventory remains blocked on four exact preconditions', () => {
+test('current source inventory is conversion-ready on exact released registry coordinates', () => {
   const report = evaluateConsoleReleaseBoundary(root);
-  assert.equal(report.state, 'blocked-with-exact-preconditions');
-  assert.equal(report.conversionReady, false);
+  assert.equal(report.state, 'conversion-ready');
+  assert.equal(report.conversionReady, true);
   assert.equal(report.authored.declarationCount, 153);
   assert.equal(report.authored.sourceFileCount, 53);
   assert.equal(report.authored.packages['@unisane/ui'].declarationCount, 142);
   assert.equal(report.authored.packages['@unisane/data-table'].declarationCount, 11);
   assert.equal(report.authored.computedLoaderCount, 0);
-  assert.deepEqual(
-    report.blockers.map(({ id }) => id),
-    policy.blockers.map(({ id }) => id),
-  );
+  assert.deepEqual(report.package.coordinates, {
+    '@unisane/data-table': '0.1.1',
+    '@unisane/ui': '0.1.1',
+  });
+  assert.deepEqual(report.blockers, []);
   assert.deepEqual(report.violations, []);
-  assert.equal(report.authority.publicationAuthorized, false);
-  assert.equal(report.authority.consumerConversionAuthorized, false);
+  assert.equal(report.authority.producerPublicationVerified, true);
+  assert.equal(report.authority.consumerConversionAuthorized, true);
+  assert.equal(report.authority.consumerDependencyLicenseAdmission, 'approved');
+  assert.equal(report.authority.opsPublicationAuthorized, false);
+  assert.equal(report.authority.remoteAuthorized, false);
+  assert.equal(report.authority.deploymentAuthorized, false);
+  assert.equal(report.authority.authorityCutoverAuthorized, false);
+  const evidence = collectConsoleConsumerEvidence(root, { policy });
   assert.equal(
-    report.blockers.some(({ id }) => id === 'OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER'),
-    false,
+    evidence.semanticInventoryDigest,
+    policy.cleanExternalConsumer.consumerSemanticInventoryDigest,
+  );
+  assert.deepEqual(
+    evidence.semanticInventory.coordinates,
+    report.consumerSemanticInventory.coordinates,
   );
 });
 
@@ -202,6 +217,12 @@ test('stylesheet, Material Symbols, React singleton, and Node facts stay explici
     const drift = evaluateConsoleReleaseBoundary(fixtureRoot, { policy });
     assert.match(drift.violations.join('\n'), /standalone \.node-version differs/u);
   });
+
+  withFixture((fixtureRoot) => {
+    writeFileSync(join(fixtureRoot, '.npmrc'), 'store-dir=.different-store\n');
+    const drift = evaluateConsoleReleaseBoundary(fixtureRoot, { policy });
+    assert.match(drift.violations.join('\n'), /pnpm store configuration differs/u);
+  });
 });
 
 test('emitted declarations, CSS, and Material Symbols assets are closed and resolvable', () => {
@@ -286,26 +307,57 @@ test('emitted private or first-party UI imports cannot escape the browser bundle
   });
 });
 
-test('authority or blocker drift cannot make conversion appear complete', () => {
+test('authority or blocker drift cannot keep conversion complete', () => {
   const changedPolicy = clone(policy);
-  changedPolicy.authority = {
-    publicationAuthorized: true,
-    consumerConversionAuthorized: true,
-    licenseAdmission: 'approved',
-  };
+  changedPolicy.authority.opsPublicationAuthorized = true;
+  changedPolicy.blockers.push({ id: 'STALE-BLOCKER' });
   const report = evaluateConsoleReleaseBoundary(root, { policy: changedPolicy });
   assert.equal(report.conversionReady, false);
   assert.match(
     report.violations.join('\n'),
-    /active blocker set differs from the exact fail-closed policy/u,
+    /retained Ops authority gates differ|must not retain active blockers/u,
   );
 });
 
 test('missing clean external consumer proof fails closed', () => {
   const changedPolicy = clone(policy);
   changedPolicy.cleanExternalConsumer.proofId = null;
-  assert.throws(
-    () => evaluateConsoleReleaseBoundary(root, { policy: changedPolicy }),
-    /does not define blocker OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER/u,
+  const report = evaluateConsoleReleaseBoundary(root, { policy: changedPolicy });
+  assert.equal(report.conversionReady, false);
+  assert.match(
+    report.violations.join('\n'),
+    /clean external consumer proof contract is incomplete/u,
   );
+});
+
+test('registry, integrity, and local coordinate drift fail closed', () => {
+  const changedPolicy = clone(policy);
+  changedPolicy.cleanExternalConsumer.artifacts['@unisane/ui'].registryIntegrity = 'sha256-drift';
+  const integrityReport = evaluateConsoleReleaseBoundary(root, { policy: changedPolicy });
+  assert.equal(integrityReport.conversionReady, false);
+
+  withFixture((fixtureRoot) => {
+    updateManifest(fixtureRoot, (manifest) => {
+      manifest.dependencies['@unisane/ui'] = 'file:../../copied-ui';
+    });
+    const report = evaluateConsoleReleaseBoundary(fixtureRoot, { policy });
+    assert.match(report.violations.join('\n'), /local, aliased, Git, URL, or sibling locator/u);
+  });
+
+  withFixture((fixtureRoot) => {
+    updateManifest(fixtureRoot, (manifest) => {
+      manifest.dependencies['@unisane/ui'] = '0.1.2';
+    });
+    const coordinatedPolicy = clone(policy);
+    coordinatedPolicy.currentDependencies['@unisane/ui'] = '0.1.2';
+    coordinatedPolicy.registry.uiVersion = '0.1.2';
+    coordinatedPolicy.cleanExternalConsumer.artifacts['@unisane/ui'].version = '0.1.2';
+    coordinatedPolicy.producerTechnicalEvidence.versions['@unisane/ui'] = '0.1.2';
+    const report = evaluateConsoleReleaseBoundary(fixtureRoot, { policy: coordinatedPolicy });
+    assert.equal(report.conversionReady, false);
+    assert.match(
+      report.violations.join('\n'),
+      /exact released-version contracts are not identical/u,
+    );
+  });
 });

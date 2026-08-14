@@ -18,17 +18,24 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
+import {
+  collectConsoleConsumerEvidence,
+  evaluateConsoleReleaseBoundary,
+} from './check-console-release-boundary.mjs';
+
 const opsRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const umbrellaRoot = path.resolve(opsRoot, '..');
-const packageProfiles = Object.freeze([
-  Object.freeze({ name: '@unisane/tokens', tarball: 'unisane-tokens-0.1.0.tgz' }),
-  Object.freeze({ name: '@unisane/ui', tarball: 'unisane-ui-0.1.0.tgz' }),
-  Object.freeze({ name: '@unisane/data-table', tarball: 'unisane-data-table-0.1.0.tgz' }),
+const packageNames = Object.freeze(['@unisane/tokens', '@unisane/ui', '@unisane/data-table']);
+const forbiddenFallbackPatterns = Object.freeze([
+  /(?:^|[\s'"@{[(])(?:workspace|file|link|portal|github|gitlab|bitbucket):/imu,
+  /(?:^|[\s'"@{[(])(?:https?|ssh):\/\//imu,
+  /(?:^|[\s'"@{[(])git(?:\+(?:https?|ssh|file))?:/imu,
+  /(?:^|[\s'"@{[(])git@[a-z0-9.-]+:/imu,
+  /(?:^|[\s'"@{[(])\/(?:Users|home|private|tmp|var|opt)\//imu,
+  /(?:specifier|version):\s*['"]?npm:|@npm:/imu,
+  /(?:directory|path|tarball):\s*['"]?(?:\.\.?\/|\/)/imu,
+  /(?:repo|repository):\s*['"]?(?:(?:workspace|file|link|portal|github|gitlab|bitbucket):|(?:https?|ssh):\/\/|git(?:\+(?:https?|ssh|file))?:|git@[a-z0-9.-]+:)/imu,
+  /(?:\.\.\/)+(?:Unisane|unisane-(?:ops|pro|ui|site|platforms|infrastructure))(?:\/|$)/imu,
 ]);
-const allowedTarballLocator =
-  /file:[^\s"',}\]]*\/tarballs\/unisane-(?:data-table|tokens|ui)-0\.1\.0\.tgz/gu;
-const forbiddenFallback =
-  /(?:^|[\s'"])(?:workspace|file|link|portal):|(?:\.\.\/)+(?:Unisane|unisane-(?:ops|pro|ui|site|platforms|infrastructure))(?:\/|$)/mu;
 
 function stableValue(value) {
   if (Array.isArray(value)) return value.map(stableValue);
@@ -60,10 +67,10 @@ function writeJson(filePath, value) {
 
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, {
-    cwd: options.cwd ?? umbrellaRoot,
+    cwd: options.cwd ?? opsRoot,
     encoding: 'utf8',
     env: { ...process.env, ...options.env },
-    stdio: options.inherit ? 'inherit' : 'pipe',
+    stdio: 'pipe',
   });
   if (result.status !== 0) {
     throw new Error(
@@ -73,91 +80,92 @@ function run(command, args, options = {}) {
   return result.stdout ?? '';
 }
 
-export function selectOpsSemanticInventory(certificate) {
-  const semantic = certificate.consumerImports?.semanticInventory;
-  if (!semantic) throw new Error('Packed producer certificate lacks consumer semantic inventory.');
-  const imports = semantic.imports.filter(({ file }) =>
-    file.startsWith('unisane-ops/apps/console/'),
-  );
-  const inventory = {
-    imports,
-    sourceFiles: [...new Set(imports.map(({ file }) => file))].sort(),
-    coordinates: semantic.coordinates.filter(
-      ({ consumerRoot }) => consumerRoot === 'unisane-ops/apps/console',
-    ),
-  };
-  if (imports.length === 0 || inventory.coordinates.length !== 2) {
-    throw new Error(
-      'Packed producer certificate lacks the exact Ops console UI consumer boundary.',
-    );
-  }
-  return inventory;
+function packageProfiles(policy) {
+  return packageNames.map((name) => ({ name, ...policy.cleanExternalConsumer.artifacts[name] }));
 }
 
-export function assertCertifiedInputs(certificate, policy, tarballs) {
-  if (
-    certificate.publicationAuthorized !== false ||
-    certificate.consumerConversionAuthorized !== false ||
-    certificate.externalEffects?.length !== 0
-  ) {
-    throw new Error('Packed producer certificate must remain fail-closed and side-effect free.');
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
+}
+
+export function assertOpsSemanticEvidence(evidence, policy) {
+  const inventory = evidence.semanticInventory;
+  if (!inventory || inventory.imports.length === 0 || inventory.coordinates.length !== 2) {
+    throw new Error('Ops-owned evidence lacks the exact console UI consumer boundary.');
   }
-  if (
-    certificate.sourceIdentity?.producerContentDigest !==
-    policy.cleanExternalConsumer.producerContentDigest
-  ) {
-    throw new Error(
-      'Packed producer content digest differs from the canonical Ops proof contract.',
-    );
+  if (evidence.violations.length !== 0) {
+    throw new Error(`Ops-owned semantic evidence is invalid: ${evidence.violations.join('; ')}`);
   }
-  const certified = new Map(certificate.artifacts.map((artifact) => [artifact.name, artifact]));
-  for (const profile of packageProfiles) {
-    const expected = policy.cleanExternalConsumer.artifacts[profile.name];
-    const artifact = certified.get(profile.name);
-    const tarballPath = tarballs.get(profile.name);
-    if (!expected || !artifact || !tarballPath) {
-      throw new Error(`Certified artifact input is missing for ${profile.name}.`);
-    }
+  for (const coordinate of inventory.coordinates) {
+    const expected = policy.currentDependencies[coordinate.packageName];
     if (
-      artifact.version !== expected.version ||
-      artifact.contentDigest !== expected.contentDigest ||
-      artifact.runArtifactSha256 !== expected.tarballSha256 ||
-      sha256File(tarballPath) !== expected.tarballSha256
+      !packageNames.includes(coordinate.packageName) ||
+      !expected ||
+      coordinate.coordinate !== expected ||
+      coordinate.field !== 'dependencies'
     ) {
-      throw new Error(`Certified artifact digest differs for ${profile.name}.`);
+      throw new Error('Ops console semantic evidence retains a non-registry consumer coordinate.');
     }
   }
-  const inventory = selectOpsSemanticInventory(certificate);
-  if (hashValue(inventory) !== policy.cleanExternalConsumer.consumerSemanticInventoryDigest) {
-    throw new Error('Ops console semantic inventory differs from the canonical proof contract.');
+  if (
+    evidence.semanticInventoryDigest !==
+    policy.cleanExternalConsumer.consumerSemanticInventoryDigest
+  ) {
+    throw new Error(
+      `Ops console semantic inventory differs from policy: observed=${evidence.semanticInventoryDigest}.`,
+    );
   }
   return inventory;
 }
 
-export function assertFrozenConsumerLock(lock) {
-  const withoutCertifiedTarballs = lock.replace(allowedTarballLocator, '');
-  if (forbiddenFallback.test(withoutCertifiedTarballs)) {
+export function assertFrozenConsumerLock(lock, artifacts) {
+  const forbiddenPattern = forbiddenFallbackPatterns.find((pattern) => pattern.test(lock));
+  if (forbiddenPattern) {
+    const forbiddenMatch = lock.match(forbiddenPattern)?.[0] ?? '';
+    const matchIndex = lock.search(forbiddenPattern);
+    const context = lock.slice(
+      Math.max(0, matchIndex - 80),
+      matchIndex + forbiddenMatch.length + 80,
+    );
     throw new Error(
-      'External consumer lock retained a workspace, file, link, portal, sibling, or source fallback.',
+      `External consumer lock retained a workspace, file, link, portal, Git, sibling, copied-source, or local fallback: ${JSON.stringify(forbiddenMatch)} in ${JSON.stringify(context)}.`,
     );
   }
-  for (const profile of packageProfiles) {
-    if (!lock.includes(profile.tarball)) {
-      throw new Error(`External consumer lock does not bind ${profile.name} to its tarball.`);
+  const packagesStart = lock.indexOf('\npackages:\n');
+  if (packagesStart === -1) throw new Error('External consumer lock lacks a packages inventory.');
+  const importers = lock.slice(0, packagesStart);
+  const packages = lock.slice(packagesStart);
+  for (const [name, artifact] of Object.entries(artifacts)) {
+    const exactImporter = new RegExp(
+      `\\n[ \\t]+['"]?${escapeRegExp(name)}['"]?:\\n[ \\t]+specifier: ['"]?${escapeRegExp(artifact.version)}['"]?\\n[ \\t]+version: ['"]?${escapeRegExp(artifact.version)}['"]?(?:\\(|\\n|$)`,
+      'u',
+    );
+    if (!exactImporter.test(importers)) {
+      throw new Error(`External consumer lock does not bind ${name} to exact ${artifact.version}.`);
+    }
+    const marker = `\n  '${name}@${artifact.version}':\n`;
+    const start = packages.indexOf(marker);
+    if (start === -1) {
+      throw new Error(
+        `External consumer lock lacks the exact ${name}@${artifact.version} package.`,
+      );
+    }
+    const next = packages.indexOf('\n  ', start + marker.length);
+    const block = packages.slice(start, next === -1 ? undefined : next);
+    if (!block.includes(`resolution: {integrity: ${artifact.registryIntegrity}}`)) {
+      throw new Error(`External consumer lock integrity differs for ${name}@${artifact.version}.`);
     }
   }
 }
 
-export function normalizedConsumerLockDigest(lock) {
-  assertFrozenConsumerLock(lock);
-  return createHash('sha256')
-    .update(lock.replace(allowedTarballLocator, 'file:<CERTIFIED_TARBALL>'))
-    .digest('hex');
+export function normalizedConsumerLockDigest(lock, artifacts) {
+  assertFrozenConsumerLock(lock, artifacts);
+  return createHash('sha256').update(lock).digest('hex');
 }
 
 export function assertExactSingletons(singletons) {
   for (const [name, paths] of Object.entries(singletons)) {
-    if (new Set(paths).size !== 1) {
+    if (paths.length === 0 || new Set(paths).size !== 1) {
       throw new Error(`${name} does not resolve to one exact external-consumer singleton.`);
     }
   }
@@ -173,7 +181,17 @@ export function assertReceiptContract(receipt, expected) {
     materialSymbolsFontSha256: receipt.validation.browser.fontAssets[0]?.sha256 ?? null,
   };
   if (JSON.stringify(observed) !== JSON.stringify(expected)) {
-    throw new Error('External consumer receipt differs from the exact canonical proof contract.');
+    throw new Error(
+      `External consumer receipt differs from policy: expected=${JSON.stringify(expected)} observed=${JSON.stringify(observed)}.`,
+    );
+  }
+}
+
+export function assertConversionReadyBoundary(boundary) {
+  if (!boundary.conversionReady) {
+    throw new Error(
+      `Ops console release boundary is not conversion-ready: ${boundary.violations.join('; ')}`,
+    );
   }
 }
 
@@ -193,21 +211,39 @@ function fixtureImports(records) {
   for (const [specifier, imports] of [...bySpecifier].sort(([left], [right]) =>
     left.localeCompare(right),
   )) {
-    const types = [...imports.types].filter((name) => name !== '*' && name !== 'default');
-    if (types.length > 0) {
+    const typeNames = [...imports.types].sort();
+    if (typeNames.includes('*')) {
+      typeLines.push(`import type * as T${index++} from ${JSON.stringify(specifier)};`);
+    }
+    if (typeNames.includes('default')) {
+      typeLines.push(`import type T${index++} from ${JSON.stringify(specifier)};`);
+    }
+    const namedTypes = typeNames.filter((name) => name !== '*' && name !== 'default');
+    if (namedTypes.length > 0) {
       typeLines.push(
-        `import type { ${types.map((name) => `${name} as T${index++}`).join(', ')} } from ${JSON.stringify(specifier)};`,
+        `import type { ${namedTypes.map((name) => `${name} as T${index++}`).join(', ')} } from ${JSON.stringify(specifier)};`,
       );
     }
-    const values = [...imports.values].filter((name) => name !== '*' && name !== 'default');
-    if (values.length > 0) {
-      const aliases = values.map((name) => ({ alias: `V${index++}`, name }));
+    const valueNames = [...imports.values].sort();
+    if (valueNames.includes('*')) {
+      const alias = `V${index++}`;
+      valueLines.push(`import * as ${alias} from ${JSON.stringify(specifier)};`);
+      valueLines.push(`void ${alias};`);
+    }
+    if (valueNames.includes('default')) {
+      const alias = `V${index++}`;
+      valueLines.push(`import ${alias} from ${JSON.stringify(specifier)};`);
+      valueLines.push(`void ${alias};`);
+    }
+    const namedValues = valueNames.filter((name) => name !== '*' && name !== 'default');
+    if (namedValues.length > 0) {
+      const aliases = namedValues.map((name) => ({ alias: `V${index++}`, name }));
       valueLines.push(
         `import { ${aliases.map(({ alias, name }) => `${name} as ${alias}`).join(', ')} } from ${JSON.stringify(specifier)};`,
       );
       valueLines.push(`void [${aliases.map(({ alias }) => alias).join(', ')}];`);
     }
-    runtimeChecks.push({ specifier, values });
+    runtimeChecks.push({ specifier, values: valueNames });
   }
   return {
     runtimeChecks,
@@ -215,64 +251,36 @@ function fixtureImports(records) {
   };
 }
 
-function prepareCertifiedArtifacts(workRoot) {
-  const certificateRoot = path.join(workRoot, 'certificate');
-  const tarballRoot = path.join(workRoot, 'tarballs');
-  mkdirSync(certificateRoot, { recursive: true });
-  mkdirSync(tarballRoot, { recursive: true });
-  run('pnpm', ['--dir', 'unisane-ui', 'check:packed-producer-certificate'], {
-    env: { SKOPOS_ARTIFACT_ROOT: certificateRoot },
-  });
-  for (const profile of packageProfiles) {
-    run('pnpm', ['--filter', profile.name, 'pack', '--pack-destination', tarballRoot]);
-  }
-  const certificate = readJson(
-    path.join(certificateRoot, 'unisane-ui/packed-producer-certificate.json'),
-  );
-  const tarballs = new Map(
-    packageProfiles.map((profile) => [profile.name, path.join(tarballRoot, profile.tarball)]),
-  );
-  return { certificate, tarballs };
-}
-
-function materializeConsumer(workRoot, inventory, tarballs) {
+function materializeConsumer(workRoot, inventory, policy) {
   const fixtureRoot = path.join(workRoot, 'consumer');
   mkdirSync(fixtureRoot, { recursive: true });
-  const installed = (name) =>
-    readJson(path.join(umbrellaRoot, 'node_modules', name, 'package.json'));
-  const locator = (name) => `file:${tarballs.get(name)}`;
+  const toolchain = policy.toolchain;
+  const artifacts = policy.cleanExternalConsumer.artifacts;
   writeJson(path.join(fixtureRoot, 'package.json'), {
     name: 'unisane-ops-console-external-consumer-proof',
     version: '0.0.0',
     private: true,
     type: 'module',
-    engines: { node: '>=24.13.0' },
+    engines: { node: policy.nodeRuntime.engineFloor },
     scripts: {
       typecheck: 'tsc --noEmit',
       build: 'tsup --config tsup.config.ts',
-      runtime: 'node runtime-check.mjs',
     },
     dependencies: {
-      '@material-symbols/font-400': installed('@material-symbols/font-400').version,
-      '@unisane/data-table': locator('@unisane/data-table'),
-      '@unisane/tokens': locator('@unisane/tokens'),
-      '@unisane/ui': locator('@unisane/ui'),
-      react: installed('react').version,
-      'react-dom': installed('react-dom').version,
+      '@material-symbols/font-400': toolchain.materialSymbols,
+      '@unisane/data-table': artifacts['@unisane/data-table'].version,
+      '@unisane/tokens': artifacts['@unisane/tokens'].version,
+      '@unisane/ui': artifacts['@unisane/ui'].version,
+      react: toolchain.react,
+      'react-dom': toolchain.reactDom,
     },
     devDependencies: {
-      '@types/react': installed('@types/react').version,
-      '@types/react-dom': installed('@types/react-dom').version,
-      tsup: installed('tsup').version,
-      typescript: installed('typescript').version,
+      '@types/react': toolchain.typesReact,
+      '@types/react-dom': toolchain.typesReactDom,
+      tsup: toolchain.tsup,
+      typescript: toolchain.typescript,
     },
-    pnpm: {
-      overrides: {
-        '@unisane/tokens@0.1.0': locator('@unisane/tokens'),
-        '@unisane/ui@0.1.0': locator('@unisane/ui'),
-      },
-    },
-    packageManager: 'pnpm@10.26.0',
+    packageManager: toolchain.packageManager,
   });
   writeJson(path.join(fixtureRoot, 'tsconfig.json'), {
     compilerOptions: {
@@ -297,7 +305,7 @@ function materializeConsumer(workRoot, inventory, tarballs) {
   );
   writeFileSync(
     path.join(fixtureRoot, 'runtime-check.mjs'),
-    `import { createRequire } from 'node:module';\nimport { readFileSync, realpathSync } from 'node:fs';\nimport { createElement } from 'react';\nimport { renderToStaticMarkup } from 'react-dom/server';\nimport { Button } from '@unisane/ui/button';\nimport { DataTable } from '@unisane/data-table';\nimport { preloadPDF, preloadXLSX } from '@unisane/data-table/export';\nconst checks = ${JSON.stringify(imports.runtimeChecks)};\nfor (const check of checks) {\n  const loaded = await import(check.specifier);\n  for (const name of check.values) if (!(name in loaded)) throw new Error(check.specifier + ' lacks ' + name);\n}\nconst roots = [import.meta.url, new URL('./node_modules/@unisane/ui/package.json', import.meta.url), new URL('./node_modules/@unisane/data-table/package.json', import.meta.url)];\nconst singletonPaths = { react: [], reactDom: [] };\nfor (const root of roots) {\n  const request = createRequire(root);\n  singletonPaths.react.push(realpathSync(request.resolve('react/package.json')));\n  singletonPaths.reactDom.push(realpathSync(request.resolve('react-dom/package.json')));\n}\nconst packageVersion = (file) => JSON.parse(readFileSync(file, 'utf8')).version;\nconst button = renderToStaticMarkup(createElement(Button, null, 'External Ops'));\nconst table = renderToStaticMarkup(createElement(DataTable, { data: [{ id: '1', name: 'Ada' }], columns: [{ key: 'name', header: 'Name' }], preset: 'simple' }));\nif (!button.includes('External Ops') || !table.includes('Ada')) throw new Error('UI SSR runtime smoke failed.');\nawait preloadXLSX();\nawait preloadPDF();\nconsole.log(JSON.stringify({ singletonPaths, singletonVersions: { react: packageVersion(singletonPaths.react[0]), reactDom: packageVersion(singletonPaths.reactDom[0]) }, runtimeModuleCount: checks.length, dynamicDependencies: ['jspdf', 'jspdf-autotable', 'xlsx'] }));\n`,
+    `import { createRequire } from 'node:module';\nimport { readFileSync, realpathSync } from 'node:fs';\nimport { createElement } from 'react';\nimport { renderToStaticMarkup } from 'react-dom/server';\nimport { Button } from '@unisane/ui/button';\nimport { DataTable } from '@unisane/data-table';\nimport { preloadPDF, preloadXLSX } from '@unisane/data-table/export';\nconst checks = ${JSON.stringify(imports.runtimeChecks)};\nfor (const check of checks) {\n  const loaded = await import(check.specifier);\n  for (const name of check.values) if (name !== '*' && !(name in loaded)) throw new Error(check.specifier + ' lacks ' + name);\n}\nconst request = createRequire(import.meta.url);\nconst roots = [import.meta.url, request.resolve('@unisane/ui/button'), request.resolve('@unisane/data-table')];\nconst singletonPaths = { react: [], reactDom: [] };\nfor (const root of roots) {\n  const nestedRequest = createRequire(root);\n  singletonPaths.react.push(realpathSync(nestedRequest.resolve('react/package.json')));\n  singletonPaths.reactDom.push(realpathSync(nestedRequest.resolve('react-dom/package.json')));\n}\nconst packageVersion = (file) => JSON.parse(readFileSync(file, 'utf8')).version;\nconst button = renderToStaticMarkup(createElement(Button, null, 'External Ops'));\nconst table = renderToStaticMarkup(createElement(DataTable, { data: [{ id: '1', name: 'Ada' }], columns: [{ key: 'name', header: 'Name' }], preset: 'simple' }));\nif (!button.includes('External Ops') || !table.includes('Ada')) throw new Error('UI SSR runtime smoke failed.');\nawait preloadXLSX();\nawait preloadPDF();\nconsole.log(JSON.stringify({ singletonPaths, singletonVersions: { react: packageVersion(singletonPaths.react[0]), reactDom: packageVersion(singletonPaths.reactDom[0]) }, runtimeModuleCount: checks.length, dynamicDependencies: ['jspdf', 'jspdf-autotable', 'xlsx'] }));\n`,
   );
   return fixtureRoot;
 }
@@ -313,7 +321,7 @@ function inspectBrowserOutput(fixtureRoot, policy) {
     throw new Error('External consumer CSS lacks the exact Material Symbols family.');
   }
   for (const selector of policy.dataTableStylesheet.emittedSelectors) {
-    if (!css.includes(selector.replace('\\/', '/')) && !css.includes(selector)) {
+    if (!css.includes(selector.replaceAll('\\/', '/')) && !css.includes(selector)) {
       throw new Error(`External consumer CSS lacks DataTable selector ${selector}.`);
     }
   }
@@ -331,61 +339,82 @@ function inspectBrowserOutput(fixtureRoot, policy) {
   };
 }
 
+function inspectInstalledPackages(fixtureRoot, profiles) {
+  const fixtureRealPath = realpathSync(fixtureRoot);
+  return Object.fromEntries(
+    profiles.map(({ name, version }) => {
+      const packageRoot = realpathSync(path.join(fixtureRoot, 'node_modules', ...name.split('/')));
+      if (
+        packageRoot !== fixtureRealPath &&
+        !packageRoot.startsWith(`${fixtureRealPath}${path.sep}`)
+      ) {
+        throw new Error(`${name} resolved outside the disposable consumer.`);
+      }
+      const installedVersion = readJson(path.join(packageRoot, 'package.json')).version;
+      if (installedVersion !== version) {
+        throw new Error(`${name} installed ${installedVersion}; expected exact ${version}.`);
+      }
+      return [name, { version: installedVersion, resolvedInsideConsumer: true }];
+    }),
+  );
+}
+
 export function executeProof(root = opsRoot) {
   const policy = readJson(path.join(root, 'tools/repository/console-release-boundary-policy.json'));
+  const boundary = evaluateConsoleReleaseBoundary(root, { policy });
+  assertConversionReadyBoundary(boundary);
+  const evidence = collectConsoleConsumerEvidence(root, { policy });
+  const inventory = assertOpsSemanticEvidence(evidence, policy);
+  const profiles = packageProfiles(policy);
   const workRoot = mkdtempSync(path.join(tmpdir(), 'unisane-ops-console-external-consumer-'));
+  const storeRoot = path.join(root, policy.toolchain.storeDir);
   try {
-    const { certificate, tarballs } = prepareCertifiedArtifacts(workRoot);
-    const inventory = assertCertifiedInputs(certificate, policy, tarballs);
-    const fixtureRoot = materializeConsumer(workRoot, inventory, tarballs);
-    run('pnpm', ['install', '--lockfile-only', '--offline', '--ignore-workspace'], {
-      cwd: fixtureRoot,
-    });
+    const fixtureRoot = materializeConsumer(workRoot, inventory, policy);
+    const installArgs = [
+      'install',
+      '--offline',
+      '--ignore-workspace',
+      '--config.shared-workspace-lockfile=false',
+      '--store-dir',
+      storeRoot,
+    ];
+    run('pnpm', [...installArgs, '--lockfile-only'], { cwd: fixtureRoot });
     const lockPath = path.join(fixtureRoot, 'pnpm-lock.yaml');
-    assertFrozenConsumerLock(readFileSync(lockPath, 'utf8'));
-    run('pnpm', ['install', '--offline', '--frozen-lockfile', '--ignore-workspace'], {
-      cwd: fixtureRoot,
-    });
-    assertFrozenConsumerLock(readFileSync(lockPath, 'utf8'));
+    const artifacts = policy.cleanExternalConsumer.artifacts;
+    assertFrozenConsumerLock(readFileSync(lockPath, 'utf8'), artifacts);
+    run('pnpm', [...installArgs, '--frozen-lockfile'], { cwd: fixtureRoot });
+    const lock = readFileSync(lockPath, 'utf8');
+    assertFrozenConsumerLock(lock, artifacts);
     run('pnpm', ['typecheck'], { cwd: fixtureRoot });
     run('pnpm', ['build'], { cwd: fixtureRoot });
     const runtime = JSON.parse(run('node', ['runtime-check.mjs'], { cwd: fixtureRoot }).trim());
     assertExactSingletons(runtime.singletonPaths);
+    if (
+      runtime.singletonVersions.react !== policy.toolchain.react ||
+      runtime.singletonVersions.reactDom !== policy.toolchain.reactDom
+    ) {
+      throw new Error('External consumer React singleton versions differ from policy.');
+    }
     const browser = inspectBrowserOutput(fixtureRoot, policy);
-    const installedPackages = Object.fromEntries(
-      packageProfiles.map(({ name }) => {
-        const installedRoot = realpathSync(
-          path.join(fixtureRoot, 'node_modules', ...name.split('/')),
-        );
-        if (!installedRoot.startsWith(realpathSync(fixtureRoot))) {
-          throw new Error(`${name} resolved outside the disposable consumer.`);
-        }
-        return [name, true];
-      }),
-    );
     const receipt = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       proofId: policy.cleanExternalConsumer.proofId,
       state: 'verified-offline-frozen-isolated-consumer',
-      producerContentDigest: certificate.sourceIdentity.producerContentDigest,
-      artifacts: certificate.artifacts.map(
-        ({ name, version, contentDigest, runArtifactSha256 }) => ({
-          name,
-          version,
-          contentDigest,
-          tarballSha256: runArtifactSha256,
-        }),
-      ),
       consumerSemanticInventory: {
-        digest: hashValue(inventory),
+        digest: evidence.semanticInventoryDigest,
         declarationCount: inventory.imports.length,
         sourceFileCount: inventory.sourceFiles.length,
         coordinates: inventory.coordinates,
       },
+      artifacts: profiles.map(({ name, version, registryIntegrity }) => ({
+        name,
+        version,
+        registryIntegrity,
+      })),
       install: {
-        mode: 'offline-frozen',
-        normalizedLockSha256: normalizedConsumerLockDigest(readFileSync(lockPath, 'utf8')),
-        installedPackages,
+        mode: 'offline-frozen-exact-registry',
+        normalizedLockSha256: normalizedConsumerLockDigest(lock, artifacts),
+        installedPackages: inspectInstalledPackages(fixtureRoot, profiles),
         forbiddenFallbackCount: 0,
       },
       reactSingletons: {
@@ -399,9 +428,8 @@ export function executeProof(root = opsRoot) {
         dynamicDependencies: runtime.dynamicDependencies,
         browser,
       },
+      authority: policy.authority,
       externalEffects: [],
-      publicationAuthorized: false,
-      consumerConversionAuthorized: false,
     };
     assertReceiptContract(receipt, policy.cleanExternalConsumer.receipt);
     return receipt;
