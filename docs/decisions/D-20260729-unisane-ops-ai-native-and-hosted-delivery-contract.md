@@ -9,12 +9,24 @@ authority: canonical
 provenance: accepted
 view: current
 status: accepted
+relatedDocs:
+  - './D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md'
+  - './D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md'
+  - '../standards/13-unisane-ops-product-architecture-baseline.md'
 ---
 
 # D-20260729 Unisane Ops AI-Native And Hosted Delivery Contract
 
 ## Changelog
 
+- `2026-08-15`: Aligned every current delivery surface to the separate Ops
+  `unisane-ops` CLI and one typed `ActionDefinition`. Framework `unisane` remains owned
+  by `@unisane/devtools`, `create-unisane` remains the sole scaffolder, and the optional
+  non-default Framework adapter consumes only a versioned serialized descriptor with
+  zero Framework npm dependencies. Nested product CLIs, raw-argv engine APIs, output or
+  process-exit capture, and provider mutations in Framework Compiler/Devtools are
+  forbidden. Earlier dated `unisane ...` implementation evidence remains chronology
+  only. The Framework remains private under its founder hold.
 - `2026-08-04`: Accepted SEO-first, local-completion-first sequencing. Existing hosted
   read-spine feasibility proof remains frozen, while further SaaS product implementation
   is inadmissible until the complete local SEO loop closes and the user replies with the
@@ -163,8 +175,13 @@ transport-neutral Ops actions
         |
 @unisane/ops-engine
         |
-Cloud / Growth / providers / Web Runtime / Framework Ops
+Cloud / Growth / providers / Web Runtime / optional Framework descriptor adapter
 ```
+
+The Framework adapter in this diagram is Ops-owned. It is absent from the default
+installation, has zero Framework npm dependencies, and
+consumes immutable serialized descriptor data; it is not an executable Framework pack,
+Devtools bridge, or Framework runtime integration.
 
 Multiple surfaces are not compatibility fallbacks. They serve distinct user contexts
 over one canonical implementation. A surface may change presentation, progressive
@@ -178,26 +195,54 @@ contract. The initial owner is the exact public subpath
 `@unisane/ops-engine/actions`; a separate client-contract package is admitted only when
 independent distribution or runtime constraints prove a real boundary.
 
-Every action descriptor and result must support, where applicable:
+Every operational capability is one typed `ActionDefinition`. Its definition and result
+must support, where applicable:
 
 - stable action id and schema version
+- typed input and normalized result schemas
 - project, site, target, and environment identity
 - authenticated actor and hosted `scopeId` context
 - required capability, connection, resource, and permission
-- maximum effect and mutation/spend classification
-- explicit input and structured output schemas
+- declared maximum effect and result-recorded actual effect
 - evidence, observation time, freshness, and uncertainty
 - readiness findings and one or more safe next actions
-- approval requirements and non-forgeable approval reference
-- idempotency key and immutable receipt reference
+- policy, admission, approval requirements, deterministic plan behavior, and a
+  non-forgeable approval reference
+- one admitted typed apply handler and postcondition verification
+- structured errors, artifacts, redaction, and immutable receipt schema
+- idempotency, lock, retry, cancellation, timeout, recovery, and reconciliation
+  semantics
 - pagination or bounded summaries for large datasets
 - asynchronous job reference, progress, cancellation, and terminal result
 - stable typed errors with human recovery guidance
 - console deep link when a visual workflow materially helps
 
 CLI JSON, console state/actions, MCP tools, hosted API responses, CI, and agents lower
-from this contract. No adapter parses human CLI output or shells through another public
-surface to obtain behavior.
+from this contract. CLI, MCP, API, UI, scheduler, automation, agent, and plugin adapters
+validate boundary input, invoke the same action engine, and render the typed result. No
+adapter implements provider behavior, creates another approval/effect/workflow model,
+parses human CLI output, or invokes another presentation adapter to obtain behavior.
+
+Below CLI presentation, raw `argv`, nested Commander or product CLI invocation,
+child-CLI business execution, stdout/stderr interception, `process.exitCode` capture or
+replacement, terminal-prose parsing, thrown CLI exits as engine errors, and parallel
+command/action handlers are forbidden.
+
+### Framework descriptor boundary
+
+Ops core and its default CLI import no Framework RuntimeHost, Kernel, modules, adapters,
+Starters, generated runtime, Compiler, Devtools, source tree, workspace alias, cache, or
+sibling checkout. The optional non-default Ops-owned adapter consumes only a versioned,
+schema-validated, serialized descriptor emitted through the Framework-owned path. It
+has zero Framework npm dependencies and validates schema version, compatibility, digest,
+project identity, freshness for the requested operation, and requested capability.
+
+The descriptor contains static admitted identities and metadata only—never executable
+handlers, service instances, container references, secrets, credentials, provider
+clients, or source-path assumptions. Missing, tampered, stale, incompatible, ambiguous,
+or unrecognized input fails closed. Ops never invokes Framework compilation implicitly,
+and the adapter adds no second action, authorization, approval, policy, or workflow
+engine.
 
 ### MCP contract
 
@@ -274,8 +319,8 @@ A local/private binding may precede hosted SaaS. It must not claim remote availa
 team state, managed credentials, or public support. Public listing metadata, review, and
 host compatibility are release work, not substitutes for the hosted runtime.
 
-The first Codex adapter is a project-local configuration binding generated by the
-canonical `unisane` CLI. It composes the existing STDIO server with one absolute project,
+The first Codex adapter is a project-local configuration binding generated by the Ops
+`unisane-ops` CLI. It composes the existing STDIO server with one absolute project,
 Growth environment, actor, and frozen tool allowlist. It does not install a second
 runtime owner, modify global Codex configuration, infer ambient targets, or package
 workflow truth. Host skills remain a later thin layer over this same binding.
@@ -417,7 +462,7 @@ outcomes; they do not become workflow or authorization truth.
 The entry experience depends on the user, while the resulting project and action truth
 remains one:
 
-- local developer: install one CLI product entrypoint, run `unisane ops init`, and let
+- local developer: install the Ops CLI product entrypoint, run `unisane-ops init`, and let
   that host compose the required engine, Growth, and provider packages
 - marketer/founder: enter the hosted console, choose a project/site, connect providers,
   and follow guided outcomes without installing an npm package
@@ -435,6 +480,20 @@ their ownership boundaries, while the product entrypoint composes them for ordin
 local use. Hosted and agent delivery compose the same contracts without requiring that
 entrypoint on the user's machine. A future repository extraction changes release
 ownership, not these user-facing installation modes.
+
+Framework `unisane` is a separate developer CLI owned by `@unisane/devtools`, and
+`create-unisane` is the separate Framework scaffolder. Neither is an Ops delivery
+adapter, and no hosted, MCP, plugin, or agent surface delegates business behavior to
+either executable. Provider, network, database, billing, deployment, account,
+marketing, and production-state mutations belong to typed Ops actions or another
+explicitly admitted product owner, never Framework Compiler or Devtools.
+
+The Framework repository remains private throughout the complete architecture,
+release, and repository-finalization program. Completion permits only a later founder
+review and never creates public eligibility or an automatic transition. Any future
+public state requires direct founder approval and a separate accepted high-impact
+Decision. This delivery Decision authorizes no Framework remote, registry,
+publication, visibility, or source-authority change.
 
 Every AI-assisted answer must make project/site/environment, data freshness, important
 evidence, risk, and the next safe action understandable. Dense charts and detailed
@@ -500,6 +559,19 @@ read-only. Production, automation, multi-process, remote MCP, and hosted executi
 blocked until an atomic durable host, hosted identity, authorization, and reconciliation
 boundary exists.
 
+## Compatibility And Supersession
+
+`D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract` supersedes
+every earlier clause or example here that used the combined `unisane` launcher, treated
+Framework commands as an Ops pack, depended on a Devtools bridge, or allowed an adapter
+to invoke another CLI. Dated changelog entries remain factual implementation chronology;
+they are not current command or dependency authority.
+
+This Decision preserves one Ops engine, typed action semantics, local and remote MCP
+separation, thin skills/plugins, guided workflows, mutation safety, and the explicit
+hosted-SaaS admission gate. It does not authorize a Framework publication, remote,
+registry, visibility change, or product authority cutover.
+
 ## Consequences
 
 ### Positive
@@ -533,7 +605,9 @@ boundary exists.
 
 Future bounded Skopos Tasks must prove:
 
-1. no CLI parser or human-output dependency inside console, MCP, hosted API, or jobs
+1. no raw-argv engine API, nested product CLI, CLI parser, human-output dependency,
+   stdout/stderr interception, or process-exit capture inside console, MCP, hosted API,
+   jobs, or action handlers
 2. one action id/schema/effect/result family across all surfaces
 3. no provider SDK import in UI, AI-host plugin, or MCP presentation code
 4. no raw secret/token field in tool schemas, logs, receipts, prompts, or project config
@@ -547,6 +621,11 @@ Future bounded Skopos Tasks must prove:
 12. no SaaS-only fork of project config, readiness, domain logic, or provider behavior
 13. no hosted SaaS product change before local end-to-end closure and exact user
     confirmation through `START UNISANE OPS HOSTED SAAS`
+14. separate ownership of Framework `unisane`, Ops `unisane-ops`, and
+    `create-unisane`, with no cross-product invocation or catch-all forwarding
+15. the optional Framework descriptor adapter is absent by default, has zero Framework
+    npm dependencies, and fails closed without executing Framework code
+16. Framework Compiler and Devtools contain no provider or remote-state mutations
 
 Required validation includes focused engine/action tests, protocol conformance,
 cross-host scenario evaluations, auth/permission tests, mutation denial and replay

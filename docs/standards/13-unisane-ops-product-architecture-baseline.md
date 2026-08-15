@@ -8,6 +8,12 @@ lifecycle: durable
 authority: canonical
 provenance: accepted
 view: current
+relatedDocs:
+  - '../decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md'
+  - '../decisions/D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md'
+  - '../decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md'
+  - '../decisions/D-20260815-framework-release-units-compatibility-bom-and-registry-proof-contract.md'
+  - '../findings/F-20260724-unisane-ops-product-boundary-and-devtools-coupling-gap.md'
 ---
 
 # Unisane Ops Product Architecture Baseline
@@ -16,6 +22,13 @@ Canonical product, package, repository, command, and extension boundaries for Un
 
 ## Changelog
 
+- `2026-08-15`: Superseded the combined-CLI and executable Framework-pack target with
+  separate Framework `unisane`, Ops `unisane-ops`, and `create-unisane` products. Ops now
+  has one typed `ActionDefinition` path for every presentation adapter; its optional
+  Framework adapter consumes only a versioned serialized descriptor, has zero Framework
+  npm dependencies, and is absent from the default install. Historical one-CLI,
+  `unisane-devtools`, and Devtools-bridge entries below remain implementation chronology,
+  not current target authority.
 - `2026-08-09`: Defined the cross-repository UI adopter-tooling extension boundary.
   UI owns `@unisane/ui-cli` and its eight exact `ui ...` command leaves; the package
   implements the versioned structural pack protocol, bundles UI registry assets, and contributes
@@ -363,7 +376,7 @@ Canonical product, package, repository, command, and extension boundaries for Un
 
 ## Status And Authority
 
-This document defines the target architecture. The canonical CLI, engine, Cloud package,
+This document defines the target architecture. The engine, Cloud package,
 Cloudflare, AWS, and Google provider packages, Growth and Web Runtime packages, the GTM
 domain/provider implementation split, direct Cloud DNS commands, Cloudflare resource
 inventory/readiness/environment commands, Queue/Worker/Cron plan/apply, expert aliases,
@@ -375,14 +388,24 @@ measurement, keyword, marketing-report transport, and live campaign mutation exe
 are Provider-Google-owned. Provider Meta currently exposes transport implementation
 only; it has no advertised provider CLI or canonical connection adapter, so Meta-backed
 Growth operations fail closed before credentials are needed. Growth selects no provider
-implementation; the command host injects exact provider contracts.
-Devtools retains only thin compatibility registrars for migrated provider and Growth
-roots; it does not own their implementations or canonical runtime composition.
-Remaining cloud commands inside `@unisane/devtools` remain transitional implementation
-state, not target-package proof.
-The canonical `unisane` host loads exact sealed packs for Cloud, Growth, AWS, Cloudflare,
-Google, and optional Framework commands. It has no Devtools dependency or catch-all
-subprocess fallback. Devtools publishes only `unisane-devtools`.
+implementation; the Ops host injects exact provider contracts.
+
+Current Devtools compatibility registrars, remaining cloud commands, the combined
+`unisane` Ops host, and the executable Framework pack are transitional implementation
+evidence only. They are not target-package or command authority.
+
+The accepted target has three separate executable products:
+
+- Framework `unisane`, delivered by `@unisane/devtools`
+- Ops `unisane-ops`, delivered by the Ops CLI package
+- `create-unisane`, the sole Framework project creator
+
+The Ops CLI loads only Ops-owned typed action packs. It contributes no Framework or UI
+commands, invokes no product CLI, and depends on no Framework implementation. The
+optional Ops-owned Framework adapter is descriptor-only, is not installed by default,
+and has zero Framework npm dependencies. Devtools becomes the thin Framework CLI over
+`@unisane/compiler`; remote provider mutations move to typed Ops actions or another
+deliberately admitted owner.
 
 The Ops adoption, Growth config, Google connection, and aggregate readiness lifecycle is
 current executable state. Instrumentation reconciliation, console separation, and the
@@ -412,7 +435,7 @@ This document owns:
 
 - product and suite names
 - package and target-repository boundaries
-- public CLI namespaces
+- Ops product CLI namespaces
 - extension and pack taxonomy
 - config export shape
 - package dependency direction
@@ -448,7 +471,18 @@ Adoption progresses without forced migration:
 4. `Manage`: plan, apply, receipt, and detect drift.
 5. `Automate`: run approved policy-driven workflows in CI or scheduled environments.
 
-Framework integration is optional. Unisane Framework must not depend on Unisane Ops. `@unisane/framework-ops` is the adapter between the two products.
+Framework integration is optional. Unisane Framework must not depend on Unisane Ops.
+`@unisane/framework-ops` is an Ops-owned, non-default adapter that consumes only a
+schema-versioned serialized Framework project descriptor. It declares zero Framework,
+Compiler, Devtools, runtime, module, adapter, Starter, source-tree, cache, workspace, or
+sibling-checkout dependency and adds no second action, policy, approval, or workflow
+engine. The descriptor contains static admitted identities and metadata only—never
+handlers, service instances, containers, secrets, credentials, provider clients, or
+source-path assumptions. The adapter validates descriptor schema version,
+compatibility, digest, project identity, freshness for the requested operation, and
+requested capability before translating data into Ops-owned input; missing, tampered,
+stale, incompatible, ambiguous, or unrecognized input fails closed. Ops never invokes
+Framework compilation implicitly.
 
 ## Growth Onboarding And Readiness Contract
 
@@ -458,16 +492,16 @@ Framework integration is optional. Unisane Framework must not depend on Unisane 
 Ordinary Growth adoption uses one project lifecycle:
 
 ```text
-unisane ops init
-unisane add growth
-unisane connect google
-unisane check
-unisane growth <domain operation>
-unisane growth console
+unisane-ops init
+unisane-ops add growth
+unisane-ops connect google
+unisane-ops check
+unisane-ops growth <domain operation>
+unisane-ops growth console
 ```
 
-Interactive `unisane ops init` may select Growth directly; explicit
-`unisane add growth` writes the same intent for an existing initialized project.
+Interactive `unisane-ops init` may select Growth directly; explicit
+`unisane-ops add growth` writes the same intent for an existing initialized project.
 Supported adoption modes are `new`, `adopt-existing`, `audit-only`, and versioned
 `migrate`. Detection may recommend a mode or resource but must not silently claim a live
 provider resource.
@@ -476,7 +510,9 @@ Core owns project detection, capability selection, connection dispatch, and aggr
 readiness. Growth owns domain intent, audits, reports, recommendations, experiments,
 mutation safety, and headless console state. Provider packages own authentication,
 incremental grants, discovery, resource selection, token lifecycle, and transport. Web
-Runtime owns application instrumentation. Framework Ops only adapts Framework context.
+Runtime owns application instrumentation. The optional Ops-owned Framework adapter only
+validates and translates the serialized Framework descriptor into Ops-owned context; it
+is never a Framework package or executable bridge.
 The optional console application owns presentation over the same headless state/actions.
 
 Google is one user-visible connection whose provider-owned record may hold distinct
@@ -491,12 +527,13 @@ finding carries a stable code, evidence, freshness, affected identity, blocking 
 and one next action. A configured file alone never proves usable instrumentation, fresh
 data, or mutation authority.
 
-The clean cutover is a coordinated public major release. A one-shot migrator may read
-the retired schema and write the new schema, but normal runtime loading rejects retired
-schemas. Replaced commands, aliases, config loaders, auth stores, raw access-token
-fallbacks, manual readiness state, tests, docs, and embedded console presentation are
-deleted in the same convergence workstream. No wrapper, deprecated alias, dual loader,
-shadow state, or hidden fallback survives the release.
+The clean cutover is a coordinated unreleased replacement. A one-shot migrator may read
+real persisted state in the retired schema and write the new schema, but normal runtime
+loading rejects retired schemas. Replaced commands, aliases, config loaders, auth stores,
+raw access-token fallbacks, manual readiness state, tests, docs, and embedded console
+presentation are deleted in the same convergence workstream. No wrapper, deprecated
+alias, dual loader, shadow state, or hidden fallback survives the cutover. A later real
+stable Ops release follows separately admitted release and migration policy.
 
 Clean replacement is enforced inside every bounded slice, not deferred until release.
 The retired owner/export/route is deleted first so type and behavior failures expose all
@@ -979,7 +1016,17 @@ all supported surfaces:
 | AI-host plugin or skill | easy discovery, installation, and safe workflow guidance              |
 | optional hosted SaaS    | managed connections, teams, durable jobs, schedules, and history      |
 
-The initial action-contract owner is `@unisane/ops-engine/actions`. The local MCP
+The sole action-contract owner is `@unisane/ops-engine/actions`. Every operational
+capability is one versioned `ActionDefinition` that owns its stable id, typed input and
+normalized result, declared maximum effect, exact target-identity requirements,
+capability and policy admission, approval requirements, deterministic plan, admitted
+apply handler, postcondition verification, structured errors, artifacts, redaction and
+receipt schemas, plus idempotency, lock, retry, cancellation, timeout, recovery, and
+reconciliation semantics where applicable. Maximum effect is exactly `offline`,
+`read-network`, `write`, or `spend-impact`; the result and receipt record actual effect
+independently.
+
+The local MCP
 adapter is `@unisane/ops-mcp`. Its read catalog is `review_growth_health`,
 `research_seo_opportunities`, and `audit_growth_measurement`. Its first controlled-action
 catalog is `plan_campaign_pause`, `review_campaign_pause`,
@@ -987,15 +1034,16 @@ catalog is `plan_campaign_pause`, `review_campaign_pause`,
 environment bound and lowers directly from a public Growth workflow executor. The
 campaign tools preserve plan/review/apply/verify separation and expose no approval tool.
 A later hosted Task may reuse this goal-oriented registry for remote Streamable HTTP
-only after remote identity and authorization exist. CLI, console, MCP, hosted API, jobs, and
-host plugins must call actions directly; no adapter may parse CLI output or call another
-adapter for business behavior.
+only after remote identity and authorization exist. CLI, console, MCP, hosted API, jobs,
+schedulers, agents, and host plugins are presentation or transport adapters over that
+same action. They validate boundary input, invoke the engine, and render the typed
+result. No adapter may parse CLI output, call another adapter for business behavior,
+invent another effect/result/approval contract, or become a provider implementation.
 
-The action contract owns stable ids and schemas, explicit project/site/environment and
-actor context, evidence and freshness, readiness and safe next actions, effect/risk
-classification, approval references, idempotency, immutable receipts, bounded results,
-jobs, structured errors, and optional console deep links. Growth, Cloud, provider, Web
-Runtime, and Framework Ops owners remain unchanged.
+The action contract also owns explicit project/site/environment and actor context,
+evidence and freshness, readiness and safe next actions, bounded results, jobs, and
+optional console deep links. Growth, Cloud, provider, Web Runtime, and descriptor-adapter
+ownership remains unchanged.
 
 AI-host plugins are thin distribution adapters. They may package MCP wiring, workflow
 skills, installation metadata, and small host-supported review UI; they do not own
@@ -1007,7 +1055,7 @@ exists. A public AI-host plugin that depends on remote MCP may ship only after t
 runtime, authorization, revocation, privacy, support, and compatibility gates pass. A
 local binding must not be presented as a hosted or universally available integration.
 
-The current Codex binding is owned by `unisane mcp configure codex`. Preview is the
+The current Codex binding is owned by `unisane-ops mcp configure codex`. Preview is the
 default; mutation requires explicit `--write`. It may create, replace, or remove only the
 marked `mcp_servers.unisane_ops` block in the selected project's `.codex/config.toml`.
 It must preserve unrelated host settings byte-for-byte, use an absolute project root,
@@ -1292,25 +1340,30 @@ are not accepted as substitutes.
 
 | Package                | Ownership                                               |
 | ---------------------- | ------------------------------------------------------- |
-| `unisane`              | The current one-install local CLI and pack host         |
+| Ops CLI package        | The `unisane-ops` executable and thin typed-action host |
 | `@unisane/cloud`       | Cloud suite commands, schemas, policies, and workflows  |
 | `@unisane/growth`      | Growth suite commands, schemas, policies, and workflows |
 | `@unisane/web-runtime` | Stack-neutral application-runtime capabilities          |
 
 ### Technical packages
 
-| Package                        | Ownership                                                      |
-| ------------------------------ | -------------------------------------------------------------- |
-| `@unisane/ops-engine`          | Headless plan/apply/receipt/drift engine and pack contracts    |
-| `@unisane/provider-aws`        | AWS connection and capability implementations                  |
-| `@unisane/provider-cloudflare` | Cloudflare connection and capability implementations           |
-| `@unisane/provider-google`     | Google connection and capability implementations               |
-| `@unisane/provider-meta`       | Meta connection and management capability implementations      |
-| `@unisane/framework-ops`       | Optional Framework discovery, config, and workflow integration |
+| Package                        | Ownership                                                   |
+| ------------------------------ | ----------------------------------------------------------- |
+| `@unisane/ops-engine`          | Headless plan/apply/receipt/drift engine and pack contracts |
+| `@unisane/provider-aws`        | AWS connection and capability implementations               |
+| `@unisane/provider-cloudflare` | Cloudflare connection and capability implementations        |
+| `@unisane/provider-google`     | Google connection and capability implementations            |
+| `@unisane/provider-meta`       | Meta connection and management capability implementations   |
+| `@unisane/framework-ops`       | Optional serialized Framework-descriptor adapter            |
 
 Package boundaries require a real distribution, dependency, lifecycle, or ownership seam. Internal features remain folders or subpath exports; they do not become packages merely to make the tree look symmetrical.
 
-All packages in this table have public source in `unisane-ops` and publish publicly to the package registry. “Technical” describes the audience and dependency role, not private access. Workspace-only helpers remain private folders and must not be referenced across repositories.
+Every released package named in these tables has public source in `unisane-ops` and may
+publish publicly only through its separately admitted release authority. “Technical”
+describes the audience and dependency role, not private access. The release manifest
+owns the exact registry coordinate for the Ops CLI package; the unscoped `unisane`
+package and binary are not Ops target identities. Workspace-only helpers remain private
+folders and must not be referenced across repositories.
 
 ### Installation And Distribution Rule
 
@@ -1325,11 +1378,12 @@ experience is audience-specific:
 | SDK integrator      | direct installation of the smallest applicable public technical package or subpath                            |
 | contributor         | the complete workspace package graph through repository tooling                                               |
 
-The current local entrypoint is the `unisane` package and `unisane` binary. Installing it
-does not install or embed a Framework application runtime; it installs the local product
-host. Do not add a second umbrella package merely to mirror the phrase `Unisane Ops`.
-Admit a renamed or separate distribution entrypoint only through an explicit release
-Decision backed by registry, audience, compatibility, and migration evidence.
+The target local entrypoint is the Ops CLI package and `unisane-ops` binary. Installing
+it does not install or embed a Framework application runtime, Framework adapter, UI
+tooling, Compiler, or Devtools; it installs only the Ops product host and its selected
+Ops dependencies. Framework `unisane` and `create-unisane` are separate Framework-owned
+products. The current unscoped `unisane` Ops package is transitional and is removed or
+renamed in the admitted clean cut without a compatibility wrapper.
 
 Hosted delivery, remote MCP, and AI-host plugins compose the same action and workflow
 contracts without requiring the local CLI on the user's machine. Repository extraction
@@ -1372,77 +1426,67 @@ Rules:
 
 1. Runtime code must not depend on the CLI, `@unisane/ops-engine`, or provider administration SDKs.
 2. Framework adapters may integrate these subpaths, but the base subpaths remain usable in non-Framework projects.
-3. Framework-specific behavior belongs in `@unisane/framework-ops` or an explicit Framework adapter, not in stack-neutral runtime roots.
+3. Framework runtime integration belongs in a Framework-owned adapter over these public
+   Web Runtime subpaths. `@unisane/framework-ops` is only the Ops-owned serialized-
+   descriptor adapter and never becomes a Framework runtime dependency.
 4. Framework-only deployment, compiler, and DI assumptions must not leak into Web Runtime APIs.
 5. Persistent slug history, redirect ownership, aliases, canonical public identity, publication state, and dynamic URL records remain the separate Framework `@unisane/public-urls` capability; Web Runtime SEO owns pure metadata, robots, sitemap, canonical rendering, and JSON-LD helpers only.
 6. `@unisane/web-runtime/contracts` contains runtime-neutral event, measurement, consent, and evidence schemas. Growth may depend on that subpath; it must not import browser/server adapters or conversion implementations.
 7. The package root exports only environment-neutral contracts/helpers, or intentionally no runtime barrel. It must not combine browser, server, React, Next, or provider conversion implementations; subpaths are the runtime and bundling boundaries.
 
-## One CLI Contract
+## Separate Product CLI Contract
 
-The public executable is `unisane`, owned by the `unisane` package.
+Executable ownership is intentionally product-specific:
 
-Target namespaces:
+| Command          | Owner                                  | Boundary                                                                                               |
+| ---------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `unisane`        | `@unisane/devtools`, Unisane Framework | Framework adoption, compile, generate, develop, build, inspect, and local diagnostics                  |
+| `unisane-ops`    | Ops CLI package, Unisane Ops           | Ops adoption, observe, connect, plan, approve, apply, verify, inspect, automate, and receipt workflows |
+| `create-unisane` | Framework scaffolder                   | new Framework project creation only                                                                    |
+
+The Ops namespaces are:
 
 ```text
-unisane ops init
-unisane add|remove|connect|check|doctor|status|info|inspect
-unisane cloud ...
-unisane growth ...
-unisane ui ...                   # when the UI adopter-tooling pack is installed
-unisane provider ...
-unisane dev|build ...            # when the Framework integration pack is selected
-unisane generate|llm|app ...     # when the Framework integration pack is selected
+unisane-ops init
+unisane-ops add|remove|connect|disconnect|check|doctor|status|info|inspect
+unisane-ops cloud ...
+unisane-ops growth ...
+unisane-ops provider ...
+unisane-ops mcp ...
 ```
 
 Rules:
 
 1. `cloud` and `growth` are the primary capability-oriented user experience.
-2. `provider` is an expert lane for provider-specific behavior that cannot be normalized honestly.
-3. Provider names must not become the default navigation model for ordinary cross-provider tasks.
-4. Framework-specific commands are contributed through `@unisane/framework-ops`; they do not make Framework Devtools the owner of the public CLI.
-5. `@unisane/devtools` retains the internal `unisane-devtools` executable for Framework compiler, assembly, codegen, reference generation, and governance workflows.
-6. Exactly one package publishes `unisane`: the canonical `unisane` host. Devtools
-   publishes only `unisane-devtools`.
-7. Existing `unisane-devtools` provider and Growth compatibility facades describe
-   transitional current state only. The coordinated clean cut deletes the
-   obsolete command paths and documentation; no public alias or wrapper is part of the
-   target contract.
-8. `create-unisane` creates a new Unisane Framework application; `unisane ops init` adopts/configures Unisane Ops in an existing project and must not become a second Framework scaffolder. Bare `unisane init` is not an alias or supported command.
-9. Core owns `ops init`, `info`, `doctor`, and root primitive dispatch. `info` reports
-   CLI and project-declared Unisane package versions without importing Framework
-   Devtools. Root `doctor` executes only sealed `doctor <pack>` contribution descriptors,
-   preserves their declared effect ceiling and typed results, and emits one core-owned
-   human or JSON envelope. Missing optional diagnostics are explicit `not-selected`
-   state rather than synthesized checks. Doctor is read-only; it has no `--fix` mode.
-   Packs may contribute namespaced commands and registered `add` item types; duplicate
-   command paths, stable command ids, root names, `add` item types, config namespaces,
-   or capability bindings fail closed.
-10. The Framework pack owns the `app` namespace and preserves `unisane app compile --write|--check`. It may contribute Framework-specific `add` item types without taking ownership of root `add`.
-11. Core reserves the root `dev`, `build`, `generate`, and `llm` names for the Framework
-    integration pack, preserves `remove` as the peer dispatcher to `add`, and owns
-    aggregate `doctor`/`inspect` dispatch. The Framework pack contributes the sealed
-    `doctor framework` descriptor while Framework Devtools owns its checks, and exposes one executable
-    compiler at `unisane app compile --write|--check`; it does not contribute a root
-    regeneration alias. Local Project Memory generation, provider-state synchronization,
-    and doctor remain separate commands with separate ownership.
-12. A generic Ops project without the Framework pack does not synthesize Framework handlers for reserved Framework roots. Root `doctor` instead reports the Framework diagnostic component as `not-selected`; help and errors never accept another pack's conflicting root command.
-13. CLI core has a built-in non-executable JSON manifest for its executable root handlers. Delegated commands merge the core and selected contribution descriptors, use the stricter maximum effect, union their write targets, and cannot weaken JSON, exit, trust, or collision rules.
-14. Stable pack, command, capability, provider, item-type, alias, and config-namespace ids follow the exact lowercase ASCII grammar in `docs/architecture/07-naming-and-pattern-conventions.md`; hosts reject noncanonical values rather than silently normalizing them.
-15. A core reserved root may name an exact first-party contributor pack. The binding is
-    part of the sealed manifest graph; an undeclared pack cannot claim that root.
-16. A typed pack result may carry human `stdout`/`stderr` presentation only after handler
-    identity, effect, write-target, risk, trust, and integrity checks pass. JSON mode
-    remains one structured host result.
-17. The UI repository owns `@unisane/ui-cli`, not Ops or Framework Devtools. It
-    contributes exact `ui init`, `ui add`, `ui diff`, `ui doctor`, `ui theme`, and
-    `ui appearance enable|disable|list` descriptors through the static pack contract.
-    It publishes no binary; exactly one `unisane` executable remains.
-18. The canonical host may resolve the explicitly trusted installed UI pack, but its
-    package manifest does not depend on `@unisane/ui-cli`. The UI pack likewise imports
-    no Ops, Framework, or runtime UI package; its static manifest and handler result
-    implement the versioned structural protocol and are validated by the host. Runtime
-    `@unisane/ui` does not depend on either CLI package.
+2. `provider` is an expert lane for behavior that cannot be normalized honestly;
+   provider names do not become the default navigation model.
+3. The CLI is a presentation adapter over typed `ActionDefinition`s. It parses boundary
+   input, calls the engine, and renders the structured result; it owns no provider,
+   business, policy, approval, verification, or workflow behavior.
+4. Ops contributes no Framework `dev`, `build`, `generate`, compiler, database, LLM,
+   scaffolding, or UI commands. Framework and UI tooling expose their own product
+   surfaces and are not runtime-discovered command packs in the Ops CLI.
+5. No product CLI invokes, forwards raw arguments to, captures output from, or delegates
+   business behavior to another CLI. There is no combined launcher, reserved Framework
+   root, catch-all fallback, or compatibility alias.
+6. Exactly one package owns `unisane-ops`; `@unisane/devtools` owns `unisane`, and
+   `create-unisane` is the only project-creation command. The current `unisane` Ops and
+   `unisane-devtools` identities are deleted in the clean cut.
+7. Core owns `init`, `info`, `doctor`, and root primitive dispatch. `info` reports only
+   Ops and project-declared package truth. `doctor` is read-only and has no `--fix` mode.
+8. CLI core and selected Ops packs expose non-executable versioned manifests. Every
+   command maps to an exact typed leaf action and exact handler export; the complete graph
+   is validated for schema, trust, compatibility, provenance, integrity, capability,
+   effect, write target, and collisions before the selected handler loads.
+9. Duplicate pack ids, command paths, stable action/command ids, root names, `add` item
+   types, config namespaces, or capability bindings fail closed.
+10. Stable pack, action, command, capability, provider, item-type, and config-namespace
+    ids follow the exact lowercase ASCII grammar in
+    `docs/architecture/07-naming-and-pattern-conventions.md`; the host rejects rather than
+    silently normalizes invalid values.
+11. Action handlers return typed results only. Human text and process exit behavior are
+    CLI projections; packs do not return stdout/stderr transcripts or mutate process
+    output/exit state as an engine protocol.
 
 Canonical operation terms:
 
@@ -1465,16 +1509,23 @@ Mutation commands emit receipts automatically as lifecycle output; the `receipt`
 
 ## Engine And Extension Contract
 
-There is one headless operational engine for desired state, inventory, policy, plan, approval, apply, receipts, and drift. Cloud, Growth, providers, Framework integration, the CLI, and later automation surfaces consume the same engine contracts. The engine also owns provider-neutral `SecretResolver`, `SecretWriter`, `ArtifactStore`, `ApprovalStore`, and `LockStore` ports; hosts and packs provide explicit implementations under the safety rules in SSOT 12.
+There is one headless operational engine and one `ActionDefinition` protocol for desired
+state, inventory, policy, plan, approval, apply, verify, results, receipts, and drift.
+Cloud, Growth, providers, the descriptor adapter, CLI, MCP, API, console, scheduler,
+automation, and agent surfaces consume the same engine contracts. The engine also owns
+provider-neutral `SecretResolver`, `SecretWriter`, `ArtifactStore`, `ApprovalStore`, and
+`LockStore` ports; hosts and packs provide explicit implementations under the safety
+rules in SSOT 12.
 
 Extensions register through a versioned, static `PackManifest`. A pack declares:
 
 - stable pack id and version
 - compatible pack API version
-- command namespaces
+- typed leaf action ids, input/result schemas, and exact handler exports
+- command or presentation namespaces where applicable
 - capabilities and provider bindings
 - config-schema contribution
-- effect classification
+- declared maximum effect, risk, and exact write-target requirements
 - required connections and permissions
 
 Rules:
@@ -1489,24 +1540,39 @@ Rules:
 8. Initial handler execution is limited to first-party or explicitly approved trusted packs. Untrusted third-party packs are deferred until a separate threat model and process/capability-isolation contract is approved.
 9. Provider SDKs load from their provider packages only when a selected capability needs them; the lightweight CLI package must not bundle every provider SDK.
 10. All mutation surfaces must use the shared safety lifecycle from `12-provider-control-plane-baseline.md`.
+11. The host loads accepted handlers generically. Provider-, product-, and action-specific
+    switch statements in the generic host are forbidden.
+12. Below the CLI presentation boundary, raw argv APIs, nested Commander or product CLI
+    execution, child CLI spawning, stdout/stderr interception, `process.exitCode`
+    capture, terminal-output parsing, CLI-exit error contracts, and parallel command/
+    action handler implementations are forbidden.
+13. Provider discovery, remote diff, plan, approval, apply, repair, archive, billing,
+    infrastructure, marketing, and production-state mutation are typed Ops actions.
+    Compiler and Devtools perform no provider/network/database mutation.
 
 ## Dependency Direction
 
 ```text
-unisane CLI -> ops-engine contracts
-unisane CLI -> explicitly selected suite/integration manifests + handlers
+unisane-ops CLI -> ops-engine action/manifest contracts
+unisane-ops CLI -> explicitly selected Ops suite/provider manifests + typed handlers
 suite packs -> ops-engine contracts; expose schema-only domain contract subpaths
 growth -> web-runtime/contracts only for application measurement schemas/evidence
 provider packs -> ops-engine contracts + exact suite /contracts subpaths + own SDKs
-framework-ops -> Ops contracts + Framework authoring contracts + @unisane/devtools/framework-integration
-ui-cli -> no ecosystem runtime package; owns its bundled UI registry assets
-unisane CLI -X-> ui-cli package/source; it may discover an explicitly installed trusted pack
+framework-ops -> Ops contracts + versioned serialized Framework descriptor data only
+framework-ops -X-> Framework packages / Compiler / Devtools / RuntimeHost / source / cache
 web-runtime -> ecosystem-neutral runtime libraries + declared optional peers only
 Unisane Framework -X-> Unisane Ops
 runtime code -X-> CLI / ops-engine / provider administration SDKs
 ```
 
-Suites do not import provider packages. Provider packages may import only the schema-only suite contract subpaths they implement, never suite roots or orchestration. Framework integration may lazy-load only the narrow headless `@unisane/devtools/framework-integration` subpath selected for a command; it must not import the Devtools root, CLI parser state, private compiler modules, or Framework runtime internals. Dependency inversions are architecture violations even when workspace aliases make them compile.
+Suites do not import provider packages. Provider packages may import only the schema-only
+suite contract subpaths they implement, never suite roots or orchestration. The optional
+Framework adapter is not part of the default install and consumes an immutable,
+schema-versioned descriptor through Ops-owned validation. It never imports or executes
+Framework authoring contracts, Compiler, Devtools, RuntimeHost, modules, adapters,
+Starters, generated runtime code, source trees, caches, workspaces, or sibling checkouts.
+Dependency inversions are architecture violations even when workspace aliases make them
+compile.
 
 ## Configuration Contract
 
@@ -1559,15 +1625,22 @@ Ops configuration uses stack-neutral terms:
 - `capability`
 - `policy`
 
-Framework keeps `scopeId` as its canonical tenant identifier. `@unisane/framework-ops` maps Framework identity into generic Ops project/target context at the integration boundary; Ops must not redefine `scopeId` or export `tenantId`.
+Framework keeps `scopeId` as its canonical tenant identifier. `@unisane/framework-ops`
+maps only validated serialized descriptor identity into generic Ops project/target
+context; it neither evaluates Framework configuration nor imports Framework code. Ops
+must not redefine `scopeId`, export `tenantId`, or create a second descriptor schema.
 
 ## Versioning Contract
 
-Three version axes are explicit:
+Five version axes are explicit:
 
 1. package semver governs distributed JavaScript package compatibility
 2. pack API version governs manifest and engine-extension compatibility
-3. config/artifact schema versions govern durable desired-state and evidence migrations
+3. action contract/schema version governs typed input, effect, result, and receipt
+   compatibility across presentation adapters
+4. config/artifact schema versions govern durable desired-state and evidence migrations
+5. Framework descriptor schema version governs only the optional adapter's supported
+   serialized input and advances independently from Ops package or action versions
 
 These versions may advance independently. Readers must reject unsupported major versions rather than silently reinterpret state.
 
@@ -1576,13 +1649,20 @@ These versions may advance independently. Readers must reject unsupported major 
 Target ownership is:
 
 ```text
-unisane/             # public Unisane Framework monorepo
+unisane/             # private Unisane Framework monorepo; later public review deferred
 unisane-pro/         # private reusable commercial Framework extensions
 unisane-ops/         # public CLI, Ops engine, Cloud, Growth, Web Runtime, providers
 unisane-ui/          # public UI system
 unisane-platforms/   # private product implementations and validation
 unisane-site/        # public brand/marketing/docs gateway; no product SSOT
 ```
+
+Framework source, packages, documentation distribution, registries, and remotes remain
+private through the complete architecture, release, and repository-finalization
+program. Completion permits only a later founder review; it does not establish public
+eligibility or publication authority. A future public state requires direct founder
+approval and a separate accepted high-impact Decision. This standard authorizes no
+Framework remote, registry, publication, visibility, or source-authority transition.
 
 `unisane-ops/` is one monorepo. Do not create one repository per package or provider. A future repository split requires independent ownership, security, release cadence, or distribution evidence and a new decision.
 
@@ -1597,9 +1677,10 @@ Repository rules:
 
 1. each target repository has one authoritative writable remote
 2. do not reconnect repositories with Git submodules, nested Git roots, copied package sources, or cross-repository relative imports
-3. private Pro and Platforms consume published public semver versions or explicit
-   prereleases after cutover; Platforms consume Pro only from its access-controlled
-   registry
+3. Pro and Platforms consume exact Framework packages only from a separately authorized
+   private registry/channel while the founder hold is active; they consume Pro only from
+   its access-controlled registry, while public Ops/UI packages use their separately
+   authorized release channels
 4. preserve relevant history and record source/destination commits and provenance during extraction
 5. the ecosystem Git plan owns the complete root-by-root split and cutover sequence
 6. after cutover, Ops product, provider-safety, CLI/config/pack, and execution docs have one writable authority in `unisane-ops`; Framework retains only its ecosystem/integration rules and noncanonical pointers, never editable copies of Ops SSOT
@@ -1608,12 +1689,13 @@ Repository rules:
 
 ## Exception Policy
 
-- Owner: `architecture-program`
-- Reason: Current provider, marketing, GTM, SEO, web-package, config-loader, and duplicate-binary behavior remains under Framework/Devtools paths until characterized replacement slices preserve behavior and public compatibility.
-- Expiry: `2027-01-31`
-- Removal Condition: Phase 7 of the active extraction plan has removed duplicate command/config/package owners and all zero-residue, compatibility, and integration gates pass; otherwise the owner must renew this exception with updated evidence and scope.
-- Canonical Owner Doc: `docs/standards/13-unisane-ops-product-architecture-baseline.md`
-- Tracking Artifact: `docs/findings/F-20260724-unisane-ops-product-boundary-and-devtools-coupling-gap.md`
+No architecture exception authorizes the combined CLI, executable Framework pack,
+Devtools bridge, raw-argv handlers, nested CLIs, output/process interception, duplicate
+action models, provider-specific generic-host switches, or Devtools provider mutations.
+Their observed current residue is tracked only by
+`F-20260724-unisane-ops-product-boundary-and-devtools-coupling-gap.md` and must be removed
+through the accepted clean cut. It cannot be extended by date, compatibility label, or
+implementation convenience.
 
 ## Enforcement And Transition
 
@@ -1626,4 +1708,6 @@ Until migration closes:
 3. characterization tests precede movement of live provider behavior
 4. each replacement slice must delete or demote the superseded path after parity proof
 5. generated references and architecture checks must be updated from their owning sources
-6. public breaking changes require coordinated semver and migration notes
+6. real stable, separately released Ops surfaces follow their semver and migration
+   policy; unreleased command, config, action, and adapter surfaces use the direct clean
+   cut without aliases or shims

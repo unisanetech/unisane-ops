@@ -24,6 +24,11 @@ onboarding lifecycle while preserving the established Ops package boundaries.
 
 ## Changelog
 
+- `2026-08-15`: Superseded combined-launcher guidance with the separate `unisane-ops`
+  CLI, one typed `ActionDefinition` across surfaces, and descriptor-only optional
+  Framework context with zero Framework npm dependencies. The cutover is unreleased and
+  direct; nested CLI/output capture is forbidden; provider mutations belong to Ops.
+  Earlier dated command/release entries remain chronology only.
 - `2026-07-31`: Completed the first bounded P120-W2 audit-only slice. The exact offline
   `growth marketing audit` command now emits one normalized source/manifest/observation
   result for CLI JSON, agents, and `Analytics > Tracking health`; it detects Web
@@ -114,6 +119,20 @@ The W1 lifecycle and configuration described here are executable current state a
 taught by the current guides and pack manifests. W2-W4 instrumentation, console, hosted,
 team, and automation behavior remains target state until its owning Skopos Task closes
 with direct acceptance Evidence.
+
+Current 2026-08-15 authority supersedes every `unisane ops`, `unisane growth`,
+`unisane provider`, executable Framework-pack, or Devtools-bridge target elsewhere in
+this plan. Current Ops commands use `unisane-ops`; Framework `unisane` and
+`create-unisane` remain separate. Every CLI/console/MCP/API/automation/agent surface
+invokes one typed action and never uses raw argv, a nested product CLI, stdout/stderr or
+process-exit capture, terminal parsing, or duplicate handlers. Framework context is an
+optional non-default serialized descriptor input with zero Framework npm dependencies.
+Provider/remote mutations never live in Framework Compiler or Devtools.
+
+The Framework remains private through the complete architecture, release, and
+repository-finalization program. Completion only permits later founder review; public
+state requires direct founder approval and a separate accepted high-impact Decision.
+This plan grants no Framework publication or visibility authority.
 
 ## Current Console Audit
 
@@ -228,21 +247,21 @@ surface.
 ### Initial flow
 
 ```text
-unisane ops init
-unisane add growth
-unisane connect google
-unisane check
+unisane-ops init
+unisane-ops add growth
+unisane-ops connect google
+unisane-ops check
 ```
 
-Interactive `unisane ops init` may select Growth directly. Non-interactive operation
+Interactive `unisane-ops init` may select Growth directly. Non-interactive operation
 must expose equivalent typed inputs and stable JSON; it must not depend on parsing
-prompts. Bare `unisane init` must fail with guidance to use `unisane ops init` for an
-existing project or `create-unisane` for a new Framework application; it is not an
-alias.
+prompts. Ops never intercepts or aliases the Framework `unisane` product. Guidance uses
+`unisane-ops init` for an existing project and `create-unisane` for a new Framework
+application.
 
-After readiness, capability-oriented operations remain under `unisane growth ...`.
-Provider-specific diagnostics remain under `unisane provider ...`. The visual entrypoint
-is `unisane growth console`.
+After readiness, capability-oriented operations remain under `unisane-ops growth ...`.
+Provider-specific diagnostics remain under `unisane-ops provider ...`. The visual
+entrypoint is `unisane-ops growth console`.
 
 ### What automation may do
 
@@ -804,15 +823,15 @@ Target WCAG 2.2 AA. Prove:
 
 ## Ownership Map
 
-| Owner                      | Responsibility                                                                                                            |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `unisane` CLI core         | project detection, `ops init`, `add`, `connect`, aggregate `check`, command/help generation                               |
-| `@unisane/ops-engine`      | normalized findings, readiness dimensions, next actions, state/artifact/secret ports, effect policy                       |
-| `@unisane/growth`          | Growth intent schema, domain manifests, audits, reports, recommendations, experiments, ads safety, headless console state |
-| provider packages          | OAuth/credentials, grants, discovery, resource access, transport, refresh/revocation                                      |
-| `@unisane/web-runtime`     | runtime tracking, consent, conversion delivery, SEO helpers, local instrumentation proof                                  |
-| `@unisane/framework-ops`   | optional Framework context and adapter installation only                                                                  |
-| `unisane-ops/apps/console` | visual shell over the same headless state/actions                                                                         |
+| Owner                           | Responsibility                                                                                                            |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Ops CLI package / `unisane-ops` | project detection, `init`, `add`, `connect`, aggregate `check`, command/help generation                                   |
+| `@unisane/ops-engine`           | normalized findings, readiness dimensions, next actions, state/artifact/secret ports, effect policy                       |
+| `@unisane/growth`               | Growth intent schema, domain manifests, audits, reports, recommendations, experiments, ads safety, headless console state |
+| provider packages               | OAuth/credentials, grants, discovery, resource access, transport, refresh/revocation                                      |
+| `@unisane/web-runtime`          | runtime tracking, consent, conversion delivery, SEO helpers, local instrumentation proof                                  |
+| `@unisane/framework-ops`        | optional descriptor-only adapter; consumes validated serialized Framework data with zero Framework dependencies           |
+| `unisane-ops/apps/console`      | visual shell over the same headless state/actions                                                                         |
 
 No owner may reimplement another row to make onboarding convenient.
 
@@ -900,16 +919,18 @@ implements the four lifecycle handlers at `src/handlers/init.ts`,
 
 Status: completed on `2026-07-30`.
 
-Deliver the public replacement as one coordinated major-release cut:
+Deliver the unreleased replacement as one coordinated direct cut:
 
 1. add the shared lifecycle, finding, next-action, and readiness contracts
 2. extend the root config schema and pack contribution model for Growth
-3. implement core `ops init`, `add growth`, `connect google`, and aggregate `check`
+3. implement core `unisane-ops init`, `add growth`, `connect google`, and aggregate
+   `check` typed actions and CLI projections
 4. move Google grants/discovery/resource selection behind one provider connection
 5. migrate first-party project intent and auth/resource state
 6. delete transitional setup/auth/config/token/readiness command implementations
 7. regenerate command/help/completion artifacts from manifests
-8. publish the versioned migration guide and reject retired schemas in normal loading
+8. write the versioned migration guide and reject retired schemas in normal loading;
+   publication remains separately authorized
 9. prove all scenario fixtures and repository-wide zero residue
 
 The replacement and deletion happen in the same bounded Task. A partially migrated command
@@ -966,7 +987,7 @@ This workstream may extend checks but must use the W1 readiness and action contr
 14. run aggregate comprehension, screenshot, responsive, keyboard, focus, screen-reader,
     contrast, table/chart, zoom, and reflow proof only after every slice is individually
     clean
-15. keep `unisane growth console` as the only visual entrypoint
+15. keep `unisane-ops growth console` as the only visual entrypoint
 
 No second API, cache, readiness computation, or action implementation is admitted for
 the console. W3 required one bounded Task with explicit replacement, deletion,
@@ -987,7 +1008,7 @@ This does not broaden mutation safety beyond SSOT 12.
 ## Clean-Cut Rules
 
 1. No wrapper command calls a retired command implementation.
-2. No deprecated alias or hidden CLI root survives the major release.
+2. No deprecated alias or hidden CLI root survives the unreleased cut.
 3. No loader searches `config/marketing.*` or `config/google-tag-manager.*`.
 4. No Growth or GTM code owns a Google OAuth/token profile.
 5. No operation reads a raw provider access token as fallback or debug behavior.
@@ -996,8 +1017,12 @@ This does not broaden mutation safety beyond SSOT 12.
 7. No new console recomputes headless state or calls provider SDKs directly.
 8. No Framework-only assumption enters the core, Growth, provider, or Web Runtime path.
 9. No old tests/docs/examples remain as an allowlist; migrate or delete them.
-10. Public compatibility is release/migration documentation plus an explicit one-shot
-    migrator, not runtime duality.
+10. Pre-release migration is an explicit one-shot persisted-state migrator, not runtime
+    duality; stable compatibility begins only after a separately admitted real release.
+11. No raw-argv action API, nested product CLI, stdout/stderr or `process.exitCode`
+    interception, terminal parsing, or duplicate command/action handler survives.
+12. The optional Framework adapter consumes only a validated serialized descriptor,
+    has zero Framework npm dependencies, and is absent from the default install.
 
 ### Slice-local hard replacement protocol
 
@@ -1053,8 +1078,8 @@ not contain planned legacy deletion.
    rejects them with stable code `GROWTH_CONFIG_SCHEMA_RETIRED`
 6. regenerate help/reference/index artifacts from their owners after every affected
    slice and once at aggregate closure
-7. aggregate the already-clean slice receipts and release as one coordinated major
-   version with upgrade and rollback notes
+7. aggregate the already-clean slice receipts for any separately authorized release;
+   do not infer a public major version or publication authority
 
 If a consumer cannot migrate in the release window, delay the cutover. Do not retain a
 fallback to accommodate it.
@@ -1083,6 +1108,11 @@ fallback to accommodate it.
 - only console app owns presentation
 - manifest/source/build/help command sets agree
 - retired-pattern inventory is zero with no allowlist
+- every presentation adapter invokes one typed action and returns the same structured
+  result, with no nested CLI or output/process interception
+- Ops core/default install has zero Framework implementation dependencies and the
+  optional adapter is descriptor-only
+- Framework Compiler/Devtools contain no provider or remote-state mutation
 
 ### Documentation
 
@@ -1144,7 +1174,8 @@ This plan is complete only when:
    contents contain zero unallowed retired patterns
 6. no compatibility alias, loader, state bridge, token fallback, or embedded console
    remains
-7. package versions, migration notes, and release coordination are recorded
+7. package versions, migration notes, and separately authorized release coordination
+   are recorded when applicable
 8. the linked finding is closed and removed from the active registry
 9. P120-W3's closed Task Evidence proves the final navigation, connection model, page
    hierarchy, copy vocabulary, progressive disclosure, accessibility, and deletion of
@@ -1152,3 +1183,7 @@ This plan is complete only when:
 10. the normal console contains no parallel expert mode and no ordinary page exposes
     duplicate, irrelevant, misleading, unactionable, or machine-oriented control-plane
     presentation
+11. all current commands use `unisane-ops`; Framework `unisane` and `create-unisane`
+    remain separate and no product CLI delegates to another
+12. every surface uses one typed `ActionDefinition`, Ops has zero Framework
+    implementation dependency, and provider mutations are absent from Compiler/Devtools

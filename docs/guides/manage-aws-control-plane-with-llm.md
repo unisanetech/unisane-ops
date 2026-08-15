@@ -14,10 +14,14 @@ view: current
 
 Use this guide when changing or operating Unisane-managed AWS resources through
 `@unisane/provider-aws`. The canonical command surface is
-`unisane provider aws ...`.
+`unisane-ops provider aws ...`.
 
 ## Changelog
 
+- `2026-08-15`: Moved all current AWS guidance to `unisane-ops`, canonical
+  `unisane.config.ts`, one typed action path, and provider-owned proof. Historical
+  Devtools commands remain chronology only; Framework Compiler/Devtools own no AWS
+  remote mutation and the private Framework is not an Ops dependency.
 - `2026-07-31`: Replaced manual Task verification with atomic `skopos finish`
   closure.
 - `2026-07-27`: Removed the unreleased Devtools AWS facade and root alias;
@@ -37,9 +41,15 @@ Use this guide when changing or operating Unisane-managed AWS resources through
 
 ## Command Authority
 
-`unisane provider aws ...` resolves the sealed `@unisane/provider-aws` pack. Devtools
+`unisane-ops provider aws ...` resolves the sealed `@unisane/provider-aws` pack. Devtools
 does not own or register AWS config, credentials, inventory, planning, apply, audit,
 reports, SDK code, or command composition.
+
+Every leaf command invokes one typed Ops `ActionDefinition`; CLI, MCP, API, UI, and
+agents share its plan/apply/verify/result contract. No handler invokes another product
+CLI, captures terminal/process output, or parses prose. The optional Framework adapter
+is descriptor-only with zero Framework npm dependencies. Framework remains private
+under its founder hold, and this guide grants no publication or visibility authority.
 
 ## Rule
 
@@ -49,7 +59,8 @@ production env values from deployable app startup code.
 
 ## Desired State
 
-Use `config/aws.ops.ts` or `config/aws.ops.mjs` for secret-free desired state:
+Use the AWS capability contribution in the single `unisane.config.ts` for secret-free
+desired state:
 
 ```txt
 accounts
@@ -93,7 +104,7 @@ mailIdentities.<identity>.bimi.certificateUrl = https://assets.<domain>/bimi/<br
 mailIdentities.<identity>.bimi.hostedZone = <dns-zone-key>
 ```
 
-BIMI is not part of runtime SES delivery. It requires enforced DMARC on the sending domain, published SVG/PEM assets, a BIMI TXT record, and mailbox-provider support. For platform-owned brand marks, `unisane-devtools brand generate` can write the BIMI SVG plus `public/brand/publish-manifest.json`; publish the manifest's `objectKey` entries to the configured asset CDN prefix before treating BIMI as ready.
+BIMI is not part of runtime SES delivery. It requires enforced DMARC on the sending domain, published SVG/PEM assets, a BIMI TXT record, and mailbox-provider support. For Framework platform-owned brand marks, the Framework-owned `unisane brand generate` command may write the BIMI SVG plus `public/brand/publish-manifest.json`; publish the manifest's `objectKey` entries to the configured asset CDN prefix before treating BIMI as ready. It performs local deterministic generation only, never provider mutation.
 
 ## New Platform Setup
 
@@ -135,16 +146,16 @@ For a new platform, wire production AWS in this order:
    - publish final CloudFront alias DNS records
    - re-run plans until remaining operations are expected manual external DNS reminders or no-ops
 
-Do not create production AWS resources from app startup, and do not keep app-specific AWS setup in hidden local notes. Durable desired state belongs in `config/aws.ops.*`; durable workflow rules belong in this guide; platform-specific launch gates belong in the platform docs pack.
+Do not create production AWS resources from app startup, and do not keep app-specific AWS setup in hidden local notes. Durable desired state belongs in `unisane.config.ts`; durable workflow rules belong in this guide; platform-specific launch gates belong in the platform docs pack.
 
 ## Readiness Loop
 
 Run non-mutating commands first:
 
 ```txt
-pnpm --filter unisane exec unisane provider aws doctor --env dev
-pnpm --filter unisane exec unisane provider aws audit --env dev --json
-pnpm --filter unisane exec unisane provider aws iam policy --env dev --output .unisane/aws/dev/iam/policy.json
+unisane-ops provider aws doctor --env dev
+unisane-ops provider aws audit --env dev --json
+unisane-ops provider aws iam policy --env dev --output .unisane/aws/dev/iam/policy.json
 ```
 
 `aws audit` is the CI-friendly readiness gate. It verifies account posture, S3 production prefix classification, private-bucket posture, CloudFront OAC and access-log configuration, SES production config expectations, SES BIMI sender-brand desired state, ACM CloudFront region rules, and DNS-zone references without mutating AWS.
@@ -154,12 +165,12 @@ pnpm --filter unisane exec unisane provider aws iam policy --env dev --output .u
 Generate inventories and plans before mutation:
 
 ```txt
-pnpm --filter unisane exec unisane provider aws s3 inventory --env dev
-pnpm --filter unisane exec unisane provider aws s3 plan --env dev
-pnpm --filter unisane exec unisane provider aws cloudfront inventory --env dev
-pnpm --filter unisane exec unisane provider aws cloudfront plan --env dev
-pnpm --filter unisane exec unisane provider aws domains inventory --env dev
-pnpm --filter unisane exec unisane provider aws domains plan --env dev
+unisane-ops provider aws s3 inventory --env dev
+unisane-ops provider aws s3 plan --env dev
+unisane-ops provider aws cloudfront inventory --env dev
+unisane-ops provider aws cloudfront plan --env dev
+unisane-ops provider aws domains inventory --env dev
+unisane-ops provider aws domains plan --env dev
 ```
 
 Review plan artifacts under `.unisane/aws/<env>/plans/**`. Manual operations are instructions for external DNS providers and are skipped by guarded apply.
@@ -173,9 +184,9 @@ HTTPS SNS subscriptions require the target app webhook to be publicly reachable 
 Apply only reviewed plans:
 
 ```txt
-pnpm --filter unisane exec unisane provider aws s3 apply --env dev --plan .unisane/aws/dev/plans/s3-plan.json --account-confirm <account-id> --yes
-pnpm --filter unisane exec unisane provider aws cloudfront apply --env dev --plan .unisane/aws/dev/plans/cloudfront-plan.json --account-confirm <account-id> --yes
-pnpm --filter unisane exec unisane provider aws domains apply --env dev --plan .unisane/aws/dev/plans/domains-plan.json --account-confirm <account-id> --yes
+unisane-ops provider aws s3 apply --env dev --plan .unisane/aws/dev/plans/s3-plan.json --account-confirm <account-id> --yes
+unisane-ops provider aws cloudfront apply --env dev --plan .unisane/aws/dev/plans/cloudfront-plan.json --account-confirm <account-id> --yes
+unisane-ops provider aws domains apply --env dev --plan .unisane/aws/dev/plans/domains-plan.json --account-confirm <account-id> --yes
 ```
 
 For production, include the exact production confirmation:
@@ -193,7 +204,7 @@ Every apply writes a receipt under `.unisane/aws/<env>/receipts/**`.
 Use certificate deletion only for local/non-production cleanup of unused ACM certificates that were requested during development and are not attached to any resource:
 
 ```txt
-pnpm --filter unisane exec unisane provider aws domains delete-certificate --env dev --certificate-arn <arn> --account-confirm <account-id> --yes
+unisane-ops provider aws domains delete-certificate --env dev --certificate-arn <arn> --account-confirm <account-id> --yes
 ```
 
 The command refuses production environments, requires exact account confirmation, checks the ARN account, and blocks deletion when ACM reports `InUseBy` entries. Production certificate cleanup is intentionally not available through this lane.
@@ -203,7 +214,7 @@ The command refuses production environments, requires exact account confirmation
 After resources exist, generate secret-free app env values:
 
 ```txt
-pnpm --filter unisane exec unisane provider aws env --env dev --app true-resume
+unisane-ops provider aws env --env dev --app true-resume
 ```
 
 The output may include storage bucket, public asset base URL, and SES identity/configuration-set values. It must not emit AWS credentials.
@@ -236,18 +247,8 @@ For production apps in the same AWS account as development, keep resources separ
 
 ## Verification
 
-For AWS provider changes, run:
-
-```txt
-pnpm --filter @unisane/cloud build
-pnpm --filter @unisane/provider-aws check-types
-pnpm --filter @unisane/provider-aws test
-pnpm --filter @unisane/provider-aws build
-pnpm --filter @unisane/devtools exec vitest run src/commands/aws/__tests__
-pnpm --filter @unisane/devtools check-types
-pnpm ops:architecture:check
-pnpm docs:core:check
-pnpm architecture:index:check
-pnpm -w typecheck
-skopos finish <task-id> . --actor <id>
-```
+For AWS provider changes, use the current Task-selected registered Actions for
+`@unisane/provider-aws`, its affected Cloud contracts, the Ops package boundary, and
+provider mutation safety. Proof must exercise the typed action directly and through the
+admitted CLI projection; no Devtools command or Framework implementation is part of AWS
+provider verification.

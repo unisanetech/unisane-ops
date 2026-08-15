@@ -25,6 +25,12 @@ web projects.
 
 ## Changelog
 
+- `2026-08-15`: Superseded the combined `unisane` host, executable Framework pack,
+  Devtools bridge, direct Framework dependency, and public-Framework assumption. The
+  current target has Framework `unisane`, Ops `unisane-ops`, and `create-unisane`; a
+  non-default descriptor-only adapter with zero Framework npm dependencies; one typed
+  `ActionDefinition`; no nested CLI/output/process capture; and provider mutations in
+  Ops, never Compiler/Devtools. Earlier phase/checkpoint text remains chronology only.
 - `2026-07-29`: Clarified that P120's coordinated major cut is executed through
   delete-first slice-local replacement, not build-then-clean staging. Each slice reaches
   zero retired residue before the next; aggregate release closure contains proof and
@@ -227,11 +233,31 @@ execution until a durable host state adapter lands. Growth, wider providers, dur
 automation, and remaining target packages are not proved. Documentation must never
 instruct a user to run an unproved command.
 
+The accepted 2026-08-15 Decisions supersede every combined-launcher, executable
+Framework-pack, Devtools-bridge, public-Framework, or direct Framework-import clause
+elsewhere in this plan. Current target authority is:
+
+1. `@unisane/devtools` owns the separate Framework `unisane` CLI;
+   `create-unisane` alone scaffolds Framework projects.
+2. the Ops CLI package owns `unisane-ops` and exposes only Ops command families.
+3. Ops core/default install has zero Framework implementation dependencies. The optional
+   non-default `@unisane/framework-ops` adapter consumes only a versioned validated
+   serialized descriptor and has zero Framework npm dependencies.
+4. every CLI/MCP/API/UI/scheduler/automation/agent/plugin leaf invokes one typed
+   `ActionDefinition`; raw argv, nested product CLIs, stdout/stderr or process-exit
+   capture, terminal parsing, and duplicate handlers are forbidden below presentation.
+5. provider and remote-state mutations belong to typed Ops actions or another admitted
+   product owner, never Framework Compiler or Devtools.
+6. Framework stays private through the complete architecture, release, and
+   repository-finalization program. Completion only permits later founder review; public
+   state requires direct founder approval and a separate accepted high-impact Decision.
+   This plan grants no Framework remote, registry, publication, or visibility authority.
+
 P120 owns the target Growth onboarding and developer-experience refactor. Its
-`ops init` plus root `add`/`connect`/`check` lifecycle, canonical Growth config
+`unisane-ops init` plus root `add`/`connect`/`check` lifecycle, canonical Growth config
 contribution, unified provider connection, derived readiness, and console separation
 are not current command truth until the linked Tasks close. P120 must replace and
-delete the old public surfaces in one coordinated major-release workstream; this
+delete the old unreleased surfaces in one coordinated direct-cut workstream; this
 umbrella plan does not admit wrappers, aliases, dual loaders, or cleanup-later staging.
 Inside that workstream, every bounded slice deletes its retired owner/export/route
 first, implements and migrates the canonical replacement, deletes related residue, and
@@ -278,28 +304,31 @@ Unisane Ops contains two user-facing suites:
 After this formal introduction, this plan uses `Cloud` and `Growth` as shorthand. They are
 not separate top-level products.
 
-The result should feel like one product, not a collection of provider scripts. A developer
-starts with the capability they need, uses one CLI and one config, and reaches a provider
-specific lane only when the provider genuinely exposes a non-portable lifecycle.
+Ops should feel like one product, not a collection of provider scripts. A developer
+starts with the capability they need, uses the one Ops CLI and one config, and reaches a
+provider-specific lane only when the provider genuinely exposes a non-portable lifecycle.
 
 ## Success Criteria
 
 The program is complete when:
 
-1. one published `unisane` package owns the `unisane` binary
-2. the CLI starts without loading Framework compiler code or any provider SDK
+1. `@unisane/devtools` owns Framework `unisane`, the Ops CLI package owns
+   `unisane-ops`, and `create-unisane` alone scaffolds Framework projects
+2. the Ops CLI starts without loading Framework implementation code or any provider SDK
 3. Cloud and Growth commands use one headless plan/apply/receipt/drift engine
 4. provider SDKs live only in provider-family packages and load only when selected
 5. Cloud, Growth, and Web Runtime work in a non-Unisane website repository
-6. Unisane Framework integrates through `@unisane/framework-ops`, without making
-   Framework runtime code depend on the CLI or Ops engine
+6. optional Framework context enters through a serialized descriptor adapter with zero
+   Framework npm dependencies and without either product importing the other
 7. `unisane.config.ts` is the only project-level Unisane config authority
-8. the static, versioned pack contract is independent of Commander
+8. the static pack contract exposes typed leaf `ActionDefinition`s and is independent of
+   Commander, raw argv, nested CLIs, and terminal capture
 9. web tracking, conversions, and SEO converge behind one `@unisane/web-runtime`
    package with deliberate subpath exports
 10. existing supported behavior has characterization and parity proof before old paths
     are deleted
-11. public migrations follow semver and ship with migration notes
+11. unreleased surfaces use direct clean cuts; real stable releases follow their owning
+    semver and migration policy
 12. no internal compatibility path or duplicate command owner remains after its
     replacement Task closes
 
@@ -325,18 +354,18 @@ This program does not:
 
 The package model exists to support these jobs:
 
-| Job                           | Example                                                                                                           | Primary owner             |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| Understand a project          | identify configured capabilities, connections, readiness, and drift                                               | `unisane` + Ops engine    |
-| Adopt existing infrastructure | inventory an existing domain/CDN/bucket, import intent, then manage it                                            | Cloud + provider package  |
-| Safely create infrastructure  | plan DNS, delivery, storage, certificate, queue, or schedule changes                                              | Cloud + provider package  |
-| Establish measurement         | configure consent-aware tracking and validate event coverage                                                      | Growth + Web Runtime      |
-| Send server conversions       | deliver deduplicated Google Ads or Meta CAPI events                                                               | Web Runtime               |
-| Operate GTM and analytics     | inspect, plan, publish, report, and roll back through one Google connection                                       | Growth + Google provider  |
-| Improve discoverability       | audit technical SEO, research opportunities, generate briefs, and measure outcomes                                | Growth + Web Runtime      |
-| Operate paid acquisition      | inspect accounts, draft changes, assess spend impact, apply with approval, and report                             | Growth + provider package |
-| Add Framework context         | derive project targets and environments from Framework config without coupling generic Ops to Framework internals | Framework Ops integration |
-| Automate in CI or an agent    | consume stable JSON, exit codes, artifacts, and explicit effect classifications                                   | CLI + Ops engine          |
+| Job                           | Example                                                                                                           | Primary owner              |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| Understand a project          | identify configured capabilities, connections, readiness, and drift                                               | `unisane-ops` + Ops engine |
+| Adopt existing infrastructure | inventory an existing domain/CDN/bucket, import intent, then manage it                                            | Cloud + provider package   |
+| Safely create infrastructure  | plan DNS, delivery, storage, certificate, queue, or schedule changes                                              | Cloud + provider package   |
+| Establish measurement         | configure consent-aware tracking and validate event coverage                                                      | Growth + Web Runtime       |
+| Send server conversions       | deliver deduplicated Google Ads or Meta CAPI events                                                               | Web Runtime                |
+| Operate GTM and analytics     | inspect, plan, publish, report, and roll back through one Google connection                                       | Growth + Google provider   |
+| Improve discoverability       | audit technical SEO, research opportunities, generate briefs, and measure outcomes                                | Growth + Web Runtime       |
+| Operate paid acquisition      | inspect accounts, draft changes, assess spend impact, apply with approval, and report                             | Growth + provider package  |
+| Add Framework context         | derive project targets and environments from Framework config without coupling generic Ops to Framework internals | Framework Ops integration  |
+| Automate in CI or an agent    | consume stable JSON, exit codes, artifacts, and explicit effect classifications                                   | CLI + Ops engine           |
 
 The common workflow is:
 
@@ -369,8 +398,9 @@ Generic Ops code uses these terms:
 
 Generic Ops code must not assume Framework concepts such as modules, starters, containers,
 or platform scopes. Unisane Framework keeps `scopeId` as its canonical tenant identifier.
-`@unisane/framework-ops` maps Framework project and `scopeId` context into generic Ops
-`project`, `target`, and `environment` inputs at the integration boundary.
+`@unisane/framework-ops` maps only validated serialized Framework descriptor identity
+into generic Ops `project`, `target`, and `environment` inputs. It never imports or
+executes Framework code.
 
 Use **provider** for the vendor family and **connection** for credentials. Do not use
 provider names as capability names when a capability-first term is accurate.
@@ -381,22 +411,23 @@ The target ecosystem repository model is:
 
 ```text
 Unisane Git organization/
-├── unisane/                         # Unisane Framework; public
+├── unisane/                         # Unisane Framework; private under founder hold
 │   ├── packages/
 │   │   ├── foundation/
 │   │   ├── modules/
 │   │   └── adapters/
 │   ├── starters/
 │   └── tooling/
-│       ├── devtools/                # Framework compiler/codegen/governance only
-│       └── create-unisane/
+│       ├── compiler/                # deterministic engine, IR, codegen, output manifest
+│       ├── devtools/                # thin CLI/watch/scaffold/doctor/diagnostic presentation
+│       └── create-unisane/          # sole Framework project scaffolder
 ├── unisane-pro/                     # reusable commercial Framework extensions; private
 │   ├── packages/
 │   ├── examples/
 │   └── docs/
 ├── unisane-ops/                     # Unisane Ops + Web Runtime; public monorepo
 │   ├── packages/
-│   │   ├── unisane/                 # canonical CLI and binary
+│   │   ├── <ops-cli-package>/       # canonical `unisane-ops` CLI; exact coordinate release-manifest owned
 │   │   ├── ops-engine/              # headless orchestration and policy engine
 │   │   ├── cloud/                   # Cloud capability suite
 │   │   ├── growth/                  # Growth capability suite
@@ -404,7 +435,7 @@ Unisane Git organization/
 │   │   ├── provider-aws/            # AWS family
 │   │   ├── provider-cloudflare/     # Cloudflare family
 │   │   ├── provider-google/         # Google family
-│   │   └── framework-ops/           # Framework integration pack
+│   │   └── framework-ops/           # optional serialized-descriptor adapter; non-default
 │   ├── apps/
 │   │   └── console/                 # optional thin Ops/Growth presentation app
 │   ├── tests/
@@ -539,39 +570,40 @@ unisane-ops/packages/
 
 | Package                | Promise                                                                           |
 | ---------------------- | --------------------------------------------------------------------------------- |
-| `unisane`              | one installable CLI, config loader, output contract, and explicit pack loader     |
+| Ops CLI package        | `unisane-ops`, config loader, typed-result projection, and explicit pack loader   |
 | `@unisane/cloud`       | capability-first cloud operations and policy                                      |
 | `@unisane/growth`      | capability-first growth operations, analysis, and reporting                       |
 | `@unisane/web-runtime` | framework-neutral application runtime for tracking, conversions, SEO, and testing |
 
 ### Technical packages
 
-| Package                        | Promise                                                                                           |
-| ------------------------------ | ------------------------------------------------------------------------------------------------- |
-| `@unisane/ops-engine`          | headless command, effect, planning, policy, artifact, receipt, and drift contracts                |
-| `@unisane/provider-aws`        | AWS connection and AWS service implementations                                                    |
-| `@unisane/provider-cloudflare` | Cloudflare connection and Cloudflare service implementations                                      |
-| `@unisane/provider-google`     | one Google connection and Google product implementations                                          |
-| `@unisane/provider-meta`       | one Meta connection and Meta management implementations                                           |
-| `@unisane/framework-ops`       | the only integration layer allowed to translate Framework project context into generic Ops inputs |
+| Package                        | Promise                                                                                                          |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `@unisane/ops-engine`          | headless command, effect, planning, policy, artifact, receipt, and drift contracts                               |
+| `@unisane/provider-aws`        | AWS connection and AWS service implementations                                                                   |
+| `@unisane/provider-cloudflare` | Cloudflare connection and Cloudflare service implementations                                                     |
+| `@unisane/provider-google`     | one Google connection and Google product implementations                                                         |
+| `@unisane/provider-meta`       | one Meta connection and Meta management implementations                                                          |
+| `@unisane/framework-ops`       | optional non-default adapter for validated serialized Framework descriptor data; zero Framework npm dependencies |
 
 ### Source visibility and registry publication
 
-| Surface                                                                                                                              | Source visibility         | Registry/deployment                                | Primary audience                       |
-| ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- | -------------------------------------------------- | -------------------------------------- |
-| `unisane`, `@unisane/cloud`, `@unisane/growth`, `@unisane/web-runtime`                                                               | public                    | public package registry                            | application and operations developers  |
-| `@unisane/ops-engine`, `@unisane/provider-aws`, `@unisane/provider-cloudflare`, `@unisane/provider-google`, `@unisane/provider-meta` | public                    | public package registry                            | pack/provider authors and advanced use |
-| `@unisane/framework-ops`                                                                                                             | public                    | public package registry                            | Unisane Framework projects             |
-| `unisane-ops/apps/console`                                                                                                           | public                    | deployable app; not an implicit runtime dependency | operators choosing the visual surface  |
-| tracked internal helpers and redacted fixtures                                                                                       | public repo source        | not separately registry-published                  | maintainers and package tests          |
-| restricted fixtures, release credentials, customer/provider evidence, and production state                                           | excluded/ignored/external | never published in public Git or packages          | access-controlled maintainers/CI only  |
+| Surface                                                                                                                              | Source visibility               | Registry/deployment                                | Primary audience                       |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- | -------------------------------------------------- | -------------------------------------- |
+| Ops CLI package, `@unisane/cloud`, `@unisane/growth`, `@unisane/web-runtime`                                                         | public target, separately gated | separately authorized package registry/channel     | application and operations developers  |
+| `@unisane/ops-engine`, `@unisane/provider-aws`, `@unisane/provider-cloudflare`, `@unisane/provider-google`, `@unisane/provider-meta` | public                          | public package registry                            | pack/provider authors and advanced use |
+| `@unisane/framework-ops`                                                                                                             | public                          | public package registry                            | Unisane Framework projects             |
+| `unisane-ops/apps/console`                                                                                                           | public                          | deployable app; not an implicit runtime dependency | operators choosing the visual surface  |
+| tracked internal helpers and redacted fixtures                                                                                       | public repo source              | not separately registry-published                  | maintainers and package tests          |
+| restricted fixtures, release credentials, customer/provider evidence, and production state                                           | excluded/ignored/external       | never published in public Git or packages          | access-controlled maintainers/CI only  |
 
 Technical does not mean private. It describes audience and dependency role. Every
 cross-repository package edge resolves through a published semver or explicit prerelease;
 workspace-only helper packages cannot become hidden cross-repository dependencies.
-The external Framework prerequisite `@unisane/devtools` is likewise a public technical
-registry package; only its supported `@unisane/devtools/framework-integration` subpath is
-the cross-product contract used by `@unisane/framework-ops`.
+There is no external Framework package prerequisite for Ops. The optional adapter has
+zero Framework npm dependencies and consumes only a portable descriptor. Framework
+packages, source, registry, and remotes stay private under the founder hold; an Ops
+release or successful proof cannot lift it.
 
 ## Package Budget And Split Tests
 
@@ -658,7 +690,7 @@ data. Meta CAPI remains a Web Runtime connector; the separately admitted
 The target import direction is:
 
 ```text
-unisane CLI
+unisane-ops CLI
   -> Ops engine contracts
   -> explicitly configured suite and integration pack manifests
 
@@ -676,8 +708,8 @@ provider-aws / provider-cloudflare / provider-google
 
 framework-ops
   -> Ops engine contracts
-  -> exact public Unisane Framework authoring contracts
-  -> @unisane/devtools/framework-integration
+  -> versioned serialized Framework descriptor data only
+  -X-> Framework packages / Compiler / Devtools / RuntimeHost / source / cache
 
 web-runtime
   -> no CLI, Ops engine, suite, provider-management, or Framework runtime dependency
@@ -685,7 +717,7 @@ web-runtime
 
 Hard rules:
 
-1. `unisane` has no provider SDK dependency.
+1. the `unisane-ops` CLI has no provider SDK or Framework implementation dependency.
 2. `@unisane/ops-engine` has no Commander, provider SDK, Framework runtime, React, or Next
    dependency.
 3. Cloud and Growth depend on provider-neutral engine contracts, not provider SDKs, and
@@ -696,13 +728,16 @@ Hard rules:
    Framework packages. Suites never import provider packages; pack composition supplies
    the binding.
 5. Provider packages load only after explicit pack/provider selection.
-6. `@unisane/framework-ops` may use only exact public Framework authoring contracts and the
-   narrow headless `@unisane/devtools/framework-integration` subpath. It must not import
-   the Devtools root, CLI parser state, private compiler modules, or runtime internals.
-7. `@unisane/devtools` remains the Framework compiler, codegen, starter, LLM, and
-   governance owner; generic Ops behavior must leave it.
-8. Framework runtime packages, modules, adapters, starters, and deployables do not import
-   `unisane`, `@unisane/ops-engine`, Cloud, or Growth at runtime.
+6. `@unisane/framework-ops` is non-default, has zero Framework npm dependencies, and
+   consumes only a versioned validated serialized descriptor. It must not import or
+   execute Framework authoring, Compiler, Devtools, RuntimeHost, modules, adapters,
+   Starters, generated runtime, source, caches, workspaces, or sibling checkouts.
+7. `@unisane/compiler` owns deterministic Framework compilation, lowering, codegen, and
+   generated-output truth. `@unisane/devtools` owns only the thin Framework CLI, watch,
+   scaffold, local-reference, doctor, and diagnostic UX over canonical owners; generic
+   Ops behavior must leave both packages.
+8. Framework runtime packages, modules, adapters, starters, Compiler, Devtools, and
+   deployables do not import the Ops CLI, `@unisane/ops-engine`, Cloud, or Growth.
 9. Web Runtime can expose optional React and Next peer integration subpaths without
    making those frameworks required for core consumers.
 10. Growth may import only `@unisane/web-runtime/contracts` for runtime-neutral event,
@@ -711,6 +746,10 @@ Hard rules:
 11. Cross-package types that form the generic pack protocol live in Ops engine; domain
     capability types live in the owning suite contract subpath. Commander objects never
     cross a package boundary.
+12. Below CLI presentation, raw argv, nested product CLIs, stdout/stderr or
+    `process.exitCode` interception, terminal parsing, and duplicate command/action
+    handlers are forbidden.
+13. Framework Compiler and Devtools perform no provider or remote-state mutation.
 
 ## Build, Bundle, And Publish Contract
 
@@ -957,81 +996,54 @@ Rules:
    available; run untrusted validation in a credential-free isolated job or validate a
    reviewed/default-branch artifact
 
-## One CLI And Target Command Grammar
+## Separate Product CLIs And Target Command Grammar
 
-The package `unisane` is the sole owner of the `unisane` binary.
+Executable ownership is final and non-overlapping:
 
-Top-level target grammar:
+| Command          | Owner                          | Boundary                                                              |
+| ---------------- | ------------------------------ | --------------------------------------------------------------------- |
+| `unisane`        | `@unisane/devtools`, Framework | Framework adopt/compile/generate/dev/build/inspect/local diagnostics  |
+| `unisane-ops`    | Ops CLI package, Unisane Ops   | Ops adopt/observe/connect/plan/approve/apply/verify/automate/receipts |
+| `create-unisane` | Framework scaffolder           | new Framework project creation only                                   |
+
+Ops target grammar is:
 
 ```text
-unisane ops init
-unisane add <item-type> <id-or-package>
-unisane remove <item-type> <id-or-package>
-unisane connect <provider-or-integration>
-unisane check
-unisane doctor
-unisane status
-unisane inspect <subject>
-
-unisane cloud <capability> <verb>
-unisane growth <capability> <verb>
-unisane provider <provider> <capability> <verb>
-unisane sync|dev|build                         # Framework pack selected
-unisane generate|llm|app <framework-command>  # Framework pack selected
+unisane-ops init
+unisane-ops add|remove|connect|disconnect|check|doctor|status|info|inspect
+unisane-ops cloud <capability> <verb>
+unisane-ops growth <capability> <verb>
+unisane-ops provider <provider> <capability> <verb>
+unisane-ops mcp <operation>
 ```
 
-Namespace and dispatcher ownership is deterministic:
+Ops contributes no Framework or UI commands. There is no combined launcher, reserved
+Framework root, catch-all forwarding, compatibility alias, or runtime product discovery.
+`create-unisane` is the only scaffolder; `unisane` exposes no second create command.
 
-| Owner                    | Command contribution                                                                                                              |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| CLI core                 | `ops init`; root `add`, `remove`, `connect`, `check`, `doctor`, `status`, and `inspect` dispatch; reserved root-name registry     |
-| Cloud pack               | `cloud` namespace plus its capability/verb paths                                                                                  |
-| Growth pack              | `growth` namespace plus its capability/verb paths                                                                                 |
-| selected provider pack   | its exact `provider <provider>` expert namespace                                                                                  |
-| `@unisane/framework-ops` | reserved root `sync`, `dev`, `build`, `generate`, and `llm`; `app` namespace; Framework `add`/`remove` item types and diagnostics |
+CLI core and selected packs expose non-executable validated manifests containing typed
+leaf action ids, input/result schemas, exact handler exports, effects, risk, targets,
+capabilities, and compatibility/provenance. Each CLI leaf parses boundary input, invokes
+one `ActionDefinition`, and renders its typed result. Duplicate identities or command
+paths fail before handler load. Below presentation, raw argv, nested Commander/product
+CLIs, child-CLI execution, stdout/stderr or `process.exitCode` interception, terminal
+parsing, and parallel command/action handlers are forbidden.
 
-CLI core is itself described by built-in `core.manifest.json` under the same manifest
-schema. Its root handlers declare command ids, `maximumEffect`, `writeTargets`, artifact
-classes, JSON/exit behavior, and exact handler exports. A delegated command such as
-`connect` merges the core dispatcher descriptor with the selected provider/integration
-descriptor: the effective maximum effect is the stricter value and write targets are the
-union. Delegation cannot reduce either declaration.
-
-Core `add` is a dispatcher, not a claim over every item. Built-in Ops item types include
-`pack` and `capability`; the Framework pack may register `module`, `feature`, `adapter`,
-`plugin`, and other Framework item types owned by Framework docs. Duplicate root names,
-command paths, stable command ids, `add` item types, config namespaces, or capability
-bindings fail before help or execution is assembled.
-
-Core reserves the Framework root names so another pack cannot claim them. A generic Ops
-project without `@unisane/framework-ops` reports those commands as unavailable rather than
-inventing a handler. With the Framework pack selected, `unisane sync|dev|build|doctor`
-remains the public Framework lifecycle spine; Framework/app workspace profiles and
-profile-scoped `generate`, `inspect`, `add/remove`, and `llm` behavior remain governed by
-their active Framework decisions. `doctor` and `inspect` aggregate core plus selected pack
-contributions instead of letting one pack replace the root.
-
-`create-unisane` scaffolds a new Unisane Framework application. `unisane ops init`
-adopts or configures Unisane Ops in an existing project and must not duplicate Framework
-creation. Bare `unisane init` is rejected rather than retained as an alias. When the
-Framework pack is selected, `unisane app compile --write|--check` remains the canonical
-compiler lifecycle command.
-
-The primary UX is capability-first:
+The primary Ops UX is capability-first:
 
 ```text
-unisane cloud domains audit
-unisane cloud delivery plan
-unisane growth seo report
-unisane growth tag-management publish
+unisane-ops cloud domains audit
+unisane-ops cloud delivery plan
+unisane-ops growth seo report
+unisane-ops growth tag-management publish
 ```
 
 The provider lane is an expert escape hatch for provider-only concepts:
 
 ```text
-unisane provider aws cloudfront inventory
-unisane provider cloudflare workers plan
-unisane provider google gtm rollback
+unisane-ops provider aws cloudfront inventory
+unisane-ops provider cloudflare workers plan
+unisane-ops provider google gtm rollback
 ```
 
 Do not duplicate the same normalized capability under both lanes without one shared
@@ -1063,8 +1075,8 @@ Aliases must not weaken these meanings.
 
 ### Effect classes
 
-Every command declares exactly one `maximumEffect` in its manifest, and every execution
-records an `actualEffect` that cannot exceed it:
+Every typed `ActionDefinition` declares exactly one `maximumEffect`, and every result and
+receipt records an `actualEffect` that cannot exceed it:
 
 | Effect         | Meaning                                                                                  | Default policy                                                      |
 | -------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
@@ -1129,11 +1141,13 @@ Reading it must not import or execute the package's JavaScript/ESM handler. It d
 - integrity/provenance identity required by the configured trust policy
 - supported `packApiVersion`
 - config and artifact schema versions
-- command groups, exact paths, stable command ids, and contributed `add` item types
+- command groups, exact paths, stable typed leaf action ids, input/result schemas, exact
+  handler exports, and contributed `add` item types
 - config namespaces and schema keys
 - capabilities and provider requirements
-- maximum effect class per command
-- the exact package export used to load the typed handler
+- maximum effect, risk, target, approval, plan/apply/verify, and receipt contract per
+  action
+- the exact package export used to load the typed action handler
 
 Rules:
 
@@ -1160,8 +1174,9 @@ Rules:
 10. initial execution is limited to first-party or explicitly approved trusted packs;
     untrusted third-party packs are deferred until a separate threat model and
     process/capability-isolation contract is approved
-11. Commander remains a private presentation adapter; packs expose typed command
-    descriptors and headless handlers, not Commander instances or callbacks
+11. Commander remains a private presentation adapter; packs expose typed
+    `ActionDefinition`s and headless handlers, not Commander instances, callbacks, raw
+    argv APIs, nested product CLIs, or terminal-output contracts
 12. incompatible or untrusted packs fail before command execution with exit code `2`
 
 Three versions remain distinct:
@@ -1290,32 +1305,32 @@ reporting, SEO, tracking, or Web Runtime capabilities.
 
 This is a migration map, not a claim that target packages exist.
 
-| Current source/package                                                                                                                                                                      | Current responsibility                                                       | Target                                                                                                                                                                 |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `unisane-tools/packages/unisane`                                                                                                                                                            | `unisane` wrapper binary                                                     | become the canonical lightweight `unisane` CLI                                                                                                                         |
-| `unisane-tools/packages/devtools` binary map                                                                                                                                                | publishes both `unisane` and `unisane-devtools`                              | retain only the Framework-owned internal/devtools entry after canonical CLI cutover                                                                                    |
-| `unisane-tools/packages/unisane` dependency on `@unisane/devtools`                                                                                                                          | launches the full Devtools CLI                                               | replace with Ops engine and explicit pack dependencies/loaders                                                                                                         |
-| `devtools/src/control-plane/**`                                                                                                                                                             | artifact, plan, receipt, drift, policy primitives                            | `@unisane/ops-engine` after characterization                                                                                                                           |
-| `devtools/src/commands/aws/**`                                                                                                                                                              | AWS auth/inventory/plan/apply                                                | `@unisane/provider-aws` plus Cloud capability orchestration                                                                                                            |
-| `devtools/src/commands/cloudflare/**`                                                                                                                                                       | Cloudflare auth/inventory/plan/apply                                         | `@unisane/provider-cloudflare` plus Cloud capability orchestration                                                                                                     |
-| `devtools/src/commands/google/**`, `commands/gtm/**`, and Google provider clients under marketing/SEO                                                                                       | Google auth, GTM, GA4, Search Console, Ads                                   | `@unisane/provider-google` plus Growth workflows                                                                                                                       |
-| `devtools/src/marketing-control-plane/**`, `seo-research/**`, `commands/marketing/**`, `commands/seo/**`, `commands/ads/**`, `commands/analytics/**`                                        | marketing, SEO, ads, analytics, reports                                      | `@unisane/growth` headless workflows and state                                                                                                                         |
-| `devtools/src/marketing-console/**`                                                                                                                                                         | marketing presentation and mixed console state                               | headless state to `@unisane/growth`; optional UI to `unisane-ops/apps/console`, otherwise retire                                                                       |
-| Framework `create`, `configure`, composition, `add`, `app`, feature-spec, `generate`, routes, SDK, database, migrations, `dev`, `inspect`, ownership, verify, upgrade, and release commands | Framework assembly and maintenance                                           | remain Framework-owned in `@unisane/devtools`/`create-unisane`; Phase 0 classifies each as Framework root/`app` contribution or maintainer-only Devtools               |
-| current `commands/ui/**` and UI-related generators                                                                                                                                          | mixed Framework starter UI composition and reusable UI registry/docs tooling | Framework app composition stays in Devtools/Framework pack; genuinely reusable UI registry/docs tooling moves to `unisane-ui` only after owner and compatibility proof |
-| current `commands/brand/**`                                                                                                                                                                 | mixed brand/project operations                                               | site content/publishing/deployment moves to `unisane-site`; Framework starter/app brand config remains Framework; Growth analytics belongs to Growth                   |
-| current `commands/env/**`                                                                                                                                                                   | Framework and provider environment guidance                                  | Framework compiled/runtime env projection remains Framework; generic Ops connection/secret-reference guidance moves only with an admitted Ops capability               |
-| current `commands/billing/**` and billing provider sync/runtime state                                                                                                                       | Framework business/runtime billing operations                                | remain Framework-owned unless a separately admitted Ops contract proves a provider-account operation; shared vendor naming alone does not move it                      |
-| `@unisane/web-tracking`                                                                                                                                                                     | browser tracking, consent, attribution, React/Next adapters                  | `@unisane/web-runtime/tracking` subpaths                                                                                                                               |
-| `@unisane/web-conversions`                                                                                                                                                                  | provider-neutral server conversion runtime                                   | `@unisane/web-runtime/conversions`                                                                                                                                     |
-| `@unisane/web-conversions-google-ads`                                                                                                                                                       | Google Ads conversion delivery                                               | `@unisane/web-runtime/conversions/google-ads`                                                                                                                          |
-| `@unisane/web-conversions-meta-capi`                                                                                                                                                        | Meta CAPI delivery                                                           | `@unisane/web-runtime/conversions/meta`                                                                                                                                |
-| `@unisane/web-seo`                                                                                                                                                                          | metadata, canonical URL, robots, sitemap, JSON-LD                            | `@unisane/web-runtime/seo` and `/seo/next`                                                                                                                             |
-| future `@unisane/public-urls` / persistent public URL lane                                                                                                                                  | slug history, redirects, aliases, canonical identity                         | remain a Framework capability; never migrate into Web Runtime SEO                                                                                                      |
-| `@unisane/tag-manager-google`                                                                                                                                                               | Google tag-manager integration                                               | split by behavior: management in Google provider; application runtime helpers in Web Runtime tracking                                                                  |
-| Framework runtime/business provider packages (`storage*`, `email-ses`, `queue-cloudflare`, `scheduler-cloudflare`, Framework `analytics`)                                                   | application runtime ports/adapters or business capabilities                  | remain Framework-owned; Ops provider packages administer remote state and do not absorb them                                                                           |
-| current Meta control-plane/reporting code                                                                                                                                                   | Meta management and evidence                                                 | migrate transport/auth ownership to admitted `@unisane/provider-meta`; retain Devtools command composition only until CLI-host migration                               |
-| `config/aws.ops.ts`, Cloudflare ops config, marketing config                                                                                                                                | parallel config authorities                                                  | migrate into `unisane.config.ts` Ops export under a public schema migration                                                                                            |
+| Current source/package                                                                                                                                                                      | Current responsibility                                                       | Target                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `unisane-tools/packages/unisane`                                                                                                                                                            | transitional combined `unisane` wrapper binary                               | delete the combined wrapper after Framework `unisane` is owned directly by `@unisane/devtools` and Ops behavior moves to the independent `unisane-ops` CLI |
+| `unisane-tools/packages/devtools` binary map                                                                                                                                                | publishes both `unisane` and `unisane-devtools`                              | retain only Framework-owned `unisane`; delete `unisane-devtools` and all Ops/provider command ownership                                                    |
+| `unisane-tools/packages/unisane` dependency on `@unisane/devtools`                                                                                                                          | launches the full Devtools CLI                                               | delete the wrapper bridge; Framework `unisane` calls Devtools directly, while `unisane-ops` depends only on the Ops engine and admitted packs              |
+| `devtools/src/control-plane/**`                                                                                                                                                             | artifact, plan, receipt, drift, policy primitives                            | `@unisane/ops-engine` after characterization                                                                                                               |
+| `devtools/src/commands/aws/**`                                                                                                                                                              | AWS auth/inventory/plan/apply                                                | `@unisane/provider-aws` plus Cloud capability orchestration                                                                                                |
+| `devtools/src/commands/cloudflare/**`                                                                                                                                                       | Cloudflare auth/inventory/plan/apply                                         | `@unisane/provider-cloudflare` plus Cloud capability orchestration                                                                                         |
+| `devtools/src/commands/google/**`, `commands/gtm/**`, and Google provider clients under marketing/SEO                                                                                       | Google auth, GTM, GA4, Search Console, Ads                                   | `@unisane/provider-google` plus Growth workflows                                                                                                           |
+| `devtools/src/marketing-control-plane/**`, `seo-research/**`, `commands/marketing/**`, `commands/seo/**`, `commands/ads/**`, `commands/analytics/**`                                        | marketing, SEO, ads, analytics, reports                                      | `@unisane/growth` headless workflows and state                                                                                                             |
+| `devtools/src/marketing-console/**`                                                                                                                                                         | marketing presentation and mixed console state                               | headless state to `@unisane/growth`; optional UI to `unisane-ops/apps/console`, otherwise retire                                                           |
+| Framework `create`, `configure`, composition, `add`, `app`, feature-spec, `generate`, routes, SDK, database, migrations, `dev`, `inspect`, ownership, verify, upgrade, and release commands | Framework assembly and maintenance                                           | remain exclusively in Framework `unisane`/`@unisane/devtools` or `create-unisane`; never contribute to Ops                                                 |
+| current `commands/ui/**` and UI-related generators                                                                                                                                          | mixed Framework starter UI composition and reusable UI registry/docs tooling | Framework app composition stays in Framework `unisane`; reusable UI tooling moves to its UI-owned surface after owner/compatibility proof                  |
+| current `commands/brand/**`                                                                                                                                                                 | mixed brand/project operations                                               | site content/publishing/deployment moves to `unisane-site`; Framework starter/app brand config remains Framework; Growth analytics belongs to Growth       |
+| current `commands/env/**`                                                                                                                                                                   | Framework and provider environment guidance                                  | Framework compiled/runtime env projection remains Framework; generic Ops connection/secret-reference guidance moves only with an admitted Ops capability   |
+| current `commands/billing/**` and billing provider sync/runtime state                                                                                                                       | Framework business/runtime billing operations                                | remain Framework-owned unless a separately admitted Ops contract proves a provider-account operation; shared vendor naming alone does not move it          |
+| `@unisane/web-tracking`                                                                                                                                                                     | browser tracking, consent, attribution, React/Next adapters                  | `@unisane/web-runtime/tracking` subpaths                                                                                                                   |
+| `@unisane/web-conversions`                                                                                                                                                                  | provider-neutral server conversion runtime                                   | `@unisane/web-runtime/conversions`                                                                                                                         |
+| `@unisane/web-conversions-google-ads`                                                                                                                                                       | Google Ads conversion delivery                                               | `@unisane/web-runtime/conversions/google-ads`                                                                                                              |
+| `@unisane/web-conversions-meta-capi`                                                                                                                                                        | Meta CAPI delivery                                                           | `@unisane/web-runtime/conversions/meta`                                                                                                                    |
+| `@unisane/web-seo`                                                                                                                                                                          | metadata, canonical URL, robots, sitemap, JSON-LD                            | `@unisane/web-runtime/seo` and `/seo/next`                                                                                                                 |
+| future `@unisane/public-urls` / persistent public URL lane                                                                                                                                  | slug history, redirects, aliases, canonical identity                         | remain a Framework capability; never migrate into Web Runtime SEO                                                                                          |
+| `@unisane/tag-manager-google`                                                                                                                                                               | Google tag-manager integration                                               | split by behavior: management in Google provider; application runtime helpers in Web Runtime tracking                                                      |
+| Framework runtime/business provider packages (`storage*`, `email-ses`, `queue-cloudflare`, `scheduler-cloudflare`, Framework `analytics`)                                                   | application runtime ports/adapters or business capabilities                  | remain Framework-owned; Ops provider packages administer remote state and do not absorb them                                                               |
+| current Meta control-plane/reporting code                                                                                                                                                   | Meta management and evidence                                                 | migrate transport/auth ownership to admitted `@unisane/provider-meta`; delete Devtools composition in the clean cut                                        |
+| `config/aws.ops.ts`, Cloudflare ops config, marketing config                                                                                                                                | parallel config authorities                                                  | migrate once into `unisane.config.ts` Ops export and reject retired schemas during normal loading                                                          |
 
 Before moving any row, inventory its exports, tests, commands, artifacts, consumers,
 secrets, side effects, and public compatibility obligations.
@@ -1335,9 +1350,8 @@ Deliverables:
   routes/SDK, database/migrations, billing, brand, environment, UI, provider, growth,
   Skopos integration, governance, verification, and release commands
 - for each command record its current path/profile/effect/public compatibility, canonical
-  stable id, and exactly one target: CLI core, an Ops suite/provider pack, Framework
-  integration/root/`app`, maintainer-only Devtools, UI, Site, or explicit semver
-  retirement
+  stable id, and exactly one target: Ops CLI core, an Ops suite/provider pack, Framework
+  `unisane`, `create-unisane`, UI, Site, or direct pre-release retirement
 - freeze the Ops protocol identifier grammar from the naming SSOT and reject
   noncanonical/colliding pack, command, capability, provider, item-type, alias, and config
   namespace ids
@@ -1392,38 +1406,37 @@ Exit:
 
 ### Phase 3: Lightweight CLI And Pack Protocol
 
-Current checkpoint: complete. `unisane` is the sole public binary and a real static-pack
-host. Core, Cloud, Cloudflare, Growth, AWS, Google, Meta, and optional Framework
-manifests pass exact trust/integrity/collision validation. Framework roots route through
-the narrow Devtools bridge; UI routes through Framework Ops; GTM routes through Growth;
-provider expert roots route through their provider owners. Unknown commands fail closed,
-the canonical host has no Devtools dependency, and Devtools publishes only
-`unisane-devtools`.
+Historical checkpoint: the 2026-07-25 combined-host/static-pack migration proved
+trust/integrity/collision behavior and provider routing, but its `unisane` Ops ownership,
+Framework command pack, Devtools bridge, and duplicate developer binary are superseded
+implementation chronology, not current target authority.
 
 Deliverables:
 
-- make `unisane` the real CLI rather than a Devtools launcher
+- make `unisane-ops` the real Ops CLI while `@unisane/devtools` separately owns
+  Framework `unisane`
 - implement and validate static `PackManifest`
 - implement explicit pack selection and exact lazy imports
 - implement stable human/JSON output and exit codes
-- establish core `ops init`; root `add`, `remove`, `connect`, `check`, `doctor`,
-  `status`, and `inspect` dispatch; and reserved Framework root names
-- establish the minimal `@unisane/framework-ops` package shell and exact Framework
-  integration bridge required to preserve `unisane app compile --write|--check`
-- expose the headless bridge at `@unisane/devtools/framework-integration`
-- route current Framework commands through that bounded Framework pack without importing
-  the Devtools root or private compiler internals
-- preserve the public Framework `sync`, `dev`, `build`, `doctor`, workspace-profile, and
-  low-level `app compile` contracts through characterization and semver migration proof
-- remove the duplicate `unisane` binary from Devtools when parity and public migration
-  requirements are satisfied and every command-disposition row is routed, migrated, or
-  retired
+- establish `unisane-ops init`; root `add`, `remove`, `connect`, `disconnect`, `check`,
+  `doctor`, `status`, `info`, `inspect`, and `mcp` dispatch
+- make every command leaf one typed `ActionDefinition` and remove raw-argv handlers,
+  nested product CLIs, stdout/stderr/process-exit capture, and terminal parsing
+- replace the executable Framework pack/Devtools bridge with a non-default
+  `@unisane/framework-ops` serialized-descriptor adapter that has zero Framework npm
+  dependencies
+- delete all Framework/UI command contributions, reserved Framework roots, catch-all
+  forwarding, and compatibility aliases from Ops
+- keep Framework compile/dev/build/generate/inspect behavior exclusively in the separate
+  Framework `unisane` CLI and project creation exclusively in `create-unisane`
 
 Exit:
 
 - CLI installation has no provider SDKs
+- Ops core/default install has no Framework implementation dependencies
 - no arbitrary scanning, downloading, or import-time execution exists
-- one package owns the binary
+- each of `unisane`, `unisane-ops`, and `create-unisane` has one exact owner
+- CLI and a non-CLI adapter prove equivalent typed results for representative actions
 
 ### Phase 4: Cloud Vertical Proof
 
@@ -1431,7 +1444,8 @@ Current checkpoint: the Cloud and Cloudflare packages expose direct capability-f
 inventory/import/plan/apply; account/zone/Queue/Worker/Cron inventory; offline
 Queue/Worker/Cron plans; guarded local Queue/Worker/Cron apply; readiness/environment
 reports; and exact expert Cloudflare aliases. Plain non-Framework fixtures prove direct
-canonical use, and historical Devtools resource commands consume the same workflows.
+canonical use. Earlier Devtools consumer parity remains historical evidence only; the
+final cut deletes those commands and remote-operation owners.
 AWS provider ownership and expert routing are complete. Writable connection/secret
 management and durable automation composition remain.
 
@@ -1476,11 +1490,11 @@ Exit:
 
 ### Phase 6: Growth Extraction
 
-Current checkpoint: complete for source/package/command ownership. Growth owns GTM, SEO,
-marketing, ads, analytics, reports, recommendations, and headless console behavior;
-Google and Meta provider execution is host-injected; canonical and compatibility routes
-are explicit sealed-pack entries. Durable production automation remains a separate
-engine-host concern.
+Current checkpoint: source/package ownership is substantially extracted. Growth owns
+GTM, SEO, marketing, ads, analytics, reports, recommendations, and headless console
+behavior; Google and Meta provider execution is host-injected. Combined-host and
+compatibility routes remain residue to delete in the `unisane-ops` typed-action cut.
+Durable production automation remains a separate engine-host concern.
 
 Deliverables:
 
@@ -1503,26 +1517,33 @@ Exit:
 
 ### Phase 7: Framework Integration And Residue Deletion
 
-Current checkpoint: complete for the Devtools refactor boundary. Framework Ops owns the
-optional pack and UI route, Devtools retains Framework compiler/codegen/governance plus
-thin compatibility facades, generic Ops implementations are removed, and permanent
-gates reject fallback, duplicate-binary, and provider/GTM ownership regression.
+Historical checkpoint: source/package extraction removed much generic Ops behavior from
+Devtools, but the executable Framework pack, UI route contribution, compatibility
+facades, and bridge described by the earlier checkpoint are superseded residue, not the
+final integration.
 
 Deliverables:
 
-- complete and harden the Phase 3 `@unisane/framework-ops` shell
+- replace the Phase 3 executable shell with the non-default Ops-owned
+  `@unisane/framework-ops` descriptor adapter
 - implement exact named `ops` config export support
-- map Framework project/target/environment context at the integration boundary
-- keep compiler/codegen/governance in `@unisane/devtools`
-- delete generic cloud/growth/provider/runtime ownership from Devtools and Framework
-- delete parallel config loaders, command registrars, binary aliases, and artifact writers
+- emit a versioned static Framework descriptor through the Framework-owned path and map
+  its validated project/target/environment identity into Ops-owned contracts
+- keep deterministic compilation/codegen in `@unisane/compiler`; keep only thin
+  Framework CLI/watch/scaffold/reference/doctor/diagnostic UX in `@unisane/devtools`
+- delete generic cloud/growth/provider/runtime ownership and every provider or
+  remote-state mutation from Devtools and Framework Compiler
+- delete Framework/Ops package dependencies, executable bridge, parallel config loaders,
+  command registrars, binary aliases, nested CLI/output capture, and artifact writers
 - remove every remaining generic Meta management/reporting implementation from Devtools;
-  command compatibility may remain only until canonical CLI-host migration
+  no command compatibility facade remains after the clean cut
 
 Exit:
 
-- Framework projects use the canonical CLI plus Framework pack
-- Framework runtime has no Ops/CLI dependency
+- Framework projects use separate `unisane` and `unisane-ops` executables; optional Ops
+  context is descriptor-only
+- both products have zero implementation dependencies on the other and the adapter has
+  zero Framework npm dependencies
 - zero-residue import, command, config, binary, and artifact-owner gates pass
 
 ### Phase 8: Repository-Cutover And Release-Readiness Handoff

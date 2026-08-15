@@ -15,9 +15,29 @@ status: accepted
 
 ## Changelog
 
+- `2026-08-15`: Preserved Provider Meta admission while assigning all remote inventory,
+  pull, plan, apply, repair, verify, approval, and receipt flows to typed Unisane Ops
+  actions through `unisane-ops`. Any Devtools command surface is observed residue to be
+  deleted, not a compatibility wrapper; this update does not claim the source move is
+  complete.
 - `2026-07-25`: Admitted one Meta provider-family package after the implemented
   management lifecycle passed the provider and package-budget tests; kept Meta CAPI in
   Web Runtime and Growth strategy/safety outside the provider.
+
+## Current Supersession
+
+Provider Meta remains the admitted Meta management transport owner. Growth owns
+provider-neutral intent, normalized evidence, plans, policy, and safety contracts. Each
+remote capability is exposed as one typed Ops `ActionDefinition`; `unisane-ops` and any
+admitted MCP, API, console, automation, or agent adapter invoke that same action and
+render its structured result.
+
+Framework Compiler and Devtools own no Meta inventory, network transport, mutation,
+approval, or receipt behavior. They never invoke Ops through a nested CLI or parse its
+terminal output. Physical Devtools commands or wrappers still visible in the checkout
+are observed implementation residue pending clean-cut removal. They are not supported
+compatibility surfaces, and this Decision does not assert that their source has already
+moved.
 
 ## Context
 
@@ -46,8 +66,9 @@ The package owns:
 
 Growth owns Meta-neutral configuration schemas, normalized reports, plans, creative and
 campaign policy, confirmations, approvals, locks, blockers, receipts, and provider
-contracts. Devtools remains a transitional command/presentation composition root. Meta
-CAPI remains `@unisane/web-runtime/conversions/meta`; it is not moved into the management
+contracts. Typed Ops actions compose those contracts with Provider Meta and are reached
+through `unisane-ops`; there is no Framework or Devtools presentation owner. Meta CAPI
+remains `@unisane/web-runtime/conversions/meta`; it is not moved into the management
 provider package.
 
 Use one provider-family package with `./marketing` as the management subpath. Do not
@@ -64,9 +85,9 @@ create separate packages for Meta Ads, Pages, Instagram, Pixels, or auth.
 | state and concurrency          | Secrets remain outside artifacts. Growth owns freshness, plan hash, approval, operation confirmation, blockers, receipts, and replay-safe orchestration; durable automation remains unavailable without the engine-grade stores and locks required by the provider safety baseline. |
 | SDK/dependency isolation       | The current transport is standards-based `fetch`, so no Meta SDK is required. Graph API versions, permissions, pagination, retry/rate-limit policy, and any future optional SDK remain isolated in Provider Meta.                                                                   |
 | fixtures and provider access   | Existing redacted Meta discovery, reporting, inventory, asset, auth, and live-campaign characterization uses mocked Graph responses and controlled file auth stores; no production customer data is required.                                                                       |
-| independent consumers          | Transitional marketing report pull, ads apply, ads asset upload, and expert Meta inventory/auth command families consume the provider independently through Growth contracts or provider APIs.                                                                                      |
+| independent consumers          | Typed Ops actions for marketing report pull, Ads plan/apply/verify, asset upload, and Meta inventory/auth consume the provider through Growth contracts or provider APIs; presentation adapters invoke those actions rather than the provider directly.                             |
 | package-budget result          | Passed below.                                                                                                                                                                                                                                                                       |
-| terminal legacy disposition    | P116-W18 removes Meta Graph transport and saved-profile implementation from Growth/Devtools owners, retains only command composition, and adds permanent zero-residue gates.                                                                                                        |
+| terminal legacy disposition    | P116-W18 is historical implementation evidence. The current clean cut removes every Devtools command/composition wrapper and leaves typed Ops actions plus Provider Meta as the only executable path; permanent zero-residue gates reject forwarding or compatibility surfaces.     |
 
 ## Package-Budget Admission Record
 
@@ -87,8 +108,9 @@ create separate packages for Meta Ads, Pages, Instagram, Pixels, or auth.
 - Provider Meta becomes an approved target package and generated Ops owner.
 - Growth no longer contains Meta Graph API request transport or a Meta live-executor
   fallback.
-- Devtools command wrappers may remain temporarily for public compatibility but must
-  import Provider Meta rather than own auth or Graph transport.
+- Devtools contains no supported Meta command, wrapper, auth, Graph transport, or
+  provider-mutation path. Observed residue is deleted during implementation rather than
+  retained for compatibility.
 - Provider Meta must consume Growth through the exact `@unisane/growth/contracts`
   subpath.
 - New Meta capabilities require capability-level admission and safety proof inside this

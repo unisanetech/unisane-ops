@@ -16,6 +16,9 @@ Use this guide once when a project has Growth intent from the retired pre-Ops sc
 
 ## Changelog
 
+- `2026-08-15`: Moved the target workflow from the retired combined `unisane ops`
+  command family to the product-owned `unisane-ops` CLI. No forwarding alias or
+  compatibility launcher is supported.
 - `2026-07-30`: Added the one-shot clean-cut migration workflow.
 
 ## Migration
@@ -23,9 +26,9 @@ Use this guide once when a project has Growth intent from the retired pre-Ops sc
 Initialize Ops without selecting Growth, then run the explicit migrator:
 
 ```bash
-unisane ops init --yes
-unisane ops migrate growth-config --input <retired-config-module> --yes
-unisane check
+unisane-ops init --yes
+unisane-ops migrate growth-config --input <retired-config-module> --yes
+unisane-ops check
 ```
 
 The input path is explicit. Normal config loading never searches for or accepts the
@@ -42,8 +45,8 @@ The migrator:
 Complete the new connection lifecycle:
 
 ```bash
-unisane connect google --environment <environment>
-unisane check
+unisane-ops connect google --environment <environment>
+unisane-ops check
 ```
 
 Resolve ambiguous provider resources explicitly. Review instrumentation in

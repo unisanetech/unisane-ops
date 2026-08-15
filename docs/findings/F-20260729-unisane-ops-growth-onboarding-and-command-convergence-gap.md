@@ -16,6 +16,10 @@ status: in-progress
 
 ## Changelog
 
+- `2026-08-15`: Rebased target and closure on the separate `unisane-ops` CLI, one typed
+  `ActionDefinition`, descriptor-only optional Framework context with zero Framework
+  dependencies, no nested CLI/output capture, and provider mutations outside
+  Compiler/Devtools. Earlier combined-command entries remain observed chronology only.
 - `2026-07-31`: Closed the first bounded P120-W2 audit-only gap. One normalized offline
   audit now drives CLI JSON, agents, and Analytics Tracking health across source,
   manifest, and optional observed browser/server evidence, including emitter conflicts,
@@ -107,12 +111,12 @@ Receipts expose machine artifacts, and Schedule omits expected automation contro
 ## Fix Plan
 
 1. Implement the decision-owned Ops adoption lifecycle and shared readiness/next-action
-   model, beginning only at `unisane ops init`.
+   model, beginning only at `unisane-ops init`.
 2. Move Growth intent into the one root config and provider access into one connection
    lifecycle.
 3. Migrate every first-party project, test, document, and automation surface.
 4. Delete all retired setup/auth/config/token/readiness/console paths in the same
-   coordinated major-release workstream.
+   coordinated unreleased direct-cut program.
 5. Complete instrumentation reconciliation, console separation, and team/CI credential
    lifecycle in later P120 workpacks without reopening parallel ownership.
 6. In P120-W3, replace the flat control-plane navigation with the human-first
@@ -135,6 +139,17 @@ Receipts expose machine artifacts, and Schedule omits expected automation contro
 12. Apply the delete-first hard-replacement protocol to every bounded slice and block
     the next slice until old exports/routes/owners, consumers, tests, docs, config,
     assets, and generated residue are zero without an allowlist.
+13. Ensure every CLI/console/MCP/API/automation/agent leaf invokes one typed action and
+    remove raw argv, nested product CLIs, stdout/stderr or `process.exitCode` capture,
+    terminal parsing, and duplicate handlers.
+14. Keep Ops core/default install free of Framework implementation dependencies; admit
+    Framework context only through the non-default serialized descriptor adapter with
+    zero Framework npm dependencies.
+15. Remove provider and remote-state mutations from Framework Compiler/Devtools.
+
+The Framework remains private through complete architecture, release, and repository
+finalization. Closing this Finding only permits later founder review and grants no
+publication or visibility authority.
 
 ## Verification
 
@@ -146,6 +161,11 @@ Receipts expose machine artifacts, and Schedule omits expected automation contro
 - focused package behavior and type proof selected by Skopos for each implementation cut
 - plain-project and Framework-project onboarding scenario fixtures
 - manifest/source/build/help parity proof
+- separate ownership proof for Framework `unisane`, Ops `unisane-ops`, and
+  `create-unisane`, with no cross-product CLI delegation
+- typed-result parity across CLI and a non-CLI adapter; zero nested CLI/output capture
+- descriptor fixtures and dependency proof showing zero Framework npm dependencies
+- zero provider/remote mutation owners in Framework Compiler/Devtools
 - repository-wide zero-residue inventory with no allowlist
 - URL-addressable SEO tab and no-retired-tab route proof
 - partial Google grant/service-state, resource ambiguity, revoked/expired access, and
@@ -158,5 +178,6 @@ Receipts expose machine artifacts, and Schedule omits expected automation contro
 
 - `docs/standards/13-unisane-ops-product-architecture-baseline.md`
 - `docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md`
+- `docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md`
 - `docs/work/plans/unisane-ops-growth-onboarding-and-developer-experience-convergence-plan.md`
 - `docs/work/archive/tasks/P120-W1.md`

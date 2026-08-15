@@ -22,7 +22,10 @@ status: in-progress
   CLIs, process-global output capture, hardcoded host graph, parallel AWS config, and
   remaining Devtools remote-operation residue. The accepted target is separate product
   CLIs, one typed Ops action model, and an optional serialized-descriptor adapter with
-  zero Framework package dependencies.
+  zero Framework package dependencies. Framework remains private through the complete
+  architecture, release, and repository-finalization program; completing that program
+  permits only a later founder review, and any public state still requires direct
+  founder approval plus a separate accepted high-impact Decision.
 - `2026-08-09`: Removed the remaining direct Framework Devtools dependency/import leak
   into Ops-owned `@unisane/cli-core` and `@unisane/ops-engine`. Devtools now uses a
   package-private terminal helper, preserves the 76-command disposition, and is covered
@@ -353,7 +356,8 @@ frozen as one cross-cutting contract.
 3. **One typed action engine**
    - make one `ActionDefinition` own input schema, exact target, effect/risk,
      plan/approval/apply/verify behavior, typed result, artifacts, and receipts
-   - make CLI, MCP, API, console, scheduler, and agents thin adapters over that owner
+   - make CLI, MCP, API, UI/console, scheduler/automation, agents, and plugins thin
+     adapters over that owner
    - delete raw argv handlers, duplicate effect vocabularies, nested Commander parsing,
      output interception, process-exit capture, and CLI-output parsing
    - expose every provider capability as a manifest-declared typed leaf action
@@ -364,6 +368,8 @@ frozen as one cross-cutting contract.
 4. **Independent product CLIs and generic pack protocol**
    - give Framework and Ops separate binaries; the accepted target is Framework
      `unisane`, Ops `unisane-ops`, and Framework scaffolder `create-unisane`
+   - forbid a combined launcher, command ownership overlap, and delegation from one
+     product CLI to another
    - introduce non-executable JSON manifests, trust/integrity/collision validation, and
      exact lazy handler loading
    - make the host load accepted exact handlers generically after explicit trust
@@ -385,6 +391,8 @@ frozen as one cross-cutting contract.
    - make the optional Ops-owned adapter consume a schema-versioned serialized project
      descriptor, remain outside the default Ops install, and declare zero Framework npm
      dependencies
+   - restrict the adapter to descriptor schema validation and translation; it must not
+     load Framework code or recreate Framework compilation
    - do not re-expose Framework developer commands through Ops
    - move compilation to `@unisane/compiler`; retain CLI/watch/scaffold/doctor behavior
      in Devtools
@@ -404,6 +412,10 @@ The finding remains open until all of these are true:
 - Framework and Ops expose separate product binaries with no CLI-to-CLI delegation
 - the default Ops dependency graph and optional Framework adapter declare no Framework
   package dependency
+- the only Framework-aware Ops integration is the non-default Ops-owned adapter over a
+  schema-versioned serialized descriptor, with no Framework code loading or compilation
+- one typed `ActionDefinition` produces equivalent semantics and typed results for CLI,
+  MCP, API, UI/console, scheduler/automation, agent, and plugin adapters
 - `unisane`, Ops engine, Cloud, and Growth declare no provider SDK dependencies
 - provider SDKs exist only in the selected provider-family packages
 - the Ops engine can typecheck and test without Commander, Framework, or provider SDKs
@@ -424,6 +436,8 @@ The finding remains open until all of these are true:
   `/contracts` subpaths, and suites do not import provider packages
 - optional Framework context works from a versioned serialized descriptor; Ops core,
   Framework runtime, Compiler, and Devtools do not import the opposite product
+- Framework Compiler and Devtools own no provider, network, database, billing, publish,
+  or other remote mutation; every such effect has a typed Ops or explicit product owner
 - old command registrars, config loaders, artifact writers, dependencies, exports, and
   docs are removed for migrated slices
 - no generic Meta management/reporting path remains as terminal legacy in Devtools
@@ -447,6 +461,9 @@ Before setting this finding to `done`, record:
 - the final package and repository tree
 - exact private or public package versions where separately authorized and migration
   guides for real stable releases only
+- proof that Framework remained private throughout this program; completion is not
+  public eligibility, and any later public transition has its own accepted high-impact
+  Decision and direct founder approval
 - separate product-binary proof
 - dependency and clean-install reports
 - command/manifest/config/artifact compatibility test results

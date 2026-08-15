@@ -9,12 +9,25 @@ authority: canonical
 provenance: accepted
 view: current
 status: accepted
+relatedDocs:
+  - './D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md'
+  - './D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md'
+  - './D-20260815-framework-release-units-compatibility-bom-and-registry-proof-contract.md'
+  - '../standards/13-unisane-ops-product-architecture-baseline.md'
 ---
 
 # D-20260724 Unisane Ops Product, Package, And Repository Boundary Contract
 
 ## Changelog
 
+- `2026-08-15`: Superseded the combined `unisane` launcher, executable Framework pack,
+  Devtools bridge, and direct Framework-package integration. The accepted target now has
+  separate Framework `unisane`, Ops `unisane-ops`, and `create-unisane` executables; a
+  non-default descriptor-only Ops adapter with zero Framework npm dependencies; one
+  typed `ActionDefinition` for every Ops presentation adapter; no nested CLI/output
+  capture; and no provider or remote-state mutations in Framework Compiler or Devtools.
+  The Framework remains private under its founder hold. Earlier dated implementation
+  entries remain chronology only.
 - `2026-08-02`: Removed the Framework aggregate regeneration root. The Framework pack
   now contributes `dev`, `build`, specialist generate/LLM commands, and the sole
   executable compiler at `app compile --write|--check`.
@@ -62,7 +75,8 @@ standalone capabilities that ordinary websites could use.
 
 - keep the Unisane brand coherent
 - make cloud, growth, and web capabilities useful outside Unisane Framework
-- preserve one simple CLI and config experience
+- preserve one simple product-specific CLI and one config experience without coupling
+  the Framework and Ops implementations
 - keep Framework compilation and runtime architecture independent from generic Ops
 - isolate provider SDKs, credentials, and release risk
 - avoid package-per-service fragmentation
@@ -77,8 +91,9 @@ standalone capabilities that ordinary websites could use.
 2. Create one independent package and repository per provider service and specialist tool.
 3. Create separate Cloud, Growth, provider, Web Runtime, and CLI repositories immediately.
 4. Put Ops behavior inside Unisane Framework foundation/runtime packages.
-5. Create one Unisane Ops product monorepo with one CLI, one headless engine, two suites,
-   one Web Runtime, provider-family packages, and a narrow Framework integration.
+5. Create one Unisane Ops product monorepo with one Ops CLI, one headless engine, two
+   suites, one Web Runtime, provider-family packages, and an optional portable Framework
+   descriptor adapter; keep the Framework CLI and scaffolder separately owned.
 
 ## Decision
 
@@ -102,7 +117,8 @@ independently and does not require Ops or Framework at application runtime.
 
 Use these long-term repository boundaries:
 
-- `unisane`: public Framework monorepo
+- `unisane`: private Framework monorepo throughout the complete architecture, release,
+  and repository-finalization program
 - `unisane-pro`: private reusable commercial Framework extensions
 - `unisane-ops`: public Ops monorepo containing CLI, engine, suites, Web Runtime,
   provider packages, and Framework integration
@@ -114,6 +130,11 @@ The Ops packages remain together because they share a versioned extension protoc
 contract tests, security model, and coordinated extraction. A repository split is a later
 governance/release decision, not a naming preference.
 
+Completing that program permits only a later founder review. It does not create public
+eligibility or an automatic visibility/publication transition. Any future public
+Framework state requires direct founder approval and a separate accepted high-impact
+Decision.
+
 The exact six-remote visibility, staging, history, docs-authority, and umbrella-retirement
 contract is owned by
 `D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract`; this decision
@@ -123,7 +144,8 @@ does not create a competing Git cutover path.
 
 Public user-facing packages:
 
-- `unisane`
+- the Ops CLI package, which owns the `unisane-ops` executable; its exact registry
+  coordinate is owned by the release manifest
 - `@unisane/cloud`
 - `@unisane/growth`
 - `@unisane/web-runtime`
@@ -137,8 +159,10 @@ Technical extension/integration packages:
 - `@unisane/provider-meta`
 - `@unisane/framework-ops`
 
-All listed packages have public source in `unisane-ops` and publish to the public package
-registry. “Technical” identifies audience and dependency role, not private access.
+The target Ops packages have public source in `unisane-ops`, but publication requires
+their separately admitted release authority. This Decision does not create a registry,
+remote, package version, or publication action. “Technical” identifies audience and
+dependency role, not private access.
 
 Do not create a package for every capability, command, UI, or provider service. New
 packages require an independent consumer/import surface, optional dependency boundary,
@@ -192,61 +216,78 @@ public identity, and dynamic public URL records remain the separate Framework
 
 ### CLI and extension contract
 
-The package `unisane` is the only final owner of the `unisane` binary.
+Executable ownership is product-specific:
 
-The primary command groups are:
+| Command          | Owner                            | Responsibility                                                                                     |
+| ---------------- | -------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `unisane`        | `@unisane/devtools`, Framework   | Framework adoption, compile, generate, develop, build, inspect, and local developer diagnostics    |
+| `unisane-ops`    | the Ops CLI package, Unisane Ops | Ops adoption, observe, connect, plan, approve, apply, verify, inspect, automate, and receipt flows |
+| `create-unisane` | the Framework scaffolder         | new Framework project creation only                                                                |
 
-- project primitives/dispatchers: `ops init`, `add`, `remove`, `connect`, `check`,
-  `doctor`, `status`, `inspect`
-- capability suites: `cloud`, `growth`
+The primary `unisane-ops` command groups are:
+
+- project primitives/dispatchers: `init`, `add`, `remove`, `connect`, `disconnect`,
+  `check`, `doctor`, `status`, `info`, `inspect`, and `mcp`
+- capability suites: `cloud` and `growth`
 - provider expert lane: `provider`
-- Framework integration: reserved root `dev`, `build`, `generate`, `llm`, plus
-  `app`
 
-Capability-first commands are the default. Provider commands exist only for concepts that
-cannot be normalized honestly or for expert troubleshooting.
+Capability-first commands are the default. Provider commands exist only for concepts
+that cannot be normalized honestly or for expert troubleshooting.
 
-The CLI is a presentation shell over `@unisane/ops-engine`. It has no provider SDK
-dependencies. Provider packages are exact, lazy imports selected through an explicit
-static `PackManifest`.
+The Ops CLI is a presentation shell over the one typed action engine. It has no
+Framework implementation or provider SDK dependency. Provider packages are exact, lazy
+imports selected through an explicit static `PackManifest`. Framework commands are not
+Ops packs, reserved roots, fallbacks, or runtime-discovered contributions. The products
+do not invoke, forward to, or capture output from each other's CLI.
 
 `PackManifest` is a schema-versioned JSON resource, not an executable ESM/JavaScript
-module. It declares pack/package identity, compatibility, integrity/provenance, commands,
-`add` item types, config namespaces, capabilities, effects, schemas, and one exact handler
-export. The CLI validates the complete explicitly selected graph for schema, version,
-trust, integrity, and collisions before importing only the selected handler. Duplicate
-pack ids, command paths/ids, `add` item types, config keys, or capability bindings fail
-closed. The CLI must not scan arbitrary `node_modules`, infer package commands, download
-packages, or run package scripts. Commander is a private CLI adapter, not the public
-extension API.
+module. It declares pack/package identity, compatibility, integrity/provenance, typed
+leaf action ids, input/result schemas, exact handler exports, `add` item types, config
+namespaces, capabilities, maximum effects, risk, and exact write targets. The CLI
+validates the complete explicitly selected graph for schema, version, trust, integrity,
+capability, effect, target, and collisions before importing only the selected handler.
+Duplicate pack ids, command paths/ids, stable action ids, `add` item types, config keys,
+or capability bindings fail closed. The CLI must not scan arbitrary `node_modules`,
+infer package commands, download packages, or run package scripts. Commander is a
+private CLI adapter, not the extension API.
 
-Core owns `ops init` and root dispatch; packs own their namespaces and registered item
-types. `create-unisane` creates a new Framework application, while `unisane ops init`
-adopts Ops in an existing project. Bare `unisane init` is not an alias or supported
-command. The Framework pack preserves public `unisane dev|build`, workspace profiles,
-and the sole executable compiler `unisane app compile --write|--check`; aggregate
-doctor remains core-owned. A generic project without that pack reports reserved
-Framework commands unavailable. Provider state and local Project Memory use their
-explicit specialist commands and are not compiler phases.
+Core owns `unisane-ops init` and root dispatch; packs own their namespaces and
+registered item types. `create-unisane` is the only new-Framework-project command.
+`unisane` does not expose another create command, and Ops does not expose Framework
+`dev`, `build`, `generate`, compiler, database, LLM, or UI commands. There is no
+combined launcher, compatibility alias, catch-all forwarding route, or runtime product
+discovery.
 
 ### Engine and effect contract
 
-One Ops engine owns typed command execution, normalized inventory, deterministic plans,
-policy, approvals, receipts, drift, redaction, artifact schemas, and the provider-neutral
-`SecretResolver`, `SecretWriter`, `ArtifactStore`, `ApprovalStore`, and `LockStore` ports.
+One Ops engine owns normalized inventory, deterministic plans, policy, approvals,
+verification, receipts, drift, redaction, artifact schemas, and the provider-neutral
+`SecretResolver`, `SecretWriter`, `ArtifactStore`, `ApprovalStore`, and `LockStore`
+ports. Every operational capability is one versioned typed `ActionDefinition` shared by
+CLI, MCP, API, console, jobs, schedulers, automation, agents, and plugins. It owns a
+stable action id, typed input and result, maximum effect, exact target identity,
+capability/policy/admission/approval requirements, plan, one apply handler,
+postcondition verification, structured errors/artifacts/redaction/receipt, and relevant
+idempotency, lock, retry, cancellation, timeout, recovery, and reconciliation semantics.
 
-Every command declares one maximum effect:
+Every action declares one maximum effect:
 
 - `offline`
 - `read-network`
 - `write`
 - `spend-impact`
 
-The manifest declares maximum effect and a set of write targets; executions record actual
-effect separately from supporting artifact writes. Remote business-resource mutation
+The manifest declares maximum effect and a set of write targets; results and receipts
+record actual effect separately from supporting artifact writes. Remote business-resource mutation
 requires a fresh hash-bound plan, exact target identity, policy approval, lock, and
 receipt. Publish remains separate from apply. Rollback prepares an inverse plan that only
 the normal approved apply stage executes.
+
+Below the CLI presentation boundary, raw `argv` action APIs, nested Commander or product
+CLI invocation, child-CLI business execution, stdout/stderr interception,
+`process.exitCode` capture or replacement, terminal-prose parsing, thrown CLI exits as
+engine errors, and parallel command/action handlers are forbidden. Machine callers
+receive structured typed results.
 
 ### Config contract
 
@@ -258,7 +299,10 @@ Use one `unisane.config.ts`.
 
 Generic Ops vocabulary is `project`, `target`, `environment`, `connection`, `provider`,
 `connector`, `integration`, `capability`, and `policy`. Framework `scopeId` remains
-canonical inside Framework and is mapped only by `@unisane/framework-ops`.
+canonical inside Framework and is mapped only by `@unisane/framework-ops` from a
+versioned serialized Framework descriptor. In a Framework project, the Framework-owned
+path emits the admitted static config/identity projection; Ops never evaluates the
+Framework default export or invokes compilation implicitly.
 
 Provider-specific root config files and guessed export-name families are transitional,
 not the target architecture.
@@ -273,29 +317,39 @@ credential-free isolated lane or a reviewed/default-branch artifact.
 
 ### Dependency contract
 
-- the CLI depends on engine/manifest contracts and explicit packs, never provider SDKs
-- the engine depends on no CLI framework, provider SDK, Framework runtime, React, or Next
+- the Ops CLI depends on Ops engine/action/manifest contracts and explicit packs, never
+  provider SDKs or Framework implementation packages
+- the engine depends on no CLI framework, provider SDK, Framework RuntimeHost, Kernel,
+  modules, adapters, Starters, generated runtime, React, or Next
 - Cloud and Growth depend on engine contracts, not concrete provider SDKs, and expose
   schema-only `/contracts` subpaths
 - provider packages depend on engine contracts, their own SDKs, and only the exact suite
   `/contracts` subpaths they implement; suites never import providers
 - Growth may additionally import only `@unisane/web-runtime/contracts`
-- Framework Ops is the only cross-product integration and uses public Framework authoring
-  contracts plus the narrow `@unisane/devtools/framework-integration` subpath
+- `@unisane/framework-ops` is an Ops-owned, non-default adapter that consumes only a
+  versioned, schema-validated, serialized Framework descriptor and has zero Framework
+  npm dependencies; it validates schema version, compatibility, digest, project
+  identity, freshness, and requested capability before translation and fails closed
+- the descriptor contains static admitted identities and metadata only, never executable
+  handlers, service instances, containers, secrets, credentials, provider clients, or
+  source-path assumptions
 - Web Runtime has no CLI, engine, suite, management-provider, or Framework runtime
   dependency
-- Framework runtime code has no Ops/CLI dependency
-- `@unisane/devtools` continues to own Framework compilation, generation, starters, LLM
-  context, architecture gates, and governance
-- `@unisane/devtools` remains a publicly distributed technical Framework package so the
-  exact semver-governed `@unisane/devtools/framework-integration` subpath resolves from
-  `@unisane/framework-ops`; this does not make its root or private compiler modules a
-  cross-product API
+- Framework runtime, Compiler, and Devtools have no Ops dependency
+- `@unisane/compiler` owns Framework compilation, lowering, generation, and
+  generated-output truth; `@unisane/devtools` owns only the thin Framework CLI, watch,
+  scaffold, local-reference, doctor, and diagnostic UX over canonical owners
+- Framework Compiler and Devtools perform no provider, network, database, billing,
+  deployment, account, marketing, or production-state mutation; those behaviors belong
+  to typed Ops actions or another explicitly admitted product owner
+- Framework package distribution and visibility remain separately governed and private
+  under the founder hold; this Decision creates no cross-product package bridge
 
 ### Git and artifact contract
 
-Public repositories contain reusable code, docs, schemas, redacted fixtures, examples,
-and tests. Private platforms remain private.
+Separately authorized public product repositories may contain reusable code, docs,
+schemas, redacted fixtures, examples, and tests. The Framework remains private under its
+founder hold, and private Platforms remain private.
 
 Track authored non-secret intent. Ignore credentials, provider inventories, account data,
 plans, receipts, locks, caches, OAuth state, and unredacted reports by default. Private
@@ -304,8 +358,11 @@ tracked for review. Durable production receipts belong in an access-controlled i
 artifact store rather than Git. Each product repository has one authoritative writable
 remote; submodules, nested repositories, copied source ownership, and cross-repository
 relative imports are forbidden. Private platforms consume published, semver-pinned
-packages or explicit prereleases after extraction. Public extraction requires a secret,
-customer-data, provenance, and license audit.
+packages or explicit prereleases only from separately authorized channels after
+extraction. Framework packages remain on a separately authorized private
+registry/channel while the founder hold is active. Public extraction requires a secret,
+customer-data, provenance, and license audit plus its independent visibility and
+publication authority.
 
 ### Adoption contract
 
@@ -322,7 +379,7 @@ Read-only use must not require Unisane to take ownership of existing resources.
 ### Positive
 
 - non-Framework developers can adopt valuable Unisane capabilities
-- one CLI and one config remain understandable
+- separate product CLIs and one config remain understandable without a combined launcher
 - provider SDK and credential risk is isolated
 - Cloud and Growth can evolve without forcing Framework compiler releases
 - Web Runtime can be installed without operations tooling
@@ -335,7 +392,7 @@ Read-only use must not require Unisane to take ownership of existing resources.
 
 - extraction requires staged characterization and coordinated public migrations
 - one Ops monorepo still requires disciplined package import rules
-- the `unisane` CLI needs a static pack protocol and compatibility policy
+- the `unisane-ops` CLI needs a static pack protocol and compatibility policy
 - moving current capabilities will temporarily require current/target documentation
   distinctions
 - consolidating web packages creates a public semver and consumer migration workload
@@ -346,6 +403,13 @@ Read-only use must not require Unisane to take ownership of existing resources.
 
 ## Compatibility With Existing Decisions
 
+`D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract` supersedes
+this Decision's earlier clauses that assigned the `unisane` binary to Ops, exposed
+Framework commands through an executable Ops pack, imported
+`@unisane/devtools/framework-integration`, or left provider mutations in Devtools. The
+separate product CLI, descriptor-only integration, typed action, and mutation-ownership
+rules in the 2026-08-15 Decision are controlling.
+
 This decision does not supersede Framework architecture decisions governing:
 
 - compile-time graph resolution
@@ -355,12 +419,14 @@ This decision does not supersede Framework architecture decisions governing:
 - the Framework command spine and build freshness
 - greenfield hard cuts in internal Framework runtime flows
 
-It narrows the scope of those decisions:
+Subject to that supersession, it narrows the scope of those decisions:
 
-- `@unisane/devtools` remains the Framework assembly and governance owner
+- `@unisane/compiler` remains the Framework assembly and generated-output owner, while
+  `@unisane/devtools` remains only its thin process-facing CLI/tooling consumer
 - generic cloud, growth, provider-management, and web-runtime product behavior moves out
   through the staged plan
-- public `unisane` and current web-package migrations follow semver policy
+- separately released Ops CLI and current web-package migrations follow their owning
+  semver policy
 - internal duplicate owners are deleted in the same bounded extraction workpack after
   parity
 
@@ -373,17 +439,22 @@ preserving verified capability behavior and provider-safety requirements.
 This decision initially establishes documentation authority only. Implementation
 workpacks must add machine enforcement for:
 
-1. one `unisane` binary owner
-2. no direct `unisane` CLI dependency on `@unisane/devtools`
+1. exact ownership of Framework `unisane`, Ops `unisane-ops`, and `create-unisane`
+2. no Framework or Devtools dependency in Ops core/CLI and no Ops dependency in
+   Framework
 3. no provider SDK dependencies in the CLI, Ops engine, Cloud, or Growth
 4. no generic Ops implementation in Framework Devtools after migration
 5. no Ops/CLI dependency from Framework or Web Runtime runtime code
 6. valid static pack manifests and supported pack API versions
-7. command id, effect, JSON, and exit-code contracts
+7. action id, typed input/result, effect, JSON, and CLI exit-code projection contracts
 8. config default/named-export rules and schema migrations
 9. provider plan/apply/receipt/redaction/security contracts
 10. package budget and provider admission evidence
-11. clean package contents, public provenance, and secret scanning
+11. clean package contents, authorized-channel provenance, and secret scanning
+12. descriptor-only optional Framework integration with zero Framework npm dependencies
+13. rejection of raw-argv engine APIs, nested product CLIs, stdout/stderr or
+    `process.exitCode` capture, and duplicate command/action handlers
+14. absence of provider and remote-state mutations from Framework Compiler and Devtools
 
 The owning workpacks must update the command workflow only when commands become live and
 must run the canonical docs, architecture, dependency, type, test, package, and

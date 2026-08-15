@@ -25,6 +25,11 @@ configuration model, or safety lifecycle.
 
 ## Changelog
 
+- `2026-08-15`: Converged current delivery on Ops `unisane-ops`, one typed
+  `ActionDefinition`, and the optional non-default serialized Framework descriptor
+  adapter with zero Framework npm dependencies. Framework `unisane` and
+  `create-unisane` remain separate; nested CLIs/output capture are forbidden; provider
+  mutations remain in Ops. Earlier dated `unisane ...` evidence is chronology only.
 - `2026-08-04`: Finalized the SEO-first product delivery sequence. The immediate
   objective is a complete real-site local loop from evidence preparation and
   conversational research through an implementation packet and measured result.
@@ -198,7 +203,7 @@ configuration model, or safety lifecycle.
 
 This plan owns future AI-native and hosted delivery. The project-bound local STDIO MCP
 package, its three read workflows, four controlled campaign-pause lifecycle tools, and
-the canonical `unisane mcp serve` composition are current MCP truth. Public AI-host
+the canonical `unisane-ops mcp serve` composition are current MCP truth. Public AI-host
 plugins, remote MCP/APIs, managed OAuth, and hosted SaaS remain target state. Current
 package READMEs, pack manifests, and implemented CLI behavior remain executable
 authority.
@@ -233,6 +238,21 @@ surface. Approved provider apply and verification are not yet real-host certifie
 released-host/model and desktop certification, other AI-host bindings, public
 distribution, remote MCP, managed secrets, scheduling, and hosted deployment remain
 planning direction until their bounded Skopos Tasks close with direct Evidence.
+
+Current 2026-08-15 authority supersedes every combined-launcher, executable Framework
+pack, Devtools bridge, or direct Framework-import clause elsewhere in this plan. Ops
+core/default install has zero Framework implementation dependencies; its optional
+adapter consumes only validated serialized descriptor data and never invokes
+compilation. CLI/MCP/API/UI/scheduler/automation/agent/plugin surfaces call the same
+typed action and never invoke another adapter, accept raw argv as the engine API,
+capture stdout/stderr or `process.exitCode`, or parse terminal prose. Provider and
+remote-state mutations belong to Ops actions or another admitted product owner, never
+Framework Compiler/Devtools.
+
+The Framework stays private through the complete architecture, release, and
+repository-finalization program. Completion only permits later founder review; a public
+state requires direct founder approval and a separate accepted high-impact Decision.
+This plan grants no Framework remote, registry, publication, or visibility authority.
 
 ## Product Outcome
 
@@ -282,14 +302,16 @@ into one source package.
 - `@unisane/cloud`
 - provider packages
 - `@unisane/web-runtime`
-- optional `@unisane/framework-ops`
+- optional non-default `@unisane/framework-ops` serialized-descriptor adapter
 
 These packages continue to own domain intent, provider execution, application runtime,
-and Framework adaptation.
+and descriptor translation. The adapter has zero Framework npm dependencies and never
+contains or executes Framework handlers, services, containers, secrets, provider
+clients, source paths, Compiler, Devtools, or runtime code.
 
 ### Layer 2: one operational engine
 
-`@unisane/ops-engine` owns:
+`@unisane/ops-engine` owns one typed `ActionDefinition` protocol and:
 
 - action descriptors and execution
 - inventory and evidence normalization
@@ -315,16 +337,16 @@ without a CLI parser, React, a provider SDK, or a hosted database.
 
 Core structures:
 
-| Contract           | Responsibility                                                                         |
-| ------------------ | -------------------------------------------------------------------------------------- |
-| action descriptor  | stable id, schemas, owner, effect, requirements, and presentation hints                |
-| execution context  | actor, `scopeId` when hosted, project, site, target, environment, and request identity |
-| action request     | typed input, idempotency, expected resource/version, and explicit intent               |
-| action result      | typed data, human summary, evidence, freshness, findings, and next actions             |
-| approval reference | authoritative approval identity, scope, target, effect, expiry, and approver           |
-| receipt            | immutable outcome, before/after identity, effect, actor, request, and verification     |
-| job reference      | queued/running/terminal state, progress, cancellation, retry, and result               |
-| error              | stable code, affected identity, retryability, blocking effect, and recovery action     |
+| Contract           | Responsibility                                                                                                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| action definition  | stable id/version, typed input/result, owner, maximum effect, exact target, policy/admission/approval, plan/apply/verify, errors/artifacts/redaction/receipt, and recovery semantics |
+| execution context  | actor, `scopeId` when hosted, project, site, target, environment, and request identity                                                                                               |
+| action request     | typed input, idempotency, expected resource/version, and explicit intent                                                                                                             |
+| action result      | typed data, human summary, evidence, freshness, findings, and next actions                                                                                                           |
+| approval reference | authoritative approval identity, scope, target, effect, expiry, and approver                                                                                                         |
+| receipt            | immutable outcome, before/after identity, effect, actor, request, and verification                                                                                                   |
+| job reference      | queued/running/terminal state, progress, cancellation, retry, and result                                                                                                             |
+| error              | stable code, affected identity, retryability, blocking effect, and recovery action                                                                                                   |
 
 The contract must support bounded summaries, pagination/cursors, artifact references, and
 deep links so AI context windows are not filled with raw provider payloads.
@@ -343,6 +365,9 @@ deep links so AI context windows are not filled with raw provider payloads.
 | AI-host plugins/skills | installation, workflow guidance, and optional host UI |
 
 No adapter calls another adapter for business behavior.
+Below CLI presentation, raw argv, nested Commander/product CLIs, child-CLI execution,
+stdout/stderr interception, process-exit capture, terminal parsing, and parallel
+command/action handlers are forbidden.
 
 ### Layer 5: optional managed platform
 
@@ -379,7 +404,7 @@ independent-deployment evidence justify them. Do not create a microservice per l
 ### Developer and local agent
 
 1. User opens an existing project.
-2. User runs `unisane ops init`.
+2. User runs `unisane-ops init`.
 3. User selects Growth/Cloud capabilities and local or managed connection mode.
 4. CLI emits agent integration options without modifying unrelated AI-host settings.
 5. User installs the chosen AI-host plugin or project-scoped MCP configuration.
@@ -940,12 +965,17 @@ defense-in-depth, not the authorization boundary.
 
 - one action owner and one schema version registry
 - zero adapter-to-adapter business execution
+- zero raw-argv action APIs, nested product CLIs, output/process interception, or
+  terminal parsing below presentation
 - zero provider SDK imports in UI/MCP/plugin packages
 - zero raw secret/token tool fields
 - zero unapproved mutation paths
 - zero second config/readiness/receipt owner
 - exact local/remote shared-tool parity
 - exact actor/`scopeId`/project/environment/resource audit context
+- zero Framework implementation dependencies in Ops core/default install and
+  descriptor-only optional integration
+- zero provider or remote-state mutations in Framework Compiler/Devtools
 
 ### Product gates
 

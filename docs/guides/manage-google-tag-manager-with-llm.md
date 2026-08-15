@@ -17,6 +17,8 @@ publishing, rollback, or drift.
 
 ## Changelog
 
+- `2026-08-15`: Moved current Tag Manager guidance to `unisane-ops` and one typed Ops
+  action path; Framework/Devtools have no provider mutation role.
 - `2026-07-30`: Routed Tag Manager through the canonical Growth intent and Google
   connection, with one project-owned manifest location and no separate credential flow.
 
@@ -33,13 +35,13 @@ publishing, rollback, or drift.
 Adopt and connect first:
 
 ```bash
-unisane ops init --growth --mode adopt-existing --yes
-unisane connect google --service tag-manager
-unisane check
+unisane-ops init --growth --mode adopt-existing --yes
+unisane-ops connect google --service tag-manager
+unisane-ops check
 ```
 
 When multiple containers are visible, pass
-`--tag-manager-container <container>` to `unisane connect google`. Never silently use
+`--tag-manager-container <container>` to `unisane-ops connect google`. Never silently use
 the first result.
 
 ## Safe Workflow
@@ -59,16 +61,22 @@ validate desired state
 Typical commands:
 
 ```bash
-unisane growth gtm validate --env production
-unisane growth gtm pull --env production --connection google-primary
-unisane growth gtm plan --env production --snapshot <snapshot>
-unisane growth gtm apply --env production --plan <plan> --dry-run
-unisane growth gtm publish --env production --version-receipt <receipt>
+unisane-ops growth gtm validate --env production
+unisane-ops growth gtm pull --env production --connection google-primary
+unisane-ops growth gtm plan --env production --snapshot <snapshot>
+unisane-ops growth gtm apply --env production --plan <plan> --dry-run
+unisane-ops growth gtm publish --env production --version-receipt <receipt>
 ```
 
 The manifest is loaded from the canonical Growth runtime location. `--manifest` is an
 explicit expert override for a reviewed alternate desired-state artifact, not a second
 project config.
+
+Every leaf invokes one typed `ActionDefinition`; CLI/MCP/API/UI/agent adapters render the
+same structured result. Nested product CLIs, raw-argv engine APIs, terminal/output
+capture, and duplicate action handlers are forbidden. Optional Framework context is
+descriptor-only with zero Framework npm dependencies. The Framework remains private,
+and this guide authorizes no publication or visibility change.
 
 ## Guardrails
 

@@ -9,12 +9,24 @@ authority: canonical
 provenance: accepted
 view: current
 status: accepted
+relatedDocs:
+  - './D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md'
+  - './D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md'
+  - '../standards/13-unisane-ops-product-architecture-baseline.md'
 ---
 
 # D-20260729 Unisane Ops Growth Onboarding And Clean Cutover Contract
 
 ## Changelog
 
+- `2026-08-15`: Superseded combined-launcher command examples with the separate Ops
+  `unisane-ops` CLI. Framework `unisane` remains owned by `@unisane/devtools`, and
+  `create-unisane` remains the sole Framework scaffolder. Framework context reaches Ops
+  only through the non-default serialized-descriptor adapter with zero Framework npm
+  dependencies; every surface uses one typed `ActionDefinition`, never nested CLI or
+  output/process interception. The clean cut is an unreleased direct replacement, not a
+  compatibility-bearing public major release. Earlier dated command evidence remains
+  chronology only. The Framework remains private under its founder hold.
 - `2026-07-30`: Fixed the W3 presentation implementation boundary after an inline
   renderer began concentrating shell, routes, styles, and interaction logic. The
   accepted replacement is a modular React browser app using public `@unisane/ui/*`
@@ -133,16 +145,16 @@ Selected option: `3`.
 The canonical ordinary-user journey is:
 
 ```text
-unisane ops init
-  -> unisane add growth
-  -> unisane connect google
-  -> unisane check
-  -> unisane growth <domain operation>
-  -> unisane growth console
+unisane-ops init
+  -> unisane-ops add growth
+  -> unisane-ops connect google
+  -> unisane-ops check
+  -> unisane-ops growth <domain operation>
+  -> unisane-ops growth console
 ```
 
-`unisane ops init` may offer Growth during interactive initialization, so a new user
-does not need to run `add` separately. `unisane add growth` is the explicit, repeatable
+`unisane-ops init` may offer Growth during interactive initialization, so a new user
+does not need to run `add` separately. `unisane-ops add growth` is the explicit, repeatable
 adoption operation for an already initialized project. Both routes materialize the same
 project intent and never create separate setup state.
 
@@ -158,24 +170,26 @@ intent. It does not create a new directory, scaffold an application, convert a p
 to Framework, authenticate a provider, install production instrumentation, or mutate a
 remote account without the later explicit action and required authority.
 
-If a user enters bare `unisane init`, the host fails with simple guidance:
+Framework and Ops commands are separate products. Ops help may explain the distinction
+without intercepting or forwarding another product's command:
 
 ```text
-`unisane init` is not a command.
-Set up Ops in this project: unisane ops init
+Set up Ops in this project: unisane-ops init
 Create a Framework application: npx create-unisane <project-name>
 ```
 
-Core owns `ops init`, root `add` and `connect` dispatch, and aggregate `check`. Bare
-`unisane init` is not an alias or supported command. Growth contributes typed capability
+Core owns `init`, root `add` and `connect` dispatch, and aggregate `check`. Growth contributes typed capability
 intent, checks, next actions, and domain operations through its pack. Provider Google
 owns OAuth, grant expansion, discovery, resource selection, token refresh, revocation
 detection, and transport. Web Runtime owns application instrumentation.
-`@unisane/framework-ops` supplies Framework project context only. The optional
+`@unisane/framework-ops` supplies Framework project context only from a versioned,
+schema-validated, serialized descriptor. It is non-default, has zero Framework npm
+dependencies, validates compatibility/digest/project/capability/freshness, and never
+executes Framework code or invokes compilation. The optional
 `unisane-ops/apps/console` owns visual presentation; Growth owns its headless view model
 and actions.
 
-`unisane provider google ...` remains a narrow expert lane for provider-specific project,
+`unisane-ops provider google ...` remains a narrow expert lane for provider-specific project,
 API, grant, and transport diagnostics that cannot be normalized. It is not a second
 onboarding path.
 
@@ -201,7 +215,7 @@ The user sees one named Google connection. Internally it may carry separate gran
 Search Console, GA4, GTM, Google Ads, and project/API administration, but those grants
 share one provider-owned lifecycle and status model.
 
-`unisane connect google`:
+`unisane-ops connect google`:
 
 1. reads selected Growth capabilities and the current environment
 2. requests only the grants needed for the next usable capability
@@ -217,7 +231,7 @@ fall back to another credential.
 
 ### Readiness is multidimensional
 
-The system must not collapse readiness to one `configured` boolean. `unisane check`
+The system must not collapse readiness to one `configured` boolean. `unisane-ops check`
 aggregates independently derived dimensions:
 
 | Dimension       | Question answered                                                                            |
@@ -256,7 +270,7 @@ adapter with declared grants.
 
 ### Console and command truth
 
-`unisane growth console` is the one visual entrypoint. The console reads the same
+`unisane-ops growth console` is the one visual entrypoint. The console reads the same
 headless state and invokes the same typed actions as CLI and automation. The embedded
 Growth static presentation is deleted when the app console lands; it is not retained as
 a fallback server.
@@ -425,16 +439,21 @@ switching, empty/error states, keyboard focus, screen-reader names, 200% zoom, a
 responsive reflow require direct accessibility proof. Hidden inspector content must also
 leave the accessibility tree and focus order.
 
-Pack manifests and typed command descriptors are the only command catalog. Help,
-documentation tables, shell completion, and dispatch derive from that catalog. A stale
-built binary, hand-maintained help branch, or hidden source-only command is a release
-failure.
+Pack manifests and typed leaf `ActionDefinition`s are the only command/action catalog.
+Help, documentation tables, shell completion, and CLI dispatch derive from that catalog.
+The CLI parses boundary input, invokes the typed action, and renders its structured
+result. A stale built binary, hand-maintained help branch, hidden source-only command,
+raw-argv engine API, nested Commander/product CLI, stdout/stderr capture,
+`process.exitCode` interception, terminal parsing, or duplicate command/action handler
+is a release failure.
 
-### Clean public cutover
+### Clean unreleased cutover
 
-This is a coordinated public breaking release:
+These command, config, action, adapter, and console surfaces have no stable public
+release. The replacement is coordinated but direct:
 
-- ship one major version with migration notes and an explicit config/artifact migrator
+- replace the canonical surface and all owned consumers in the same bounded program,
+  with an explicit one-shot config/artifact migrator only for real persisted state
 - for each bounded slice, delete its replaced command, registrar, auth implementation,
   config loader, token fallback, readiness writer, route, presentation owner, test, or
   document before implementing and repairing consumers against the canonical
@@ -446,8 +465,9 @@ This is a coordinated public breaking release:
   hidden fallbacks, or environment-variable escape paths
 
 The migration tool may read an old schema as input and write the new schema. Normal
-runtime loading must reject the retired schema after the cutover. This satisfies public
-semver coordination without keeping legacy product code alive.
+runtime loading must reject the retired schema after the cutover. A later real stable
+Ops release follows its separately admitted semver, compatibility, and migration policy;
+this pre-release cut creates no compatibility shell.
 
 Deletion is not deferred to final cleanup. A development branch may be temporarily
 broken after deleting an owner so compiler/test failures expose every consumer, but it
@@ -456,9 +476,25 @@ together. Every reviewable checkpoint and merged commit contains only one reacha
 owner for replaced behavior. Git history is rollback; the explicit one-shot migrator is
 the only old-input reader and is not a normal-runtime loader.
 
-The final release stage aggregates already-passing slice proof, validates the one-shot
-migration and retired-schema rejection, regenerates owned references, and prepares the
-major release. It does not perform planned legacy deletion.
+The final program stage aggregates already-passing slice proof, validates the one-shot
+migration and retired-schema rejection, regenerates owned references, and prepares any
+separately authorized release work. It does not perform planned legacy deletion or
+infer publication authority.
+
+## Compatibility And Supersession
+
+`D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract` supersedes
+every earlier current-target clause that used `unisane ops`, `unisane growth`, or another
+combined-launcher command; exposed Framework commands as Ops contributions; or depended
+on direct Framework/Devtools execution. Dated changelog entries remain implementation
+chronology only.
+
+This Decision preserves the onboarding, connection, readiness, console, and delete-first
+clean-cut behavior. It creates no Framework remote, registry, publication, visibility,
+or source-authority transition. The Framework remains private through the complete
+architecture, release, and repository-finalization program; completion permits only a
+later founder review. Any future public state requires direct founder approval and a
+separate accepted high-impact Decision.
 
 ## Consequences
 
@@ -474,7 +510,7 @@ major release. It does not perform planned legacy deletion.
 
 ### Negative And Tradeoffs
 
-- this requires a coordinated major release and first-party migration
+- this requires a coordinated unreleased cutover and first-party migration
 - the cutover crosses CLI core, Growth, provider packages, Web Runtime, Framework
   integration, console, docs, and platform examples
 - provider consent, account access, domain verification, Ads billing/terms, and mutation
@@ -523,13 +559,23 @@ P120 workpacks and their convergence contracts must enforce:
 27. no reviewable or merged state with both old and replacement behavior reachable
 28. aggregate release closure contains validation and packaging only, not deferred
     legacy deletion
+29. all executable guidance uses `unisane-ops`; Framework `unisane` and
+    `create-unisane` remain separate and are never delegated through Ops
+30. every CLI, console, MCP, API, scheduler, automation, or agent capability invokes one
+    typed `ActionDefinition` and receives a structured result
+31. the optional Framework descriptor adapter is absent by default, has zero Framework
+    npm dependencies, and fails closed without executing Framework code
+32. no raw-argv engine API, nested product CLI, output/process interception, terminal
+    parsing, or duplicate command/action implementation survives
+33. provider and remote-state mutations live in typed Ops actions or another explicitly
+    admitted product owner, never Framework Compiler or Devtools
 
 ## Rollback And Follow-Up
 
-Before publication, rollback means reverting the complete release candidate. After
-publication, use a new fixed version or an explicit package rollback with matching
-migration guidance. Never restore the old commands, loaders, token fallbacks, or console
-as an in-process compatibility path.
+Before any separately authorized publication, rollback means reverting the complete
+candidate. After a real stable publication, use a new fixed version or an explicit
+package rollback with matching migration guidance. Never restore the old commands,
+loaders, token fallbacks, or console as an in-process compatibility path.
 
 The linked plan owns implementation sequencing. The current marketing how-to remains
 command truth until the clean cutover is executable and verified; target commands in this
