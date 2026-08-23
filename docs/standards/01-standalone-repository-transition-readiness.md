@@ -213,7 +213,6 @@ At E1, the exact external package-manifest consumers are:
 | Consumer owner                                      | Ops dependencies                                     |             Current edges |
 | --------------------------------------------------- | ---------------------------------------------------- | ------------------------: |
 | `unisane-platforms/apps/data-entry-lm`              | `@unisane/growth`, `@unisane/web-runtime`, `unisane` |     3 `workspace:*` edges |
-| `unisane-platforms/apps/invoice-platform`           | `@unisane/web-runtime`                               |      1 `workspace:*` edge |
 | `unisane-platforms/apps/true-resume`                | `@unisane/growth`, `@unisane/web-runtime`, `unisane` |     3 `workspace:*` edges |
 | Framework starter sources `api-only` and `saaskit`  | `@unisane/framework-ops`, `unisane`                  |     4 `workspace:*` edges |
 | `create-unisane` templates `api-only` and `saaskit` | `@unisane/framework-ops`, `unisane`                  | 4 declared `^0.1.0` edges |

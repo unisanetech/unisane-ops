@@ -116,7 +116,7 @@ function configSource(access = 'cloudfront-oac'): string {
       environment: 'dev',
       storageBucket: 'devSharedStorage'
     },
-    'invoice-platform': {
+    'example-platform': {
       environment: 'dev',
       storageBucket: 'devSharedStorage'
     }
@@ -200,7 +200,7 @@ function context(overrides?: Partial<AwsCommandContext>): AwsCommandContext {
           environment: 'dev',
           storageBucket: 'devSharedStorage',
         },
-        'invoice-platform': {
+        'example-platform': {
           environment: 'dev',
           storageBucket: 'devSharedStorage',
         },
