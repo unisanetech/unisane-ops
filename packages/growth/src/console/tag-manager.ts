@@ -130,13 +130,13 @@ export function buildMarketingConsoleTagManager(input: {
       'gtm.refresh',
       'Refresh Tag Manager',
       'Read the selected Tag Manager workspace without changing it.',
-      `unisane growth gtm pull ${commandContext}`,
+      `unisane-ops growth gtm pull ${commandContext}`,
     ),
     commandAction(
       'gtm.review-changes',
       'Review changes',
       'Compare the project-owned measurement manifest with the current workspace and write a non-mutating plan.',
-      `unisane growth gtm plan ${commandContext}`,
+      `unisane-ops growth gtm plan ${commandContext}`,
     ),
     ...(pendingChangeCount && pendingChangeCount > 0 && !prepared
       ? [
@@ -144,7 +144,7 @@ export function buildMarketingConsoleTagManager(input: {
             'gtm.preview-apply',
             'Preview workspace update',
             'Compute the guarded workspace update without changing Tag Manager.',
-            `unisane growth gtm apply ${commandContext} --dry-run`,
+            `unisane-ops growth gtm apply ${commandContext} --dry-run`,
           ),
         ]
       : []),
@@ -154,7 +154,7 @@ export function buildMarketingConsoleTagManager(input: {
             'gtm.preview-workspace',
             'Check workspace preview',
             'Run the provider preview after the approved workspace update and record the result.',
-            `unisane growth gtm preview ${commandContext}`,
+            `unisane-ops growth gtm preview ${commandContext}`,
           ),
         ]
       : []),

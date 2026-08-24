@@ -101,7 +101,7 @@ export function resolveGrowthResource(input: {
   );
   if (matches.length === 0) {
     throw new Error(
-      `[GROWTH_RESOURCE_MISSING] No ${input.provider} ${input.service} resource is selected for '${environmentId}'. Run \`unisane connect ${input.provider}\`.`,
+      `[GROWTH_RESOURCE_MISSING] No ${input.provider} ${input.service} resource is selected for '${environmentId}'. Run \`unisane-ops connect ${input.provider}\`.`,
     );
   }
   if (matches.length > 1) {

@@ -336,13 +336,13 @@ export async function connectGoogle(
     artifacts: [artifact],
     nextActions:
       connection.credentialState === 'active' && outcome.issues.length === 0
-        ? ['Run `unisane check` to review resource and data readiness.']
+        ? ['Run `unisane-ops check` to review resource and data readiness.']
         : outcome.issues.length > 0
           ? [
-              'Choose ambiguous resources with the matching `unisane connect google --<resource> <id>` option, or resolve the named access blocker.',
+              'Choose ambiguous resources with the matching `unisane-ops connect google --<resource> <id>` option, or resolve the named access blocker.',
             ]
           : [
-              'Bind and verify the external Google secret, then run `unisane connect google` again.',
+              'Bind and verify the external Google secret, then run `unisane-ops connect google` again.',
             ],
   });
 }

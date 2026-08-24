@@ -222,7 +222,7 @@ function buildActions(input: {
       title: 'Refresh Google Ads search terms',
       rationale: input.searchTerms.sourceStatus.message,
       command:
-        'pnpm --filter unisane exec unisane growth ads pull --cwd <app-cwd> --provider googleAds --report query --api --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>',
+        'pnpm --filter unisane-ops exec unisane-ops growth ads pull --cwd <app-cwd> --provider googleAds --report query --api --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>',
       evidencePath: input.searchTerms.sourcePath,
     });
   }
@@ -247,7 +247,7 @@ function buildActions(input: {
       rationale:
         'Competitor pressure cannot be monitored until Google Ads Auction Insights is cached.',
       command:
-        'pnpm --filter unisane exec unisane growth ads pull --cwd <app-cwd> --provider googleAds --report auctionInsight --api --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>',
+        'pnpm --filter unisane-ops exec unisane-ops growth ads pull --cwd <app-cwd> --provider googleAds --report auctionInsight --api --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>',
       evidencePath: input.competitors.auctionInsightsPath,
     });
   }

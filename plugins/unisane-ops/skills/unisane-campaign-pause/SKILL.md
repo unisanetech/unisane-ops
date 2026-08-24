@@ -26,7 +26,7 @@ the sequence and explanation; it never grants approval.
    developer workflow, provide this command with the returned values, but do not run it:
 
    ```sh
-   unisane growth campaign pause approve --cwd <project-root> --environment <environmentId> --run-id <runId> --plan-hash <planHash> --approved-by <human-identity>
+   unisane-ops growth campaign pause approve --cwd <project-root> --environment <environmentId> --run-id <runId> --plan-hash <planHash> --approved-by <human-identity>
    ```
 
 5. When the user asks to continue after approval, call `review_campaign_pause` with the
@@ -58,5 +58,5 @@ the sequence and explanation; it never grants approval.
 - This is a local private-development workflow. Do not present it as hosted,
   multi-process, scheduled, remote MCP, or public marketplace support.
 - If `unisane_ops` is unavailable, explain that the project-local binding is missing.
-  Recommend previewing `unisane mcp configure codex` and applying it with `--write` only
+  Recommend previewing `unisane-ops mcp configure codex` and applying it with `--write` only
   after explicit review; do not create another MCP definition.

@@ -1,7 +1,7 @@
 # Unisane Ops Console
 
 The optional human-first local console for Unisane Ops. It owns presentation, static
-assets, build output, and the exact `unisane growth console` pack contribution.
+assets, build output, and the exact `unisane-ops growth console` pack contribution.
 
 Growth data and actions come only from the UI-neutral `@unisane/growth/console`
 contract.
@@ -21,5 +21,5 @@ effect, and the console exposes no apply or verify endpoint. An explicit local o
 identity may be bound when starting the console:
 
 ```bash
-unisane growth console --operator user.alice
+unisane-ops growth console --operator user.alice
 ```

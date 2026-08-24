@@ -309,13 +309,13 @@ function candidateDiff(input: {
 
 function nextWorkflowStep(report: Omit<MarketingAdsDiffReport, 'nextWorkflowStep'>): string {
   if (report.checks.some((check) => check.status === 'error')) {
-    return 'Fix invalid provider artifacts or blocking drift, then rerun `unisane growth ads diff`.';
+    return 'Fix invalid provider artifacts or blocking drift, then rerun `unisane-ops growth ads diff`.';
   }
   if (report.checks.some((check) => check.id.includes('.cache') && check.status === 'warn')) {
     return 'Refresh missing, stale, or partial ads provider pulls before apply dry-run review.';
   }
   if (report.candidates.some((candidate) => candidate.status === 'planned_new')) {
-    return 'Review planned-new provider objects and approvals, then run `unisane growth ads apply --dry-run`.';
+    return 'Review planned-new provider objects and approvals, then run `unisane-ops growth ads apply --dry-run`.';
   }
   return 'Provider cache matches the ads plan; proceed to guarded `ads apply --dry-run` when approvals are ready.';
 }

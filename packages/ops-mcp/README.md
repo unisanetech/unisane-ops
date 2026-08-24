@@ -58,7 +58,7 @@ STDIO options argument lets the embedding host report transport errors out of ba
 own shutdown behavior without changing tool semantics.
 
 This package does not load project configuration, provider credentials, or a user
-identity. The canonical `unisane mcp serve` command, a private host integration, or a
+identity. The canonical `unisane-ops mcp serve` command, a private host integration, or a
 future hosted adapter owns that composition and passes a fully bound context into this
 package. Read-workflow resume is stateless. The canonical local host persists
 campaign-pause lifecycle state in the selected project for development use. Production,

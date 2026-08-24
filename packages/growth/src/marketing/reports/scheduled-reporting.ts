@@ -164,7 +164,7 @@ export function buildMarketingScheduledReportingPlan(
       const jobWindowDays = scheduledWindowDays(family.reportType, windowDays);
       const jobDates = datePlaceholders(jobWindowDays);
       const command = [
-        'unisane growth marketing pull-api',
+        'unisane-ops growth marketing pull-api',
         `--provider ${family.provider}`,
         `--report ${family.reportType}`,
         `--start-date ${jobDates.startDate}`,

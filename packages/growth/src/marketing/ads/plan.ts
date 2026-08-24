@@ -59,7 +59,7 @@ function enabledProviders(
 
 function nextWorkflowStep(artifact: MarketingAdsPlanArtifact): string {
   if (artifact.blockers.includes('missing_strategy_map')) {
-    return 'Run `unisane growth marketing strategy-pull --input <strategy-map.json>` before ads planning.';
+    return 'Run `unisane-ops growth marketing strategy-pull --input <strategy-map.json>` before ads planning.';
   }
   if (artifact.blockers.length > 0) {
     return 'Resolve ads plan blockers, then regenerate the draft before any provider mutation planning.';

@@ -233,7 +233,7 @@ async function runInventory(
       diagnostics: inventory.errors.map((entry) => `${entry.code}: ${entry.message}`),
       artifacts: [artifact.relativePath],
       nextActions: [
-        `Review the inventory, then run \`unisane ${cli} plan --inventory ${artifact.relativePath}\`.`,
+        `Review the inventory, then run \`unisane-ops ${cli} plan --inventory ${artifact.relativePath}\`.`,
       ],
     });
   } catch (error) {

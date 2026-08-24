@@ -639,12 +639,12 @@ function resolveNextWorkflowStep(
     return 'Fix asset registry errors before upload planning.';
   }
   if (report.registry.assets.length === 0) {
-    return 'Import first media with `unisane growth ads assets import --file <path> --asset-id <id> --type image --provider metaAds --owner <owner>`.';
+    return 'Import first media with `unisane-ops growth ads assets import --file <path> --asset-id <id> --type image --provider metaAds --owner <owner>`.';
   }
   if (report.checks.some((check) => check.status === 'warn')) {
-    return 'Complete asset metadata and approvals, then rerun `unisane growth ads assets validate`.';
+    return 'Complete asset metadata and approvals, then rerun `unisane-ops growth ads assets validate`.';
   }
-  return 'Generate a non-mutating upload plan with `unisane growth ads assets upload-plan`.';
+  return 'Generate a non-mutating upload plan with `unisane-ops growth ads assets upload-plan`.';
 }
 
 export function buildMarketingAdsAssetReport(

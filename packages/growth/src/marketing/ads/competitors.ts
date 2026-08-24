@@ -359,7 +359,7 @@ export function buildMarketingAdsCompetitorMonitorReport(
     signals,
     nextWorkflowStep:
       rows.length === 0
-        ? 'Run `unisane growth ads pull --provider googleAds --report auctionInsight --api` after enough auction volume exists.'
+        ? 'Run `unisane-ops growth ads pull --provider googleAds --report auctionInsight --api` after enough auction volume exists.'
         : highPressure > 0
           ? 'Review high-pressure competitors against landing pages, ad copy, bids, and conversion economics before changing budgets.'
           : 'Keep weekly competitor trend monitoring and refresh the registry when new domains appear.',

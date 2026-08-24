@@ -8,13 +8,25 @@ authority: canonical
 provenance: accepted
 view: transition
 status: accepted
-lastUpdated: '2026-08-15'
+lastUpdated: '2026-08-25'
 ---
 
 # Standalone Unisane Ops Repository Transition Readiness
 
 ## Changelog
 
+- `2026-08-25`: Applied the Ops-owned half of the Phase 1 product-boundary cut. The
+  public package/config coordinate and sole binary are now `unisane-ops` and
+  `unisane-ops/config`; the prior `unisane` package, binary, forwarding wrapper,
+  combined Framework/UI command discovery, and executable Framework bridge are
+  retired without aliases. `@unisane/framework-ops` now has zero Framework, Compiler,
+  or Devtools dependencies and remains private and non-executable at a typed seam.
+  Migration 1 must still provide the canonical serialized descriptor schema, digest
+  and compatibility semantics, and valid/tampered fixtures before the adapter can
+  implement validation/mapping or become publishable. The regenerated owner-local
+  integrity receipt covers 954 source files with zero foreign workspace blockers and
+  the two exact admitted UI release edges. No registry, remote, hosted governance,
+  provider, deployment, or authority state changed.
 - `2026-08-15`: Attempted the controlled Ops target sync from authoritative umbrella
   `fc31756fd9ba82e12bb0a1979079e5916e6adfae`. The target's real resolver returned `404` for
   `@unisane/devtools@0.1.0`; all 32 packages in its first-party runtime closure lack public registry
@@ -148,8 +160,13 @@ The accepted public package contract contains exactly:
 
 | Audience    | Packages                                                                                                                                                       |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| user-facing | `unisane`, `@unisane/cloud`, `@unisane/growth`, `@unisane/web-runtime`                                                                                         |
-| technical   | `@unisane/ops-engine`, `@unisane/provider-aws`, `@unisane/provider-cloudflare`, `@unisane/provider-google`, `@unisane/provider-meta`, `@unisane/framework-ops` |
+| user-facing | `unisane-ops`, `@unisane/cloud`, `@unisane/growth`, `@unisane/web-runtime`                                                                                     |
+| technical   | `@unisane/ops-engine`, `@unisane/provider-aws`, `@unisane/provider-cloudflare`, `@unisane/provider-google`, `@unisane/provider-meta`                           |
+
+`@unisane/framework-ops` remains an Ops-owned package coordinate, but it is private and
+not registry-admitted while the Framework-owned descriptor contract is absent. It may
+join the public technical set only after it implements and proves descriptor
+validation/mapping without any Framework, Compiler, or Devtools dependency.
 
 The accepted extraction Plan classifies `@unisane/ops-console` as a public-source deployable app,
 not a registry package. Its staging manifest is therefore private. `@unisane/ops-hosted-runtime`
@@ -194,17 +211,18 @@ following current edges cross the intended repository boundary:
 | Consumer                   | Current dependency                               | Final rule                                                                      | Gate                                                                                                                                                                |
 | -------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@unisane/ops-console`     | `@unisane/ui@0.1.1`, `@unisane/data-table@0.1.1` | consume exact released public UI packages; no sibling or local source           | closed for the local consumer boundary; registry-only standalone proof and repository integrity reject coordinate or fallback drift                                 |
-| `@unisane/framework-ops`   | `@unisane/devtools@0.1.0`                        | consume an exact real-registry-admitted `./framework-integration` contract only | source/import and candidate-package shape are converged, but real registry admission is blocked because Devtools and its 32-package runtime closure are unavailable |
+| `@unisane/framework-ops`   | no Framework package dependency                  | consume only the Framework-owned canonical serialized project descriptor        | executable bridge removed; private typed seam is blocked until Migration 1 supplies the schema, digest/compatibility semantics, and fixtures                         |
 | `@unisane/provider-aws`    | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency           | converged; focused package proof required                                                                                                                           |
 | `@unisane/provider-google` | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency           | converged; focused package proof required                                                                                                                           |
-| `unisane` host             | dynamically resolves UI-owned `@unisane/ui-cli`  | keep discovery-only structural pack contract; never depend on UI source         | require a released/admitted UI CLI candidate and trust/compatibility proof                                                                                          |
+| `unisane-ops` host         | no Framework or UI command pack                  | retain only Ops-owned commands and installed Ops pack discovery                  | converged in source; focused packed proof remains required                                                                                                          |
 
-The intended Framework bridge remains the only Framework integration direction. It is not available
-to a standalone Ops install until its exact dependency-light contract or admitted runtime closure
-exists in a real registry with immutable integrity. Do not pull Framework compiler modules, UI
-source, root Devtools, `create-unisane`, or unrelated Framework product tooling into Ops, and do not
-add a sibling, file, link, copied-source, or temporary-registry fallback to make a standalone build
-pass.
+The optional Framework adapter accepts only a serialized descriptor produced by the
+Framework compiler. It does not compile, execute a Framework CLI, capture terminal
+output, or import a Framework package. Until the canonical descriptor schema and
+fixtures arrive, it remains private and non-executable. Do not pull Framework compiler
+modules, UI source, root Devtools, `create-unisane`, or unrelated Framework product
+tooling into Ops, and do not add a sibling, file, link, copied-source, or temporary-
+registry fallback to make a standalone build pass.
 
 ### Current manifest consumers outside Ops
 
@@ -491,7 +509,7 @@ Source convergence is complete only when every row reaches its final state:
 | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `unisane-ops/**` staging source                                                           | filter and rename to target root after convergence; preserve admitted history                                                                                                   |
 | `unisane-tools/packages/cli-core/**`                                                      | absorb only required Ops presentation contracts under the CLI owner, remove provider logging coupling, migrate remaining consumers, then delete the package                     |
-| `unisane-tools/packages/devtools/src/framework-integration.ts`                            | remain Framework-owned public subpath consumed by released `@unisane/framework-ops`                                                                                             |
+| retired executable Framework integration bridge                                          | remain deleted from Ops consumption; Migration 1 owns the serialized descriptor contract                                                                                        |
 | remaining Devtools provider/growth compatibility source                                   | retire after exact consumer/parity proof; do not import generic Devtools into Ops                                                                                               |
 | UI packages and `@unisane/ui-cli`                                                         | remain UI-owned and consumed only as released/admitted external contracts                                                                                                       |
 | Framework starters/templates                                                              | remain Framework-owned consumers; migrate from workspace edges to released/admitted Ops candidates                                                                              |
@@ -649,10 +667,10 @@ authority cutover. Those gates remain independently fail-closed below.
 | OPS-R01 | closed at checkpoint                           | source convergence          | exact file/docs/tool/root-config disposition is generated from reviewed source policy                                                                                                                                                                                                                                               | Ops maintainers; current ledger check and immutable checkpoint commit                                                                           |
 | OPS-R02 | closed at checkpoint                           | source convergence          | private CLI-core dependencies and imports are absent from AWS and Google                                                                                                                                                                                                                                                            | Ops maintainers; focused provider and boundary proof                                                                                            |
 | OPS-R03 | closed at local source conversion              | local shadow                | console pins exact released public `@unisane/ui@0.1.1` and `@unisane/data-table@0.1.1`; source, emitted, integrity, and isolated registry-consumer proof reject every local or sibling fallback                                                                                                                                     | Ops consumer owner; exact source/emitted inventory, registry integrity, frozen isolated install, build, CSS/assets, and React-singleton proof   |
-| OPS-R04 | reopened; registry blocked                     | local shadow                | source/import and candidate-package shape are converged, but exact `@unisane/devtools@0.1.0` resolves through an umbrella workspace link and is absent from the real registry; its 32-package first-party runtime closure is also unavailable and 31 members are private                                                            | Framework architecture and release owners; select a release shape, admit immutable real-registry artifacts, and prove a clean external consumer |
+| OPS-R04 | open; descriptor contract blocked              | local shadow                | the executable Devtools bridge and dependency are removed, but Migration 1 has not yet supplied the canonical serialized descriptor schema/version, digest and compatibility semantics, or valid/tampered fixtures; the adapter therefore remains private and non-executable                                              | Framework Migration 1 owner; emit the canonical descriptor contract and fixtures, then Ops implements and proves validation/mapping              |
 | OPS-R05 | open                                           | local shadow                | Platforms retain seven `workspace:*` Ops edges                                                                                                                                                                                                                                                                                      | Platforms owner; later consumer Tasks against immutable candidates                                                                              |
 | OPS-R06 | open                                           | package release             | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved                                                                                                                                                                                                                                        | product and release owners; explicit package admission or privatization                                                                         |
-| OPS-R07 | open; install registry blocked                 | local shadow                | the existing target at `5f565477466528ac49793545b24802fa15d499eb` has no lockfile; its controlled sync Task is deferred because the Framework edge cannot resolve from a real registry. Target Skopos is active, but setup certification, target sync, lock generation, clean install, Node matrix, and hosted CI proof remain open | Framework release owner first, then Ops tooling owner; close OPS-R04 and rerun source-bound target-sync and standalone proof                    |
+| OPS-R07 | open; integration projection blocked           | local shadow                | the Ops source coordinate has changed, while the umbrella lock and external consumer projection remain coordinator-owned; standalone setup certification, target sync, lock generation, clean install, Node matrix, and hosted CI proof remain open                                                                        | Migration coordinator after OPS-R04; reconcile the root lock/consumer projection, then rerun source-bound target sync and standalone proof        |
 | OPS-R08 | local materialization complete; approval open  | local shadow/public history | the history-preserved local candidate exists and exact filter, commit map, parity, excluded-path, ref/tag/signature, integrity, and cleanup receipts pass; migration-tool/final-history approval and any public-history promotion remain open                                                                                       | migration owner and reviewer; approve the migration route and public-history receipts before external promotion                                 |
 | OPS-R09 | technical scan complete; certification blocked | public history              | deterministic full-history scan produced 1,027 redacted findings, but scanner policy, findings, allowlists, remediation, security, privacy, and legal approvals are absent                                                                                                                                                          | security/legal/privacy/provider-data owners; resolve redacted ledger and rerun approved scanners                                                |
 | OPS-R10 | open                                           | public release              | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved                                                                                                                                                                         | legal and release owners; approved text, policy, registry, package and provenance proof                                                         |

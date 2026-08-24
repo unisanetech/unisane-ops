@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "tooling",
+  "id": "unisane-ops",
+  "edition": "oss",
+  "maturity": "beta",
+  "supportedModes": [
+    "full-platform",
+    "headless"
+  ],
+  "requiresPackages": [
+    "@unisane/cloud",
+    "@unisane/growth",
+    "@unisane/ops-engine",
+    "@unisane/ops-mcp",
+    "@unisane/provider-aws",
+    "@unisane/provider-cloudflare",
+    "@unisane/provider-google",
+    "@unisane/provider-meta"
+  ],
+  "requiresTokens": [],
+  "runtimeProfiles": [
+    "local-minimal",
+    "standard-production",
+    "distributed-production"
+  ],
+  "docs": [
+    "README.md"
+  ],
+  "exports": [
+    "./config"
+  ]
+}

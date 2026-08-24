@@ -81,7 +81,7 @@ describe('SEO opportunity review pane', () => {
         id: 'seo.approve.resume-templates',
         label: 'Approve selection',
         description: 'Records the human decision.',
-        command: 'unisane growth seo opportunities status',
+        command: 'unisane-ops growth seo opportunities status',
       },
     });
 

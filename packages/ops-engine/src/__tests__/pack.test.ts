@@ -16,7 +16,7 @@ function payload(packId = 'core'): PackManifestPayload {
     schemaVersion: 1,
     kind: 'unisane.pack-manifest',
     packId,
-    packageName: packId === 'core' ? 'unisane' : `@unisane/${packId}`,
+    packageName: packId === 'core' ? 'unisane-ops' : `@unisane/${packId}`,
     version: '0.1.0',
     packApiVersion: 1,
     trust: 'first-party',
@@ -45,9 +45,9 @@ describe('pack contracts', () => {
     const manifest = sealPackManifest(payload());
     expect(
       verifyPackManifestIntegrity(manifest, {
-        packageName: 'unisane',
+        packageName: 'unisane-ops',
         installedVersion: '0.1.0',
-        trustedPackageNames: ['unisane'],
+        trustedPackageNames: ['unisane-ops'],
       }),
     ).toEqual(manifest);
   });
@@ -57,12 +57,16 @@ describe('pack contracts', () => {
     expect(() =>
       verifyPackManifestIntegrity(
         { ...manifest, integrity: { ...manifest.integrity, manifestHash: '0'.repeat(64) } },
-        { packageName: 'unisane', installedVersion: '0.1.0', trustedPackageNames: ['unisane'] },
+        {
+          packageName: 'unisane-ops',
+          installedVersion: '0.1.0',
+          trustedPackageNames: ['unisane-ops'],
+        },
       ),
     ).toThrow('OPS_PACK_INTEGRITY_MISMATCH');
     expect(() =>
       verifyPackManifestIntegrity(manifest, {
-        packageName: 'unisane',
+        packageName: 'unisane-ops',
         installedVersion: '0.1.0',
         trustedPackageNames: [],
       }),
@@ -71,14 +75,14 @@ describe('pack contracts', () => {
       verifyPackManifestIntegrity(manifest, {
         packageName: '@unisane/cloud',
         installedVersion: '0.1.0',
-        trustedPackageNames: ['unisane'],
+        trustedPackageNames: ['unisane-ops'],
       }),
     ).toThrow('OPS_PACK_PACKAGE_MISMATCH');
     expect(() =>
       verifyPackManifestIntegrity(manifest, {
-        packageName: 'unisane',
+        packageName: 'unisane-ops',
         installedVersion: '0.2.0',
-        trustedPackageNames: ['unisane'],
+        trustedPackageNames: ['unisane-ops'],
       }),
     ).toThrow('OPS_PACK_VERSION_MISMATCH');
   });

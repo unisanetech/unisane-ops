@@ -9,7 +9,7 @@ import { registerAwsCommands } from './register.js';
 export function runProviderAwsCommand(context: PackCommandContext): Promise<PackCommandResult> {
   return runCapturedPackCommand(context, async () => {
     const program = new Command();
-    program.name('unisane').exitOverride();
+    program.name('unisane-ops').exitOverride();
     program.configureOutput({
       writeOut: (value) => process.stdout.write(value),
       writeErr: (value) => process.stderr.write(value),
@@ -17,6 +17,6 @@ export function runProviderAwsCommand(context: PackCommandContext): Promise<Pack
     registerAwsCommands(program);
     const args = ['aws', ...context.argv];
     if (context.json) args.push('--json');
-    await program.parseAsync(['node', 'unisane', ...args]);
+    await program.parseAsync(['node', 'unisane-ops', ...args]);
   });
 }

@@ -157,7 +157,7 @@ function buildSeoOpportunityWorkflows(input: {
             description:
               'This command records the human opportunity-selection decision only. It does not prepare, edit, publish, or deploy a page.',
             command: command([
-              'unisane growth seo opportunities status',
+              'unisane-ops growth seo opportunities status',
               `--opportunities ${shellArgument(opportunitySource)}`,
               `--out ${shellArgument(opportunitySource)}`,
               `--id ${shellArgument(opportunity.id)}`,
@@ -180,7 +180,7 @@ function buildSeoOpportunityWorkflows(input: {
           description:
             'This creates a local evidence-bound packet for a coding agent. It does not edit, approve, publish, or deploy a page.',
           command: command([
-            'unisane growth seo opportunities prepare',
+            'unisane-ops growth seo opportunities prepare',
             `--opportunities ${shellArgument(opportunitySource)}`,
             `--id ${shellArgument(opportunity.id)}`,
             `--out-dir ${shellArgument(input.paths.preparedDirectory)}`,
@@ -221,7 +221,7 @@ function buildSeoOpportunityWorkflows(input: {
           description:
             'Use this only after the exact page was reviewed and published externally. The command records that human-confirmed fact; it cannot publish the page.',
           command: command([
-            'unisane growth seo opportunities record-publication',
+            'unisane-ops growth seo opportunities record-publication',
             `--packet ${shellArgument(packetArtifact.path)}`,
             `--published-url ${shellArgument('REPLACE_WITH_PUBLISHED_URL')}`,
             `--published-at ${shellArgument('REPLACE_WITH_ISO_8601_TIME')}`,
@@ -251,7 +251,7 @@ function buildSeoOpportunityWorkflows(input: {
       description:
         'This refreshes the exact opportunity evidence and records an observed result. It does not establish causation or guarantee an outcome.',
       command: command([
-        'unisane growth seo opportunities verify-publication',
+        'unisane-ops growth seo opportunities verify-publication',
         `--publication ${shellArgument(publicationArtifact.path)}`,
         `--out ${shellArgument(proposedVerificationPath)}`,
       ]),

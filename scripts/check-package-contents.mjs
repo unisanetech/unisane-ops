@@ -20,7 +20,7 @@ for (const name of policy.acceptedPublicPackages) {
   if (!entry) errors.push(`accepted public package is absent: ${name}`);
   else if (entry.value.private === true) errors.push(`accepted public package is private: ${name}`);
   else if (!entry.value.version) errors.push(`accepted public package lacks a version: ${name}`);
-  else if (!entry.value.exports && name !== 'unisane') errors.push(`accepted public package lacks exports: ${name}`);
+  else if (!entry.value.exports) errors.push(`accepted public package lacks exports: ${name}`);
 }
 for (const [name, admission] of Object.entries(policy.packageAdmissions)) {
   const entry = byName.get(name);
@@ -36,5 +36,5 @@ if (errors.length) {
   for (const error of errors) console.error(error);
   process.exitCode = 1;
 } else {
-  console.log('Unisane Ops package contents verified: 10 public packages, 2 private apps, 2 fail-closed owner decisions.');
+  console.log('Unisane Ops package contents verified: 9 public packages, 3 private packages/apps, 2 fail-closed owner decisions.');
 }

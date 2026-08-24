@@ -298,16 +298,16 @@ function resolveNextWorkflowStep(
   report: Omit<MarketingAdsStatusReport, 'nextWorkflowStep'>,
 ): string {
   if (report.checks.some((check) => check.status === 'error')) {
-    return 'Fix ads doctor errors, then rerun `unisane growth ads doctor`.';
+    return 'Fix ads doctor errors, then rerun `unisane-ops growth ads doctor`.';
   }
   if (report.providerReports.some((provider) => provider.status === 'missing')) {
-    return 'Pull read-only Google Ads and Meta Ads reports before optimization: `unisane growth marketing pull-api --provider <provider> --report campaign ...`.';
+    return 'Pull read-only Google Ads and Meta Ads reports before optimization: `unisane-ops growth marketing pull-api --provider <provider> --report campaign ...`.';
   }
   if (!report.latestPlan) {
-    return 'Build the first non-mutating paid plan with `unisane growth ads plan`.';
+    return 'Build the first non-mutating paid plan with `unisane-ops growth ads plan`.';
   }
   if (!report.latestReceipt) {
-    return 'Review the ads plan, then run `unisane growth ads apply --dry-run` to create the guarded receipt.';
+    return 'Review the ads plan, then run `unisane-ops growth ads apply --dry-run` to create the guarded receipt.';
   }
   return 'Review recommendations and experiments before any live provider mutation work.';
 }

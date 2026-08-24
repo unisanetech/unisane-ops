@@ -49,7 +49,7 @@ export async function crawlSiteFile(options: CrawlSiteFileOptions): Promise<Craw
   const siteUrl = options.siteUrl ?? config.site?.url;
   if (!siteUrl) {
     throw new Error(
-      'No site is configured. Run `unisane growth seo site configure` or pass --site.',
+      'No site is configured. Run `unisane-ops growth seo site configure` or pass --site.',
     );
   }
   const crawlDefaults = config.site?.crawl;

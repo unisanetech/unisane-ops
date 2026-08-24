@@ -65,7 +65,7 @@ export async function runGrowthCommand(context: PackCommandContext): Promise<Pac
 
   const execution = await captureOutput(async () => {
     const program = new Command();
-    program.name('unisane').exitOverride();
+    program.name('unisane-ops').exitOverride();
     program.configureOutput({
       writeOut: (value) => process.stdout.write(value),
       writeErr: (value) => process.stderr.write(value),
@@ -77,7 +77,7 @@ export async function runGrowthCommand(context: PackCommandContext): Promise<Pac
       );
     }
     await runWithGrowthProviderRuntime(context.runtime, context.cwd, () =>
-      program.parseAsync(['node', 'unisane', ...args]),
+      program.parseAsync(['node', 'unisane-ops', ...args]),
     );
   });
 

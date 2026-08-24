@@ -128,22 +128,22 @@ function selectNextWorkflowStep(report: Omit<MarketingStatusReport, 'nextWorkflo
     const reportFamily = staleProvider.reportType
       ? `${staleProvider.provider}/${staleProvider.reportType}`
       : staleProvider.provider;
-    return `Refresh ${reportFamily} pulls, then rerun \`unisane growth ${command}\`.`;
+    return `Refresh ${reportFamily} pulls, then rerun \`unisane-ops growth ${command}\`.`;
   }
   if (report.confirmedConversions.status === 'error') {
     return 'Fix invalid Unisane-confirmed conversion artifact, then rerun status.';
   }
   if (['missing', 'stale', 'partial'].includes(report.confirmedConversions.status)) {
-    return 'Refresh Unisane-confirmed conversion truth with `unisane growth marketing conversion-pull`.';
+    return 'Refresh Unisane-confirmed conversion truth with `unisane-ops growth marketing conversion-pull`.';
   }
   if (report.mode === 'marketing') {
     if (report.strategyMap.status === 'error') {
       return 'Fix invalid marketing strategy-map artifact, then rerun status.';
     }
     if (['missing', 'stale'].includes(report.strategyMap.status)) {
-      return 'Refresh the strategy map with `unisane growth marketing strategy-pull`.';
+      return 'Refresh the strategy map with `unisane-ops growth marketing strategy-pull`.';
     }
-    return 'Run `unisane growth marketing report --unified` or regenerate recommendations.';
+    return 'Run `unisane-ops growth marketing report --unified` or regenerate recommendations.';
   }
-  return 'Run `unisane growth marketing report --unified` to reconcile analytics, ads, and confirmed conversion truth.';
+  return 'Run `unisane-ops growth marketing report --unified` to reconcile analytics, ads, and confirmed conversion truth.';
 }

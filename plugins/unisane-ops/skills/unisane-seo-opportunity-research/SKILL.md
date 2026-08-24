@@ -49,5 +49,5 @@ as workflow truth; this skill only guides invocation and presentation.
 - Keep internal run, guard, context-brief, and evidence-schema vocabulary out of the
   primary explanation unless the user requests technical details.
 - If `unisane_ops` is unavailable, explain that the project-local binding is missing.
-  Recommend previewing `unisane mcp configure codex` and applying it with `--write` only
+  Recommend previewing `unisane-ops mcp configure codex` and applying it with `--write` only
   after explicit review; do not create another MCP definition.

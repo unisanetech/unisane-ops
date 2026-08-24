@@ -40,9 +40,8 @@
     }
   ],
   "acceptedPublicPackages": [
-    "unisane",
+    "unisane-ops",
     "@unisane/cloud",
-    "@unisane/framework-ops",
     "@unisane/growth",
     "@unisane/ops-engine",
     "@unisane/provider-aws",
@@ -52,6 +51,12 @@
     "@unisane/web-runtime"
   ],
   "packageAdmissions": {
+    "@unisane/framework-ops": {
+      "kind": "descriptor-adapter-blocked-on-framework-contract",
+      "registryAdmission": "not-admitted",
+      "requiredPrivate": true,
+      "authority": "docs/standards/01-standalone-repository-transition-readiness.md"
+    },
     "@unisane/ops-console": {
       "kind": "public-source-deployable-app",
       "registryAdmission": "not-admitted",

@@ -82,7 +82,7 @@ describe('Growth console connection projection', () => {
       identityLabel: 'operator@example.test',
       disconnect: {
         command:
-          'unisane disconnect google --environment production --connection google-primary --yes',
+          'unisane-ops disconnect google --environment production --connection google-primary --yes',
         historicalDataRemains: true,
         providerResourcesUnchanged: true,
       },
@@ -93,7 +93,7 @@ describe('Growth console connection projection', () => {
         state: 'partial-permission',
         primaryAction: expect.objectContaining({
           command:
-            'unisane connect google --environment production --connection google-primary --service search-console',
+            'unisane-ops connect google --environment production --connection google-primary --service search-console',
         }),
       }),
       expect.objectContaining({
@@ -136,7 +136,7 @@ describe('Growth console connection projection', () => {
         state: 'not-connected',
         primaryAction: expect.objectContaining({
           label: 'Continue with Google',
-          command: 'unisane connect google --environment development',
+          command: 'unisane-ops connect google --environment development',
         }),
       }),
       expect.objectContaining({

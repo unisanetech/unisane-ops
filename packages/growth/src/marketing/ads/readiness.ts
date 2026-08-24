@@ -353,7 +353,7 @@ export async function buildMarketingAdsReadinessPlan(
         : 'warn',
       message: 'Google Ads conversion mappings should exist for all primary TrueResume goals.',
       recommendation:
-        'Run `unisane growth ads goals google --dry-run` and then guarded apply when the customer id is confirmed.',
+        'Run `unisane-ops growth ads goals google --dry-run` and then guarded apply when the customer id is confirmed.',
     }),
     statusCheck({
       id: 'conversion.report.fresh',
@@ -404,7 +404,7 @@ export async function buildMarketingAdsReadinessPlan(
       priority: 'should',
       title: 'Split the primary Search campaign into intent-specific ad groups',
       rationale: `Use ${recommendedAdGroups.join(', ')} so ad copy and landing pages match intent.`,
-      command: 'unisane growth ads plan --provider googleAds',
+      command: 'unisane-ops growth ads plan --provider googleAds',
       blocksLaunch: false,
     },
     {
@@ -422,7 +422,7 @@ export async function buildMarketingAdsReadinessPlan(
       title: 'Use phased conversion goals',
       rationale:
         'Start with resume import and signup for learning, then optimize toward subscription once production purchase volume exists.',
-      command: 'unisane growth ads goals google --dry-run',
+      command: 'unisane-ops growth ads goals google --dry-run',
       blocksLaunch: !freshStatus(conversionStatus),
     },
     {
@@ -432,7 +432,7 @@ export async function buildMarketingAdsReadinessPlan(
       title: 'Keep closed-loop conversion proof fresh',
       rationale:
         'Provider-reported conversions alone are not enough; the dashboard needs business-confirmed conversion and value data.',
-      command: 'unisane growth marketing conversion-pull --input <confirmed-conversions.json>',
+      command: 'unisane-ops growth marketing conversion-pull --input <confirmed-conversions.json>',
       blocksLaunch:
         confirmedConversions.status === 'missing' || confirmedConversions.status === 'error',
     },
@@ -444,7 +444,7 @@ export async function buildMarketingAdsReadinessPlan(
         'Prepare logo and polished image assets for later asset extensions and cross-channel campaigns',
       rationale:
         'Search can launch without images, but assets are needed for richer Google placements and future paid-social tests.',
-      command: 'unisane growth ads assets upload-plan --provider googleAds',
+      command: 'unisane-ops growth ads assets upload-plan --provider googleAds',
       blocksLaunch: false,
     },
   ];
@@ -489,8 +489,8 @@ export async function buildMarketingAdsReadinessPlan(
     checks,
     actions,
     nextWorkflowStep: hasBlockingError
-      ? 'Fix failed readiness checks, then rerun `unisane growth ads readiness` before live production launch.'
-      : 'Run `unisane growth ads optimize` and use the readiness actions to refine campaign structure before production launch.',
+      ? 'Fix failed readiness checks, then rerun `unisane-ops growth ads readiness` before live production launch.'
+      : 'Run `unisane-ops growth ads optimize` and use the readiness actions to refine campaign structure before production launch.',
   };
 }
 

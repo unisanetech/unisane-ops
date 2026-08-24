@@ -141,8 +141,8 @@ function automationFor(input: {
   const connectionFlag = input.connection.connectionId
     ? ` --connection ${input.connection.connectionId}`
     : '';
-  const runCommand = `unisane growth marketing pull-api --cwd . --provider ${input.job.provider} --report ${input.job.reportType} --start-date ${window.startDate} --end-date ${window.endDate}${connectionFlag}`;
-  const editCommand = `unisane growth marketing schedule reporting --cwd . --cadence ${input.job.cadence} --window-days ${input.job.windowDays}${connectionFlag}`;
+  const runCommand = `unisane-ops growth marketing pull-api --cwd . --provider ${input.job.provider} --report ${input.job.reportType} --start-date ${window.startDate} --end-date ${window.endDate}${connectionFlag}`;
+  const editCommand = `unisane-ops growth marketing schedule reporting --cwd . --cadence ${input.job.cadence} --window-days ${input.job.windowDays}${connectionFlag}`;
   const scheduleBlocker = blockerMessage(input.job.blocker);
   return {
     id: input.job.id,

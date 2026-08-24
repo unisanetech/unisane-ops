@@ -45,8 +45,8 @@ export async function adsReport(options: AdsCliOptions): Promise<number> {
       maxAgeDays: reports[0]?.maxAgeDays ?? 3,
       providers: reports.flatMap((entry) => entry.providers),
       nextWorkflowStep: reports.some((entry) => !entry.ok)
-        ? 'Fix invalid ads provider pull artifacts, then rerun `unisane growth ads report`.'
-        : 'Run `unisane growth marketing report --unified` to join ads with analytics, SEO, and confirmed conversion truth.',
+        ? 'Fix invalid ads provider pull artifacts, then rerun `unisane-ops growth ads report`.'
+        : 'Run `unisane-ops growth marketing report --unified` to join ads with analytics, SEO, and confirmed conversion truth.',
     };
     if (options.json) console.log(JSON.stringify(report, null, 2));
     else printAdsProviderReportStatus(report);

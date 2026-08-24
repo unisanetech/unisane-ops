@@ -270,7 +270,7 @@ export function buildMarketingAdsSearchTermsReport(
     classifications,
     nextWorkflowStep: ok
       ? 'Review search-term classifications, then promote approved negatives, keywords, and landing-page backlog items.'
-      : 'Run `unisane growth ads pull --provider googleAds --report query --api` before search-term classification.',
+      : 'Run `unisane-ops growth ads pull --provider googleAds --report query --api` before search-term classification.',
   };
 }
 

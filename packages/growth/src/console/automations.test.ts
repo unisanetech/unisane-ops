@@ -14,7 +14,7 @@ describe('Growth console Automations projection', () => {
             windowDays: 3,
             status: 'blocked',
             blocker:
-              'Run unisane growth marketing conversion-pull --input <confirmed-conversions.json>.',
+              'Run unisane-ops growth marketing conversion-pull --input <confirmed-conversions.json>.',
           },
           {
             id: 'metaAds.campaign.daily',
@@ -89,7 +89,7 @@ describe('Growth console Automations projection', () => {
             nextRunLabel: 'Not scheduled',
             runNow: expect.objectContaining({
               command:
-                'unisane growth marketing pull-api --cwd . --provider googleAds --report campaign --start-date 2026-07-27 --end-date 2026-07-30 --connection google-primary',
+                'unisane-ops growth marketing pull-api --cwd . --provider googleAds --report campaign --start-date 2026-07-27 --end-date 2026-07-30 --connection google-primary',
             }),
           }),
         ],

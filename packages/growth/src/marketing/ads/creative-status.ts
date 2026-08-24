@@ -248,18 +248,18 @@ function resolveNextWorkflowStep(
     return 'Fix blocking creative errors before ads diff or apply dry-run.';
   }
   if (!report.planPath) {
-    return 'Run `unisane growth ads plan --out <plan.json>` or pass `--plan <plan.json>` to review planned creatives.';
+    return 'Run `unisane-ops growth ads plan --out <plan.json>` or pass `--plan <plan.json>` to review planned creatives.';
   }
   if (report.plannedAssets.length === 0) {
     return 'Regenerate the ads plan so it includes reviewable creative assets.';
   }
   if (report.checks.some((check) => check.id.startsWith('planned.') && check.status === 'warn')) {
-    return 'Review creative copy/assets, set approval and policy status, then rerun `unisane growth ads creative status`.';
+    return 'Review creative copy/assets, set approval and policy status, then rerun `unisane-ops growth ads creative status`.';
   }
   if (report.providerArtifacts.some((artifact) => artifact.status === 'missing')) {
     return 'Pull provider creative inventory where available, then compare planned and live creative evidence.';
   }
-  return 'Creative evidence is ready for `unisane growth ads diff` and guarded `ads apply --dry-run`.';
+  return 'Creative evidence is ready for `unisane-ops growth ads diff` and guarded `ads apply --dry-run`.';
 }
 
 export function buildMarketingAdsCreativeStatusReport(

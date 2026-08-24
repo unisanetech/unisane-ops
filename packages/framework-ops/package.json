@@ -1,7 +1,8 @@
 {
   "name": "@unisane/framework-ops",
   "version": "0.1.0",
-  "description": "Optional Unisane Framework integration pack for the canonical Unisane CLI",
+  "description": "Reserved typed boundary for serialized Framework descriptors in Unisane Ops",
+  "private": true,
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -9,7 +10,6 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "pack.manifest.json",
     "unisane.meta.json",
     "README.md"
   ],
@@ -22,38 +22,22 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./handlers/framework": {
-      "types": "./dist/handlers/framework.d.ts",
-      "import": "./dist/handlers/framework.js",
-      "default": "./dist/handlers/framework.js"
-    },
-    "./contributions/add": {
-      "types": "./dist/contributions/add.d.ts",
-      "import": "./dist/contributions/add.js",
-      "default": "./dist/contributions/add.js"
-    },
-    "./pack-manifest": "./pack.manifest.json",
     "./meta": "./unisane.meta.json"
   },
   "scripts": {
-    "build": "tsup src/index.ts src/contributions/add.ts src/handlers/framework.ts --format esm --dts --clean",
-    "dev": "tsup src/index.ts src/contributions/add.ts src/handlers/framework.ts --format esm --dts --watch",
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
     "lint": "eslint src scripts tests --max-warnings 0",
-    "test": "pnpm build && vitest run && node --test tests/*.test.mjs",
+    "test": "pnpm build && node --test tests/*.test.mjs",
     "check-types": "tsc --noEmit",
     "check:boundary": "node scripts/verify-release-boundary.mjs --source-only",
     "pack:check": "pnpm build && node scripts/verify-release-boundary.mjs",
     "prepublishOnly": "pnpm pack:check && pnpm check-types && pnpm test"
   },
-  "dependencies": {
-    "@unisane/devtools": "0.1.0",
-    "@unisane/ops-engine": "workspace:*"
-  },
   "devDependencies": {
     "eslint": "^9.39.1",
     "tsup": "^8.0.0",
-    "typescript": "^5.9.2",
-    "vitest": "^4.0.16"
+    "typescript": "^5.9.2"
   },
   "unisane": {
     "kind": "tooling",

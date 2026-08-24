@@ -76,7 +76,7 @@ describe('Growth console Tag Manager projection', () => {
           expect.objectContaining({
             id: 'gtm.refresh',
             command:
-              'unisane growth gtm pull --cwd . --app true-resume --env production --connection google-primary',
+              'unisane-ops growth gtm pull --cwd . --app true-resume --env production --connection google-primary',
           }),
           expect.objectContaining({
             id: 'gtm.review-changes',

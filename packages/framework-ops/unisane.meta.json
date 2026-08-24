@@ -8,10 +8,7 @@
     "full-platform",
     "headless"
   ],
-  "requiresPackages": [
-    "@unisane/devtools",
-    "@unisane/ops-engine"
-  ],
+  "requiresPackages": [],
   "requiresTokens": [],
   "runtimeProfiles": [
     "local-minimal",
@@ -21,10 +18,5 @@
   "docs": [
     "README.md"
   ],
-  "exports": [
-    ".",
-    "./contributions/add",
-    "./handlers/framework",
-    "./pack-manifest"
-  ]
+  "exports": ["."]
 }

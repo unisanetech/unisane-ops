@@ -23,12 +23,13 @@ writable copy of this product boundary may remain in the umbrella repository.
 
 The accepted standalone repository owns:
 
-- the `unisane` CLI and one `unisane` executable
+- the `unisane-ops` package, its one `unisane-ops` executable, and
+  `unisane-ops/config`
 - the headless Ops engine and static pack/action contracts
 - Unisane Ops Cloud and Unisane Ops Growth
 - Unisane Web Runtime
 - AWS, Cloudflare, Google, and Meta provider families
-- the optional Framework Ops integration
+- the optional descriptor-only Framework Ops adapter
 - admitted console, MCP, AI-host, hosted-runtime, deployment, documentation, test, and
   release surfaces that use the same engine and safety contracts
 
@@ -43,10 +44,12 @@ It does not own:
 
 ## Repository Relationship
 
-`unisane-ops` may depend on released public Framework contracts only where the accepted
-integration boundary requires them. Framework runtime must not depend on Ops. Private
-platforms consume released or explicitly admitted prerelease packages, never sibling
-source. UI packages and the UI CLI remain UI-owned.
+The optional `@unisane/framework-ops` adapter may consume only the serialized Framework
+project descriptor. It has no Framework, Compiler, or Devtools package dependency and
+does not compile projects, discover Framework commands, execute another CLI, or parse
+terminal output. Framework runtime must not depend on Ops. Private platforms consume
+released or explicitly admitted prerelease packages, never sibling source. UI packages
+and the UI CLI remain UI-owned.
 
 The current top-level `unisane-ops/**` directory is staging inside the umbrella Git
 repository. It is not a nested repository, local shadow, configured remote, or writable
@@ -65,16 +68,15 @@ rollback, observability, recovery, privacy, and accountable deployment ownership
 
 ## Current Readiness
 
-The no-shadow source-convergence candidate has a generated disposition ledger,
-target-local inert repository declarations, no private CLI-core or foreign relative
-source/config edges, and exact history and safety specifications. A disposable proof
-has now executed the filter with exact current-tree parity, clean Git residue removal,
-and deterministic full-history technical scanning. It retains three externally owned
-workspace blockers: two private UI dependencies and the Framework Devtools edge
-required by the current umbrella gate. Redacted scan findings plus scanner, security,
-privacy, legal, contributor, asset, license, signing, and remote-governance decisions
-remain unresolved. It is not certified for standalone CI, public history, remote
-authority, public package release, or production deployment.
+The Ops Phase 1 source now owns the final `unisane-ops` package, executable, and config
+coordinate without the prior combined-host wrapper or Framework command bridge. The
+Framework adapter is intentionally private and non-executable until Migration 1 supplies
+the canonical versioned serialized descriptor schema, digest rules, compatibility
+semantics, and fixtures. The umbrella integration lock and Platform consumer projection
+also remain outside this lane. Redacted scan findings plus
+scanner, security, privacy, legal, contributor, asset, license, signing, and
+remote-governance decisions remain unresolved. It is not certified for standalone CI,
+public history, remote authority, public package release, or production deployment.
 Detailed extraction and scanner receipts remain Infrastructure-owned private audit
 Evidence outside this future public product boundary; target Memory retains only safe
 receipt IDs, hashes, counts, and summaries.

@@ -120,7 +120,7 @@ function addBrokenTracking(
     rationale:
       'Tracking-fix recommendations outrank scaling recommendations because provider metrics are not reliable until audit gaps are resolved.',
     nextStep:
-      'Run `unisane growth marketing audit`, fix failed checks, then regenerate recommendations.',
+      'Run `unisane-ops growth marketing audit`, fix failed checks, then regenerate recommendations.',
     requiresReceipt: true,
   });
 }
@@ -162,7 +162,7 @@ function addFreshnessAlerts(
       rationale:
         'Fresh report data is required before spend, CPA, and conversion recommendations can be trusted.',
       nextStep:
-        'Run `unisane growth marketing pull` or `marketing pull-api` for the stale, missing, partial, or invalid provider.',
+        'Run `unisane-ops growth marketing pull` or `marketing pull-api` for the stale, missing, partial, or invalid provider.',
       requiresReceipt: true,
     });
   }

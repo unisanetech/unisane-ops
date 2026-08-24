@@ -10,7 +10,7 @@ import { runWithGoogleProviderCommandContext } from './runtime.js';
 export function runProviderGoogleCommand(context: PackCommandContext): Promise<PackCommandResult> {
   return runCapturedPackCommand(context, async () => {
     const program = new Command();
-    program.name('unisane').exitOverride();
+    program.name('unisane-ops').exitOverride();
     program.configureOutput({
       writeOut: (value) => process.stdout.write(value),
       writeErr: (value) => process.stderr.write(value),
@@ -24,7 +24,7 @@ export function runProviderGoogleCommand(context: PackCommandContext): Promise<P
       );
     }
     await runWithGoogleProviderCommandContext({ cwd: context.cwd, runtime: context.runtime }, () =>
-      program.parseAsync(['node', 'unisane', ...args]),
+      program.parseAsync(['node', 'unisane-ops', ...args]),
     );
   });
 }

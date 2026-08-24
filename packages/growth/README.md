@@ -36,10 +36,10 @@ bindings.
 Growth is selected through the root lifecycle:
 
 ```bash
-unisane ops init --growth --yes
-unisane add growth --capability seo --capability analytics --yes
-unisane connect google
-unisane check
+unisane-ops init --growth --yes
+unisane-ops add growth --capability seo --capability analytics --yes
+unisane-ops connect google
+unisane-ops check
 ```
 
 Project intent lives only in `unisane.config.ts`. Readiness is derived from shared
@@ -49,19 +49,19 @@ mutation findings.
 After readiness permits the operation:
 
 ```bash
-unisane growth seo ...
-unisane growth marketing ...
-unisane growth ads ...
-unisane growth gtm ...
-unisane growth console
+unisane-ops growth seo ...
+unisane-ops growth marketing ...
+unisane-ops growth ads ...
+unisane-ops growth gtm ...
+unisane-ops growth console
 ```
 
 Growth health review is the canonical readiness diagnosis for headless callers, the
 CLI, and the console Overview:
 
 ```bash
-unisane growth health review
-unisane growth health review --environment production --finding-limit 20 --json
+unisane-ops growth health review
+unisane-ops growth health review --environment production --finding-limit 20 --json
 ```
 
 The review reads canonical Growth intent and only the provider report families required
@@ -72,8 +72,8 @@ evidence. Disabled mutation is treated as a valid safe policy, not as missing se
 The guided measurement audit is available through the same structured workflow result:
 
 ```bash
-unisane growth measurement audit
-unisane growth measurement audit --json
+unisane-ops growth measurement audit
+unisane-ops growth measurement audit --json
 ```
 
 Human CLI output and `Analytics > Tracking health` lower from the action-owned workflow
@@ -84,8 +84,8 @@ surface.
 SEO opportunity review follows the same contract:
 
 ```bash
-unisane growth seo opportunities review
-unisane growth seo opportunities review --market "US / en" --limit 5 --json
+unisane-ops growth seo opportunities review
+unisane-ops growth seo opportunities review --market "US / en" --limit 5 --json
 ```
 
 The CLI and `SEO > Opportunities` consume the action-owned ranking, confidence,
@@ -109,7 +109,7 @@ After a person explicitly marks one recorded page opportunity as `approved`, pre
 bounded implementation handoff without granting change authority:
 
 ```bash
-unisane growth seo opportunities prepare \
+unisane-ops growth seo opportunities prepare \
   --opportunities docs/domains/seo/keyword-research/opportunities/pages.json \
   --id resume-templates \
   --out-dir docs/domains/seo/keyword-research/prepared \
@@ -134,7 +134,7 @@ After the externally reviewed page is live, record that fact without asking Grow
 publish it:
 
 ```bash
-unisane growth seo opportunities record-publication \
+unisane-ops growth seo opportunities record-publication \
   --packet docs/domains/seo/keyword-research/prepared/templates.implementation.json \
   --published-url https://example.com/templates \
   --published-at 2026-08-04T00:00:00Z \
@@ -151,7 +151,7 @@ does not provide repository, CMS, deployment, or provider authority.
 On or after the declared verification date, refresh and compare the exact opportunity:
 
 ```bash
-unisane growth seo opportunities verify-publication \
+unisane-ops growth seo opportunities verify-publication \
   --publication docs/domains/seo/keyword-research/publications/templates.json \
   --out docs/domains/seo/keyword-research/verifications/templates.json
 ```
@@ -168,7 +168,7 @@ windows. Both commands support `--dry-run` and `--json`.
 Configure the first-party site, target markets, and conservative crawl defaults once:
 
 ```bash
-unisane growth seo site configure \
+unisane-ops growth seo site configure \
   --site https://example.com \
   --market US/en \
   --market GB/en \
@@ -185,8 +185,8 @@ Then capture a bounded, provider-neutral snapshot inside the existing SEO resear
 workspace:
 
 ```bash
-unisane growth seo site crawl
-unisane growth seo site crawl \
+unisane-ops growth seo site crawl
+unisane-ops growth seo site crawl \
   --site https://example.com \
   --max-pages 100 \
   --max-depth 2 \
@@ -211,8 +211,8 @@ or contains too little static text for a reliable content decision, capture a sm
 browser-rendered supplement:
 
 ```bash
-unisane growth seo site render
-unisane growth seo site render \
+unisane-ops growth seo site render
+unisane-ops growth seo site render \
   --url https://example.com/app \
   --url https://example.com/pricing \
   --max-pages 2 \
@@ -243,12 +243,12 @@ making a request or writing evidence, and Search Console URL-prefix and domain
 properties must cover the configured site.
 
 ```bash
-unisane growth seo performance fetch-search-console \
+unisane-ops growth seo performance fetch-search-console \
   --platform example \
   --start-date 2026-07-01 \
   --end-date 2026-07-31
 
-unisane growth seo performance fetch-ga4 \
+unisane-ops growth seo performance fetch-ga4 \
   --platform example \
   --start-date 2026-07-01 \
   --end-date 2026-07-31
@@ -308,7 +308,7 @@ the operator can resume without repeating completed days. This avoids treating a
 multi-day total as if the provider had supplied daily facts.
 
 ```bash
-unisane growth marketing history backfill \
+unisane-ops growth marketing history backfill \
   --provider googleAds \
   --report campaign \
   --start-date 2026-06-01 \
@@ -354,8 +354,8 @@ Reconcile the latest crawl with any available Search Console and GA4 artifacts b
 asking the opportunity workflow to reason about existing pages:
 
 ```bash
-unisane growth seo pages inventory
-unisane growth seo pages inventory --dry-run --json
+unisane-ops growth seo pages inventory
+unisane-ops growth seo pages inventory --dry-run --json
 ```
 
 The command uses conservative workspace defaults and writes
@@ -383,23 +383,23 @@ requires the exact `provider:account:campaign` target; verification is a separat
 provider read:
 
 ```bash
-unisane growth campaign pause plan \
+unisane-ops growth campaign pause plan \
   --provider googleAds \
   --account-id 1234567890 \
   --campaign-id 42 \
   --evidence-revision evidence-3 \
   --json
 
-unisane growth campaign pause show --run-id <run-id>
-unisane growth campaign pause approve \
+unisane-ops growth campaign pause show --run-id <run-id>
+unisane-ops growth campaign pause approve \
   --run-id <run-id> \
   --plan-hash <exact-plan-hash> \
   --approved-by <operator>
-unisane growth campaign pause apply \
+unisane-ops growth campaign pause apply \
   --run-id <run-id> \
   --evidence-revision evidence-3 \
   --confirm-target googleAds:1234567890:42
-unisane growth campaign pause verify --run-id <run-id>
+unisane-ops growth campaign pause verify --run-id <run-id>
 ```
 
 Every command reads or advances the same canonical local mutation-run record. Human and
@@ -425,8 +425,8 @@ Use the read-only tracking audit to reconcile project source, the event and conv
 manifests, Tag Manager intent, and captured browser/server evidence:
 
 ```bash
-unisane growth marketing audit --cwd . --json
-unisane growth marketing audit --cwd . --observations ops/growth/tracking-observations.json --json
+unisane-ops growth marketing audit --cwd . --json
+unisane-ops growth marketing audit --cwd . --observations ops/growth/tracking-observations.json --json
 ```
 
 The JSON result is the canonical headless contract for agents, CI, and the console's

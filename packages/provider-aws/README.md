@@ -16,7 +16,7 @@ are capabilities inside the family, not separate packages. It owns the sealed
 `provider aws` command pack and exact handler:
 
 ```bash
-unisane provider aws ...
+unisane-ops provider aws ...
 ```
 
 The existing Devtools `aws ...` root is a thin compatibility registrar over this owner.

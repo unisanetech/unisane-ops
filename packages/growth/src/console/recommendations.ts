@@ -133,7 +133,7 @@ function decisionActions(input: {
 }): Pick<MarketingConsoleRecommendation, 'acceptAction' | 'dismissAction'> {
   if (input.decision !== 'pending') return {};
   const base = [
-    'unisane growth marketing recommend decision',
+    'unisane-ops growth marketing recommend decision',
     '--cwd .',
     `--input ${shellQuote(input.artifactPath)}`,
     `--recommendation-id ${shellQuote(input.recommendation.id)}`,

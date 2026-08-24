@@ -213,7 +213,7 @@ function nextWorkflowStep(preview: MarketingAdsApplyPreview): string {
     return 'Review the ads plan, set status to reviewed or approved, then rerun dry-run apply.';
   }
   if (preview.blockers.length > 0) {
-    return 'Resolve apply blockers and rerun `unisane growth ads apply --dry-run`.';
+    return 'Resolve apply blockers and rerun `unisane-ops growth ads apply --dry-run`.';
   }
   return 'Dry-run apply is ready; live provider mutation remains disabled until receipt-backed executors are implemented.';
 }

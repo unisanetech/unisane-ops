@@ -4,12 +4,12 @@ Provider-owned Google connection and transport implementation for Unisane Ops.
 
 ## Connection Contract
 
-`unisane connect google` creates one named connection carrying incremental grants for
+`unisane-ops connect google` creates one named connection carrying incremental grants for
 Search Console, Analytics, Tag Manager, Ads, and project administration. This package
 owns OAuth, secure local credentials, refresh, revocation state, discovery, explicit
 resource selection, and connection readiness.
 
-`unisane disconnect google` removes the local connection record and locally owned
+`unisane-ops disconnect google` removes the local connection record and locally owned
 credential material after explicit confirmation. It does not delete historical reports
 or mutate provider-side tags, properties, containers, accounts, or campaigns.
 
@@ -25,7 +25,7 @@ desired state, strategy, policy, plans, approvals, locks, and receipts.
 The narrow expert lane remains:
 
 ```bash
-unisane provider google ...
+unisane-ops provider google ...
 ```
 
 It is for provider-specific inventory and transport diagnostics, not a second

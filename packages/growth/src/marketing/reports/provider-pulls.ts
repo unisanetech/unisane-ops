@@ -176,9 +176,9 @@ export function readMarketingProviderReportStatus(
     maxAgeDays,
     providers,
     nextWorkflowStep: hasError
-      ? 'Fix invalid provider pull artifacts, then rerun `unisane growth marketing report`.'
+      ? 'Fix invalid provider pull artifacts, then rerun `unisane-ops growth marketing report`.'
       : hasMissingOrStale
-        ? 'Run `unisane growth marketing pull --provider <provider> --input <artifact.json>` for missing, stale, or partial providers.'
+        ? 'Run `unisane-ops growth marketing pull --provider <provider> --input <artifact.json>` for missing, stale, or partial providers.'
         : 'Run unified report joins or optimization analysis from the fresh provider pulls.',
   };
 }

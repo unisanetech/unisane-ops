@@ -150,7 +150,7 @@ function serviceProjection(args: {
   evidence?: MarketingEvidenceProviderStatus;
   freshness: MarketingConsoleFreshnessCell[];
 }): MarketingConsoleConnectionService {
-  const baseCommand = `unisane connect google --environment ${args.environmentId}`;
+  const baseCommand = `unisane-ops connect google --environment ${args.environmentId}`;
   const cells = serviceFreshness(args.service, args.freshness);
   const coverageLabel = dataCoverageLabel(cells);
   const dataUpdatedAt = latestPulledAt(cells);
@@ -411,7 +411,7 @@ export function buildMarketingConsoleConnections(args: {
             'google.connect',
             'Continue with Google',
             'Connect one Google account and request only the access needed by selected outcomes.',
-            `unisane connect google --environment ${args.context.environmentId}`,
+            `unisane-ops connect google --environment ${args.context.environmentId}`,
           )
         : services.find((service) => service.state === state)?.primaryAction;
       const workingCount = services.filter((service) => service.state === 'current').length;
@@ -448,7 +448,7 @@ export function buildMarketingConsoleConnections(args: {
           title: 'Disconnect Google from this workspace?',
           ...(connection
             ? {
-                command: `unisane disconnect google --environment ${args.context.environmentId} --connection ${connection.id} --yes`,
+                command: `unisane-ops disconnect google --environment ${args.context.environmentId} --connection ${connection.id} --yes`,
               }
             : {}),
           consequences: [

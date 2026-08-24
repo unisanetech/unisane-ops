@@ -145,7 +145,7 @@ function commands(
     id: `marketing.pull-api.${provider}.${reportType}`,
     provider,
     reportType,
-    command: `unisane growth marketing pull-api --provider ${provider} --report ${reportType} --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>${connection ? ` --connection ${connection}` : ''}`,
+    command: `unisane-ops growth marketing pull-api --provider ${provider} --report ${reportType} --start-date <YYYY-MM-DD> --end-date <YYYY-MM-DD>${connection ? ` --connection ${connection}` : ''}`,
     purpose: `Refresh ${provider}/${reportType} through the selected connection.`,
   }));
 }
@@ -237,7 +237,7 @@ export function buildMarketingEvidenceStatus(
         {
           id: 'gtm.validate',
           provider: 'gtm',
-          command: 'unisane growth gtm validate',
+          command: 'unisane-ops growth gtm validate',
           purpose: 'Validate Tag Manager desired state.',
         },
       ],
@@ -256,12 +256,12 @@ export function buildMarketingEvidenceStatus(
     localEvidenceStatus({
       provider: 'confirmedConversions',
       status: readMarketingConfirmedConversionStatus({ cwd, maxAgeDays, now }),
-      command: 'unisane growth marketing conversion-pull --input <confirmed-conversions.json>',
+      command: 'unisane-ops growth marketing conversion-pull --input <confirmed-conversions.json>',
     }),
     localEvidenceStatus({
       provider: 'strategyMap',
       status: readMarketingStrategyMapStatus({ cwd, maxAgeDays, now }),
-      command: 'unisane growth marketing strategy-pull --input <strategy-map.json>',
+      command: 'unisane-ops growth marketing strategy-pull --input <strategy-map.json>',
     }),
   ];
   const required = providers.filter(requiredEvidence);

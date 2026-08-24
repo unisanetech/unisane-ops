@@ -213,7 +213,7 @@ async function runInventory(
       diagnostics: inventory.errors.map((entry) => `${entry.code}: ${entry.message}`),
       artifacts: [artifact.relativePath],
       nextActions: [
-        `Run \`unisane ${route.cli} plan --inventory ${artifact.relativePath}\` after reviewing the inventory.`,
+        `Run \`unisane-ops ${route.cli} plan --inventory ${artifact.relativePath}\` after reviewing the inventory.`,
       ],
     });
   } catch (error) {
@@ -263,7 +263,7 @@ async function runPlan(context: PackCommandContext, route: DnsRoute): Promise<Pa
       nextActions:
         plan.summary.blocked === 0
           ? [
-              `Review the plan, then run \`unisane ${route.cli} apply --plan ${artifact.relativePath} --account-confirm ${plan.accountId} --yes\`.`,
+              `Review the plan, then run \`unisane-ops ${route.cli} apply --plan ${artifact.relativePath} --account-confirm ${plan.accountId} --yes\`.`,
             ]
           : ['Resolve blocked DNS operations and generate a new inventory and plan.'],
     });
