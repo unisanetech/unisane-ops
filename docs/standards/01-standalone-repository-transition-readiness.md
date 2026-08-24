@@ -15,6 +15,12 @@ lastUpdated: '2026-08-25'
 
 ## Changelog
 
+- `2026-08-25`: Marked the pre-Phase 1 E1 owner/consumer inventory and the
+  `2026-08-09` no-shadow checkpoint as immutable historical snapshots. They no longer
+  participate in current coordinate or blocker retrieval. Current retrieval resolves
+  only `unisane-ops`, `unisane-ops/config`, and the descriptor-only
+  `@unisane/framework-ops` boundary with zero Framework, Compiler, or Devtools package
+  dependencies.
 - `2026-08-25`: Applied the Ops-owned half of the Phase 1 product-boundary cut. The
   public package/config coordinate and sole binary are now `unisane-ops` and
   `unisane-ops/config`; the prior `unisane` package, binary, forwarding wrapper,
@@ -98,6 +104,26 @@ This document uses exact labels:
 A recommendation never satisfies an owner decision. A current file, test, package field, or
 deployment manifest never promotes itself into public or production approval.
 
+## Current Phase 1 Retrieval Contract
+
+The current canonical Ops product coordinate is the public npm package `unisane-ops`.
+It owns the sole `unisane-ops` binary and the `unisane-ops/config` export. Standalone
+projects use `defineUnisaneProject(...)` as the default export of the one
+`unisane.config.ts`; Framework projects retain their Framework-owned default and add the
+exact named `ops = defineUnisaneOps(...)` export.
+
+The optional `@unisane/framework-ops` package consumes only the Framework-owned
+serialized project descriptor. It has zero Framework, Compiler, or Devtools package
+dependencies and owns no compilation, command discovery, nested CLI execution,
+terminal parsing, or process capture. It remains private and non-executable until
+Migration 1 supplies the canonical descriptor schema, digest and compatibility
+semantics, and valid/tampered fixtures.
+
+All later references to `packages/unisane`, `unisane/config`, the executable Devtools
+bridge, or a Devtools workspace edge occur only inside explicitly labeled historical
+Evidence snapshots. They describe the pre-cutover repository and must not be retrieved
+as current package, command, config, or blocker truth.
+
 ## Evidence Freeze
 
 The inventory was read from umbrella `dev` commit `bac6eee22e4288ce6b1c743a34eab7fb06cbac78` before
@@ -124,20 +150,20 @@ later source-convergence checkpoint is recorded separately below.
 | E11 direct-path patch heuristic | the same high-confidence patterns over `git log -p --all -- unisane-ops`  | zero matches; this is not a complete imported-history, entropy, privacy, or license scan                                                                                         |
 | E12 public/legal state          | repository-system manifest plus package metadata                          | public distribution, license, NOTICE, contributor terms, asset rights, registry, CODEOWNERS, security, signing, deployment, and target authority remain unapproved or unresolved |
 
-## Exact Current Candidate Boundary
+## Candidate Boundary And Current Package Contract
 
-### Tracked owners
+### Historical tracked owners at E1
 
-At E1, the exact tracked staging boundary is:
+At E1, before the Phase 1 coordinate cut, the exact tracked staging boundary was:
 
-| Current owner                     | Paths | Disposition                                                                                                                       |
+| E1 owner                          | Paths | Disposition at E1                                                                                                                 |
 | --------------------------------- | ----: | --------------------------------------------------------------------------------------------------------------------------------- |
 | `.agents/plugins/**`              |     1 | keep only as an admitted target-local marketplace source; never as host or workflow authority                                     |
 | `apps/console/**`                 |   103 | keep as an Ops presentation app; public package and deployment status remain blocked                                              |
 | `apps/hosted-runtime/**`          |    30 | keep as the private modular-monolith composition boundary; never publish as a public package without a new admission              |
 | `deploy/hosted/**`                |    30 | keep only if an accountable deployment owner accepts the environment-neutral manifests and production gates                       |
 | `packages/cloud/**`               |    19 | keep as accepted public package `@unisane/cloud`                                                                                  |
-| `packages/framework-ops/**`       |     9 | keep as accepted public package `@unisane/framework-ops`, dependent only on released Framework integration contracts              |
+| `packages/framework-ops/**`       |     9 | was retained as public `@unisane/framework-ops`, then dependent on the pre-cutover Framework integration bridge                    |
 | `packages/growth/**`              |   426 | keep as accepted public package `@unisane/growth`                                                                                 |
 | `packages/hosted-postgresql/**`   |     8 | keep implementation source; decide internal versus public package before release                                                  |
 | `packages/ops-engine/**`          |    31 | keep as accepted public package `@unisane/ops-engine`                                                                             |
@@ -146,13 +172,16 @@ At E1, the exact tracked staging boundary is:
 | `packages/provider-cloudflare/**` |    10 | keep as accepted public package `@unisane/provider-cloudflare`                                                                    |
 | `packages/provider-google/**`     |    66 | keep as accepted public package `@unisane/provider-google` after removing the foreign CLI-core edge                               |
 | `packages/provider-meta/**`       |    13 | keep as accepted public package `@unisane/provider-meta`; unimplemented connection/CLI claims remain fail-closed product behavior |
-| `packages/unisane/**`             |    36 | keep as accepted public `unisane` package and sole `unisane` binary owner                                                         |
+| `packages/unisane/**`             |    36 | was retained as the then-public `unisane` package and then-sole `unisane` binary owner                                             |
 | `packages/web-runtime/**`         |    77 | keep as accepted public package `@unisane/web-runtime`                                                                            |
 | `plugins/unisane-ops/**`          |     9 | keep as the thin current private Codex distribution source; public plugin admission remains separate                              |
 
-The readiness audit added `docs/00-start-here.md`, `docs/overview.md`, and this Standard. The later
-no-shadow convergence checkpoint and its exact additional paths are owned by the generated
-disposition ledger rather than this historical table.
+This table is an immutable pre-cutover inventory. In particular,
+`packages/unisane/**`, package `unisane`, and binary `unisane` are historical facts, not
+accepted current Ops coordinates. The readiness audit added `docs/00-start-here.md`,
+`docs/overview.md`, and this Standard. The later no-shadow convergence checkpoint and
+its exact additional paths are owned by the generated disposition ledger rather than
+this historical table.
 
 ### Canonical public package set
 
@@ -224,22 +253,23 @@ modules, UI source, root Devtools, `create-unisane`, or unrelated Framework prod
 tooling into Ops, and do not add a sibling, file, link, copied-source, or temporary-
 registry fallback to make a standalone build pass.
 
-### Current manifest consumers outside Ops
+### Historical manifest consumers outside Ops at E1
 
-At E1, the exact external package-manifest consumers are:
+At E1, before the Phase 1 coordinate cut, the exact external package-manifest consumers were:
 
-| Consumer owner                                      | Ops dependencies                                     |             Current edges |
+| Consumer owner at E1                                | Ops dependencies at E1                               |                Edges at E1 |
 | --------------------------------------------------- | ---------------------------------------------------- | ------------------------: |
 | `unisane-platforms/apps/data-entry-lm`              | `@unisane/growth`, `@unisane/web-runtime`, `unisane` |     3 `workspace:*` edges |
 | `unisane-platforms/apps/true-resume`                | `@unisane/growth`, `@unisane/web-runtime`, `unisane` |     3 `workspace:*` edges |
 | Framework starter sources `api-only` and `saaskit`  | `@unisane/framework-ops`, `unisane`                  |     4 `workspace:*` edges |
 | `create-unisane` templates `api-only` and `saaskit` | `@unisane/framework-ops`, `unisane`                  | 4 declared `^0.1.0` edges |
 
-That is fifteen manifest edges. Platforms also contain direct source imports of Growth, Web Runtime,
-and `unisane/config`; these are consumers, not migration source. The Framework starter/template
-release graph must prove that Ops can consume the selected real-registry-admitted Framework
-integration boundary while Framework consumers consume released Ops packages without a sibling
-workspace or circular unpublished release.
+That historical snapshot contained fifteen manifest edges. Platforms also contained
+direct source imports of Growth, Web Runtime, and the retired `unisane/config`
+coordinate. Those observations are preserved only as pre-cutover consumer Evidence;
+the current Ops config coordinate is `unisane-ops/config`. Current consumer migration
+must use released Ops packages without a sibling workspace or circular unpublished
+release.
 
 Consumer migration happens in each owning repository after immutable Ops candidates exist. This
 audit does not rewrite consumers.
@@ -526,29 +556,32 @@ writer, full canonical doc, source import, package workspace edge, writable Task
 authority survives in both repositories. Historical recovery in the archived umbrella Git is
 allowed; a filtered current fallback is not.
 
-## No-Shadow Source-Convergence Checkpoint
+## Historical No-Shadow Source-Convergence Checkpoint — 2026-08-09
 
-Task `T-287702f0` converges source from certified umbrella `dev` commit
-`50f13fcc35e95aad3b8ad3c5dc7b271810946a34`. Its generated source disposition ledger covers every
-concrete target file except Skopos-managed Task artifact patterns and records every matching
+Task `T-287702f0` converged source from certified umbrella `dev` commit
+`50f13fcc35e95aad3b8ad3c5dc7b271810946a34`. Its generated source disposition ledger covered every
+concrete target file except Skopos-managed Task artifact patterns and recorded every matching
 canonical umbrella docs surface and declared root/tool/config disposition. The detailed ledger,
-exact history specification, and safety specification are controlled Infrastructure audit Evidence,
+exact history specification, and safety specification were controlled Infrastructure audit Evidence,
 not target repository outputs. Their frozen digests remain source-bound under receipt ID
 `OPS-EXTRACTION-T-b222cdbf`; they must not enter a future public current-path filter.
 
-The checkpoint establishes these facts:
+This subsection is an immutable pre-Phase 1 Evidence snapshot. Its package counts,
+Devtools edge, UI discovery statement, and blocker cardinality are superseded for
+current retrieval by the Current Phase 1 Retrieval Contract and the current Gate And
+Blocker Ledger below. The checkpoint established these facts at that time:
 
-- the 14 app/package manifests contain ten accepted public packages, two accepted private apps, and
+- the 14 app/package manifests contained ten accepted public packages, two accepted private apps, and
   two unresolved registry-admission owner decisions;
 - AWS and Google no longer import or depend on private `@unisane/cli-core`; each owns a
   dependency-free provider presentation adapter, with no compatibility export, alias, shim, or
   fallback;
 - all package/app TypeScript configurations extend the staged target-local base rather than
   Framework source, and no foreign relative source/config path remains;
-- the exact smallest foreign workspace blocker set is three edges: the console's edges to private
-  `@unisane/ui` and `@unisane/data-table`, plus the Framework bridge edge to `@unisane/devtools`
-  that the root-owned umbrella architecture gate still requires; the dynamic UI CLI discovery
-  contract also awaits an immutable UI-owned candidate;
+- at that checkpoint, the exact smallest foreign workspace blocker set was three edges:
+  the console's edges to then-private `@unisane/ui` and `@unisane/data-table`, plus the
+  then-current Framework bridge edge to `@unisane/devtools`; the host also retained
+  dynamic UI CLI discovery;
 - the target-local package/workspace/TypeScript/lint/format/test/build/release/CI and reviewed
   Skopos Action/Guard source declarations are staged under `unisane-ops/**`; they neither add a
   target lockfile nor activate target Skopos in the umbrella;
@@ -668,7 +701,7 @@ authority cutover. Those gates remain independently fail-closed below.
 | OPS-R02 | closed at checkpoint                           | source convergence          | private CLI-core dependencies and imports are absent from AWS and Google                                                                                                                                                                                                                                                            | Ops maintainers; focused provider and boundary proof                                                                                            |
 | OPS-R03 | closed at local source conversion              | local shadow                | console pins exact released public `@unisane/ui@0.1.1` and `@unisane/data-table@0.1.1`; source, emitted, integrity, and isolated registry-consumer proof reject every local or sibling fallback                                                                                                                                     | Ops consumer owner; exact source/emitted inventory, registry integrity, frozen isolated install, build, CSS/assets, and React-singleton proof   |
 | OPS-R04 | open; descriptor contract blocked              | local shadow                | the executable Devtools bridge and dependency are removed, but Migration 1 has not yet supplied the canonical serialized descriptor schema/version, digest and compatibility semantics, or valid/tampered fixtures; the adapter therefore remains private and non-executable                                              | Framework Migration 1 owner; emit the canonical descriptor contract and fixtures, then Ops implements and proves validation/mapping              |
-| OPS-R05 | open                                           | local shadow                | Platforms retain seven `workspace:*` Ops edges                                                                                                                                                                                                                                                                                      | Platforms owner; later consumer Tasks against immutable candidates                                                                              |
+| OPS-R05 | open                                           | local shadow                | Platform consumers and the umbrella lock still retain pre-cutover Ops workspace coordinates                                                                                                                                                                                                                                        | Platforms and migration owners; migrate consumers to immutable `unisane-ops` candidates and regenerate the owning lock projection               |
 | OPS-R06 | open                                           | package release             | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved                                                                                                                                                                                                                                        | product and release owners; explicit package admission or privatization                                                                         |
 | OPS-R07 | open; integration projection blocked           | local shadow                | the Ops source coordinate has changed, while the umbrella lock and external consumer projection remain coordinator-owned; standalone setup certification, target sync, lock generation, clean install, Node matrix, and hosted CI proof remain open                                                                        | Migration coordinator after OPS-R04; reconcile the root lock/consumer projection, then rerun source-bound target sync and standalone proof        |
 | OPS-R08 | local materialization complete; approval open  | local shadow/public history | the history-preserved local candidate exists and exact filter, commit map, parity, excluded-path, ref/tag/signature, integrity, and cleanup receipts pass; migration-tool/final-history approval and any public-history promotion remain open                                                                                       | migration owner and reviewer; approve the migration route and public-history receipts before external promotion                                 |
@@ -683,26 +716,21 @@ source, or a future remote name.
 
 ## Safest Next Bounded Task After Proof Review
 
-The next input is frozen as the existing clean standalone candidate at
-`/Users/bhaskarbarma/Desktop/TOP/unisane-repositories/unisane-ops`, exact local `main`
-`5f565477466528ac49793545b24802fa15d499eb`. It has no configured remote and no target lockfile. Its
-latest commit contains only corrected target Memory and the deferred integration Task after the
-attempted product/config sync was restored.
+The Ops-side Phase 1 implementation is held unintegrated while Task `T-f530a84c`
+remains deferred at the typed descriptor seam. The exact next dependency is Framework
+Migration 1, not a Devtools release or executable bridge:
 
-The next bounded work is upstream Framework release-shape resolution, not another Ops extraction,
-resolver retry, or authority flip:
-
-1. choose and admit the Framework integration release shape; prefer a dependency-light public
-   contract, while treating release of the current 32-package closure as a larger separately
-   approved alternative
-2. prove the chosen exact Framework coordinate and complete runtime closure through immutable
-   real-registry integrity and a clean external consumer, without local or temporary fallback
-3. re-prove the Ops target is clean, remote-free, at the exact frozen base, and lacks a lockfile;
-   then freeze the authoritative umbrella source and recompute the complete target delta
-4. apply that delta once, adapt target-local Scope bindings, generate the first target lock through
-   the real resolver, and prove a second clean frozen install plus focused target validation
-5. record the new local target commit and receipts while keeping the umbrella the sole writable
-   authority
+1. Migration 1 emits the versioned canonical serialized Framework project descriptor,
+   including schema, digest canonicalization, project identity, capabilities,
+   compatibility and freshness semantics, plus valid and tampered fixtures.
+2. Resume `T-f530a84c` only to implement and prove descriptor validation/mapping in
+   `@unisane/framework-ops`, retaining zero Framework, Compiler, or Devtools package
+   dependencies and no executable behavior.
+3. The migration coordinator reconciles the root Ops architecture gate, umbrella lock,
+   and remaining Platform consumers to `unisane-ops` and `unisane-ops/config`, then
+   reruns the Task-selected focused Actions from a valid dependency installation.
+4. Record the integrated candidate and proof while the umbrella remains the sole
+   writable authority.
 
 History/scanner approval, security and legal disposition, package release, hosted CI, remote
 governance, deployment, and authority cutover remain separate gates. This section authorizes none of
