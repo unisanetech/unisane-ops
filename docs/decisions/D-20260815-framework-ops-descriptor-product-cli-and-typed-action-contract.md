@@ -9,6 +9,7 @@ authority: canonical
 provenance: accepted
 view: current
 status: accepted
+lastUpdated: 2026-08-25
 relatedDocs:
   - './D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md'
   - './D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md'
@@ -23,6 +24,13 @@ relatedDocs:
 
 ## Changelog
 
+- `2026-08-25`: Fixed the final public coordinates and clean-cut implementation
+  contract: `@unisane/devtools` owns only the `unisane` Framework binary; the
+  `unisane-ops` npm package owns only the `unisane-ops` binary and
+  `unisane-ops/config`; and `@unisane/framework-ops` is a descriptor-only Ops adapter
+  with zero Framework, Compiler, or Devtools dependencies. The unreleased
+  `unisane-devtools`, Ops-owned `unisane`, executable Framework bridge, and all aliases
+  or compatibility shims are deleted rather than retained.
 - `2026-08-15`: Accepted separate Framework and Ops product CLIs, a serialized
   descriptor-only optional Framework integration, one typed Ops action protocol for
   every presentation adapter, and the removal of provider mutations and nested CLI
@@ -76,7 +84,7 @@ The final executable ownership is:
 | Command          | Package and product owner              | Responsibility                                                                                       |
 | ---------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `unisane`        | `@unisane/devtools`, Unisane Framework | Framework adopt support, compile, generate, develop, build, inspect, and local developer diagnostics |
-| `unisane-ops`    | the Ops CLI package, Unisane Ops       | Ops adoption, observe, plan, approve, apply, verify, inspect, automate, and receipt workflows        |
+| `unisane-ops`    | `unisane-ops` npm package, Unisane Ops | Ops adoption, observe, plan, approve, apply, verify, inspect, automate, and receipt workflows        |
 | `create-unisane` | the Framework scaffolder               | create a new Framework project                                                                       |
 
 Only `create-unisane` exposes project creation. Devtools may share an internal
@@ -90,6 +98,55 @@ launcher, catch-all forwarding route, compatibility alias, or runtime product di
 Because these command surfaces have no stable public release, the cutover is direct.
 Documentation, packages, tests, and consumers move to the selected names in the same
 bounded implementation work; the old parallel paths are deleted.
+
+`@unisane/devtools` owns exactly the `unisane` binary. The unreleased
+`unisane-devtools` binary is deleted, and `@unisane/devtools/framework-integration`
+and every equivalent executable Framework bridge export are deleted. Framework
+commands are invoked only through the Framework-owned `unisane` CLI or its direct
+typed programmatic owners; Ops never invokes, wraps, forwards to, or captures it.
+
+The public Ops CLI npm package coordinate is exactly `unisane-ops`, and that package
+owns exactly the `unisane-ops` binary. The transitional Ops-owned `unisane` package and
+binary are deleted. Neither product publishes the other product's command, and no
+deprecated package, binary alias, forwarding wrapper, combined launcher, or
+compatibility shim survives the clean cut.
+
+### One project config contract
+
+The only project-level filename is `unisane.config.ts`. The public config import
+coordinate is exactly `unisane-ops/config`, exported by the `unisane-ops` npm package.
+A standalone Ops project uses `defineUnisaneProject(...)` as its default export:
+
+```ts
+import { defineUnisaneProject } from 'unisane-ops/config';
+
+export default defineUnisaneProject({
+  project: { id: 'example-project' },
+  environments: {},
+  ops: {},
+});
+```
+
+A Framework project preserves its Framework-owned default export and exposes Ops only
+through the exact named `ops` export created with `defineUnisaneOps(...)`:
+
+```ts
+import { defineUnisaneOps } from 'unisane-ops/config';
+
+export const ops = defineUnisaneOps({
+  project: { id: 'example-platform' },
+  environments: {},
+});
+
+export default defineConfig({
+  // Framework-owned configuration.
+});
+```
+
+The loader accepts the generic default export or the exact named `ops` export when the
+default belongs to Framework. The transitional `unisane/config` coordinate,
+provider-specific root config exports, alternate filenames, re-export aliases, and
+compatibility loaders are deleted rather than supported in parallel.
 
 ### Stack-neutral Ops core
 
@@ -110,7 +167,9 @@ assumptions.
 
 The adapter:
 
-- has zero Framework npm dependencies
+- is a descriptor-only validator and mapper that consumes serialized data, not
+  executable Framework behavior
+- has zero Framework, `@unisane/compiler`, or `@unisane/devtools` npm dependencies
 - is not installed or activated by the default Ops installation
 - validates descriptor schema version, compatibility, digest, project identity, and
   requested capability before creating Ops inputs
@@ -215,6 +274,7 @@ Runtime independence, and repository direction accepted by
 It supersedes that Decision's statements that:
 
 - the Ops package owns the `unisane` binary
+- the Ops CLI package uses the `unisane` npm coordinate or `unisane/config` export
 - one CLI reserves or forwards Framework root commands
 - a Framework pack supplies compiler, `dev`, `build`, `generate`, or LLM commands to Ops
 - `@unisane/framework-ops` imports public Framework authoring contracts or
@@ -239,16 +299,20 @@ the Framework remains under its founder public-availability hold.
    supported-version validator, mapping, and typed `ActionDefinition` contracts before
    moving implementations; Ops does not create a second descriptor schema.
 3. Add the Framework descriptor emitter and isolated fixture without an Ops dependency.
-4. Add the Ops descriptor adapter with zero Framework npm dependencies and keep it out
-   of the default install profile.
+4. Add the `@unisane/framework-ops` descriptor validator/mapper with zero Framework,
+   Compiler, or Devtools npm dependencies and keep it out of the default install
+   profile.
 5. Port one representative read action and one approval-gated mutation end to end
    through CLI, MCP or API, plan, apply, verification, and receipt.
 6. Port remaining leaf actions and presentation adapters to the same engine.
 7. Move or delete remote provider mutations in Devtools after their typed owner passes
    focused parity and safety proof.
-8. Rename executable ownership and delete the combined launcher, Framework pack command
-   contribution, nested CLIs, output capture, compatibility aliases, and duplicate paths
-   in the same admitted cutover.
+8. Rename `@unisane/devtools` to the sole `unisane` binary owner, rename the Ops npm/CLI
+   identity to `unisane-ops`, move the config export to `unisane-ops/config`, and delete
+   `unisane-devtools`, the Ops-owned `unisane` package/binary, the executable
+   `framework-integration` bridge, the Framework pack command contribution, nested
+   CLIs, output capture, compatibility aliases, shims, and duplicate paths in the same
+   admitted cutover.
 9. Enforce package and dependency rules in both standalone repositories before their
    authority flips.
 
@@ -264,6 +328,9 @@ the Framework remains under its founder public-availability hold.
 - mutation fixtures prove exact target identity, hash-bound plan, approval, lock,
   verification, redaction, and receipt behavior
 - dependency gates reject Framework imports from Ops core and Ops imports from Framework
+- packed manifest checks prove `@unisane/devtools` exposes only `unisane`, `unisane-ops`
+  exposes only `unisane-ops` and `unisane-ops/config`, and `@unisane/framework-ops` has
+  zero Framework, Compiler, or Devtools dependencies
 - source checks reject nested CLI execution, raw-argv engine APIs, stdout/stderr capture,
   and `process.exitCode` interception below CLI presentation
 - compiler and Devtools checks prove provider/network/database mutations are absent from
