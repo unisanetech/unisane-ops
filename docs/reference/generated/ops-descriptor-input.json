@@ -1,0 +1,12 @@
+{
+  "contract": "versioned serialized Framework descriptor",
+  "descriptor": {
+    "path": "packages/framework-ops/tests/fixtures/project-descriptor-contract/v1/contract.json.fixture",
+    "sha256": "51ec7dfef1e3abf2ea91529e5c1f53aed40dc55aa7cbf5f3ab929398ea2b9c55"
+  },
+  "package": "@unisane/framework-ops",
+  "repository": "unisane-ops",
+  "role": "consumer",
+  "schemaVersion": 1,
+  "sourceCommit": "5f6e0b3e3dea915b4267a266571c99150834f88b"
+}

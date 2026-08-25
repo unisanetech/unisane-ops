@@ -1,0 +1,9 @@
+{
+  "commitMapDigest": "f312a8857dff23bda3111a46fddbf63dff1458b2d0a96c93b1eed6503031fe63",
+  "fileInventoryDigest": "ed06da68067d1676ad9d0a34bfa50f13a8c83486a08465f3bc96d8f89fd42116",
+  "filterDigest": "d17a6216399ccdc88d395e703a1d95153daed5d940560edc75f897ddcddaf082",
+  "schemaVersion": 1,
+  "sourceCommit": "5f6e0b3e3dea915b4267a266571c99150834f88b",
+  "sourceRepository": "umbrella:unisane-ops",
+  "zeroResidueDigest": "8b73d319a46668abfda35164df0113ba23558e1333617d309f70247eed3728e7"
+}
