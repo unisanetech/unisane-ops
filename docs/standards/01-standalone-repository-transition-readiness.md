@@ -15,21 +15,30 @@ lastUpdated: '2026-08-25'
 
 ## Changelog
 
+- `2026-08-25`: Reconciled authoritative umbrella `dev` with the earlier Ops Phase 1
+  commits without replaying their alternate validator implementation. The canonical
+  modular `@unisane/framework-ops` adapter remains descriptor-only and public, validates
+  the exact `@unisane/compiler/project-descriptor-contract/v1` assets, and now requires
+  Compiler `0.1.0` in both the contract asset and every consumer expectation. The
+  `unisane-ops` package exposes only `unisane-ops/config` and the `unisane-ops` binary.
+  Package admission and owner-local integrity truth now match that source. No alias,
+  compatibility path, remote, registry, hosted, provider, deployment, or authority
+  mutation was introduced.
 - `2026-08-25`: Marked the pre-Phase 1 E1 owner/consumer inventory and the
   `2026-08-09` no-shadow checkpoint as immutable historical snapshots. They no longer
   participate in current coordinate or blocker retrieval. Current retrieval resolves
   only `unisane-ops`, `unisane-ops/config`, and the descriptor-only
   `@unisane/framework-ops` boundary with zero Framework, Compiler, or Devtools package
   dependencies.
-- `2026-08-25`: Applied the Ops-owned half of the Phase 1 product-boundary cut. The
+- `2026-08-25` historical pre-descriptor checkpoint: Applied the Ops-owned half of the Phase 1 product-boundary cut. The
   public package/config coordinate and sole binary are now `unisane-ops` and
   `unisane-ops/config`; the prior `unisane` package, binary, forwarding wrapper,
   combined Framework/UI command discovery, and executable Framework bridge are
-  retired without aliases. `@unisane/framework-ops` now has zero Framework, Compiler,
-  or Devtools dependencies and remains private and non-executable at a typed seam.
-  Migration 1 must still provide the canonical serialized descriptor schema, digest
-  and compatibility semantics, and valid/tampered fixtures before the adapter can
-  implement validation/mapping or become publishable. The regenerated owner-local
+  retired without aliases. At that checkpoint, `@unisane/framework-ops` had zero
+  Framework, Compiler, or Devtools dependencies but remained private and non-executable
+  at a typed seam because the canonical descriptor contract had not yet landed. This
+  entry is immutable historical Evidence and no longer defines current package or
+  blocker truth. The then-regenerated owner-local
   integrity receipt covers 954 source files with zero foreign workspace blockers and
   the two exact admitted UI release edges. No registry, remote, hosted governance,
   provider, deployment, or authority state changed.
@@ -113,11 +122,13 @@ projects use `defineUnisaneProject(...)` as the default export of the one
 exact named `ops = defineUnisaneOps(...)` export.
 
 The optional `@unisane/framework-ops` package consumes only the Framework-owned
-serialized project descriptor. It has zero Framework, Compiler, or Devtools package
-dependencies and owns no compilation, command discovery, nested CLI execution,
-terminal parsing, or process capture. It remains private and non-executable until
-Migration 1 supplies the canonical descriptor schema, digest and compatibility
-semantics, and valid/tampered fixtures.
+serialized project descriptor and exact contract/schema asset bytes published at
+`@unisane/compiler/project-descriptor-contract/v1`. It is public, has zero Framework,
+Compiler, or Devtools package dependencies, and owns no compilation, command discovery,
+nested CLI execution, terminal parsing, or process capture. Validation requires the
+canonical SHA-256 and serialization rules, exact project and Compiler identities,
+allowed and required capabilities, and compatibility lifecycle semantics before the
+Ops-owned mapper returns immutable static facts.
 
 All later references to `packages/unisane`, `unisane/config`, the executable Devtools
 bridge, or a Devtools workspace edge occur only inside explicitly labeled historical
@@ -190,12 +201,7 @@ The accepted public package contract contains exactly:
 | Audience    | Packages                                                                                                                                                       |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | user-facing | `unisane-ops`, `@unisane/cloud`, `@unisane/growth`, `@unisane/web-runtime`                                                                                     |
-| technical   | `@unisane/ops-engine`, `@unisane/provider-aws`, `@unisane/provider-cloudflare`, `@unisane/provider-google`, `@unisane/provider-meta`                           |
-
-`@unisane/framework-ops` remains an Ops-owned package coordinate, but it is private and
-not registry-admitted while the Framework-owned descriptor contract is absent. It may
-join the public technical set only after it implements and proves descriptor
-validation/mapping without any Framework, Compiler, or Devtools dependency.
+| technical   | `@unisane/ops-engine`, `@unisane/framework-ops`, `@unisane/provider-aws`, `@unisane/provider-cloudflare`, `@unisane/provider-google`, `@unisane/provider-meta` |
 
 The accepted extraction Plan classifies `@unisane/ops-console` as a public-source deployable app,
 not a registry package. Its staging manifest is therefore private. `@unisane/ops-hosted-runtime`
@@ -240,16 +246,16 @@ following current edges cross the intended repository boundary:
 | Consumer                   | Current dependency                               | Final rule                                                                      | Gate                                                                                                                                                                |
 | -------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@unisane/ops-console`     | `@unisane/ui@0.1.1`, `@unisane/data-table@0.1.1` | consume exact released public UI packages; no sibling or local source           | closed for the local consumer boundary; registry-only standalone proof and repository integrity reject coordinate or fallback drift                                 |
-| `@unisane/framework-ops`   | no Framework package dependency                  | consume only the Framework-owned canonical serialized project descriptor        | executable bridge removed; private typed seam is blocked until Migration 1 supplies the schema, digest/compatibility semantics, and fixtures                         |
+| `@unisane/framework-ops`   | no Framework package dependency                  | consume only `@unisane/compiler/project-descriptor-contract/v1` assets and the canonical serialized descriptor | closed locally; exact contract/schema bytes, Compiler version, digest, identity, capabilities, compatibility, mapping, zero first-party dependencies, and no executable bridge are focused-proven |
 | `@unisane/provider-aws`    | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency           | converged; focused package proof required                                                                                                                           |
 | `@unisane/provider-google` | provider-local dependency-free output adapter    | retain provider-owned presentation with no private Tooling dependency           | converged; focused package proof required                                                                                                                           |
 | `unisane-ops` host         | no Framework or UI command pack                  | retain only Ops-owned commands and installed Ops pack discovery                  | converged in source; focused packed proof remains required                                                                                                          |
 
 The optional Framework adapter accepts only a serialized descriptor produced by the
 Framework compiler. It does not compile, execute a Framework CLI, capture terminal
-output, or import a Framework package. Until the canonical descriptor schema and
-fixtures arrive, it remains private and non-executable. Do not pull Framework compiler
-modules, UI source, root Devtools, `create-unisane`, or unrelated Framework product
+output, or import a Framework package. It validates the exact public contract/schema
+asset bytes and remains non-executable. Do not pull Framework compiler modules, UI
+source, root Devtools, `create-unisane`, or unrelated Framework product
 tooling into Ops, and do not add a sibling, file, link, copied-source, or temporary-
 registry fallback to make a standalone build pass.
 
@@ -539,7 +545,7 @@ Source convergence is complete only when every row reaches its final state:
 | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `unisane-ops/**` staging source                                                           | filter and rename to target root after convergence; preserve admitted history                                                                                                   |
 | `unisane-tools/packages/cli-core/**`                                                      | absorb only required Ops presentation contracts under the CLI owner, remove provider logging coupling, migrate remaining consumers, then delete the package                     |
-| retired executable Framework integration bridge                                          | remain deleted from Ops consumption; Migration 1 owns the serialized descriptor contract                                                                                        |
+| retired executable Framework integration bridge                                          | remain deleted from Ops consumption; consume only the frozen Framework-owned serialized descriptor contract                                                                     |
 | remaining Devtools provider/growth compatibility source                                   | retire after exact consumer/parity proof; do not import generic Devtools into Ops                                                                                               |
 | UI packages and `@unisane/ui-cli`                                                         | remain UI-owned and consumed only as released/admitted external contracts                                                                                                       |
 | Framework starters/templates                                                              | remain Framework-owned consumers; migrate from workspace edges to released/admitted Ops candidates                                                                              |
@@ -700,7 +706,7 @@ authority cutover. Those gates remain independently fail-closed below.
 | OPS-R01 | closed at checkpoint                           | source convergence          | exact file/docs/tool/root-config disposition is generated from reviewed source policy                                                                                                                                                                                                                                               | Ops maintainers; current ledger check and immutable checkpoint commit                                                                           |
 | OPS-R02 | closed at checkpoint                           | source convergence          | private CLI-core dependencies and imports are absent from AWS and Google                                                                                                                                                                                                                                                            | Ops maintainers; focused provider and boundary proof                                                                                            |
 | OPS-R03 | closed at local source conversion              | local shadow                | console pins exact released public `@unisane/ui@0.1.1` and `@unisane/data-table@0.1.1`; source, emitted, integrity, and isolated registry-consumer proof reject every local or sibling fallback                                                                                                                                     | Ops consumer owner; exact source/emitted inventory, registry integrity, frozen isolated install, build, CSS/assets, and React-singleton proof   |
-| OPS-R04 | open; descriptor contract blocked              | local shadow                | the executable Devtools bridge and dependency are removed, but Migration 1 has not yet supplied the canonical serialized descriptor schema/version, digest and compatibility semantics, or valid/tampered fixtures; the adapter therefore remains private and non-executable                                              | Framework Migration 1 owner; emit the canonical descriptor contract and fixtures, then Ops implements and proves validation/mapping              |
+| OPS-R04 | closed at local descriptor contract            | local shadow                | `@unisane/framework-ops` validates the exact V1 contract/schema assets, canonical bytes and SHA-256, admitted Compiler version, identity, allowed and required capabilities, compatibility, and mapping with zero Framework/Compiler/Devtools dependencies and no executable bridge | Framework and Ops owners; retain the exact cross-repository fixtures and focused contract proof |
 | OPS-R05 | open                                           | local shadow                | Platform consumers and the umbrella lock still retain pre-cutover Ops workspace coordinates                                                                                                                                                                                                                                        | Platforms and migration owners; migrate consumers to immutable `unisane-ops` candidates and regenerate the owning lock projection               |
 | OPS-R06 | open                                           | package release             | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved                                                                                                                                                                                                                                        | product and release owners; explicit package admission or privatization                                                                         |
 | OPS-R07 | open; integration projection blocked           | local shadow                | the Ops source coordinate has changed, while the umbrella lock and external consumer projection remain coordinator-owned; standalone setup certification, target sync, lock generation, clean install, Node matrix, and hosted CI proof remain open                                                                        | Migration coordinator after OPS-R04; reconcile the root lock/consumer projection, then rerun source-bound target sync and standalone proof        |
@@ -716,21 +722,22 @@ source, or a future remote name.
 
 ## Safest Next Bounded Task After Proof Review
 
-The Ops-side Phase 1 implementation is held unintegrated while Task `T-f530a84c`
-remains deferred at the typed descriptor seam. The exact next dependency is Framework
-Migration 1, not a Devtools release or executable bridge:
+The canonical Ops CLI, config, and descriptor adapter are implemented in authoritative
+umbrella source. The next dependency is local candidate projection and registry-backed
+integration proof, not another descriptor contract or executable bridge:
 
-1. Migration 1 emits the versioned canonical serialized Framework project descriptor,
-   including schema, digest canonicalization, project identity, capabilities,
-   compatibility and freshness semantics, plus valid and tampered fixtures.
-2. Resume `T-f530a84c` only to implement and prove descriptor validation/mapping in
-   `@unisane/framework-ops`, retaining zero Framework, Compiler, or Devtools package
-   dependencies and no executable behavior.
-3. The migration coordinator reconciles the root Ops architecture gate, umbrella lock,
-   and remaining Platform consumers to `unisane-ops` and `unisane-ops/config`, then
-   reruns the Task-selected focused Actions from a valid dependency installation.
-4. Record the integrated candidate and proof while the umbrella remains the sole
-   writable authority.
+1. Refresh the preserved local, non-authoritative standalone candidate from one exact
+   authoritative Ops source commit while retaining target-only Git, Skopos, history,
+   Memory, and materialization receipts.
+2. Prove the standalone package coordinates, `unisane-ops` binary,
+   `unisane-ops/config` builders and loader, descriptor contract, zero first-party
+   adapter dependencies, and absence of retired executable surfaces.
+3. Keep registry-backed descriptor-consumer proof fail-closed until the private
+   Framework registry admits immutable resolution of
+   `@unisane/compiler/project-descriptor-contract/v1`; do not use a sibling, file, Git,
+   copied-source, or temporary-registry fallback.
+4. Reconcile remaining Platform consumers and the owning lock projection separately,
+   then record candidate proof while the umbrella remains the sole writable authority.
 
 History/scanner approval, security and legal disposition, package release, hosted CI, remote
 governance, deployment, and authority cutover remain separate gates. This section authorizes none of

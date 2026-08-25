@@ -79,8 +79,7 @@
       "types": "./dist/config/index.d.ts",
       "import": "./dist/config/index.js",
       "default": "./dist/config/index.js"
-    },
-    "./meta": "./unisane.meta.json"
+    }
   },
   "unisane": {
     "kind": "tooling",

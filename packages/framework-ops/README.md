@@ -9,6 +9,8 @@ The package validates the exact supported contract and JSON Schema assets before
 descriptor. Descriptor validation then enforces canonical serialized bytes, the SHA-256 core digest,
 project and compiler identity, an explicit allowed capability set, required feature and operation
 coverage, and the complete API compatibility lifecycle policy.
+The V1 boundary admits Compiler `0.1.0` exactly in both the contract asset and every
+consumer expectation.
 
 `validateAndMapFrameworkProjectDescriptor(...)` returns one deeply immutable, Ops-owned
 `FrameworkOpsProjectIntegration`. The model contains static project, compiler, capability, and API
@@ -26,3 +28,5 @@ Callers must supply:
 The contract assets and descriptor are immutable inputs. This package does not invoke Framework
 compilation, discover commands or packages, or provide a compatibility path for the retired
 executable Framework bridge.
+Its package manifest has zero runtime, optional, and peer dependencies and no Framework,
+Compiler, or Devtools development dependency.

@@ -69,11 +69,15 @@ rollback, observability, recovery, privacy, and accountable deployment ownership
 ## Current Readiness
 
 The Ops Phase 1 source now owns the final `unisane-ops` package, executable, and config
-coordinate without the prior combined-host wrapper or Framework command bridge. The
-Framework adapter is intentionally private and non-executable until Migration 1 supplies
-the canonical versioned serialized descriptor schema, digest rules, compatibility
-semantics, and fixtures. The umbrella integration lock and Platform consumer projection
-also remain outside this lane. Redacted scan findings plus
+coordinate without the prior combined-host wrapper or Framework command bridge.
+`@unisane/framework-ops` is a public, descriptor-only adapter for
+`@unisane/compiler/project-descriptor-contract/v1`; it validates the exact contract and
+schema assets, canonical descriptor bytes and digest, admitted Compiler version,
+identity, capabilities, and compatibility before mapping static facts. It has zero
+Framework, Compiler, or Devtools package dependencies and no executable behavior. The
+private Framework registry still lacks an admitted external resolution receipt for the
+contract asset, and the umbrella integration lock and Platform consumer projection also
+remain outside this lane. Redacted scan findings plus
 scanner, security, privacy, legal, contributor, asset, license, signing, and
 remote-governance decisions remain unresolved. It is not certified for standalone CI,
 public history, remote authority, public package release, or production deployment.

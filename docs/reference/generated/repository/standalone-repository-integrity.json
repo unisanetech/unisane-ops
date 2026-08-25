@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "state": "valid-with-exact-released-edges",
-  "generatedFromPolicySha256": "6814647eb1a7a80568befdc042e7d1d0809bff4e6e3f63e9550d740ba1f41d7b",
+  "generatedFromPolicySha256": "fd6c9865c585a57021479003b9f1d7e65496d8977c0adeb50d798ce5ff57fe60",
   "source": {
-    "fileCount": 954,
-    "digest": "bcf2053547df0435364f0bca06809f0eae717f447271d2412534376f1755daa6",
+    "fileCount": 967,
+    "digest": "c9663c7cd1766698c9fd985074c606483c3150d8158af01cdce28dd1cae4ac68",
     "excludedGeneratedAndTaskMemory": [
       "docs/reference/generated/**",
       "docs/work/tasks/**",

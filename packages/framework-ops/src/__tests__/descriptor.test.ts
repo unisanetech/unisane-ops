@@ -1,6 +1,8 @@
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
+  FRAMEWORK_COMPILER_VERSION,
   FRAMEWORK_PROJECT_DESCRIPTOR_CONTRACT_COORDINATE,
   FRAMEWORK_PROJECT_DESCRIPTOR_SCHEMA_ID,
   FrameworkProjectDescriptorValidationError,
@@ -70,6 +72,17 @@ describe('Framework project descriptor assets', () => {
       () =>
         validateFrameworkProjectDescriptorAssets({
           contractText: contractText.replace('"contractVersion": 1', '"contractVersion": 2'),
+          schemaText,
+        }),
+      'project-descriptor-contract-unsupported',
+    );
+    expectValidationError(
+      () =>
+        validateFrameworkProjectDescriptorAssets({
+          contractText: contractText.replace(
+            `"version": "${FRAMEWORK_COMPILER_VERSION}"`,
+            '"version": "9.9.9"',
+          ),
           schemaText,
         }),
       'project-descriptor-contract-unsupported',
@@ -201,6 +214,31 @@ describe('Framework project descriptor validation and mapping', () => {
     );
     expectValidationError(
       () => parseFrameworkProjectDescriptor(fixture('contradictory-compatibility'), expectation()),
+      'project-descriptor-compatibility-unsupported',
+    );
+    expectValidationError(
+      () =>
+        parseFrameworkProjectDescriptor(
+          fixture('valid'),
+          expectation({ compilerVersion: '9.9.9' }),
+        ),
+      'project-descriptor-compatibility-unsupported',
+    );
+
+    const descriptor = JSON.parse(fixture('valid')) as Record<string, unknown> & {
+      compatibility: { compiler: { version: string } };
+      digest: string;
+    };
+    descriptor.compatibility.compiler.version = '9.9.9';
+    const { digest: ignoredDigest, ...core } = descriptor;
+    void ignoredDigest;
+    descriptor.digest = createHash('sha256').update(JSON.stringify(core), 'utf8').digest('hex');
+    expectValidationError(
+      () =>
+        parseFrameworkProjectDescriptor(
+          `${JSON.stringify(descriptor, null, 2)}\n`,
+          expectation({ compilerVersion: '9.9.9' }),
+        ),
       'project-descriptor-compatibility-unsupported',
     );
   });

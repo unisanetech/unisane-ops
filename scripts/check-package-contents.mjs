@@ -36,5 +36,14 @@ if (errors.length) {
   for (const error of errors) console.error(error);
   process.exitCode = 1;
 } else {
-  console.log('Unisane Ops package contents verified: 9 public packages, 3 private packages/apps, 2 fail-closed owner decisions.');
+  const publicCount = policy.acceptedPublicPackages.length;
+  const privateCount = Object.values(policy.packageAdmissions).filter(
+    (admission) => admission.requiredPrivate === true,
+  ).length;
+  const ownerDecisionCount = Object.values(policy.packageAdmissions).filter(
+    (admission) => admission.registryAdmission === 'owner-decision',
+  ).length;
+  console.log(
+    `Unisane Ops package contents verified: ${publicCount} public packages, ${privateCount} private packages/apps, ${ownerDecisionCount} fail-closed owner decisions.`,
+  );
 }

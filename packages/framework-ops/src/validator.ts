@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import {
   FRAMEWORK_COMPILER_PACKAGE,
+  FRAMEWORK_COMPILER_VERSION,
   FRAMEWORK_MODULE_DESCRIPTOR_SCHEMA_VERSION,
   FRAMEWORK_PROJECT_CAPABILITY_FEATURES,
   FRAMEWORK_PROJECT_DESCRIPTOR_CONTRACT_COORDINATE,
@@ -254,6 +255,12 @@ function validateContractIdentity(contract: unknown): void {
     compiler.package,
     FRAMEWORK_COMPILER_PACKAGE,
     '$contract.descriptor.compiler.package',
+    code,
+  );
+  assertExactValue(
+    compiler.version,
+    FRAMEWORK_COMPILER_VERSION,
+    '$contract.descriptor.compiler.version',
     code,
   );
   assertExactValue(
@@ -737,6 +744,13 @@ function validateExpectation(
 ): void {
   const compilerVersion = text(expectation.compilerVersion, '$expectation.compilerVersion');
   const projectId = identifier(expectation.projectId, '$expectation.projectId');
+  if (compilerVersion !== FRAMEWORK_COMPILER_VERSION) {
+    fail(
+      '$expectation.compilerVersion',
+      `must equal admitted compiler version ${JSON.stringify(FRAMEWORK_COMPILER_VERSION)}.`,
+      'project-descriptor-compatibility-unsupported',
+    );
+  }
   if (descriptor.compatibility.compiler.version !== compilerVersion) {
     fail(
       '$.compatibility.compiler.version',
