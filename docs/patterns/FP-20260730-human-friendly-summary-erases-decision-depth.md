@@ -73,7 +73,8 @@ to target next. One must not silently replace the other.
   `docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md`
 - Plan:
   `docs/work/plans/unisane-ops-growth-onboarding-and-developer-experience-convergence-plan.md`
-- Historical execution record: `docs/work/archive/tasks/P120-W3.md`
+- Historical execution context: P120-W3 / Task `T-eede3498`; no Task document is copied
+  into this repository.
 
 ## Changelog
 

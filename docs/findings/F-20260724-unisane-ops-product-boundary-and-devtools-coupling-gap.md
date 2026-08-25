@@ -475,8 +475,8 @@ Before setting this finding to `done`, record:
 ## Linked Docs
 
 - `docs/standards/13-unisane-ops-product-architecture-baseline.md`
-- `docs/standards/12-provider-control-plane-baseline.md`
+- `https://github.com/unisanetech/unisane/blob/main/docs/standards/12-provider-control-plane-baseline.md`
 - `docs/work/plans/unisane-ops-product-architecture-and-extraction-plan.md`
 - `docs/decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md`
 - `docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md`
-- `docs/decisions/D-20260815-framework-release-units-compatibility-bom-and-registry-proof-contract.md`
+- `https://github.com/unisanetech/unisane/blob/main/docs/decisions/D-20260815-framework-release-units-compatibility-bom-and-registry-proof-contract.md`

@@ -95,7 +95,7 @@ secret-free AWS ops config
 
 New AWS capability work must extend the provider owner or add a genuinely
 provider-neutral Cloud workflow through
-`unisane-ops-product-architecture-and-extraction-plan.md`. It must not restore a Devtools
+`docs/work/plans/unisane-ops-product-architecture-and-extraction-plan.md`. It must not restore a Devtools
 implementation owner, nested provider CLI, raw-argv handler, or parallel provider config.
 
 ## Non-Goals

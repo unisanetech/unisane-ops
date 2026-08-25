@@ -440,7 +440,8 @@ This document owns:
 - config export shape
 - package dependency direction
 
-The provider control-plane safety lifecycle is owned by `12-provider-control-plane-baseline.md`.
+The provider control-plane safety lifecycle is owned by
+`https://github.com/unisanetech/unisane/blob/main/docs/standards/12-provider-control-plane-baseline.md`.
 
 ## Product Map
 
@@ -1482,7 +1483,8 @@ Rules:
    types, config namespaces, or capability bindings fail closed.
 10. Stable pack, action, command, capability, provider, item-type, and config-namespace
     ids follow the exact lowercase ASCII grammar in
-    `docs/architecture/07-naming-and-pattern-conventions.md`; the host rejects rather than
+    `https://github.com/unisanetech/unisane/blob/main/docs/architecture/07-naming-and-pattern-conventions.md`;
+    the host rejects rather than
     silently normalizes invalid values.
 11. Action handlers return typed results only. Human text and process exit behavior are
     CLI projections; packs do not return stdout/stderr transcripts or mutate process
@@ -1539,7 +1541,8 @@ Rules:
 7. Manifest validation, integrity, and provenance make discovery deterministic; they do not sandbox a loaded handler. A handler has the Node host's process, filesystem, environment, and network authority.
 8. Initial handler execution is limited to first-party or explicitly approved trusted packs. Untrusted third-party packs are deferred until a separate threat model and process/capability-isolation contract is approved.
 9. Provider SDKs load from their provider packages only when a selected capability needs them; the lightweight CLI package must not bundle every provider SDK.
-10. All mutation surfaces must use the shared safety lifecycle from `12-provider-control-plane-baseline.md`.
+10. All mutation surfaces must use the shared safety lifecycle from
+    `https://github.com/unisanetech/unisane/blob/main/docs/standards/12-provider-control-plane-baseline.md`.
 11. The host loads accepted handlers generically. Provider-, product-, and action-specific
     switch statements in the generic host are forbidden.
 12. Below the CLI presentation boundary, raw argv APIs, nested Commander or product CLI
@@ -1693,13 +1696,13 @@ No architecture exception authorizes the combined CLI, executable Framework pack
 Devtools bridge, raw-argv handlers, nested CLIs, output/process interception, duplicate
 action models, provider-specific generic-host switches, or Devtools provider mutations.
 Their observed current residue is tracked only by
-`F-20260724-unisane-ops-product-boundary-and-devtools-coupling-gap.md` and must be removed
+`docs/findings/F-20260724-unisane-ops-product-boundary-and-devtools-coupling-gap.md` and must be removed
 through the accepted clean cut. It cannot be extended by date, compatibility label, or
 implementation convenience.
 
 ## Enforcement And Transition
 
-Implementation follows `unisane-ops-product-architecture-and-extraction-plan.md`.
+Implementation follows `docs/work/plans/unisane-ops-product-architecture-and-extraction-plan.md`.
 
 Until migration closes:
 

@@ -87,18 +87,20 @@ migration authority. The existing local candidate owns active target-local Skopo
 candidate-scoped migration Evidence, but that state is not independent product-source, release, or
 cutover authority. The temporary umbrella child Scope `unisane-ops` keeps the staged
 `unisane-ops/docs` owner-local Project Memory synchronized while the umbrella remains authoritative.
-The following umbrella documents are controlling inputs:
+The controlling contract coordinates are:
 
 - `docs/standards/13-unisane-ops-product-architecture-baseline.md`
-- `docs/standards/12-provider-control-plane-baseline.md`
+- `https://github.com/unisanetech/unisane/blob/main/docs/standards/12-provider-control-plane-baseline.md`
 - `docs/decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md`
 - `docs/work/plans/unisane-ops-product-architecture-and-extraction-plan.md`
-- `docs/work/plans/unisane-ecosystem-repository-separation-and-git-governance-plan.md`
-- `unisane-infrastructure/repository-system/manifests/unisane-ops.json`
+- `https://github.com/unisanetech/unisane-infrastructure/blob/main/docs/decisions/D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md`
+- `https://github.com/unisanetech/unisane-infrastructure/blob/main/docs/standards/04-ecosystem-architecture.md`
+- `https://github.com/unisanetech/unisane-infrastructure/blob/main/repository-system/manifests/unisane-ops.json`
 
 Those path strings are source coordinates, not permission to retain cross-repository relative links
 after cutover. Owner-local truth moves or is rewritten once, and the old full copy stops being
-writable.
+writable. Infrastructure governance owns history/provenance, visibility, and one-authority
+transition policy; this repository owns Ops product contents and readiness evidence.
 
 ## Truth Labels
 
@@ -346,9 +348,10 @@ decision, omitted-history ledger, public-history scan receipt, and content compa
 filtering runs only in a disposable clone after source freeze. It never runs in the active worktree
 or sole clone, and this Standard does not authorize it.
 
-The verified shadow later owns `docs/repository-provenance.json` with source and target commits,
-filter/tool versions and digests, mappings, tag policy, redacted audit receipt ids, and verification
-commands. Do not create that file before real filter Evidence exists.
+The verified shadow records source and target commits, filter/tool versions and digests, mappings,
+tag policy, redacted audit receipt ids, and verification commands in retained Git history and its
+repository-foundation provenance. Do not invent a separate provenance document before real filter
+Evidence exists.
 
 ## Standalone Repository Shape
 

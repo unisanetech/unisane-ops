@@ -72,8 +72,8 @@ onboarding lifecycle while preserving the established Ops package boundaries.
   `@unisane/growth/console` owns the headless state boundary, CLI core lazily loads the
   installed exact `growth.console` contribution, and the retired Growth console owners
   and nested build/serve commands are absent.
-- `2026-07-30`: Admitted P120-W3 under Skopos Task `T-eede3498`; its historical
-  execution record is `docs/work/archive/tasks/P120-W3.md`. The frozen
+- `2026-07-30`: Admitted historical slice P120-W3 under Skopos Task `T-eede3498`;
+  no Task document is copied into this repository. The frozen
   cut makes the optional console app the command and presentation owner, moves only
   headless state/actions to `@unisane/growth/console`, and deletes the old command,
   embedded app, and route catalog slice by slice.

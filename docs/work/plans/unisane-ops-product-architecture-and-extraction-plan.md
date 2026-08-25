@@ -215,17 +215,18 @@ The authority order is:
 
 1. `docs/standards/13-unisane-ops-product-architecture-baseline.md` owns durable Unisane Ops
    product, package, dependency, config, CLI, and extension rules.
-2. `docs/standards/12-provider-control-plane-baseline.md` owns provider-operation safety:
+2. `https://github.com/unisanetech/unisane/blob/main/docs/standards/12-provider-control-plane-baseline.md` owns provider-operation safety:
    inventory, plan, approval, apply, receipt, drift, auth, redaction, and risk.
-3. `docs/standards/04-ecosystem-architecture.md` owns ecosystem and repository-family
+3. `https://github.com/unisanetech/unisane-infrastructure/blob/main/docs/standards/04-ecosystem-architecture.md` owns ecosystem and repository-family
    boundaries.
 4. The linked decision freezes the selected product/package/repository model.
 5. This plan owns Ops package/capability sequencing, behavior migration, parity, and
    release readiness.
-6. `unisane-ecosystem-repository-separation-and-git-governance-plan.md` owns single-Git
-   staging, history/provenance, remote authority, visibility, Git governance, and umbrella
-   retirement.
-7. `docs/guides/command-workflow-contract.md` remains the authority for commands
+6. The Infrastructure-owned repository/visibility Decision and ecosystem Standard own
+   history/provenance, visibility, Git governance, and the one-writable-authority
+   transition. This plan requires those invariants but does not depend on the umbrella
+   repository-separation Plan.
+7. `https://github.com/unisanetech/unisane/blob/main/docs/guides/command-workflow-contract.md` remains the authority for commands
    that are actually available in the current repository.
 
 Everything under **Target** remains future-state unless the current checkpoint or an
@@ -1264,10 +1265,10 @@ rotate it, and remove it from repository and workflow surfaces.
 
 Repository-shaped staging, history filtering, commit/provenance maps, remote visibility,
 authority cutover, branch protection, CODEOWNERS, cross-repository dependency policy, and
-umbrella retirement are owned by
-`unisane-ecosystem-repository-separation-and-git-governance-plan.md`. This plan owns the
-Ops package contents and proof that must be ready before the repository cutover Task
-can be admitted.
+umbrella retirement are governed by the Infrastructure-owned repository/visibility
+Decision and ecosystem Standard. Their invariant is one reviewed writable authority,
+history-preserving provenance, and no external mutation inferred from local readiness.
+This plan owns the Ops package contents and proof required before cutover can be admitted.
 
 ## Security And Mutation Policy
 
@@ -1637,17 +1638,18 @@ Retirement requires:
 
 ## Legacy Plan Disposition
 
-The following plan families must be reviewed in Phase 0:
+The following historical umbrella plan-family identifiers were reviewed in Phase 0;
+they are context, not current document dependencies:
 
-- `framework-provider-control-plane-devtools-plan.md`
-- `framework-aws-control-plane-devtools-plan.md`
-- `framework-cloudflare-control-plane-devtools-plan.md`
-- `framework-marketing-control-plane-devtools-plan.md`
-- `framework-google-tag-manager-control-plane-plan.md`
-- `framework-keyword-research-and-ads-planning-devtools-plan.md`
-- `framework-marketing-console-dashboard-devtools-plan.md`
-- `framework-web-tracking-and-conversions-plan.md`
-- `framework-web-seo-and-public-url-management-plan.md`
+- `framework-provider-control-plane-devtools-plan`
+- `framework-aws-control-plane-devtools-plan`
+- `framework-cloudflare-control-plane-devtools-plan`
+- `framework-marketing-control-plane-devtools-plan`
+- `framework-google-tag-manager-control-plane-plan`
+- `framework-keyword-research-and-ads-planning-devtools-plan`
+- `framework-marketing-console-dashboard-devtools-plan`
+- `framework-web-tracking-and-conversions-plan`
+- `framework-web-seo-and-public-url-management-plan`
 
 Disposition rules:
 

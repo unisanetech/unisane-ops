@@ -156,7 +156,8 @@ publication or visibility authority.
 - P120-W2 audit-only source/observation reconciliation tests, exact offline pack-command
   execution against True Resume, and live Tracking health rendering without browser
   errors
-- P120-W1 completion evidence is archived in `docs/work/archive/tasks/P120-W1.md`.
+- Historical slice P120-W1 is summarized here; no Task document is copied into this
+  repository.
 - per-slice Task admission, impact, Evidence, and closure through Skopos
 - focused package behavior and type proof selected by Skopos for each implementation cut
 - plain-project and Framework-project onboarding scenario fixtures
@@ -180,4 +181,4 @@ publication or visibility authority.
 - `docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md`
 - `docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md`
 - `docs/work/plans/unisane-ops-growth-onboarding-and-developer-experience-convergence-plan.md`
-- `docs/work/archive/tasks/P120-W1.md`
+- Historical execution id: P120-W1
