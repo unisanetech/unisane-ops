@@ -1,8 +1,8 @@
 x-runtime: &runtime
   image: ${OPS_HOSTED_TEST_IMAGE:-unisane-ops-hosted-runtime:integration}
   build:
-    context: ../../..
-    dockerfile: unisane-ops/apps/hosted-runtime/Dockerfile
+    context: ../..
+    dockerfile: apps/hosted-runtime/Dockerfile
     target: integration
 
 x-role: &role
@@ -27,8 +27,8 @@ x-role: &role
 x-postgres-tools: &postgres-tools
   image: ${OPS_HOSTED_TEST_POSTGRES_TOOLS_IMAGE:-unisane-ops-postgres-tools:integration}
   build:
-    context: ../../..
-    dockerfile: unisane-ops/deploy/hosted/postgres-tools/Dockerfile
+    context: ../..
+    dockerfile: deploy/hosted/postgres-tools/Dockerfile
   read_only: true
   tmpfs:
     - /tmp:size=16m,mode=1777

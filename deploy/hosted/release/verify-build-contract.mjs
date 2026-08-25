@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 function main() {
   const result = spawnSync(
     'docker',
-    ['buildx', 'bake', '--file', 'unisane-ops/deploy/hosted/release/docker-bake.hcl', '--print'],
+    ['buildx', 'bake', '--file', 'deploy/hosted/release/docker-bake.hcl', '--print'],
     { encoding: 'utf8' },
   );
   if (result.status !== 0) {
@@ -20,7 +20,7 @@ function main() {
     );
   if (
     target?.context !== '.' ||
-    target?.dockerfile !== 'unisane-ops/apps/hosted-runtime/Dockerfile' ||
+    target?.dockerfile !== 'apps/hosted-runtime/Dockerfile' ||
     target?.target !== 'runtime' ||
     !hasAttestation({ type: 'provenance', mode: 'max', version: 'v1' }) ||
     !hasAttestation({ type: 'sbom' }) ||

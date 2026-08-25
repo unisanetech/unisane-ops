@@ -6,9 +6,9 @@ const arguments_ = process.argv.slice(2);
 const allowPlaceholder = arguments_.includes('--allow-placeholder');
 const configuredRoots = arguments_.filter((argument) => argument !== '--allow-placeholder');
 const defaultRoots = [
-  'unisane-ops/deploy/hosted/kubernetes/migration',
-  'unisane-ops/deploy/hosted/kubernetes/runtime',
-  'unisane-ops/deploy/hosted/kubernetes/rollback-check',
+  'deploy/hosted/kubernetes/migration',
+  'deploy/hosted/kubernetes/runtime',
+  'deploy/hosted/kubernetes/rollback-check',
 ];
 const roots = configuredRoots.length === 0 ? defaultRoots : configuredRoots;
 

@@ -57,7 +57,7 @@ try {
     '--tag',
     runtimeImage,
     '--file',
-    'unisane-ops/apps/hosted-runtime/Dockerfile',
+    'apps/hosted-runtime/Dockerfile',
     '.',
   ]);
   await run('docker', [

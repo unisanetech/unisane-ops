@@ -107,7 +107,7 @@ function candidateBrowserAssetPaths(startDirectory: string, fileName: string): s
   let currentDirectory = path.resolve(startDirectory);
   while (true) {
     candidates.push(
-      path.join(currentDirectory, 'unisane-ops/apps/console/dist/browser', fileName),
+      path.join(currentDirectory, 'apps/console/dist/browser', fileName),
       path.join(currentDirectory, 'browser', fileName),
     );
     const parentDirectory = path.dirname(currentDirectory);

@@ -20,7 +20,7 @@ group "default" {
 
 target "runtime" {
   context    = "."
-  dockerfile = "unisane-ops/apps/hosted-runtime/Dockerfile"
+  dockerfile = "apps/hosted-runtime/Dockerfile"
   target     = "runtime"
   tags       = [RELEASE_IMAGE]
   platforms  = ["linux/amd64", "linux/arm64"]
