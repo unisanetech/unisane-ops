@@ -1,0 +1,403 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "apps/hosted-runtime/package.json",
+    "sourceRoot": "apps/hosted-runtime"
+  },
+  "summary": {
+    "package": "@unisane/ops-hosted-runtime",
+    "owner": "ops-apps/hosted-runtime",
+    "packageDir": "apps/hosted-runtime",
+    "sourceFileCount": 16,
+    "symbolCount": 31,
+    "functionCount": 31,
+    "publicFunctionCount": 16,
+    "internalFunctionCount": 15,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "apps/hosted-runtime",
+    "apps/hosted-runtime/package.json"
+  ],
+  "records": [
+    {
+      "name": "main",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/gateway.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "main(): Promise<void>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "main",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/migrate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "main(): Promise<void>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "main",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/probe.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "main(): Promise<void>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "main",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/scheduler.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "main(): Promise<void>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "awaitRoleShutdown",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awaitRoleShutdown(operation, signal, milliseconds): Promise<T>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "createJsonLineObserver",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createJsonLineObserver(): HostedRoleObserver",
+      "layer": "package-layer"
+    },
+    {
+      "name": "isOpsReadActionDefinition",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/shared.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isOpsReadActionDefinition(value): value is OpsReadActionDefinition",
+      "layer": "package-layer"
+    },
+    {
+      "name": "loadHostedActions",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "loadHostedActions(modulePath): Promise<readonly OpsReadActionDefinition[]>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "processAbortSignal",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "processAbortSignal(): AbortSignal",
+      "layer": "package-layer"
+    },
+    {
+      "name": "withinShutdownDeadline",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/shared.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "withinShutdownDeadline(operation, milliseconds): Promise<T>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "main",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/bin/worker.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "main(): Promise<void>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "defaultSecretFileReader",
+      "kind": "const-function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/config.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultSecretFileReader(path): SecretFileReader",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readHostedGatewayProcessConfig",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readHostedGatewayProcessConfig(environment, readSecretFile): HostedGatewayProcessConfig",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readHostedMigrationProcessConfig",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readHostedMigrationProcessConfig(environment, readSecretFile): HostedMigrationProcessConfig",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readHostedSchedulerProcessConfig",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readHostedSchedulerProcessConfig(environment, readSecretFile): HostedSchedulerProcessConfig",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readHostedWorkerProcessConfig",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readHostedWorkerProcessConfig(environment, readSecretFile): HostedWorkerProcessConfig",
+      "layer": "package-layer"
+    },
+    {
+      "name": "resolvePostgresEnvironment",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/config.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolvePostgresEnvironment(environment, readSecretFile): Readonly<Record<string, string | undefined>>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "authentication",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/gateway-http.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "authentication(request): HostedGatewayAuthentication",
+      "layer": "package-layer"
+    },
+    {
+      "name": "createHostedGatewayHttpTransport",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/gateway-http.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedGatewayHttpTransport(input): HostedGatewayTransport",
+      "layer": "package-layer"
+    },
+    {
+      "name": "errorStatus",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/gateway-http.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorStatus(error): number",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readJson",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/gateway-http.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readJson(request, maximumBytes): Promise<unknown>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "writeJson",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/gateway-http.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "writeJson(response, status, value): void",
+      "layer": "package-layer"
+    },
+    {
+      "name": "createHostedGatewayProcess",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/gateway-process.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedGatewayProcess(input)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "createHostedGatewayRole",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/gateway.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedGatewayRole(input): HostedGatewayRole",
+      "layer": "package-layer"
+    },
+    {
+      "name": "createOidcWorkloadIdentityAuthorizer",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/identity.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createOidcWorkloadIdentityAuthorizer(input): HostedWorkloadIdentityAuthorizer",
+      "layer": "package-layer"
+    },
+    {
+      "name": "createRemoteOidcWorkloadIdentityAuthorizer",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/identity.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createRemoteOidcWorkloadIdentityAuthorizer(input): HostedWorkloadIdentityAuthorizer",
+      "layer": "package-layer"
+    },
+    {
+      "name": "abortableDelay",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/scheduler-process.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "abortableDelay(milliseconds, signal): Promise<void>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "createHostedSchedulerProcess",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/scheduler-process.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedSchedulerProcess(input)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "abortableDelay",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/worker-process.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "abortableDelay(milliseconds, signal): Promise<void>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "createHostedWorkerProcess",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/worker-process.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedWorkerProcess(input)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "createHostedWorkerRole",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-runtime",
+      "owner": "ops-apps/hosted-runtime",
+      "file": "apps/hosted-runtime/src/worker.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedWorkerRole(input): HostedWorkerRole",
+      "layer": "package-layer"
+    }
+  ],
+  "generatedAt": "content-hash:ade82a4e2025"
+}

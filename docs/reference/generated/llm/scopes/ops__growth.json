@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/growth/package.json",
+    "compilerDescriptor": null
+  },
+  "summary": {
+    "scopeId": "ops/growth",
+    "kind": "ops-tooling",
+    "operationCount": 0,
+    "tokenCount": 0,
+    "aliasCount": 2,
+    "validationCapabilityCount": 6,
+    "relevantDocCount": 1
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-scope-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/growth/package.json"
+  ],
+  "records": {
+    "scope": {
+      "scopeId": "ops/growth",
+      "kind": "ops-tooling",
+      "packageName": "@unisane/growth",
+      "packageDir": "packages/growth",
+      "deployableId": null,
+      "deployableKind": null
+    },
+    "aliases": [
+      "@unisane/growth",
+      "growth"
+    ],
+    "operations": [],
+    "tokens": [],
+    "entryPoints": [
+      "packages/growth/src/index.ts"
+    ],
+    "validationCapabilities": [
+      "build",
+      "check-types",
+      "dev",
+      "lint",
+      "prepublishOnly",
+      "test"
+    ],
+    "relevantDocs": [
+      "packages/growth/README.md"
+    ],
+    "contractFiles": [],
+    "paths": [
+      "packages/growth"
+    ]
+  },
+  "generatedAt": "content-hash:a09d31cc8aee"
+}

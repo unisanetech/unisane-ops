@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/ops-mcp/package.json",
+    "compilerDescriptor": null
+  },
+  "summary": {
+    "scopeId": "ops/ops-mcp",
+    "kind": "ops-tooling",
+    "operationCount": 0,
+    "tokenCount": 0,
+    "aliasCount": 2,
+    "validationCapabilityCount": 7,
+    "relevantDocCount": 1
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-scope-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/ops-mcp/package.json"
+  ],
+  "records": {
+    "scope": {
+      "scopeId": "ops/ops-mcp",
+      "kind": "ops-tooling",
+      "packageName": "@unisane/ops-mcp",
+      "packageDir": "packages/ops-mcp",
+      "deployableId": null,
+      "deployableKind": null
+    },
+    "aliases": [
+      "@unisane/ops-mcp",
+      "ops-mcp"
+    ],
+    "operations": [],
+    "tokens": [],
+    "entryPoints": [
+      "packages/ops-mcp/src/index.ts"
+    ],
+    "validationCapabilities": [
+      "build",
+      "check-types",
+      "dev",
+      "eval:agents",
+      "lint",
+      "prepublishOnly",
+      "test"
+    ],
+    "relevantDocs": [
+      "packages/ops-mcp/README.md"
+    ],
+    "contractFiles": [],
+    "paths": [
+      "packages/ops-mcp"
+    ]
+  },
+  "generatedAt": "content-hash:de4a44ba0199"
+}

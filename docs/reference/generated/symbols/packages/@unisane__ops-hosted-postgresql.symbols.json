@@ -1,0 +1,543 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/hosted-postgresql/package.json",
+    "sourceRoot": "packages/hosted-postgresql"
+  },
+  "summary": {
+    "package": "@unisane/ops-hosted-postgresql",
+    "owner": "ops/hosted-postgresql",
+    "packageDir": "packages/hosted-postgresql",
+    "sourceFileCount": 2,
+    "symbolCount": 41,
+    "functionCount": 41,
+    "publicFunctionCount": 18,
+    "internalFunctionCount": 23,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/hosted-postgresql",
+    "packages/hosted-postgresql/package.json"
+  ],
+  "records": [
+    {
+      "name": "admitBundle",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "admitBundle(client, bundle)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "canonicalMetadata",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "canonicalMetadata(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createPostgresHostedReadPersistence",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createPostgresHostedReadPersistence(pool): { store: PostgresHostedReadJobStore; results: HostedReadResultStore; dispatch: HostedReadDispatchStore; schedules: PostgresHostedReadS...",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "digest",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "digest(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "getJob",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "getJob(queryable, jobId): Promise<HostedReadJob | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "insertAudit",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "insertAudit(client, audit): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "insertCredentialVersion",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "insertCredentialVersion(client, version): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "insertDispatch",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "insertDispatch(client, dispatch): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "json",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "json(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedCredentialStore.create",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedCredentialStore.create(bundle): Promise<'stored' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedCredentialStore.getActiveVersion",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedCredentialStore.getActiveVersion(input): Promise<HostedCredentialBundle | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedCredentialStore.revoke",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedCredentialStore.revoke(input): Promise<HostedCredentialRecord | 'not-found' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedCredentialStore.rotate",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedCredentialStore.rotate(input): Promise<'stored' | 'not-found' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadDispatchStore.acknowledge",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "PostgresHostedReadDispatchStore.acknowledge(input): Promise<'stored' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadDispatchStore.claimAvailable",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "PostgresHostedReadDispatchStore.claimAvailable(input): Promise<HostedReadDispatchClaim | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadDispatchStore.fail",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "PostgresHostedReadDispatchStore.fail(input): Promise<'stored' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadDispatchStore.listExpiredJobIds",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "PostgresHostedReadDispatchStore.listExpiredJobIds(input): Promise<readonly string[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadDispatchStore.release",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "PostgresHostedReadDispatchStore.release(input): Promise<'stored' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadJobStore.admit",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadJobStore.admit(bundle)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadJobStore.claim",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadJobStore.claim(input): Promise<HostedReadClaim | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadJobStore.complete",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadJobStore.complete(input): Promise<'stored' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadJobStore.get",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadJobStore.get(jobId): Promise<HostedReadJob | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadJobStore.getAuthorized",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadJobStore.getAuthorized(input): Promise<HostedReadJob | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadJobStore.recover",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadJobStore.recover(input): Promise<HostedReadJob | 'not-expired' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadResultStore.put",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "PostgresHostedReadResultStore.put(input): Promise<HostedReadResultReference>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadScheduleStore.claimDue",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadScheduleStore.claimDue(input): Promise<HostedReadScheduleClaim | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadScheduleStore.materialize",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadScheduleStore.materialize(input): Promise<ReturnType<typeof createHostedReadScheduleMaterialization> | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadScheduleStore.recoverExpired",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadScheduleStore.recoverExpired(input): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "PostgresHostedReadScheduleStore.save",
+      "kind": "method",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "PostgresHostedReadScheduleStore.save(schedule): Promise<'stored' | 'existing' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rowToCredential",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "rowToCredential(row): HostedCredentialRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rowToCredentialVersion",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "rowToCredentialVersion(row): HostedCredentialVersion",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rowToJob",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "rowToJob(row): HostedReadJob",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rowToSchedule",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "rowToSchedule(row): HostedReadSchedule",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "safeStateError",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "safeStateError(): OpsActionExecutionError",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "timestamp",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "timestamp(value): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "transaction",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "transaction(pool, operation)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertPostgresHostedReadSchema",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/migrations.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertPostgresHostedReadSchema(pool): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configurePostgresHostedReadRuntimeRoles",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/migrations.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "configurePostgresHostedReadRuntimeRoles(pool, roles): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "migrate",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/migrations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "migrate(client): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "migratePostgresHostedReadPersistence",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/migrations.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "migratePostgresHostedReadPersistence(pool): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "roleIdentifier",
+      "kind": "function",
+      "package": "@unisane/ops-hosted-postgresql",
+      "owner": "ops/hosted-postgresql",
+      "file": "packages/hosted-postgresql/src/migrations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "roleIdentifier(value): string",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:2e02ad72a1b8"
+}

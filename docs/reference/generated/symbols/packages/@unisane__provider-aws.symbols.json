@@ -1,0 +1,3701 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/provider-aws/package.json",
+    "sourceRoot": "packages/provider-aws"
+  },
+  "summary": {
+    "package": "@unisane/provider-aws",
+    "owner": "ops/provider-aws",
+    "packageDir": "packages/provider-aws",
+    "sourceFileCount": 26,
+    "symbolCount": 319,
+    "functionCount": 319,
+    "publicFunctionCount": 76,
+    "internalFunctionCount": 243,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/provider-aws",
+    "packages/provider-aws/package.json"
+  ],
+  "records": [
+    {
+      "name": "awsSafeArtifactStamp",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/artifacts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsSafeArtifactStamp(date): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveAwsArtifactPath",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/artifacts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveAwsArtifactPath(args): AwsJsonArtifact",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeAwsJsonArtifact",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/artifacts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "writeAwsJsonArtifact(args): AwsJsonArtifact",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addCheck",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/audit.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addCheck(checks, status, id, scope, message): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsAudit",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/audit.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsAudit(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createAwsAuditReport",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/audit.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createAwsAuditReport(args): AwsAuditReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasClassifiedPrefixes",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/audit.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hasClassifiedPrefixes(bucket): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "matchingZones",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/audit.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "matchingZones(context, domain): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanAudit",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/audit.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanAudit(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsAudit",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/audit.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsAudit(options, deps): Promise<AwsAuditReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeKeyValue",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cli-output.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "writeKeyValue(key, value): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderAwsCommand",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cli/handler.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runProviderAwsCommand(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCsv",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cli/register.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseCsv(value): string[] | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerAwsCommands",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cli/register.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerAwsCommands(program): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "accessLoggingConfigFromDesired",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "accessLoggingConfigFromDesired(desiredValue): LoggingConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "acmClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "acmClient(context, region): ACMClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyOperations",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyOperations(args): Promise<AwsCloudFrontApplyOperationResult[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertSupportedOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertSupportedOperation(operation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsCloudFrontApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsCloudFrontApply(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "bucketPolicyResources",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "bucketPolicyResources(bucketName, publicPrefixes): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "certificateRegion",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "certificateRegion(context, certificate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "cloudFrontClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "cloudFrontClient(context): CloudFrontClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredBucketName",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredBucketName(context, cdn): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredCdn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredCdn(context, cdnKey): AwsOpsCdnConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredCertificate",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredCertificate(context, cdn): AwsOpsCertificateConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultCacheBehavior",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultCacheBehavior(config)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredBoolean",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredBoolean(value, code): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredObject",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredObject(value, code): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredString",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredString(value, code): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredStringArray",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredStringArray(value, code): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "distributionConfigForCreate",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "distributionConfigForCreate(args): DistributionConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureCachePolicy",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureCachePolicy(args): Promise<{ id: string; name: string }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureInsideCwd",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureInsideCwd(cwd, candidate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureOriginAccessControl",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureOriginAccessControl(args): Promise<{ id: string; name: string }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "errorCode",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorCode(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "firstOrigin",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "firstOrigin(config)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashJson",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hashJson(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRecord(value): value is Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "managedStatementSid",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "managedStatementSid(cdnKey): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanApply(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "putBucketPolicyForDistribution",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "putBucketPolicyForDistribution(args): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readPlan(cwd, planPath): { planPath: string; plan: AwsCloudFrontPlanReport }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveIssuedCertificateArn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveIssuedCertificateArn(args): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsCloudFrontApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsCloudFrontApply(options, deps): Promise<AwsCloudFrontApplyReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "s3Client",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "s3Client(context): S3Client",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SdkAwsCloudFrontApplyExecutor.applyOperation",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "SdkAwsCloudFrontApplyExecutor.applyOperation(args): Promise<AwsCloudFrontApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "updateDistribution",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "updateDistribution(args): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validatePlanForApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validatePlanForApply(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsCloudFrontInvalidate",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsCloudFrontInvalidate(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "cloudFrontClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "cloudFrontClient(context): CloudFrontClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredCdn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredCdn(context, cdnKey): AwsOpsCdnConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultPaths",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultPaths(cdn): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizePath",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizePath(path): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizePaths",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizePaths(options, cdn): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanInvalidate",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanInvalidate(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveDistributionId",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveDistributionId(args): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsCloudFrontInvalidate",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsCloudFrontInvalidate(options, deps): Promise<AwsCloudFrontInvalidationReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SdkAwsCloudFrontInvalidationExecutor.createInvalidation",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "SdkAwsCloudFrontInvalidationExecutor.createInvalidation(args): Promise<{ invalidationId: string | null; status: string | null; message: string }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateInvalidationForApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-invalidate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validateInvalidationForApply(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "acmClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "acmClient(context, region): ACMClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "aliases",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "aliases(distribution): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "arrayValue",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "arrayValue(value): unknown[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsCloudFrontInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsCloudFrontInventory(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "bucketPolicyResources",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "bucketPolicyResources(bucketName, publicPrefixes): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "certificateRegion",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "certificateRegion(context, certificate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectAwsCloudFrontInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "collectAwsCloudFrontInventory(args): Promise<AwsCloudFrontInventoryReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredCloudFrontForEnvironment",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "configuredCloudFrontForEnvironment(context): Array<[string, AwsOpsCdnConfig]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createInventoryItem",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createInventoryItem(args): AwsCloudFrontDistributionInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "credentials",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "credentials(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCloudFrontAccessLogBucket",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "desiredCloudFrontAccessLogBucket(args): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCloudFrontAccessLogging",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "desiredCloudFrontAccessLogging(args): { enabled: true; bucketKey: string; bucket: string | null; prefix: string; includeCookies: boolean; } | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCloudFrontAccessLogPrefix",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "desiredCloudFrontAccessLogPrefix(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCloudFrontCachePolicyName",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "desiredCloudFrontCachePolicyName(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCloudFrontCachePolicyTtl",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "desiredCloudFrontCachePolicyTtl(context): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCloudFrontOacName",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "desiredCloudFrontOacName(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCloudFrontOriginDomain",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "desiredCloudFrontOriginDomain(args): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "errorCode",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorCode(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "errorMessage",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorMessage(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "findDistribution",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "findDistribution(args): { distribution: DistributionSummary | null; matchedBy: 'alias' | 'origin' | 'none' }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "firstOrigin",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "firstOrigin(distribution): DistributionOrigin | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRecord(value): value is Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "managedStatementSid",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "managedStatementSid(cdnKey): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeCachePolicy",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeCachePolicy(summary): AwsCloudFrontCachePolicyInventory | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeOac",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeOac(summary): AwsCloudFrontOriginAccessControlInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "origins",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "origins(distribution): DistributionOrigin[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanInventory(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readBucketPolicyAllowsDistribution",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readBucketPolicyAllowsDistribution(args): Promise<boolean | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readDistributionConfigs",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readDistributionConfigs(args): Promise<{ configs: Map<string, DistributionConfig>; errors: Map<string, { code: string; message: string }>; }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveDesiredCertificate",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveDesiredCertificate(args): Promise<{ key: string | null; arn: string | null; status: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsCloudFrontInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsCloudFrontInventory(options, deps): Promise<AwsCloudFrontInventoryReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "s3Client",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "s3Client(context): S3Client",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SdkAwsCloudFrontInventoryReader.read",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "SdkAwsCloudFrontInventoryReader.read(args): Promise<{ distributions: AwsCloudFrontDistributionInventory[]; originAccessControls: AwsCloudFrontOriginAccessControlInventory[]; cac...",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "statementAllowsCloudFrontDistribution",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "statementAllowsCloudFrontDistribution(args): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stringSet",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stringSet(value): Set<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "withDistributionConfigError",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "withDistributionConfigError(item, errors): AwsCloudFrontDistributionInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "accessLoggingMatches",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "accessLoggingMatches(current, desired): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addOperation(operations, operation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addViewerCertificateReadinessOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addViewerCertificateReadinessOperation(args): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "aliasesMatch",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "aliasesMatch(current, desired): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsCloudFrontPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsCloudFrontPlan(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createAwsCloudFrontPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createAwsCloudFrontPlan(args): AwsCloudFrontPlanReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredAliases",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredAliases(cdn): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredBucketPolicyPayload",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredBucketPolicyPayload(args): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCachePolicyPayload",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredCachePolicyPayload(args): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCreatePayload",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredCreatePayload(args): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredViewerCertificatePayload",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredViewerCertificatePayload(current): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureInsideCwd",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureInsideCwd(cwd, candidate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanPlan(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readInventoryFromFile",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readInventoryFromFile(cwd, inventoryPath): AwsCloudFrontInventoryReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsCloudFrontPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/cloudfront-plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsCloudFrontPlan(options, deps): Promise<AwsCloudFrontPlanReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configFromModule",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/config-loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configFromModule(moduleValue): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureWithinCwd",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/config-loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureWithinCwd(cwd, resolvedPath): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/config-loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRecord(value): value is Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadAwsOpsConfig",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/config-loader.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "loadAwsOpsConfig(args): Promise<LoadedAwsOpsConfig>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveConfigPath",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/config-loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveConfigPath(cwd, explicitPath): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineAwsOpsConfig",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/config-schema.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineAwsOpsConfig(config): AwsOpsConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateAwsOpsConfig",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/config-schema.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validateAwsOpsConfig(value): AwsOpsConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isPlaceholderAccountId",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/context.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "isPlaceholderAccountId(accountId): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveAwsCommandContext",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/context.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveAwsCommandContext(options, deps): Promise<AwsCommandContext>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveAwsOpsEnvironment",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/context.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveAwsOpsEnvironment(config, envName): { accountKey: string; expectedAccountId: string; profile: string | null; region: string; production: boolean; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addCheck",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/doctor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addCheck(checks, check): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsDoctor",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/doctor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsDoctor(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createFailureReport",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/doctor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createFailureReport(args): AwsDoctorReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasErrors",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/doctor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hasErrors(checks): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanReport",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/doctor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanReport(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requiredTags",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/doctor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "requiredTags(config): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveEnvironment",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/doctor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveEnvironment(config, envName): { accountKey: string | null; expectedAccountId: string | null; profile: string | null; region: string | null; production: boolean; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsDoctor",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/doctor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsDoctor(options, deps): Promise<AwsDoctorReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "acmClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "acmClient(context, region): ACMClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyOperations",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyOperations(args): Promise<AwsDomainsApplyOperationResult[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertSupportedOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertSupportedOperation(operation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsDomainsApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsDomainsApply(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "certificateIdempotencyToken",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "certificateIdempotencyToken(context, key): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredCertificate",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredCertificate(context, key): AwsOpsCertificateConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredMailIdentity",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredMailIdentity(context, key): AwsOpsMailIdentityConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "credentials",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "credentials(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultTags",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultTags(context): Array<{ Key: string; Value: string }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredBoolean",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredBoolean(value, fallback): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredObject",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredObject(value, code): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredString",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredString(value, code): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredStringArray",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredStringArray(value, code): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureInsideCwd",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureInsideCwd(cwd, candidate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "errorCode",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorCode(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashJson",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hashJson(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ignoreAlreadyExists",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ignoreAlreadyExists(run): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isAllowedStagedBlockedOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isAllowedStagedBlockedOperation(operation): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isAllowedStagedStatusOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isAllowedStagedStatusOperation(operation): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isAlreadyExists",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isAlreadyExists(error): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRecord(value): value is Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanApply(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readPlan(cwd, planPath): { planPath: string; plan: AwsDomainsPlanReport }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "route53Client",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "route53Client(context): Route53Client",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsDomainsApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsDomainsApply(options, deps): Promise<AwsDomainsApplyReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SdkAwsDomainsApplyExecutor.applyOperation",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "SdkAwsDomainsApplyExecutor.applyOperation(args): Promise<AwsDomainsApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sesClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sesClient(context): SESv2Client",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sesEventDestinationDefinition",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sesEventDestinationDefinition(desired)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "snsClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "snsClient(context): SNSClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validatePlanForApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validatePlanForApply(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "acmClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-delete-certificate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "acmClient(context, region): ACMClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsDomainsCertificateDelete",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-delete-certificate.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsDomainsCertificateDelete(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCertificateArn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-delete-certificate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseCertificateArn(arn): { region: string; accountId: string }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanReport",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-delete-certificate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanReport(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsDomainsCertificateDelete",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-delete-certificate.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsDomainsCertificateDelete(options, deps): Promise<AwsDomainsCertificateDeleteReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SdkAwsDomainsCertificateDeleteExecutor.deleteCertificate",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-delete-certificate.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "SdkAwsDomainsCertificateDeleteExecutor.deleteCertificate(args): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SdkAwsDomainsCertificateDeleteExecutor.describeCertificate",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-delete-certificate.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "SdkAwsDomainsCertificateDeleteExecutor.describeCertificate(args): Promise<AwsDomainsCertificateDeleteTarget>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateCertificateDeleteRequest",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-delete-certificate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validateCertificateDeleteRequest(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateCertificateTarget",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-delete-certificate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validateCertificateTarget(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "acmClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "acmClient(context, region): ACMClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsDomainsInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsDomainsInventory(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "certificateMatches",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "certificateMatches(summary, certificate): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "certificateRegion",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "certificateRegion(context, certificate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectAwsDomainsInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "collectAwsDomainsInventory(args): Promise<AwsDomainsInventoryReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredCertificatesForEnvironment",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "configuredCertificatesForEnvironment(context): Array<[string, AwsOpsCertificateConfig]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredDnsZonesForEnvironment",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "configuredDnsZonesForEnvironment(context): Array<[string, AwsOpsDnsZoneConfig]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredMailIdentitiesForEnvironment",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "configuredMailIdentitiesForEnvironment(context): Array<[string, AwsOpsMailIdentityConfig]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "credentials",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "credentials(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "emptyCertificateInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "emptyCertificateInventory(args): AwsDomainCertificateInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "emptyDnsZoneInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "emptyDnsZoneInventory(args): AwsDomainDnsZoneInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "emptyMailInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "emptyMailInventory(args): AwsDomainMailIdentityInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "emptySesAccountInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "emptySesAccountInventory(errors): AwsDomainSesAccountInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "errorCode",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorCode(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "errorMessage",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorMessage(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "eventDestinationInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "eventDestinationInventory(destination, snsSubscriptions): AwsDomainSesEventDestinationInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "findCertificateArn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "findCertificateArn(args): Promise<string | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hostedZoneId",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hostedZoneId(value): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isMissing",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isMissing(error): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "listRecordSets",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "listRecordSets(args): Promise<AwsDomainDnsRecordInventory[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeRecord",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeRecord(record): AwsDomainDnsRecordInventory | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeZoneName",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeZoneName(name): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanInventory(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readCertificate",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readCertificate(args): Promise<AwsDomainCertificateInventory>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readConfigurationSetEventDestinations",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readConfigurationSetEventDestinations(args): Promise<AwsDomainSesEventDestinationInventory[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readDnsZone",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readDnsZone(args): Promise<AwsDomainDnsZoneInventory>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readMailIdentity",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readMailIdentity(args): Promise<AwsDomainMailIdentityInventory>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readSesAccount",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readSesAccount(context): Promise<AwsDomainSesAccountInventory>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readSnsSubscriptionsByTopic",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readSnsSubscriptionsByTopic(args): Promise<AwsDomainSnsSubscriptionInventory[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "route53Client",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "route53Client(context): Route53Client",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsDomainsInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsDomainsInventory(options, deps): Promise<AwsDomainsInventoryReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SdkAwsDomainsInventoryReader.read",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "SdkAwsDomainsInventoryReader.read(args): Promise<{ sesAccount: AwsDomainSesAccountInventory; mailIdentities: AwsDomainMailIdentityInventory[]; certificates: AwsDomainCertificate...",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sesClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sesClient(context): SESv2Client",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "snsClient",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "snsClient(context): SNSClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addDnsRecordOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addDnsRecordOperation(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addOperation(operations, operation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "aliasTargetsMatch",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "aliasTargetsMatch(current, desired): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsDomainsPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsDomainsPlan(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "bimiRecordName",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "bimiRecordName(identity): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "bimiSelector",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "bimiSelector(identity): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createAwsDomainsPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createAwsDomainsPlan(args): AwsDomainsPlanReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredBimiTxtValue",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredBimiTxtValue(identity): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCertificatePayload",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredCertificatePayload(certificate): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredDnsZonePayload",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredDnsZonePayload(zone): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredEventDestinationPayload",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredEventDestinationPayload(args): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredMailPayload",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredMailPayload(identity): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredSnsSubscriptionPayload",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredSnsSubscriptionPayload(args): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "dmarcEnforced",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "dmarcEnforced(record): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "dmarcTags",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "dmarcTags(record): Map<string, string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureInsideCwd",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureInsideCwd(cwd, candidate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "eventDestinationMatches",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "eventDestinationMatches(args): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "eventTypesCovered",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "eventTypesCovered(destinations, required): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "findBestZoneForRecord",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "findBestZoneForRecord(args): AwsDomainDnsZoneInventory | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "findRecord",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "findRecord(args): AwsDomainDnsRecordInventory | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeAliasDnsName",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeAliasDnsName(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeDestinationType",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeDestinationType(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeDnsName",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeDnsName(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeDnsValue",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeDnsValue(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizedTxtValues",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizedTxtValues(record): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeEventType",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeEventType(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeSubscriptionProtocol",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeSubscriptionProtocol(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "planBimiSenderBrandReadiness",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "planBimiSenderBrandReadiness(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "planCertificate",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "planCertificate(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "planCloudFrontAliasRecords",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "planCloudFrontAliasRecords(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "planDnsZone",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "planDnsZone(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "planMailEventDestinations",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "planMailEventDestinations(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "planMailIdentity",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "planMailIdentity(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "planProductionMailReadiness",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "planProductionMailReadiness(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "planSesAccountReadiness",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "planSesAccountReadiness(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanPlan(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readInventoryFromFile",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readInventoryFromFile(cwd, inventoryPath): AwsDomainsInventoryReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordValuesMatch",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordValuesMatch(left, right): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsDomainsPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsDomainsPlan(options, deps): Promise<AwsDomainsPlanReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sameSet",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sameSet(left, right): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "snsSubscriptionMatches",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "snsSubscriptionMatches(args): { exists: boolean; pendingConfirmation: boolean }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sorted",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sorted(values): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "txtRecordContains",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/domains-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "txtRecordContains(record, prefix): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addVariable",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addVariable(variables, name, value, source): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsEnvOutput",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsEnvOutput(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "bucketName",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "bucketName(context, bucketKey): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredApp",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredApp(context, appKey): AwsOpsAppConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredCdn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredCdn(context, cdnKey): AwsOpsCdnConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredMailIdentity",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredMailIdentity(context, identityKey): AwsOpsMailIdentityConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createAwsEnvOutput",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createAwsEnvOutput(args): Promise<AwsEnvOutputReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "objectDeliveryPublicBaseUrl",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "objectDeliveryPublicBaseUrl(args): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printDotEnv",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printDotEnv(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsEnvOutput",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/env-output.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsEnvOutput(options, deps): Promise<AwsEnvOutputReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsIamPolicy",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/iam-policy.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsIamPolicy(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "certificateArn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/iam-policy.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "certificateArn(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "certificateRegion",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/iam-policy.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "certificateRegion(context, usage, region): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createAwsIamPolicyReport",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/iam-policy.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createAwsIamPolicyReport(args): AwsIamPolicyReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "route53ZoneArn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/iam-policy.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "route53ZoneArn(hostedZoneId): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsIamPolicy",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/iam-policy.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsIamPolicy(options, deps): Promise<AwsIamPolicyReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "s3BucketArn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/iam-policy.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "s3BucketArn(bucketName): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "s3ObjectArn",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/iam-policy.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "s3ObjectArn(bucketName): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "statement",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/iam-policy.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "statement(sid, actions, resources): AwsIamPolicyStatement",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "describeCredentialSource",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/identity.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "describeCredentialSource(args): { source: string; warnings: string[] }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "redactAwsSecrets",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/identity.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "redactAwsSecrets(value): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "StsAwsIdentityReader.read",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/identity.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "StsAwsIdentityReader.read(args): Promise<AwsCallerIdentity>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "withAwsOperationLock",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/lock.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "withAwsOperationLock(args): Promise<T>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyOperations",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyOperations(args): Promise<AwsS3ApplyOperationResult[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertSupportedOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertSupportedOperation(operation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsS3Apply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsS3Apply(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "currentLifecycleRules",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "currentLifecycleRules(value): AwsS3LifecycleRuleInventory[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCorsRules",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredCorsRules(value): AwsS3CorsRuleInventory[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredLifecycle",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredLifecycle(value): { prefix: string; expirationDays: number }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredObjectOwnership",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredObjectOwnership(value): 'BucketOwnerEnforced' | 'BucketOwnerPreferred'",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredPublicAccessBlock",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredPublicAccessBlock(value): { blockPublicAcls: boolean; ignorePublicAcls: boolean; blockPublicPolicy: boolean; restrictPublicBuckets: boolean; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredRecord",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredRecord(value): Record<string, string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureInsideCwd",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureInsideCwd(cwd, candidate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashJson",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hashJson(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRecord(value): value is Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanApply(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readPlan(cwd, planPath): { planPath: string; plan: AwsS3PlanReport }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsS3Apply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsS3Apply(options, deps): Promise<AwsS3ApplyReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sanitizeLifecycleId",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sanitizeLifecycleId(prefix): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SdkAwsS3ApplyExecutor.applyOperation",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "SdkAwsS3ApplyExecutor.applyOperation(args): Promise<AwsS3ApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validatePlanForApply",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validatePlanForApply(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsS3Inventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsS3Inventory(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectAwsS3Inventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "collectAwsS3Inventory(args): Promise<AwsS3InventoryReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredBucketsForEnvironment",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "configuredBucketsForEnvironment(context): Array<[string, AwsOpsBucketConfig]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "errorCode",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorCode(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "errorMessage",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorMessage(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isMissingBucket",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isMissingBucket(error): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isMissingOptionalConfig",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isMissingOptionalConfig(error): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "lifecyclePrefix",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "lifecyclePrefix(rule): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeCorsRule",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeCorsRule(rule): AwsS3CorsRuleInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeEncryption",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeEncryption(value): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeOwnership",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeOwnership(value): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeStringList",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeStringList(value): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanInventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanInventory(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsS3Inventory",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsS3Inventory(options, deps): Promise<AwsS3InventoryReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SdkAwsS3InventoryReader.readBucket",
+      "kind": "method",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "SdkAwsS3InventoryReader.readBucket(args): Promise<AwsS3BucketInventory>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "statusCode",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "statusCode(error): number | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addOperation",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addOperation(operations, operation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "awsS3Plan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "awsS3Plan(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "corsRulesMatch",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "corsRulesMatch(current, desired): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createAwsS3Plan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createAwsS3Plan(args): AwsS3PlanReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultTags",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultTags(context, bucket): Record<string, string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredCorsRules",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredCorsRules(cors): AwsS3CorsRuleInventory[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredLifecyclePrefixes",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredLifecyclePrefixes(bucket): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureInsideCwd",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureInsideCwd(cwd, candidate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasAllTags",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hasAllTags(current, desired): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasLifecycleForPrefix",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hasLifecycleForPrefix(bucket, prefix): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeList",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeList(value): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printHumanPlan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printHumanPlan(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "productionCorsIsRestricted",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "productionCorsIsRestricted(bucket): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "productionPrefixesAreClassified",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "productionPrefixesAreClassified(bucket): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "publicAccessBlockMatches",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "publicAccessBlockMatches(current): current is NonNullable<AwsS3BucketInventory['publicAccessBlock']>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readInventoryFromFile",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readInventoryFromFile(cwd, inventoryPath): AwsS3InventoryReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requiredPublicAccessBlock",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "requiredPublicAccessBlock(): NonNullable<AwsS3BucketInventory['publicAccessBlock']>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAwsS3Plan",
+      "kind": "function",
+      "package": "@unisane/provider-aws",
+      "owner": "ops/provider-aws",
+      "file": "packages/provider-aws/src/s3-plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runAwsS3Plan(options, deps): Promise<AwsS3PlanReport>",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:70b866a07045"
+}

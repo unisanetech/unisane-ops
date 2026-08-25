@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/ops-mcp/package.json",
+    "sourceRoot": "packages/ops-mcp"
+  },
+  "summary": {
+    "package": "@unisane/ops-mcp",
+    "owner": "ops/ops-mcp",
+    "packageDir": "packages/ops-mcp",
+    "sourceFileCount": 11,
+    "symbolCount": 15,
+    "functionCount": 15,
+    "publicFunctionCount": 11,
+    "internalFunctionCount": 4,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/ops-mcp",
+    "packages/ops-mcp/package.json"
+  ],
+  "records": [
+    {
+      "name": "assertBoundTarget",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/contracts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertBoundTarget(binding, input): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "prepareBoundWorkflowResume",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/contracts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "prepareBoundWorkflowResume(input): { handoff?: OpsWorkflowHandoff; requestId?: string }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateLocalOpsMcpBinding",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/contracts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validateLocalOpsMcpBinding(input): ValidatedLocalOpsMcpBinding",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertOpsMcpEvaluationPassed",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/evaluation/evaluate.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertOpsMcpEvaluationPassed(report): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "check",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/evaluation/evaluate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "check(id, passed, detail): OpsMcpEvaluationCheck",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "evaluateOpsMcpDenial",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/evaluation/evaluate.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "evaluateOpsMcpDenial(input): OpsMcpEvaluationReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "evaluateOpsMcpScenario",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/evaluation/evaluate.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "evaluateOpsMcpScenario(input): OpsMcpEvaluationReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "textContent",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/evaluation/evaluate.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "textContent(response): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "attachWorkflowResume",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/resume.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "attachWorkflowResume(output, handoff): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "campaignPauseSafeError",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/server.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "campaignPauseSafeError(error): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createLocalOpsMcpServer",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/server.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createLocalOpsMcpServer(bindingInput, workflows, executors): McpServer",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "serveLocalOpsMcpStdio",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/stdio.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "serveLocalOpsMcpStdio(binding, workflows, executors, options): ReturnType<typeof serveStdio>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createOpsMcpErrorResult",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/tool-result.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createOpsMcpErrorResult(error)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createOpsMcpToolResult",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/tool-result.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createOpsMcpToolResult(output, maximumResultBytes)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "presentation",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/tool-result.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "presentation(output): Presentation",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:ae03c86a86fa"
+}

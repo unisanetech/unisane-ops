@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/framework-ops/package.json",
+    "compilerDescriptor": null
+  },
+  "summary": {
+    "scopeId": "ops/framework-ops",
+    "kind": "ops-tooling",
+    "operationCount": 0,
+    "tokenCount": 0,
+    "aliasCount": 2,
+    "validationCapabilityCount": 8,
+    "relevantDocCount": 1
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-scope-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/framework-ops/package.json"
+  ],
+  "records": {
+    "scope": {
+      "scopeId": "ops/framework-ops",
+      "kind": "ops-tooling",
+      "packageName": "@unisane/framework-ops",
+      "packageDir": "packages/framework-ops",
+      "deployableId": null,
+      "deployableKind": null
+    },
+    "aliases": [
+      "@unisane/framework-ops",
+      "framework-ops"
+    ],
+    "operations": [],
+    "tokens": [],
+    "entryPoints": [
+      "packages/framework-ops/src/index.ts"
+    ],
+    "validationCapabilities": [
+      "build",
+      "check-types",
+      "check:boundary",
+      "dev",
+      "lint",
+      "pack:check",
+      "prepublishOnly",
+      "test"
+    ],
+    "relevantDocs": [
+      "packages/framework-ops/README.md"
+    ],
+    "contractFiles": [],
+    "paths": [
+      "packages/framework-ops"
+    ]
+  },
+  "generatedAt": "content-hash:5243a2d4fc74"
+}

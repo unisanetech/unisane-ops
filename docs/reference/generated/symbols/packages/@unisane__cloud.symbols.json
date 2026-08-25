@@ -1,0 +1,1808 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/cloud/package.json",
+    "sourceRoot": "packages/cloud"
+  },
+  "summary": {
+    "package": "@unisane/cloud",
+    "owner": "ops/cloud",
+    "packageDir": "packages/cloud",
+    "sourceFileCount": 11,
+    "symbolCount": 145,
+    "functionCount": 145,
+    "publicFunctionCount": 57,
+    "internalFunctionCount": 88,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/cloud",
+    "packages/cloud/package.json"
+  ],
+  "records": [
+    {
+      "name": "applyCloudflareQueuePlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "applyCloudflareQueuePlan(args): Promise<CloudflareResourceApplyReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyCloudflareWorkerPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "applyCloudflareWorkerPlan(args): Promise<CloudflareResourceApplyReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyQueueBinding",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyQueueBinding(args): Promise<CloudflareResourceApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyQueueOperation",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyQueueOperation(args): Promise<CloudflareResourceApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyResourcePlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyResourcePlan(args): Promise<CloudflareResourceApplyReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applySettingsBinding",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applySettingsBinding(args): Promise<CloudflareResourceApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyWorkerCron",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyWorkerCron(args): Promise<CloudflareResourceApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyWorkerOperation",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyWorkerOperation(args): Promise<CloudflareResourceApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyWorkerRoute",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyWorkerRoute(args): Promise<CloudflareResourceApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyWorkerScript",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyWorkerScript(args): Promise<CloudflareResourceApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyWorkerSecret",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyWorkerSecret(args): Promise<CloudflareResourceApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyWorkerVar",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyWorkerVar(args): Promise<CloudflareResourceApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertPlanContext",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertPlanContext(target, plan): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "bindingName",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "bindingName(binding): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectDrift",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "collectDrift(args): Promise<CloudflareResourceDriftReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createApproval",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createApproval(args): OpsApprovalRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createEngineReceipt",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createEngineReceipt(args): OpsMutationReceipt",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "currentId",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "currentId(operation): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredString",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredString(operation, key): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredStringArray",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredStringArray(operation, key): string[] | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "expectedSafetyRisk",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "expectedSafetyRisk(operation): 'low' | 'medium' | 'high'",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "expectedSafetyType",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "expectedSafetyType(operation): 'create' | 'update' | 'verify' | 'no-op'",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "receiptStatus",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "receiptStatus(results): OpsMutationReceipt['status']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireConfirmation",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "requireConfirmation(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "result",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "result(args): CloudflareResourceApplyOperationResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "upsertBinding",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "upsertBinding(settings, binding): CloudflareWorkerSettings",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addCronOperations",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addCronOperations(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addQueueOperation",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addQueueOperation(operations, operation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addQueueOperations",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addQueueOperations(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addRouteOperations",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addRouteOperations(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addScriptOperation",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addScriptOperation(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addVariables",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addVariables(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addWorkerOperation",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addWorkerOperation(operations, operation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertInventoryContext",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertInventoryContext(target, inventory): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "bindingName",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "bindingName(queueKey): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectCloudflareResourceInventory",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "collectCloudflareResourceInventory(args): Promise<CloudflareResourceInventory>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectZones",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "collectZones(target, provider, errors): Promise<CloudDnsZone[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredZone",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredZone(target, route): [string, CloudDnsZoneConfig] | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudflareEnvironmentReport",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCloudflareEnvironmentReport(args): CloudflareEnvironmentReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudflareQueuePlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCloudflareQueuePlan(args): CloudflareQueuePlan",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudflareReadinessReport",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCloudflareReadinessReport(args): CloudflareReadinessReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudflareWorkerPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCloudflareWorkerPlan(args): CloudflareWorkerPlan",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "envName",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "envName(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalize",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalize(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "queueEntries",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "queueEntries(sourceKey, queue): Array<{ sourceKey: string; role: 'primary' | 'dlq'; name: string; }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "queueSafetyAction",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "queueSafetyAction(operation): OpsMutationAction",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordValue",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordValue(value): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "risk",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "risk(target): CloudflareMutationRisk",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "safetyRisk",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "safetyRisk(riskValue): OpsMutationAction['risk']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "workerSafetyAction",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "workerSafetyAction(operation): OpsMutationAction",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "zoneMatches",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/cloudflare-resource-workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "zoneMatches(zone, configured): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertPlanBinding",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/contracts.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertPlanBinding(plan): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "bindCloudDnsSafetyPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/contracts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "bindCloudDnsSafetyPlan(args): OpsMutationPlan",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashCloudDnsOperationInput",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/contracts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "hashCloudDnsOperationInput(operation): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCloudDnsImportProposal",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/contracts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "parseCloudDnsImportProposal(input): CloudDnsImportProposal",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCloudDnsInventory",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/contracts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "parseCloudDnsInventory(input): CloudDnsInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCloudDnsMutationPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/contracts.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "parseCloudDnsMutationPlan(input): CloudDnsMutationPlan",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assessCloudDnsDrift",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/dns.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assessCloudDnsDrift(args): CloudDnsDriftReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeName",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeName(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordMatches",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordMatches(current, desired, zoneId): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "unknownCloudDnsDrift",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/dns.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "unknownCloudDnsDrift(args): CloudDnsDriftReport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "diagnostic",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "diagnostic(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "failureStatus",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "failureStatus(error): PackCommandResult['status']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mutationResult",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "mutationResult(args): PackCommandResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseArguments",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "parseArguments(argv): ParsedArguments",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireArgument",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "requireArgument(value, flag): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireRuntime",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "requireRuntime(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "result",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "result(args): PackCommandResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runApply",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "runApply(context, command, focus): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudCheck",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudCheck(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudCronApply",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudCronApply(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudCronInventory",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudCronInventory(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudCronPlan",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudCronPlan(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudEnv",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudEnv(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudInventory",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudInventory(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudQueuesApply",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudQueuesApply(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudQueuesInventory",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudQueuesInventory(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudQueuesPlan",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudQueuesPlan(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudWorkersApply",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudWorkersApply(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudWorkersInventory",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudWorkersInventory(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudWorkersPlan",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudWorkersPlan(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runInventory",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "runInventory(context, command, focus, cli): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "runPlan(context, command, focus): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareCronApply",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareCronApply(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareCronInventory",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareCronInventory(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareCronPlan",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareCronPlan(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareInventory",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareInventory(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareQueuesApply",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareQueuesApply(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareQueuesInventory",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareQueuesInventory(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareQueuesPlan",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareQueuesPlan(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareWorkersApply",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareWorkersApply(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareWorkersInventory",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareWorkersInventory(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareWorkersPlan",
+      "kind": "const-function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareWorkersPlan(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runReport",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/cloudflare-resources.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "runReport(context, command, kind): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "diagnostic",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "diagnostic(error): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "failureStatus",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "failureStatus(error): PackCommandResult['status']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseArguments",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "parseArguments(argv): ParsedArguments",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireArgument",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "requireArgument(value, flag): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireRuntime",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "requireRuntime(context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "result",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "result(args): PackCommandResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runApply",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "runApply(context, route): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudDnsApply",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudDnsApply(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudDnsImport",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudDnsImport(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudDnsInventory",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudDnsInventory(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudDnsPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudDnsPlan(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runInventory",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "runInventory(context, route): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "runPlan(context, route): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareDnsApply",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareDnsApply(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareDnsInventory",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareDnsInventory(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderCloudflareDnsPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/handlers/dns.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runProviderCloudflareDnsPlan(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudDnsExecutionState",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudDnsExecutionState(binding): OpsExecutionState",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudDnsProvider",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudDnsProvider(binding): CloudDnsProvider",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudDnsRuntimeBinding",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudDnsRuntimeBinding(input): CloudDnsRuntimeBinding",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudflareMutationProvider",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudflareMutationProvider(binding): CloudflareMutationProvider",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudflareResourceExecutionState",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudflareResourceExecutionState(binding): OpsExecutionState",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudflareResourceProvider",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudflareResourceProvider(binding): CloudflareReadProvider",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudflareResourceRuntimeBinding",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudflareResourceRuntimeBinding(input): CloudflareResourceRuntimeBinding",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudflareResourceSecrets",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudflareResourceSecrets(binding): SecretResolver",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudflareResourceSources",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudflareResourceSources(binding): CloudflareResourceSourceAccess",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addOperation",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addOperation(operations, operation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyCloudDnsPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "applyCloudDnsPlan(args): Promise<CloudDnsApplyReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyOperation",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyOperation(args): Promise<CloudDnsApplyOperationResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertInventoryContext",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertInventoryContext(target, inventory): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertPlanContext",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertPlanContext(target, plan): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectCloudDnsInventory",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "collectCloudDnsInventory(args): Promise<CloudDnsInventory>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectPostApplyDrift",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "collectPostApplyDrift(args): Promise<CloudDnsDriftReport>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectZones",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "collectZones(target, provider, errors): Promise<CloudDnsZone[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "configuredZoneForRecord",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "configuredZoneForRecord(target, record): [string, CloudDnsZoneConfig] | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createApproval",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createApproval(args): OpsApprovalRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudDnsImportProposal",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCloudDnsImportProposal(args): CloudDnsImportProposal",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudDnsPlan",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCloudDnsPlan(args): CloudDnsMutationPlan",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createEngineReceipt",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createEngineReceipt(args): OpsMutationReceipt",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredRecord",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredRecord(record, content)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredValues",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredValues(record): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "importedRecordConfig",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "importedRecordConfig(record, zoneKey): CloudDnsRecordConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "liveZoneForConfigured",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "liveZoneForConfigured(inventory, configured): CloudDnsZone | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "matchingRecords",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "matchingRecords(records, desired, zoneId): CloudDnsRecord[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeName",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeName(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readCloudDnsInventory",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readCloudDnsInventory(binding, relativePath): CloudDnsInventory",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "receiptStatus",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "receiptStatus(results): OpsMutationReceipt['status']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordMatchesDesired",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordMatchesDesired(current, desired): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireReviewConfirmation",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "requireReviewConfirmation(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "safetyAction",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "safetyAction(operation): OpsMutationAction",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stableImportKey",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stableImportKey(value, prefix): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "zoneMatchesConfigured",
+      "kind": "function",
+      "package": "@unisane/cloud",
+      "owner": "ops/cloud",
+      "file": "packages/cloud/src/workflow.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "zoneMatchesConfigured(zone, configured): boolean",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:3c37bb8eb6d1"
+}

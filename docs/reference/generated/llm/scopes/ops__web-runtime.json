@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/web-runtime/package.json",
+    "compilerDescriptor": null
+  },
+  "summary": {
+    "scopeId": "ops/web-runtime",
+    "kind": "ops-tooling",
+    "operationCount": 0,
+    "tokenCount": 0,
+    "aliasCount": 2,
+    "validationCapabilityCount": 6,
+    "relevantDocCount": 1
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-scope-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/web-runtime/package.json"
+  ],
+  "records": {
+    "scope": {
+      "scopeId": "ops/web-runtime",
+      "kind": "ops-tooling",
+      "packageName": "@unisane/web-runtime",
+      "packageDir": "packages/web-runtime",
+      "deployableId": null,
+      "deployableKind": null
+    },
+    "aliases": [
+      "@unisane/web-runtime",
+      "web-runtime"
+    ],
+    "operations": [],
+    "tokens": [],
+    "entryPoints": [
+      "packages/web-runtime/src/index.ts"
+    ],
+    "validationCapabilities": [
+      "build",
+      "check-types",
+      "dev",
+      "lint",
+      "prepublishOnly",
+      "test"
+    ],
+    "relevantDocs": [
+      "packages/web-runtime/README.md"
+    ],
+    "contractFiles": [],
+    "paths": [
+      "packages/web-runtime"
+    ]
+  },
+  "generatedAt": "content-hash:168bfbc09f36"
+}

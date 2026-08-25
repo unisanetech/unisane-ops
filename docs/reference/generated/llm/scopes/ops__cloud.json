@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/cloud/package.json",
+    "compilerDescriptor": null
+  },
+  "summary": {
+    "scopeId": "ops/cloud",
+    "kind": "ops-tooling",
+    "operationCount": 0,
+    "tokenCount": 0,
+    "aliasCount": 2,
+    "validationCapabilityCount": 6,
+    "relevantDocCount": 1
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-scope-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/cloud/package.json"
+  ],
+  "records": {
+    "scope": {
+      "scopeId": "ops/cloud",
+      "kind": "ops-tooling",
+      "packageName": "@unisane/cloud",
+      "packageDir": "packages/cloud",
+      "deployableId": null,
+      "deployableKind": null
+    },
+    "aliases": [
+      "@unisane/cloud",
+      "cloud"
+    ],
+    "operations": [],
+    "tokens": [],
+    "entryPoints": [
+      "packages/cloud/src/index.ts"
+    ],
+    "validationCapabilities": [
+      "build",
+      "check-types",
+      "dev",
+      "lint",
+      "prepublishOnly",
+      "test"
+    ],
+    "relevantDocs": [
+      "packages/cloud/README.md"
+    ],
+    "contractFiles": [],
+    "paths": [
+      "packages/cloud"
+    ]
+  },
+  "generatedAt": "content-hash:3dfaa6af99fe"
+}

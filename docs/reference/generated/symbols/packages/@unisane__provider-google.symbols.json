@@ -1,0 +1,3984 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/provider-google/package.json",
+    "sourceRoot": "packages/provider-google"
+  },
+  "summary": {
+    "package": "@unisane/provider-google",
+    "owner": "ops/provider-google",
+    "packageDir": "packages/provider-google",
+    "sourceFileCount": 54,
+    "symbolCount": 331,
+    "functionCount": 331,
+    "publicFunctionCount": 136,
+    "internalFunctionCount": 195,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/provider-google",
+    "packages/provider-google/package.json"
+  ],
+  "records": [
+    {
+      "name": "writeKeyValue",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/cli-output.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "writeKeyValue(key, value): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runProviderGoogleCommand",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/cli/handler.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runProviderGoogleCommand(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addGoogleProviderSharedOptions",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/cli/register.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addGoogleProviderSharedOptions(command): Command",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectRepeated",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/cli/register.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "collectRepeated(value, previous): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerGoogleCommands",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/cli/register.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerGoogleCommands(program): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runGoogleCommand",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/cli/register.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "runGoogleCommand(options, handler): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGoogleProviderConnectionToken",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/cli/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveGoogleProviderConnectionToken(input): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runWithGoogleProviderCommandContext",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/cli/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runWithGoogleProviderCommandContext(context, run): T",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleOAuthErrorCode",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth-types.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleOAuthErrorCode(code): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth-types.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "isRecord(input): input is Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertRequiredScope",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertRequiredScope(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "base64Url",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "base64Url(input): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCodeChallenge",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createCodeChallenge(verifier): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCodeVerifier",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createCodeVerifier(): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "exchangeAuthorizationCode",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "exchangeAuthorizationCode(args): Promise<GoogleTokenResponse>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchImpl",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fetchImpl(runtime): GoogleOAuthFetch",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "openAuthorizationUrl",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "openAuthorizationUrl(url, runtime): Promise<boolean>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parsePort",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "parsePort(input): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseTimeoutMs",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "parseTimeoutMs(input): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "postToken",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "postToken(body, runtime): Promise<GoogleTokenResponse>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "refreshAccessToken",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "refreshAccessToken(args): Promise<GoogleAccessTokenResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveOpenCommand",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveOpenCommand(platform): { command: string; args: readonly string[] } | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "waitForAuthorizationCode",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/auth/oauth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "waitForAuthorizationCode(args): Promise<{ code: string; redirectUri: string; codeVerifier: string }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "connectGoogle",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connect.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "connectGoogle(request): Promise<OpsLifecycleContributionResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "grants",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "grants(selectedServices, state, observedAt): GoogleConnectionGrant[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "option",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "option(argv, name): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseArguments",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseArguments(argv, observedAt): ParsedGoogleConnectArguments",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordFromExternalReference",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordFromExternalReference(args): { connection: GoogleConnectionRecord; issues: GoogleResourceDiscoveryIssue[] }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordFromOAuth",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordFromOAuth(args): Promise<{ connection: GoogleConnectionRecord; issues: GoogleResourceDiscoveryIssue[] }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resourceSelections",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resourceSelections(argv, observedAt): GoogleResourceSelection[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "services",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "services(input): GoogleConnectionService[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "candidates",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "candidates(service, resources, observedAt): GoogleResourceDiscoveryResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "discoverGoogleConnectionResources",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-discovery.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "discoverGoogleConnectionResources(input): Promise<GoogleResourceDiscoveryResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "discoverService",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "discoverService(input): Promise<GoogleResourceDiscoveryResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "account",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-keychain.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "account(connectionId, field): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleConnectionKeychainSecret",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-keychain.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readGoogleConnectionKeychainSecret(args): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "removeGoogleConnectionKeychainSecret",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-keychain.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "removeGoogleConnectionKeychainSecret(args): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeGoogleConnectionKeychainSecret",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-keychain.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "writeGoogleConnectionKeychainSecret(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-store.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readGoogleConnectionRecord(args): GoogleConnectionRecord | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "removeGoogleConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-store.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "removeGoogleConnectionRecord(args): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveRecordPath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-store.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveRecordPath(projectRoot, recordPath): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeGoogleConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-store.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "writeGoogleConnectionRecord(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGoogleConnectionAccessToken",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-token.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveGoogleConnectionAccessToken(args): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGoogleConnectionCredentials",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection-token.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveGoogleConnectionCredentials(args): Promise<GoogleConnectionCredentials>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildGoogleConnectionReadiness",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildGoogleConnectionReadiness(input): OpsReadinessFinding[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineGoogleConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineGoogleConnectionRecord(input): GoogleConnectionRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyGoogleApisPlan",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/apis/apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "applyGoogleApisPlan(options, deps): Promise<GoogleProviderApplyReceipt>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildGoogleApisInventory",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/apis/inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildGoogleApisInventory(options, deps): Promise<GoogleProviderInventoryArtifact>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asGoogleApisInventory",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/apis/plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "asGoogleApisInventory(value): GoogleProviderInventoryArtifact",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asGoogleApisPlan",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/apis/plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "asGoogleApisPlan(value): GoogleProviderPlanArtifact",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildGoogleApisPlan",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/apis/plan.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildGoogleApisPlan(options, deps): Promise<GoogleProviderPlanArtifact>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "listGoogleAnalyticsProperties",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/analytics.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "listGoogleAnalyticsProperties(args): Promise<GoogleAnalyticsPropertyResource[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleProject",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/cloud-resource-manager.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readGoogleProject(args): Promise<GoogleProjectResource>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "customerIdFromResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/google-ads.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "customerIdFromResource(resourceName): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "listGoogleAdsAccessibleCustomers",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/google-ads.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "listGoogleAdsAccessibleCustomers(args): Promise<GoogleAdsCustomerResource[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "listGoogleSearchConsoleSites",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/search-console.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "listGoogleSearchConsoleSites(args): Promise<GoogleSearchConsoleSiteResource[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "enableGoogleService",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/service-usage.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "enableGoogleService(args): Promise<GoogleServiceEnableResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "listGoogleEnabledServices",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/service-usage.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "listGoogleEnabledServices(args): Promise<GoogleServiceUsageResource[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "serviceNameFromResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/service-usage.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "serviceNameFromResource(name): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asGoogleArray",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "asGoogleArray(value): unknown[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asGoogleRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "asGoogleRecord(value): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleBearerHeaders",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleBearerHeaders(accessToken): Record<string, string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleFetchImpl",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleFetchImpl(fetcher): GoogleControlPlaneFetch",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "optionalGoogleString",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "optionalGoogleString(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleJson",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readGoogleJson(response, label): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "listGoogleTagManagerAccounts",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/tag-manager.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "listGoogleTagManagerAccounts(args): Promise<GoogleTagManagerAccountResource[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "listGoogleTagManagerContainers",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/clients/tag-manager.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "listGoogleTagManagerContainers(args): Promise<GoogleTagManagerContainerResource[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleApisApply",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/commands.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleApisApply(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleApisInventory",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/commands.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleApisInventory(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleApisPlan",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/commands.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleApisPlan(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleProductsInventory",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/commands.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleProductsInventory(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printInventory",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/commands.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printInventory(inventory): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printJson",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/commands.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printJson(value): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printPlan",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/commands.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printPlan(plan): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "printProductsInventory",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/commands.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "printProductsInventory(inventory): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildGoogleProductsInventory",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/products/inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildGoogleProductsInventory(options, deps): Promise<GoogleProviderProductsInventoryArtifact>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectProductResources",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/products/inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "collectProductResources(args): Promise<{ resources: GoogleProviderInventoryResource[]; warnings: string[] }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeApiName",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/shared/project.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeApiName(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGoogleProjectId",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/shared/project.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveGoogleProjectId(args): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGoogleRequiredApis",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/shared/project.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveGoogleRequiredApis(api): GoogleProviderRequiredApi[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleControlPlaneStamp",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/shared/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleControlPlaneStamp(date): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googlePlanHash",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/shared/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googlePlanHash(plan): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleProviderAccessToken",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/shared/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleProviderAccessToken(options, service, requiredScope): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleProviderFetchFromOptions",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/shared/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleProviderFetchFromOptions(options, fetch): GoogleControlPlaneFetch | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleJsonFile",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/shared/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readGoogleJsonFile(filePath, cwd): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeGoogleProviderArtifact",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/control-plane/shared/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "writeGoogleProviderArtifact(args): T",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "disconnectGoogle",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/disconnect.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "disconnectGoogle(request): Promise<OpsLifecycleContributionResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ga4Dimensions",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/ga4/api-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ga4Dimensions(reportType): Array<{ name: string }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ga4Metrics",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/ga4/api-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ga4Metrics(reportType): Array<{ name: string }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pullGa4Report",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/ga4/api-pull.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pullGa4Report(input): Promise<ProviderApiPullPayload<'ga4'>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGa4ReportType",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/ga4/api-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveGa4ReportType(input): Ga4ReportType",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleAdsQuery",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/google-ads/api-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "googleAdsQuery(reportType, startDate, endDate): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeGoogleAdsCustomerId",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/google-ads/api-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeGoogleAdsCustomerId(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pullGoogleAdsReport",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/google-ads/api-pull.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pullGoogleAdsReport(input): Promise<ProviderApiPullPayload<'google-ads'>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGoogleAdsReportType",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/google-ads/api-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveGoogleAdsReportType(input): GoogleAdsReportType",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "absoluteFinalUrl",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "absoluteFinalUrl(origin, value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertGoogleAdsCustomerMutationAllowed",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertGoogleAdsCustomerMutationAllowed(args): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsAdGroupKeywords",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createGoogleAdsAdGroupKeywords(args): Promise<string[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsAdGroups",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createGoogleAdsAdGroups(args): Promise<Array<{ resourceName: string; index: number }>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsAsset",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createGoogleAdsAsset(args): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsCampaignAssets",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createGoogleAdsCampaignAssets(args): Promise<string[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsCampaignControlAdapter",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGoogleAdsCampaignControlAdapter(options)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsCampaignCriteria",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createGoogleAdsCampaignCriteria(args): Promise<string[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsResponsiveSearchAd",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createGoogleAdsResponsiveSearchAd(args): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createPausedGoogleAdsSearchCampaign",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createPausedGoogleAdsSearchCampaign(args): Promise<{ providerOperationId?: string; message: string }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeGoogleAdsLiveOperation",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "executeGoogleAdsLiveOperation(options): Promise<MarketingAdsLiveProviderExecutionResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "firstResourceName",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "firstResourceName(body, errorCode): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleAdsCampaignBidding",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "googleAdsCampaignBidding(candidate): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "linkGoogleAdsCampaignAsset",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "linkGoogleAdsCampaignAsset(args): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "microsFromDailyBudgetAmount",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "microsFromDailyBudgetAmount(value): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mutateGoogleAds",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mutateGoogleAds(args): Promise<Record<string, unknown>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeGoogleAdsCustomerId",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeGoogleAdsCustomerId(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseProviderResponse",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseProviderResponse(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pauseGoogleAdsCampaign",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pauseGoogleAdsCampaign(args): Promise<GoogleAdsCampaignPauseResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "productionCustomerMutationEnabled",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "productionCustomerMutationEnabled(env): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleAdsCampaignStatus",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readGoogleAdsCampaignStatus(args): Promise<'paused' | 'active' | 'unknown'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readProviderResponse",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readProviderResponse(response, code, label): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resultResourceNames",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resultResourceNames(body): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "safeGoogleAdsName",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "safeGoogleAdsName(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pullSearchConsoleReport",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/search-console/api-pull.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pullSearchConsoleReport(input): Promise<ProviderApiPullPayload<'search-console'>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveSearchConsoleReportType",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/search-console/api-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveSearchConsoleReportType(input): SearchConsoleReportType",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "searchConsoleDimensions",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/search-console/api-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "searchConsoleDimensions(reportType): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asArray",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/transport-utils.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "asArray(value): unknown[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/transport-utils.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "asRecord(value): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "optionalNumber",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/transport-utils.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "optionalNumber(value): number | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readJsonResponse",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/transport-utils.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readJsonResponse(response, provider): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireConfigValue",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/transport-utils.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "requireConfigValue(value, code, label): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveEnv",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/transport-utils.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveEnv(env, envName, code, label): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchGa4PerformanceFile",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/fetch-file.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "fetchGa4PerformanceFile(options): Promise<FetchGa4PerformanceFileResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolvePath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/fetch-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolvePath(cwd, maybeRelativePath): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assignIfDefined",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/map-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assignIfDefined(record, key, value): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createRecordId",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/map-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createRecordId(options): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mapGa4RowsToPerformanceRecords",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/map-report.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "mapGa4RowsToPerformanceRecords(options): SeoPerformanceRecord[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizePagePath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/map-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizePagePath(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readDimensionValue",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/map-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readDimensionValue(row, dimensions, candidates): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readMetricInteger",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/map-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readMetricInteger(row, metrics, candidates): number | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readMetricNumber",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/map-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readMetricNumber(row, metrics, candidates): number | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "clampLimit",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/run-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "clampLimit(value): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchAllRows",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/run-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fetchAllRows(options): Promise<Ga4ResponseRow[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchRows",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/run-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fetchRows(options): Promise<Ga4ResponseRow[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizePropertyName",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/run-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizePropertyName(propertyId): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readErrorMessage",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/run-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readErrorMessage(payload): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readJsonResponse",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/run-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readJsonResponse(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readRows",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/run-report.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readRows(payload): Ga4ResponseRow[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runGa4PerformanceReport",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/ga4/run-report.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runGa4PerformanceReport(options): Promise<SeoPerformanceFile>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeCustomerId",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeCustomerId(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyKeywordFilter",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/fetch-metrics-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyKeywordFilter(keywordMetrics, filter): KeywordMetricFile",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "chunkKeywords",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/fetch-metrics-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "chunkKeywords(keywords): string[][]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "dedupeKeywords",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/fetch-metrics-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "dedupeKeywords(keywords): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchGoogleAdsKeywordMetricsFile",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/fetch-metrics-file.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "fetchGoogleAdsKeywordMetricsFile(options): Promise<FetchGoogleAdsKeywordMetricsFileResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "matchesKeywordFilter",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/fetch-metrics-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "matchesKeywordFilter(term, filter): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mergeKeywordMetricFiles",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/fetch-metrics-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mergeKeywordMetricFiles(options): KeywordMetricFile",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeKeywordFilter",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/fetch-metrics-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeKeywordFilter(filter): KeywordFilter",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolvePath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/fetch-metrics-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolvePath(cwd, maybeRelativePath): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "termIncludesFilterTerm",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/fetch-metrics-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "termIncludesFilterTerm(term, filterTerm): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsHeaders",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createGoogleAdsHeaders(credentials, accessToken): Record<string, string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createKeywordIdeasRequest",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createKeywordIdeasRequest(options, keywords): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createKeywordIdeasUrl",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createKeywordIdeasUrl(credentials): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createKeywordMetricSource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createKeywordMetricSource(options, keywords): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createKeywordMetricsRunId",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createKeywordMetricsRunId(platformId, country, language, fetchedAt): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createSeed",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createSeed(pageUrl, keywords): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "dedupeKeywords",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "dedupeKeywords(keywords): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchGoogleAdsKeywordIdeas",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "fetchGoogleAdsKeywordIdeas(options): Promise<KeywordMetricFile>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isKeywordIdeaResult",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isKeywordIdeaResult(value): value is GoogleAdsKeywordIdeaResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mapKeywordIdeaResult",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mapKeywordIdeaResult(result, context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeCompetition",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeCompetition(value)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseInteger",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseInteger(value): number | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readErrorMessage",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readErrorMessage(payload): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readJsonResponse",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readJsonResponse(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readKeywordIdeas",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/google-ads/keyword-ideas.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readKeywordIdeas(payload): GoogleAdsKeywordIdeaResult[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchSearchConsolePerformanceFile",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/fetch-file.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "fetchSearchConsolePerformanceFile(options): Promise<FetchSearchConsolePerformanceFileResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolvePath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/fetch-file.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolvePath(cwd, maybeRelativePath): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "clampRowLimit",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "clampRowLimit(value): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createRecordId",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createRecordId(options): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchAllRows",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fetchAllRows(options): Promise<SearchConsoleResponseRow[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchRows",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fetchRows(options): Promise<SearchConsoleResponseRow[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mapRowsToPerformanceRecords",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mapRowsToPerformanceRecords(options): SeoPerformanceRecord[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizePagePath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizePagePath(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "querySearchConsolePerformance",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "querySearchConsolePerformance(options): Promise<SeoPerformanceFile>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readDimensionValue",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readDimensionValue(options): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readErrorMessage",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readErrorMessage(payload): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readJsonResponse",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readJsonResponse(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readRows",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/seo/search-console/query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readRows(payload): SearchConsoleResponseRow[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleTagManagerApiClient",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGoogleTagManagerApiClient(options): GoogleTagManagerApiClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "encodePathSegment",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "encodePathSegment(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleTagManagerAccountPath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleTagManagerAccountPath(accountId): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.createBuiltInVariables",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.createBuiltInVariables(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.createContainerVersion",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.createContainerVersion(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.createFolder",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.createFolder(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.createTag",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.createTag(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.createTrigger",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.createTrigger(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.createVariable",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.createVariable(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.createWorkspace",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.createWorkspace(args): Promise<GoogleTagManagerWorkspace>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.createWorkspaceResource",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.createWorkspaceResource(workspacePath, collection, body): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.getContainerVersion",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.getContainerVersion(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.getLiveVersion",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.getLiveVersion(args): Promise<GoogleTagManagerJsonObject | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.getWorkspaceStatus",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.getWorkspaceStatus(workspacePath): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listAccounts",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listAccounts(): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listAll",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listAll(apiPath, collectionKey): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listBuiltInVariables",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listBuiltInVariables(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listClients",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listClients(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listContainers",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listContainers(accountId): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listDestinations",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listDestinations(args): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listEnvironments",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listEnvironments(args): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listFolders",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listFolders(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listGtagConfigs",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listGtagConfigs(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listTags",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listTags(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listTemplates",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listTemplates(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listTransformations",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listTransformations(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listTriggers",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listTriggers(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listUserPermissions",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listUserPermissions(accountId): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listVariables",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listVariables(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listVersionHeaders",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listVersionHeaders(args): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listWorkspaces",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listWorkspaces(args): Promise<readonly GoogleTagManagerWorkspace[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.listZones",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.listZones(workspacePath): Promise<readonly GoogleTagManagerJsonObject[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.publishContainerVersion",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.publishContainerVersion(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.quickPreviewWorkspace",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.quickPreviewWorkspace(workspacePath): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.requestJson",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.requestJson(apiPath, init): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.resolveAccessToken",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.resolveAccessToken(): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.resolveWorkspace",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.resolveWorkspace(selector): Promise<GoogleTagManagerWorkspace>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.syncWorkspace",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.syncWorkspace(workspacePath): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.updateFolder",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.updateFolder(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.updateTag",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.updateTag(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.updateTrigger",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.updateTrigger(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.updateVariable",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.updateVariable(args): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.updateWorkspaceResource",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.updateWorkspaceResource(path, body, fingerprint): Promise<GoogleTagManagerJsonObject>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "GoogleTagManagerApiClient.waitForRateLimit",
+      "kind": "method",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "GoogleTagManagerApiClient.waitForRateLimit(): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleTagManagerContainerPath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleTagManagerContainerPath(accountId, containerId): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleTagManagerContainerVersionPath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleTagManagerContainerVersionPath(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleTagManagerWorkspacePath",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleTagManagerWorkspacePath(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRecord(value): value is Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseResponseBody",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseResponseBody(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "responseMessage",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "responseMessage(body, fallback): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sleep",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sleep(ms): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stringField",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stringField(value, key): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "trimSlashes",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "trimSlashes(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyGoogleTagManagerPlan",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "applyGoogleTagManagerPlan(args): Promise<GoogleTagManagerApplyReceipt>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "arrayField",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "arrayField(value, key): readonly unknown[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertNoMergeConflicts",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertNoMergeConflicts(value, stage): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "bindingFromResponse",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "bindingFromResponse(args): ResourceBinding",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildApplyState",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "buildApplyState(snapshot): ApplyState",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "conditionParameter",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "conditionParameter(key, value): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "consentSettings",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "consentSettings(consent): GoogleTagManagerJsonObject | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredPayload",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredPayload(resource): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureApplyWorkspace",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureApplyWorkspace(args): Promise<GoogleTagManagerWorkspace>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeCreate",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "executeCreate(args): Promise<GoogleTagManagerAppliedOperation>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executePauseTag",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "executePauseTag(args): Promise<GoogleTagManagerAppliedOperation>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeUpdate",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "executeUpdate(args): Promise<GoogleTagManagerAppliedOperation>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "folderIdForSlug",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "folderIdForSlug(state, folderSlug): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasMergeConflicts",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hasMergeConflicts(value): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "htmlParameters",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "htmlParameters(args): readonly GoogleTagManagerJsonObject[] | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRecord(value): value is GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "listParameter",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "listParameter(key, values): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "lowerFolder",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "lowerFolder(resource): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "lowerResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "lowerResource(args): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "lowerTag",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "lowerTag(args): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "lowerTrigger",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "lowerTrigger(args): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "lowerVariable",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "lowerVariable(args): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaPixelHtml",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "metaPixelHtml(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parameter",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parameter(args): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parameterType",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parameterType(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parameterValue",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parameterValue(value, variableNameBySlug): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parameterValueByKey",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parameterValueByKey(parameters, key): GoogleTagManagerParameterValue | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pathForResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "pathForResource(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "remoteBinding",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "remoteBinding(resource): ResourceBinding",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resourceKey",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resourceKey(kind, slug): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stringField",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stringField(value, key): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "tableParameter",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "tableParameter(args): GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "tagParameterKey",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "tagParameterKey(type, key): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "timestampSegment",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "timestampSegment(): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "trimSlashes",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "trimSlashes(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "workspaceIdFromWorkspace",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "workspaceIdFromWorkspace(workspace): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "workspacePathFromWorkspace",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/apply.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "workspacePathFromWorkspace(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleTagManagerProvider",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/provider.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGoogleTagManagerProvider(options): GoogleTagManagerProvider",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "arrayField",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "arrayField(value, key): readonly unknown[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "booleanField",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "booleanField(value, key): boolean | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildFolderBindings",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "buildFolderBindings(folders, desiredFoldersByName): readonly FolderBinding[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildTriggerBindings",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "buildTriggerBindings(args): readonly TriggerBinding[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "byParameterKey",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "byParameterKey(left, right): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "customEventName",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "customEventName(trigger): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredByName",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredByName(desired, kind): Map<string, GoogleTagManagerDesiredResource>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredBySlug",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredBySlug(desired, kind): Map<string, GoogleTagManagerDesiredResource>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredParameterValue",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredParameterValue(args): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "desiredPayload",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "desiredPayload(resource): GoogleTagManagerJsonObject | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "findParameterValue",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "findParameterValue(parameters, key): string | number | boolean | readonly string[] | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "folderSlug",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "folderSlug(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "folderSlugForResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "folderSlugForResource(resource, folderBindings): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "inferSlugFromNamespacedName",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "inferSlugFromNamespacedName(args): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRecord(value): value is GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "managedByDesired",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "managedByDesired(desiredResource, inferredSlug): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mapParameterValue",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mapParameterValue(parameterMap, key, variableSlugByName): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeConsentSettings",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeConsentSettings(value): GoogleTagManagerJsonObject | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeGa4EventSettingsTable",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeGa4EventSettingsTable(args): readonly { key: string; value: unknown }[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeGoogleTagManagerApiSnapshot",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeGoogleTagManagerApiSnapshot(args): GoogleTagManagerRemoteSnapshot",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeParameters",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeParameters(parameters): readonly { key: string; value: unknown }[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeSettingsTable",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeSettingsTable(args): readonly { key: string; value: unknown }[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeTagParameters",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeTagParameters(args): readonly { key: string; value: unknown }[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeVariableParameters",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeVariableParameters(args): readonly { key: string; value: unknown }[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleTagManagerApiSnapshot",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readGoogleTagManagerApiSnapshot(args): Promise<GoogleTagManagerApiSnapshot>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleTagManagerRemoteSnapshot",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readGoogleTagManagerRemoteSnapshot(args): Promise<GoogleTagManagerRemoteSnapshot>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "remoteBuiltInVariableResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "remoteBuiltInVariableResource(args): GoogleTagManagerRemoteResource",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "remoteFolderResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "remoteFolderResource(args): GoogleTagManagerRemoteResource",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "remoteId",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "remoteId(resource, idField): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "remoteTagResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "remoteTagResource(args): GoogleTagManagerRemoteResource",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "remoteTriggerResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "remoteTriggerResource(args): GoogleTagManagerRemoteResource",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "remoteVariableResource",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "remoteVariableResource(args): GoogleTagManagerRemoteResource",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "renderedParameterValue",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "renderedParameterValue(value, variableSlugByName): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resourceFingerprint",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resourceFingerprint(resource): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stringField",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stringField(value, key): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "triggerSlugForId",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "triggerSlugForId(triggerId, triggerBindings): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "variableReference",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "variableReference(value, variableSlugByName): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "arrayField",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "arrayField(value, key): readonly unknown[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertNoCompilerError",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertNoCompilerError(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertNoSyncConflict",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertNoSyncConflict(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "booleanField",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "booleanField(value, key): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "containerVersion",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "containerVersion(response): GoogleTagManagerJsonObject | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleTagManagerContainerVersion",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGoogleTagManagerContainerVersion(args): Promise<GoogleTagManagerCreateVersionReceipt>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasMergeConflicts",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hasMergeConflicts(value): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRecord(value): value is GoogleTagManagerJsonObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "previewGoogleTagManagerWorkspace",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "previewGoogleTagManagerWorkspace(args): Promise<GoogleTagManagerPreviewReceipt>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "publishGoogleTagManagerContainerVersion",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "publishGoogleTagManagerContainerVersion(args): Promise<GoogleTagManagerPublishReceipt>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveWorkspace",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveWorkspace(args): Promise<GoogleTagManagerWorkspace>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rollbackGoogleTagManagerContainerVersion",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "rollbackGoogleTagManagerContainerVersion(args): Promise<GoogleTagManagerRollbackReceipt>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stringField",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stringField(value, key): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "versionIdFromVersion",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "versionIdFromVersion(version): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "versionPathFromVersion",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "versionPathFromVersion(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "workspaceIdFromWorkspace",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "workspaceIdFromWorkspace(workspace): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "workspacePathFromWorkspace",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "workspacePathFromWorkspace(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureDir",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/utils/fs.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureDir(dirPath): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readJson",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/utils/fs.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readJson(filePath): Promise<T>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeJson",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/utils/fs.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "writeJson(filePath, data, indent): Promise<void>",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:3293546a1eb2"
+}

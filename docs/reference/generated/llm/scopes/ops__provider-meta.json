@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/provider-meta/package.json",
+    "compilerDescriptor": null
+  },
+  "summary": {
+    "scopeId": "ops/provider-meta",
+    "kind": "ops-tooling",
+    "operationCount": 0,
+    "tokenCount": 0,
+    "aliasCount": 2,
+    "validationCapabilityCount": 7,
+    "relevantDocCount": 1
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-scope-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/provider-meta/package.json"
+  ],
+  "records": {
+    "scope": {
+      "scopeId": "ops/provider-meta",
+      "kind": "ops-tooling",
+      "packageName": "@unisane/provider-meta",
+      "packageDir": "packages/provider-meta",
+      "deployableId": null,
+      "deployableKind": null
+    },
+    "aliases": [
+      "@unisane/provider-meta",
+      "provider-meta"
+    ],
+    "operations": [],
+    "tokens": [],
+    "entryPoints": [
+      "packages/provider-meta/src/index.ts"
+    ],
+    "validationCapabilities": [
+      "build",
+      "check-types",
+      "dev",
+      "lint",
+      "prepublishOnly",
+      "test",
+      "validate"
+    ],
+    "relevantDocs": [
+      "packages/provider-meta/README.md"
+    ],
+    "contractFiles": [],
+    "paths": [
+      "packages/provider-meta"
+    ]
+  },
+  "generatedAt": "content-hash:3008be203f1c"
+}

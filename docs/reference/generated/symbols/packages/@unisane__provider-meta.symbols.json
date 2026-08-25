@@ -1,0 +1,435 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/provider-meta/package.json",
+    "sourceRoot": "packages/provider-meta"
+  },
+  "summary": {
+    "package": "@unisane/provider-meta",
+    "owner": "ops/provider-meta",
+    "packageDir": "packages/provider-meta",
+    "sourceFileCount": 7,
+    "symbolCount": 35,
+    "functionCount": 35,
+    "publicFunctionCount": 10,
+    "internalFunctionCount": 25,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/provider-meta",
+    "packages/provider-meta/package.json"
+  ],
+  "records": [
+    {
+      "name": "accountPath",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/asset-uploader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "accountPath(accountId): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "imageHash",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/asset-uploader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "imageHash(value, fallbackKey): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseProviderResponse",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/asset-uploader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseProviderResponse(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "uploadMetaAdsAsset",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/asset-uploader.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "uploadMetaAdsAsset(options): Promise<MarketingAdsAssetProviderUploadResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "videoId",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/asset-uploader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "videoId(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asArray",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/graph-utils.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "asArray(value): unknown[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/graph-utils.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "asRecord(value): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "optionalString",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/graph-utils.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "optionalString(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectMetaSocialInventory",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/inventory.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "collectMetaSocialInventory(args): Promise<MetaSocialInventory>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchGraphRows",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fetchGraphRows(args): Promise<unknown[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseBusiness",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseBusiness(value): MetaSocialInventoryResource | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parsePageAndInstagram",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parsePageAndInstagram(value): MetaSocialInventoryResource[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGraphJson",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/inventory.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readGraphJson(args): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "absoluteFinalUrl",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "absoluteFinalUrl(origin, value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "asRecord(value): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertReviewedMetaBuildout",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertReviewedMetaBuildout(buildout): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createMetaAdsCampaignControlAdapter",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createMetaAdsCampaignControlAdapter(options)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createPausedMetaAdsCampaign",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createPausedMetaAdsCampaign(args): Promise<{ providerOperationId?: string; message: string }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeMetaAdsLiveOperation",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "executeMetaAdsLiveOperation(options): Promise<MarketingAdsLiveProviderExecutionResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isMetaReviewPlaceholder",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isMetaReviewPlaceholder(value): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaAccountPath",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "metaAccountPath(accountId): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaAdSetTargeting",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "metaAdSetTargeting(buildout): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaAdsName",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "metaAdsName(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaObjectStorySpec",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "metaObjectStorySpec(args): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaResultId",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "metaResultId(body, errorCode): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "minorUnitsFromDailyBudgetAmount",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "minorUnitsFromDailyBudgetAmount(value): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mutateMetaAds",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mutateMetaAds(args): Promise<Record<string, unknown>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseProviderResponse",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseProviderResponse(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pauseMetaAdsCampaign",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pauseMetaAdsCampaign(args): Promise<MetaAdsCampaignPauseResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readMetaAdsCampaignStatus",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readMetaAdsCampaignStatus(args): Promise<'paused' | 'active' | 'unknown'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readProviderResponse",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readProviderResponse(response, code, label): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "nextPageUrl",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/report-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "nextPageUrl(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pullMetaAdsReport",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/report-pull.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pullMetaAdsReport(input): Promise<ProviderApiPullPayload<'meta-ads'>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readJsonResponse",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/report-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readJsonResponse(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveMetaAdsReportType",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/report-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveMetaAdsReportType(input): MetaAdsReportType",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:711cb69a44c3"
+}

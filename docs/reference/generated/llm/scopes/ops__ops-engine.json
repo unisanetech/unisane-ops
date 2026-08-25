@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/ops-engine/package.json",
+    "compilerDescriptor": null
+  },
+  "summary": {
+    "scopeId": "ops/ops-engine",
+    "kind": "ops-tooling",
+    "operationCount": 0,
+    "tokenCount": 0,
+    "aliasCount": 2,
+    "validationCapabilityCount": 6,
+    "relevantDocCount": 1
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-scope-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/ops-engine/package.json"
+  ],
+  "records": {
+    "scope": {
+      "scopeId": "ops/ops-engine",
+      "kind": "ops-tooling",
+      "packageName": "@unisane/ops-engine",
+      "packageDir": "packages/ops-engine",
+      "deployableId": null,
+      "deployableKind": null
+    },
+    "aliases": [
+      "@unisane/ops-engine",
+      "ops-engine"
+    ],
+    "operations": [],
+    "tokens": [],
+    "entryPoints": [
+      "packages/ops-engine/src/index.ts"
+    ],
+    "validationCapabilities": [
+      "build",
+      "check-types",
+      "dev",
+      "lint",
+      "prepublishOnly",
+      "test"
+    ],
+    "relevantDocs": [
+      "packages/ops-engine/README.md"
+    ],
+    "contractFiles": [],
+    "paths": [
+      "packages/ops-engine"
+    ]
+  },
+  "generatedAt": "content-hash:0ff8d4b0024b"
+}

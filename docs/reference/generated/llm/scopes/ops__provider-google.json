@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/provider-google/package.json",
+    "compilerDescriptor": null
+  },
+  "summary": {
+    "scopeId": "ops/provider-google",
+    "kind": "ops-tooling",
+    "operationCount": 0,
+    "tokenCount": 0,
+    "aliasCount": 2,
+    "validationCapabilityCount": 6,
+    "relevantDocCount": 1
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-scope-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/provider-google/package.json"
+  ],
+  "records": {
+    "scope": {
+      "scopeId": "ops/provider-google",
+      "kind": "ops-tooling",
+      "packageName": "@unisane/provider-google",
+      "packageDir": "packages/provider-google",
+      "deployableId": null,
+      "deployableKind": null
+    },
+    "aliases": [
+      "@unisane/provider-google",
+      "provider-google"
+    ],
+    "operations": [],
+    "tokens": [],
+    "entryPoints": [
+      "packages/provider-google/src/index.ts"
+    ],
+    "validationCapabilities": [
+      "build",
+      "check-types",
+      "dev",
+      "lint",
+      "prepublishOnly",
+      "test"
+    ],
+    "relevantDocs": [
+      "packages/provider-google/README.md"
+    ],
+    "contractFiles": [],
+    "paths": [
+      "packages/provider-google"
+    ]
+  },
+  "generatedAt": "content-hash:4774b5a27c82"
+}

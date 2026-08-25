@@ -1,0 +1,449 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/provider-cloudflare/package.json",
+    "sourceRoot": "packages/provider-cloudflare"
+  },
+  "summary": {
+    "package": "@unisane/provider-cloudflare",
+    "owner": "ops/provider-cloudflare",
+    "packageDir": "packages/provider-cloudflare",
+    "sourceFileCount": 3,
+    "symbolCount": 31,
+    "functionCount": 31,
+    "publicFunctionCount": 26,
+    "internalFunctionCount": 5,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/provider-cloudflare",
+    "packages/provider-cloudflare/package.json"
+  ],
+  "records": [
+    {
+      "name": "commandResult",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/handlers/connection.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "commandResult(args): PackCommandResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseArguments",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/handlers/connection.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "parseArguments(argv): ParsedArguments",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCloudflareConnectionCheck",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/handlers/connection.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCloudflareConnectionCheck(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudflareConnectionProvider",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCloudflareConnectionProvider(options): CloudflareConnectionProvider",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudflareDnsProvider",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCloudflareDnsProvider(options): CloudDnsProvider",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudflareResourceProvider",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCloudflareResourceProvider(options): CloudflareMutationProvider",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "encodeQuery",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "encodeQuery(params): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.createDnsRecord",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.createDnsRecord(zoneId, record): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.createQueue",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.createQueue(accountId, queue): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.createQueueConsumer",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.createQueueConsumer(accountId, queueId, scriptName): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.createWorkerRoute",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.createWorkerRoute(zoneId, route): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.listAccounts",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.listAccounts(): Promise<CloudDnsAccount[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.listDnsRecords",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.listDnsRecords(zone): Promise<CloudDnsRecord[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.listQueues",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.listQueues(accountId): Promise<CloudflareQueueInventory[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.listWorkerCronTriggers",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.listWorkerCronTriggers(accountId, scriptName): Promise<CloudflareWorkerCronInventory[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.listWorkerRoutes",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.listWorkerRoutes(zone): Promise<CloudflareWorkerRouteInventory[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.listWorkers",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.listWorkers(accountId): Promise<CloudflareWorkerInventory[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.listWorkerSettings",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.listWorkerSettings(accountId, scriptName): Promise<CloudflareWorkerSettings>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.listZones",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.listZones(args): Promise<CloudDnsZone[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.putWorkerCronTriggers",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.putWorkerCronTriggers(accountId, scriptName, crons): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.putWorkerScript",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.putWorkerScript(accountId, scriptName, script): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.putWorkerSecret",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.putWorkerSecret(accountId, scriptName, secret): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.request",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.request(requestPath, resultSchema, init): Promise<{ result: unknown; totalPages: number | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.updateDnsRecord",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.updateDnsRecord(zoneId, recordId, record): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.updateWorkerRoute",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.updateWorkerRoute(zoneId, routeId, route): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.updateWorkerSettings",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.updateWorkerSettings(accountId, scriptName, settings): Promise<{ id: string | null }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.verifyConnection",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.verifyConnection(): Promise<CloudflareConnectionVerification>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "FetchCloudflareProvider.verifyToken",
+      "kind": "method",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "FetchCloudflareProvider.verifyToken(): Promise<CloudflareConnectionVerification>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeDnsRecord",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeDnsRecord(record, zone): CloudDnsRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireToken",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/index.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "requireToken(token): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requireCloudflareConnectionBinding",
+      "kind": "function",
+      "package": "@unisane/provider-cloudflare",
+      "owner": "ops/provider-cloudflare",
+      "file": "packages/provider-cloudflare/src/runtime.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "requireCloudflareConnectionBinding(input): CloudflareConnectionRuntimeBinding",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:7edc9e519167"
+}

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/hosted-postgresql/package.json",
+    "compilerDescriptor": null
+  },
+  "summary": {
+    "scopeId": "ops/hosted-postgresql",
+    "kind": "ops-tooling",
+    "operationCount": 0,
+    "tokenCount": 0,
+    "aliasCount": 2,
+    "validationCapabilityCount": 5,
+    "relevantDocCount": 1
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-scope-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/hosted-postgresql/package.json"
+  ],
+  "records": {
+    "scope": {
+      "scopeId": "ops/hosted-postgresql",
+      "kind": "ops-tooling",
+      "packageName": "@unisane/ops-hosted-postgresql",
+      "packageDir": "packages/hosted-postgresql",
+      "deployableId": null,
+      "deployableKind": null
+    },
+    "aliases": [
+      "@unisane/ops-hosted-postgresql",
+      "hosted-postgresql"
+    ],
+    "operations": [],
+    "tokens": [],
+    "entryPoints": [
+      "packages/hosted-postgresql/src/index.ts"
+    ],
+    "validationCapabilities": [
+      "build",
+      "check-types",
+      "lint",
+      "prepublishOnly",
+      "test"
+    ],
+    "relevantDocs": [
+      "packages/hosted-postgresql/README.md"
+    ],
+    "contractFiles": [],
+    "paths": [
+      "packages/hosted-postgresql"
+    ]
+  },
+  "generatedAt": "content-hash:931c644c6029"
+}

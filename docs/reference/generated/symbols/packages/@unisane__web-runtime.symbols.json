@@ -1,0 +1,1623 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/web-runtime/package.json",
+    "sourceRoot": "packages/web-runtime"
+  },
+  "summary": {
+    "package": "@unisane/web-runtime",
+    "owner": "ops/web-runtime",
+    "packageDir": "packages/web-runtime",
+    "sourceFileCount": 61,
+    "symbolCount": 129,
+    "functionCount": 129,
+    "publicFunctionCount": 87,
+    "internalFunctionCount": 42,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/web-runtime",
+    "packages/web-runtime/package.json"
+  ],
+  "records": [
+    {
+      "name": "defineWebConversionConfig",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineWebConversionConfig(config): WebConversionConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveWebConversionConfig",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveWebConversionConfig(config): ResolvedWebConversionConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createConversionClient",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/conversion-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createConversionClient(args): WebConversionClient<TMap>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeOptionalString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/conversion-envelope.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeOptionalString(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeRequiredString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/conversion-envelope.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeRequiredString(value, fieldName): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebConversionEnvelope",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/conversion-envelope.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebConversionEnvelope(args): WebConversionEnvelope",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebConversionProperties",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/conversion-envelope.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeWebConversionProperties(args): Record<string, WebConversionValue> | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isTransactionIdRequiredForWebConversionEvent",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/conversion-event-map.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "isTransactionIdRequiredForWebConversionEvent(name, requiredEvents): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebConversionEventName",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/conversion-event-map.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebConversionEventName(name): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createWebConversionDedupeKey",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/dedupe-key.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createWebConversionDedupeKey(envelope): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createWebConversionEventId",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/event-id.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createWebConversionEventId(prefix): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebConversionEventId",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/event-id.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebConversionEventId(eventId): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "randomSegment",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/event-id.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "randomSegment(): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeGoogleAdsApiVersion",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeGoogleAdsApiVersion(apiVersion): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeGoogleAdsConversionActionConfig",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeGoogleAdsConversionActionConfig(value): GoogleAdsConversionActionConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeGoogleAdsCustomerId",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeGoogleAdsCustomerId(customerId): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeRequiredString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/config.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeRequiredString(value, fieldName): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGoogleAdsConversionActionResourceName",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveGoogleAdsConversionActionResourceName(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateGoogleAdsWebConversionTransportConfig",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validateGoogleAdsWebConversionTransportConfig(config): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultHttpClient",
+      "kind": "const-function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-http-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultHttpClient(url, init): GoogleAdsHttpClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readResponseBody",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-http-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readResponseBody(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "uploadGoogleAdsClickConversions",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-http-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "uploadGoogleAdsClickConversions(args): Promise<GoogleAdsUploadClickConversionsResponse>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "formatGoogleAdsDateTime",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "formatGoogleAdsDateTime(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasGoogleAdsAttribution",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hasGoogleAdsAttribution(conversion): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mapWebConversionEnvelopeToGoogleAdsClickConversion",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-payload.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "mapWebConversionEnvelopeToGoogleAdsClickConversion(args): GoogleAdsClickConversion | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleAdsConversionAction",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readGoogleAdsConversionAction(args): GoogleAdsConversionActionMap[string] | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readPropertyConsent",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readPropertyConsent(properties, keys): 'GRANTED' | 'DENIED' | 'UNSPECIFIED' | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readPropertyString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readPropertyString(properties, keys): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveUserIdentifiers",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/google-ads-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveUserIdentifiers(properties): GoogleAdsClickConversion['userIdentifiers']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsWebConversionTransport",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/send-google-ads-conversion.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGoogleAdsWebConversionTransport(config): WebConversionTransport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sendGoogleAdsWebConversion",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/send-google-ads-conversion.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "sendGoogleAdsWebConversion(args): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashGoogleAdsEmail",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/user-identifiers.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "hashGoogleAdsEmail(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashGoogleAdsPhoneNumber",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/user-identifiers.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "hashGoogleAdsPhoneNumber(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeGoogleAdsEmail",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/user-identifiers.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeGoogleAdsEmail(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeGoogleAdsPhoneNumber",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/user-identifiers.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeGoogleAdsPhoneNumber(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sha256",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/google-ads/user-identifiers.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sha256(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebConversionItem",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/item-normalization.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebConversionItem(item): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebConversionItems",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/item-normalization.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebConversionItems(items): readonly Record<string, unknown>[] | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeMetaCapiApiVersion",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeMetaCapiApiVersion(apiVersion): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeMetaCapiPixelId",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeMetaCapiPixelId(pixelId): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeRequiredString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/config.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeRequiredString(value, fieldName): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateMetaCapiWebConversionTransportConfig",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validateMetaCapiWebConversionTransportConfig(config): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultHttpClient",
+      "kind": "const-function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-http-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultHttpClient(url, init): MetaCapiHttpClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readResponseBody",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-http-client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readResponseBody(response): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "uploadMetaCapiEvents",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-http-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "uploadMetaCapiEvents(args): Promise<MetaCapiEventsResponse>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasMetaCapiAttribution",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hasMetaCapiAttribution(userData): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mapWebConversionEnvelopeToMetaCapiEvent",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-payload.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "mapWebConversionEnvelopeToMetaCapiEvent(args): MetaCapiEvent | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readMetaCapiEventName",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readMetaCapiEventName(args): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readPropertyString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readPropertyString(properties, keys): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveContentIds",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveContentIds(items): string[] | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveEventSourceUrl",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveEventSourceUrl(envelope, config, properties): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveEventTime",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveEventTime(value): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveUserData",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/meta-capi-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveUserData(envelope, properties): MetaCapiUserData",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createMetaCapiWebConversionTransport",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/send-meta-capi-conversion.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createMetaCapiWebConversionTransport(config): WebConversionTransport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sendMetaCapiWebConversion",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/send-meta-capi-conversion.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "sendMetaCapiWebConversion(args): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashMetaCapiEmail",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/user-data.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "hashMetaCapiEmail(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashMetaCapiExternalId",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/user-data.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "hashMetaCapiExternalId(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashMetaCapiPhoneNumber",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/user-data.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "hashMetaCapiPhoneNumber(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeMetaCapiEmail",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/user-data.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeMetaCapiEmail(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeMetaCapiExternalId",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/user-data.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeMetaCapiExternalId(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeMetaCapiPhoneNumber",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/user-data.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeMetaCapiPhoneNumber(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sha256",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/meta/user-data.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sha256(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sendConversionEvent",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/send-conversion-event.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "sendConversionEvent(args): Promise<WebConversionEnvelope>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeParamsToSnakeCase",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/snake-case.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeParamsToSnakeCase(params): Record<string, WebConversionValue>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "toSnakeCase",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/snake-case.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "toSnakeCase(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createConversionRecorder",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/testing/conversion-recorder.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createConversionRecorder(): WebConversionRecorder",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createTestConversionClient",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/testing/create-test-conversion-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createTestConversionClient(args)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createWebConversionTransactionId",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/transaction-id.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createWebConversionTransactionId(prefix): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebConversionTransactionId",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/transaction-id.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebConversionTransactionId(transactionId): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "randomSegment",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/transaction-id.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "randomSegment(): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeOptionalString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/value-normalization.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeOptionalString(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebConversionCurrency",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/value-normalization.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebConversionCurrency(args): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebConversionValue",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/conversions/value-normalization.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebConversionValue(value): number | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildAlternateLanguageUrls",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/canonical-url.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildAlternateLanguageUrls(siteUrl, alternates): Record<string, string> | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildCanonicalUrl",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/canonical-url.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildCanonicalUrl(siteUrl, path): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isAbsoluteUrl",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/canonical-url.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isAbsoluteUrl(value): value is SeoAbsoluteUrl",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveSeoUrl",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/canonical-url.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveSeoUrl(siteUrl, value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "trimTrailingSlash",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/canonical-url.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "trimTrailingSlash(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createOrganizationJsonLd",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/json-ld.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createOrganizationJsonLd(site, input): JsonLd",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createSoftwareApplicationJsonLd",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/json-ld.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createSoftwareApplicationJsonLd(site, input): JsonLd",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createWebSiteJsonLd",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/json-ld.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createWebSiteJsonLd(site, input): JsonLd",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createNoIndexMetadata",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/page-metadata.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createNoIndexMetadata(site, page): Metadata",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createNoIndexRobotsMetadata",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/page-metadata.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createNoIndexRobotsMetadata(): Metadata",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createPageMetadata",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/page-metadata.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createPageMetadata(site, page): Metadata",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isIndexEnabled",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/page-metadata.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isIndexEnabled(site, page): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createRobots",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/robots.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createRobots(site, input): MetadataRoute.Robots",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createSiteMetadata",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/site-metadata.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createSiteMetadata(site): Metadata",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createSitemap",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/seo/sitemap.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createSitemap(site, entries): MetadataRoute.Sitemap",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildCookieString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/attribution.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "buildCookieString(name, value, options): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createBrowserCookieAttributionStore",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/attribution.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createBrowserCookieAttributionStore(options): { read: () => WebTrackingAttributionState; write: (state: WebTrackingAttributionState) => void; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createFbcValue",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/attribution.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createFbcValue(fbclid, now): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mergeWebTrackingAttributionFromSearch",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/attribution.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "mergeWebTrackingAttributionFromSearch(args): WebTrackingAttributionState",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCookieString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/attribution.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseCookieString(cookieString): Record<string, string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readWebTrackingAttributionFromCookies",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/attribution.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readWebTrackingAttributionFromCookies(cookieString): WebTrackingAttributionState",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createEventDedupeKey",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createEventDedupeKey(input): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createPageViewDedupeKey",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/client.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createPageViewDedupeKey(input, fallbackPath): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createWebTrackingClient",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createWebTrackingClient(args): WebTrackingClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineWebTrackingConfig",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineWebTrackingConfig(config): WebTrackingConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveWebTrackingConfig",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/config.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveWebTrackingConfig(config): ResolvedWebTrackingConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createDefaultWebTrackingConsentState",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/consent.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createDefaultWebTrackingConsentState(overrides): WebTrackingConsentState",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeConsentTransportState",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/consent.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeConsentTransportState(state): Record<string, string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createWebTrackingDedupeStore",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/dedupe.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createWebTrackingDedupeStore(): WebTrackingDedupeStore",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createWebTrackingEventId",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/event-id.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createWebTrackingEventId(prefix): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mergePayloadContext",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/event-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mergePayloadContext(baseContext, eventParams): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeItem",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/event-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeItem(item): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeItems",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/event-payload.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeItems(items): readonly Record<string, unknown>[] | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebTrackingEventPayload",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/event-payload.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebTrackingEventPayload(args): WebTrackingPayload",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeWebTrackingPageViewPayload",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/event-payload.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeWebTrackingPageViewPayload(args): WebTrackingPayload",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "getWebTrackingClient",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/global-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "getWebTrackingClient(): WebTrackingClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resetGlobalWebTrackingClient",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/global-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resetGlobalWebTrackingClient(): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "setGlobalWebTrackingClient",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/global-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "setGlobalWebTrackingClient(client): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "trackWebEvent",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/global-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "trackWebEvent(input): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "trackWebPageView",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/global-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "trackWebPageView(input): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "updateWebTrackingConsent",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/global-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "updateWebTrackingConsent(update, mode): WebTrackingConsentState",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildGtmBootstrapScript",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/next/gtm.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildGtmBootstrapScript(config): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildGtmScriptUrl",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/next/gtm.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildGtmScriptUrl(config): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createBrowserGtmTransport",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/next/gtm.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createBrowserGtmTransport(args): WebTrackingTransport",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureDataLayer",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/next/gtm.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureDataLayer(windowObject, dataLayerName): unknown[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureGtag",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/next/gtm.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureGtag(windowObject, dataLayerName): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "getBrowserPageContext",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/next/gtm.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "getBrowserPageContext(): { pageLocation?: string; pagePath?: string; pageTitle?: string; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "serializeInlineScriptString",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/next/gtm.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "serializeInlineScriptString(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "WebTrackingRuntime",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/next/web-tracking-runtime.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "WebTrackingRuntime({ config })",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "WebTrackingRuntimeInner",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/next/web-tracking-runtime.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "WebTrackingRuntimeInner({ config })",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createNoopWebTrackingClient",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/noop-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createNoopWebTrackingClient(): WebTrackingClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "useOptionalWebTrackingClientContext",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/react/context.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "useOptionalWebTrackingClientContext(): WebTrackingClient | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "WebTrackingProvider",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/react/provider.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "WebTrackingProvider({ client, children, })",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "useWebTracking",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/react/use-web-tracking.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "useWebTracking(): WebTrackingClient",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeParamsToSnakeCase",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/snake-case.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeParamsToSnakeCase(params): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "toSnakeCase",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/tracking/snake-case.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "toSnakeCase(value): string",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:8a20f51f3ba8"
+}

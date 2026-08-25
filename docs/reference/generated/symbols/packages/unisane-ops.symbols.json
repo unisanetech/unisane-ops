@@ -1,0 +1,1487 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/unisane-ops/package.json",
+    "sourceRoot": "packages/unisane-ops"
+  },
+  "summary": {
+    "package": "unisane-ops",
+    "owner": "ops/unisane-ops",
+    "packageDir": "packages/unisane-ops",
+    "sourceFileCount": 24,
+    "symbolCount": 121,
+    "functionCount": 121,
+    "publicFunctionCount": 35,
+    "internalFunctionCount": 86,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/unisane-ops",
+    "packages/unisane-ops/package.json"
+  ],
+  "records": [
+    {
+      "name": "asModuleNamespace",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "asModuleNamespace(input): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "findConfigPath",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "findConfigPath(startDirectory): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRetiredGrowthConfig",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isRetiredGrowthConfig(input): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadUnisaneOpsConfig",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/loader.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "loadUnisaneOpsConfig(cwd): Promise<LoadedUnisaneOpsConfig>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeConfig",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizeConfig(namespace): UnisaneOpsConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCurrentOpsConfig",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseCurrentOpsConfig(input): UnisaneOpsConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCurrentProjectConfig",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseCurrentProjectConfig(input): ReturnType<typeof unisaneProjectConfigSchema.parse>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "retiredGrowthConfigError",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "retiredGrowthConfigError(): Error",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "unwrapDefault",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/loader.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "unwrapDefault(input): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineUnisaneOps",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/schema.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineUnisaneOps(config): UnisaneOpsConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineUnisaneProject",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/schema.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineUnisaneProject(config): UnisaneProjectConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateConfigRelations",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/config/schema.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validateConfigRelations(config, context): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "addGrowth",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/add.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "addGrowth(context, parsed): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "confirmWrite",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/add.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "confirmWrite(context, message): Promise<boolean>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runAdd",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/add.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runAdd(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectedCapabilities",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/add.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "selectedCapabilities(input, existing): GrowthCapability[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "oneOption",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/arguments.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "oneOption(parsed, name): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseArguments",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/arguments.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "parseArguments(argv, contract): ParsedArguments",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "connectionEnvironments",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/check.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "connectionEnvironments(findings, connectionId): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "connectionFailure",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/check.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "connectionFailure(args): OpsReadinessFinding",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCheck",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/check.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runCheck(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "confirmWrite",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/connect.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "confirmWrite(context, message): Promise<boolean>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "option",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/connect.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "option(argv, name): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runConnect",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/connect.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runConnect(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectEnvironment",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/connect.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "selectEnvironment(environmentIds, requested): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "confirmDisconnect",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/disconnect.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "confirmDisconnect(context, message): Promise<boolean>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "option",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/disconnect.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "option(argv, name): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runDisconnect",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/disconnect.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runDisconnect(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectEnvironment",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/disconnect.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "selectEnvironment(environmentIds, requested): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "doctorHelp",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/doctor.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "doctorHelp(): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runDoctor",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/doctor.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runDoctor(context, contributors): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readProjectPackages",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/info.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "readProjectPackages(cwd): readonly UnisanePackageVersion[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "renderHuman",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/info.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "renderHuman(cliVersion, packages): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runInfo",
+      "kind": "const-function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/info.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runInfo(context): PackCommandHandler",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "adoptionMode",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/init.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "adoptionMode(input, priorGrowthState): GrowthAdoptionMode",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "capabilities",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/init.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "capabilities(input): GrowthCapability[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "confirmWrite",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/init.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "confirmWrite(context, message): Promise<boolean>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runOpsInit",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/init.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runOpsInit(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runInspectPacks",
+      "kind": "const-function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/inspect-packs.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runInspectPacks(context): PackCommandHandler",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "installShutdown",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/mcp.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "installShutdown(handle): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requiredOption",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/mcp.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "requiredOption(value, name): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resultByteLimit",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/mcp.ts",
+      "exported": false,
+      "tags": [
+        "handlers"
+      ],
+      "signatureShort": "resultByteLimit(value): number | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runMcpConfigureCodex",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/mcp.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runMcpConfigureCodex(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runMcpServe",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/mcp.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runMcpServe(context, dependencies): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runMigrateGrowthConfig",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/migrate-growth-config.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runMigrateGrowthConfig(context): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "commandResult",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/result.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "commandResult(context, input): PackCommandResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runStatus",
+      "kind": "const-function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/status.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "runStatus(context): PackCommandHandler",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadExactHandler",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/host.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "loadExactHandler(command): Promise<PackCommandHandler>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadFirstPartyPackGraph",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/host.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "loadFirstPartyPackGraph(): readonly PackManifest[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadVerifiedManifest",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/host.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "loadVerifiedManifest(manifestPath, packagePath): PackManifest",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readIdentity",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/host.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readIdentity(path): PackageIdentity",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readJson",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/host.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readJson(path): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "renderHuman",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/host.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "renderHuman(result): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rootHelp",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/host.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "rootHelp(): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runUnisaneOpsCli",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/host.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runUnisaneOpsCli(argv, dependencies): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "absoluteProjectRoot",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "absoluteProjectRoot(projectRoot): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyCodexMcpBinding",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "applyCodexMcpBinding(plan): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "managedSpan",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "managedSpan(source): { start: number; end: number } | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "planCodexMcpBinding",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "planCodexMcpBinding(input): CodexMcpBindingPlan",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "renderCodexMcpBinding",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "renderCodexMcpBinding(input): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stableId",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stableId(value, name): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "tomlString",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "tomlString(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "campaignExecutionResult",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "campaignExecutionResult(input): GrowthCampaignPauseExecutionResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "campaignPauseProviderAdapters",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "campaignPauseProviderAdapters(input): GrowthCampaignPauseProviderAdapters",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "campaignStatus",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "campaignStatus(input): 'paused' | 'active' | 'unknown'",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createLocalGrowthMcpRuntime",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createLocalGrowthMcpRuntime(options, dependencies): Promise<LocalGrowthMcpRuntime>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executionStateRoot",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "executionStateRoot(input): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createInitialOpsConfig",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createInitialOpsConfig(input): UnisaneOpsConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "dependencyNames",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "dependencyNames(document): Set<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "detectOpsProject",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "detectOpsProject(cwd): DetectedOpsProject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureConfigImport",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureConfigImport(source): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "initializeOpsConfigSource",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "initializeOpsConfigSource(args): { configPath: string; mode: 'standalone' | 'framework' }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "packageDocument",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "packageDocument(root): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "projectConfigOf",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "projectConfigOf(config): UnisaneProjectConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordOf",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordOf(input): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "renderFrameworkBlock",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "renderFrameworkBlock(config): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "renderProjectBlock",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "renderProjectBlock(config): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "renderValue",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "renderValue(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "replaceBlock",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "replaceBlock(args): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stableProjectId",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stableProjectId(input): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "updateOpsConfigSource",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "updateOpsConfigSource(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeAtomic",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/config-source.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "writeAtomic(filePath, source): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "enabled",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "enabled(record, key): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "inferCapabilities",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "inferCapabilities(input): GrowthCapability[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadRetiredGrowthConfigInput",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "loadRetiredGrowthConfigInput(args): Promise<{ path: string; value: unknown }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "migrateRetiredGrowthConfig",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "migrateRetiredGrowthConfig(input): GrowthConfig",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "projectPath",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "projectPath(record, key): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordOf",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordOf(input): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "unwrapDefault",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "unwrapDefault(input): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "CanonicalPackRuntime.resolveBinding",
+      "kind": "method",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "CanonicalPackRuntime.resolveBinding(bindingId, input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createArtifactAccess",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createArtifactAccess(args): CloudDnsArtifactAccess",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCanonicalPackRuntime",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCanonicalPackRuntime(): PackCommandRuntime",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCloudflareConnectionArtifactAccess",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createCloudflareConnectionArtifactAccess(args): CloudflareConnectionArtifactAccess",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createEnvironmentSecretResolver",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createEnvironmentSecretResolver(): SecretResolver",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createResourceArtifactAccess",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createResourceArtifactAccess(args): CloudflareResourceArtifactAccess",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createResourceSourceAccess",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createResourceSourceAccess(projectRoot)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isStringArray",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isStringArray(input): input is string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCloudDnsRequest",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseCloudDnsRequest(input): CloudDnsBindingRequest",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCloudflareConnectionRequest",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseCloudflareConnectionRequest(input): CloudflareConnectionBindingRequest",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCloudflareResourceRequest",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseCloudflareResourceRequest(input): CloudflareResourceBindingRequest",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseLifecycleConnectRequest",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseLifecycleConnectRequest(input): { provider: string; packId: string; projectId: string; environmentId: string; recordPath: string; requiredServices: readonly string[]; conte...",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseLifecycleDisconnectRequest",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseLifecycleDisconnectRequest(input): { provider: string; packId: string; projectId: string; environmentId: string; connectionId: string; recordPath: string; context: OpsLifec...",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseLifecycleReadinessRequest",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseLifecycleReadinessRequest(input): { provider: string; projectRoot: string; recordPath: string; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveResourceTarget",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveResourceTarget(args): { context: CloudflareResourceTarget; credentialEnvironmentVariable: string; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveScriptSource",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveScriptSource(args): CloudflareResolvedScriptSource",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveTargetContext",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveTargetContext(args): { context: CloudDnsTargetContext; credentialEnvironmentVariable: string; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectId",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "selectId(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeGoogleMarketing",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "executeGoogleMarketing(cwd, operation, input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeGoogleSeo",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "executeGoogleSeo(operation, input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeGoogleTagManager",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "executeGoogleTagManager(operation, input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeGrowthProviderOperation",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "executeGrowthProviderOperation(cwd, operation, input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeMeta",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "executeMeta(cwd, operation, input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isGrowthProviderBinding",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "isGrowthProviderBinding(bindingId): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordOf",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordOf(input): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "requestOf",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "requestOf(input): GrowthProviderCommandRequest",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGoogleConnectionCredentials",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveGoogleConnectionCredentials(cwd, input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGrowthConnectionsContext",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveGrowthConnectionsContext(cwd, input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGrowthProjectContext",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveGrowthProjectContext(cwd): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveGrowthProviderBinding",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveGrowthProviderBinding(runtime, input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveMetaConnectionToken",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveMetaConnectionToken(cwd, input): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectGrowthEnvironment",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "selectGrowthEnvironment(environments, requested): string",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:2833d5e099e7"
+}

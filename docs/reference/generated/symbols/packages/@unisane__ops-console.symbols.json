@@ -1,0 +1,3194 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "apps/console/package.json",
+    "sourceRoot": "apps/console"
+  },
+  "summary": {
+    "package": "@unisane/ops-console",
+    "owner": "ops-apps/console",
+    "packageDir": "apps/console",
+    "sourceFileCount": 83,
+    "symbolCount": 260,
+    "functionCount": 260,
+    "publicFunctionCount": 152,
+    "internalFunctionCount": 108,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "apps/console",
+    "apps/console/package.json"
+  ],
+  "records": [
+    {
+      "name": "escapeHtml",
+      "kind": "const-function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/app.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "escapeHtml(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "renderMarketingConsoleHtml",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/app.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "renderMarketingConsoleHtml(state, options): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "serializeInlineJson",
+      "kind": "const-function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/app.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "serializeInlineJson(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "App",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/app.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "App()",
+      "layer": "package-layer"
+    },
+    {
+      "name": "stateMatchesQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/app.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stateMatchesQuery(state, query): boolean",
+      "layer": "package-layer"
+    },
+    {
+      "name": "temporalCacheKey",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/app.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "temporalCacheKey(startDate, endDate): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readConsoleBootData",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/bootstrap.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readConsoleBootData(): { state: MarketingConsoleState; shell: ConsoleShellModel; }",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readJson",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/bootstrap.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readJson(id): T",
+      "layer": "package-layer"
+    },
+    {
+      "name": "formatCompactNumber",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/lib/format.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "formatCompactNumber(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "formatDateTime",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/lib/format.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "formatDateTime(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "formatNumber",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/lib/format.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "formatNumber(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "healthStatusLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/lib/format.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "healthStatusLabel(status): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "humanize",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/lib/format.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "humanize(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "outcomeStatusLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/lib/format.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "outcomeStatusLabel(status): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "statusColor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/lib/format.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "statusColor(status): 'success' | 'warning' | 'error' | 'info'",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readConsoleHomePath",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/preferences.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readConsoleHomePath(): ConsoleHomePath",
+      "layer": "package-layer"
+    },
+    {
+      "name": "resetConsolePreferences",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/preferences.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resetConsolePreferences(): void",
+      "layer": "package-layer"
+    },
+    {
+      "name": "writeConsoleHomePath",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/preferences.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "writeConsoleHomePath(path): void",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readHelpSource",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/help-context.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readHelpSource(): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "rememberHelpSource",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/help-context.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "rememberHelpSource(path): void",
+      "layer": "package-layer"
+    },
+    {
+      "name": "useConsoleRoute",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-route.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "useConsoleRoute(capabilities)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "addDays",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "addDays(date, days): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "defaultEndDate",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultEndDate(state): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "defaultQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultQuery(route, state): MarketingConsoleTemporalQuery",
+      "layer": "package-layer"
+    },
+    {
+      "name": "isoDate",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isoDate(date): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "isTemporalQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isTemporalQuery(value): value is MarketingConsoleTemporalQuery",
+      "layer": "package-layer"
+    },
+    {
+      "name": "pathWithRememberedTemporalQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pathWithRememberedTemporalQuery(path, route): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "queryForPreset",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "queryForPreset(preset, endDate): MarketingConsoleTemporalQuery",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readQuery(route, state): MarketingConsoleTemporalQuery",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readRememberedQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readRememberedQuery(route): MarketingConsoleTemporalQuery | undefined",
+      "layer": "package-layer"
+    },
+    {
+      "name": "rememberQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "rememberQuery(route, query): void",
+      "layer": "package-layer"
+    },
+    {
+      "name": "replaceUrlQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "replaceUrlQuery(query): void",
+      "layer": "package-layer"
+    },
+    {
+      "name": "routeHasDateRange",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "routeHasDateRange(route): boolean",
+      "layer": "package-layer"
+    },
+    {
+      "name": "storageKeyForRoute",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "storageKeyForRoute(route): string | undefined",
+      "layer": "package-layer"
+    },
+    {
+      "name": "useConsoleTemporalQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/routing/use-console-temporal-query.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "useConsoleTemporalQuery(route, bootState)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ActivityScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/activity-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ActivityScreen({ state })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/advertising-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingScreen(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "CampaignDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-details-pane.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "CampaignDetailsPane({ campaign, source, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "formatCampaignDate",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-details-pane.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "formatCampaignDate(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "approveCampaignPausePlan",
+      "kind": "const-function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-approval-client.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "approveCampaignPausePlan(input): CampaignPauseApprovalClient",
+      "layer": "package-layer"
+    },
+    {
+      "name": "approvalLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "approvalLabel(review): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "campaignPauseApprovalCopy",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "campaignPauseApprovalCopy(review)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "CampaignPauseApprovalDialog",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "CampaignPauseApprovalDialog({ review, open, state, error, onClose, onApprove, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "CampaignPauseReviewPanel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "CampaignPauseReviewPanel({ review, approvalAvailable = false, approve = approveCampaignPausePlan, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "canApprove",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "canApprove(review, approvalAvailable): boolean",
+      "layer": "package-layer"
+    },
+    {
+      "name": "executionLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "executionLabel(review): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "reviewColor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "reviewColor(status): 'success' | 'warning' | 'error' | 'info' | 'primary'",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ReviewFact",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ReviewFact({ label, value, detail })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "selectCampaignPauseReviews",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "selectCampaignPauseReviews(reviews, platform, campaigns): CampaignPauseReview[]",
+      "layer": "package-layer"
+    },
+    {
+      "name": "verificationLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-pause-review.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "verificationLabel(review): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "campaignCodeLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "campaignCodeLabel(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "campaignDeliveryColor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "campaignDeliveryColor(campaign): 'success' | 'warning' | 'error' | 'secondary'",
+      "layer": "package-layer"
+    },
+    {
+      "name": "campaignDeliveryDetail",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "campaignDeliveryDetail(campaign): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "campaignDeliveryLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "campaignDeliveryLabel(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "campaignDeliveryValue",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "campaignDeliveryValue(campaign): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "campaignReasonLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaign-presenters.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "campaignReasonLabel(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingCampaigns",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaigns.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingCampaigns({ state, route, navigate, openSupportingPane, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "campaignMetric",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaigns.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "campaignMetric(key, header, render, minVisibleWidth, responsivePriority): Column<Campaign>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "compareCampaigns",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/campaigns.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "compareCampaigns(left, right, sort): number",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingChangeHistory",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/change-history.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingChangeHistory({ state, route })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConversionDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/conversion-details-pane.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ConversionDetailsPane({ conversion, source, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "conversionMeasurementColor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/conversion-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "conversionMeasurementColor(conversion): 'success' | 'warning'",
+      "layer": "package-layer"
+    },
+    {
+      "name": "conversionMeasurementLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/conversion-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "conversionMeasurementLabel(conversion): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "conversionNextStep",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/conversion-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "conversionNextStep(conversion): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingConversions",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/conversions.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingConversions({ state, route, navigate, openSupportingPane, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConversionStatus",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/conversions.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ConversionStatus({ conversion })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingDetailFact",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingDetailFact({ label, value })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingDetailMetric",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingDetailMetric({ label, value })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingDetailSection",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingDetailSection({ title, description, children, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingPerformanceFunnel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingPerformanceFunnel({ impressions, clicks, conversions, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingSourceEvidence",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingSourceEvidence({ source, fallbackLabel, fallbackDetail, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "FunnelStep",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/detail-pane-primitives.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "FunnelStep({ label, value, detail })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingEntityDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/entity-details-pane.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingEntityDetailsPane({ entity, source, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "entityDeliveryColor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/entity-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "entityDeliveryColor(value): 'success' | 'warning' | 'error' | 'secondary'",
+      "layer": "package-layer"
+    },
+    {
+      "name": "entityDeliveryLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/entity-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "entityDeliveryLabel(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "entityTypeLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/entity-presenters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "entityTypeLabel(entity): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "entityMetric",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-entities.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "entityMetric(key, header, render, minVisibleWidth, responsivePriority): Column<MarketingConsoleAdvertisingEntity>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "EntityPage",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-entities.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "EntityPage({ entities, sources, headline, detail, sectionTitle, emptyTitle, emptyDescription, selectedEntityId, onSelectEntity, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "EntitySection",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-entities.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "EntitySection({ entities, title, emptyTitle, emptyDescription, showCreative = false, selectedEntityId, onSelectEntity, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "entitySectionItemLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-entities.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "entitySectionItemLabel(title): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetaAdsAndCreatives",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-entities.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetaAdsAndCreatives(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetaAdSets",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-entities.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetaAdSets(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "useAdvertisingEntityPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-entities.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "useAdvertisingEntityPane(openSupportingPane, source)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingOverview",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/overview.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingOverview({ state, route, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingProviderSpendComparison",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/provider-comparison-chart.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingProviderSpendComparison({ providers, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingRecommendations",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/recommendations.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingRecommendations(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "advertisingConnectionPath",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/view.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "advertisingConnectionPath(platform): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "advertisingView",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/view.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "advertisingView(state, route): MarketingConsoleAdvertisingView",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AnalyticsDataTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/analytics-data-table.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AnalyticsDataTable({ rows, firstColumn, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "optionalMetric",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/analytics-data-table.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "optionalMetric(key, header, value, minVisibleWidth, responsivePriority): Column<MarketingConsoleAnalyticsRow>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AnalyticsOverview",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/analytics-screen.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "AnalyticsOverview({ state, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AnalyticsRows",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/analytics-screen.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "AnalyticsRows({ state, navigate, kind, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AnalyticsScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/analytics-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AnalyticsScreen(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "TrackingHealth",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/analytics-screen.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "TrackingHealth(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MeasurementOutcomeComparisons",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/measurement-comparison-charts.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MeasurementOutcomeComparisons({ audit, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "TagManagerWorkspace",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/tag-manager-workspace.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "TagManagerWorkspace({ state, openOverlay, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AutomationsScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/automations-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AutomationsScreen({ state, openOverlay, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ChannelMetrics",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/channels/shared.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ChannelMetrics({ metrics, ids, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "formatMoney",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/channels/shared.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "formatMoney(value, currencyCode): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "formatPercent",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/channels/shared.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "formatPercent(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SourceSummaries",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/channels/shared.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SourceSummaries({ sources })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SourceSummary",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/channels/shared.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SourceSummary({ source })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConnectionCard",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections-screen.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ConnectionCard({ connection, navigate, openOverlay, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConnectionsScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ConnectionsScreen(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ServiceRow",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections-screen.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ServiceRow({ service })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConnectionAccess",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections/connection-detail.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ConnectionAccess({ connection, openOverlay, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConnectionActivity",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections/connection-detail.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ConnectionActivity({ connection, state, navigate, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConnectionDataSync",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections/connection-detail.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ConnectionDataSync({ connection, openOverlay, navigate, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConnectionDetailScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections/connection-detail.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ConnectionDetailScreen(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConnectionOverview",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections/connection-detail.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ConnectionOverview({ connection, openOverlay, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConnectionResources",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections/connection-detail.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ConnectionResources({ connection, openOverlay, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "Detail",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections/connection-detail.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "Detail({ label, value })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ServiceHeading",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections/connection-detail.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ServiceHeading({ service })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ExperimentEmpty",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/experiments/experiments-screen.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ExperimentEmpty({ kind })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ExperimentsScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/experiments/experiments-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ExperimentsScreen({ state, route })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "OverviewFunnel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/overview-insights.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "OverviewFunnel({ funnel, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "RecentOutcomes",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/overview-insights.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "RecentOutcomes({ outcomes, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "OverviewScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/overview-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "OverviewScreen({ state, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoOpportunitiesScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/opportunities.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoOpportunitiesScreen({ state, navigate, openOverlay, openSupportingPane, closeSupportingPane, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoOverviewScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/overview.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoOverviewScreen({ state, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "pageSortValue",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/pages.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "pageSortValue(page, sort)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoPagesScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/pages.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoPagesScreen({ state, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "querySortValue",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/queries.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "querySortValue(query, sort)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoQueriesScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/queries.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoQueriesScreen({ state, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "CompetitorAnalysisDataTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-analysis-data-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "CompetitorAnalysisDataTable({ research, openSupportingPane, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetadataExperimentsDataTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-analysis-data-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetadataExperimentsDataTable({ intelligence, activeRowId, onSelect, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "openMetadataDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-analysis-data-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "openMetadataDetailsPane(row, openSupportingPane, onClose)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "openSerpDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-analysis-data-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "openSerpDetailsPane(row, openSupportingPane, onClose)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SerpLandscapeDataTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-analysis-data-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SerpLandscapeDataTable({ intelligence, activeRowId, onSelect, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ResearchBulletList",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ResearchBulletList({ items, emptyMessage, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ResearchDetailFact",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ResearchDetailFact({ label, value })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ResearchDetailMetric",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ResearchDetailMetric({ label, value, note, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ResearchDetailPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ResearchDetailPane({ ariaLabel, badges, summary, children, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ResearchDetailSection",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ResearchDetailSection({ title, description, children, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ResearchInlineList",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-pane-primitives.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ResearchInlineList({ items, emptyMessage, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ClusterResearchDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-panes.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ClusterResearchDetailsPane({ cluster })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "competitionComparison",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-panes.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "competitionComparison(current, average): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "CompetitorResearchDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-panes.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "CompetitorResearchDetailsPane({ competitor })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "formatBidRange",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-panes.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "formatBidRange(keyword, fallbackCurrency): string | undefined",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MarketResearchDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-panes.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MarketResearchDetailsPane({ market, markets, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetadataExperimentDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-panes.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetadataExperimentDetailsPane({ experiment })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SerpResearchDetailsPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-detail-panes.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SerpResearchDetailsPane({ snapshot })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ClusterTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ClusterTable({ research, openSupportingPane, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "CompetitorTables",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "CompetitorTables({ research, openSupportingPane, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "formatCompetition",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-tables.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "formatCompetition(row): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "KeywordTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "KeywordTable({ rows })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MarketTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MarketTable({ research, openSupportingPane, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "numericColumn",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-tables.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "numericColumn(key, header, value, minVisibleWidth, responsivePriority): Column<T>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "QuestionTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "QuestionTable({ research })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SerpTables",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SerpTables({ intelligence, openSupportingPane, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "averageCompetition",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "averageCompetition(row)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "compareKeywordRows",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "compareKeywordRows(left, right, sort)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoResearchScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/research.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoResearchScreen({ state, openSupportingPane, closeSupportingPane, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "confidenceColor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-opportunity-card.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "confidenceColor(confidence): 'success' | 'warning' | 'info'",
+      "layer": "package-layer"
+    },
+    {
+      "name": "Metric",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-opportunity-card.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "Metric({ label, value })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoOpportunityCard",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-opportunity-card.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoOpportunityCard({ opportunity, selected, actionLabel, onAction, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "recommendationFor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-opportunity-review-pane.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recommendationFor(workflow)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ReviewMetric",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-opportunity-review-pane.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ReviewMetric({ label, value, note })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SectionTitle",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-opportunity-review-pane.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "SectionTitle({ children })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoOpportunityReviewPane",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-opportunity-review-pane.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoOpportunityReviewPane({ opportunity, evidence, workflow, onReviewAction, onResearch, onClose, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "workflowSteps",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-opportunity-review-pane.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "workflowSteps(workflow): Array<{ label: string; value: string; state: StepState; }>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "metricColumn",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-performance-data-tables.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "metricColumn(key, header, value): Column<T>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoPagesDataTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-performance-data-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoPagesDataTable({ pages })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoQueriesDataTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-performance-data-tables.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoQueriesDataTable({ queries })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/seo-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoScreen(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoHealthScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/site-health.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoHealthScreen({ state, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SeoSourceNote",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/seo/source-note.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SeoSourceNote({ state })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SupportScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/support-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SupportScreen(props)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "HelpScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/support/help-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "HelpScreen({ state, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "StatusMeaning",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/support/help-screen.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "StatusMeaning({ status, label, detail, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "Detail",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/support/settings-screen.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "Detail({ label, value })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "SettingsScreen",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/support/settings-screen.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "SettingsScreen({ state, navigate })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ActivityItemCard",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/activity-item-card.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ActivityItemCard({ item })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "AdvertisingPlatformSelector",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/advertising-platform-selector.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "AdvertisingPlatformSelector({ route, navigate, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "CommandDialog",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/command-dialog.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "CommandDialog({ action, onClose, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "barToneClass",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/comparison-bar-chart.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "barToneClass(tone): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ComparisonBarChart",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/comparison-bar-chart.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ComparisonBarChart({ title, description, items, caption, compact = false, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConsoleDataTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/console-data-table.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ConsoleDataTable({ features, pagination, styling, ...props })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ActionGroup",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ActionGroup({ primary, secondary = [], })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConsoleCardGrid",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ConsoleCardGrid({ children, minItemWidth = 'md', })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ContentSection",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ContentSection({ title, description, width = 'full', children, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "DataState",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "DataState({ kind = 'empty', title, description, actionLabel, onAction, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "EvidenceRow",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "EvidenceRow({ title, detail, status, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "InsightCard",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "InsightCard({ badge, tone = 'primary', title, description, evidence, metadata, actionLabel, onAction, density = 'comfortable', selected = false, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetricCard",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetricCard({ label, value, helper, context, comparison, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetricGrid",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetricGrid({ children, minItemWidth = 'sm', layout = 'auto', })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "PageContent",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "PageContent({ density = 'standard', children, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "PageHeader",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "PageHeader({ route })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "StatusBadge",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "StatusBadge({ status, label, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "Summary",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "Summary({ headline, detail, context, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "FilterToolbar",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/controls.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "FilterToolbar({ children, resultCount, totalCount, resultLabel = 'results', isFiltered = false, onClear, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "DataTableListPreview",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/data-table-content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "DataTableListPreview({ items, visibleCount = 2, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "DataTablePrimaryText",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/data-table-content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "DataTablePrimaryText({ children })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "DataTableWrappedText",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/data-table-content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "DataTableWrappedText({ children })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ExpandedDataInlineList",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/data-table-content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ExpandedDataInlineList({ items, emptyMessage = 'No supporting evidence was recorded.', })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ExpandedDataList",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/data-table-content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ExpandedDataList({ items, emptyMessage = 'No supporting evidence was recorded.', })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ExpandedDataSection",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/data-table-content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ExpandedDataSection({ title, children, span = 'auto', })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ExpandedDataTableRow",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/data-table-content.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ExpandedDataTableRow({ title, description, children, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "activePreset",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/date-range-control.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "activePreset(query): ReportingPreset | 'custom'",
+      "layer": "package-layer"
+    },
+    {
+      "name": "dateFromIso",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/date-range-control.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "dateFromIso(value): Date",
+      "layer": "package-layer"
+    },
+    {
+      "name": "DateRangeControl",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/date-range-control.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "DateRangeControl({ query, contextLabel = 'Reporting period', onChange, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "humanDate",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/date-range-control.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "humanDate(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "isoFromDate",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/date-range-control.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isoFromDate(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "queryForReportingPreset",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/date-range-control.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "queryForReportingPreset(preset, endDate): MarketingConsoleTemporalQuery",
+      "layer": "package-layer"
+    },
+    {
+      "name": "sameQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/date-range-control.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sameQuery(left, right)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "threeMonthQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/date-range-control.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "threeMonthQuery(endDate): MarketingConsoleTemporalQuery",
+      "layer": "package-layer"
+    },
+    {
+      "name": "today",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/date-range-control.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "today(): Date",
+      "layer": "package-layer"
+    },
+    {
+      "name": "NarrativeDataTable",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/narrative-data-table.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "NarrativeDataTable({ tableId, data, columns, emptyMessage, emptyIcon, renderExpandedRow, getRowCanExpand, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConsoleOverlayDialog",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/overlays.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ConsoleOverlayDialog({ overlay, state, onClose, onReplace, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "PlatformScopeBar",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/platform-scope-bar.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "PlatformScopeBar({ route, navigate, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "decisionColor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/recommendation-list.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "decisionColor(decision): 'info' | 'success' | 'secondary'",
+      "layer": "package-layer"
+    },
+    {
+      "name": "RecommendationFact",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/recommendation-list.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "RecommendationFact({ label, value })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "RecommendationList",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/recommendation-list.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "RecommendationList({ items, route, navigate, openOverlay, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "severityColor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/recommendation-list.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "severityColor(severity): 'info' | 'warning' | 'error'",
+      "layer": "package-layer"
+    },
+    {
+      "name": "RouteTabs",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/route-tabs.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "RouteTabs({ route, navigate, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "dateFromIso",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/temporal-context-bar.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "dateFromIso(value): Date",
+      "layer": "package-layer"
+    },
+    {
+      "name": "humanDate",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/temporal-context-bar.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "humanDate(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "recordedDate",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/temporal-context-bar.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordedDate(state): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "TemporalContextBar",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/temporal-context-bar.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "TemporalContextBar({ route, state, query, loading, error, onQueryChange, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "temporalPresentation",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shared/temporal-context-bar.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "temporalPresentation(route, state): TemporalPresentation | undefined",
+      "layer": "package-layer"
+    },
+    {
+      "name": "activeItemId",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shell/console-shell.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "activeItemId(route): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "BrandMark",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shell/console-shell.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "BrandMark({ accessibleLabel })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "buildNavigation",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shell/console-shell.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "buildNavigation(shell): NavigationItem[]",
+      "layer": "package-layer"
+    },
+    {
+      "name": "CollapsedBrand",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shell/console-shell.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "CollapsedBrand({ state })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConsoleNavigationLink",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shell/console-shell.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ConsoleNavigationLink({ item, props, navigate, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ConsoleShell",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shell/console-shell.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ConsoleShell({ state, shell, route, navigate, primaryNavigation, supportingPane, onCloseSupportingPane, children, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "ProjectIdentity",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shell/console-shell.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ProjectIdentity({ state })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "topAppBarTitle",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/shell/console-shell.tsx",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "topAppBarTitle(route): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "buildMarketingConsoleApp",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/build.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildMarketingConsoleApp(options): Promise<MarketingConsoleBuildResult>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "candidateBrowserAssetPaths",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/build.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "candidateBrowserAssetPaths(startDirectory, fileName): string[]",
+      "layer": "package-layer"
+    },
+    {
+      "name": "copyBrowserAssets",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/build.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "copyBrowserAssets(sourceDirectory, outputDirectory): Promise<void>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "fileExists",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/build.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fileExists(filePath): Promise<boolean>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "listFiles",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/build.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "listFiles(directoryPath): Promise<string[]>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "resolveBrowserAssetPath",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/build.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveBrowserAssetPath(fileName): Promise<string>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "errorDetails",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/campaign-pause-approval-action.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "errorDetails(error): { code: string; message: string; statusCode: number }",
+      "layer": "package-layer"
+    },
+    {
+      "name": "handleCampaignPauseApprovalRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/campaign-pause-approval-action.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "handleCampaignPauseApprovalRequest(request, response, approve): Promise<boolean>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "parseRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/campaign-pause-approval-action.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseRequest(input): CampaignPauseApprovalRequest",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readBody",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/campaign-pause-approval-action.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readBody(request): Promise<unknown>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "reject",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/campaign-pause-approval-action.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "reject(response, statusCode, code, message): true",
+      "layer": "package-layer"
+    },
+    {
+      "name": "requestIsSameOrigin",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/campaign-pause-approval-action.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "requestIsSameOrigin(request): boolean",
+      "layer": "package-layer"
+    },
+    {
+      "name": "sendJson",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/campaign-pause-approval-action.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sendJson(response, statusCode, body): void",
+      "layer": "package-layer"
+    },
+    {
+      "name": "parsePositiveInteger",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/handler.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parsePositiveInteger(value, fallback, name): number",
+      "layer": "package-layer"
+    },
+    {
+      "name": "runGrowthConsole",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/handler.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runGrowthConsole(context): Promise<PackCommandResult>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "advertisingPlatformLabel",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "advertisingPlatformLabel(platform): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "advertisingPlatformRoutes",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "advertisingPlatformRoutes(routeValue): readonly ConsoleRoute[]",
+      "layer": "package-layer"
+    },
+    {
+      "name": "advertisingRoute",
+      "kind": "const-function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "advertisingRoute(platform, section, label, title, description, temporalMode): ConsoleRoute",
+      "layer": "package-layer"
+    },
+    {
+      "name": "advertisingRoutes",
+      "kind": "const-function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "advertisingRoutes(platform): readonly ConsoleRoute[]",
+      "layer": "package-layer"
+    },
+    {
+      "name": "connectionRoute",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "connectionRoute(pathname): ConsoleRoute | undefined",
+      "layer": "package-layer"
+    },
+    {
+      "name": "consoleNavigation",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "consoleNavigation(capabilities): readonly ConsoleNavigationGroup[]",
+      "layer": "package-layer"
+    },
+    {
+      "name": "humanize",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "humanize(value): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "normalizePath",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "normalizePath(pathname): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "resolveConsoleRoute",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveConsoleRoute(pathname, capabilities): ConsoleRoute",
+      "layer": "package-layer"
+    },
+    {
+      "name": "route",
+      "kind": "const-function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "route(id, path, family, label, title, description, temporalMode): ConsoleRoute",
+      "layer": "package-layer"
+    },
+    {
+      "name": "tabsForRoute",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/routes.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "tabsForRoute(routeValue): readonly ConsoleRoute[]",
+      "layer": "package-layer"
+    },
+    {
+      "name": "contentTypeFor",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/serve.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "contentTypeFor(filePath): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "readableFile",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/serve.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readableFile(filePath): Promise<boolean>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "resolveFilePath",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/serve.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveFilePath(rootDirectory, requestedPath): string",
+      "layer": "package-layer"
+    },
+    {
+      "name": "serveMarketingConsoleApp",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/serve.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "serveMarketingConsoleApp(options): Promise<MarketingConsoleServeResult>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "handleTemporalStateRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/temporal-state.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "handleTemporalStateRequest(request, response, requestUrl, options): Promise<boolean>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "parseTemporalQuery",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/temporal-state.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseTemporalQuery(url): MarketingConsoleTemporalQuery",
+      "layer": "package-layer"
+    }
+  ],
+  "generatedAt": "content-hash:33943528c46e"
+}

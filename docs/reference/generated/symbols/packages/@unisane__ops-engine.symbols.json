@@ -1,0 +1,1896 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/ops-engine/package.json",
+    "sourceRoot": "packages/ops-engine"
+  },
+  "summary": {
+    "package": "@unisane/ops-engine",
+    "owner": "ops/ops-engine",
+    "packageDir": "packages/ops-engine",
+    "sourceFileCount": 17,
+    "symbolCount": 146,
+    "functionCount": 146,
+    "publicFunctionCount": 104,
+    "internalFunctionCount": 42,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/ops-engine",
+    "packages/ops-engine/package.json"
+  ],
+  "records": [
+    {
+      "name": "createOpsReadActionRequest",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/actions.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createOpsReadActionRequest(input): OpsReadActionRequest",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineOpsMutationAction",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/actions.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineOpsMutationAction(definition): OpsMutationActionDefinition< TPlanInputSchema, TPlanOutputSchema, TApplyInputSchema, TApplyOutputSchema, TVerifyInputSchema, TVerifyOutputSc...",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineOpsReadAction",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/actions.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineOpsReadAction(definition): OpsReadActionDefinition<TInputSchema, TOutputSchema>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "approvalPolicyForControlPlaneRisk",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "approvalPolicyForControlPlaneRisk(risk): ControlPlaneApprovalPolicy",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertControlPlaneApproval",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertControlPlaneApproval(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertControlPlaneProductionConfirmation",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertControlPlaneProductionConfirmation(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assessControlPlaneArtifactFreshness",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assessControlPlaneArtifactFreshness(args): ControlPlaneArtifactFreshness",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "classifyControlPlaneMutationRisk",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "classifyControlPlaneMutationRisk(args): ControlPlaneMutationRisk",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "controlPlaneSafeArtifactStamp",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "controlPlaneSafeArtifactStamp(date): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "controlPlaneSetupReady",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "controlPlaneSetupReady(checks): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createControlPlaneAuthProfile",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createControlPlaneAuthProfile(args): ControlPlaneAuthProfile",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createControlPlaneInventoryArtifact",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createControlPlaneInventoryArtifact(args): ControlPlaneInventoryArtifact<TResource>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureControlPlanePathInsideCwd",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "ensureControlPlanePathInsideCwd(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "expectedControlPlaneProductionConfirmation",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "expectedControlPlaneProductionConfirmation(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasRequiredControlPlaneScopes",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "hasRequiredControlPlaneScopes(args): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "highestControlPlaneMutationRisk",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "highestControlPlaneMutationRisk(risks): ControlPlaneMutationRisk",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isControlPlaneSecretName",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "isControlPlaneSecretName(name): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "missingControlPlaneAuthProfile",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "missingControlPlaneAuthProfile(args): ControlPlaneAuthProfile",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "providerArtifactRelativePath",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "providerArtifactRelativePath(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "publicControlPlaneEnvEntry",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "publicControlPlaneEnvEntry(entry): ControlPlaneEnvEntry",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "redactControlPlaneObject",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "redactControlPlaneObject(value): T",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "redactControlPlaneSecret",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "redactControlPlaneSecret(value): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveControlPlaneArtifactPath",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveControlPlaneArtifactPath(args): ControlPlaneJsonArtifact",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveControlPlaneProviderContext",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveControlPlaneProviderContext(args): ControlPlaneProviderContext",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "safeSegment",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "safeSegment(value, label): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "suiteArtifactRelativePath",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "suiteArtifactRelativePath(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "summarizeControlPlanePlanActions",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/control-plane.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "summarizeControlPlanePlanActions(actions): ControlPlanePlanArtifact['summary']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createOpsReadActionRuntime",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/execution.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createOpsReadActionRuntime(input): OpsReadActionRuntime",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertCredentialNotReturned",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-credentials.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertCredentialNotReturned(value, plaintext, seen): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createHostedCredential",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-credentials.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedCredential(input): Promise<HostedCredentialRecord>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createHostedWorkerCredentialResolver",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-credentials.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedWorkerCredentialResolver(input): HostedWorkerCredentialResolver",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "credentialAad",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-credentials.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "credentialAad(record, version): Uint8Array",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "credentialText",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-credentials.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "credentialText(plaintext): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "encryptVersion",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-credentials.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "encryptVersion(input): Promise<HostedCredentialVersion>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "revokeHostedCredential",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-credentials.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "revokeHostedCredential(input): Promise<HostedCredentialRecord>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rotateHostedCredential",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-credentials.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "rotateHostedCredential(input): Promise<HostedCredentialRecord>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "admitHostedReadAction",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-read.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "admitHostedReadAction(input): Promise<HostedReadJob>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertNoCredentialMaterial",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-read.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertNoCredentialMaterial(value, path): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "auditFact",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-read.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "auditFact(kind, job, occurredAt): HostedReadAuditFact",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createHostedReadWorker",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-read.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedReadWorker(input)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "serializedByteLength",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-read.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "serializedByteLength(value): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "toFailure",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-read.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "toFailure(error): z.infer<typeof hostedReadFailureSchema>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertNoCredentialMaterial",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-scheduler.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertNoCredentialMaterial(value, path): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createHostedReadSchedule",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-scheduler.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedReadSchedule(input): HostedReadSchedule",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createHostedReadScheduleMaterialization",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-scheduler.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createHostedReadScheduleMaterialization(schedule, dueAt): HostedReadScheduleMaterialization",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asRow",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "asRow(input): SqliteRow | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createSqliteHostedReadPersistence",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createSqliteHostedReadPersistence(database): { store: HostedReadJobStore; results: HostedReadResultStore; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "getJob",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "getJob(database, jobId): HostedReadJob | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "initialize",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "initialize(database): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "insertAudit",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "insertAudit(database, audit): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "insertDispatch",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "insertDispatch(database, dispatch): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "nullableStringColumn",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "nullableStringColumn(row, name): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "numberColumn",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "numberColumn(row, name): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseJson",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseJson(value): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rowToJob",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "rowToJob(row): HostedReadJob",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SqliteHostedReadJobStore.admit",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "SqliteHostedReadJobStore.admit(bundle)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SqliteHostedReadJobStore.claim",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "SqliteHostedReadJobStore.claim(input): Promise<HostedReadClaim | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SqliteHostedReadJobStore.complete",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "SqliteHostedReadJobStore.complete(input)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SqliteHostedReadJobStore.get",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "SqliteHostedReadJobStore.get(jobId)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SqliteHostedReadJobStore.recover",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "SqliteHostedReadJobStore.recover(input)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "SqliteHostedReadResultStore.put",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [
+        "class-method"
+      ],
+      "signatureShort": "SqliteHostedReadResultStore.put(input)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stringColumn",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stringColumn(row, name): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "withTransaction",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/hosted-sqlite.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "withTransaction(database, operation): T",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineOpsLifecycleContributionResult",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/lifecycle.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineOpsLifecycleContributionResult(input): OpsLifecycleContributionResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createLocalOpsExecutionState",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createLocalOpsExecutionState(baseDirectory): OpsExecutionState",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ensureDirectory",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ensureDirectory(directory, options): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "findWorkspaceRoot",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "findWorkspaceRoot(start): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadEnvironmentDirectory",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "loadEnvironmentDirectory(directory): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadEnvironmentFile",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "loadEnvironmentFile(filePath): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadLocalEnvironment",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "loadLocalEnvironment(options): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalApprovalStore.get",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalApprovalStore.get(approvalId): Promise<OpsApprovalRecord | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalApprovalStore.put",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalApprovalStore.put(approvalInput): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalArtifactStore.get",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalArtifactStore.get(id): Promise<OpsArtifactRecord<T> | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalArtifactStore.hasReceiptForPlan",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalArtifactStore.hasReceiptForPlan(planHash): Promise<boolean>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalArtifactStore.put",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalArtifactStore.put(record): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalArtifactStore.recordReceipt",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalArtifactStore.recordReceipt(receiptInput): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalLockStore.acquire",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalLockStore.acquire(request): Promise<OpsLockLease | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalLockStore.assertCurrent",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalLockStore.assertCurrent(leaseInput, now): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalLockStore.leasePath",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalLockStore.leasePath(lockId): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalLockStore.nextFencingValue",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalLockStore.nextFencingValue(previous): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalLockStore.release",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalLockStore.release(leaseInput): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalLockStore.renew",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalLockStore.renew(leaseInput, ttlMs, now): Promise<OpsLockLease>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalOpsMutationRunStore.compareAndSet",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalOpsMutationRunStore.compareAndSet(runInput, expectedRevision): Promise<'stored' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalOpsMutationRunStore.get",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalOpsMutationRunStore.get(runId): Promise<OpsMutationRun<TActionState> | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalOpsMutationRunStore.list",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalOpsMutationRunStore.list(queryInput): Promise<Array<OpsMutationRun<TActionState>>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readJsonFile",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readJsonFile(filePath): Promise<unknown | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveControlPlaneWorkingDirectory",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveControlPlaneWorkingDirectory(input, options): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stateFile",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stateFile(directory, identity): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeControlPlaneJsonArtifact",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "writeControlPlaneJsonArtifact(args): ControlPlaneJsonArtifact",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeJsonAtomic",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/local.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "writeJsonAtomic(filePath, value): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertPackCommandResult",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertPackCommandResult(descriptor, input): PackCommandResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "capturedExitCode",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "capturedExitCode(error): number | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "duplicate",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "duplicate(values): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mergeCommandEffects",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "mergeCommandEffects(descriptors): Pick<PackCommandDescriptor, 'maximumEffect' | 'writeTargets' | 'riskGuards'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseCapturedOutput",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseCapturedOutput(stdout): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "payloadOf",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "payloadOf(manifest): PackManifestPayload",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveAddItemContributor",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveAddItemContributor(manifests, itemType): PackManifest | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolvePackCommand",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolvePackCommand(manifests, argv): { manifest: PackManifest; command: PackCommandDescriptor; args: readonly string[] } | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveProviderBindingContributor",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveProviderBindingContributor(manifests, provider): PackManifest | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "runCapturedPackCommand",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "runCapturedPackCommand(context, run): Promise<PackCommandResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sealPackManifest",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "sealPackManifest(input): PackManifest",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validatePackGraph",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validatePackGraph(manifests): readonly PackManifest[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "verifyPackManifestIntegrity",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/pack.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "verifyPackManifestIntegrity(input, selection): PackManifest",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertOpsExecutionState",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/ports.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertOpsExecutionState(args): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "aggregateOpsReadiness",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/readiness.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "aggregateOpsReadiness(findings): { status: 'ready' | 'attention' | 'blocked'; blockingCount: number; attentionCount: number; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineOpsReadinessFinding",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/readiness.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineOpsReadinessFinding(input): OpsReadinessFinding",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertOpsMutationRunStore",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/runs.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertOpsMutationRunStore(input): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseOpsMutationRun",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/runs.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "parseOpsMutationRun(input): OpsMutationRun<TActionState>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertOpsMutationPreflight",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/safety.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertOpsMutationPreflight(args): Promise<OpsMutationPreflightResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createOpsMutationPlan",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/safety.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createOpsMutationPlan(input): OpsMutationPlan",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fail",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/safety.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fail(code, message): never",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashOpsMutationPlanPayload",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/safety.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "hashOpsMutationPlanPayload(input): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hashOpsValue",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/safety.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "hashOpsValue(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mutationPlanPayload",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/safety.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mutationPlanPayload(plan): OpsMutationPlanInput",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stableValue",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/safety.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stableValue(value): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "clone",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "clone(value): T",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.admit",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.admit(input): Promise<OpsActionAdmission>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.append",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.append(job, type, actorId, occurredAt): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.assertClaim",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.assertClaim(job, claimToken): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.claimNext",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.claimNext(input): Promise<OpsActionJob | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.complete",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.complete(input): Promise<OpsActionJob>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.current",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.current(jobId): OpsActionJob",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.fail",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.fail(input): Promise<OpsActionJob>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.get",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.get(jobId): Promise<OpsActionJob | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.idempotencyIdentity",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.idempotencyIdentity(request): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.listAudit",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.listAudit(jobId): Promise<readonly OpsActionAuditEvent[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.recoverExpired",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.recoverExpired(input): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryActionJobStore.requestCancellation",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryActionJobStore.requestCancellation(input): Promise<OpsActionJob>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryApprovalStore.get",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryApprovalStore.get(approvalId): Promise<OpsApprovalRecord | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryApprovalStore.put",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryApprovalStore.put(approval): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryArtifactStore.get",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryArtifactStore.get(id): Promise<OpsArtifactRecord<T> | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryArtifactStore.hasReceiptForPlan",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryArtifactStore.hasReceiptForPlan(planHash): Promise<boolean>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryArtifactStore.put",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryArtifactStore.put(record): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryArtifactStore.recordReceipt",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryArtifactStore.recordReceipt(receipt): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryLockStore.acquire",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryLockStore.acquire(request): Promise<OpsLockLease | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryLockStore.assertCurrent",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryLockStore.assertCurrent(lease, now): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryLockStore.release",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryLockStore.release(lease): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryLockStore.renew",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryLockStore.renew(lease, ttlMs, now): Promise<OpsLockLease>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryOpsMutationRunStore.compareAndSet",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryOpsMutationRunStore.compareAndSet(runInput, expectedRevision): Promise<'stored' | 'conflict'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryOpsMutationRunStore.get",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryOpsMutationRunStore.get(runId): Promise<OpsMutationRun<TActionState> | null>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "InMemoryOpsMutationRunStore.list",
+      "kind": "method",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/testing.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "InMemoryOpsMutationRunStore.list(queryInput): Promise<Array<OpsMutationRun<TActionState>>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildOpsWorkflowContextBrief",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/workflows.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildOpsWorkflowContextBrief(input): OpsWorkflowContextBrief",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createOpsWorkflowHandoff",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/workflows.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createOpsWorkflowHandoff(input): OpsWorkflowHandoff",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineOpsWorkflowRun",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/workflows.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineOpsWorkflowRun(input): OpsWorkflowRun",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "invalidateOpsWorkflowEvidence",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/workflows.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "invalidateOpsWorkflowEvidence(input): OpsWorkflowRun",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resumeOpsWorkflowHandoff",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/workflows.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resumeOpsWorkflowHandoff(input): OpsWorkflowResumeResult",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:3a08dfdbee1f"
+}

@@ -1,0 +1,434 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "packageManifest": "packages/framework-ops/package.json",
+    "sourceRoot": "packages/framework-ops"
+  },
+  "summary": {
+    "package": "@unisane/framework-ops",
+    "owner": "ops/framework-ops",
+    "packageDir": "packages/framework-ops",
+    "sourceFileCount": 4,
+    "symbolCount": 36,
+    "functionCount": 36,
+    "publicFunctionCount": 4,
+    "internalFunctionCount": 32,
+    "serviceLayerFunctionCount": 0
+  },
+  "owner": "unisane-ops",
+  "status": "generated",
+  "generatorScript": "scripts/commands/references/generate-symbol-reference.mjs",
+  "generatorVersion": 1,
+  "sourceCommit": "workspace",
+  "sourceFiles": [
+    "packages/framework-ops",
+    "packages/framework-ops/package.json"
+  ],
+  "records": [
+    {
+      "name": "mapApiCompatibility",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/mapper.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mapApiCompatibility(record): FrameworkProjectApiCompatibility",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mapFrameworkProjectDescriptorToOps",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/mapper.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "mapFrameworkProjectDescriptorToOps(descriptor): FrameworkOpsProjectIntegration",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateAndMapFrameworkProjectDescriptor",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/mapper.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validateAndMapFrameworkProjectDescriptor(input): FrameworkOpsProjectIntegration",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "apiCompatibility",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "apiCompatibility(value, path): FrameworkProjectApiCompatibility",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "array",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "array(value, path, parse): readonly T[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertExactValue",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertExactValue(actual, expected, path, code): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "capabilities",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "capabilities(value, path): readonly FrameworkProjectCapability[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "capability",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "capability(value, path): FrameworkProjectCapability",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "compareStrings",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "compareStrings(left, right): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "compatibility",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "compatibility(value, path): FrameworkProjectDescriptor['compatibility']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "deprecation",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "deprecation(value, path): FrameworkProjectApiDeprecation | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "descriptorCore",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "descriptorCore(descriptor)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "digest",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "digest(value, path): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "exactIsoDate",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "exactIsoDate(value): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fail",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fail(path, message, code): never",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "identifier",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "identifier(value, path): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "nestedObject",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "nestedObject(value, path): DataObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "nullableText",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "nullableText(value, path): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "oneOf",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "oneOf(value, path, values): T",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "packageName",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "packageName(value, path): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseFrameworkProjectDescriptor",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "parseFrameworkProjectDescriptor(content, expectation): FrameworkProjectDescriptor",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseJsonText",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseJsonText(content, path, code): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseRequirement",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseRequirement(value, path): FrameworkProjectCapabilityRequirement",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "project",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "project(value, path): FrameworkProjectDescriptor['project']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "propertyPath",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "propertyPath(path, property): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readObject",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readObject(value, path, properties): DataObject",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "required",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "required(object, property, path): unknown",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "serializeDescriptor",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "serializeDescriptor(descriptor): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sha256",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sha256(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sortedUnique",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sortedUnique(value, path, parse): readonly T[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "text",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "text(value, path): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateApiCompatibilityLifecycle",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validateApiCompatibilityLifecycle(record, path): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateContractIdentity",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validateContractIdentity(contract): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateExpectation",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validateExpectation(descriptor, expectation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateFrameworkProjectDescriptorAssets",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validateFrameworkProjectDescriptorAssets(input): ValidatedFrameworkProjectDescriptorAssets",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateSchemaIdentity",
+      "kind": "function",
+      "package": "@unisane/framework-ops",
+      "owner": "ops/framework-ops",
+      "file": "packages/framework-ops/src/validator.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "validateSchemaIdentity(schema): void",
+      "layer": "tooling-layer"
+    }
+  ],
+  "generatedAt": "content-hash:09575ec22d9e"
+}
