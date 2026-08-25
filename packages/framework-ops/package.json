@@ -34,6 +34,7 @@
     "prepublishOnly": "pnpm pack:check && pnpm check-types && pnpm test"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
     "eslint": "^9.39.1",
     "tsup": "^8.0.0",
     "typescript": "^5.9.2",
