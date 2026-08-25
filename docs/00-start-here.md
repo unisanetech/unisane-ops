@@ -31,13 +31,23 @@ until an approved cutover records otherwise.
 4. The current controlled receipt ID is `OPS-EXTRACTION-T-b222cdbf`. It is not a public
    provenance record, approval, or materialization authority.
 
+## Owner-Local Product Memory
+
+- [Ops product architecture Standard](standards/13-unisane-ops-product-architecture-baseline.md)
+- [Accepted Ops Decisions](decisions/)
+- [Active Ops Findings](findings/)
+- [Ops operator and migration Guides](guides/)
+- [Ops documentation Pattern](patterns/)
+- [Three active Ops Plans](work/plans/)
+
 ## Authority During Transition
 
 - The transition Standard owns the target-local readiness gates, blocker ledger, and
   one-authority cutover contract.
-- The umbrella Ops product Architecture, provider-safety Standard, accepted Decisions,
-  and extraction Plan remain authoritative inputs until their reviewed owner-local
-  versions move here.
+- The migrated Architecture, Standards, Decisions, Findings, Guides, Pattern, and Plans
+  are owner-local shadow truth in this candidate. The umbrella remains the sole writable
+  authority until the approved cutover; the two copies must not be developed in
+  parallel.
 - Skopos Tasks own execution and Evidence. This router is not a Task index or a release
   checklist.
 - Generated references belong under `docs/reference/generated/**` and are changed only

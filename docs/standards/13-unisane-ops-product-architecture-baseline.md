@@ -10,7 +10,7 @@ provenance: accepted
 view: current
 relatedDocs:
   - '../decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md'
-  - 'https://github.com/Croodo/unisane/blob/5f6e0b3e3dea915b4267a266571c99150834f88b/docs/decisions/D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md'
+  - 'https://github.com/unisanetech/unisane-infrastructure/blob/main/docs/decisions/D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md'
   - '../decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md'
   - 'https://github.com/unisanetech/unisane/blob/main/docs/decisions/D-20260815-framework-release-units-compatibility-bom-and-registry-proof-contract.md'
   - '../findings/F-20260724-unisane-ops-product-boundary-and-devtools-coupling-gap.md'

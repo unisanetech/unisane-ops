@@ -10,7 +10,7 @@ provenance: accepted
 view: current
 status: accepted
 relatedDocs:
-  - 'https://github.com/Croodo/unisane/blob/5f6e0b3e3dea915b4267a266571c99150834f88b/docs/decisions/D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md'
+  - 'https://github.com/unisanetech/unisane-infrastructure/blob/main/docs/decisions/D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md'
   - './D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md'
   - 'https://github.com/unisanetech/unisane/blob/main/docs/decisions/D-20260815-framework-release-units-compatibility-bom-and-registry-proof-contract.md'
   - '../standards/13-unisane-ops-product-architecture-baseline.md'

@@ -12,7 +12,7 @@ status: accepted
 lastUpdated: 2026-08-25
 relatedDocs:
   - './D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md'
-  - 'https://github.com/Croodo/unisane/blob/5f6e0b3e3dea915b4267a266571c99150834f88b/docs/decisions/D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md'
+  - 'https://github.com/unisanetech/unisane-infrastructure/blob/main/docs/decisions/D-20260724-unisane-ecosystem-repository-remote-and-visibility-contract.md'
   - 'https://github.com/unisanetech/unisane/blob/main/docs/architecture/13-ai-native-application-and-agent-integration.md'
   - 'https://github.com/unisanetech/unisane/blob/main/docs/standards/09-runtime-compiler-tooling-and-config-boundary-contract.md'
   - '../standards/13-unisane-ops-product-architecture-baseline.md'
