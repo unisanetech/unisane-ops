@@ -26,6 +26,6 @@ Product Memory owns the resulting decisions, opportunities, rejected ideas, and
 directional conclusions. It must never claim that a historical normalized summary is
 current provider truth without fresh Ops evidence.
 
-The admitted normalized evidence is under `evidence/measurement/**` and
-`evidence/seo/**`. Exact provider-resource snapshots and campaign-operation plans are
-excluded and recorded in [Quarantined Provider Evidence](quarantined-provider-evidence.md).
+No product-specific evidence payload is committed to this public operations family.
+Provider metrics, crawl or render output, configuration, fixtures, resource snapshots,
+and campaign-operation plans remain excluded private evidence.

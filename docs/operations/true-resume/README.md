@@ -18,7 +18,6 @@ procedure relevant to the operation:
 - [Growth Provider Operations](growth-provider-operations.md)
 - [Advertising Asset Provider Operations](ads-asset-provider-operations.md)
 - [Research Provider Evidence](research-provider-evidence.md)
-- [Quarantined Provider Evidence](quarantined-provider-evidence.md)
 
 True Resume product intent, conversion semantics, reviewed creative facts, and curated
 redacted research remain in the product-owned
@@ -26,8 +25,6 @@ redacted research remain in the product-owned
 Memory family. Credentials, raw exports, private identifiers, mutable receipts, and
 provider state are never promoted into either public Memory surface.
 
-The `evidence/` tree contains 23 redacted or normalized Ops-owned artifacts: one
-private-evidence exclusion file, three non-mutating asset-upload plans, fourteen Google
-Ads keyword-metric files, one synthetic conversion fixture, one sanitized SEO
-configuration, and three generated SEO/crawl evidence files. It is provider evidence,
-not product truth or live readiness.
+This public operations family contains mechanism and control documentation only. It
+does not contain product evidence payloads, account or resource state, provider plans,
+metrics, snapshots, fixtures, or mutable receipts.

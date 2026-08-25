@@ -30,7 +30,5 @@ creation may consume them only after that guarded upload step succeeds.
 Placement-specific image dimensions, video duration, Page actor, and Instagram actor
 requirements are provider validation inputs. Product plans must contain reviewed copy
 and real approved product asset ids; placeholder creative values never admit execution.
-
-The three committed non-mutating upload-plan artifacts live under
-`evidence/ads/asset-upload-plans/**`. They are Ops-owned planning evidence and cannot
-authorize upload, creative creation, campaign creation, or spend.
+Upload plans and their provider receipts remain private operational state and are not
+committed to this public operations family.
