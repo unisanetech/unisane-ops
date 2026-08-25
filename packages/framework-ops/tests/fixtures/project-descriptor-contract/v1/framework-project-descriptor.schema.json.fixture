@@ -1,0 +1,449 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://unisane.dev/schemas/framework-project-descriptor.v1.json",
+  "title": "Unisane Framework Project Descriptor V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "schemaVersion", "project", "capabilities", "compatibility", "digest"],
+  "properties": {
+    "format": {
+      "const": "unisane.framework-project-descriptor"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "project": {
+      "$ref": "#/$defs/project"
+    },
+    "capabilities": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/capability"
+      }
+    },
+    "compatibility": {
+      "$ref": "#/$defs/compatibility"
+    },
+    "digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "nonBlankText": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!\\s)(?![\\s\\S]*\\s$)(?![\\s\\S]*[\\u0000-\\u001F\\u007F-\\u009F])[\\s\\S]+$"
+    },
+    "nullableNonBlankText": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/nonBlankText"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "packageName": {
+      "type": "string",
+      "pattern": "^(?:@[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*|[a-z0-9][a-z0-9._-]*)$"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        }
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "owner", "package", "features", "operations"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "kind": {
+          "const": "module"
+        },
+        "owner": {
+          "$ref": "#/$defs/packageName"
+        },
+        "package": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "version"],
+          "properties": {
+            "name": {
+              "$ref": "#/$defs/packageName"
+            },
+            "version": {
+              "$ref": "#/$defs/nonBlankText"
+            }
+          }
+        },
+        "features": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["bulk", "persistence", "publishes-events", "subscribes-to-events"]
+          }
+        },
+        "operations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/nonBlankText"
+          }
+        }
+      }
+    },
+    "deprecation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["announcedOn", "sunsetOn", "replacement", "migration"],
+      "properties": {
+        "announcedOn": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "sunsetOn": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "replacement": {
+          "$ref": "#/$defs/nullableNonBlankText"
+        },
+        "migration": {
+          "$ref": "#/$defs/nullableNonBlankText"
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "replacement": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "properties": {
+            "migration": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "apiCompatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation", "audience", "host", "lifecycle", "apiMajor", "compatibilityBaselineId", "supportPolicyId", "deprecation"],
+      "properties": {
+        "operation": {
+          "$ref": "#/$defs/nonBlankText"
+        },
+        "audience": {
+          "enum": ["first-party", "partner", "public", "operator", "protocol", "provider-ingress"]
+        },
+        "host": {
+          "enum": ["application", "external-api", "operator", "protocol", "provider-ingress"]
+        },
+        "lifecycle": {
+          "enum": ["internal", "preview", "stable", "deprecated", "retired"]
+        },
+        "apiMajor": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "compatibilityBaselineId": {
+          "$ref": "#/$defs/nullableNonBlankText"
+        },
+        "supportPolicyId": {
+          "$ref": "#/$defs/nullableNonBlankText"
+        },
+        "deprecation": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/deprecation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "audience": {
+                "enum": ["partner", "public"]
+              }
+            },
+            "required": ["audience"]
+          },
+          "then": {
+            "properties": {
+              "host": {
+                "const": "external-api"
+              },
+              "lifecycle": {
+                "enum": ["preview", "stable", "deprecated"]
+              },
+              "apiMajor": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "const": "preview"
+              }
+            },
+            "required": ["lifecycle"]
+          },
+          "then": {
+            "properties": {
+              "compatibilityBaselineId": {
+                "type": "null"
+              },
+              "supportPolicyId": {
+                "type": "null"
+              },
+              "deprecation": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "const": "stable"
+              }
+            },
+            "required": ["lifecycle"]
+          },
+          "then": {
+            "properties": {
+              "compatibilityBaselineId": {
+                "$ref": "#/$defs/nonBlankText"
+              },
+              "supportPolicyId": {
+                "$ref": "#/$defs/nonBlankText"
+              },
+              "deprecation": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "lifecycle": {
+                "const": "deprecated"
+              }
+            },
+            "required": ["lifecycle"]
+          },
+          "then": {
+            "properties": {
+              "compatibilityBaselineId": {
+                "$ref": "#/$defs/nonBlankText"
+              },
+              "supportPolicyId": {
+                "$ref": "#/$defs/nonBlankText"
+              },
+              "deprecation": {
+                "$ref": "#/$defs/deprecation"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "audience": {
+                "const": "first-party"
+              }
+            },
+            "required": ["audience"]
+          },
+          "then": {
+            "$ref": "#/$defs/internalApplicationCompatibility"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "audience": {
+                "const": "operator"
+              }
+            },
+            "required": ["audience"]
+          },
+          "then": {
+            "$ref": "#/$defs/internalOperatorCompatibility"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "audience": {
+                "const": "protocol"
+              }
+            },
+            "required": ["audience"]
+          },
+          "then": {
+            "$ref": "#/$defs/internalProtocolCompatibility"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "audience": {
+                "const": "provider-ingress"
+              }
+            },
+            "required": ["audience"]
+          },
+          "then": {
+            "$ref": "#/$defs/internalProviderIngressCompatibility"
+          }
+        }
+      ]
+    },
+    "internalCompatibility": {
+      "type": "object",
+      "properties": {
+        "lifecycle": {
+          "const": "internal"
+        },
+        "apiMajor": {
+          "type": "null"
+        },
+        "compatibilityBaselineId": {
+          "type": "null"
+        },
+        "supportPolicyId": {
+          "type": "null"
+        },
+        "deprecation": {
+          "type": "null"
+        }
+      }
+    },
+    "internalApplicationCompatibility": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/internalCompatibility"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "host": {
+              "const": "application"
+            }
+          }
+        }
+      ]
+    },
+    "internalOperatorCompatibility": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/internalCompatibility"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "host": {
+              "const": "operator"
+            }
+          }
+        }
+      ]
+    },
+    "internalProtocolCompatibility": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/internalCompatibility"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "host": {
+              "const": "protocol"
+            }
+          }
+        }
+      ]
+    },
+    "internalProviderIngressCompatibility": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/internalCompatibility"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "host": {
+              "const": "provider-ingress"
+            }
+          }
+        }
+      ]
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compiler", "projectModelSchemaVersion", "moduleDescriptorSchemaVersion", "api"],
+      "properties": {
+        "compiler": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["package", "version"],
+          "properties": {
+            "package": {
+              "const": "@unisane/compiler"
+            },
+            "version": {
+              "$ref": "#/$defs/nonBlankText"
+            }
+          }
+        },
+        "projectModelSchemaVersion": {
+          "const": 3
+        },
+        "moduleDescriptorSchemaVersion": {
+          "const": 1
+        },
+        "api": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/apiCompatibility"
+          }
+        }
+      }
+    }
+  }
+}

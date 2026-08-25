@@ -1,0 +1,175 @@
+{
+  "format": "unisane.framework-project-descriptor-contract",
+  "contractVersion": 1,
+  "descriptor": {
+    "outputPath": ".cache/unisane/project-descriptor.json",
+    "format": "unisane.framework-project-descriptor",
+    "schemaVersion": 1,
+    "jsonSchema": "./framework-project-descriptor.schema.json",
+    "compiler": {
+      "package": "@unisane/compiler",
+      "version": "0.1.0"
+    },
+    "projectModelSchemaVersion": 3,
+    "moduleDescriptorSchemaVersion": 1
+  },
+  "canonicalization": {
+    "encoding": "utf-8",
+    "coreKeyOrder": ["format", "schemaVersion", "project", "capabilities", "compatibility"],
+    "documentKeyOrder": ["format", "schemaVersion", "project", "capabilities", "compatibility", "digest"],
+    "nestedObjectKeyOrder": {
+      "project": ["id"],
+      "capabilities[]": ["id", "kind", "owner", "package", "features", "operations"],
+      "capabilities[].package": ["name", "version"],
+      "compatibility": ["compiler", "projectModelSchemaVersion", "moduleDescriptorSchemaVersion", "api"],
+      "compatibility.compiler": ["package", "version"],
+      "compatibility.api[]": ["operation", "audience", "host", "lifecycle", "apiMajor", "compatibilityBaselineId", "supportPolicyId", "deprecation"],
+      "compatibility.api[].deprecation": ["announcedOn", "sunsetOn", "replacement", "migration"]
+    },
+    "digest": {
+      "algorithm": "sha256",
+      "inputExpression": "JSON.stringify(core)",
+      "excludedProperties": ["digest"],
+      "outputEncoding": "lowercase-hex"
+    },
+    "serializationExpression": "JSON.stringify(descriptor, null, 2) + \"\\n\"",
+    "indentSpaces": 2,
+    "lineEnding": "lf",
+    "arrayOrdering": {
+      "capabilities": "ascending capability.id using ECMAScript relational string order",
+      "features": "ascending feature using ECMAScript relational string order",
+      "operations": "ascending operation using ECMAScript relational string order",
+      "apiCompatibility": "ascending JSON.stringify(record) using ECMAScript relational string order"
+    }
+  },
+  "expectations": {
+    "digest": "When supplied, must equal descriptor.digest exactly.",
+    "projectId": "When supplied, must equal descriptor.project.id exactly.",
+    "compilerVersion": "Consumers must supply the admitted compiler version and require an exact match.",
+    "requiredCapabilities": "Every requested capability id must exist and contain every requested feature and operation.",
+    "unknownCapabilityPolicy": "consumer-owned"
+  },
+  "valueValidation": {
+    "text": {
+      "minimumLength": 1,
+      "mustEqualTrimmedValue": true,
+      "forbiddenUnicodeGeneralCategories": ["Cc"]
+    },
+    "identifierPattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+    "packageNamePattern": "^(?:@[a-z0-9][a-z0-9._-]*/[a-z0-9][a-z0-9._-]*|[a-z0-9][a-z0-9._-]*)$",
+    "digestPattern": "^[a-f0-9]{64}$",
+    "apiMajor": "null-or-positive-safe-integer",
+    "capabilities": {
+      "kind": "module",
+      "ownerMustEqual": "package.name",
+      "uniqueBy": "id",
+      "featureValues": ["bulk", "persistence", "publishes-events", "subscribes-to-events"],
+      "featuresUnique": true,
+      "operationsUnique": true
+    },
+    "apiCompatibilityRecords": {
+      "uniqueBy": "JSON.stringify(record)",
+      "retiredAccepted": false
+    },
+    "canonicalSerializedBytesRequired": true
+  },
+  "apiCompatibility": {
+    "externalAudiences": ["partner", "public"],
+    "externalHost": "external-api",
+    "externalLifecycles": {
+      "preview": {
+        "apiMajor": "positive-safe-integer",
+        "compatibilityBaselineId": null,
+        "supportPolicyId": null,
+        "deprecation": null
+      },
+      "stable": {
+        "apiMajor": "positive-safe-integer",
+        "compatibilityBaselineId": "non-blank-string",
+        "supportPolicyId": "non-blank-string",
+        "deprecation": null
+      },
+      "deprecated": {
+        "apiMajor": "positive-safe-integer",
+        "compatibilityBaselineId": "non-blank-string",
+        "supportPolicyId": "non-blank-string",
+        "deprecation": {
+          "announcedOn": "exact-yyyy-mm-dd",
+          "sunsetOn": "exact-yyyy-mm-dd-later-than-announcedOn",
+          "replacementOrMigration": "at-least-one-non-null"
+        }
+      }
+    },
+    "internalAudiences": {
+      "first-party": "application",
+      "operator": "operator",
+      "protocol": "protocol",
+      "provider-ingress": "provider-ingress"
+    },
+    "internalLifecycle": "internal",
+    "internalNullProperties": ["apiMajor", "compatibilityBaselineId", "supportPolicyId", "deprecation"]
+  },
+  "fixtures": [
+    {
+      "id": "valid",
+      "path": "./fixtures/valid.json",
+      "expectedResult": "accepted",
+      "expectation": {
+        "digest": "900d90da6f4ed068c2650538a0568a92d747fbe069899d40d2ad6caaf58ab9ab",
+        "projectId": "fixture-project",
+        "compilerVersion": "0.1.0",
+        "requiredCapabilities": [
+          {
+            "id": "simple"
+          }
+        ]
+      }
+    },
+    {
+      "id": "unsupported-schema",
+      "path": "./fixtures/unsupported-schema.json",
+      "expectedResult": "rejected",
+      "validationCode": "project-descriptor-version-unsupported"
+    },
+    {
+      "id": "tampered-digest",
+      "path": "./fixtures/tampered-digest.json",
+      "expectedResult": "rejected",
+      "validationCode": "project-descriptor-digest-mismatch"
+    },
+    {
+      "id": "identity-mismatch",
+      "path": "./fixtures/identity-mismatch.json",
+      "expectedResult": "rejected",
+      "validationCode": "project-descriptor-identity-mismatch",
+      "expectation": {
+        "projectId": "fixture-project"
+      }
+    },
+    {
+      "id": "missing-capability",
+      "path": "./fixtures/missing-capability.json",
+      "expectedResult": "rejected",
+      "validationCode": "project-descriptor-capability-missing",
+      "expectation": {
+        "requiredCapabilities": [
+          {
+            "id": "simple"
+          }
+        ]
+      }
+    },
+    {
+      "id": "unsupported-compatibility",
+      "path": "./fixtures/unsupported-compatibility.json",
+      "expectedResult": "rejected",
+      "validationCode": "project-descriptor-compatibility-unsupported"
+    },
+    {
+      "id": "contradictory-compatibility",
+      "path": "./fixtures/contradictory-compatibility.json",
+      "expectedResult": "rejected",
+      "validationCode": "project-descriptor-compatibility-unsupported"
+    }
+  ]
+}

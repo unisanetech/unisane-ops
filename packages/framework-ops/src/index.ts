@@ -1,6 +1,9 @@
-export type SerializedFrameworkProjectDescriptor = unknown;
-
-export interface FrameworkOpsDescriptorBoundary<TValidatedDescriptor, TOpsProjection> {
-  validate(input: SerializedFrameworkProjectDescriptor): TValidatedDescriptor;
-  map(descriptor: TValidatedDescriptor): TOpsProjection;
-}
+export * from './contracts.js';
+export {
+  parseFrameworkProjectDescriptor,
+  validateFrameworkProjectDescriptorAssets,
+} from './validator.js';
+export {
+  mapFrameworkProjectDescriptorToOps,
+  validateAndMapFrameworkProjectDescriptor,
+} from './mapper.js';

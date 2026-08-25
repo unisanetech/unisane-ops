@@ -1,0 +1,41 @@
+{
+  "format": "unisane.framework-project-descriptor",
+  "schemaVersion": 1,
+  "project": {
+    "id": "fixture-project"
+  },
+  "capabilities": [
+    {
+      "id": "simple",
+      "kind": "module",
+      "owner": "@fixture/simple",
+      "package": {
+        "name": "@fixture/simple",
+        "version": "1.2.3"
+      },
+      "features": [],
+      "operations": []
+    }
+  ],
+  "compatibility": {
+    "compiler": {
+      "package": "@unisane/compiler",
+      "version": "0.1.0"
+    },
+    "projectModelSchemaVersion": 3,
+    "moduleDescriptorSchemaVersion": 1,
+    "api": [
+      {
+        "operation": "simple.create",
+        "audience": "public",
+        "host": "external-api",
+        "lifecycle": "stable",
+        "apiMajor": 1,
+        "compatibilityBaselineId": "simple-v1",
+        "supportPolicyId": "standard",
+        "deprecation": null
+      }
+    ]
+  },
+  "digest": "900d90da6f4ed068c2650538a0568a92d747fbe069899d40d2ad6caaf58ab9ab"
+}

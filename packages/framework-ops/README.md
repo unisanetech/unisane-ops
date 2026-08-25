@@ -1,17 +1,28 @@
 # @unisane/framework-ops
 
-Reserved typed boundary for the optional integration between a serialized Unisane Framework
-project descriptor and Unisane Ops.
+`@unisane/framework-ops` is the optional descriptor-only boundary between Unisane Framework projects
+and Unisane Ops. It accepts static JSON bytes from the versioned
+`@unisane/compiler/project-descriptor-contract/v1` coordinate and never imports or executes
+Framework, Compiler, Devtools, generated runtime code, or another product CLI.
 
-This package has no runtime implementation while the Framework-owned descriptor schema, digest
-rules, compatibility contract, and canonical fixtures remain unavailable. Its only source export is
-a generic TypeScript boundary whose input is `unknown`; it deliberately makes no claim about
-descriptor fields or the shape of the eventual Ops projection.
+The package validates the exact supported contract and JSON Schema assets before it parses a
+descriptor. Descriptor validation then enforces canonical serialized bytes, the SHA-256 core digest,
+project and compiler identity, an explicit allowed capability set, required feature and operation
+coverage, and the complete API compatibility lifecycle policy.
 
-The package does not compile a Framework project, load Framework source or cache state, import
-Framework, Compiler, or Devtools packages, contribute CLI commands, execute another binary, or parse
-terminal output. It is not part of the default Ops installation.
+`validateAndMapFrameworkProjectDescriptor(...)` returns one deeply immutable, Ops-owned
+`FrameworkOpsProjectIntegration`. The model contains static project, compiler, capability, and API
+compatibility facts only. It contains no handler, command, source path, service, container,
+provider, credential, approval, policy, or workflow authority.
 
-`private: true` prevents this incomplete boundary from being published as a usable adapter. Remove
-that guard only after the Framework-owned contract is frozen and package-owned validation, mapping,
-compatibility fixtures, and release proof are complete.
+Callers must supply:
+
+- the raw `contract.json` and `framework-project-descriptor.schema.json` bytes resolved from
+  `@unisane/compiler/project-descriptor-contract/v1`;
+- the raw `.cache/unisane/project-descriptor.json` bytes;
+- the exact expected project and compiler identities;
+- the complete allowed capability id set and any required capability facts.
+
+The contract assets and descriptor are immutable inputs. This package does not invoke Framework
+compilation, discover commands or packages, or provide a compatibility path for the retired
+executable Framework bridge.

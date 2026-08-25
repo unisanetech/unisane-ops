@@ -1,0 +1,18 @@
+{
+  "format": "unisane.framework-project-descriptor",
+  "schemaVersion": 2,
+  "project": {
+    "id": "fixture-project"
+  },
+  "capabilities": [],
+  "compatibility": {
+    "compiler": {
+      "package": "@unisane/compiler",
+      "version": "0.1.0"
+    },
+    "projectModelSchemaVersion": 3,
+    "moduleDescriptorSchemaVersion": 1,
+    "api": []
+  },
+  "digest": "0000000000000000000000000000000000000000000000000000000000000000"
+}

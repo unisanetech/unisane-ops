@@ -1,8 +1,7 @@
 {
   "name": "@unisane/framework-ops",
   "version": "0.1.0",
-  "description": "Reserved typed boundary for serialized Framework descriptors in Unisane Ops",
-  "private": true,
+  "description": "Descriptor-only Unisane Framework integration for Unisane Ops",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -28,7 +27,7 @@
     "build": "tsup src/index.ts --format esm --dts --clean",
     "dev": "tsup src/index.ts --format esm --dts --watch",
     "lint": "eslint src scripts tests --max-warnings 0",
-    "test": "pnpm build && node --test tests/*.test.mjs",
+    "test": "pnpm build && vitest run && node --test tests/*.test.mjs",
     "check-types": "tsc --noEmit",
     "check:boundary": "node scripts/verify-release-boundary.mjs --source-only",
     "pack:check": "pnpm build && node scripts/verify-release-boundary.mjs",
@@ -37,7 +36,8 @@
   "devDependencies": {
     "eslint": "^9.39.1",
     "tsup": "^8.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^4.0.16"
   },
   "unisane": {
     "kind": "tooling",
