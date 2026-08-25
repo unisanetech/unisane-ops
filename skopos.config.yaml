@@ -1,0 +1,42 @@
+schemaVersion: 1
+project:
+  name: "unisane-ops"
+  archetype: "library"
+  repoMode: "multi-package"
+  scopeStrategy: hybrid
+  mode: clean-refactor
+commands:
+  build: "pnpm build"
+  lint: "pnpm lint"
+  test: "pnpm test"
+  typecheck: "pnpm typecheck"
+workspace:
+  ignore:
+    - .skopos
+    - node_modules
+    - dist
+docs:
+  root: docs
+  startHerePath: docs/00-start-here.md
+  usePerDomainArchive: true
+  strictMetadata: true
+  strictLinking: true
+agents:
+  canonicalInstructions: AGENTS.md
+  syncMirrors: []
+  mcp: true
+verification:
+  mode: balanced
+  requireDocsSync: true
+  requireEvidenceForReadiness: true
+decisions:
+  mode: balanced
+  askFor:
+    - architecture-shift
+    - public-api-change
+    - destructive-migration
+    - vendor-choice
+    - security-privacy-change
+security:
+  privacyMode: local-only
+  redactSecrets: true

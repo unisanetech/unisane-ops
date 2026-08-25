@@ -21,7 +21,7 @@ procedure relevant to the operation:
 
 True Resume product intent, conversion semantics, reviewed creative facts, and curated
 redacted research remain in the product-owned
-[`standalone-products/true-resume/docs/domains/growth`](../../../../unisane-platforms/standalone-products/true-resume/docs/domains/growth/README.md)
+[`standalone-products/true-resume/docs/domains/growth`](https://github.com/unisanetech/unisane-platforms/blob/main/standalone-products/true-resume/docs/domains/growth/README.md)
 Memory family. Credentials, raw exports, private identifiers, mutable receipts, and
 provider state are never promoted into either public Memory surface.
 

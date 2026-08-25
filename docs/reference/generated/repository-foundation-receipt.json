@@ -1,0 +1,192 @@
+{
+  "contentDigest": "1ec06ab760aa9a453477df531bd74771ecb2980b00e3b2f6ffcd26cd591ed264",
+  "externalMutations": [],
+  "files": [
+    {
+      "path": ".changeset/config.json",
+      "sha256": "40f092a2afe89905cc770fe50e03629944ab533681629b9ae25e89a1bdb4ec25"
+    },
+    {
+      "path": ".editorconfig",
+      "sha256": "3a151560c443f6fe8a734313554126e8625ff1ae0642d44115f9bd097b873390"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "a2cbaf17cba8b97c8ad37789cb2d8d4220d40b97469495607cf5b082faaef134"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "a6ca78af27de1794ce07accb9f7b580a9207412609d1e7902f480b38b81584e5"
+    },
+    {
+      "path": ".node-version",
+      "sha256": "55ce66383dffcaf804e6d3b03993b0d332cb5d7c38e26e9f92fb78ab040dc70c"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "99f7ff3254e258bc61222e85a8210d844e3902b5c673f57cc4c94ee12b706c03"
+    },
+    {
+      "path": "README.md",
+      "sha256": "060f7b9b719dc5c442750cd61ed08dc148bb610a4a3f0d21262f366d4373d374"
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "44676ce066c2763e8d20fe472aba05cbea49a25c9c590ac99d9fb7fba81975a1"
+    },
+    {
+      "path": "docs/00-start-here.md",
+      "sha256": "dc3396bf1710580d24cd9718ff02e9d4e7d3fda2c43d55fd112fd6b51dee971d"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "sha256": "9f29a402bf3efb12681e6f11c8857945c526ab0e450053761eae596c474e8b2b"
+    },
+    {
+      "path": "package.json",
+      "sha256": "889e6314e72d629dbb3ed5210a7aedb1d54d4f2643153ccbb6036625111b5f76"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "sha256": "60ce4d1dbf137701a4683d171391c51662700c2f3e32a7caab8b2efc22540e65"
+    },
+    {
+      "path": "prettier.config.mjs",
+      "sha256": "e4a363b17cdc1af850055f9cea70d30caaefc9de140ce4553204b03703f3b7fe"
+    },
+    {
+      "path": "skopos.config.yaml",
+      "sha256": "0bd19794db394f9f18a2dfd089efba0cea95027798fc7fb28376e453eca17932"
+    },
+    {
+      "path": "tools/skopos/scopes.yaml",
+      "sha256": "8f261b9e420fa2d9046e8ac98b88eb822eabf23c65acdf52186a65ac599d0e07"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "41e577f706f8710c62f7510eb0192e788d741b06c129e5be98e72253fce27a63"
+    },
+    {
+      "path": "turbo.json",
+      "sha256": "65dc5cd61e8b72ee9438b7fe2fc557098c1fb0b46c3edac171bb7ced50b56bfd"
+    },
+    {
+      "path": "vitest.config.mjs",
+      "sha256": "9261e391f5ab9d56def583d66e8eec5b25b52122f46f2c6056c72b8abf61d448"
+    }
+  ],
+  "gates": {
+    "foundation": {
+      "allowed": true,
+      "blockers": [],
+      "declared": "ready"
+    },
+    "localShadow": {
+      "allowed": false,
+      "blockers": [],
+      "declared": "blocked"
+    },
+    "productionDeployment": {
+      "allowed": false,
+      "blockers": [
+        {
+          "concern": "deployment",
+          "path": "distribution.deployment",
+          "state": "unresolved"
+        },
+        {
+          "concern": "security",
+          "path": "governance.security",
+          "state": "unresolved"
+        }
+      ],
+      "declared": "blocked"
+    },
+    "publicRelease": {
+      "allowed": false,
+      "blockers": [
+        {
+          "concern": "registry",
+          "path": "distribution.registry",
+          "state": "unresolved"
+        },
+        {
+          "concern": "release",
+          "path": "governance.signedReleaseTags",
+          "state": "unresolved"
+        },
+        {
+          "concern": "legal",
+          "path": "legal.assetRights",
+          "state": "unapproved"
+        },
+        {
+          "concern": "legal",
+          "path": "legal.contributors",
+          "state": "unapproved"
+        },
+        {
+          "concern": "legal",
+          "path": "legal.license",
+          "state": "unapproved"
+        },
+        {
+          "concern": "legal",
+          "path": "legal.notice",
+          "state": "unapproved"
+        },
+        {
+          "concern": "legal",
+          "path": "legal.publicDistribution",
+          "state": "unapproved"
+        }
+      ],
+      "declared": "blocked"
+    },
+    "remoteAuthority": {
+      "allowed": false,
+      "blockers": [
+        {
+          "concern": "authority",
+          "path": "authority.target",
+          "state": "unresolved"
+        },
+        {
+          "concern": "codeowners",
+          "path": "governance.codeowners",
+          "state": "unresolved"
+        },
+        {
+          "concern": "security",
+          "path": "governance.security",
+          "state": "unresolved"
+        },
+        {
+          "concern": "recovery",
+          "path": "ownership.recovery",
+          "state": "unresolved"
+        }
+      ],
+      "declared": "blocked"
+    }
+  },
+  "manifestDigest": "8152a89f65dfb96917cec01a2d2bc2a84aa2163fdbf1c36091c4c69aaf972bd0",
+  "profile": "public-package-product",
+  "profileDigest": "ecd747493a5c3d38a0251242ee3917b771555b6746ce7b993675b12f959f9458",
+  "repository": "unisane-ops",
+  "schemaVersion": 1,
+  "workspaceFoundation": {
+    "commandContract": null,
+    "configurationDispositions": {},
+    "lockfile": {
+      "authority": "materialized-package-graph",
+      "criterion": "materialized-package-graph-admitted",
+      "rationale": "Generate a real lockfile only from the admitted materialized package graph; the repository foundation never emits a placeholder.",
+      "state": "blocked"
+    },
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ]
+  }
+}

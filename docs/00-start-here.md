@@ -1,20 +1,20 @@
 ---
 id: 'DOC-b939888a0c84'
 owner: 'unisane-ops'
-scope: unisane-ops
+scope: workspace
 role: router
-lifecycle: durable
+lifecycle: active
 authority: canonical
 provenance: accepted
-view: transition
+view: current
 ---
 
 # Unisane Ops Documentation
 
-This is the compact router for the future standalone `unisane-ops` repository.
-It belongs to the temporary umbrella child Scope `unisane-ops`; that registration makes
-this directory current Project Memory but does not create an independent repository or
-Skopos authority. The umbrella repository remains the sole writable source authority
+This is the repository-local documentation router for the standalone `unisane-ops`
+candidate. Product Architecture, Standards, Guides, Decisions, Findings, Patterns,
+generated references, and tracked Tasks belong under this repository's `docs/**`
+authority. The umbrella repository remains the sole writable product-source authority
 until an approved cutover records otherwise.
 
 ## Start Here
@@ -45,6 +45,6 @@ until an approved cutover records otherwise.
 
 ## Fail-Closed Rule
 
-No local shadow, remote, public history, package release, or production deployment is
-ready merely because source exists under `unisane-ops/**`. Use the transition Standard's
-gate status and blocker ledger.
+No remote, public history, package release, production deployment, or authority cutover
+is ready merely because this local candidate exists. Use the transition Standard's gate
+status and blocker ledger.
