@@ -1,8 +1,8 @@
 'use client';
 
 import { Suspense, useEffect, useRef, useState } from 'react';
-import Script from 'next/script';
-import { usePathname, useSearchParams } from 'next/navigation';
+import Script from 'next/script.js';
+import { usePathname, useSearchParams } from 'next/navigation.js';
 import { createWebTrackingClient } from '../client';
 import { setGlobalWebTrackingClient } from '../global-client';
 import type { WebTrackingClient, WebTrackingConfig } from '../types';
