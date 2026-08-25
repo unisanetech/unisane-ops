@@ -20,7 +20,8 @@ lastUpdated: '2026-08-25'
   modular `@unisane/framework-ops` adapter remains descriptor-only and public, validates
   the exact `@unisane/compiler/project-descriptor-contract/v1` assets, and now requires
   Compiler `0.1.0` in both the contract asset and every consumer expectation. The
-  `unisane-ops` package exposes only `unisane-ops/config` and the `unisane-ops` binary.
+  `unisane-ops` package exposes `unisane-ops/config`, the package-metadata-owned
+  `unisane-ops/meta`, and the `unisane-ops` binary.
   Package admission and owner-local integrity truth now match that source. No alias,
   compatibility path, remote, registry, hosted, provider, deployment, or authority
   mutation was introduced.
