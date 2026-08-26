@@ -141,9 +141,7 @@ const topLevel = readdirSync(root)
   .filter((name) => !ignoredDirectories.has(name) && name !== '.git')
   .sort();
 const missingTopLevel = policy.expectedTopLevel.filter((path) => !topLevel.includes(path));
-const unexpectedTopLevel = topLevel.filter(
-  (path) => !policy.expectedTopLevel.includes(path) && path !== 'pnpm-lock.yaml',
-);
+const unexpectedTopLevel = topLevel.filter((path) => !policy.expectedTopLevel.includes(path));
 const violations = [
   ...(expectedGeneratedPaths.includes(policy.generatedOutput)
     ? []
