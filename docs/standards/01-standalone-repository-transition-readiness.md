@@ -8,13 +8,18 @@ authority: canonical
 provenance: accepted
 view: transition
 status: accepted
-lastUpdated: '2026-08-25'
+lastUpdated: '2026-08-27'
 ---
 
 # Standalone Unisane Ops Repository Transition Readiness
 
 ## Changelog
 
+- `2026-08-27`: Generated the owner-local pnpm lock from the current public and
+  repository-internal package graph and staged a least-privilege GitHub Actions CI
+  workflow that performs a frozen install and the existing `pnpm verify` contract.
+  No hosted run, required-check configuration, registry, publisher, provenance,
+  deployment, remote, push, or authority claim is established by this local change.
 - `2026-08-25`: Reconciled authoritative umbrella `dev` with the earlier Ops Phase 1
   commits without replaying their alternate validator implementation. The canonical
   modular `@unisane/framework-ops` adapter remains descriptor-only and public, validates
@@ -660,8 +665,9 @@ bundle.
 
 The staged repository-integrity check is a real deterministic target-local gate. It is not a
 substitute for the public-package-product profile's still-missing approved security and license
-checks. No target lockfile, clean install, hosted CI run, target-local Skopos activation, public
-release, or authority promotion was performed or certified.
+checks. The target now has an owner-local lockfile and staged hosted-CI declaration, but no hosted
+run, required-check configuration, target-local Skopos certification, public release, or authority
+promotion was performed or certified.
 
 ## Ops Console UI Consumer Release Boundary
 
@@ -713,7 +719,7 @@ authority cutover. Those gates remain independently fail-closed below.
 | OPS-R04 | closed at local descriptor contract            | local shadow                | `@unisane/framework-ops` validates the exact V1 contract/schema assets, canonical bytes and SHA-256, admitted Compiler version, identity, allowed and required capabilities, compatibility, and mapping with zero Framework/Compiler/Devtools dependencies and no executable bridge | Framework and Ops owners; retain the exact cross-repository fixtures and focused contract proof |
 | OPS-R05 | open                                           | local shadow                | Platform consumers and the umbrella lock still retain pre-cutover Ops workspace coordinates                                                                                                                                                                                                                                        | Platforms and migration owners; migrate consumers to immutable `unisane-ops` candidates and regenerate the owning lock projection               |
 | OPS-R06 | open                                           | package release             | console is private; registry disposition of Ops MCP and hosted PostgreSQL remains unresolved                                                                                                                                                                                                                                        | product and release owners; explicit package admission or privatization                                                                         |
-| OPS-R07 | open; integration projection blocked           | local shadow                | the Ops source coordinate has changed, while the umbrella lock and external consumer projection remain coordinator-owned; standalone setup certification, target sync, lock generation, clean install, Node matrix, and hosted CI proof remain open                                                                        | Migration coordinator after OPS-R04; reconcile the root lock/consumer projection, then rerun source-bound target sync and standalone proof        |
+| OPS-R07 | owner-local lock and CI staged; hosted proof open | local shadow              | the current Ops package graph has an owner-local lock and least-privilege CI declaration; standalone frozen install, hosted execution, Node matrix, required-check configuration, setup certification, and external consumer projection remain open                                                                        | Ops and migration owners; run the staged lane from the protected remote, then retain source-bound install and consumer Evidence                    |
 | OPS-R08 | local materialization complete; approval open  | local shadow/public history | the history-preserved local candidate exists and exact filter, commit map, parity, excluded-path, ref/tag/signature, integrity, and cleanup receipts pass; migration-tool/final-history approval and any public-history promotion remain open                                                                                       | migration owner and reviewer; approve the migration route and public-history receipts before external promotion                                 |
 | OPS-R09 | technical scan complete; certification blocked | public history              | deterministic full-history scan produced 1,027 redacted findings, but scanner policy, findings, allowlists, remediation, security, privacy, and legal approvals are absent                                                                                                                                                          | security/legal/privacy/provider-data owners; resolve redacted ledger and rerun approved scanners                                                |
 | OPS-R10 | open                                           | public release              | license, NOTICE, contributor terms, asset/fixture/provider rights, public distribution, package metadata, npm access, and trusted publishing are unapproved                                                                                                                                                                         | legal and release owners; approved text, policy, registry, package and provenance proof                                                         |
