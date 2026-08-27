@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Portable web tracking, conversions, delivery adapters, and SEO runtime for Unisane and standalone applications",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unisanetech/unisane-ops.git",
+    "directory": "packages/web-runtime"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",

@@ -3,7 +3,7 @@ title: "Task: Establish the fail-closed Ops console UI consumer release boundary
 status: complete
 owner: "codex-ops-ui-consumer-boundary"
 id: T-0789a7ed
-scope: "unisane-ops"
+scope: "workspace"
 role: task
 lifecycle: historical
 authority: canonical

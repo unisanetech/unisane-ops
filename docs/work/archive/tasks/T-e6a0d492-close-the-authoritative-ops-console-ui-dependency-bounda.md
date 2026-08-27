@@ -5,7 +5,7 @@ title:
 status: complete
 owner: 'codex'
 id: T-e6a0d492
-scope: 'unisane-ops'
+scope: 'workspace'
 role: task
 lifecycle: historical
 authority: canonical

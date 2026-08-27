@@ -3,7 +3,7 @@ title: 'Task: Align the Ops console Node floor with the standalone repository co
 status: complete
 owner: 'codex-ops-console-node-floor'
 id: T-73507855
-scope: 'unisane-ops'
+scope: 'workspace'
 role: task
 lifecycle: historical
 authority: canonical

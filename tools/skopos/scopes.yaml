@@ -14,3 +14,4 @@ scopes:
       - 'ops-maintainers'
     aliases:
       - root
+      - unisane-ops

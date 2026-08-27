@@ -5,7 +5,7 @@ title:
 status: superseded
 owner: 'project'
 id: T-639cf77f
-scope: 'unisane-ops'
+scope: 'workspace'
 role: task
 lifecycle: historical
 authority: canonical

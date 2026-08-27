@@ -2,12 +2,12 @@
 id: 'DOC-a7bd679b443a'
 owner: 'unisane-ops'
 repository: unisane-ops
-scope: unisane-ops
+scope: workspace
 role: guide
 lifecycle: durable
 authority: canonical
 provenance: accepted
-view: transition
+view: current
 ---
 
 # True Resume Advertising Asset Provider Operations

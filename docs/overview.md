@@ -1,12 +1,12 @@
 ---
 id: 'DOC-5ec590061b3d'
 owner: 'unisane-ops'
-scope: unisane-ops
+scope: workspace
 role: overview
 lifecycle: durable
 authority: canonical
 provenance: accepted
-view: transition
+view: current
 ---
 
 # Unisane Ops Overview
@@ -14,10 +14,10 @@ view: transition
 Unisane Ops is the stack-neutral operations product in the wider Unisane ecosystem. It
 serves existing websites and services as well as Framework projects.
 
-This is the compact owner-local overview for the temporary umbrella child Scope
-`unisane-ops`. At cutover, each central predecessor must receive an exact `move`,
-`rewrite`, or `delete` disposition. After the authority flip, no second canonical,
-writable copy of this product boundary may remain in the umbrella repository.
+This is the owner-local overview for the standalone `unisane-ops` repository. Product
+source, packages, applications, plugins, documentation, and Project Memory are
+repository-local and do not depend on the umbrella checkout. The final fleet
+one-authority cutover remains an explicit Infrastructure governance action.
 
 ## Product Boundary
 

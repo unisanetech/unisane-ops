@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Cloudflare provider-family implementations for Unisane Cloud operations",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unisanetech/unisane-ops.git",
+    "directory": "packages/provider-cloudflare"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",

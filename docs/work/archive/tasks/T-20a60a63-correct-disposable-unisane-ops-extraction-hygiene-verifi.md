@@ -3,7 +3,7 @@ title: "Task: Correct disposable Unisane Ops extraction hygiene verification and
 status: complete
 owner: "codex-unisane-ops-proof-correction"
 id: T-20a60a63
-scope: "unisane-ops"
+scope: "workspace"
 role: task
 lifecycle: historical
 authority: canonical

@@ -1,8 +1,14 @@
 {
   "name": "@unisane/ops-hosted-postgresql",
+  "private": true,
   "version": "0.1.0",
   "description": "PostgreSQL job, schedule, and encrypted credential persistence for the Unisane Ops hosted runtime",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unisanetech/unisane-ops.git",
+    "directory": "packages/hosted-postgresql"
+  },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",

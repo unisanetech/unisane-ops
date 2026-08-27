@@ -3,7 +3,7 @@ title: 'Task: Close the Ops console DataTable stylesheet release-boundary blocke
 status: complete
 owner: 'codex-ops-data-table-stylesheet'
 id: T-5bdf44c9
-scope: 'unisane-ops'
+scope: 'workspace'
 role: task
 lifecycle: historical
 authority: canonical

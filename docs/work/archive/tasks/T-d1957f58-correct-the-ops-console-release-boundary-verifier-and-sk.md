@@ -3,7 +3,7 @@ title: "Task: Correct the Ops console release-boundary verifier and Skopos manif
 status: complete
 owner: "codex-ops-ui-boundary-correction"
 id: T-d1957f58
-scope: "unisane-ops"
+scope: "workspace"
 role: task
 lifecycle: historical
 authority: canonical

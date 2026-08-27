@@ -3,7 +3,7 @@ title: "Task: Freeze and converge the authoritative Unisane Ops standalone sourc
 status: complete
 owner: "codex-unisane-ops-convergence"
 id: T-287702f0
-scope: "unisane-ops"
+scope: "workspace"
 role: task
 lifecycle: historical
 authority: canonical

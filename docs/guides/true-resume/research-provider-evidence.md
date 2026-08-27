@@ -2,12 +2,12 @@
 id: 'DOC-55c19ef10d85'
 owner: 'unisane-ops'
 repository: unisane-ops
-scope: unisane-ops
+scope: workspace
 role: guide
 lifecycle: durable
 authority: canonical
 provenance: accepted
-view: transition
+view: current
 ---
 
 # True Resume Research Provider Evidence

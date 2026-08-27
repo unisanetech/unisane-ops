@@ -4,7 +4,7 @@ title:
 status: complete
 owner: 'codex-ops-external-consumer'
 id: T-ec2d585b
-scope: 'unisane-ops'
+scope: 'workspace'
 role: task
 lifecycle: historical
 authority: canonical

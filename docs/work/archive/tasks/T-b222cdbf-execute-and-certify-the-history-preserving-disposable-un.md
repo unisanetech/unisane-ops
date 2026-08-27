@@ -3,7 +3,7 @@ title: "Task: Execute and certify the history-preserving disposable Unisane Ops 
 status: complete
 owner: "codex-unisane-ops-extraction-proof"
 id: T-b222cdbf
-scope: "unisane-ops"
+scope: "workspace"
 role: task
 lifecycle: historical
 authority: canonical

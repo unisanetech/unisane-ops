@@ -2,7 +2,15 @@
   "name": "unisane-ops-workspace",
   "version": "0.0.0",
   "private": true,
-  "description": "Standalone workspace declaration for the staged Unisane Ops repository boundary",
+  "description": "Standalone workspace for the Unisane Ops product and public package family",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unisanetech/unisane-ops.git"
+  },
+  "homepage": "https://github.com/unisanetech/unisane-ops#readme",
+  "bugs": {
+    "url": "https://github.com/unisanetech/unisane-ops/issues"
+  },
   "scripts": {
     "build": "turbo run build",
     "check:console-external-consumer": "node scripts/check-console-external-consumer.mjs",

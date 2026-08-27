@@ -1,9 +1,9 @@
 ---
 id: 'DOC-c63e12f679d9'
 owner: 'unisane-ops'
-scope: unisane-ops
+scope: workspace
 role: standard
-lifecycle: durable
+lifecycle: historical
 authority: canonical
 provenance: accepted
 view: transition

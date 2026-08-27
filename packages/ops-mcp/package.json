@@ -1,8 +1,14 @@
 {
   "name": "@unisane/ops-mcp",
+  "private": true,
   "version": "0.1.0",
   "description": "Project-scoped local MCP access to proven Unisane Ops workflows",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unisanetech/unisane-ops.git",
+    "directory": "packages/ops-mcp"
+  },
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",
