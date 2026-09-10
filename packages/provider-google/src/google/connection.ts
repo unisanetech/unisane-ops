@@ -14,6 +14,33 @@ export const googleConnectionServiceSchema = z.enum([
 ]);
 export type GoogleConnectionService = z.infer<typeof googleConnectionServiceSchema>;
 
+export const googleTagManagerAccessSchema = z.enum(['read', 'workspace', 'publish']);
+export type GoogleTagManagerAccess = z.infer<typeof googleTagManagerAccessSchema>;
+
+const GOOGLE_TAG_MANAGER_SCOPES_BY_ACCESS: Record<
+  GoogleTagManagerAccess,
+  readonly string[]
+> = {
+  read: ['https://www.googleapis.com/auth/tagmanager.readonly'],
+  workspace: [
+    'https://www.googleapis.com/auth/tagmanager.readonly',
+    'https://www.googleapis.com/auth/tagmanager.edit.containers',
+    'https://www.googleapis.com/auth/tagmanager.edit.containerversions',
+  ],
+  publish: [
+    'https://www.googleapis.com/auth/tagmanager.readonly',
+    'https://www.googleapis.com/auth/tagmanager.edit.containers',
+    'https://www.googleapis.com/auth/tagmanager.edit.containerversions',
+    'https://www.googleapis.com/auth/tagmanager.publish',
+  ],
+};
+
+export function googleTagManagerScopesForAccess(
+  access: GoogleTagManagerAccess,
+): readonly string[] {
+  return [...GOOGLE_TAG_MANAGER_SCOPES_BY_ACCESS[googleTagManagerAccessSchema.parse(access)]];
+}
+
 export const googleConnectionGrantSchema = z
   .object({
     service: googleConnectionServiceSchema,

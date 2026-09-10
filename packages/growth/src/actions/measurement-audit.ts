@@ -111,11 +111,27 @@ function limitationsFor(input: {
   trackingAudit: MarketingTrackingAuditReport;
   canonicalOutcomes: readonly CanonicalOutcome[];
   providerAttributions: readonly ProviderAttributedConversion[];
+  projectId: string;
   environmentId: string;
+  period: GrowthMeasurementAuditInput['period'];
 }) {
   const limitations: string[] = [];
   if (input.canonicalOutcomes.length === 0) {
     limitations.push('No canonical outcome is recorded for this period.');
+  }
+  if (input.canonicalOutcomes.some((outcome) => outcome.projectId !== input.projectId)) {
+    limitations.push('Some canonical outcomes belong to a different project.');
+  }
+  if (input.canonicalOutcomes.some((outcome) => outcome.environmentId !== input.environmentId)) {
+    limitations.push('Some canonical outcomes belong to a different environment.');
+  }
+  if (
+    input.canonicalOutcomes.some(
+      (outcome) =>
+        outcome.window.start !== input.period.start || outcome.window.end !== input.period.end,
+    )
+  ) {
+    limitations.push('Some canonical outcomes cover a different measurement window.');
   }
   if (input.trackingAudit.summary.status === 'blocked') {
     limitations.push('Tracking errors make conversion evidence unreliable.');
@@ -140,6 +156,18 @@ function limitationsFor(input: {
   if (input.canonicalOutcomes.some((outcome) => outcome.freshness === 'unknown')) {
     limitations.push('Some canonical outcome evidence has unknown freshness.');
   }
+  if (input.canonicalOutcomes.some((outcome) => outcome.finality !== 'server-confirmed')) {
+    limitations.push('Some canonical outcomes are not server-confirmed.');
+  }
+  if (input.canonicalOutcomes.some((outcome) => outcome.status === 'partial')) {
+    limitations.push('Some canonical outcome evidence is partial.');
+  }
+  if (input.canonicalOutcomes.some((outcome) => outcome.status === 'conflicting')) {
+    limitations.push('Some canonical outcome evidence is conflicting.');
+  }
+  if (input.canonicalOutcomes.some((outcome) => outcome.status === 'reversed')) {
+    limitations.push('Some canonical outcomes are fully reversed.');
+  }
   if (input.providerAttributions.some((attribution) => attribution.freshness === 'stale')) {
     limitations.push('Some provider-attributed conversion evidence is stale.');
   }
@@ -153,14 +181,37 @@ function limitationsFor(input: {
   return limitations;
 }
 
+function hasCanonicalBlocker(input: {
+  canonicalOutcomes: readonly CanonicalOutcome[];
+  projectId: string;
+  environmentId: string;
+  period: GrowthMeasurementAuditInput['period'];
+}): boolean {
+  return (
+    input.canonicalOutcomes.length === 0 ||
+    input.canonicalOutcomes.some(
+      (outcome) =>
+        outcome.projectId !== input.projectId ||
+        outcome.environmentId !== input.environmentId ||
+        outcome.window.start !== input.period.start ||
+        outcome.window.end !== input.period.end ||
+        outcome.freshness !== 'fresh' ||
+        outcome.finality !== 'server-confirmed' ||
+        outcome.status !== 'confirmed',
+    )
+  );
+}
+
 function trustStatus(input: {
   trackingAudit: MarketingTrackingAuditReport;
   canonicalOutcomes: readonly CanonicalOutcome[];
   limitations: readonly string[];
+  projectId: string;
   environmentId: string;
+  period: GrowthMeasurementAuditInput['period'];
 }) {
   if (
-    input.canonicalOutcomes.length === 0 ||
+    hasCanonicalBlocker(input) ||
     input.trackingAudit.summary.status === 'blocked' ||
     input.trackingAudit.environment !== input.environmentId
   ) {
@@ -194,13 +245,17 @@ export function createGrowthMeasurementAuditAction(
         trackingAudit,
         canonicalOutcomes,
         providerAttributions,
+        projectId: context.projectId,
         environmentId: context.environmentId,
+        period: input.period,
       });
       const status = trustStatus({
         trackingAudit,
         canonicalOutcomes,
         limitations,
+        projectId: context.projectId,
         environmentId: context.environmentId,
+        period: input.period,
       });
       const observedAt = (dependencies.now ?? (() => new Date()))().toISOString();
       const safeToScale = status === 'ready';

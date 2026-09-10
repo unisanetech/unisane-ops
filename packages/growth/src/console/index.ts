@@ -82,3 +82,4 @@ export function runWithGrowthConsoleRuntime<T>(
 }
 
 export const loadGrowthConsoleExecutionContext = loadMarketingExecutionContext;
+export * from './capability-review.js';

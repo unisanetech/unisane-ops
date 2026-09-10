@@ -1,0 +1,53 @@
+{
+  "snapshotId": "S-a9c0e58499ed",
+  "taskId": "T-cc34cd70",
+  "sessionId": "8f74a1ed-b013-4e65-a209-e97b30b13218",
+  "actorId": "ops-descriptor",
+  "baseRevision": "d799e47265faab9bbf961aef294a3296b34e591f",
+  "paths": [
+    {
+      "path": "docs/standards/13-unisane-ops-product-architecture-baseline.md",
+      "digest": "79ea13a4843388340d7ad5f45e68b1386e526878514d2d0d1f103541203b37d3",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/framework-ops/README.md",
+      "digest": "b1569c02c438bf2a7a4c8c55c77b3c7b297e6f3b9670970d59f7bbf3782a7c6f",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/framework-ops/package.json",
+      "digest": "e2bd3c499fa7610216be3b637753ead90eda2a9e7d53589d98aa4c83872f9066",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/framework-ops/scripts/verify-release-boundary.mjs",
+      "digest": "45c3472388093f6f533bf8b50dedfb807b360835542474d6f6f8d36faaacd904",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/framework-ops/src/__tests__/descriptor.test.ts",
+      "digest": "b853b3879cb03c42424701418a6509d611d824f40f298b5998b28b24b3f3152c",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/framework-ops/src/contracts.ts",
+      "digest": "6eb3f6add50d5aa0faa8c8be721606b6a54da312126b999e1a3ddeb040e01bd5",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/framework-ops/tests/fixtures/project-descriptor-contract/v1",
+      "digest": "c48b27e202c60eafc376e850062dabd62415d91ed1bb75a7b585ed9a6435f6d8",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/framework-ops/tests/release-boundary.test.mjs",
+      "digest": "3bc96f278e4b12a816a5f67305cd0de5a046e8b3a16088c903ece9d8bab3285e",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    }
+  ],
+  "digest": "a9c0e58499ed96659ceac6630470ee4f6ac2c3b639e2cfe6bb861c1fe87b419e",
+  "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs",
+  "createdAt": "2026-09-07T11:31:04.833Z",
+  "artifactPath": "docs/work/tasks/snapshots/T-cc34cd70-S-a9c0e58499ed.json"
+}

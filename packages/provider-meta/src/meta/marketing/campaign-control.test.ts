@@ -54,3 +54,14 @@ describe('Meta Ads campaign control', () => {
     expect(JSON.stringify(result)).not.toContain(credentials.accessToken);
   });
 });
+
+it('does not treat an empty acknowledgement or an unknown status as success', async () => {
+  const fetcher = vi
+    .fn()
+    .mockResolvedValueOnce(new Response('{}'))
+    .mockResolvedValueOnce(new Response('{"status":"ARCHIVED"}'));
+  expect(await pauseMetaAdsCampaign({ ...credentials, fetcher })).toMatchObject({
+    outcome: 'outcome-unknown',
+  });
+  expect(await readMetaAdsCampaignStatus({ ...credentials, fetcher })).toBe('unknown');
+});

@@ -59,6 +59,7 @@ async function loadArtifact<T>(
   relativePath: string,
   schema: z.ZodTypeAny,
   missingCode: string,
+  retiredVersionCode?: string,
 ): Promise<LoadedMarketingArtifact<T>> {
   const resolvedPath = path.resolve(cwd, relativePath);
   ensurePathWithinCwd(cwd, resolvedPath);
@@ -67,9 +68,21 @@ async function loadArtifact<T>(
       `[${missingCode}] Marketing registry artifact was not found at ${resolvedPath}.`,
     );
   }
+  const value = await readArtifactValue(resolvedPath);
+  if (
+    retiredVersionCode &&
+    typeof value === 'object' &&
+    value !== null &&
+    'version' in value &&
+    value.version === 1
+  ) {
+    throw new Error(
+      `[${retiredVersionCode}] Event registry version 1 is retired. Run the explicit migrateMarketingEventRegistryV1 migration and save the version 2 artifact before ordinary runtime loading.`,
+    );
+  }
   return {
     path: resolvedPath,
-    value: schema.parse(await readArtifactValue(resolvedPath)) as T,
+    value: schema.parse(value) as T,
   };
 }
 
@@ -83,6 +96,7 @@ export async function loadMarketingRegistries(
     config.paths.eventRegistry,
     marketingEventRegistrySchema,
     'MARKETING_EVENT_REGISTRY_NOT_FOUND',
+    'MARKETING_EVENT_REGISTRY_V1_RETIRED',
   );
   const conversions = await loadArtifact<MarketingConversionRegistry>(
     cwd,
@@ -91,4 +105,11 @@ export async function loadMarketingRegistries(
     'MARKETING_CONVERSION_REGISTRY_NOT_FOUND',
   );
   return { events, conversions };
+}
+
+export function isMissingMarketingRegistryError(error: unknown): boolean {
+  return error instanceof Error && [
+    'MARKETING_EVENT_REGISTRY_NOT_FOUND',
+    'MARKETING_CONVERSION_REGISTRY_NOT_FOUND',
+  ].some((code) => error.message.includes(`[${code}]`));
 }

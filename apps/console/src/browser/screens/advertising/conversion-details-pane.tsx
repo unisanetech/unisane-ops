@@ -73,7 +73,7 @@ export function ConversionDetailsPane({
           </Card>
           <Typography variant="bodySmall" className="text-on-surface-variant mt-3">
             A configured action proves setup exists. It does not by itself prove that an outcome was
-            observed or reconciled with the product's canonical conversion record.
+            observed or reconciled with the product’s canonical conversion record.
           </Typography>
         </AdvertisingDetailSection>
 

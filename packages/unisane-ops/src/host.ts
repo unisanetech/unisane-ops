@@ -81,6 +81,7 @@ export function loadFirstPartyPackGraph(): readonly PackManifest[] {
     '@unisane/ops-console',
     '@unisane/provider-aws',
     '@unisane/provider-google',
+    '@unisane/provider-meta',
   ] as const) {
     try {
       const manifestPath = require.resolve(`${packageName}/pack-manifest`);
@@ -377,6 +378,8 @@ Canonical commands:
   unisane-ops add growth [--capability <id>] [--yes] [--json]
   unisane-ops connect google [--environment <id>] [--yes] [--json]
   unisane-ops disconnect google [--environment <id>] [--connection <id>] [--yes] [--json]
+  unisane-ops connect meta [--environment <id>] [--credential-env <NAME>] [--ad-account <id>] [--pixel <id>|--dataset <id>] [--refresh|--rotate] [--yes] [--json]
+  unisane-ops disconnect meta [--environment <id>] [--connection <id>] [--yes] [--json]
   unisane-ops check [--environment <id>] [--json]
   unisane-ops migrate growth-config --input <path> --yes [--json]
   unisane-ops status [--json]

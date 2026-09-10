@@ -8,11 +8,11 @@
     "package": "@unisane/provider-meta",
     "owner": "ops/provider-meta",
     "packageDir": "packages/provider-meta",
-    "sourceFileCount": 7,
-    "symbolCount": 35,
-    "functionCount": 35,
-    "publicFunctionCount": 10,
-    "internalFunctionCount": 25,
+    "sourceFileCount": 19,
+    "symbolCount": 106,
+    "functionCount": 106,
+    "publicFunctionCount": 38,
+    "internalFunctionCount": 68,
     "serviceLayerFunctionCount": 0
   },
   "owner": "unisane-ops",
@@ -25,6 +25,727 @@
     "packages/provider-meta/package.json"
   ],
   "records": [
+    {
+      "name": "metaMeasurementCapabilityMatrix",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/capabilities.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "metaMeasurementCapabilityMatrix(): MetaMeasurementCapabilityMatrix",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertCurrentContext",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertCurrentContext(request, connectionId, current): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "binding",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "binding(input): { reference: MetaCredentialReference; context: MetaCredentialContext }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "connectMeta",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "connectMeta(request, dependencies): Promise<MetaLifecycleContributionResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createDefaultMetaCredentialIngress",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createDefaultMetaCredentialIngress(input): MetaCredentialIngress",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "credentialText",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "credentialText(credential): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineMetaLifecycleContributionResult",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineMetaLifecycleContributionResult(input): MetaLifecycleContributionResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "integerOption",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "integerOption(argv, name, bounds): number | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "observeConnection",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "observeConnection(input): Promise<{ connection: MetaConnectionRecord; discovery: MetaConnectionDiscoveryResult }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "option",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "option(argv, name): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseArguments",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseArguments(argv): ParsedArguments",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectedId",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "selectedId(parsed, previous, resourceType): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectionResources",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "selectionResources(input): MarketingMetaConnectionResource[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "areaResult",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "areaResult(area, page, failure): MetaDiscoveryAreaResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "checkedNextUrl",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "checkedNextUrl(value, apiVersion): URL | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "dedupeResources",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "dedupeResources(resources): { resources: MetaDiscoveredResource[]; limitReached: boolean; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "discoverMetaConnection",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "discoverMetaConnection(input): Promise<MetaConnectionDiscoveryResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "grantsFromPermissions",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "grantsFromPermissions(rows, observedAt): MarketingMetaConnectionGrant[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "graphUrl",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "graphUrl(apiVersion, path, fields, pageSize): URL",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "optionalPages",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "optionalPages(area, input): Promise<{ page?: GraphPage; area: MetaDiscoveryAreaResult }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pageResources",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "pageResources(value): MetaDiscoveredResource[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "probeMetaConnectionIdentity",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "probeMetaConnectionIdentity(input): Promise<MetaConnectionIdentity>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGraphJson",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readGraphJson(input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGraphPages",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readGraphPages(input): Promise<GraphPage>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readRequiredIdentity",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readRequiredIdentity(input): Promise<{ identity: MetaConnectionIdentity; area: MetaDiscoveryAreaResult }>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordOf",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordOf(value): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resource",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resource(input): MetaDiscoveredResource | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stringOf",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stringOf(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "applyObservation",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-lifecycle.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "applyObservation(currentInput, observationInput, mode): MetaConnectionRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertContext",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-lifecycle.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertContext(current, observation): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "disconnectMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-lifecycle.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "disconnectMetaConnectionRecord(input): { disconnected: boolean; recordMissing: boolean; historicalDataRetained: true; providerResourcesChanged: false; hostCredentialRevocationRe...",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fail",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-lifecycle.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fail(code, message): never",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "refreshMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-lifecycle.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "refreshMetaConnectionRecord(current, observation): MetaConnectionRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "revokeMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-lifecycle.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "revokeMetaConnectionRecord(currentInput, input): MetaConnectionRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rotateMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-lifecycle.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "rotateMetaConnectionRecord(current, observation): MetaConnectionRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "withoutVerification",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-lifecycle.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "withoutVerification(record): Omit<MetaConnectionRecord, 'lastVerifiedAt'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-store.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readMetaConnectionRecord(args): MetaConnectionRecord | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "removeMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-store.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "removeMetaConnectionRecord(args): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveRecordPath",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-store.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveRecordPath(projectRoot, recordPath): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-store.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "writeMetaConnectionRecord(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildMetaConnectionReadiness",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildMetaConnectionReadiness(input): Array<Record<string, unknown>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createMetaConnectionRecord(input): MetaConnectionRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "defineMetaConnectionRecord(input): MetaConnectionRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defineMetaReadinessFinding",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defineMetaReadinessFinding(input): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "projectMetaConnectionStatus",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "projectMetaConnectionStatus(input): MarketingMetaConnectionStatus",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "accessTokenFromBytes",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/credential-execution.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "accessTokenFromBytes(credential): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "discoverMetaConnectionWithHostCredential",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/credential-execution.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "discoverMetaConnectionWithHostCredential(input): Promise<MetaConnectionDiscoveryResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pullMetaAdsReportWithHostCredential",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/credential-execution.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pullMetaAdsReportWithHostCredential(input)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "withMetaConnectionCredential",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/credential-execution.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "withMetaConnectionCredential(input): Promise<T>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "disconnectMeta",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/disconnect.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "disconnectMeta(request, dependencies): Promise<MetaLifecycleContributionResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertCredentialNotExposed",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertCredentialNotExposed(value, credential, seen): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createLocalMetaCredentialResolver",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createLocalMetaCredentialResolver(input): MetaHostCredentialResolver",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createMacOsMetaCredentialResolver",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createMacOsMetaCredentialResolver(): MetaHostCredentialResolver",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createMacOsMetaKeychainCredentialSource",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createMacOsMetaKeychainCredentialSource(input): MetaLocalCredentialSource",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "credentialText",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "credentialText(credential): string | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultKeychainRunner",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultKeychainRunner(): MetaKeychainCommandRunner",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaKeychainAccount",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "metaKeychainAccount(input): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "trimmedCredential",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "trimmedCredential(bytes): Uint8Array",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "clearOutput",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-store.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "clearOutput(result): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createMacOsMetaKeychainCredentialStore",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-store.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createMacOsMetaKeychainCredentialStore(input): MetaLocalCredentialStore",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultRunner",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-store.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultRunner(): MetaKeychainMutationRunner",
+      "layer": "tooling-layer"
+    },
     {
       "name": "accountPath",
       "kind": "function",
@@ -409,14 +1130,16 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "readJsonResponse",
+      "name": "pullMetaAdsReportRequest",
       "kind": "function",
       "package": "@unisane/provider-meta",
       "owner": "ops/provider-meta",
       "file": "packages/provider-meta/src/meta/marketing/report-pull.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "readJsonResponse(response): Promise<unknown>",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pullMetaAdsReportRequest(input): Promise<ProviderApiPullPayload<'meta-ads'>>",
       "layer": "tooling-layer"
     },
     {
@@ -429,7 +1152,121 @@
       "tags": [],
       "signatureShort": "resolveMetaAdsReportType(input): MetaAdsReportType",
       "layer": "tooling-layer"
+    },
+    {
+      "name": "trustedNextPageUrl",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/report-pull.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "trustedNextPageUrl(value, apiVersion): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultSleep",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/read-transport.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultSleep(milliseconds): Promise<void>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "failureOf",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/read-transport.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "failureOf(response, value, attempts, maximumRetryAfter): MetaGraphReadFailure",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "fetchWithTimeout",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/read-transport.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "fetchWithTimeout(input): Promise<Response>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "integerOf",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/read-transport.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "integerOf(value): number | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readMetaGraphJson",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/read-transport.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readMetaGraphJson(input): Promise<unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordOf",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/read-transport.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordOf(value): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "retryable",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/read-transport.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "retryable(failure): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "retryAfter",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/read-transport.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "retryAfter(response, maximum): number | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createTerminalMetaCredentialPrompt",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/terminal-credential-prompt.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createTerminalMetaCredentialPrompt(options): MetaCredentialPrompt",
+      "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:711cb69a44c3"
+  "generatedAt": "content-hash:855d24b83789"
 }

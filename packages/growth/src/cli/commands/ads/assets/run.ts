@@ -3,14 +3,10 @@ import {
   archiveMarketingAdsAsset,
   buildMarketingAdsAssetReport,
   importMarketingAdsAsset,
-  MARKETING_GOOGLE_ADS_SCOPE,
   marketingAdsAssetTypeSchema,
   marketingAdsPlanProviderSchema,
   writeMarketingAdsAssetCreativePlan,
-  writeMarketingAdsAssetUploadReceipt,
   writeMarketingAdsAssetUploadPlan,
-  writeMarketingGoogleAdsCampaignAssetLinkReceipt,
-  type MarketingExecutionContext,
   type MarketingAdsPlanProvider,
 } from '@unisane/growth/marketing';
 import type { AdsCliOptions } from '../options.js';
@@ -21,14 +17,12 @@ import {
   printAdsAssetUploadResult,
   printAdsAssetUploadPlanResult,
 } from '../output/assets.js';
-import { uploadMetaAdsAsset } from '../../../provider-adapters.js';
-import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
-import { resolveGrowthMetaConnectionToken } from '../../../connections/meta.js';
-import {
-  loadGrowthProjectContext,
-  loadMarketingExecutionContext,
-  resolveGrowthResource,
-} from '../../../project-context.js';
+import { executeGrowthProviderCommand } from '../../../provider-runtime.js';
+import type {
+  MarketingAdsAssetUploadResult,
+  MarketingGoogleAdsCampaignAssetLinkResult,
+} from '@unisane/growth/marketing';
+import { loadMarketingExecutionContext } from '../../../project-context.js';
 
 type AdsAssetMode =
   | 'import'
@@ -72,72 +66,6 @@ function parseGoogleCampaignImageFieldType(
   throw new Error(
     '[ADS_ASSET_GOOGLE_LINK_FIELD_UNSUPPORTED] Google Ads campaign image field type must be MARKETING_IMAGE or AD_IMAGE.',
   );
-}
-
-async function resolveAdsAssetLiveEnv(
-  config: MarketingExecutionContext,
-  options: AdsCliOptions,
-  providers: Set<MarketingAdsPlanProvider>,
-): Promise<{
-  env: Record<string, string | undefined>;
-  providerCredentials: NonNullable<
-    Parameters<typeof writeMarketingAdsAssetUploadReceipt>[1]['providerCredentials']
-  >;
-}> {
-  const env = { ...process.env };
-  const google = providers.has('googleAds')
-    ? {
-        resource: resolveGrowthResource({
-          context: await loadGrowthProjectContext(),
-          environment: options.environment,
-          provider: 'google',
-          service: 'ads',
-          resourceType: 'customer',
-        }),
-        credentials: await resolveGrowthGoogleConnectionCredentials({
-          service: 'ads',
-          connection: options.connection,
-          environment: options.environment,
-          requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
-        }),
-      }
-    : undefined;
-  const meta = providers.has('metaAds')
-    ? {
-        resource: resolveGrowthResource({
-          context: await loadGrowthProjectContext(),
-          environment: options.environment,
-          provider: 'meta',
-          service: 'ads',
-          resourceType: 'ad-account',
-        }),
-        accessToken: await resolveGrowthMetaConnectionToken({
-          connection: options.connection,
-          environment: options.environment,
-        }),
-      }
-    : undefined;
-  return {
-    env,
-    providerCredentials: {
-      ...(google
-        ? {
-            googleAds: {
-              accountId: google.resource.resourceId,
-              ...google.credentials,
-            },
-          }
-        : {}),
-      ...(meta
-        ? {
-            metaAds: {
-              accountId: meta.resource.resourceId,
-              accessToken: meta.accessToken,
-            },
-          }
-        : {}),
-    },
-  };
 }
 
 export async function adsAssets(
@@ -219,33 +147,25 @@ export async function adsAssets(
       if (!options.plan) {
         throw new Error('[ADS_ASSET_UPLOAD_PLAN_REQUIRED] Pass --plan <upload-plan.json>.');
       }
-      const providers = parseProviderFilter(options.provider);
-      const selectedProviders =
-        providers === 'all'
-          ? new Set<MarketingAdsPlanProvider>(['googleAds', 'metaAds'])
-          : new Set([providers]);
-      const providerContext = options.yes
-        ? await resolveAdsAssetLiveEnv(loaded.config, options, selectedProviders)
-        : undefined;
-      const result = await writeMarketingAdsAssetUploadReceipt(loaded.config, {
-        cwd: options.cwd,
-        planPath: options.plan,
-        dryRun: options.dryRun,
-        yes: options.yes,
-        receiptPath: options.receipt,
-        approvalRef: options.approvalRef,
-        accountConfirm: options.accountConfirm,
-        productionConfirm: options.productionConfirm,
-        operationConfirm: options.operationConfirm,
-        liveExecutorMode: options.liveExecutor ?? 'disabled',
-        providerUploaders: {
-          metaAds: uploadMetaAdsAsset,
+      const result = await executeGrowthProviderCommand<MarketingAdsAssetUploadResult>(
+        'google.marketing.assets',
+        {
+          kind: 'upload',
+          environment: options.environment,
+          connection: options.connection,
+          planPath: options.plan,
+          dryRun: options.dryRun,
+          yes: options.yes,
+          receiptPath: options.receipt,
+          approvalRef: options.approvalRef,
+          accountConfirm: options.accountConfirm,
+          productionConfirm: options.productionConfirm,
+          operationConfirm: options.operationConfirm,
+          liveExecutorMode: options.liveExecutor ?? 'disabled',
+          out: options.out,
+          apiVersion: options.apiVersion,
         },
-        out: options.out,
-        env: providerContext?.env,
-        providerCredentials: providerContext?.providerCredentials,
-        apiVersion: options.apiVersion,
-      });
+      );
       printAdsAssetUploadResult(result, { json: options.json });
       return result.ok ? 0 : 1;
     }
@@ -258,20 +178,21 @@ export async function adsAssets(
       }
       const assetIds = parseCsv(options.assetId);
       if (!assetIds) throw new Error('[ADS_ASSET_ID_REQUIRED] Pass --asset-id <id[,id]>.');
-      const providerContext = options.yes
-        ? await resolveAdsAssetLiveEnv(loaded.config, options, new Set(['googleAds']))
-        : undefined;
-      const result = await writeMarketingGoogleAdsCampaignAssetLinkReceipt(loaded.config, {
-        cwd: options.cwd,
-        campaignResourceName: options.campaignResource,
-        assetIds,
-        fieldType: parseGoogleCampaignImageFieldType(options.fieldType),
-        yes: options.yes,
-        out: options.out,
-        env: providerContext?.env,
-        credentials: providerContext?.providerCredentials.googleAds,
-        apiVersion: options.apiVersion,
-      });
+      const result = await executeGrowthProviderCommand<MarketingGoogleAdsCampaignAssetLinkResult>(
+        'google.marketing.assets',
+        {
+          kind: 'link',
+          environment: options.environment,
+          connection: options.connection,
+          accountConfirm: options.accountConfirm,
+          campaignResourceName: options.campaignResource,
+          assetIds,
+          fieldType: parseGoogleCampaignImageFieldType(options.fieldType),
+          yes: options.yes,
+          out: options.out,
+          apiVersion: options.apiVersion,
+        },
+      );
       printJson(result.receipt);
       return result.ok ? 0 : 1;
     }

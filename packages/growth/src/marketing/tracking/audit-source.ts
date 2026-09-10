@@ -32,7 +32,25 @@ export type {
   SourceFile,
 } from './audit-types.js';
 export {
+  marketingTrackingCaptureEvidenceSchema,
+  marketingTrackingCommerceEvidenceSchema,
+  marketingTrackingConsentEvidenceSchema,
+  marketingTrackingCustomerFieldEvidenceSchema,
+  marketingTrackingDiagnosticEvidenceSchema,
+  marketingTrackingEvidenceStateSchema,
+  marketingTrackingIdentityDigestSchema,
+  marketingTrackingObservationSchema,
   marketingTrackingObservationArtifactSchema,
+  marketingTrackingObservationEmitterSchema,
+  marketingTrackingObservationOutcomeSchema,
+  marketingTrackingObservationWindowsSchema,
+  marketingTrackingParameterEvidenceSchema,
+  marketingTrackingParameterTypeSchema,
+  marketingTrackingProviderReferenceSchema,
+  marketingTrackingTransportFieldEvidenceSchema,
+  marketingTrackingValidityStateSchema,
+  migrateMarketingTrackingObservationArtifactV1,
+  type MarketingTrackingEvidenceState,
   type MarketingTrackingObservation,
   type MarketingTrackingObservationArtifact,
 } from './audit-observations.js';
@@ -200,6 +218,8 @@ function buildReadinessFinding(input: {
   status: 'ready' | 'attention' | 'blocked';
   summary: string;
   observationPath?: string;
+  observationObservedAt?: string;
+  observationFreshness: 'fresh' | 'stale' | 'unknown';
   scannedFileCount: number;
 }): OpsReadinessFinding {
   const state =
@@ -219,8 +239,8 @@ function buildReadinessFinding(input: {
       {
         kind: 'tracking-audit',
         source: input.observationPath ?? 'project source and manifests',
-        observedAt: input.generatedAt,
-        freshness: input.observationPath ? 'fresh' : 'unknown',
+        observedAt: input.observationObservedAt ?? input.generatedAt,
+        freshness: input.observationFreshness,
         summary: `${input.scannedFileCount} source files inspected in audit-only mode.`,
       },
     ],
@@ -271,7 +291,9 @@ export async function auditMarketingTrackingSource(
   const reconciled = reconcileMarketingTrackingObservations({
     registries,
     loaded: observations,
+    projectId: config.platformId,
     environment: config.defaultEnvironment,
+    now: options.now,
   });
   const detected = detectMarketingTrackingEmitters({
     cwd,
@@ -280,7 +302,7 @@ export async function auditMarketingTrackingSource(
     observedEmitterIds: reconciled.observedEmitters,
   });
   const browserEvents = registries.events.value.events.filter(
-    (event) => event.source === 'browser',
+    (event) => event.deliveryExpectation !== 'server-only',
   );
   const serverConversions = registries.conversions.value.conversions.filter(
     (conversion) => conversion.confirmationSource === 'server',
@@ -394,6 +416,8 @@ export async function auditMarketingTrackingSource(
       status,
       summary: summaryText,
       observationPath: observations.path,
+      observationObservedAt: reconciled.evidenceObservedAt,
+      observationFreshness: reconciled.evidenceFreshness,
       scannedFileCount: files.length,
     }),
     checks,

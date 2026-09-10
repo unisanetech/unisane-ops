@@ -18,6 +18,7 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
+    "pack.manifest.json",
     "unisane.meta.json",
     "README.md"
   ],
@@ -30,6 +31,7 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./pack-manifest": "./pack.manifest.json",
     "./marketing": {
       "types": "./dist/meta/marketing/index.d.ts",
       "import": "./dist/meta/marketing/index.js",
@@ -47,7 +49,8 @@
     "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
   },
   "dependencies": {
-    "@unisane/growth": "workspace:*"
+    "@unisane/growth": "workspace:*",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

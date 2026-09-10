@@ -10,3 +10,7 @@ export {
   type GoogleAdsCampaignControlAdapterOptions,
   type GoogleAdsCampaignPauseResult,
 } from './live-ads-executor.js';
+
+export { createGoogleAdsGoalProvider, type GoogleAdsGoalProviderOptions } from './conversion-goals.js';
+
+export * from "./assets.js";

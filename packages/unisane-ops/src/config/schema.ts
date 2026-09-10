@@ -181,6 +181,17 @@ function validateConfigRelations(
   }
 }
 
+const executionSchema = z
+  .object({
+    ads: z.object({ backend: z.enum(['local', 'sqlite']) }).strict().optional(),
+    gtm: z
+      .object({ backend: z.enum(['local', 'sqlite']) })
+      .strict()
+      .optional(),
+  })
+  .strict()
+  .optional();
+
 export const unisaneOpsConfigSchema = z
   .object({
     schemaVersion: z.literal(1).default(1),
@@ -189,6 +200,7 @@ export const unisaneOpsConfigSchema = z
     connections: connectionsSchema,
     targets: targetsSchema,
     capabilities: capabilitiesSchema,
+    execution: executionSchema,
   })
   .strict()
   .superRefine(validateConfigRelations);
@@ -205,6 +217,7 @@ export const unisaneProjectConfigSchema = z
         connections: connectionsSchema,
         targets: targetsSchema,
         capabilities: capabilitiesSchema,
+        execution: executionSchema,
       })
       .strict()
       .default({}),

@@ -6,8 +6,8 @@ import {
 } from '@unisane/growth/marketing';
 import { loadGrowthConnectionsContext } from '../cli/project-context.js';
 
-export async function resolveGrowthConsoleAuthContext() {
-  const context = await loadGrowthConnectionsContext();
+export async function resolveGrowthConsoleAuthContext(environmentId?: string) {
+  const context = await loadGrowthConnectionsContext(environmentId);
   const connection = context.providers.find(
     (provider) => provider.provider === 'google',
   )?.connection;
@@ -33,5 +33,5 @@ export async function resolveGrowthConsoleAuthContext() {
     scopes: [],
     credentialAvailable: false,
   };
-  return { googleAuth, metaAuth };
+  return { googleAuth, metaAuth, environmentId: context.environmentId };
 }

@@ -1,3 +1,8 @@
+import { hashOpsValue } from '@unisane/ops-engine';
+import {
+  assertGoogleTagManagerVersionIdentity,
+  googleTagManagerVersionContentDigest,
+} from '@unisane/growth/gtm';
 import {
   googleTagManagerContainerPath,
   googleTagManagerContainerVersionPath,
@@ -11,7 +16,6 @@ import type {
   GoogleTagManagerPreviewReceipt,
   GoogleTagManagerPublishOptions,
   GoogleTagManagerPublishReceipt,
-  GoogleTagManagerRollbackReceipt,
   GoogleTagManagerWorkspace,
   GoogleTagManagerWorkspaceVersionOptions,
 } from '@unisane/growth/contracts';
@@ -43,7 +47,17 @@ function workspacePathFromWorkspace(args: {
   workspace: GoogleTagManagerWorkspace;
   manifest: GoogleTagManagerContainerManifest;
 }): string {
-  if (args.workspace.path) return args.workspace.path;
+  if (args.workspace.path) {
+    const prefix = `${googleTagManagerContainerPath(args.manifest.accountId, args.manifest.containerId)}/workspaces/`;
+    if (
+      !args.workspace.path.startsWith(prefix) ||
+      !/^[a-zA-Z0-9_-]+$/.test(args.workspace.path.slice(prefix.length))
+    )
+      throw new Error(
+        '[GTM_WORKSPACE_TARGET_MISMATCH] Provider workspace belongs to another container.',
+      );
+    return args.workspace.path;
+  }
   const workspaceId = workspaceIdFromWorkspace(args.workspace);
   if (!workspaceId) {
     throw new Error(
@@ -94,7 +108,7 @@ function versionIdFromVersion(version: GoogleTagManagerJsonObject | undefined): 
 
 function assertNoCompilerError(args: {
   response: GoogleTagManagerJsonObject;
-  stage: 'preview' | 'create-version' | 'publish' | 'rollback';
+  stage: 'preview' | 'create-version' | 'publish';
 }): void {
   if (!booleanField(args.response, 'compilerError')) return;
   throw new Error(`[GTM_COMPILER_ERROR] GTM ${args.stage} reported compiler errors.`);
@@ -106,6 +120,8 @@ function assertNoSyncConflict(args: {
 }): void {
   const syncStatus = args.response.syncStatus;
   if (!isRecord(syncStatus)) return;
+  if (syncStatus.syncError === true)
+    throw new Error('[GTM_WORKSPACE_SYNC_ERROR] Workspace synchronization failed.');
   if (!hasMergeConflicts(syncStatus)) return;
   throw new Error(`[GTM_WORKSPACE_CONFLICT] GTM ${args.stage} reported workspace merge conflicts.`);
 }
@@ -142,6 +158,13 @@ export async function previewGoogleTagManagerWorkspace(args: {
   assertNoSyncConflict({ response, stage: 'preview' });
   assertNoCompilerError({ response, stage: 'preview' });
   const version = containerVersion(response);
+  if (!version)
+    throw new Error('[GTM_VERSION_MISSING] Provider omitted compiled container version.');
+  assertGoogleTagManagerVersionIdentity(
+    version,
+    args.options.manifest.accountId,
+    args.options.manifest.containerId,
+  );
   return {
     appId: args.options.manifest.appId,
     environment: args.options.environment,
@@ -153,6 +176,7 @@ export async function previewGoogleTagManagerWorkspace(args: {
     ),
     workspacePath,
     previewedAt: new Date().toISOString(),
+    contentDigest: googleTagManagerVersionContentDigest(version),
     compilerError: booleanField(response, 'compilerError'),
     syncStatus: isRecord(response.syncStatus) ? response.syncStatus : undefined,
     containerVersion: version,
@@ -169,6 +193,17 @@ export async function createGoogleTagManagerContainerVersion(args: {
     workspace,
     manifest: args.options.manifest,
   });
+  if (!args.options.expectedPreviewDigest)
+    throw new Error('[GTM_PREVIEW_REQUIRED] Version creation requires reviewed preview content.');
+  const preview = await previewGoogleTagManagerWorkspace({
+    client: args.client,
+    options: { ...args.options, workspaceId: workspaceIdFromWorkspace(workspace) },
+  });
+  if (preview.contentDigest !== args.options.expectedPreviewDigest)
+    throw new Error(
+      '[GTM_PREVIEW_DRIFT] Workspace content changed after preview. Review a new preview before versioning.',
+    );
+  await args.options.beforeWrite?.();
   const response = await args.client.createContainerVersion({
     workspacePath,
     name: args.options.name,
@@ -178,6 +213,20 @@ export async function createGoogleTagManagerContainerVersion(args: {
   assertNoCompilerError({ response, stage: 'create-version' });
   const version = containerVersion(response);
   const versionId = versionIdFromVersion(version);
+  if (!version || !versionId)
+    throw new Error(
+      '[GTM_VERSION_OUTCOME_UNCERTAIN] Version creation returned no identity. Inspect container versions before retrying.',
+    );
+  assertGoogleTagManagerVersionIdentity(
+    version,
+    args.options.manifest.accountId,
+    args.options.manifest.containerId,
+    versionId,
+  );
+  if (googleTagManagerVersionContentDigest(version) !== args.options.expectedPreviewDigest)
+    throw new Error(
+      '[GTM_VERSION_CONTENT_CHANGED] Created version differs from reviewed preview. Do not publish; inspect and review the created version.',
+    );
   return {
     appId: args.options.manifest.appId,
     environment: args.options.environment,
@@ -219,14 +268,59 @@ export async function publishGoogleTagManagerContainerVersion(args: {
     containerId,
     versionId: args.options.versionId,
   });
+  assertGoogleTagManagerVersionIdentity(
+    targetVersion,
+    accountId,
+    containerId,
+    args.options.versionId,
+  );
+  if (args.options.fingerprint && targetVersion.fingerprint !== args.options.fingerprint)
+    throw new Error('[GTM_VERSION_DRIFT] Version fingerprint changed after review.');
+  if (typeof targetVersion.fingerprint !== 'string' || !targetVersion.fingerprint)
+    throw new Error('[GTM_VERSION_FINGERPRINT_REQUIRED] Provider omitted version fingerprint.');
+  if (
+    args.options.expectedLiveRevision !== undefined &&
+    (previousLiveVersion ? hashOpsValue(previousLiveVersion) : null) !==
+      args.options.expectedLiveRevision
+  )
+    throw new Error('[GTM_LIVE_VERSION_DRIFT] Live version changed after review.');
+  await args.options.beforeWrite?.();
   const response = await args.client.publishContainerVersion({
     accountId,
     containerId,
     versionId: args.options.versionId,
-    fingerprint: args.options.fingerprint,
+    fingerprint: args.options.fingerprint ?? targetVersion.fingerprint,
   });
   assertNoCompilerError({ response, stage: 'publish' });
   const version = containerVersion(response);
+  if (!version)
+    throw new Error(
+      '[GTM_PUBLISH_OUTCOME_UNCERTAIN] Publish returned no version. Read the live version before retrying.',
+    );
+  assertGoogleTagManagerVersionIdentity(version, accountId, containerId, args.options.versionId);
+  let observedLiveVersion: GoogleTagManagerJsonObject | null;
+  try {
+    observedLiveVersion = await args.client.getLiveVersion({ accountId, containerId });
+  } catch {
+    throw new Error(
+      '[GTM_PUBLISH_OUTCOME_UNCERTAIN] Publish completed but live readback failed. Inspect live state before retrying.',
+    );
+  }
+  if (!observedLiveVersion)
+    throw new Error('[GTM_PUBLISH_NOT_VERIFIED] No live version was returned after publication.');
+  assertGoogleTagManagerVersionIdentity(
+    observedLiveVersion,
+    accountId,
+    containerId,
+    args.options.versionId,
+  );
+  if (
+    googleTagManagerVersionContentDigest(observedLiveVersion) !==
+    googleTagManagerVersionContentDigest(targetVersion)
+  )
+    throw new Error(
+      '[GTM_PUBLISH_CONTENT_MISMATCH] Live version content differs from the target read before publication. Inspect live state before any further write.',
+    );
   return {
     appId: args.options.manifest.appId,
     environment: args.options.environment,
@@ -241,21 +335,13 @@ export async function publishGoogleTagManagerContainerVersion(args: {
     }),
     versionId: args.options.versionId,
     publishedAt: new Date().toISOString(),
+    verification: 'verified',
+    verifiedAt: new Date().toISOString(),
+    observedLiveVersion,
     compilerError: booleanField(response, 'compilerError'),
     previousLiveVersion,
     targetVersion,
     containerVersion: version,
     raw: response,
-  };
-}
-
-export async function rollbackGoogleTagManagerContainerVersion(args: {
-  client: GoogleTagManagerApiClient;
-  options: GoogleTagManagerPublishOptions;
-}): Promise<GoogleTagManagerRollbackReceipt> {
-  const receipt = await publishGoogleTagManagerContainerVersion(args);
-  return {
-    ...receipt,
-    rollback: true,
   };
 }

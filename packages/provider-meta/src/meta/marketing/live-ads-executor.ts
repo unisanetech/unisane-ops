@@ -1,3 +1,5 @@
+import { readMetaMutationResponse } from './mutation-response.js';
+import { META_GRAPH_API_VERSION, META_CAMPAIGN_CONTROL_API_VERSION } from '../api-version.js';
 import type {
   FetchLike,
   MarketingAdsLiveProviderExecutionOptions,
@@ -5,6 +7,7 @@ import type {
   MarketingAdsPlanCandidate,
   MarketingMetaAdsBuildout,
 } from '@unisane/growth/contracts';
+import { metaCampaignDailyBudget, resolveMetaCampaignDestination } from './campaign-input.js';
 
 export interface MetaAdsCampaignControlInput {
   providerAccountId: string;
@@ -47,53 +50,20 @@ export function createMetaAdsCampaignControlAdapter(options: MetaAdsCampaignCont
   };
 }
 
-function absoluteFinalUrl(origin: string | undefined, value: string): string {
-  if (/^https?:\/\//i.test(value)) return value;
-  const base = origin?.trim() || 'https://trueresume.io';
-  return new URL(value.startsWith('/') ? value : `/${value}`, base).toString();
-}
-
 function metaAccountPath(accountId: string): string {
   const normalized = accountId.trim();
   if (normalized.startsWith('act_')) return normalized;
   return `act_${normalized}`;
 }
 
-function minorUnitsFromDailyBudgetAmount(value: number | undefined): number {
-  const amount = value && Number.isFinite(value) ? value : 1;
-  return Math.max(1, Math.round(amount * 100));
-}
-
 function metaAdsName(value: string): string {
   return value.replace(/\s+/g, ' ').trim().slice(0, 255);
-}
-
-async function parseProviderResponse(response: Response): Promise<unknown> {
-  const text = await response.text();
-  if (!text.trim()) return {};
-  try {
-    return JSON.parse(text) as unknown;
-  } catch {
-    return { raw: text };
-  }
 }
 
 function asRecord(value: unknown): Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
     ? (value as Record<string, unknown>)
     : {};
-}
-
-async function readProviderResponse(
-  response: Response,
-  code: string,
-  label: string,
-): Promise<unknown> {
-  const body = await parseProviderResponse(response);
-  if (!response.ok) {
-    throw new Error(`[${code}] ${label} failed: ${JSON.stringify(body)}`);
-  }
-  return body;
 }
 
 export async function pauseMetaAdsCampaign(
@@ -105,7 +75,7 @@ export async function pauseMetaAdsCampaign(
       safeMessage: 'Meta Ads campaign control requires a valid account, campaign, and connection.',
     };
   }
-  const apiVersion = args.apiVersion ?? 'v23.0';
+  const apiVersion = args.apiVersion ?? META_CAMPAIGN_CONTROL_API_VERSION;
   const body = new URLSearchParams();
   body.set('status', 'PAUSED');
   body.set('access_token', args.accessToken);
@@ -121,11 +91,29 @@ export async function pauseMetaAdsCampaign(
       safeMessage: 'Meta Ads did not confirm whether the campaign pause was applied.',
     };
   }
-  const parsed = await parseProviderResponse(response);
   if (!response.ok) {
     return { outcome: 'rejected', safeMessage: 'Meta Ads rejected the campaign pause.' };
   }
-  void parsed;
+  try {
+    const parsed = asRecord(
+      await readMetaMutationResponse(
+        response,
+        'META_PAUSE_RESPONSE_INVALID',
+        'Meta campaign pause',
+      ),
+    );
+    if (parsed.success !== true)
+      return {
+        outcome: 'outcome-unknown',
+        safeMessage:
+          'Meta did not provide a positive pause acknowledgement. Verify the campaign before retrying.',
+      };
+  } catch {
+    return {
+      outcome: 'outcome-unknown',
+      safeMessage: 'Meta returned unreadable pause evidence. Verify the campaign before retrying.',
+    };
+  }
   return {
     outcome: 'succeeded',
     providerOperationId: args.campaignId,
@@ -139,15 +127,21 @@ export async function readMetaAdsCampaignStatus(
   if (!args.providerAccountId.trim() || !args.campaignId.trim() || !args.accessToken.trim()) {
     return 'unknown';
   }
-  const apiVersion = args.apiVersion ?? 'v23.0';
+  const apiVersion = args.apiVersion ?? META_CAMPAIGN_CONTROL_API_VERSION;
   const query = new URLSearchParams({ fields: 'id,status', access_token: args.accessToken });
   const response = await args.fetcher(
     `https://graph.facebook.com/${apiVersion}/${args.campaignId}?${query.toString()}`,
   );
   if (!response.ok) return 'unknown';
-  const status = asRecord(await parseProviderResponse(response)).status;
+  const status = asRecord(
+    await readMetaMutationResponse(
+      response,
+      'META_STATUS_RESPONSE_INVALID',
+      'Meta campaign status',
+    ),
+  ).status;
   if (status === 'PAUSED') return 'paused';
-  return typeof status === 'string' ? 'active' : 'unknown';
+  return status === 'ACTIVE' ? 'active' : 'unknown';
 }
 
 async function mutateMetaAds(args: {
@@ -172,7 +166,7 @@ async function mutateMetaAds(args: {
       body: payload,
     },
   );
-  return asRecord(await readProviderResponse(response, args.errorCode, args.label));
+  return asRecord(await readMetaMutationResponse(response, args.errorCode, args.label));
 }
 
 function metaResultId(body: Record<string, unknown>, errorCode: string): string {
@@ -276,12 +270,13 @@ async function createPausedMetaAdsCampaign(args: {
     );
   }
   assertReviewedMetaBuildout(buildout);
-  const apiVersion = args.apiVersion ?? 'v25.0';
+  const apiVersion = args.apiVersion ?? META_GRAPH_API_VERSION;
   const accountPath = metaAccountPath(accountId);
-  const destinationUrl = absoluteFinalUrl(
+  const destinationUrl = resolveMetaCampaignDestination(
     buildout.finalUrlOrigin,
-    buildout.destinationUrl || args.candidate.utm.finalUrl || args.candidate.landingPageUrl || '/',
+    buildout.destinationUrl,
   );
+  const dailyBudget = metaCampaignDailyBudget(args.candidate.budgetGuardrail.dailyBudgetAmount);
   const campaignBody = await mutateMetaAds({
     fetcher: args.fetcher,
     apiVersion,
@@ -313,9 +308,7 @@ async function createPausedMetaAdsCampaign(args: {
       name: metaAdsName(buildout.adSetName),
       campaign_id: campaignId,
       status: buildout.status,
-      daily_budget: minorUnitsFromDailyBudgetAmount(
-        args.candidate.budgetGuardrail.dailyBudgetAmount,
-      ),
+      daily_budget: dailyBudget,
       billing_event: buildout.billingEvent,
       optimization_goal: buildout.optimizationGoal,
       bid_strategy: buildout.bidStrategy,

@@ -65,7 +65,10 @@ export async function runDisconnect(context: PackCommandContext): Promise<PackCo
       `[UNISANE_DISCONNECT_PROVIDER_UNKNOWN] No installed pack contributes '${provider}'.`,
     );
   }
-  if (provider !== 'google' || contributor.packId !== 'provider-google') {
+  if (
+    (provider !== 'google' && provider !== 'meta') ||
+    contributor.packId !== `provider-${provider}`
+  ) {
     throw new Error(
       `[UNISANE_DISCONNECT_PROVIDER_UNSUPPORTED] Provider '${provider}' has no ordinary disconnect lifecycle yet.`,
     );
@@ -82,7 +85,8 @@ export async function runDisconnect(context: PackCommandContext): Promise<PackCo
     option(providerArguments, '--environment'),
   );
   const environment = growth.environments[environmentId];
-  const connectionId = option(providerArguments, '--connection') ?? environment.connections.google;
+  const connectionId =
+    option(providerArguments, '--connection') ?? environment.connections[provider];
   if (!connectionId) {
     return commandResult(context, {
       actualEffect: 'offline',
@@ -93,25 +97,25 @@ export async function runDisconnect(context: PackCommandContext): Promise<PackCo
         disconnected: false,
         reason: 'not-connected',
       },
-      nextActions: ['Google is not connected in this environment.'],
+      nextActions: [`${provider} is not connected in this environment.`],
     });
   }
-  if (environment.connections.google !== connectionId) {
+  if (environment.connections[provider] !== connectionId) {
     throw new Error(
-      `[UNISANE_DISCONNECT_CONNECTION_MISMATCH] '${connectionId}' is not the selected Google connection for '${environmentId}'.`,
+      `[UNISANE_DISCONNECT_CONNECTION_MISMATCH] '${connectionId}' is not the selected ${provider} connection for '${environmentId}'.`,
     );
   }
   const reference = loaded.config.connections[connectionId];
-  if (!reference || reference.provider !== 'google' || !('recordPath' in reference)) {
+  if (!reference || reference.provider !== provider || !('recordPath' in reference)) {
     throw new Error(
-      `[UNISANE_DISCONNECT_CONNECTION_UNKNOWN] '${connectionId}' is not a canonical Google connection.`,
+      `[UNISANE_DISCONNECT_CONNECTION_UNKNOWN] '${connectionId}' is not a canonical ${provider} connection.`,
     );
   }
   const confirmed =
     providerArguments.includes('--yes') ||
     (await confirmDisconnect(
       context,
-      `Disconnect Google from '${loaded.config.project.id}' (${environmentId})? Historical data remains; provider-side resources are unchanged.`,
+      `Disconnect ${provider} from '${loaded.config.project.id}' (${environmentId})? Historical data remains; provider-side resources are unchanged.`,
     ));
   if (!confirmed) {
     return commandResult(context, {
@@ -126,7 +130,7 @@ export async function runDisconnect(context: PackCommandContext): Promise<PackCo
         providerResourcesChanged: false,
       },
       nextActions: [
-        `Re-run \`unisane-ops disconnect google --environment ${environmentId} --connection ${connectionId} --yes\` after reviewing the consequences.`,
+        `Re-run \`unisane-ops disconnect ${provider} --environment ${environmentId} --connection ${connectionId} --yes\` after reviewing the consequences.`,
       ],
     });
   }
@@ -139,6 +143,7 @@ export async function runDisconnect(context: PackCommandContext): Promise<PackCo
     await context.runtime.resolveBinding('ops.lifecycle.disconnect', {
       provider,
       packId: contributor.packId,
+      scopeId: 'workspace',
       projectId: loaded.config.project.id,
       environmentId,
       connectionId,
@@ -154,7 +159,7 @@ export async function runDisconnect(context: PackCommandContext): Promise<PackCo
     (resource) => resource.provider !== provider || resource.connection !== connectionId,
   );
   const retainedConnections = { ...environment.connections };
-  delete retainedConnections.google;
+  delete retainedConnections[provider];
   growth.environments[environmentId] = {
     connections: retainedConnections,
     resources: retainedResources,

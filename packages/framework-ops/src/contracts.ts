@@ -4,11 +4,11 @@ export const FRAMEWORK_PROJECT_DESCRIPTOR_CONTRACT_FORMAT =
   'unisane.framework-project-descriptor-contract' as const;
 export const FRAMEWORK_PROJECT_DESCRIPTOR_CONTRACT_VERSION = 1 as const;
 export const FRAMEWORK_PROJECT_DESCRIPTOR_CONTRACT_SHA256 =
-  '51ec7dfef1e3abf2ea91529e5c1f53aed40dc55aa7cbf5f3ab929398ea2b9c55' as const;
+  'af269188a83a2f7a27a815738f34377887311b1e49e349a5bff2a6322d9f5d9a' as const;
 export const FRAMEWORK_PROJECT_DESCRIPTOR_SCHEMA_ID =
   'https://unisane.dev/schemas/framework-project-descriptor.v1.json' as const;
 export const FRAMEWORK_PROJECT_DESCRIPTOR_SCHEMA_SHA256 =
-  '230280eb2234b7298c27f0502e785a7a7dddb134e21ab9bbaa1459ca9ca1105d' as const;
+  '6f78377766bb0baeabb863efe37577692aa9a007b4ea257576b190c6eed73db4' as const;
 export const FRAMEWORK_PROJECT_DESCRIPTOR_FORMAT = 'unisane.framework-project-descriptor' as const;
 export const FRAMEWORK_PROJECT_DESCRIPTOR_SCHEMA_VERSION = 1 as const;
 export const FRAMEWORK_PROJECT_DESCRIPTOR_OUTPUT_PATH =
@@ -16,7 +16,7 @@ export const FRAMEWORK_PROJECT_DESCRIPTOR_OUTPUT_PATH =
 export const FRAMEWORK_COMPILER_PACKAGE = '@unisane/compiler' as const;
 export const FRAMEWORK_COMPILER_VERSION = '0.1.0' as const;
 export const FRAMEWORK_PROJECT_MODEL_SCHEMA_VERSION = 3 as const;
-export const FRAMEWORK_MODULE_DESCRIPTOR_SCHEMA_VERSION = 1 as const;
+export const FRAMEWORK_MODULE_DESCRIPTOR_SCHEMA_VERSION = 2 as const;
 
 export const FRAMEWORK_PROJECT_DESCRIPTOR_CORE_KEY_ORDER = Object.freeze([
   'format',

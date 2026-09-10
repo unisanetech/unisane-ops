@@ -5,6 +5,8 @@ export type FetchLike = typeof fetch;
 
 export type ProviderApiPullOptions = {
   accountId?: string;
+  connection?: string;
+  environment?: string;
   startDate: string;
   endDate: string;
   timeZone?: string;

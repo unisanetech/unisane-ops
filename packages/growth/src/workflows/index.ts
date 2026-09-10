@@ -23,3 +23,5 @@ export {
 export * from './seo-opportunity-preparation.js';
 export * from './seo-publication-verification.js';
 export * from './campaign-pause-execution.js';
+
+export * from "./campaign-pause-command.js";

@@ -55,6 +55,17 @@ function unwrapDefault(input: unknown): unknown {
 }
 
 function normalizeConfig(namespace: Record<string, unknown>): UnisaneOpsConfig {
+  // tsx can expose a CommonJS exports object through an ESM default wrapper.
+  // Inspect that namespace before choosing a config export, so conflicts cannot hide inside it.
+  const wrapped = namespace.default;
+  if (
+    typeof wrapped === 'object' &&
+    wrapped !== null &&
+    '__esModule' in wrapped &&
+    wrapped.__esModule === true
+  ) {
+    namespace = asModuleNamespace(wrapped);
+  }
   if (Object.prototype.hasOwnProperty.call(namespace, 'ops')) {
     if (!Object.prototype.hasOwnProperty.call(namespace, 'default')) {
       throw new Error(
@@ -77,6 +88,7 @@ function normalizeConfig(namespace: Record<string, unknown>): UnisaneOpsConfig {
     connections: standalone.ops.connections,
     targets: standalone.ops.targets,
     capabilities: standalone.ops.capabilities,
+    ...(standalone.ops.execution ? { execution: standalone.ops.execution } : {}),
   });
 }
 

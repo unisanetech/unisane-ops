@@ -88,6 +88,12 @@ export type GoogleTagManagerTrigger = {
   filters?: readonly GoogleTagManagerParameter[];
 };
 
+export type GoogleTagManagerBuiltInTrigger = {
+  slug: string;
+  triggerId: string;
+  name?: string;
+};
+
 export type GoogleTagManagerTagType =
   | 'google_tag'
   | 'ga4_pageview'
@@ -97,7 +103,25 @@ export type GoogleTagManagerTagType =
   | 'consent_default'
   | 'clarity'
   | 'meta_pixel'
+  | 'custom_template'
   | 'custom_html';
+
+export type GoogleTagManagerRawParameter = {
+  type: string;
+  key?: string;
+  value?: string;
+  list?: readonly GoogleTagManagerRawParameter[];
+  map?: readonly GoogleTagManagerRawParameter[];
+};
+
+export type GoogleTagManagerGalleryTemplateReference = {
+  tagType: string;
+  templateId: string;
+  host: string;
+  owner: string;
+  repository: string;
+  version: string;
+};
 
 export type GoogleTagManagerTagConsent = {
   noAdditionalConsentRequired?: boolean;
@@ -106,6 +130,7 @@ export type GoogleTagManagerTagConsent = {
 
 export type GoogleTagManagerTagApproval = {
   customHtml?: boolean;
+  customTemplate?: boolean;
   reason?: string;
 };
 
@@ -121,6 +146,9 @@ export type GoogleTagManagerTag = {
   folderSlug?: string;
   triggerSlugs: readonly string[];
   parameters?: readonly GoogleTagManagerParameter[];
+  rawParameters?: readonly GoogleTagManagerRawParameter[];
+  template?: GoogleTagManagerGalleryTemplateReference;
+  tagFiringOption?: string;
   consent?: GoogleTagManagerTagConsent;
   vendorDomains?: readonly string[];
   approval?: GoogleTagManagerTagApproval;
@@ -138,6 +166,7 @@ export type GoogleTagManagerContainerManifest = {
   folders?: readonly GoogleTagManagerFolder[];
   builtInVariables?: readonly string[];
   variables?: readonly GoogleTagManagerVariable[];
+  builtInTriggers?: readonly GoogleTagManagerBuiltInTrigger[];
   triggers?: readonly GoogleTagManagerTrigger[];
   tags?: readonly GoogleTagManagerTag[];
 };
@@ -238,6 +267,7 @@ export type GoogleTagManagerPreviewReceipt = {
   containerPath: string;
   workspacePath: string;
   previewedAt: string;
+  contentDigest: string;
   compilerError: boolean;
   syncStatus?: GoogleTagManagerJsonObject;
   containerVersion?: GoogleTagManagerJsonObject;
@@ -270,15 +300,14 @@ export type GoogleTagManagerPublishReceipt = {
   versionPath: string;
   versionId: string;
   publishedAt: string;
+  verification: 'verified';
+  verifiedAt: string;
+  observedLiveVersion: GoogleTagManagerJsonObject;
   compilerError: boolean;
   previousLiveVersion?: GoogleTagManagerJsonObject | null;
   targetVersion?: GoogleTagManagerJsonObject;
   containerVersion?: GoogleTagManagerJsonObject;
   raw: GoogleTagManagerJsonObject;
-};
-
-export type GoogleTagManagerRollbackReceipt = GoogleTagManagerPublishReceipt & {
-  rollback: true;
 };
 
 export type GoogleTagManagerWorkspaceVersionOptions = {
@@ -291,6 +320,8 @@ export type GoogleTagManagerWorkspaceVersionOptions = {
 export type GoogleTagManagerCreateVersionOptions = GoogleTagManagerWorkspaceVersionOptions & {
   name: string;
   notes?: string;
+  expectedPreviewDigest: string;
+  beforeWrite?: () => Promise<void>;
 };
 
 export type GoogleTagManagerPublishOptions = {
@@ -298,6 +329,8 @@ export type GoogleTagManagerPublishOptions = {
   environment: string;
   versionId: string;
   fingerprint?: string;
+  expectedLiveRevision?: string | null;
+  beforeWrite?: () => Promise<void>;
 };
 
 export type GoogleTagManagerIssueSeverity = 'error' | 'warning';
@@ -334,6 +367,8 @@ export type GoogleTagManagerWorkspace = GoogleTagManagerJsonObject & {
   workspaceId?: string;
   name?: string;
   fingerprint?: string;
+  expectedLiveRevision?: string | null;
+  beforeWrite?: () => Promise<void>;
 };
 
 export type GoogleTagManagerApiSnapshot = {
@@ -372,4 +407,5 @@ export type GoogleTagManagerReadSnapshotOptions = {
   workspaceId?: string;
   workspaceName?: string;
   includeExtendedResources?: boolean;
+  includeUserPermissions?: boolean;
 };

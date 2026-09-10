@@ -236,15 +236,18 @@ function binding(overrides: Partial<LocalOpsMcpBinding> = {}): LocalOpsMcpBindin
 
 function executors() {
   return {
-    reviewHealth: vi.fn(async (_options: ExecuteGrowthHealthReviewOptions) =>
-      workflowOutput('Growth health reviewed.'),
-    ),
-    researchSeo: vi.fn(async (_options: ExecuteGrowthSeoOpportunityOptions) =>
-      workflowOutput('SEO opportunities ranked.'),
-    ),
-    auditMeasurement: vi.fn(async (_options: ExecuteGrowthMeasurementAuditOptions) =>
-      workflowOutput('Measurement trust audited.'),
-    ),
+    reviewHealth: vi.fn(async (options: ExecuteGrowthHealthReviewOptions) => {
+      void options;
+      return workflowOutput('Growth health reviewed.');
+    }),
+    researchSeo: vi.fn(async (options: ExecuteGrowthSeoOpportunityOptions) => {
+      void options;
+      return workflowOutput('SEO opportunities ranked.');
+    }),
+    auditMeasurement: vi.fn(async (options: ExecuteGrowthMeasurementAuditOptions) => {
+      void options;
+      return workflowOutput('Measurement trust audited.');
+    }),
   } satisfies OpsMcpGrowthExecutors;
 }
 
@@ -307,7 +310,7 @@ function campaignResult(
   };
 }
 
-function workflows() {
+function workflows(): OpsMcpGrowthWorkflows {
   return {
     seoOpportunity: {
       prepare: vi.fn(async () => ({ kind: 'seo-implementation-packet' })),
@@ -730,4 +733,319 @@ describe('local Ops MCP server', () => {
     expect(resumed.isError).toBe(true);
     expect(customExecutors.reviewHealth).toHaveBeenCalledTimes(1);
   });
+});
+
+describe('capability discovery MCP', () => {
+  const output = {
+    schemaVersion: 1,
+    actionId: 'growth.capabilities.review',
+    projectId,
+    environmentId,
+    provider: 'meta',
+    observedAt: '2026-09-06T00:00:00Z',
+    liveVerified: false,
+    capabilities: [
+      {
+        id: 'meta.ads.reporting',
+        title: 'Ads reports',
+        implementation: 'implemented',
+        verification: 'fixture-proven',
+        effect: 'read-network',
+        hostState: 'blocked',
+        hostReason: 'Connect Meta.',
+        assessment: 'ads-insights',
+        executionSurfaces: ['cli'],
+        nextStep: 'Connect Meta.',
+        status: 'blocked',
+        accountState: 'connection-missing',
+        reasons: ['Connect Meta.'],
+      },
+    ],
+    presentation: {
+      headline: 'Connect Meta to read reports.',
+      whyItMatters: 'Offline recorded evidence only.',
+    },
+  };
+  it('returns the shared typed result and checks targets before host access', async () => {
+    const custom = workflows();
+    custom.reviewCapabilities = vi.fn().mockResolvedValue(output);
+    const { client } = await harness(binding(), executors(), custom);
+    const result = await client.callTool({
+      name: 'review_growth_capabilities',
+      arguments: { projectId, environmentId },
+    });
+    expect(result.structuredContent).toEqual(output);
+    expect(result.isError).not.toBe(true);
+    await client.callTool({
+      name: 'review_growth_capabilities',
+      arguments: { projectId: 'other', environmentId },
+    });
+    expect(custom.reviewCapabilities).toHaveBeenCalledTimes(1);
+  });
+  it('fails closed for missing callbacks and mismatched host evidence', async () => {
+    const first = await harness();
+    expect(
+      (
+        await first.client.callTool({
+          name: 'review_growth_capabilities',
+          arguments: { projectId, environmentId },
+        })
+      ).isError,
+    ).toBe(true);
+    const custom = workflows();
+    custom.reviewCapabilities = vi.fn().mockResolvedValue({ ...output, projectId: 'other' });
+    const second = await harness(binding(), executors(), custom);
+    expect(
+      (
+        await second.client.callTool({
+          name: 'review_growth_capabilities',
+          arguments: { projectId, environmentId },
+        })
+      ).isError,
+    ).toBe(true);
+  });
+});
+
+describe('shared Meta report tool', () => {
+  const report = { startDate: '2026-09-01', endDate: '2026-09-05' };
+  const output = {
+    projectId,
+    environmentId,
+    ...report,
+    schemaVersion: 1,
+    actionId: 'growth.reports.read',
+    connectionId: 'meta',
+    accountId: 'act_123',
+    reportType: 'campaign',
+    capturedAt: '2026-09-06T00:00:00Z',
+    timeZoneBasis: 'unavailable',
+    attributionBasis: 'provider-default-not-verified',
+    persisted: false,
+    partial: false,
+    observedRowCount: 0,
+    rowsTruncated: false,
+    rows: [],
+    presentation: { headline: 'Empty report', whyItMatters: 'No canonical conversions.' },
+  };
+  it('uses the shared schema and blocks cross-project calls before provider access', async () => {
+    const custom = workflows();
+    custom.readReport = vi.fn().mockResolvedValue(output);
+    const { client } = await harness(binding(), executors(), custom);
+    const result = await client.callTool({
+      name: 'read_growth_report',
+      arguments: { projectId, environmentId, report },
+    });
+    expect(result.isError).not.toBe(true);
+    expect(result.structuredContent).toEqual(output);
+    expect(
+      (
+        await client.callTool({
+          name: 'read_growth_report',
+          arguments: { projectId: 'other', environmentId, report },
+        })
+      ).isError,
+    ).toBe(true);
+    expect(custom.readReport).toHaveBeenCalledTimes(1);
+  });
+  it('fails closed without a reader and for mismatched evidence', async () => {
+    const first = await harness();
+    expect(
+      (
+        await first.client.callTool({
+          name: 'read_growth_report',
+          arguments: { projectId, environmentId, report },
+        })
+      ).isError,
+    ).toBe(true);
+    const custom = workflows();
+    custom.readReport = vi.fn().mockResolvedValue({ ...output, environmentId: 'other' });
+    const second = await harness(binding(), executors(), custom);
+    expect(
+      (
+        await second.client.callTool({
+          name: 'read_growth_report',
+          arguments: { projectId, environmentId, report },
+        })
+      ).isError,
+    ).toBe(true);
+  });
+});
+
+it('exposes explicit collection and offline history with target checks before callbacks', async () => {
+  const custom = workflows();
+  custom.collectReport = vi.fn();
+  custom.reportHistory = vi.fn();
+  const { client } = await harness(binding(), executors(), custom);
+  const tools = await client.listTools();
+  expect(
+    tools.tools.find((tool) => tool.name === 'collect_growth_report')?.annotations?.readOnlyHint,
+  ).toBe(false);
+  expect(
+    tools.tools.find((tool) => tool.name === 'read_growth_report_history')?.annotations
+      ?.openWorldHint,
+  ).toBe(false);
+  expect(
+    (
+      await client.callTool({
+        name: 'collect_growth_report',
+        arguments: {
+          projectId: 'other',
+          environmentId,
+          report: { startDate: '2026-09-01', endDate: '2026-09-05' },
+        },
+      })
+    ).isError,
+  ).toBe(true);
+  expect(
+    (
+      await client.callTool({
+        name: 'read_growth_report_history',
+        arguments: { projectId: 'other', environmentId, query: {} },
+      })
+    ).isError,
+  ).toBe(true);
+  expect(custom.collectReport).not.toHaveBeenCalled();
+  expect(custom.reportHistory).not.toHaveBeenCalled();
+});
+
+it('returns collected evidence and the same saved reference through offline history', async () => {
+  const { createGrowthReportEvidence } = await import('@unisane/growth/actions');
+  const report = {
+    projectId,
+    environmentId,
+    connectionId: 'meta',
+    accountId: 'act_123',
+    schemaVersion: 1,
+    actionId: 'growth.reports.read',
+    reportType: 'campaign',
+    startDate: '2026-09-01',
+    endDate: '2026-09-05',
+    capturedAt: '2026-09-06T00:00:00Z',
+    timeZoneBasis: 'unavailable',
+    attributionBasis: 'provider-default-not-verified',
+    persisted: false,
+    partial: false,
+    observedRowCount: 0,
+    rowsTruncated: false,
+    rows: [],
+    presentation: { headline: 'No rows', whyItMatters: 'Not tracking proof' },
+  };
+  const evidence = createGrowthReportEvidence(report, report.capturedAt);
+  const custom = workflows();
+  custom.collectReport = vi.fn().mockResolvedValue(evidence);
+  custom.reportHistory = vi.fn().mockResolvedValue({
+    projectId,
+    environmentId,
+    connectionId: 'meta',
+    accountId: 'act_123',
+    schemaVersion: 1,
+    actionId: 'growth.reports.history',
+    entries: [],
+    truncated: false,
+    selected: evidence,
+  });
+  const { client } = await harness(binding(), executors(), custom);
+  const collected = await client.callTool({
+    name: 'collect_growth_report',
+    arguments: {
+      projectId,
+      environmentId,
+      report: { startDate: report.startDate, endDate: report.endDate },
+    },
+  });
+  expect(collected.isError).not.toBe(true);
+  expect(collected.structuredContent).toEqual(evidence);
+  const history = await client.callTool({
+    name: 'read_growth_report_history',
+    arguments: { projectId, environmentId, query: { evidenceId: evidence.evidenceId } },
+  });
+  expect(history.isError).not.toBe(true);
+  expect(history.structuredContent).toMatchObject({ selected: evidence });
+});
+
+it('imports and reviews source-labelled Meta diagnostics through bounded tools', async () => {
+  const custom = workflows();
+  const observation = {
+    schemaVersion: 1,
+    provider: 'meta',
+    projectId,
+    environmentId,
+    connectionId: 'meta',
+    datasetId: '123',
+    capturedAt: '2026-09-06T00:00:00Z',
+    window: { startDate: '2026-09-01', endDate: '2026-09-05' },
+    source: { kind: 'manual-import', reference: 'Synthetic export', verifiedLive: false },
+    completeness: 'partial',
+    events: [],
+  };
+  const { createMetaDiagnosticEvidence, reviewMetaDiagnosticEvidence } =
+    await import('@unisane/growth/actions');
+  const target = { projectId, environmentId, connectionId: 'meta', datasetId: '123' };
+  const now = new Date(observation.capturedAt);
+  const evidence = createMetaDiagnosticEvidence(observation, target, now);
+  const output = {
+    schemaVersion: 1,
+    actionId: 'growth.meta.diagnostics.import',
+    ...target,
+    evidenceId: evidence.evidenceId,
+    importedAt: evidence.importedAt,
+    eventCount: 0,
+    verifiedLive: false,
+  };
+  custom.importMetaDiagnostics = vi.fn().mockResolvedValue(output);
+  custom.reviewMetaDiagnostics = vi
+    .fn()
+    .mockResolvedValue(reviewMetaDiagnosticEvidence(target, evidence, {}, now));
+  const { client } = await harness(binding(), executors(), custom);
+  expect(
+    (
+      await client.callTool({
+        name: 'import_meta_diagnostics',
+        arguments: { projectId, environmentId, observation },
+      })
+    ).structuredContent,
+  ).toEqual(output);
+  expect(
+    (
+      await client.callTool({
+        name: 'review_meta_diagnostics',
+        arguments: { projectId, environmentId, query: {} },
+      })
+    ).structuredContent,
+  ).toMatchObject({ freshness: 'current', verifiedLive: false, events: [] });
+  expect(
+    (
+      await client.callTool({
+        name: 'import_meta_diagnostics',
+        arguments: { projectId: 'other', environmentId, observation },
+      })
+    ).isError,
+  ).toBe(true);
+  expect(custom.importMetaDiagnostics).toHaveBeenCalledTimes(1);
+});
+
+it('diagnoses a project-scoped GTM manifest without conflating app and project identities', async () => {
+  const { client } = await harness();
+  const input = {
+    projectId,
+    environmentId,
+    manifest: {
+      appId: 'web',
+      accountId: '1',
+      containerId: '2',
+      namespace: 'web',
+      environments: { production: { workspacePrefix: 'production' } },
+    },
+  };
+  const result = await client.callTool({ name: 'diagnose_gtm', arguments: input });
+  expect(result.structuredContent).toMatchObject({
+    projectId,
+    appId: 'web',
+    evidence: 'missing',
+    trackingVerified: false,
+  });
+  expect(
+    (await client.callTool({ name: 'diagnose_gtm', arguments: { ...input, projectId: 'other' } }))
+      .isError,
+  ).toBe(true);
 });

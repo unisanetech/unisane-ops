@@ -1,3 +1,14 @@
+import { handleGtmSetupRequest } from './gtm-setup-action.js';
+import { handleGtmReleaseRequest, type ConsoleGtmRelease } from './gtm-release-action.js';
+import { handleGtmWorkspaceRequest, type ConsoleGtmWorkspace } from './gtm-workspace-action.js';
+import { handleGtmDiagnosisRequest } from './gtm-action.js';
+import {
+  handleMetaDiagnosticRequest,
+  type ConsoleMetaDiagnostics,
+} from './meta-diagnostic-action.js';
+import type { ConsoleMetaReportHistoryReader } from './meta-report-action.js';
+import { handleMetaReportRequest, type ConsoleMetaReportReader } from './meta-report-action.js';
+import type { GrowthCapabilityReviewer } from '@unisane/growth/console';
 import { createReadStream } from 'node:fs';
 import { access, stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
@@ -16,6 +27,14 @@ import type { MarketingConsoleCampaignPauseReview } from '@unisane/growth/consol
 import { handleTemporalStateRequest } from './temporal-state.js';
 
 export type ServeMarketingConsoleAppOptions = {
+  environmentId?: string;
+  reviewCapabilities?: GrowthCapabilityReviewer;
+  gtmWorkspace?: ConsoleGtmWorkspace;
+  gtmRelease?: ConsoleGtmRelease;
+  readReport?: ConsoleMetaReportReader;
+  metaDiagnostics?: ConsoleMetaDiagnostics;
+  collectReport?: ConsoleMetaReportReader;
+  readReportHistory?: ConsoleMetaReportHistoryReader;
   cwd?: string;
   configPath?: string;
   outputDirectory?: string;
@@ -35,22 +54,32 @@ export async function serveMarketingConsoleApp(
 ): Promise<MarketingConsoleServeResult> {
   const host = options.host ?? '127.0.0.1';
   if (
-    options.approveCampaignPause &&
+    (options.gtmRelease || options.gtmWorkspace ||
+      options.metaDiagnostics ||
+      options.approveCampaignPause ||
+      options.readReport ||
+      options.collectReport ||
+      options.readReportHistory) &&
     host !== '127.0.0.1' &&
     host !== 'localhost' &&
     host !== '::1'
   ) {
     throw new Error(
-      '[OPS_CONSOLE_APPROVAL_HOST_INVALID] Campaign approval is available only from a loopback console host.',
+      '[OPS_CONSOLE_APPROVAL_HOST_INVALID] Console actions are available only from a loopback console host.',
     );
   }
   const port = options.port ?? 4174;
   const buildResult = await buildMarketingConsoleApp({
     cwd: options.cwd,
+    environmentId: options.environmentId,
     outputDirectory: options.outputDirectory,
     maxAgeDays: options.maxAgeDays,
     googleAuth: options.googleAuth,
     metaAuth: options.metaAuth,
+    reviewCapabilities: options.reviewCapabilities,
+    metaDiagnosticsAvailable: Boolean(options.metaDiagnostics),
+    reportReadAvailable: Boolean(options.readReport),
+    reportEvidenceAvailable: Boolean(options.collectReport && options.readReportHistory),
     campaignPauseApprovalAvailable: options.campaignPauseApprovalAvailable,
     campaignPauseReviews: options.campaignPauseReviews,
   });
@@ -63,6 +92,42 @@ export async function serveMarketingConsoleApp(
       ) {
         return;
       }
+      if (
+        await handleMetaReportRequest(
+          request,
+          response,
+          options.readReport,
+          {
+            projectId: buildResult.state.platformId,
+            environmentId: buildResult.state.environment,
+          },
+          { collect: options.collectReport, history: options.readReportHistory },
+        )
+      )
+        return;
+      if (
+        await handleMetaDiagnosticRequest(request, response, options.metaDiagnostics, {
+          projectId: buildResult.state.platformId,
+          environmentId: buildResult.state.environment,
+        })
+      )
+        return;
+      if(await handleGtmSetupRequest(request,response,{projectId:buildResult.state.platformId,environmentId:buildResult.state.environment}))return;
+      if (
+        await handleGtmDiagnosisRequest(request, response, {
+          projectId: buildResult.state.platformId,
+          environmentId: buildResult.state.environment,
+        })
+      )
+        return;
+      if (await handleGtmReleaseRequest(request,response,options.gtmRelease,{projectId:buildResult.state.platformId,environmentId:buildResult.state.environment})) return;
+      if (
+        await handleGtmWorkspaceRequest(request, response, options.gtmWorkspace, {
+          projectId: buildResult.state.platformId,
+          environmentId: buildResult.state.environment,
+        })
+      )
+        return;
       if (await handleTemporalStateRequest(request, response, requestUrl, options)) return;
       if (request.method !== 'GET' && request.method !== 'HEAD') {
         response.statusCode = 405;

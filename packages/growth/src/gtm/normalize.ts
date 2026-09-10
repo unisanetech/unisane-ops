@@ -102,6 +102,9 @@ function tagResource(
       folderSlug: tag.folderSlug,
       triggerSlugs: [...tag.triggerSlugs].sort(),
       parameters,
+      ...(tag.rawParameters ? { rawParameters: tag.rawParameters } : {}),
+      ...(tag.template ? { template: tag.template } : {}),
+      ...(tag.tagFiringOption ? { tagFiringOption: tag.tagFiringOption } : {}),
       ...(tag.type === 'consent_default'
         ? { implementationHtml: consentDefaultHtml(parameters) }
         : {}),
@@ -121,6 +124,7 @@ export function normalizeGoogleTagManagerManifest(
     folders: [...(manifest.folders ?? [])].sort(bySlug),
     builtInVariables: [...(manifest.builtInVariables ?? [])].sort(),
     variables: [...(manifest.variables ?? [])].sort(bySlug),
+    builtInTriggers: [...(manifest.builtInTriggers ?? [])].sort(bySlug),
     triggers: [...(manifest.triggers ?? [])].sort(bySlug),
     tags: [...(manifest.tags ?? [])].sort(bySlug),
   };

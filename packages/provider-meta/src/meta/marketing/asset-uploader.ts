@@ -1,30 +1,23 @@
+import { readMetaMutationResponse } from './mutation-response.js';
+import { META_GRAPH_API_VERSION } from '../api-version.js';
 import type {
   MarketingAdsAssetProviderUploadOptions,
   MarketingAdsAssetProviderUploadResult,
 } from '@unisane/growth/contracts';
 import { asRecord } from './graph-utils.js';
 
-async function parseProviderResponse(response: Response): Promise<unknown> {
-  const text = await response.text();
-  if (!text.trim()) return {};
-  try {
-    return JSON.parse(text) as unknown;
-  } catch {
-    return { raw: text };
-  }
-}
-
 function accountPath(accountId: string): string {
   return accountId.startsWith('act_') ? accountId : `act_${accountId}`;
 }
 
-function imageHash(value: unknown, fallbackKey: string): string | undefined {
+function imageHash(value: unknown, fileName: string): string | undefined {
   const root = asRecord(value);
   const directHash = typeof root.hash === 'string' ? root.hash : undefined;
   if (directHash) return directHash;
   const images = asRecord(root.images);
-  const first = images[fallbackKey] ?? Object.values(images)[0];
-  const hash = asRecord(first).hash;
+  const candidates = Object.values(images);
+  const selected = images[fileName] ?? (candidates.length === 1 ? candidates[0] : undefined);
+  const hash = asRecord(selected).hash;
   return typeof hash === 'string' ? hash : undefined;
 }
 
@@ -49,7 +42,7 @@ export async function uploadMetaAdsAsset(
       '[ADS_ASSET_META_CONNECTION_INCOMPLETE] Meta asset upload requires a selected ad account and canonical connection credential.',
     );
   }
-  const apiVersion = options.apiVersion ?? 'v25.0';
+  const apiVersion = options.apiVersion ?? META_GRAPH_API_VERSION;
   if (options.operation.assetType === 'video') {
     const sourceBytes = new Uint8Array(options.source.bytes.byteLength);
     sourceBytes.set(options.source.bytes);
@@ -66,12 +59,11 @@ export async function uploadMetaAdsAsset(
       `https://graph.facebook.com/${apiVersion}/${accountPath(accountId)}/advideos`,
       { method: 'POST', body },
     );
-    const value = await parseProviderResponse(response);
-    if (!response.ok) {
-      throw new Error(
-        `[ADS_ASSET_META_VIDEO_UPLOAD_FAILED] Meta video upload failed: ${JSON.stringify(value)}`,
-      );
-    }
+    const value = await readMetaMutationResponse(
+      response,
+      'ADS_ASSET_META_VIDEO_UPLOAD_FAILED',
+      'Meta video upload',
+    );
     const providerAssetId = videoId(value);
     if (!providerAssetId) {
       throw new Error(
@@ -92,12 +84,11 @@ export async function uploadMetaAdsAsset(
     `https://graph.facebook.com/${apiVersion}/${accountPath(accountId)}/adimages`,
     { method: 'POST', body },
   );
-  const value = await parseProviderResponse(response);
-  if (!response.ok) {
-    throw new Error(
-      `[ADS_ASSET_META_UPLOAD_FAILED] Meta image upload failed: ${JSON.stringify(value)}`,
-    );
-  }
+  const value = await readMetaMutationResponse(
+    response,
+    'ADS_ASSET_META_UPLOAD_FAILED',
+    'Meta image upload',
+  );
   const providerAssetId = imageHash(value, options.source.fileName);
   if (!providerAssetId) {
     throw new Error(

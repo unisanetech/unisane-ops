@@ -1,6 +1,11 @@
 import type { GrowthCapability } from '../config.js';
 import type { GrowthConnectionsContext } from '../cli/project-context.js';
 import type { MarketingEvidenceProviderStatus } from '../marketing/reports/evidence-status.js';
+import {
+  assessMarketingMetaConnection,
+  type MarketingMetaConnectionService,
+  type MarketingMetaConnectionServiceAssessment,
+} from '../marketing/connections/meta.js';
 import type {
   MarketingConsoleConnection,
   MarketingConsoleConnectionAction,
@@ -381,6 +386,87 @@ function overallState(
   );
 }
 
+function metaConsoleState(
+  assessment: MarketingMetaConnectionServiceAssessment | undefined,
+  fallbackState: ReturnType<typeof assessMarketingMetaConnection>['state'],
+): MarketingConsoleConnectionState {
+  const state = assessment?.state ?? fallbackState;
+  if (state === 'ready') return 'current';
+  if (state === 'disconnected') return 'not-connected';
+  if (state === 'credential-expired' || state === 'grant-expired') return 'expired-access';
+  if (state === 'grant-missing' || state === 'grant-partial' || state === 'scope-forbidden') {
+    return 'partial-permission';
+  }
+  if (state === 'resource-missing' || state === 'resource-ambiguous') return 'needs-resource';
+  return 'failed';
+}
+
+function metaServiceProjection(args: {
+  service: MarketingMetaConnectionService;
+  connected: boolean;
+  assessment: ReturnType<typeof assessMarketingMetaConnection>;
+  currentAdsEvidence: boolean;
+  sampleAdsEvidence: boolean;
+  freshness: MarketingConsoleFreshnessCell[];
+}): MarketingConsoleConnectionService {
+  const serviceAssessment = args.assessment.services.find(
+    (candidate) => candidate.service === args.service,
+  );
+  const readinessState = metaConsoleState(serviceAssessment, args.assessment.state);
+  const state =
+    args.service === 'ads-insights' && readinessState === 'current' && !args.currentAdsEvidence
+      ? 'delayed'
+      : readinessState;
+  const selected = serviceAssessment?.selectedResources[0];
+  const issue = serviceAssessment?.issues[0] ?? args.assessment.issues[0];
+  const isAds = args.service === 'ads-insights';
+  return {
+    id: args.service,
+    label: isAds ? 'Meta Ads insights' : 'Meta event measurement',
+    purpose: isAds
+      ? 'Review Facebook and Instagram advertising performance.'
+      : 'Audit the exact Meta Pixel or dataset used for browser and server events.',
+    state,
+    statusLabel: statusLabel(state),
+    accessLabel: args.connected
+      ? state === 'partial-permission'
+        ? 'Required Meta read access is incomplete'
+        : state === 'expired-access'
+          ? 'Meta read access has expired'
+          : 'Meta read access is recorded'
+      : 'No Meta account is connected',
+    accessLevelLabel: args.connected
+      ? 'Read-only measurement access; campaign management is not allowed'
+      : 'No provider permission has been granted',
+    ...(selected
+      ? {
+          resource: {
+            type: humanize(selected.resourceType),
+            label: selected.displayName,
+            identifier: selected.resourceId,
+            selectedAt: selected.observedAt,
+          },
+        }
+      : {}),
+    dataLabel: isAds
+      ? args.sampleAdsEvidence
+        ? 'Sample reports are available for interface validation'
+        : args.currentAdsEvidence
+          ? 'Meta advertising reports are available'
+          : 'No usable Meta advertising data is available'
+      : serviceAssessment?.ready
+        ? 'Exact event-source selection is ready for bounded measurement reads'
+        : 'No bounded event-measurement read is authorized',
+    dataCoverageLabel: isAds
+      ? dataCoverageLabel(args.freshness)
+      : 'Connection readiness only; this is not event-delivery evidence',
+    ...(isAds && latestPulledAt(args.freshness)
+      ? { dataUpdatedAt: latestPulledAt(args.freshness) }
+      : {}),
+    ...(issue ? { issue } : {}),
+  };
+}
+
 export function buildMarketingConsoleConnections(args: {
   context: GrowthConnectionsContext;
   capabilities: readonly GrowthCapability[];
@@ -471,29 +557,43 @@ export function buildMarketingConsoleConnections(args: {
   );
   const connected = Boolean(metaProvider.connection);
   const currentEvidence = metaFreshness.some((cell) => cell.status === 'ready');
-  const state: MarketingConsoleConnectionState = connected
-    ? currentEvidence
-      ? 'current'
-      : 'delayed'
-    : 'not-connected';
-  const service: MarketingConsoleConnectionService = {
-    id: 'ads',
-    label: 'Meta Ads',
-    purpose: 'Review Facebook and Instagram advertising performance.',
-    state,
-    statusLabel: statusLabel(state),
-    accessLabel: connected ? 'Meta advertising access is recorded' : 'No Meta account is connected',
-    accessLevelLabel: connected
-      ? 'Advertising account access'
-      : 'No provider permission has been granted',
-    dataLabel: sampleEvidence
-      ? 'Sample reports are available for interface validation'
-      : currentEvidence
-        ? 'Meta advertising reports are available'
-        : 'No usable Meta advertising data is available',
-    dataCoverageLabel: dataCoverageLabel(metaFreshness),
-    ...(latestPulledAt(metaFreshness) ? { dataUpdatedAt: latestPulledAt(metaFreshness) } : {}),
-  };
+  const connection = metaProvider.connection;
+  const assessment = assessMarketingMetaConnection(
+    connection
+      ? {
+          schemaVersion: 1,
+          connectionId: connection.id,
+          connected: true,
+          scopes: connection.grants.flatMap((grant) => grant.scopes),
+          credentialAvailable: connection.credentialState === 'active',
+          credentialState: connection.credentialState,
+          grants: connection.grants,
+          resources: connection.resources,
+          ...(connection.updatedAt ? { updatedAt: connection.updatedAt } : {}),
+          ...(connection.lastVerifiedAt ? { lastVerifiedAt: connection.lastVerifiedAt } : {}),
+        }
+      : {
+          schemaVersion: 1,
+          connectionId: 'meta',
+          connected: false,
+          scopes: [],
+          credentialAvailable: false,
+          credentialState: 'missing',
+          grants: [],
+          resources: [],
+        },
+  );
+  const services = (['ads-insights', 'event-measurement'] as const).map((service) =>
+    metaServiceProjection({
+      service,
+      connected,
+      assessment,
+      currentAdsEvidence: currentEvidence,
+      sampleAdsEvidence: sampleEvidence,
+      freshness: metaFreshness,
+    }),
+  );
+  const state = overallState(connected, services);
   const metaConnection: MarketingConsoleConnection = {
     provider: 'meta',
     label: 'Meta',
@@ -503,9 +603,11 @@ export function buildMarketingConsoleConnections(args: {
     state,
     statusLabel: statusLabel(state),
     summary: connected
-      ? currentEvidence
-        ? 'Meta Ads is connected and has usable advertising evidence.'
-        : 'Meta Ads is connected but its reports need an update.'
+      ? assessment.ready
+        ? currentEvidence
+          ? 'Meta measurement access and advertising evidence are ready.'
+          : 'Meta measurement access is ready; advertising reports need an update.'
+        : `Meta is connected but measurement readiness is blocked: ${assessment.issues[0] ?? 'connection evidence is incomplete'}`
       : sampleEvidence
         ? 'No Meta account is connected. Sample advertising evidence is available for interface validation.'
         : 'No Meta account is connected to this workspace.',
@@ -519,7 +621,7 @@ export function buildMarketingConsoleConnections(args: {
             metaProvider.connection.lastVerifiedAt ?? metaProvider.connection.updatedAt,
         }
       : {}),
-    services: [service],
+    services,
     disconnect: {
       title: 'Disconnect Meta from this workspace?',
       consequences: [

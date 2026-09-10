@@ -55,12 +55,12 @@ function eventRequirementChecks(
   if (!event.dedupeRule) {
     checks.push({
       id: `events.${event.id}.dedupeRule`,
-      status: event.source === 'server' ? 'error' : 'warn',
+      status: event.deliveryExpectation === 'browser-only' ? 'warn' : 'error',
       message: `Event ${event.id} does not declare a dedupe rule.`,
     });
   }
 
-  if (event.source === 'browser') {
+  if (event.deliveryExpectation !== 'server-only') {
     const eventFiles = filesWithLiteral(files, event.name);
     if (eventFiles.length) {
       checks.push(

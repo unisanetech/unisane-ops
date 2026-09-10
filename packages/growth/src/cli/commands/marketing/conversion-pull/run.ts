@@ -7,8 +7,9 @@ function printJson(value: unknown): void {
 }
 
 function printResult(result: ReturnType<typeof writeMarketingConfirmedConversionPull>): void {
-  console.log(`Unisane-confirmed conversions cached: ${result.recordCount}`);
-  console.log(`Window: ${result.window.startDate} to ${result.window.endDate}`);
+  console.log(`Canonical outcome ledger ${result.disposition}: ${result.recordCount} revisions`);
+  console.log(`Artifact revision: ${result.revision}`);
+  console.log(`Window: ${result.window.start} to ${result.window.end}`);
   console.log(`Latest: ${result.latestPath}`);
 }
 
@@ -21,10 +22,6 @@ export async function marketingConversionPull(options: MarketingCliOptions): Pro
     const result = writeMarketingConfirmedConversionPull(loaded.config, {
       cwd: options.cwd,
       inputPath: options.input,
-      source: options.source,
-      startDate: options.startDate,
-      endDate: options.endDate,
-      timeZone: options.timeZone,
     });
     if (options.json) printJson(result);
     else printResult(result);

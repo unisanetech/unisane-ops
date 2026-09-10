@@ -2,6 +2,7 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import {
   loadMarketingRegistries,
+  isMissingMarketingRegistryError,
   type LoadedMarketingRegistries,
 } from '../registry/load-registries.js';
 import type {
@@ -320,8 +321,13 @@ export async function buildMarketingAdsStatusReport(
   const now = options.now ?? new Date();
   const env = options.env ?? process.env;
   const providers = providerStatuses(config, env);
-  const registries = await loadMarketingRegistries(config, { cwd });
-  const conversionMappings = conversionMappingStatuses(config, registries);
+  let registries: LoadedMarketingRegistries | undefined;
+  try {
+    registries = await loadMarketingRegistries(config, { cwd });
+  } catch (error) {
+    if (!isMissingMarketingRegistryError(error)) throw error;
+  }
+  const conversionMappings = registries ? conversionMappingStatuses(config, registries) : [];
   const providerReports = adsProviders.flatMap(
     (provider) =>
       readMarketingProviderReportStatus({
@@ -339,9 +345,12 @@ export async function buildMarketingAdsStatusReport(
     maxAgeDays: options.maxAgeDays,
     now,
   }).providers;
-  const checks = [
+  const checks: MarketingAdsStatusCheck[] = [
     ...providerChecks(providers),
-    ...conversionMappingChecks(config, conversionMappings),
+    ...(registries ? conversionMappingChecks(config, conversionMappings) : [{
+      id: 'registries', status: 'error' as const,
+      message: 'Tracking registries are missing. Configure events and conversions before evaluating conversion mappings.',
+    }]),
   ];
   for (const providerReport of providerReports) {
     checks.push({

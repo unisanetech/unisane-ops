@@ -70,7 +70,12 @@ export function App() {
       setTemporalError(undefined);
       return;
     }
-    if (stateMatchesQuery(boot.state, temporal.query)) {
+    if (
+      stateMatchesQuery(boot.state, {
+        startDate: temporal.query.startDate,
+        endDate: temporal.query.endDate,
+      })
+    ) {
       temporalStateCache.set(cacheKey, boot.state);
       setState(boot.state);
       setTemporalLoading(false);

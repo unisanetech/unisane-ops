@@ -84,18 +84,6 @@ function stringField(value: GoogleTagManagerJsonObject, key: string): string | u
   return typeof field === 'string' && field.length > 0 ? field : undefined;
 }
 
-function responseMessage(body: unknown, fallback: string): string {
-  if (!isRecord(body)) return fallback;
-  const error = body.error;
-  if (isRecord(error) && typeof error.message === 'string') {
-    return error.message;
-  }
-  if (typeof body.message === 'string') {
-    return body.message;
-  }
-  return fallback;
-}
-
 async function parseResponseBody(response: Response): Promise<unknown> {
   const text = await response.text();
   if (!text.trim()) return null;
@@ -462,7 +450,14 @@ export class GoogleTagManagerApiClient {
 
   async requestJson(apiPath: string, init: RequestInit = {}): Promise<GoogleTagManagerJsonObject> {
     await this.waitForRateLimit();
-    const token = await this.resolveAccessToken();
+    let token: string;
+    try {
+      token = await this.resolveAccessToken();
+    } catch {
+      throw new Error(
+        '[GTM_CREDENTIAL_UNAVAILABLE] Unable to resolve GTM credentials. Reconnect the selected account.',
+      );
+    }
     const url = new URL(`/tagmanager/v2/${trimSlashes(apiPath)}`, this.baseUrl);
     const headers = new Headers(init.headers);
     headers.set('authorization', `Bearer ${token}`);
@@ -471,23 +466,31 @@ export class GoogleTagManagerApiClient {
       headers.set('content-type', 'application/json');
     }
 
-    const response = await this.fetchImpl(url, {
-      ...init,
-      headers,
-    });
-    const body = await parseResponseBody(response);
+    let response: Response;
+    let body: unknown;
+    try {
+      response = await this.fetchImpl(url, {
+        ...init,
+        headers,
+        signal: init.signal ?? AbortSignal.timeout(30000),
+      });
+      body = await parseResponseBody(response);
+    } catch {
+      throw new Error(
+        '[GTM_TRANSPORT_OUTCOME_UNCERTAIN] GTM request failed or timed out. Inspect remote state before retrying a write.',
+      );
+    }
 
     if (!response.ok) {
       throw new GoogleTagManagerApiError({
         status: response.status,
-        message: responseMessage(body, response.statusText),
-        responseBody: body,
+        message: 'Provider rejected the request. Check access, target and request validity.',
+        responseBody: { status: response.status },
       });
     }
 
-    if (!isRecord(body)) {
-      return {};
-    }
+    if (!isRecord(body))
+      throw new Error('[GTM_RESPONSE_INVALID] Provider returned a non-object response.');
 
     return body;
   }
@@ -498,21 +501,32 @@ export class GoogleTagManagerApiClient {
   ): Promise<readonly GoogleTagManagerJsonObject[]> {
     const items: GoogleTagManagerJsonObject[] = [];
     let pageToken: string | undefined;
-
+    const seen = new Set<string>();
+    let pages = 0;
     do {
+      if (++pages > 100)
+        throw new Error(
+          '[GTM_PAGINATION_LIMIT] Inventory exceeded 100 pages; narrow the resource scope.',
+        );
       const pathWithQuery = pageToken
         ? `${trimSlashes(apiPath)}?pageToken=${encodeURIComponent(pageToken)}`
         : apiPath;
       const page = await this.requestJson(pathWithQuery);
       const pageItems = page[collectionKey];
-      if (Array.isArray(pageItems)) {
-        for (const item of pageItems) {
-          if (isRecord(item)) {
-            items.push(item);
-          }
-        }
+      if (pageItems !== undefined && !Array.isArray(pageItems))
+        throw new Error('[GTM_RESPONSE_INVALID] Invalid inventory collection.');
+      for (const item of (pageItems ?? []) as unknown[]) {
+        if (!isRecord(item)) throw new Error('[GTM_RESPONSE_INVALID] Invalid inventory resource.');
+        items.push(item);
+        if (items.length > 10000)
+          throw new Error('[GTM_PAGINATION_LIMIT] Inventory exceeded 10000 resources.');
       }
+      if (page.nextPageToken !== undefined && typeof page.nextPageToken !== 'string')
+        throw new Error('[GTM_RESPONSE_INVALID] Invalid page token.');
       pageToken = stringField(page, 'nextPageToken');
+      if (pageToken && seen.has(pageToken))
+        throw new Error('[GTM_PAGINATION_CYCLE] Provider repeated a page token.');
+      if (pageToken) seen.add(pageToken);
     } while (pageToken);
 
     return items;

@@ -4,24 +4,10 @@
   "id": "@unisane/provider-meta",
   "edition": "oss",
   "maturity": "beta",
-  "supportedModes": [
-    "full-platform",
-    "headless"
-  ],
-  "requiresPackages": [
-    "@unisane/growth"
-  ],
+  "supportedModes": ["full-platform", "headless"],
+  "requiresPackages": ["@unisane/growth"],
   "requiresTokens": [],
-  "runtimeProfiles": [
-    "local-minimal",
-    "standard-production",
-    "distributed-production"
-  ],
-  "docs": [
-    "README.md"
-  ],
-  "exports": [
-    ".",
-    "./marketing"
-  ]
+  "runtimeProfiles": ["local-minimal", "standard-production", "distributed-production"],
+  "docs": ["README.md"],
+  "exports": [".", "./marketing", "./pack-manifest"]
 }

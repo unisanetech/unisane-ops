@@ -10,6 +10,7 @@ import {
 import { createGrowthCampaignPauseAction } from '@unisane/growth/actions';
 import {
   createGrowthCampaignPauseRunCoordinator,
+  listGrowthCampaignPauseRunReviewEntries,
   resolveGrowthCampaignPauseRunDirectory,
 } from '@unisane/growth/playbooks';
 import { writeMarketingProviderReportPull } from '@unisane/growth/marketing';
@@ -65,14 +66,15 @@ function createTempProject(): string {
     path.join(cwd, 'docs', 'marketing', 'events.json'),
     JSON.stringify(
       {
-        version: 1,
+        version: 2,
         platformId: 'true-resume',
         events: [
           {
             id: 'resume_import_completed',
             name: 'resume_import_completed',
             owner: 'true-resume/growth',
-            source: 'server',
+            deliveryExpectation: 'server-only',
+            logicalEventIdRule: 'Use canonical server event id.',
             lifecycle: 'lead',
             requiredProperties: [{ name: 'eventId', type: 'string' }],
             optionalProperties: [],
@@ -141,6 +143,29 @@ function runWithTestProjectContext<T>(cwd: string, run: () => T): T {
           environmentId: 'production',
           providers: [{ provider: 'google', available: true }],
         };
+      }
+      if (request.operation === 'growth.campaign.pause') {
+        const value = (
+          input as {
+            input: { command: { operation: string }; projectId: string; environmentId: string };
+          }
+        ).input;
+        expect(value.command.operation).toBe('list');
+        expect(value.projectId).toBe('true-resume');
+        expect(value.environmentId).toBe('production');
+        return listGrowthCampaignPauseRunReviewEntries({
+          store: new LocalOpsMutationRunStore(
+            resolveGrowthCampaignPauseRunDirectory({
+              cwd,
+              projectId: value.projectId,
+              environmentId: value.environmentId,
+            }),
+          ),
+          projectId: value.projectId,
+          environmentId: value.environmentId,
+          limit: 50,
+          now: '2026-05-21T01:00:00.000Z',
+        });
       }
       if (request.operation !== 'growth.project.context') {
         throw new Error(`[TEST_PROVIDER_OPERATION_UNEXPECTED] ${request.operation ?? 'missing'}`);
@@ -636,6 +661,17 @@ describe('marketing console', () => {
     for (const project of tempProjects.splice(0)) {
       rmSync(project, { recursive: true, force: true });
     }
+  });
+
+  it('opens with missing tracking registries and exposes blocked tracking evidence', async () => {
+    const cwd = createTempProject();
+    tempProjects.push(cwd);
+    rmSync(path.join(cwd, 'docs/marketing/events.json'));
+    await runWithTestProjectContext(cwd, async () => {
+      const state = await buildMarketingConsoleState({ cwd });
+      expect(JSON.stringify(state)).toContain('Required tracking registry evidence has not been recorded yet.');
+      expect(JSON.stringify(state)).toContain('Tracking registries are missing.');
+    });
   });
 
   it('builds a typed console state from marketing artifacts without secrets', async () => {

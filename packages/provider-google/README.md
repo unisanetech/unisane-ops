@@ -9,6 +9,11 @@ Search Console, Analytics, Tag Manager, Ads, and project administration. This pa
 owns OAuth, secure local credentials, refresh, revocation state, discovery, explicit
 resource selection, and connection readiness.
 
+Tag Manager connections default to `--tag-manager-access read`. Use `workspace` for reviewed
+workspace apply/preview/version creation, or `publish` only when the connection must also publish a
+reviewed version. Prefer a separate named writer connection instead of expanding the routine
+read-only connection. OAuth access and refresh tokens remain outside project environment files.
+
 `unisane-ops disconnect google` removes the local connection record and locally owned
 credential material after explicit confirmation. It does not delete historical reports
 or mutate provider-side tags, properties, containers, accounts, or campaigns.

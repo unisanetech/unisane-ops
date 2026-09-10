@@ -8,21 +8,11 @@ import {
   writeFileSync,
 } from 'node:fs';
 import path from 'node:path';
+import { OPS_MCP_TOOL_NAMES } from '@unisane/ops-mcp';
 
 const START_MARKER = '# >>> unisane-ops mcp:codex >>>';
 const END_MARKER = '# <<< unisane-ops mcp:codex <<<';
 const SERVER_NAME = 'unisane_ops';
-const TOOL_NAMES = [
-  'review_growth_health',
-  'research_seo_opportunities',
-  'prepare_seo_implementation',
-  'verify_seo_publication',
-  'audit_growth_measurement',
-  'plan_campaign_pause',
-  'review_campaign_pause',
-  'apply_approved_campaign_pause',
-  'verify_campaign_pause',
-] as const;
 
 export type CodexMcpBindingOperation = 'install' | 'remove';
 
@@ -95,7 +85,7 @@ export function renderCodexMcpBinding(input: {
     'enabled = true',
     'required = false',
     'default_tools_approval_mode = "writes"',
-    `enabled_tools = ${JSON.stringify(TOOL_NAMES)}`,
+    `enabled_tools = ${JSON.stringify(OPS_MCP_TOOL_NAMES)}`,
     END_MARKER,
   ].join('\n');
 }
@@ -175,7 +165,7 @@ export function applyCodexMcpBinding(plan: CodexMcpBindingPlan): void {
 
 export const CODEX_MCP_BINDING = Object.freeze({
   serverName: SERVER_NAME,
-  toolNames: TOOL_NAMES,
+  toolNames: OPS_MCP_TOOL_NAMES,
   startMarker: START_MARKER,
   endMarker: END_MARKER,
 });

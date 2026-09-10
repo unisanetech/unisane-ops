@@ -1,21 +1,20 @@
 import path from 'node:path';
 import {
-  createGrowthCampaignPauseWorkflow,
+  createCampaignPauseHostClient,
   executeGrowthSeoOpportunityResearch,
   findSeoPublicationRecord,
   prepareSeoOpportunityArtifacts,
   resolveSeoResearchWorkspacePaths,
   verifySeoPublicationArtifacts,
-  type GrowthCampaignPauseExecutionResult,
-  type GrowthCampaignPauseProviderAdapters,
 } from '@unisane/growth';
-import { resolveGrowthCampaignPauseRunDirectory } from '@unisane/growth/playbooks';
 import { deriveMarketingExecutionContext } from '@unisane/growth/marketing';
 import type { LocalOpsMcpBinding, OpsMcpGrowthWorkflows } from '@unisane/ops-mcp';
-import { createLocalOpsExecutionState, LocalOpsMutationRunStore } from '@unisane/ops-engine/local';
 import type { OpsPrincipal } from '@unisane/ops-engine/actions';
 import { loadUnisaneOpsConfig, type LoadedUnisaneOpsConfig } from '../config/loader.js';
-import { executeGrowthProviderOperation } from '../runtime-adapters/growth.js';
+import {
+  executeGrowthProviderOperation,
+  createLocalGrowthProviderOperationDependencies,
+} from '../runtime-adapters/growth.js';
 
 export interface LocalGrowthMcpHostOptions {
   projectRoot: string;
@@ -31,82 +30,18 @@ export interface LocalGrowthMcpHostDependencies {
 
 const defaultDependencies: LocalGrowthMcpHostDependencies = {
   loadConfig: loadUnisaneOpsConfig,
-  executeProvider: executeGrowthProviderOperation,
+  executeProvider: async (cwd, operation, input) =>
+    executeGrowthProviderOperation(
+      cwd,
+      operation,
+      input,
+      await createLocalGrowthProviderOperationDependencies(),
+    ),
 };
 
 export interface LocalGrowthMcpRuntime {
   binding: LocalOpsMcpBinding;
   workflows: OpsMcpGrowthWorkflows;
-}
-
-function executionStateRoot(input: {
-  projectRoot: string;
-  projectId: string;
-  environmentId: string;
-}): string {
-  return path.join(
-    input.projectRoot,
-    '.unisane',
-    'ops',
-    input.projectId,
-    input.environmentId,
-    'state',
-    'execution',
-  );
-}
-
-function campaignExecutionResult(input: unknown): GrowthCampaignPauseExecutionResult {
-  if (!input || typeof input !== 'object') {
-    throw new Error('[GROWTH_CAMPAIGN_PAUSE_PROVIDER_RESULT_INVALID] Invalid provider result.');
-  }
-  const value = input as { outcome?: unknown; providerOperationId?: unknown };
-  if (
-    value.outcome !== 'succeeded' &&
-    value.outcome !== 'rejected' &&
-    value.outcome !== 'outcome-unknown'
-  ) {
-    throw new Error('[GROWTH_CAMPAIGN_PAUSE_PROVIDER_RESULT_INVALID] Invalid provider outcome.');
-  }
-  return {
-    outcome: value.outcome,
-    ...(typeof value.providerOperationId === 'string'
-      ? { providerOperationId: value.providerOperationId }
-      : {}),
-  };
-}
-
-function campaignStatus(input: unknown): 'paused' | 'active' | 'unknown' {
-  if (input === 'paused' || input === 'active' || input === 'unknown') return input;
-  throw new Error('[GROWTH_CAMPAIGN_PAUSE_PROVIDER_STATUS_INVALID] Invalid campaign status.');
-}
-
-function campaignPauseProviderAdapters(input: {
-  projectRoot: string;
-  environmentId: string;
-  executeProvider: LocalGrowthMcpHostDependencies['executeProvider'];
-}): GrowthCampaignPauseProviderAdapters {
-  const adapter = (provider: 'google' | 'meta') => ({
-    pauseCampaign: async (request: {
-      providerAccountId: string;
-      campaignId: string;
-      planHash: string;
-    }) =>
-      campaignExecutionResult(
-        await input.executeProvider(input.projectRoot, `${provider}.marketing.pause-campaign`, {
-          environment: input.environmentId,
-          ...request,
-        }),
-      ),
-    readCampaignStatus: async (request: { providerAccountId: string; campaignId: string }) =>
-      campaignStatus(
-        await input.executeProvider(
-          input.projectRoot,
-          `${provider}.marketing.read-campaign-status`,
-          { environment: input.environmentId, ...request },
-        ),
-      ),
-  });
-  return { googleAds: adapter('google'), metaAds: adapter('meta') };
 }
 
 export async function createLocalGrowthMcpRuntime(
@@ -154,6 +89,61 @@ export async function createLocalGrowthMcpRuntime(
   };
   const researchPaths = resolveSeoResearchWorkspacePaths(loaded.projectRoot, binding.researchRoot);
   const workflows: OpsMcpGrowthWorkflows = {
+    gtmRelease: (input) =>
+      dependencies.executeProvider(loaded.projectRoot, 'growth.gtm.release', {
+        ...input,
+        projectId: loaded.config.project.id,
+        environmentId: options.environmentId,
+        principal: options.principal,
+      }),
+    gtmWorkspace: (input) =>
+      dependencies.executeProvider(loaded.projectRoot, 'growth.gtm.workspace', {
+        ...input,
+        projectId: loaded.config.project.id,
+        environmentId: options.environmentId,
+        principal: options.principal,
+      }),
+    importMetaDiagnostics: (observation) =>
+      dependencies.executeProvider(loaded.projectRoot, 'growth.meta.diagnostics.import', {
+        projectId: loaded.config.project.id,
+        environmentId: options.environmentId,
+        principal: options.principal,
+        observation,
+      }),
+    reviewMetaDiagnostics: (query) =>
+      dependencies.executeProvider(loaded.projectRoot, 'growth.meta.diagnostics.review', {
+        projectId: loaded.config.project.id,
+        environmentId: options.environmentId,
+        principal: options.principal,
+        query,
+      }),
+    collectReport: (report) =>
+      dependencies.executeProvider(loaded.projectRoot, 'growth.reports.collect', {
+        projectId: loaded.config.project.id,
+        environmentId: options.environmentId,
+        principal: options.principal,
+        report,
+      }),
+    reportHistory: (query) =>
+      dependencies.executeProvider(loaded.projectRoot, 'growth.reports.history', {
+        projectId: loaded.config.project.id,
+        environmentId: options.environmentId,
+        principal: options.principal,
+        query,
+      }),
+    readReport: (report) =>
+      dependencies.executeProvider(loaded.projectRoot, 'growth.reports.read', {
+        projectId: loaded.config.project.id,
+        environmentId: options.environmentId,
+        principal: options.principal,
+        report,
+      }),
+    reviewCapabilities: () =>
+      dependencies.executeProvider(loaded.projectRoot, 'growth.capabilities.review', {
+        projectId: loaded.config.project.id,
+        environmentId: options.environmentId,
+        principal: options.principal,
+      }),
     seoOpportunity: {
       prepare: async (input) => {
         const review = await executeGrowthSeoOpportunityResearch({
@@ -208,31 +198,12 @@ export async function createLocalGrowthMcpRuntime(
         });
       },
     },
-    campaignPause: createGrowthCampaignPauseWorkflow({
-      state: createLocalOpsExecutionState(
-        executionStateRoot({
-          projectRoot: loaded.projectRoot,
-          projectId: binding.projectId,
-          environmentId: options.environmentId,
-        }),
-      ),
-      runStore: new LocalOpsMutationRunStore(
-        resolveGrowthCampaignPauseRunDirectory({
-          cwd: loaded.projectRoot,
-          projectId: binding.projectId,
-          environmentId: options.environmentId,
-        }),
-      ),
-      providerAdapters: campaignPauseProviderAdapters({
-        projectRoot: loaded.projectRoot,
-        environmentId: options.environmentId,
-        executeProvider: dependencies.executeProvider,
-      }),
-      actor: 'developer',
-      mutationPolicy: growth.policy.mutation,
-      production: loaded.config.environments[options.environmentId]?.production ?? false,
-      multiProcess: false,
-      lockOwner: `worker.mcp.${options.principal.id}`,
+    campaignPause: createCampaignPauseHostClient({
+      projectId: binding.projectId,
+      environmentId: options.environmentId,
+      principal: options.principal,
+      execute: (request) =>
+        dependencies.executeProvider(loaded.projectRoot, 'growth.campaign.pause', request),
     }),
   };
   return { binding, workflows };

@@ -18,9 +18,6 @@ import { executeGrowthProviderCommand } from '../../provider-runtime.js';
 import { resolveGrowthGoogleConnectionToken } from '../../connections/google.js';
 import { loadGoogleTagManagerManifest } from './manifest-loader.js';
 
-export const GOOGLE_TAG_MANAGER_PUBLISH_SCOPE =
-  'https://www.googleapis.com/auth/tagmanager.publish';
-
 export type GoogleTagManagerCliOptions = {
   app?: string;
   env?: string;
@@ -33,19 +30,9 @@ export type GoogleTagManagerCliOptions = {
   workspaceId?: string;
   workspaceName?: string;
   extended?: boolean;
+  includeUserPermissions?: boolean;
   rateLimitMs?: string;
   dryRun?: boolean;
-  yes?: boolean;
-  name?: string;
-  notes?: string;
-  version?: string;
-  fingerprint?: string;
-  previewReceipt?: string;
-  versionReceipt?: string;
-  productionConfirm?: string;
-  emergencyReason?: string;
-  actor?: string;
-  reconciliationTask?: string;
 };
 
 export type LoadedCommandContext = {
@@ -139,17 +126,11 @@ export function defaultArtifactPath(args: {
   cwd: string;
   appId: string;
   environment: string;
-  kind: 'snapshots' | 'plans' | 'receipts' | 'previews' | 'versions' | 'publishes' | 'rollbacks';
+  kind: 'snapshots';
   extension: 'json';
 }): string {
   const filenameByKind = {
     snapshots: `gtm-snapshot-${timestampSegment()}.${args.extension}`,
-    plans: `gtm-plan-${timestampSegment()}.${args.extension}`,
-    receipts: `gtm-apply-receipt-${timestampSegment()}.${args.extension}`,
-    previews: `gtm-preview-${timestampSegment()}.${args.extension}`,
-    versions: `gtm-version-${timestampSegment()}.${args.extension}`,
-    publishes: `gtm-publish-${timestampSegment()}.${args.extension}`,
-    rollbacks: `gtm-rollback-${timestampSegment()}.${args.extension}`,
   };
   return path.join(
     args.cwd,
@@ -210,9 +191,13 @@ export async function readRemoteSnapshot(args: {
     workspaceId: args.options.workspaceId,
     workspaceName: args.options.workspaceName,
     includeExtendedResources: args.options.extended,
+    includeUserPermissions: args.options.includeUserPermissions,
   };
   return executeGrowthProviderCommand('gtm.provider.read-snapshot', {
-    accessToken: await accessToken(args.options, 'tagmanager.readonly'),
+    accessToken: await accessToken(
+      args.options,
+      args.options.includeUserPermissions ? 'tagmanager.manage.users' : 'tagmanager.readonly',
+    ),
     rateLimitMs: rateLimitMs(args.options),
     options: {
       ...options,
@@ -226,17 +211,28 @@ async function readSnapshotFile(args: {
   snapshotPath: string;
 }): Promise<GoogleTagManagerRemoteSnapshot> {
   const parsed = JSON.parse(readFileSync(args.snapshotPath, 'utf8')) as unknown;
-  if (isRemoteSnapshot(parsed)) return parsed;
-  if (isApiSnapshot(parsed)) {
+  const apiSnapshot = googleTagManagerApiSnapshotFromArtifact(parsed);
+  if (apiSnapshot) {
     return executeGrowthProviderCommand('gtm.provider.normalize-snapshot', {
       manifest: args.manifest,
-      snapshot: parsed,
+      snapshot: apiSnapshot,
       desiredResources: getGoogleTagManagerDesiredResources(args.manifest),
     });
+  }
+  if (isRemoteSnapshot(parsed)) {
+    return parsed;
   }
   throw new Error(
     `[GTM_SNAPSHOT_INVALID] Snapshot at ${args.snapshotPath} must be a GoogleTagManagerRemoteSnapshot or GoogleTagManagerApiSnapshot.`,
   );
+}
+
+export function googleTagManagerApiSnapshotFromArtifact(
+  value: unknown,
+): GoogleTagManagerApiSnapshot | undefined {
+  if (isApiSnapshot(value)) return value;
+  if (isRemoteSnapshot(value) && value.raw && isApiSnapshot(value.raw)) return value.raw;
+  return undefined;
 }
 
 function isRemoteSnapshot(value: unknown): value is GoogleTagManagerRemoteSnapshot {

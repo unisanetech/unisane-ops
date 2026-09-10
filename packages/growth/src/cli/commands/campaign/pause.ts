@@ -1,16 +1,10 @@
-import { createLocalOpsExecutionState, LocalOpsMutationRunStore } from '@unisane/ops-engine/local';
-import { createCliCampaignPauseProviderAdapters } from '../../provider-adapters.js';
+import { executeGrowthProviderCommand } from '../../provider-runtime.js';
 import {
   loadGrowthProjectContext,
   selectGrowthEnvironment,
   type GrowthProjectContext,
 } from '../../project-context.js';
-import { createGrowthCampaignPauseWorkflow } from '../../../workflows/campaign-pause-execution.js';
-import {
-  getGrowthCampaignPauseRunReview,
-  resolveGrowthCampaignPauseExecutionStateDirectory,
-  resolveGrowthCampaignPauseRunDirectory,
-} from '../../../playbooks/campaign-pause-run.js';
+import { createCampaignPauseHostClient } from '../../../workflows/campaign-pause-command.js';
 import type { GrowthCampaignPauseWorkflowResult } from '../../../workflows/campaign-pause-execution.js';
 
 export type CampaignPauseCliOptions = {
@@ -59,33 +53,11 @@ function localWorkflow(input: {
   context: GrowthProjectContext;
   environmentId: string;
 }) {
-  const environment = input.context.environments[input.environmentId];
-  if (!environment) {
-    throw new Error(`[GROWTH_ENVIRONMENT_UNKNOWN] '${input.environmentId}' is not configured.`);
-  }
-  return createGrowthCampaignPauseWorkflow({
-    state: createLocalOpsExecutionState(
-      resolveGrowthCampaignPauseExecutionStateDirectory({
-        cwd: input.cwd,
-        projectId: input.context.projectId,
-        environmentId: input.environmentId,
-      }),
-    ),
-    runStore: new LocalOpsMutationRunStore(
-      resolveGrowthCampaignPauseRunDirectory({
-        cwd: input.cwd,
-        projectId: input.context.projectId,
-        environmentId: input.environmentId,
-      }),
-    ),
-    providerAdapters: createCliCampaignPauseProviderAdapters({
-      environment: input.environmentId,
-    }),
-    actor: 'developer',
-    mutationPolicy: input.context.growth.policy.mutation,
-    production: environment.production,
-    multiProcess: false,
-    lockOwner: 'worker.growth-local-cli',
+  return createCampaignPauseHostClient({
+    projectId: input.context.projectId,
+    environmentId: input.environmentId,
+    principal: { kind: 'user', id: 'user.local-operator' },
+    execute: (request) => executeGrowthProviderCommand('growth.campaign.pause', request),
   });
 }
 
@@ -186,20 +158,7 @@ export function campaignPauseShow(options: CampaignPauseCliOptions): Promise<num
   return run(options, async () => {
     const loaded = await contextFor(options);
     const runId = required(options.runId, '--run-id');
-    const review = await getGrowthCampaignPauseRunReview({
-      store: new LocalOpsMutationRunStore(
-        resolveGrowthCampaignPauseRunDirectory({
-          cwd: loaded.cwd,
-          projectId: loaded.context.projectId,
-          environmentId: loaded.environmentId,
-        }),
-      ),
-      runId,
-      now: new Date().toISOString(),
-    });
-    return review
-      ? { schemaVersion: 1, kind: 'growth.campaign-pause-workflow-result', runId, review }
-      : null;
+    return localWorkflow(loaded).show(runId);
   });
 }
 

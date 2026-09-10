@@ -9,6 +9,17 @@ describe('MeasurementOutcomeComparisons', () => {
         audit={{
           canonicalOutcomes: [
             {
+              projectId: 'store',
+              environmentId: 'production',
+              sourceId: 'order-service',
+              revision: 1,
+              status: 'confirmed',
+              finality: 'server-confirmed',
+              window: {
+                start: '2026-08-04T00:00:00Z',
+                end: '2026-08-05T00:00:00Z',
+                timeZone: 'UTC',
+              },
               outcomeId: 'purchase',
               label: 'Completed purchases',
               count: 8,

@@ -59,9 +59,9 @@ describe('Framework project descriptor assets', () => {
       coordinate: FRAMEWORK_PROJECT_DESCRIPTOR_CONTRACT_COORDINATE,
       contractFormat: 'unisane.framework-project-descriptor-contract',
       contractVersion: 1,
-      contractSha256: '51ec7dfef1e3abf2ea91529e5c1f53aed40dc55aa7cbf5f3ab929398ea2b9c55',
+      contractSha256: 'af269188a83a2f7a27a815738f34377887311b1e49e349a5bff2a6322d9f5d9a',
       schemaId: FRAMEWORK_PROJECT_DESCRIPTOR_SCHEMA_ID,
-      schemaSha256: '230280eb2234b7298c27f0502e785a7a7dddb134e21ab9bbaa1459ca9ca1105d',
+      schemaSha256: '6f78377766bb0baeabb863efe37577692aa9a007b4ea257576b190c6eed73db4',
       descriptorFormat: 'unisane.framework-project-descriptor',
       descriptorSchemaVersion: 1,
     });
@@ -108,7 +108,7 @@ describe('Framework project descriptor validation and mapping', () => {
       schemaText,
       descriptorText: fixture('valid'),
       expectation: expectation({
-        digest: '900d90da6f4ed068c2650538a0568a92d747fbe069899d40d2ad6caaf58ab9ab',
+        digest: 'a0a86a54494b569cf434820eff2a2a3bac79fdf1b64a0788261516a5e416edb8',
       }),
     });
 
@@ -122,13 +122,13 @@ describe('Framework project descriptor validation and mapping', () => {
         schemaId: 'https://unisane.dev/schemas/framework-project-descriptor.v1.json',
         descriptorFormat: 'unisane.framework-project-descriptor',
         descriptorSchemaVersion: 1,
-        descriptorDigest: '900d90da6f4ed068c2650538a0568a92d747fbe069899d40d2ad6caaf58ab9ab',
+        descriptorDigest: 'a0a86a54494b569cf434820eff2a2a3bac79fdf1b64a0788261516a5e416edb8',
       },
       compiler: {
         package: '@unisane/compiler',
         version: '0.1.0',
         projectModelSchemaVersion: 3,
-        moduleDescriptorSchemaVersion: 1,
+        moduleDescriptorSchemaVersion: 2,
       },
       capabilities: [
         {
@@ -242,4 +242,19 @@ describe('Framework project descriptor validation and mapping', () => {
       'project-descriptor-compatibility-unsupported',
     );
   });
+  it('rejects obsolete module compatibility even with a valid updated digest', () => {
+    const descriptor = JSON.parse(fixture('valid')) as {
+      compatibility: { moduleDescriptorSchemaVersion: number };
+      digest: string;
+    };
+    descriptor.compatibility.moduleDescriptorSchemaVersion = 1;
+    const { digest: ignoredDigest, ...core } = descriptor;
+    void ignoredDigest;
+    descriptor.digest = createHash('sha256').update(JSON.stringify(core), 'utf8').digest('hex');
+    expectValidationError(
+      () => parseFrameworkProjectDescriptor(`${JSON.stringify(descriptor, null, 2)}\n`, expectation()),
+      'project-descriptor-compatibility-unsupported',
+    );
+  });
+
 });

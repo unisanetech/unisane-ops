@@ -1,0 +1,63 @@
+{
+  "snapshotId": "S-0635b2e2c9eb",
+  "taskId": "T-d1cacae2",
+  "sessionId": "codex-growth-meta-connection-20260902",
+  "actorId": "bhaskarbarma",
+  "baseRevision": "d799e47265faab9bbf961aef294a3296b34e591f",
+  "paths": [
+    {
+      "path": "docs/reference/generated/repository/standalone-repository-integrity.json",
+      "digest": "76bf911f350faac317345b4742679f6c9a21a1ff6f2bf5951601335e474d88be",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/reference/generated/symbols/packages/@unisane__growth.symbols.json",
+      "digest": "db61d70d83b293c8c60d00af4299ae947292bbba77a3cb0aecbc8e34ed37e5e4",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/standards/13-unisane-ops-product-architecture-baseline.md",
+      "digest": "9cc88bb2824f591d638b8f3aa84dcdf7a3e55a0af9407a6c6b71572ddfbf0861",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/work/plans/unisane-ops-growth-meta-measurement-roadmap.md",
+      "digest": "1361049eec55ef92e05d381cfb1738db412a8b342860d585dbe53e866fcd6a03",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/work/tasks/snapshots/T-d1cacae2-S-7005b6f3a7d3.json",
+      "digest": "fdc8799c867cff5bc8449d896c5571aa5f1a68effd2666e33f160d1463c3e4e4",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/console/connections.test.ts",
+      "digest": "358608bbc44ef369bcd7d37a21fe520af87ade2aa2aab2062bb06ca722106e7e",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/console/connections.ts",
+      "digest": "88c86170820d5646b745131de60f8a4a6a85da8f2b348b9b5e893a76f0a539ba",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/connections/meta.test.ts",
+      "digest": "d04b929ab62c9055fef62ee5c8ecd6e5d6ca066b64ee4b9890e3f85591227364",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/connections/meta.ts",
+      "digest": "eb21c710afccfe857faa022cf0b03a540afa222ae32a6f3055b1cc57fbf2f0ae",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/index.ts",
+      "digest": "f866838f251c0f26d9f1025696d73c834907aad90603a863e64d14cd9cae07a8",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    }
+  ],
+  "digest": "0635b2e2c9eba826da1328cad48f66d6673f1b220b13161a8ceff05185213607",
+  "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs",
+  "createdAt": "2026-09-01T19:45:10.074Z",
+  "artifactPath": "docs/work/tasks/snapshots/T-d1cacae2-S-0635b2e2c9eb.json"
+}

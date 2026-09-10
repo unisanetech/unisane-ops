@@ -299,7 +299,7 @@ function TrackingHealth(props: ConsoleScreenProps) {
       <ContentSection>
         <DataState
           title="Need to repair measurement?"
-          description="Connections keeps access and resource selection in one place; this page only explains measurement confidence."
+          description="Manage access in Connections. Review measurement evidence and prepare approved workspace repairs here."
           actionLabel="Review connections"
           onAction={() => navigate('/connections')}
         />

@@ -1,3 +1,5 @@
+import {registerDiagnosticCommands} from './commands/diagnostics/register.js';
+import { registerReportCommands } from './commands/reports/register.js';
 import type { Command } from 'commander';
 import { registerAdsCommands } from './commands/ads/register.js';
 import { registerMarketingCommands } from './commands/marketing/register.js';
@@ -8,6 +10,9 @@ import { registerHealthCommands } from './commands/health/register.js';
 import { registerCampaignCommands } from './commands/campaign/register.js';
 
 function registerFamilies(parent: Command): void {
+  registerCapabilityCommands(parent);
+  registerReportCommands(parent);
+  registerDiagnosticCommands(parent);
   registerSeoCommands(parent);
   registerMarketingCommands(parent);
   registerAdsCommands(parent);
@@ -33,4 +38,5 @@ export {
   registerHealthCommands,
   registerCampaignCommands,
 };
-export * from './commands/gtm/commands.js';
+export * from './commands/gtm/index.js';
+import { registerCapabilityCommands } from './commands/capabilities/register.js';

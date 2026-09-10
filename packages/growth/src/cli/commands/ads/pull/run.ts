@@ -8,7 +8,6 @@ import { pullGoogleAdsReport, pullMetaAdsReport } from '../../../provider-adapte
 import type { AdsCliOptions } from '../options.js';
 import { printMarketingProviderPullResult } from '../../marketing/output/doctor.js';
 import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
-import { resolveGrowthMetaConnectionToken } from '../../../connections/meta.js';
 import {
   loadGrowthProjectContext,
   loadMarketingExecutionContext,
@@ -63,23 +62,22 @@ export async function adsPull(options: AdsCliOptions): Promise<number> {
           : undefined;
       const meta =
         provider === 'metaAds'
-          ? {
-              resource: resolveGrowthResource({
-                context: await loadGrowthProjectContext(),
-                environment: options.environment,
-                provider: 'meta',
-                service: 'ads',
-                resourceType: 'ad-account',
-              }),
-              accessToken: await resolveGrowthMetaConnectionToken({
-                connection: options.connection,
-                environment: options.environment,
-              }),
-            }
+          ? resolveGrowthResource({
+              context: await loadGrowthProjectContext(),
+              environment: options.environment,
+              provider: 'meta',
+              service: 'ads-insights',
+              resourceType: 'ad-account',
+            })
           : undefined;
       if (google && options.accountId && options.accountId !== google.resource.resourceId) {
         throw new Error(
           `[GROWTH_RESOURCE_OVERRIDE_REJECTED] '${options.accountId}' is not the selected Google Ads customer.`,
+        );
+      }
+      if (meta && options.accountId && options.accountId !== meta.resourceId) {
+        throw new Error(
+          `[GROWTH_RESOURCE_OVERRIDE_REJECTED] '${options.accountId}' is not the selected Meta Ads account.`,
         );
       }
       const result = await writeMarketingProviderApiReportPull(loaded.config, {
@@ -87,15 +85,10 @@ export async function adsPull(options: AdsCliOptions): Promise<number> {
         provider,
         driver: provider === 'googleAds' ? pullGoogleAdsReport : pullMetaAdsReport,
         env,
-        accountId: google?.resource.resourceId ?? meta?.resource.resourceId ?? options.accountId,
-        credentials: google
-          ? google.credentials
-          : meta
-            ? {
-                accountId: meta.resource.resourceId,
-                accessToken: meta.accessToken,
-              }
-            : undefined,
+        accountId: google?.resource.resourceId ?? meta?.resourceId ?? options.accountId,
+        connection: options.connection,
+        environment: options.environment,
+        credentials: google?.credentials,
         startDate: options.startDate,
         endDate: options.endDate,
         timeZone: options.timeZone,

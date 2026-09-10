@@ -240,3 +240,28 @@ export function consentDefaultTag(args: {
     },
   };
 }
+
+export function metaPixelEventTag(args: {
+  slug: string;
+  pixelId: string;
+  eventName: string;
+  triggerSlugs: readonly string[];
+  eventId: GoogleTagManagerParameterValue;
+  value?: GoogleTagManagerParameterValue;
+  currency?: GoogleTagManagerParameterValue;
+}): GoogleTagManagerTag {
+  return {
+    slug: args.slug,
+    type: 'meta_pixel',
+    triggerSlugs: args.triggerSlugs,
+    parameters: [
+      { key: 'pixelId', value: args.pixelId },
+      { key: 'eventName', value: args.eventName },
+      { key: 'eventId', value: args.eventId },
+      ...(args.value === undefined ? [] : [{ key: 'value', value: args.value }]),
+      ...(args.currency === undefined ? [] : [{ key: 'currency', value: args.currency }]),
+    ],
+    consent: { requiredConsent: ['ad_storage', 'ad_user_data', 'ad_personalization'] },
+    vendorDomains: ['connect.facebook.net', 'www.facebook.com'],
+  };
+}

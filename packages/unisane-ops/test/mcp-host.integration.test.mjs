@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { OPS_MCP_TOOL_NAMES } from '@unisane/ops-mcp';
 import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -15,10 +16,11 @@ after(() => rmSync(projectRoot, { recursive: true, force: true }));
 
 writeFileSync(
   path.join(projectRoot, 'unisane.config.ts'),
-  `export const ops = {
+  `export default {
   schemaVersion: 1,
   project: { id: 'mcp-fixture' },
   environments: { test: { production: false } },
+  ops: {
   connections: {},
   targets: {},
   capabilities: {
@@ -32,7 +34,7 @@ writeFileSync(
       policy: { mutation: 'approval-required', spend: 'approval-required' }
     }
   }
-};\n`,
+}};\n`,
 );
 
 for (const directory of ['opportunities', 'clusters', 'competitors', 'serp']) {
@@ -95,6 +97,17 @@ writeFileSync(
         pageType: 'category',
         primaryKeyword: 'resume templates',
         secondaryKeywords: ['resume formats'],
+        totalVolume: 10000,
+        metricEvidence: {
+          provider: 'manual-import',
+          country: 'US',
+          language: 'en',
+          observedAt: new Date().toISOString(),
+          matchedMetricCount: 2,
+          keywordCount: 2,
+          primaryCompetitionIndex: 24,
+          sampleData: false,
+        },
         priority: 'p0',
         rationale: 'Supported cluster.',
         fit: 'strong',
@@ -110,6 +123,7 @@ writeFileSync(
     platformId: 'mcp-fixture',
     market: 'US / en',
     source: 'manual',
+    evidence: { observedAt: new Date().toISOString(), sampleData: false, limitations: [] },
     pages: [
       {
         id: 'competitor',
@@ -126,14 +140,26 @@ writeFileSync(
 );
 writeFileSync(
   path.join(researchRoot, 'serp', 'serp.json'),
-  JSON.stringify({ snapshots: [{ keyword: 'resume templates', country: 'US', language: 'en' }] }),
+  JSON.stringify({
+    version: 1,
+    platformId: 'mcp-fixture',
+    source: 'manual-serp-model',
+    snapshots: [
+      {
+        keyword: 'resume templates',
+        country: 'US',
+        language: 'en',
+        capturedAt: new Date().toISOString(),
+      },
+    ],
+  }),
 );
 
-test('canonical CLI serves the bound Growth MCP catalog and composes campaign planning', async () => {
+test('canonical CLI serves Growth MCP and refuses campaign plans without provider evidence', async () => {
   const transport = new StdioClientTransport({
     command: process.execPath,
     args: [
-      path.join(packageRoot, 'bin/cli.js'),
+      path.join(packageRoot, 'dist/cli.js'),
       'mcp',
       'serve',
       '--project',
@@ -158,17 +184,7 @@ test('canonical CLI serves the bound Growth MCP catalog and composes campaign pl
     const catalog = await client.listTools();
     assert.deepEqual(
       catalog.tools.map((tool) => tool.name),
-      [
-        'review_growth_health',
-        'research_seo_opportunities',
-        'prepare_seo_implementation',
-        'verify_seo_publication',
-        'audit_growth_measurement',
-        'plan_campaign_pause',
-        'review_campaign_pause',
-        'apply_approved_campaign_pause',
-        'verify_campaign_pause',
-      ],
+      [...OPS_MCP_TOOL_NAMES],
     );
     const result = await client.callTool({
       name: 'review_growth_health',
@@ -222,22 +238,10 @@ test('canonical CLI serves the bound Growth MCP catalog and composes campaign pl
         evidenceRevision: 'evidence-1',
       },
     });
-    assert.notEqual(campaignPlan.isError, true);
-    assert.equal(campaignPlan.structuredContent?.review?.status, 'approval-required');
-    assert.equal(campaignPlan.structuredContent?.review?.target?.campaignId, '42');
+    assert.equal(campaignPlan.isError, true);
+    assert.match(String(campaignPlan.content[0]?.text), /campaign_target_mismatch/);
+    assert.equal(campaignPlan.structuredContent?.review, undefined);
 
-    const unapprovedApply = await client.callTool({
-      name: 'apply_approved_campaign_pause',
-      arguments: {
-        projectId: 'mcp-fixture',
-        environmentId: 'test',
-        runId: campaignPlan.structuredContent.runId,
-        currentEvidenceRevision: 'evidence-1',
-        confirmTarget: 'googleAds:1234567890:42',
-      },
-    });
-    assert.equal(unapprovedApply.isError, true);
-    assert.match(String(unapprovedApply.content[0]?.text), /approval_required/);
   } finally {
     await client.close();
   }

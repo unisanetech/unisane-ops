@@ -77,6 +77,7 @@ function parseLifecycleReadinessRequest(input: unknown): {
 function parseLifecycleConnectRequest(input: unknown): {
   provider: string;
   packId: string;
+  scopeId: string;
   projectId: string;
   environmentId: string;
   recordPath: string;
@@ -96,6 +97,7 @@ function parseLifecycleConnectRequest(input: unknown): {
   if (
     typeof record.provider !== 'string' ||
     typeof record.packId !== 'string' ||
+    typeof record.scopeId !== 'string' ||
     typeof record.projectId !== 'string' ||
     typeof record.environmentId !== 'string' ||
     typeof record.recordPath !== 'string' ||
@@ -112,6 +114,7 @@ function parseLifecycleConnectRequest(input: unknown): {
   return {
     provider: record.provider,
     packId: record.packId,
+    scopeId: record.scopeId,
     projectId: record.projectId,
     environmentId: record.environmentId,
     recordPath: record.recordPath,
@@ -127,6 +130,7 @@ function parseLifecycleConnectRequest(input: unknown): {
 function parseLifecycleDisconnectRequest(input: unknown): {
   provider: string;
   packId: string;
+  scopeId: string;
   projectId: string;
   environmentId: string;
   connectionId: string;
@@ -146,6 +150,7 @@ function parseLifecycleDisconnectRequest(input: unknown): {
   if (
     typeof record.provider !== 'string' ||
     typeof record.packId !== 'string' ||
+    typeof record.scopeId !== 'string' ||
     typeof record.projectId !== 'string' ||
     typeof record.environmentId !== 'string' ||
     typeof record.connectionId !== 'string' ||
@@ -162,6 +167,7 @@ function parseLifecycleDisconnectRequest(input: unknown): {
   return {
     provider: record.provider,
     packId: record.packId,
+    scopeId: record.scopeId,
     projectId: record.projectId,
     environmentId: record.environmentId,
     connectionId: record.connectionId,
@@ -553,25 +559,44 @@ export class CanonicalPackRuntime implements PackCommandRuntime {
   async resolveBinding(bindingId: string, input: unknown): Promise<unknown> {
     if (bindingId === OPS_LIFECYCLE_READINESS_BINDING) {
       const request = parseLifecycleReadinessRequest(input);
-      if (request.provider !== 'google') {
+      if (request.provider !== 'google' && request.provider !== 'meta') {
         throw new Error(
           `[OPS_LIFECYCLE_READINESS_CONTRIBUTOR_UNSUPPORTED] Provider '${request.provider}' does not contribute readiness.`,
         );
       }
-      const google = await import('@unisane/provider-google');
-      const connection = google.readGoogleConnectionRecord(request);
-      return connection ? google.buildGoogleConnectionReadiness(connection) : null;
+      if (request.provider === 'google') {
+        const google = await import('@unisane/provider-google');
+        const connection = google.readGoogleConnectionRecord(request);
+        return connection ? google.buildGoogleConnectionReadiness(connection) : null;
+      }
+      const meta = await import('@unisane/provider-meta');
+      const connection = meta.readMetaConnectionRecord(request);
+      return connection ? meta.buildMetaConnectionReadiness(connection) : null;
     }
     if (bindingId === OPS_LIFECYCLE_CONNECT_BINDING) {
       const request = parseLifecycleConnectRequest(input);
-      if (request.provider !== 'google' || request.packId !== 'provider-google') {
+      if (
+        (request.provider !== 'google' && request.provider !== 'meta') ||
+        request.packId !== `provider-${request.provider}`
+      ) {
         throw new Error(
           `[OPS_LIFECYCLE_CONNECT_CONTRIBUTOR_UNSUPPORTED] Pack '${request.packId}' cannot connect '${request.provider}'.`,
         );
       }
-      const google = await import('@unisane/provider-google');
-      return google.connectGoogle({
+      if (request.provider === 'google') {
+        const google = await import('@unisane/provider-google');
+        return google.connectGoogle({
+          context: request.context,
+          projectId: request.projectId,
+          environmentId: request.environmentId,
+          recordPath: request.recordPath,
+          requiredServices: request.requiredServices,
+        });
+      }
+      const meta = await import('@unisane/provider-meta');
+      return meta.connectMeta({
         context: request.context,
+        scopeId: request.scopeId,
         projectId: request.projectId,
         environmentId: request.environmentId,
         recordPath: request.recordPath,
@@ -580,14 +605,28 @@ export class CanonicalPackRuntime implements PackCommandRuntime {
     }
     if (bindingId === OPS_LIFECYCLE_DISCONNECT_BINDING) {
       const request = parseLifecycleDisconnectRequest(input);
-      if (request.provider !== 'google' || request.packId !== 'provider-google') {
+      if (
+        (request.provider !== 'google' && request.provider !== 'meta') ||
+        request.packId !== `provider-${request.provider}`
+      ) {
         throw new Error(
           `[OPS_LIFECYCLE_DISCONNECT_CONTRIBUTOR_UNSUPPORTED] Pack '${request.packId}' cannot disconnect '${request.provider}'.`,
         );
       }
-      const google = await import('@unisane/provider-google');
-      return google.disconnectGoogle({
+      if (request.provider === 'google') {
+        const google = await import('@unisane/provider-google');
+        return google.disconnectGoogle({
+          context: request.context,
+          projectId: request.projectId,
+          environmentId: request.environmentId,
+          connectionId: request.connectionId,
+          recordPath: request.recordPath,
+        });
+      }
+      const meta = await import('@unisane/provider-meta');
+      return meta.disconnectMeta({
         context: request.context,
+        scopeId: request.scopeId,
         projectId: request.projectId,
         environmentId: request.environmentId,
         connectionId: request.connectionId,

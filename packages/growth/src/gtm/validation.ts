@@ -134,11 +134,15 @@ export function validateGoogleTagManagerManifest(
 
   checkUniqueSlugs(issues, 'folders', manifest.folders ?? []);
   checkUniqueSlugs(issues, 'variables', manifest.variables ?? []);
+  checkUniqueSlugs(issues, 'builtInTriggers', manifest.builtInTriggers ?? []);
   checkUniqueSlugs(issues, 'triggers', manifest.triggers ?? []);
   checkUniqueSlugs(issues, 'tags', manifest.tags ?? []);
 
   const folderSlugs = new Set((manifest.folders ?? []).map((folder) => folder.slug));
-  const triggerSlugs = new Set((manifest.triggers ?? []).map((trigger) => trigger.slug));
+  const triggerSlugs = new Set([
+    ...(manifest.triggers ?? []).map((trigger) => trigger.slug),
+    ...(manifest.builtInTriggers ?? []).map((trigger) => trigger.slug),
+  ]);
   const variableSlugs = new Set([
     ...(manifest.variables ?? []).map((variable) => variable.slug),
     ...(manifest.builtInVariables ?? []),
@@ -204,6 +208,31 @@ export function validateGoogleTagManagerManifest(
         'missing_tag_trigger',
         `Tag "${tag.slug}" requires at least one trigger.`,
         `tags.${tag.slug}.triggerSlugs`,
+      );
+    }
+    if (tag.type === 'custom_template') {
+      if (!tag.template) {
+        addIssue(
+          issues,
+          'missing_custom_template_reference',
+          `Custom-template tag "${tag.slug}" requires a pinned template reference.`,
+          `tags.${tag.slug}.template`,
+        );
+      }
+      if (tag.parameters?.length) {
+        addIssue(
+          issues,
+          'custom_template_parameters_must_be_raw',
+          `Custom-template tag "${tag.slug}" must use rawParameters for lossless nested values.`,
+          `tags.${tag.slug}.parameters`,
+        );
+      }
+    } else if (tag.rawParameters?.length || tag.template) {
+      addIssue(
+        issues,
+        'raw_parameters_require_custom_template',
+        `Tag "${tag.slug}" may use template and rawParameters only with type custom_template.`,
+        `tags.${tag.slug}.rawParameters`,
       );
     }
     for (const triggerSlug of tag.triggerSlugs) {

@@ -55,3 +55,20 @@ export type {
   GrowthSeoOpportunityResearchInput,
   GrowthSeoOpportunityResearchOutput,
 } from './seo-opportunity-research.js';
+export * from './capability-review.js';
+export * from '../capabilities/contracts.js';
+export { createGrowthReportReadAction } from './report-read.js';
+export * from '../reports/contracts.js';
+export * from '../reports/history.js';
+export * from '../reports/history-service.js';
+export { createGrowthReportHistoryAction } from './report-history.js';
+export * from '../measurement/meta-diagnostics/contracts.js';
+export * from '../measurement/meta-diagnostics/service.js';
+export { createMetaDiagnosticReviewAction } from './meta-diagnostic-review.js';
+
+export { googleTagManagerDiagnosisAction } from '../gtm/diagnosis.js';
+export { createGtmWorkspaceMutationAction } from '../gtm/workspace/action.js';
+
+export { createGtmReleaseWorkflow } from '../gtm/release/workflow.js';
+
+export { gtmTrackingSetupAction } from '../gtm/setup/generate.js';

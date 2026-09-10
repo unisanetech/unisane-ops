@@ -26,6 +26,7 @@
 }
 
 .ops-console-supporting-pane--closed > aside {
+  display: none;
   border-inline-start: 0;
 }
 

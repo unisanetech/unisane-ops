@@ -1,16 +1,18 @@
+import { registerGtmSetupCommand } from './setup.js';
+import { registerGtmWorkspaceCommands, registerGtmReleaseCommands } from './workspace.js';
+import { loadGrowthProjectContext } from '../../project-context.js';
+import {
+  googleTagManagerDiagnosisAction,
+  googleTagManagerDiagnosisInputSchema,
+} from '../../../gtm/diagnosis.js';
+import { loadCommandContext, readRemoteSnapshot, printJson, handleCommandError } from './shared.js';
 import type { Command } from 'commander';
 import { log } from '../../log.js';
 import { resolveControlPlaneWorkingDirectory } from '../../utils/control-plane-working-directory.js';
 import { loadEnvLocal } from '../../utils/env.js';
 import {
-  applyGoogleTagManagerCommand,
-  createVersionGoogleTagManagerCommand,
   diffGoogleTagManagerCommand,
-  planGoogleTagManagerCommand,
-  previewGoogleTagManagerCommand,
-  publishGoogleTagManagerCommand,
   pullGoogleTagManagerCommand,
-  rollbackGoogleTagManagerCommand,
   validateGoogleTagManagerCommand,
   type GoogleTagManagerCliOptions,
 } from './index.js';
@@ -35,7 +37,11 @@ function addWorkspaceApiOptions(command: Command): Command {
 function addReadOptions(command: Command): Command {
   return addWorkspaceApiOptions(command)
     .option('--snapshot <path>', 'Read an existing local snapshot instead of calling the GTM API')
-    .option('--extended', 'Include extended read-only GTM resources in pull snapshots');
+    .option('--extended', 'Include extended read-only GTM resources in pull snapshots')
+    .option(
+      '--include-user-permissions',
+      'Include account user permissions (requires tagmanager.manage.users)',
+    );
 }
 
 async function runGtmCommand<TOptions extends { cwd?: string }>(
@@ -54,6 +60,52 @@ async function runGtmCommand<TOptions extends { cwd?: string }>(
 
 export function registerGoogleTagManagerCommands(program: Command): void {
   const gtm = program.command('gtm').description('Google Tag Manager control-plane commands');
+  registerGtmSetupCommand(gtm);
+  registerGtmWorkspaceCommands(gtm);
+  registerGtmReleaseCommands(gtm);
+  addSharedOptions(
+    gtm
+      .command('diagnose')
+      .description(
+        'Diagnose desired state and optional local workspace evidence without provider access',
+      ),
+  )
+    .option('--snapshot <path>', 'Existing local snapshot')
+    .action(async (options: GoogleTagManagerCliOptions) => {
+      try {
+        const context = await loadCommandContext(options);
+        const project = await loadGrowthProjectContext();
+        const snapshot = options.snapshot
+          ? await readRemoteSnapshot({ context, options })
+          : undefined;
+        const result = await googleTagManagerDiagnosisAction.execute(
+          googleTagManagerDiagnosisInputSchema.parse({
+            projectId: project.projectId,
+            manifest: context.manifest,
+            environment: context.environment,
+            snapshot,
+          }),
+          {
+            requestId: 'gtm-diagnosis',
+            scopeId: context.manifest.appId,
+            projectId: project.projectId,
+            environmentId: context.environment,
+            principal: { kind: 'user', id: 'local-cli' },
+            requestedAt: new Date().toISOString(),
+          },
+        );
+        if (options.json) printJson(result);
+        else {
+          log.info(
+            `GTM ${result.containerPath}: ${result.operations.length} proposed operations; tracking unverified.`,
+          );
+          for (const issue of result.issues)
+            log.info(`${issue.severity} ${issue.code}: ${issue.message}`);
+        }
+      } catch (error) {
+        process.exitCode = handleCommandError(error, options);
+      }
+    });
 
   addSharedOptions(
     gtm.command('validate').description('Validate the local GTM manifest and policy gates'),
@@ -81,97 +133,4 @@ export function registerGoogleTagManagerCommands(program: Command): void {
   ).action(async (options: GoogleTagManagerCliOptions) => {
     await runGtmCommand(options, diffGoogleTagManagerCommand);
   });
-
-  addReadOptions(
-    addSharedOptions(
-      gtm.command('plan').description('Write a non-mutating GTM operation plan artifact'),
-    ),
-  )
-    .option('--output <path>', 'Plan output path')
-    .option('--dry-run', 'Preview the plan without writing the plan artifact')
-    .action(async (options: GoogleTagManagerCliOptions) => {
-      await runGtmCommand(options, planGoogleTagManagerCommand);
-    });
-
-  addReadOptions(
-    addSharedOptions(
-      gtm.command('apply').description('Apply a GTM plan into a controlled workspace'),
-    ),
-  )
-    .option('--output <path>', 'Apply receipt output path')
-    .option('--dry-run', 'Compute the apply plan without mutating GTM')
-    .option('--yes', 'Confirm live GTM workspace mutation')
-    .action(async (options: GoogleTagManagerCliOptions) => {
-      await runGtmCommand(options, applyGoogleTagManagerCommand);
-    });
-
-  addWorkspaceApiOptions(
-    addSharedOptions(
-      gtm
-        .command('preview')
-        .description('Quick preview a GTM workspace and write a preview receipt'),
-    ),
-  )
-    .option('--output <path>', 'Preview receipt output path')
-    .option('--dry-run', 'Run preview without writing the preview receipt')
-    .action(async (options: GoogleTagManagerCliOptions) => {
-      await runGtmCommand(options, previewGoogleTagManagerCommand);
-    });
-
-  addWorkspaceApiOptions(
-    addSharedOptions(
-      gtm.command('create-version').description('Create a GTM container version from a workspace'),
-    ),
-  )
-    .option('--name <name>', 'Container version name')
-    .option('--notes <notes>', 'Container version notes')
-    .option('--preview-receipt <path>', 'Preview receipt from a successful gtm preview')
-    .option('--output <path>', 'Version receipt output path')
-    .option('--yes', 'Confirm GTM container version creation')
-    .action(async (options: GoogleTagManagerCliOptions) => {
-      await runGtmCommand(options, createVersionGoogleTagManagerCommand);
-    });
-
-  addSharedOptions(gtm.command('publish').description('Publish a GTM container version'))
-    .option('--version <id>', 'GTM container version id to publish')
-    .option('--fingerprint <fingerprint>', 'Expected GTM container version fingerprint')
-    .option('--version-receipt <path>', 'Version receipt from a successful gtm create-version')
-    .option(
-      '--production-confirm <value>',
-      'Required production confirmation: <app>:production:<version>',
-    )
-    .option('--connection <id>', 'Canonical Google connection id')
-    .option('--rate-limit-ms <ms>', 'Minimum delay between GTM API requests')
-    .option('--output <path>', 'Publish receipt output path')
-    .option('--yes', 'Confirm GTM publish')
-    .action(async (options: GoogleTagManagerCliOptions) => {
-      await runGtmCommand(options, publishGoogleTagManagerCommand);
-    });
-
-  addSharedOptions(
-    gtm.command('rollback').description('Rollback by publishing a previous GTM container version'),
-  )
-    .option('--version <id>', 'GTM container version id to publish as rollback target')
-    .option('--fingerprint <fingerprint>', 'Expected GTM container version fingerprint')
-    .option(
-      '--version-receipt <path>',
-      'Version or reviewed known-good receipt for normal rollback',
-    )
-    .option(
-      '--production-confirm <value>',
-      'Required production confirmation: <app>:production:<version>',
-    )
-    .option('--connection <id>', 'Canonical Google connection id')
-    .option('--rate-limit-ms <ms>', 'Minimum delay between GTM API requests')
-    .option('--output <path>', 'Rollback receipt output path')
-    .option(
-      '--emergency-reason <reason>',
-      'Explicit emergency reason when rollback receipt is unavailable',
-    )
-    .option('--actor <id>', 'Operator identity for emergency rollback exception')
-    .option('--reconciliation-task <ref>', 'Follow-up reconciliation task for emergency rollback')
-    .option('--yes', 'Confirm GTM rollback publish')
-    .action(async (options: GoogleTagManagerCliOptions) => {
-      await runGtmCommand(options, rollbackGoogleTagManagerCommand);
-    });
 }

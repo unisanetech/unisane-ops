@@ -12,12 +12,21 @@ import {
 const observedAt = '2026-08-03T00:00:00.000Z';
 
 const canonical: CanonicalOutcome = {
+  projectId: 'true-resume',
+  environmentId: 'production',
   outcomeId: 'purchase',
   label: 'Completed purchases',
   count: 10,
+  value: 1250,
+  currency: 'BDT',
   source: 'Order service',
+  sourceId: 'orders',
   observedAt,
   freshness: 'fresh',
+  window: { start: observedAt, end: observedAt, timeZone: 'UTC' },
+  revision: 1,
+  status: 'confirmed',
+  finality: 'server-confirmed',
 };
 
 const attributed: ProviderAttributedConversion = {

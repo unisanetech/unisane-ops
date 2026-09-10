@@ -9,10 +9,10 @@
     "owner": "ops/unisane-ops",
     "packageDir": "packages/unisane-ops",
     "sourceFileCount": 24,
-    "symbolCount": 121,
-    "functionCount": 121,
-    "publicFunctionCount": 35,
-    "internalFunctionCount": 86,
+    "symbolCount": 123,
+    "functionCount": 123,
+    "publicFunctionCount": 36,
+    "internalFunctionCount": 87,
     "serviceLayerFunctionCount": 0
   },
   "owner": "unisane-ops",
@@ -1253,7 +1253,7 @@
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "parseLifecycleConnectRequest(input): { provider: string; packId: string; projectId: string; environmentId: string; recordPath: string; requiredServices: readonly string[]; conte...",
+      "signatureShort": "parseLifecycleConnectRequest(input): { provider: string; packId: string; scopeId: string; projectId: string; environmentId: string; recordPath: string; requiredServices: readonl...",
       "layer": "tooling-layer"
     },
     {
@@ -1264,7 +1264,7 @@
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "parseLifecycleDisconnectRequest(input): { provider: string; packId: string; projectId: string; environmentId: string; connectionId: string; recordPath: string; context: OpsLifec...",
+      "signatureShort": "parseLifecycleDisconnectRequest(input): { provider: string; packId: string; scopeId: string; projectId: string; environmentId: string; connectionId: string; recordPath: string; ...",
       "layer": "tooling-layer"
     },
     {
@@ -1323,6 +1323,19 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "createLocalGrowthProviderOperationDependencies",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createLocalGrowthProviderOperationDependencies(input): Promise<GrowthProviderOperationDependencies>",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "executeGoogleMarketing",
       "kind": "function",
       "package": "unisane-ops",
@@ -1365,7 +1378,7 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "executeGrowthProviderOperation(cwd, operation, input): Promise<unknown>",
+      "signatureShort": "executeGrowthProviderOperation(cwd, operation, input, dependencies): Promise<unknown>",
       "layer": "tooling-layer"
     },
     {
@@ -1376,7 +1389,7 @@
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "executeMeta(cwd, operation, input): Promise<unknown>",
+      "signatureShort": "executeMeta(cwd, operation, input, dependencies): Promise<unknown>",
       "layer": "tooling-layer"
     },
     {
@@ -1457,18 +1470,29 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "resolveGrowthProviderBinding(runtime, input): Promise<unknown>",
+      "signatureShort": "resolveGrowthProviderBinding(runtime, input, dependencies): Promise<unknown>",
       "layer": "tooling-layer"
     },
     {
-      "name": "resolveMetaConnectionToken",
+      "name": "resolveMetaConnectionRecord",
       "kind": "function",
       "package": "unisane-ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "resolveMetaConnectionToken(cwd, input): Promise<string>",
+      "signatureShort": "resolveMetaConnectionRecord(cwd, input)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveSelectedMetaAdsAccount",
+      "kind": "function",
+      "package": "unisane-ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resolveSelectedMetaAdsAccount(input): string",
       "layer": "tooling-layer"
     },
     {
@@ -1483,5 +1507,5 @@
       "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:2833d5e099e7"
+  "generatedAt": "content-hash:4ee550a66a58"
 }

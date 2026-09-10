@@ -38,7 +38,16 @@ until an approved cutover records otherwise.
 - [Active Ops Findings](findings/)
 - [Ops operator and migration Guides](guides/)
 - [Ops documentation Pattern](patterns/)
-- [Three active Ops Plans](work/plans/)
+- [Console experience plan](work/plans/unisane-ops-console-experience-plan.md) — proposed screen-by-screen simplification, with a 62-screen catalog and detailed interaction/acceptance rules.
+- [Active Ops Plans](work/plans/), including the
+  [Meta capability implementation plan](work/plans/unisane-ops-meta-capability-implementation-plan.md)
+  for documented batch ownership, file structure, contract changes and validation, the
+  [Growth capability checklist — Meta first](work/plans/unisane-ops-growth-capability-checklist.md)
+  for end-to-end agent marketing control, existing capability coverage, gaps, and the
+  Meta-first delivery sequence, and the
+  [Growth Meta measurement roadmap](work/plans/unisane-ops-growth-meta-measurement-roadmap.md)
+  for provider-neutral event delivery, canonical outcome, Meta evidence, match-input,
+  reconciliation, safety, and console work.
 
 ## Authority During Transition
 

@@ -4,6 +4,7 @@ import {
   assertOpsMutationRunStore,
   hashOpsValue,
   opsApprovalRecordSchema,
+  opsLockLeaseSchema,
   opsMutationPlanSchema,
   parseOpsMutationRun,
   type OpsApprovalRecord,
@@ -31,6 +32,16 @@ const ACTION_SCHEMA_VERSION = 1;
 
 export const growthCampaignPauseRunStateSchema = z
   .object({
+    executionRevision: z.literal(2).optional(),
+    attempt: z
+      .object({
+        startedAt: z.string().datetime(),
+        principalId: z.string(),
+        lease: opsLockLeaseSchema,
+      })
+      .strict()
+      .nullable()
+      .optional(),
     parameters: growthCampaignPauseParametersSchema,
     currentEvidenceRevision: nonEmptySchema,
     plan: opsMutationPlanSchema,
@@ -62,6 +73,12 @@ export type GrowthCampaignPauseRunCoordinator = {
   recordApproval(input: {
     runId: string;
     approval: OpsApprovalRecord;
+  }): Promise<GrowthCampaignPauseRun>;
+  recordAttempt(input: {
+    runId: string;
+    startedAt: string;
+    principalId: string;
+    lease: z.infer<typeof opsLockLeaseSchema>;
   }): Promise<GrowthCampaignPauseRun>;
   recordApply(input: {
     runId: string;
@@ -159,10 +176,33 @@ function parseGrowthRun(input: unknown): GrowthCampaignPauseRun {
 }
 
 function reviewFor(run: GrowthCampaignPauseRun, now: string): GrowthCampaignPauseReview {
-  return createGrowthCampaignPauseReview({
-    ...run.actionState,
+  const state = run.actionState;
+  const attempt = state.attempt;
+  const review = createGrowthCampaignPauseReview({
+    parameters: state.parameters,
+    currentEvidenceRevision: state.currentEvidenceRevision,
+    plan: state.plan,
+    approval: state.approval,
+    applyOutput: state.applyOutput,
+    verification: state.verification,
     now,
   });
+  if (attempt && !state.applyOutput)
+    return {
+      ...review,
+      status: 'outcome-unknown',
+      headline: 'Campaign operation needs recovery',
+      explanation:
+        'A durable attempt exists without a complete result. Verify provider state; do not replay this plan.',
+      execution: { ...review.execution, status: 'outcome-unknown' },
+      nextStep: {
+        id: 'check-again',
+        label: 'Recover campaign status',
+        reason: 'Read provider state for the interrupted attempt.',
+        deepLink: '/advertising/all/campaigns',
+      },
+    };
+  return review;
 }
 
 async function storeNext(
@@ -231,6 +271,8 @@ export function createGrowthCampaignPauseRunCoordinator(input: {
         targetId: targetIdentity(parameters),
         phase: 'planned',
         actionState: {
+          executionRevision: 2,
+          attempt: null,
           parameters,
           currentEvidenceRevision,
           plan,
@@ -276,9 +318,63 @@ export function createGrowthCampaignPauseRunCoordinator(input: {
       }
       return storeNext(input.store, current, next);
     },
+    async recordAttempt(request) {
+      const current = await requiredRun(input.store, request.runId);
+      if (current.actionState.executionRevision !== 2)
+        throw new Error(
+          '[GROWTH_CAMPAIGN_REPLAN_REQUIRED] This record predates durable attempts. Create and approve a new plan.',
+        );
+      if (current.phase !== 'approved' || current.actionState.attempt)
+        throw new Error(
+          '[GROWTH_CAMPAIGN_ATTEMPT_EXISTS] Recover the existing attempt; it cannot be replayed.',
+        );
+      const guardId = `growth.campaign-pause.guard.${current.targetId}`;
+      const guard = await input.store.get<{ runId: string }>(guardId);
+      if (guard && guard.phase !== 'verified')
+        throw new Error(
+          '[GROWTH_CAMPAIGN_RECOVERY_REQUIRED] Another attempt on this target requires recovery.',
+        );
+      const started = await storeNext(
+        input.store,
+        current,
+        nextRun({
+          current,
+          phase: 'verifying',
+          updatedAt: request.startedAt,
+          actionState: {
+            ...current.actionState,
+            attempt: {
+              startedAt: request.startedAt,
+              principalId: request.principalId,
+              lease: request.lease,
+            },
+          },
+        }),
+      );
+      const claim = {
+        ...started,
+        runId: guardId,
+        revision: (guard?.revision ?? 0) + 1,
+        actionId: 'growth.ads.campaign.pause.guard',
+        actionState: { runId: current.runId },
+        createdAt: guard?.createdAt ?? request.startedAt,
+      };
+      if ((await input.store.compareAndSet(claim, guard?.revision ?? null)) !== 'stored')
+        throw new Error(
+          '[GROWTH_CAMPAIGN_RECOVERY_REQUIRED] Concurrent campaign attempt requires recovery.',
+        );
+      return started;
+    },
     async recordApply(request) {
       const current = await requiredRun(input.store, request.runId);
-      if (current.phase !== 'approved') {
+      if (
+        current.phase !== 'approved' &&
+        !(
+          current.phase === 'verifying' &&
+          current.actionState.attempt &&
+          !current.actionState.applyOutput
+        )
+      ) {
         throw new Error(
           '[GROWTH_CAMPAIGN_PAUSE_RUN_TRANSITION_INVALID] Apply output can only follow an approved run.',
         );
@@ -305,7 +401,11 @@ export function createGrowthCampaignPauseRunCoordinator(input: {
     },
     async recordVerification(request) {
       const current = await requiredRun(input.store, request.runId);
-      if (current.phase !== 'applied' && current.phase !== 'verifying') {
+      if (
+        current.phase !== 'applied' &&
+        current.phase !== 'verifying' &&
+        !(current.phase === 'attention' && current.actionState.attempt)
+      ) {
         throw new Error(
           '[GROWTH_CAMPAIGN_PAUSE_RUN_TRANSITION_INVALID] Verification can only follow an applied campaign pause.',
         );
@@ -325,7 +425,25 @@ export function createGrowthCampaignPauseRunCoordinator(input: {
         updatedAt,
       });
       reviewFor(next, updatedAt);
-      return storeNext(input.store, current, next);
+      const recorded = await storeNext(input.store, current, next);
+      if (
+        verification.observedCampaignStatus === 'active' ||
+        verification.observedCampaignStatus === 'paused'
+      ) {
+        const guardId = `growth.campaign-pause.guard.${current.targetId}`;
+        const guard = await input.store.get<{ runId: string }>(guardId);
+        if (guard?.actionState.runId === current.runId) {
+          const result = await input.store.compareAndSet(
+            { ...guard, phase: 'verified', revision: guard.revision + 1, updatedAt },
+            guard.revision,
+          );
+          if (result !== 'stored')
+            throw new Error(
+              '[GROWTH_CAMPAIGN_RUN_CONFLICT] Recovery guard changed. Refresh verification.',
+            );
+        }
+      }
+      return recorded;
     },
     async getReview(runId) {
       const run = await input.store.get(runId);

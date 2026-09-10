@@ -1,3 +1,5 @@
+import { MetaDiagnostics } from './meta-diagnostics.js';
+import { MetaReportRead } from './meta-report-read.js';
 import { Badge } from '@unisane/ui/badge';
 import type { ConsoleScreenProps } from '../../contracts.js';
 import { healthStatusLabel, statusColor } from '../../lib/format.js';
@@ -10,7 +12,33 @@ export function AdvertisingOverview({ state, route, navigate }: ConsoleScreenPro
   const advertising = advertisingView(state, route);
   return (
     <>
-      <Summary headline={advertising.headline} detail={advertising.detail} />
+      {advertising.scope === 'metaAds' && (
+        <MetaReportRead
+          available={state.reportReadAvailable ?? false}
+          evidenceAvailable={state.reportEvidenceAvailable ?? false}
+          projectId={state.platformId}
+          environmentId={state.environment}
+        />
+      )}
+      {advertising.scope === 'metaAds' && (
+        <MetaDiagnostics
+          available={state.metaDiagnosticsAvailable ?? false}
+          projectId={state.platformId}
+          environmentId={state.environment}
+        />
+      )}
+      <Summary
+        headline={
+          advertising.scope === 'metaAds' && !advertising.campaigns.length
+            ? 'No Meta Ads performance summary is available for this period.'
+            : advertising.headline
+        }
+        detail={
+          advertising.scope === 'metaAds'
+            ? 'Saved report snapshots are listed above. They are not yet included in the performance summary below.'
+            : advertising.detail
+        }
+      />
       <ChannelMetrics
         metrics={advertising.metrics}
         ids={['spend', 'paid-clicks', 'paid-conversions', 'roas']}

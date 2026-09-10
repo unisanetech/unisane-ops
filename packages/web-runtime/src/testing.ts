@@ -4,3 +4,7 @@ export {
   createTestConversionClient,
   type WebConversionRecorder,
 } from './conversions/testing';
+export {
+  createCommerceTrackingObservationFixture,
+  createLeadTrackingObservationFixture,
+} from './observations/testing';

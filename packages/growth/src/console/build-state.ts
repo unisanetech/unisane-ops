@@ -1,8 +1,9 @@
+import { loadTrackingAudit } from '../workflows/measurement-audit-execution.js';
+import { executeGrowthProviderCommand } from '../cli/provider-runtime.js';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import {
   buildMarketingAdsStatusReport,
-  auditMarketingTrackingSource,
   buildMarketingEvidenceStatus,
   buildMarketingStatusReport,
   compareLatestMarketingHistoryPeriods,
@@ -86,13 +87,14 @@ import { executeGrowthMeasurementAudit } from '../workflows/measurement-audit-ex
 import { executeGrowthSeoOpportunityResearch } from '../workflows/seo-opportunity-execution.js';
 import { executeGrowthHealthReview } from '../workflows/health-review-execution.js';
 import { growthCampaignPauseReviewSchema } from '../playbooks/campaign-pause-review.js';
-import {
-  listGrowthCampaignPauseRunReviewEntries,
-  resolveGrowthCampaignPauseRunDirectory,
-} from '../playbooks/campaign-pause-run.js';
-import { LocalOpsMutationRunStore } from '@unisane/ops-engine/local';
+import {} from '../playbooks/campaign-pause-run.js';
 
 export type BuildMarketingConsoleStateOptions = {
+  environmentId?: string;
+  reviewCapabilities?: GrowthCapabilityReviewer;
+  reportReadAvailable?: boolean;
+  reportEvidenceAvailable?: boolean;
+  metaDiagnosticsAvailable?: boolean;
   cwd?: string;
   configPath?: string;
   maxAgeDays?: number;
@@ -235,7 +237,7 @@ export async function buildMarketingConsoleState(
   const now = options.now ?? new Date();
   const generatedAt = now.toISOString();
   const maxAgeDays = options.maxAgeDays ?? 3;
-  const loaded = await loadMarketingExecutionContext();
+  const loaded = await loadMarketingExecutionContext(options.environmentId);
   const config = loaded.config;
   const proof = buildMarketingEvidenceStatus(config, {
     cwd,
@@ -266,7 +268,7 @@ export async function buildMarketingConsoleState(
     now,
   });
   const adsAudit = readAdsAuditSummary(cwd);
-  const trackingAudit = await auditMarketingTrackingSource(config, { cwd, now });
+  const trackingAudit = await loadTrackingAudit({ options: { config, cwd }, now });
   const measurementAudit = await executeGrowthMeasurementAudit({
     cwd,
     config,
@@ -370,20 +372,18 @@ export async function buildMarketingConsoleState(
         runId: review.runId,
       }))
     : (
-        await listGrowthCampaignPauseRunReviewEntries({
-          store: new LocalOpsMutationRunStore(
-            resolveGrowthCampaignPauseRunDirectory({
-              cwd,
-              projectId: projectContext.projectId,
-              environmentId: config.defaultEnvironment,
-            }),
-          ),
+        await executeGrowthProviderCommand<
+          Array<{
+            runId: string;
+            review: import('../playbooks/campaign-pause-review.js').GrowthCampaignPauseReview;
+          }>
+        >('growth.campaign.pause', {
           projectId: projectContext.projectId,
           environmentId: config.defaultEnvironment,
-          limit: 50,
-          now: generatedAt,
+          principal: { kind: 'user', id: 'user.console' },
+          command: { operation: 'list' },
         })
-      ).map(({ runId, review }) => ({ ...review, runId }));
+      ).map(({ runId, review }) => ({ ...growthCampaignPauseReviewSchema.parse(review), runId }));
   const recommendations = buildMarketingConsoleRecommendations({
     ...(recommendationEvidence
       ? {
@@ -522,6 +522,13 @@ export async function buildMarketingConsoleState(
     environment: config.defaultEnvironment,
     capabilities: [...projectContext.growth.capabilities],
     connections,
+    metaDiagnosticsAvailable: options.metaDiagnosticsAvailable ?? false,
+    reportEvidenceAvailable: options.reportEvidenceAvailable ?? false,
+    reportReadAvailable: options.reportReadAvailable ?? false,
+    capabilityReview: await loadConsoleCapabilityReview(options.reviewCapabilities, {
+      projectId: config.platformId,
+      environmentId: config.defaultEnvironment,
+    }),
     dateWindow: inferDateWindow(
       marketingStatus.providerFreshness,
       options.temporalQuery,
@@ -3285,3 +3292,4 @@ function ratio(value: number | undefined): string {
   if (value === undefined) return '-';
   return `${value.toFixed(2)}x`;
 }
+import { loadConsoleCapabilityReview, type GrowthCapabilityReviewer } from './capability-review.js';

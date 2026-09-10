@@ -1,3 +1,4 @@
+import { renderMetaPixelHtml } from './meta-pixel-html.js';
 import { googleTagManagerContainerPath, type GoogleTagManagerApiClient } from './api-client';
 import { readGoogleTagManagerRemoteSnapshot } from './remote-snapshot';
 import type {
@@ -18,6 +19,8 @@ import type {
 export type GoogleTagManagerProviderApplyOptions = GoogleTagManagerApplyOptions & {
   desiredResources: readonly GoogleTagManagerDesiredResource[];
   plan(remote: GoogleTagManagerRemoteSnapshot): GoogleTagManagerPlan;
+  syncBeforeApply?: boolean;
+  beforeWrite?: () => Promise<void>;
 };
 
 const BUILT_IN_VARIABLE_SLUG_TO_TYPE: Record<string, string> = {
@@ -250,25 +253,17 @@ function metaPixelHtml(args: {
   parameters: readonly { key: string; value: GoogleTagManagerParameterValue }[];
   variableNameBySlug: Map<string, string>;
 }): string {
-  const pixelId = parameterValueByKey(args.parameters, 'pixelId');
-  const eventName = parameterValueByKey(args.parameters, 'eventName');
-  const eventId = parameterValueByKey(args.parameters, 'eventId');
-  const normalizedEventName = typeof eventName === 'string' && eventName ? eventName : 'PageView';
-  const eventOptions =
-    typeof eventId === 'undefined'
-      ? ''
-      : `, {}, {eventID: ${JSON.stringify(parameterValue(eventId, args.variableNameBySlug))}}`;
-  return [
-    '<script>',
-    '!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?',
-    'n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;',
-    "n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;",
-    't.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}',
-    "(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');",
-    `fbq('init', ${JSON.stringify(parameterValue(pixelId ?? '', args.variableNameBySlug))});`,
-    `fbq('track', ${JSON.stringify(normalizedEventName)}${eventOptions});`,
-    '</script>',
-  ].join('\n');
+  const read = (key: string) => {
+    const value = parameterValueByKey(args.parameters, key);
+    return value === undefined ? undefined : parameterValue(value, args.variableNameBySlug);
+  };
+  return renderMetaPixelHtml({
+    pixelId: read('pixelId') ?? '',
+    eventName: read('eventName') ?? 'PageView',
+    eventId: read('eventId'),
+    value: read('value'),
+    currency: read('currency'),
+  });
 }
 
 function htmlParameters(args: {
@@ -393,7 +388,10 @@ function remoteBinding(resource: GoogleTagManagerRemoteResource): ResourceBindin
   };
 }
 
-function buildApplyState(snapshot: GoogleTagManagerRemoteSnapshot): ApplyState {
+function buildApplyState(
+  snapshot: GoogleTagManagerRemoteSnapshot,
+  manifest: GoogleTagManagerApplyOptions['manifest'],
+): ApplyState {
   const remoteByKey = new Map(
     snapshot.resources.map((resource) => [resourceKey(resource.kind, resource.slug), resource]),
   );
@@ -402,6 +400,9 @@ function buildApplyState(snapshot: GoogleTagManagerRemoteSnapshot): ApplyState {
   for (const resource of snapshot.resources) {
     if (resource.kind === 'folder') folderIdsBySlug.set(resource.slug, remoteBinding(resource));
     if (resource.kind === 'trigger') triggerIdsBySlug.set(resource.slug, remoteBinding(resource));
+  }
+  for (const trigger of manifest.builtInTriggers ?? []) {
+    triggerIdsBySlug.set(trigger.slug, { remoteId: trigger.triggerId });
   }
   return {
     folderIdsBySlug,
@@ -563,27 +564,31 @@ function lowerTag(args: {
     variableNameBySlug: args.variableNameBySlug,
     implementationHtml: stringField(payload, 'implementationHtml'),
   });
+  const customTemplate = type === 'custom_template';
+  const rawParameters = arrayField(payload, 'rawParameters').filter(isRecord);
   const eventSettingParameters: { key: string; value: GoogleTagManagerParameterValue }[] = [];
   const configSettingParameters: { key: string; value: GoogleTagManagerParameterValue }[] = [];
-  const parameters = renderedHtmlParameters
-    ? [...renderedHtmlParameters]
-    : sourceParameters.flatMap((entry) => {
-        if (type === 'google_tag' && entry.key !== 'tagId') {
-          configSettingParameters.push(entry);
-          return [];
-        }
-        if (type === 'ga4_event' && entry.key !== 'eventName' && entry.key !== 'measurementId') {
-          eventSettingParameters.push(entry);
-          return [];
-        }
-        return [
-          parameter({
-            key: tagParameterKey(type, entry.key),
-            value: entry.value,
-            variableNameBySlug: args.variableNameBySlug,
-          }),
-        ];
-      });
+  const parameters = customTemplate
+    ? rawParameters
+    : renderedHtmlParameters
+      ? [...renderedHtmlParameters]
+      : sourceParameters.flatMap((entry) => {
+          if (type === 'google_tag' && entry.key !== 'tagId') {
+            configSettingParameters.push(entry);
+            return [];
+          }
+          if (type === 'ga4_event' && entry.key !== 'eventName' && entry.key !== 'measurementId') {
+            eventSettingParameters.push(entry);
+            return [];
+          }
+          return [
+            parameter({
+              key: tagParameterKey(type, entry.key),
+              value: entry.value,
+              variableNameBySlug: args.variableNameBySlug,
+            }),
+          ];
+        });
   if (type === 'ga4_pageview' && !parameters.some((entry) => entry.key === 'eventName')) {
     parameters.push(conditionParameter('eventName', 'page_view'));
   }
@@ -606,15 +611,25 @@ function lowerTag(args: {
     );
   }
   const tagConsentSettings = consentSettings(payload.consent);
+  const template = isRecord(payload.template) ? payload.template : undefined;
+  const customTemplateTagType = stringField(template, 'tagType');
+  if (customTemplate && !customTemplateTagType) {
+    throw new Error(
+      `[GTM_CUSTOM_TEMPLATE_TYPE_MISSING] Tag '${args.resource.slug}' is missing template.tagType.`,
+    );
+  }
   return {
     name,
-    type: TAG_TYPE_TO_GTM_TYPE[type] ?? type,
+    type: customTemplate ? customTemplateTagType : (TAG_TYPE_TO_GTM_TYPE[type] ?? type),
     ...(parameters.length > 0 ? { parameter: parameters } : {}),
     ...(firingTriggerId.length > 0 ? { firingTriggerId } : {}),
     ...(folderIdForSlug(args.state, payload.folderSlug)
       ? { parentFolderId: folderIdForSlug(args.state, payload.folderSlug) }
       : {}),
     ...(tagConsentSettings ? { consentSettings: tagConsentSettings } : {}),
+    ...(stringField(payload, 'tagFiringOption')
+      ? { tagFiringOption: stringField(payload, 'tagFiringOption') }
+      : {}),
     paused: payload.paused === true,
   };
 }
@@ -636,7 +651,6 @@ function lowerResource(args: {
 function bindingFromResponse(args: {
   kind: GoogleTagManagerResourceKind;
   response: GoogleTagManagerJsonObject;
-  fallbackRemoteId: string;
 }): ResourceBinding {
   const idFieldByKind: Partial<Record<GoogleTagManagerResourceKind, string>> = {
     folder: 'folderId',
@@ -645,8 +659,13 @@ function bindingFromResponse(args: {
     tag: 'tagId',
   };
   const idField = idFieldByKind[args.kind];
+  const remoteId = idField ? stringField(args.response, idField) : undefined;
+  if (!remoteId?.trim())
+    throw new Error(
+      '[GTM_RESOURCE_ID_MISSING] Provider response omitted the resource ID. Recover the uncertain outcome before retrying.',
+    );
   return {
-    remoteId: (idField ? stringField(args.response, idField) : undefined) ?? args.fallbackRemoteId,
+    remoteId,
     fingerprint: stringField(args.response, 'fingerprint'),
     path: stringField(args.response, 'path'),
     raw: args.response,
@@ -691,7 +710,6 @@ async function executeCreate(args: {
   const binding = bindingFromResponse({
     kind: args.operation.kind,
     response,
-    fallbackRemoteId: args.operation.remoteId ?? args.operation.slug,
   });
   if (args.operation.kind === 'folder')
     args.state.folderIdsBySlug.set(args.operation.slug, binding);
@@ -737,7 +755,6 @@ async function executeUpdate(args: {
   const binding = bindingFromResponse({
     kind: args.operation.kind,
     response,
-    fallbackRemoteId: args.operation.remoteId ?? args.operation.slug,
   });
   if (args.operation.kind === 'folder')
     args.state.folderIdsBySlug.set(args.operation.slug, binding);
@@ -793,9 +810,24 @@ export async function applyGoogleTagManagerPlan(args: {
 }): Promise<GoogleTagManagerApplyReceipt> {
   const accountId = args.options.manifest.accountId;
   const containerId = args.options.manifest.containerId;
+  if (args.options.syncBeforeApply === false && !args.options.workspaceId)
+    throw new Error(
+      '[GTM_EXACT_WORKSPACE_REQUIRED] Shared mutation requires an existing exact workspace.',
+    );
   const workspace = await ensureApplyWorkspace(args);
   const workspacePath = workspacePathFromWorkspace({ workspace, accountId, containerId });
-  const syncStatus = await args.client.syncWorkspace(workspacePath);
+  const expectedPrefix = `${googleTagManagerContainerPath(accountId, containerId)}/workspaces/`;
+  if (
+    !workspacePath.startsWith(expectedPrefix) ||
+    !/^[a-zA-Z0-9_-]+$/.test(workspacePath.slice(expectedPrefix.length))
+  )
+    throw new Error(
+      '[GTM_WORKSPACE_TARGET_MISMATCH] Resolved workspace belongs to another container.',
+    );
+  const syncStatus =
+    args.options.syncBeforeApply === false
+      ? await args.client.getWorkspaceStatus(workspacePath)
+      : await args.client.syncWorkspace(workspacePath);
   assertNoMergeConflicts(syncStatus, 'sync');
   const workspaceId = workspaceIdFromWorkspace(workspace);
   const remote = await readGoogleTagManagerRemoteSnapshot({
@@ -805,6 +837,9 @@ export async function applyGoogleTagManagerPlan(args: {
       environment: args.options.environment,
       workspaceId,
       workspaceName: workspace.name,
+      includeExtendedResources: args.options.manifest.tags?.some(
+        (tag) => tag.type === 'custom_template',
+      ),
       desiredResources: args.options.desiredResources,
     },
   });
@@ -823,7 +858,7 @@ export async function applyGoogleTagManagerPlan(args: {
       (slug) => [slug, BUILT_IN_VARIABLE_SLUG_TO_NAME[slug] ?? slug] as const,
     ),
   ]);
-  const state = buildApplyState(remote);
+  const state = buildApplyState(remote, args.options.manifest);
   const appliedOperations: GoogleTagManagerAppliedOperation[] = [];
   const skippedOperations: GoogleTagManagerAppliedOperation[] = [];
 
@@ -841,6 +876,7 @@ export async function applyGoogleTagManagerPlan(args: {
       continue;
     }
 
+    await args.options.beforeWrite?.();
     if (operation.type === 'create_resource') {
       const desired = desiredByKey.get(key);
       if (!desired)

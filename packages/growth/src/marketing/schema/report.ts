@@ -188,7 +188,210 @@ export const marketingProviderReportArtifactInputSchema =
     pulledAt: z.string().datetime().optional(),
   });
 
-export const marketingConfirmedConversionRecordSchema = z.object({
+const canonicalOutcomeIdSchema = z
+  .string()
+  .trim()
+  .min(1)
+  .max(128)
+  .regex(/^[a-z0-9][a-z0-9._-]*$/i);
+
+export const marketingCanonicalOutcomeReferenceSchema = z.string().regex(/^sha256:[a-f0-9]{64}$/);
+
+export const marketingCanonicalOutcomeWindowSchema = z
+  .object({
+    start: z.string().datetime({ offset: true }),
+    end: z.string().datetime({ offset: true }),
+    timeZone: z.string().trim().min(1).max(100),
+  })
+  .strict()
+  .refine((window) => Date.parse(window.start) <= Date.parse(window.end), {
+    message: 'Canonical outcome window start must be before or equal to its end.',
+    path: ['start'],
+  });
+
+export const marketingCanonicalOutcomeRecordSchema = z
+  .object({
+    outcomeReference: marketingCanonicalOutcomeReferenceSchema,
+    correlationReference: marketingCanonicalOutcomeReferenceSchema,
+    outcomeId: canonicalOutcomeIdSchema,
+    sourceEventId: canonicalOutcomeIdSchema.optional(),
+    strategyObjectIds: z.array(canonicalOutcomeIdSchema).max(50).default([]),
+    revision: z.number().int().positive(),
+    supersedesRevision: z.number().int().positive().optional(),
+    status: z.enum(['confirmed', 'corrected', 'reversed']),
+    finality: z.literal('server-confirmed'),
+    occurredAt: z.string().datetime({ offset: true }),
+    count: z.number().int().nonnegative(),
+    value: z.number().finite().nonnegative().optional(),
+    revenue: z.number().finite().nonnegative().optional(),
+    margin: z.number().finite().optional(),
+    currency: z
+      .string()
+      .regex(/^[A-Z]{3}$/)
+      .optional(),
+  })
+  .strict()
+  .superRefine((record, context) => {
+    const hasMoney =
+      record.value !== undefined || record.revenue !== undefined || record.margin !== undefined;
+    if (hasMoney !== (record.currency !== undefined)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Canonical monetary values and uppercase currency must be provided together.',
+        path: ['currency'],
+      });
+    }
+    if (record.revision === 1) {
+      if (record.status !== 'confirmed' || record.supersedesRevision !== undefined) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'The first outcome revision must be confirmed and cannot supersede a revision.',
+          path: ['revision'],
+        });
+      }
+    } else if (record.supersedesRevision !== record.revision - 1) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A correction or reversal must supersede the immediately preceding revision.',
+        path: ['supersedesRevision'],
+      });
+    }
+    if (record.revision > 1 && record.status === 'confirmed') {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Later outcome revisions must be corrections or reversals.',
+        path: ['status'],
+      });
+    }
+    if (
+      record.status === 'reversed' &&
+      (record.count !== 0 ||
+        record.value !== undefined ||
+        record.revenue !== undefined ||
+        record.margin !== undefined ||
+        record.currency !== undefined)
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A reversed outcome must have zero count and no monetary values.',
+        path: ['status'],
+      });
+    }
+    if (record.status !== 'reversed' && record.count === 0) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A confirmed or corrected outcome must have a positive count.',
+        path: ['count'],
+      });
+    }
+  });
+
+export const marketingCanonicalOutcomeArtifactSchema = z
+  .object({
+    kind: z.literal('unisane.growth.canonical-outcomes'),
+    version: z.literal(2),
+    projectId: canonicalOutcomeIdSchema,
+    environmentId: canonicalOutcomeIdSchema,
+    source: z
+      .object({
+        id: canonicalOutcomeIdSchema,
+        system: z.string().trim().min(1).max(160),
+        authority: z.literal('business-system'),
+      })
+      .strict(),
+    ingestion: z
+      .object({
+        transport: marketingReportSourceSchema,
+      })
+      .strict(),
+    revision: z.number().int().positive(),
+    previousRevisionDigest: marketingCanonicalOutcomeReferenceSchema.optional(),
+    capturedAt: z.string().datetime({ offset: true }),
+    window: marketingCanonicalOutcomeWindowSchema,
+    partial: z.boolean(),
+    records: z.array(marketingCanonicalOutcomeRecordSchema).max(10_000),
+  })
+  .strict()
+  .superRefine((artifact, context) => {
+    if ((artifact.revision === 1) !== (artifact.previousRevisionDigest === undefined)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          'Revision 1 cannot have a previous digest; later revisions must identify the previous artifact digest.',
+        path: ['previousRevisionDigest'],
+      });
+    }
+
+    const windowStart = Date.parse(artifact.window.start);
+    const windowEnd = Date.parse(artifact.window.end);
+    const capturedAt = Date.parse(artifact.capturedAt);
+    if (!artifact.partial && capturedAt < windowEnd) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A complete canonical outcome artifact cannot be captured before its window ends.',
+        path: ['capturedAt'],
+      });
+    }
+    const byReference = new Map<string, typeof artifact.records>();
+    artifact.records.forEach((record, index) => {
+      const occurredAt = Date.parse(record.occurredAt);
+      if (occurredAt < windowStart || occurredAt > windowEnd) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Canonical outcome occurredAt must be inside the exact artifact window.',
+          path: ['records', index, 'occurredAt'],
+        });
+      }
+      if (occurredAt > capturedAt) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Canonical outcome occurredAt cannot be later than artifact capture time.',
+          path: ['records', index, 'occurredAt'],
+        });
+      }
+      const records = byReference.get(record.outcomeReference) ?? [];
+      records.push(record);
+      byReference.set(record.outcomeReference, records);
+    });
+
+    for (const records of byReference.values()) {
+      const ordered = [...records].sort((left, right) => left.revision - right.revision);
+      ordered.forEach((record, index) => {
+        if (record.revision !== index + 1) {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Outcome revision history must start at 1 and remain consecutive.',
+            path: ['records'],
+          });
+        }
+        const first = ordered[0];
+        if (
+          first &&
+          (record.outcomeId !== first.outcomeId ||
+            record.correlationReference !== first.correlationReference)
+        ) {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'An outcome revision cannot change its outcome or correlation identity.',
+            path: ['records'],
+          });
+        }
+        if (index > 0 && ordered[index - 1]?.status === 'reversed') {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'A reversed outcome is terminal and cannot receive another revision.',
+            path: ['records'],
+          });
+        }
+      });
+    }
+  });
+
+export const marketingCanonicalOutcomeArtifactInputSchema = marketingCanonicalOutcomeArtifactSchema;
+
+// Version 1 is accepted only by the explicit migration API. Ordinary loading uses the strict v2
+// schema above, so a legacy snapshot can never silently become current canonical truth.
+export const marketingConfirmedConversionV1RecordSchema = z.object({
   id: z.string().min(1),
   conversionId: z.string().min(1),
   sourceEventId: z.string().min(1),
@@ -204,7 +407,7 @@ export const marketingConfirmedConversionRecordSchema = z.object({
   pageUrl: z.string().min(1).optional(),
 });
 
-export const marketingConfirmedConversionArtifactSchema = z.object({
+export const marketingConfirmedConversionV1ArtifactSchema = z.object({
   version: z.literal(1),
   platformId: z.string().min(1),
   appId: z.string().min(1),
@@ -212,17 +415,13 @@ export const marketingConfirmedConversionArtifactSchema = z.object({
   pulledAt: z.string().datetime(),
   window: marketingReportWindowSchema,
   partial: z.boolean().default(false),
-  records: z.array(marketingConfirmedConversionRecordSchema).default([]),
+  records: z.array(marketingConfirmedConversionV1RecordSchema).default([]),
 });
 
+export const marketingConfirmedConversionRecordSchema = marketingCanonicalOutcomeRecordSchema;
+export const marketingConfirmedConversionArtifactSchema = marketingCanonicalOutcomeArtifactSchema;
 export const marketingConfirmedConversionArtifactInputSchema =
-  marketingConfirmedConversionArtifactSchema.extend({
-    platformId: z.string().min(1).optional(),
-    appId: z.string().min(1).optional(),
-    source: marketingReportSourceSchema.default('manual-export'),
-    pulledAt: z.string().datetime().optional(),
-    window: marketingReportWindowSchema.optional(),
-  });
+  marketingCanonicalOutcomeArtifactInputSchema;
 
 export const marketingStrategyObjectSchema = z.object({
   id: z.string().min(1),
@@ -275,15 +474,19 @@ export type MarketingProviderReportRecord = z.infer<typeof marketingProviderRepo
 export type MarketingProviderReportType = z.infer<typeof marketingProviderReportTypeSchema>;
 export type MarketingReportProvider = z.infer<typeof marketingReportProviderSchema>;
 export type MarketingReportSource = z.infer<typeof marketingReportSourceSchema>;
-export type MarketingConfirmedConversionRecord = z.infer<
-  typeof marketingConfirmedConversionRecordSchema
+export type MarketingCanonicalOutcomeRecord = z.infer<typeof marketingCanonicalOutcomeRecordSchema>;
+export type MarketingCanonicalOutcomeArtifact = z.infer<
+  typeof marketingCanonicalOutcomeArtifactSchema
 >;
-export type MarketingConfirmedConversionArtifact = z.infer<
-  typeof marketingConfirmedConversionArtifactSchema
+export type MarketingCanonicalOutcomeArtifactInput = z.infer<
+  typeof marketingCanonicalOutcomeArtifactInputSchema
 >;
-export type MarketingConfirmedConversionArtifactInput = z.infer<
-  typeof marketingConfirmedConversionArtifactInputSchema
+export type MarketingConfirmedConversionV1Artifact = z.infer<
+  typeof marketingConfirmedConversionV1ArtifactSchema
 >;
+export type MarketingConfirmedConversionRecord = MarketingCanonicalOutcomeRecord;
+export type MarketingConfirmedConversionArtifact = MarketingCanonicalOutcomeArtifact;
+export type MarketingConfirmedConversionArtifactInput = MarketingCanonicalOutcomeArtifactInput;
 export type MarketingStrategyObject = z.infer<typeof marketingStrategyObjectSchema>;
 export type MarketingStrategyObjectKind = z.infer<typeof marketingStrategyObjectKindSchema>;
 export type MarketingStrategyObjectStatus = z.infer<typeof marketingStrategyObjectStatusSchema>;

@@ -4,12 +4,11 @@ import {
   applyMarketingGoogleAdsGoals,
   buildMarketingGoogleAdsGoalPlan,
   loadMarketingRegistries,
-  MARKETING_GOOGLE_ADS_SCOPE,
   writeMarketingGoogleAdsGoalPlan,
   type MarketingGoogleAdsGoalPlan,
 } from '@unisane/growth/marketing';
 import type { AdsCliOptions } from '../options.js';
-import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
+import { executeGrowthProviderCommand } from '../../../provider-runtime.js';
 import {
   loadGrowthProjectContext,
   loadMarketingExecutionContext,
@@ -104,18 +103,20 @@ export async function adsGoalsGoogle(options: AdsCliOptions): Promise<number> {
       requiredAccountConfirmation(options, planned.customerId);
     }
 
-    const credentials = await resolveGrowthGoogleConnectionCredentials({
-      service: 'ads',
-      connection: options.connection,
-      environment: options.environment,
-      requiredScope: MARKETING_GOOGLE_ADS_SCOPE,
-    });
     const result = await applyMarketingGoogleAdsGoals(registries.conversions.value, {
-      accessToken: credentials.accessToken,
-      developerToken: credentials.developerToken,
       accountId: selectedCustomer.resourceId,
       managerCustomerId: options.managerCustomerId,
-      apiVersion: options.apiVersion,
+      provider: {
+        apply: (plan, validateOnly) =>
+          executeGrowthProviderCommand('google.marketing.apply-goals', {
+            plan,
+            validateOnly,
+            connection: options.connection,
+            environment: options.environment,
+            apiVersion: options.apiVersion,
+            accountConfirm: options.accountConfirm,
+          }),
+      },
       validateOnly: Boolean(options.dryRun),
       live: Boolean(options.yes),
     });

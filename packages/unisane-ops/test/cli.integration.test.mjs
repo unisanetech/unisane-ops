@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -12,6 +13,29 @@ const __dirname = dirname(__filename);
 const pkgRoot = resolve(__dirname, '..');
 const cli = resolve(pkgRoot, 'dist/cli.js');
 const workspaceNodeModules = resolve(pkgRoot, '../../../node_modules');
+
+test('secondary connections preserve the existing provider default unless explicitly selected', async () => {
+  const { selectDefaultConnectionId, selectsConnectedProviderAsDefault } =
+    await import('../dist/handlers/connect.js');
+
+  assert.equal(
+    selectDefaultConnectionId('google-primary', 'google-gtm-writer', false),
+    'google-primary',
+  );
+  assert.equal(
+    selectDefaultConnectionId('google-primary', 'google-gtm-writer', true),
+    'google-gtm-writer',
+  );
+  assert.equal(selectDefaultConnectionId(undefined, 'google-primary', false), 'google-primary');
+  assert.equal(
+    selectsConnectedProviderAsDefault('google-primary', 'google-gtm-writer', false),
+    false,
+  );
+  assert.equal(
+    selectsConnectedProviderAsDefault('google-primary', 'google-gtm-writer', true),
+    true,
+  );
+});
 
 function runCli(args, options = {}) {
   return spawnSync(process.execPath, [cli, ...args], {
@@ -270,9 +294,10 @@ test('canonical status returns one structured JSON document', () => {
       'cloud',
       'provider.cloudflare',
       'growth',
-      'ops-console',
+      ...(hasInstalledConsole() ? ['ops-console'] : []),
       'provider-aws',
       'provider-google',
+      'provider-meta',
     ],
   );
 });
@@ -331,11 +356,20 @@ test('canonical pack inspection exposes the validated static graph', () => {
   assert.equal(output.result.packs[2].commands[0].id, 'provider.cloudflare.connection.check');
   assert.equal(output.result.packs[3].packageName, '@unisane/growth');
   assert.equal(output.result.packs[3].commands[0].id, 'growth.root');
-  assert.equal(output.result.packs[4].packageName, '@unisane/ops-console');
-  assert.equal(output.result.packs[4].commands[0].id, 'growth.console');
-  assert.equal(output.result.packs[5].packageName, '@unisane/provider-aws');
-  assert.equal(output.result.packs[6].packageName, '@unisane/provider-google');
-  assert.equal(output.result.packs.some((pack) => pack.packageName === '@unisane/framework-ops'), false);
+  const packsByName = new Map(output.result.packs.map((pack) => [pack.packageName, pack]));
+  assert.equal(packsByName.has('@unisane/ops-console'), hasInstalledConsole());
+  if (hasInstalledConsole())
+    assert.equal(packsByName.get('@unisane/ops-console').commands[0].id, 'growth.console');
+  assert.ok(packsByName.has('@unisane/provider-aws'));
+  assert.ok(packsByName.has('@unisane/provider-google'));
+  assert.equal(
+    output.result.packs.some((pack) => pack.packageName === '@unisane/provider-meta'),
+    true,
+  );
+  assert.equal(
+    output.result.packs.some((pack) => pack.packageName === '@unisane/framework-ops'),
+    false,
+  );
 });
 
 test('root help exposes canonical capability and provider routing', () => {
@@ -343,6 +377,8 @@ test('root help exposes canonical capability and provider routing', () => {
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.match(result.stdout, /Canonical commands:/);
   assert.match(result.stdout, /disconnect google/);
+  assert.match(result.stdout, /connect meta/);
+  assert.match(result.stdout, /disconnect meta/);
   assert.match(result.stdout, /connect cloudflare check/);
   assert.match(result.stdout, /cloud dns import/);
   assert.match(result.stdout, /provider cloudflare dns/);
@@ -560,3 +596,13 @@ test('Cloudflare connection check is canonical before account selection and bloc
   assert.equal(output.status, 'blocked');
   assert.match(output.diagnostics[0], /CLOUDFLARE_API_TOKEN_MISSING/);
 });
+
+function hasInstalledConsole() {
+  try {
+    createRequire(import.meta.url).resolve('@unisane/ops-console/pack-manifest');
+    return true;
+  } catch (error) {
+    if (error.code === 'MODULE_NOT_FOUND') return false;
+    throw error;
+  }
+}

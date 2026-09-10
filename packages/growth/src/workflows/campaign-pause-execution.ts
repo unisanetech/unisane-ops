@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import {
   opsPrincipalSchema,
+  hashOpsValue,
+  opsMutationReceiptSchema,
   type OpsActionContext,
   type OpsExecutionState,
   type OpsMutationRunStore,
@@ -12,6 +14,7 @@ import {
   growthCampaignPauseLockIdentity,
   growthCampaignPauseParametersSchema,
   type GrowthCampaignPauseParameters,
+  type GrowthCampaignPauseDependencies,
   type GrowthCampaignPauseProviderAdapters,
 } from '../actions/campaign-pause.js';
 import {
@@ -101,6 +104,7 @@ export function createGrowthCampaignPauseWorkflow(input: {
   production: boolean;
   multiProcess: boolean;
   lockOwner: string;
+  beforeProviderMutation?: (lease: import('@unisane/ops-engine').OpsLockLease) => void;
   now?: () => Date;
   createPlanId?: () => string;
   createReceiptId?: () => string;
@@ -114,7 +118,7 @@ export function createGrowthCampaignPauseWorkflow(input: {
     multiProcess: input.multiProcess,
     now,
   });
-  const action = createGrowthCampaignPauseAction({
+  const actionDependencies: GrowthCampaignPauseDependencies = {
     state: input.state,
     lockOwner: input.lockOwner,
     actor: input.actor,
@@ -127,7 +131,8 @@ export function createGrowthCampaignPauseWorkflow(input: {
     now,
     createPlanId: input.createPlanId,
     createReceiptId: input.createReceiptId,
-  });
+  };
+  const action = createGrowthCampaignPauseAction(actionDependencies);
   return {
     async plan(request) {
       if (input.mutationPolicy === 'disabled') {
@@ -185,6 +190,10 @@ export function createGrowthCampaignPauseWorkflow(input: {
         );
       }
       const parameters = run.actionState.parameters;
+      if (run.actionState.attempt && !run.actionState.applyOutput)
+        throw new Error(
+          '[GROWTH_CAMPAIGN_ATTEMPT_EXISTS] Recover this attempt before any further changes.',
+        );
       if (request.confirmTarget !== growthCampaignPauseConfirmation(parameters)) {
         throw new Error(
           '[GROWTH_CAMPAIGN_PAUSE_TARGET_CONFIRMATION_MISMATCH] Confirm the exact provider, account, and campaign before apply.',
@@ -211,7 +220,19 @@ export function createGrowthCampaignPauseWorkflow(input: {
         );
       }
       try {
-        const applyOutput = await action.apply(
+        const guardedAction = createGrowthCampaignPauseAction({
+          ...actionDependencies,
+          beforeMutation: async (request) => {
+            await coordinator.recordAttempt({
+              runId: run.runId,
+              startedAt: request.startedAt,
+              principalId: request.context.principal.id,
+              lease: request.lease,
+            });
+            input.beforeProviderMutation?.(request.lease);
+          },
+        });
+        const applyOutput = await guardedAction.apply(
           {
             ...parameters,
             currentEvidenceRevision: nonEmptySchema.parse(request.currentEvidenceRevision),
@@ -241,7 +262,62 @@ export function createGrowthCampaignPauseWorkflow(input: {
       return workflowResult(run.runId, await requireReview(coordinator, run.runId));
     },
     async verify(request) {
-      const run = await coordinator.getRun(nonEmptySchema.parse(request.runId));
+      let run = await coordinator.getRun(nonEmptySchema.parse(request.runId));
+      if (run?.actionState.attempt && !run.actionState.applyOutput) {
+        const attempt = run.actionState.attempt;
+        const plan = run.actionState.plan;
+        const parameters = run.actionState.parameters;
+        const notBefore = new Date(
+          Date.parse(attempt.lease.expiresAt) + parameters.verificationDelayMs + 30_000,
+        );
+        if (now() < notBefore)
+          return workflowResult(run.runId, await requireReview(coordinator, run.runId));
+        const receipt = opsMutationReceiptSchema.parse({
+          schemaVersion: 1,
+          kind: 'ops.mutation-receipt',
+          receiptId: `receipt.recovery.${plan.planHash.slice(0, 24)}`,
+          planId: plan.planId,
+          planHash: plan.planHash,
+          provider: parameters.provider,
+          projectId: run.projectId,
+          environment: run.environmentId,
+          targetIdentity: plan.targetIdentity,
+          actor: attempt.principalId,
+          approvalId: run.actionState.approval!.approvalId,
+          lockId: attempt.lease.lockId,
+          lockFencingValue: attempt.lease.fencingValue,
+          startedAt: attempt.startedAt,
+          completedAt: notBefore.toISOString(),
+          status: 'partial',
+          results: [
+            {
+              actionId: 'growth.ads.campaign.pause',
+              status: 'failed',
+              outputHash: hashOpsValue({
+                outcome: 'outcome-unknown',
+                reason: 'interrupted-attempt',
+              }),
+            },
+          ],
+        });
+        await input.state.artifacts.recordReceipt(receipt);
+        await coordinator.recordApply({
+          runId: run.runId,
+          currentEvidenceRevision: run.actionState.currentEvidenceRevision,
+          applyOutput: {
+            schemaVersion: 1,
+            actionId: 'growth.ads.campaign.pause',
+            actionSchemaVersion: 1,
+            disposition: 'outcome-unknown',
+            receipt,
+            verificationWindow: {
+              notBefore: now().toISOString(),
+              expiresAt: new Date(now().getTime() + parameters.verificationTtlMs).toISOString(),
+            },
+          },
+        });
+        run = await coordinator.getRun(run.runId);
+      }
       if (!run?.actionState.applyOutput) {
         throw new Error(
           '[GROWTH_CAMPAIGN_PAUSE_RECEIPT_REQUIRED] Apply output is required before verification.',

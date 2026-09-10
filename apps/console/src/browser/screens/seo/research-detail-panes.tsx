@@ -308,7 +308,7 @@ export function CompetitorResearchDetailsPane({ competitor }: { competitor: Comp
 
       <ResearchDetailSection title="Evidence limits">
         <Typography variant="bodySmall" className="text-on-surface-variant">
-          This analysis covers only recorded pages and keywords. It does not infer the domain's full
+          This analysis covers only recorded pages and keywords. It does not infer the domain’s full
           strategy, authority, traffic, or conversion performance.
         </Typography>
       </ResearchDetailSection>

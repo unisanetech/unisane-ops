@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "kind": "unisane.pack-manifest",
+  "packId": "provider-meta",
+  "packageName": "@unisane/provider-meta",
+  "version": "0.1.0",
+  "packApiVersion": 1,
+  "trust": "first-party",
+  "commands": [],
+  "configNamespaces": ["provider-meta"],
+  "addItemTypes": [],
+  "capabilities": ["provider-meta"],
+  "providerBindings": ["meta"],
+  "reservedRootNames": [],
+  "integrity": {
+    "algorithm": "sha256",
+    "manifestHash": "276347fe4bdf24d643b76fe8dee7a9d943898ef2b5304e594b89a7861ee2218f"
+  }
+}

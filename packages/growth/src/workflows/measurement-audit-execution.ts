@@ -1,3 +1,4 @@
+import { isMissingMarketingRegistryError } from '../marketing/registry/load-registries.js';
 import type { OpsPrincipal } from '@unisane/ops-engine/actions';
 import {
   createGrowthMeasurementAuditAction,
@@ -7,6 +8,7 @@ import {
 } from '../actions/measurement-audit.js';
 import {
   auditMarketingTrackingSource,
+  latestMarketingCanonicalOutcomeRecords,
   readLatestMarketingConfirmedConversionArtifact,
   readMarketingConfirmedConversionStatus,
   readMarketingProviderReportStatus,
@@ -43,8 +45,14 @@ export type GrowthMeasurementAuditExecutionDependencies = {
     cwd: string;
     maxAgeDays: number;
     now: Date;
+    projectId: string;
+    environmentId: string;
   }): MarketingConfirmedConversionStatus;
-  readConfirmedArtifact(options: { cwd: string }): MarketingConfirmedConversionArtifact | undefined;
+  readConfirmedArtifact(options: {
+    cwd: string;
+    projectId: string;
+    environmentId: string;
+  }): MarketingConfirmedConversionArtifact | undefined;
   readProviderStatus(options: {
     cwd: string;
     provider: 'googleAds' | 'metaAds';
@@ -62,10 +70,6 @@ const defaultDependencies: GrowthMeasurementAuditExecutionDependencies = {
 };
 
 const canonicalOutcomeId = 'confirmed-conversions';
-const missingTrackingRegistryCodes = [
-  'MARKETING_EVENT_REGISTRY_NOT_FOUND',
-  'MARKETING_CONVERSION_REGISTRY_NOT_FOUND',
-] as const;
 
 function stableId(value: string): string {
   return (
@@ -82,12 +86,6 @@ function evidenceFreshness(status: string): 'fresh' | 'stale' | 'unknown' {
   return 'unknown';
 }
 
-function isMissingTrackingRegistryError(error: unknown): boolean {
-  return (
-    error instanceof Error &&
-    missingTrackingRegistryCodes.some((code) => error.message.includes(`[${code}]`))
-  );
-}
 
 function missingTrackingRegistryAudit(input: {
   cwd: string;
@@ -118,6 +116,18 @@ function missingTrackingRegistryAudit(input: {
       expectedConversionCount: 0,
       observedConversionCount: 0,
       observationCount: 0,
+      expectedDualDeliveryEventCount: 0,
+      observedLogicalEventCount: 0,
+      validDeduplicationPairCount: 0,
+      deduplicationFailureCount: 0,
+      browserDuplicateCount: 0,
+      serverDuplicateCount: 0,
+      stableServerRetryCount: 0,
+      eventIdCollisionCount: 0,
+      missingChannelCount: 0,
+      pendingFreshnessCount: 0,
+      staleEvidenceCount: 0,
+      clockSkewCount: 0,
     },
     emitters: [],
     findings: [],
@@ -146,19 +156,19 @@ function missingTrackingRegistryAudit(input: {
   };
 }
 
-async function loadTrackingAudit(input: {
-  options: ExecuteGrowthMeasurementAuditOptions;
-  dependencies: GrowthMeasurementAuditExecutionDependencies;
+export async function loadTrackingAudit(input: {
+  options: Pick<ExecuteGrowthMeasurementAuditOptions, 'config' | 'cwd' | 'trackingAudit'>;
+  dependencies?: GrowthMeasurementAuditExecutionDependencies;
   now: Date;
 }): Promise<MarketingTrackingAuditReport> {
   if (input.options.trackingAudit) return input.options.trackingAudit;
   try {
-    return await input.dependencies.auditTracking(input.options.config, {
+    return await (input.dependencies ?? defaultDependencies).auditTracking(input.options.config, {
       cwd: input.options.cwd,
       now: input.now,
     });
   } catch (error) {
-    if (!isMissingTrackingRegistryError(error)) throw error;
+    if (!isMissingMarketingRegistryError(error)) throw error;
     return missingTrackingRegistryAudit({
       cwd: input.options.cwd,
       config: input.options.config,
@@ -171,34 +181,74 @@ function canonicalOutcomes(input: {
   cwd: string;
   maxAgeDays: number;
   now: Date;
+  projectId: string;
+  environmentId: string;
   dependencies: GrowthMeasurementAuditExecutionDependencies;
 }): CanonicalOutcome[] {
   const status = input.dependencies.readConfirmedStatus(input);
   if (!status.exists || status.status === 'error') return [];
-  const artifact = input.dependencies.readConfirmedArtifact({ cwd: input.cwd });
+  const artifact = input.dependencies.readConfirmedArtifact({
+    cwd: input.cwd,
+    projectId: input.projectId,
+    environmentId: input.environmentId,
+  });
   if (!artifact) return [];
-  return [
-    {
-      outcomeId: canonicalOutcomeId,
-      label: 'Server-confirmed conversions',
-      count: artifact.records.length,
-      source: `Unisane-confirmed conversion artifact (${artifact.source})`,
-      observedAt: artifact.pulledAt,
+  const grouped = new Map<string, ReturnType<typeof latestMarketingCanonicalOutcomeRecords>>();
+  for (const record of latestMarketingCanonicalOutcomeRecords(artifact)) {
+    const records = grouped.get(record.outcomeId) ?? [];
+    records.push(record);
+    grouped.set(record.outcomeId, records);
+  }
+  return [...grouped.entries()].map(([outcomeId, records]) => {
+    const active = records.filter((record) => record.status !== 'reversed');
+    const currencies = new Set(
+      active.flatMap((record) => (record.currency ? [record.currency] : [])),
+    );
+    const valuedRecords = active.filter((record) => record.value !== undefined);
+    const conflictingValueCoverage =
+      valuedRecords.length > 0 && valuedRecords.length !== active.length;
+    const outcomeStatus = artifact.partial
+      ? 'partial'
+      : currencies.size > 1 || conflictingValueCoverage
+        ? 'conflicting'
+        : active.length === 0
+          ? 'reversed'
+          : 'confirmed';
+    const value =
+      valuedRecords.length === active.length && active.length > 0
+        ? valuedRecords.reduce((sum, record) => sum + (record.value ?? 0), 0)
+        : undefined;
+    return {
+      projectId: artifact.projectId,
+      environmentId: artifact.environmentId,
+      outcomeId,
+      label: `Server-confirmed ${outcomeId}`,
+      count: active.reduce((sum, record) => sum + record.count, 0),
+      ...(value !== undefined ? { value } : {}),
+      ...(value !== undefined && currencies.size === 1 ? { currency: [...currencies][0] } : {}),
+      source: `${artifact.source.system} (${artifact.source.id})`,
+      sourceId: artifact.source.id,
+      observedAt: artifact.capturedAt,
       freshness: evidenceFreshness(status.status),
-    },
-  ];
+      window: artifact.window,
+      revision: artifact.revision,
+      status: outcomeStatus,
+      finality: 'server-confirmed' as const,
+    };
+  });
 }
 
 function providerAttribution(
   providerId: 'google-ads' | 'meta-ads',
   status: MarketingProviderReportStatus | undefined,
+  outcomeId: string,
 ): ProviderAttributedConversion | undefined {
   if (!status?.exists || !status.pulledAt || status.metrics?.conversions === undefined) {
     return undefined;
   }
   return {
     providerId,
-    outcomeId: canonicalOutcomeId,
+    outcomeId,
     attributedCount: Math.round(status.metrics.conversions),
     source: `${providerId === 'google-ads' ? 'Google Ads' : 'Meta Ads'} ${status.reportType ?? 'provider'} report (${status.source ?? 'recorded artifact'})`,
     observedAt: status.pulledAt,
@@ -210,6 +260,7 @@ function providerAttributions(input: {
   cwd: string;
   maxAgeDays: number;
   now: Date;
+  outcomeId: string;
   dependencies: GrowthMeasurementAuditExecutionDependencies;
 }): ProviderAttributedConversion[] {
   const google = providerAttribution(
@@ -221,6 +272,7 @@ function providerAttributions(input: {
       provider: 'googleAds',
       reportType: 'conversion',
     }),
+    input.outcomeId,
   );
   const meta = providerAttribution(
     'meta-ads',
@@ -231,6 +283,7 @@ function providerAttributions(input: {
       provider: 'metaAds',
       reportType: 'campaign',
     }),
+    input.outcomeId,
   );
   return [google, meta].filter(
     (attribution): attribution is ProviderAttributedConversion => attribution !== undefined,
@@ -244,17 +297,22 @@ function periodTimestamp(date: string, boundary: 'start' | 'end'): string {
 function resolvePeriod(input: {
   startDate?: string;
   endDate?: string;
-  canonicalWindow?: { startDate: string; endDate: string };
+  canonicalWindow?: { start: string; end: string };
   providerWindows: Array<{ startDate: string; endDate: string } | undefined>;
   now: Date;
 }) {
-  const fallback = input.canonicalWindow ?? input.providerWindows.find(Boolean);
+  const providerFallback = input.providerWindows.find(Boolean);
   const today = input.now.toISOString().slice(0, 10);
-  const startDate = input.startDate ?? fallback?.startDate ?? today;
-  const endDate = input.endDate ?? fallback?.endDate ?? today;
+  const start = input.startDate
+    ? periodTimestamp(input.startDate, 'start')
+    : (input.canonicalWindow?.start ??
+      periodTimestamp(providerFallback?.startDate ?? today, 'start'));
+  const end = input.endDate
+    ? periodTimestamp(input.endDate, 'end')
+    : (input.canonicalWindow?.end ?? periodTimestamp(providerFallback?.endDate ?? today, 'end'));
   return {
-    start: periodTimestamp(startDate, 'start'),
-    end: periodTimestamp(endDate, 'end'),
+    start,
+    end,
   };
 }
 
@@ -270,6 +328,8 @@ export function createGrowthMeasurementAuditExecutor(
       cwd: options.cwd,
       maxAgeDays,
       now,
+      projectId: options.config.platformId,
+      environmentId: options.config.defaultEnvironment,
     });
     const googleStatus = dependencies.readProviderStatus({
       cwd: options.cwd,
@@ -295,12 +355,29 @@ export function createGrowthMeasurementAuditExecutor(
       }),
       comparisonLimit: options.comparisonLimit ?? 20,
     });
+    const loadedCanonicalOutcomes = canonicalOutcomes({
+      cwd: options.cwd,
+      maxAgeDays,
+      now,
+      projectId: options.config.platformId,
+      environmentId: options.config.defaultEnvironment,
+      dependencies,
+    });
+    const providerOutcomeId =
+      loadedCanonicalOutcomes.length === 1
+        ? (loadedCanonicalOutcomes[0]?.outcomeId ?? canonicalOutcomeId)
+        : canonicalOutcomeId;
     const action = createGrowthMeasurementAuditAction({
       loadTrackingAudit: () => loadTrackingAudit({ options, dependencies, now }),
-      loadCanonicalOutcomes: () =>
-        canonicalOutcomes({ cwd: options.cwd, maxAgeDays, now, dependencies }),
+      loadCanonicalOutcomes: () => loadedCanonicalOutcomes,
       loadProviderAttributions: () =>
-        providerAttributions({ cwd: options.cwd, maxAgeDays, now, dependencies }),
+        providerAttributions({
+          cwd: options.cwd,
+          maxAgeDays,
+          now,
+          outcomeId: providerOutcomeId,
+          dependencies,
+        }),
       now: () => now,
     });
     const output = await action.execute(input, {

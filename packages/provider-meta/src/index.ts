@@ -1,1 +1,15 @@
-export {};
+export * from './meta/connection.js';
+export * from './meta/capabilities.js';
+export * from './meta/connection-discovery.js';
+export * from './meta/connection-lifecycle.js';
+export * from './meta/connection-store.js';
+export * from './meta/connect.js';
+export * from './meta/credential-execution.js';
+export * from './meta/disconnect.js';
+export * from './meta/local-credential-resolver.js';
+export * from './meta/local-credential-store.js';
+export * from './meta/read-transport.js';
+export * from './meta/terminal-credential-prompt.js';
+export * from './meta/connection-resource-selection.js';
+export * from './meta/terminal-resource-prompt.js';
+export { normalizeMetaReportSnapshot } from './meta/marketing/report-snapshot.js';

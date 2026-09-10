@@ -1,3 +1,8 @@
+import {
+  googleCampaignAssetLinkRequestSchema,
+  googleCampaignAssetLinkResultSchema,
+  type GoogleCampaignAssetLinker,
+} from './asset-provider.js';
 import { createHash } from 'node:crypto';
 import {
   copyFileSync,
@@ -263,16 +268,10 @@ export type MarketingGoogleAdsCampaignAssetLinkOptions = {
   fieldType?: 'MARKETING_IMAGE' | 'AD_IMAGE';
   yes?: boolean;
   out?: string;
-  env?: Record<string, string | undefined>;
-  credentials?: {
-    accessToken?: string;
-    developerToken?: string;
-    accountId?: string;
-    loginCustomerId?: string;
-  };
-  fetch?: FetchLike;
+  customerId: string;
+  loginCustomerId?: string;
+  provider?: GoogleCampaignAssetLinker;
   now?: Date;
-  apiVersion?: string;
 };
 
 const extensionMimeTypes: Record<string, string> = {
@@ -1152,7 +1151,7 @@ function hashJson(value: unknown): string {
   return createHash('sha256').update(JSON.stringify(value)).digest('hex');
 }
 
-function readUploadPlan(
+export function readMarketingAdsAssetUploadPlan(
   cwd: string,
   planPath: string,
 ): { path: string; plan: MarketingAdsAssetUploadPlan } {
@@ -1247,52 +1246,6 @@ function normalizeGoogleAdsCustomerId(value: string): string {
   return value.replaceAll('-', '').trim();
 }
 
-function googleAdsImageMimeType(asset: MarketingAdsAssetUploadPlan['operations'][number]): string {
-  const extension = path.extname(asset.sourceLocalPath).toLowerCase();
-  if (extension === '.jpg' || extension === '.jpeg') return 'IMAGE_JPEG';
-  if (extension === '.png') return 'IMAGE_PNG';
-  if (extension === '.gif') return 'IMAGE_GIF';
-  throw new Error(
-    '[ADS_ASSET_GOOGLE_IMAGE_TYPE_UNSUPPORTED] Google Ads image upload supports jpg, png, and gif image assets.',
-  );
-}
-
-async function parseProviderResponse(response: Response): Promise<unknown> {
-  const text = await response.text();
-  if (!text.trim()) return {};
-  try {
-    return JSON.parse(text) as unknown;
-  } catch {
-    return { raw: text };
-  }
-}
-
-function googleAdsAssetResourceName(value: unknown): string | undefined {
-  const root = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
-  const direct = root.resourceName;
-  if (typeof direct === 'string') return direct;
-  const rawResults = root.results;
-  const results: readonly unknown[] = Array.isArray(rawResults) ? rawResults : [];
-  const first = results[0];
-  if (first && typeof first === 'object') {
-    const resourceName = (first as Record<string, unknown>).resourceName;
-    return typeof resourceName === 'string' ? resourceName : undefined;
-  }
-  return undefined;
-}
-
-function googleAdsResultResourceNames(value: unknown): string[] {
-  const root = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
-  const results = Array.isArray(root.results) ? root.results : [];
-  return results
-    .map((entry) =>
-      entry && typeof entry === 'object'
-        ? (entry as Record<string, unknown>).resourceName
-        : undefined,
-    )
-    .filter((resourceName): resourceName is string => typeof resourceName === 'string');
-}
-
 function readGoogleAdsProviderAssetRef(args: {
   cwd: string;
   config: MarketingExecutionContext;
@@ -1335,99 +1288,6 @@ function providerRefPath(args: {
   );
   ensurePathWithinCwd(args.cwd, resolved);
   return resolved;
-}
-
-async function uploadGoogleImageAsset(args: {
-  cwd: string;
-  config: MarketingExecutionContext;
-  operation: MarketingAdsAssetUploadPlan['operations'][number];
-  env: Record<string, string | undefined>;
-  credentials?: NonNullable<
-    MarketingAdsAssetUploadOptions['providerCredentials']
-  >[MarketingAdsPlanProvider];
-  fetcher: FetchLike;
-  apiVersion?: string;
-  attemptedAt: string;
-}): Promise<{ providerAssetId: string; providerRefPath: string; message: string }> {
-  const accountId = args.credentials?.accountId;
-  const developerToken = args.credentials?.developerToken;
-  const accessToken = args.credentials?.accessToken;
-  const loginCustomerId = args.credentials?.loginCustomerId;
-  if (!accountId || !developerToken || !accessToken) {
-    throw new Error(
-      '[ADS_ASSET_GOOGLE_CONNECTION_INCOMPLETE] Google Ads image upload requires a selected customer, OAuth access, and approved developer access.',
-    );
-  }
-  if (args.operation.assetType !== 'image' && args.operation.assetType !== 'logo') {
-    throw new Error(
-      '[ADS_ASSET_GOOGLE_TYPE_UNSUPPORTED] First Google Ads asset upload supports image/logo assets only.',
-    );
-  }
-  const sourcePath = path.resolve(args.cwd, args.operation.sourceLocalPath);
-  ensurePathWithinCwd(args.cwd, sourcePath);
-  googleAdsImageMimeType(args.operation);
-  const customerId = normalizeGoogleAdsCustomerId(accountId);
-  const headers: Record<string, string> = {
-    authorization: `Bearer ${accessToken}`,
-    'developer-token': developerToken,
-    'content-type': 'application/json',
-  };
-  if (loginCustomerId) headers['login-customer-id'] = normalizeGoogleAdsCustomerId(loginCustomerId);
-  const response = await args.fetcher(
-    `https://googleads.googleapis.com/${args.apiVersion ?? 'v24'}/customers/${customerId}/assets:mutate`,
-    {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        operations: [
-          {
-            create: {
-              name: args.operation.assetId,
-              type: 'IMAGE',
-              imageAsset: {
-                data: readFileSync(sourcePath).toString('base64'),
-              },
-            },
-          },
-        ],
-      }),
-    },
-  );
-  const value = await parseProviderResponse(response);
-  if (!response.ok) {
-    throw new Error(
-      `[ADS_ASSET_GOOGLE_UPLOAD_FAILED] Google Ads image upload failed: ${JSON.stringify(value)}`,
-    );
-  }
-  const providerAssetId = googleAdsAssetResourceName(value);
-  if (!providerAssetId) {
-    throw new Error(
-      '[ADS_ASSET_GOOGLE_UPLOAD_RESOURCE_MISSING] Google Ads image upload did not return an asset resource name.',
-    );
-  }
-  const refPath = providerRefPath({
-    cwd: args.cwd,
-    environment: args.config.defaultEnvironment,
-    provider: 'googleAds',
-    assetId: args.operation.assetId,
-  });
-  writeJsonFile(refPath, {
-    version: 1,
-    platformId: args.config.platformId,
-    appId: args.config.appId,
-    environment: args.config.defaultEnvironment,
-    provider: 'googleAds',
-    assetId: args.operation.assetId,
-    providerAssetId,
-    sourceSha256: args.operation.sourceSha256,
-    uploadedAt: args.attemptedAt,
-    accountId,
-  });
-  return {
-    providerAssetId,
-    providerRefPath: refPath,
-    message: 'Google Ads image asset upload sent.',
-  };
 }
 
 function dryRunReceipt(args: {
@@ -1496,7 +1356,9 @@ export async function writeMarketingAdsAssetUploadReceipt(
   const cwd = path.resolve(options.cwd ?? process.cwd());
   const now = options.now ?? new Date();
   const generatedAt = now.toISOString();
-  const loadedPlan = readUploadPlan(cwd, options.planPath);
+  const loadedPlan = readMarketingAdsAssetUploadPlan(cwd, options.planPath);
+  if (loadedPlan.plan.platformId !== config.platformId || loadedPlan.plan.appId !== config.appId)
+    throw new Error('[ADS_ASSET_PLAN_TARGET_MISMATCH] Plan belongs to another project.');
   const planHash = hashJson(loadedPlan.plan);
   const accountConfirmations = loadedPlan.plan.operations.map((operation) =>
     uploadAccountConfirmation({
@@ -1548,6 +1410,18 @@ export async function writeMarketingAdsAssetUploadReceipt(
   const dryRun = readUploadReceipt(cwd, options.receiptPath);
   const operationConfirmations = confirmationValues(options.operationConfirm);
   const blockers = new Set<string>();
+  if (
+    dryRun.receipt.platformId !== config.platformId ||
+    dryRun.receipt.appId !== config.appId ||
+    dryRun.receipt.environment !== config.defaultEnvironment
+  )
+    blockers.add('receipt_target_mismatch');
+  for (const operation of loadedPlan.plan.operations) {
+    if (!options.providerUploaders?.[operation.provider])
+      blockers.add(`provider_uploader_missing:${operation.provider}`);
+  }
+  if (loadedPlan.plan.checks.some((check) => check.status === 'error'))
+    blockers.add('plan_has_errors');
   if (dryRun.receipt.status !== 'previewed') blockers.add('dry_run_receipt_not_ready');
   if (dryRun.receipt.planHash !== planHash) blockers.add('plan_hash_mismatch');
   if (!options.approvalRef) blockers.add('approval_ref_required');
@@ -1603,13 +1477,18 @@ export async function writeMarketingAdsAssetUploadReceipt(
       if (providerUploader) {
         const sourcePath = path.resolve(cwd, operation.sourceLocalPath);
         ensurePathWithinCwd(cwd, sourcePath);
+        const bytes = readFileSync(sourcePath);
+        if (createHash('sha256').update(bytes).digest('hex') !== operation.sourceSha256)
+          throw new Error(
+            '[ADS_ASSET_SOURCE_CHANGED] Asset bytes changed after planning. Re-import and review a new plan.',
+          );
         const uploaded = await providerUploader({
           config,
           operation,
           source: {
             fileName: path.basename(sourcePath),
             mimeType: extensionMimeTypes[path.extname(sourcePath).toLowerCase()],
-            bytes: readFileSync(sourcePath),
+            bytes,
           },
           env,
           credentials: options.providerCredentials?.[operation.provider],
@@ -1638,17 +1517,6 @@ export async function writeMarketingAdsAssetUploadReceipt(
           ...uploaded,
           providerRefPath: refPath,
         };
-      } else if (operation.provider === 'googleAds') {
-        result = await uploadGoogleImageAsset({
-          cwd,
-          config,
-          operation,
-          env,
-          credentials: options.providerCredentials?.googleAds,
-          fetcher,
-          apiVersion: options.apiVersion,
-          attemptedAt: generatedAt,
-        });
       } else {
         throw new Error(
           `[ADS_ASSET_PROVIDER_UPLOADER_MISSING] No asset uploader was injected for ${operation.provider}.`,
@@ -1733,15 +1601,8 @@ export async function writeMarketingGoogleAdsCampaignAssetLinkReceipt(
   const cwd = path.resolve(options.cwd ?? process.cwd());
   const now = options.now ?? new Date();
   const generatedAt = now.toISOString();
-  const customerId = options.credentials?.accountId;
-  const loginCustomerId = options.credentials?.loginCustomerId;
-  const developerToken = options.credentials?.developerToken;
-  const accessToken = options.credentials?.accessToken;
-  if (!customerId || !developerToken || !accessToken) {
-    throw new Error(
-      '[ADS_ASSET_GOOGLE_LINK_CONNECTION_INCOMPLETE] Google Ads campaign asset linking requires a selected customer, OAuth access, and approved developer access.',
-    );
-  }
+  const customerId = options.customerId;
+  const loginCustomerId = options.loginCustomerId;
   if (
     options.fieldType &&
     options.fieldType !== 'MARKETING_IMAGE' &&
@@ -1773,45 +1634,33 @@ export async function writeMarketingGoogleAdsCampaignAssetLinkReceipt(
     }),
   );
 
+  const request = googleCampaignAssetLinkRequestSchema.parse({
+    customerId: normalizedCustomerId,
+    loginCustomerId: normalizedLoginCustomerId,
+    campaignResourceName,
+    fieldType,
+    providerAssetIds: assetRefs.map((ref) => ref.providerAssetId),
+  });
   if (options.yes) {
-    const headers: Record<string, string> = {
-      authorization: `Bearer ${accessToken}`,
-      'developer-token': developerToken,
-      'content-type': 'application/json',
-    };
-    if (normalizedLoginCustomerId) headers['login-customer-id'] = normalizedLoginCustomerId;
-    const response = await (options.fetch ?? fetch)(
-      `https://googleads.googleapis.com/${options.apiVersion ?? 'v24'}/customers/${normalizedCustomerId}/campaignAssets:mutate`,
-      {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          operations: assetRefs.map((assetRef) => ({
-            create: {
-              campaign: campaignResourceName,
-              asset: assetRef.providerAssetId,
-              fieldType,
-            },
-          })),
-        }),
-      },
-    );
-    const value = await parseProviderResponse(response);
-    if (!response.ok) {
-      operationResults.forEach((operation) => {
-        operation.status = 'failed';
-        operation.liveMutationSent = false;
-        operation.message = `Google Ads campaign image asset link failed: ${JSON.stringify(value)}`;
-      });
-    } else {
-      const providerResourceNames = googleAdsResultResourceNames(value);
-      operationResults.forEach((operation, index) => {
-        operation.status = 'sent';
-        operation.liveMutationSent = true;
-        operation.providerResourceName = providerResourceNames[index];
-        operation.message = 'Google Ads campaign image asset link sent.';
-      });
-    }
+    if (!options.provider)
+      throw new Error('[ADS_ASSET_PROVIDER_LINKER_MISSING] Inject a campaign asset provider.');
+    const result = googleCampaignAssetLinkResultSchema.parse(await options.provider(request));
+    if (
+      result.providerResourceNames.length !== operationResults.length ||
+      result.providerResourceNames.some(
+        (name) => !name.startsWith(`customers/${normalizedCustomerId}/campaignAssets/`),
+      )
+    )
+      throw new Error(
+        '[ADS_ASSET_LINK_OUTCOME_UNKNOWN] Incomplete or foreign provider result. Reconcile before retrying.',
+      );
+    operationResults.forEach((operation, index) => {
+      operation.status = 'sent';
+      operation.liveMutationSent = true;
+      operation.providerResourceName = result.providerResourceNames[index];
+      operation.message =
+        'Google Ads campaign image asset link acknowledged; verify provider state.';
+    });
   }
 
   const receipt = {

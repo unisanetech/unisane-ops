@@ -24,12 +24,20 @@ export type MarketingTrackingEmitter = {
 
 export type MarketingTrackingFindingCategory =
   | 'competing-emitter'
+  | 'clock-skew'
   | 'consent-suppression'
+  | 'deduplication-failure'
   | 'duplicate-event'
   | 'environment-mismatch'
+  | 'project-mismatch'
+  | 'event-id-collision'
   | 'invalid-payload'
+  | 'missing-channel'
   | 'missing-event'
   | 'missing-parameter'
+  | 'retry-leak'
+  | 'stale-evidence'
+  | 'unexpected-emitter'
   | 'unknown-event';
 
 export type MarketingTrackingFinding = {
@@ -39,6 +47,9 @@ export type MarketingTrackingFinding = {
   title: string;
   detail: string;
   eventName?: string;
+  eventId?: string;
+  logicalEventId?: string;
+  channel?: 'browser' | 'server';
   conversionId?: string;
   path?: string;
 };
@@ -49,6 +60,18 @@ export type MarketingTrackingCoverage = {
   expectedConversionCount: number;
   observedConversionCount: number;
   observationCount: number;
+  expectedDualDeliveryEventCount: number;
+  observedLogicalEventCount: number;
+  validDeduplicationPairCount: number;
+  deduplicationFailureCount: number;
+  browserDuplicateCount: number;
+  serverDuplicateCount: number;
+  stableServerRetryCount: number;
+  eventIdCollisionCount: number;
+  missingChannelCount: number;
+  pendingFreshnessCount: number;
+  staleEvidenceCount: number;
+  clockSkewCount: number;
 };
 
 export type MarketingTrackingAuditSummary = {

@@ -432,9 +432,8 @@ export async function buildMarketingAdsReadinessPlan(
       title: 'Keep closed-loop conversion proof fresh',
       rationale:
         'Provider-reported conversions alone are not enough; the dashboard needs business-confirmed conversion and value data.',
-      command: 'unisane-ops growth marketing conversion-pull --input <confirmed-conversions.json>',
-      blocksLaunch:
-        confirmedConversions.status === 'missing' || confirmedConversions.status === 'error',
+      command: 'unisane-ops growth marketing conversion-pull --input <canonical-outcomes-v2.json>',
+      blocksLaunch: confirmedConversions.status !== 'fresh',
     },
     {
       id: 'creative-assets-search-extension-plan',

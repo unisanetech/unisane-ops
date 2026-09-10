@@ -22,7 +22,6 @@ export {
   createGoogleTagManagerContainerVersion,
   previewGoogleTagManagerWorkspace,
   publishGoogleTagManagerContainerVersion,
-  rollbackGoogleTagManagerContainerVersion,
 } from './versioning.js';
 export { createGoogleTagManagerProvider } from './provider.js';
 export type {

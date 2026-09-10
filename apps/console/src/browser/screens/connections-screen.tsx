@@ -8,19 +8,30 @@ import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../contracts.js';
 import { ContentSection, StatusBadge } from '../shared/content.js';
 import { ConnectionDetailScreen } from './connections/connection-detail.js';
+import { MetaCapabilityList } from './connections/capability-list.js';
 
 export function ConnectionsScreen(props: ConsoleScreenProps) {
   if (props.route.family === 'connection-detail') {
-    return <ConnectionDetailScreen {...props} />;
+    return (
+      <>
+        <ConnectionDetailScreen {...props} />
+        {props.route.path.startsWith('/connections/meta/') && (
+          <MetaCapabilityList review={props.state.capabilityReview} />
+        )}
+      </>
+    );
   }
   return (
-    <ContentSection>
-      <div className="grid gap-4">
-        {props.state.connections.map((connection) => (
-          <ConnectionCard connection={connection} {...props} key={connection.provider} />
-        ))}
-      </div>
-    </ContentSection>
+    <>
+      <ContentSection>
+        <div className="grid gap-4">
+          {props.state.connections.map((connection) => (
+            <ConnectionCard connection={connection} {...props} key={connection.provider} />
+          ))}
+        </div>
+      </ContentSection>
+      <MetaCapabilityList review={props.state.capabilityReview} />
+    </>
   );
 }
 

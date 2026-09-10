@@ -8,11 +8,11 @@
     "package": "@unisane/growth",
     "owner": "ops/growth",
     "packageDir": "packages/growth",
-    "sourceFileCount": 352,
-    "symbolCount": 1547,
-    "functionCount": 1547,
-    "publicFunctionCount": 522,
-    "internalFunctionCount": 1025,
+    "sourceFileCount": 351,
+    "symbolCount": 1588,
+    "functionCount": 1588,
+    "publicFunctionCount": 529,
+    "internalFunctionCount": 1059,
     "serviceLayerFunctionCount": 0
   },
   "owner": "unisane-ops",
@@ -171,6 +171,17 @@
         "public"
       ],
       "signatureShort": "createGrowthMeasurementAuditAction(dependencies)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasCanonicalBlocker",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/actions/measurement-audit.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "hasCanonicalBlocker(input): boolean",
       "layer": "tooling-layer"
     },
     {
@@ -4164,19 +4175,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "resolveGrowthMetaConnectionToken",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/connections/meta.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "resolveGrowthMetaConnectionToken(input): Promise<string>",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "captureOutput",
       "kind": "function",
       "package": "@unisane/growth",
@@ -4451,6 +4449,19 @@
         "public"
       ],
       "signatureShort": "fetchSearchConsolePerformanceFile(input): Promise<FetchSearchConsolePerformanceFileResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pullMetaAdsReport",
+      "kind": "const-function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/cli/provider-adapters.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "pullMetaAdsReport(input): MarketingProviderApiPullDriver",
       "layer": "tooling-layer"
     },
     {
@@ -6258,6 +6269,28 @@
       "exported": false,
       "tags": [],
       "signatureShort": "latestPulledAt(cells): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaConsoleState",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/console/connections.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "metaConsoleState(assessment, fallbackState): MarketingConsoleConnectionState",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaServiceProjection",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/console/connections.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "metaServiceProjection(args): MarketingConsoleConnectionService",
       "layer": "tooling-layer"
     },
     {
@@ -9870,6 +9903,30 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "assessMarketingMetaConnection",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/connections/meta.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assessMarketingMetaConnection(input, options): MarketingMetaConnectionAssessment",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isExpired",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/connections/meta.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isExpired(timestamp, now): boolean",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "marketingMetaConnectionReady",
       "kind": "function",
       "package": "@unisane/growth",
@@ -9879,7 +9936,51 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "marketingMetaConnectionReady(status): status is MarketingMetaConnectionStatus & { connected: true }",
+      "signatureShort": "marketingMetaConnectionReady(status, now): status is MarketingMetaConnectionStatus & { connected: true }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resourceAssessment",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/connections/meta.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "resourceAssessment(status, service): Pick<MarketingMetaConnectionServiceAssessment, 'state' | 'issues' | 'selectedResources'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectedResourcesForService",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/connections/meta.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "selectedResourcesForService(status, service): MarketingMetaConnectionResource[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "serviceAssessment",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/connections/meta.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "serviceAssessment(status, service, now): MarketingMetaConnectionServiceAssessment",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "unique",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/connections/meta.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "unique(values): string[]",
       "layer": "tooling-layer"
     },
     {
@@ -11150,7 +11251,7 @@
       "file": "packages/growth/src/marketing/registry/load-registries.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "loadArtifact(cwd, relativePath, schema, missingCode): Promise<LoadedMarketingArtifact<T>>",
+      "signatureShort": "loadArtifact(cwd, relativePath, schema, missingCode, retiredVersionCode): Promise<LoadedMarketingArtifact<T>>",
       "layer": "tooling-layer"
     },
     {
@@ -11246,6 +11347,61 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "activeMarketingCanonicalOutcomeRecords",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "activeMarketingCanonicalOutcomeRecords(artifact): MarketingCanonicalOutcomeRecord[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "artifactFileName",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "artifactFileName(artifact): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertAppendOnlyHistory",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertAppendOnlyHistory(previous, next): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertArtifactScope",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertArtifactScope(config, artifact): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertRecordedLedger",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assertRecordedLedger(cwd, artifact): void",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "cacheMarketingConfirmedConversionArtifact",
       "kind": "function",
       "package": "@unisane/growth",
@@ -11255,7 +11411,7 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "cacheMarketingConfirmedConversionArtifact(cwd, artifact): MarketingConfirmedConversionPullResult",
+      "signatureShort": "cacheMarketingConfirmedConversionArtifact(cwd, value): MarketingConfirmedConversionPullResult",
       "layer": "tooling-layer"
     },
     {
@@ -11272,14 +11428,99 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "normalizeConfirmedConversionArtifact",
+      "name": "createMarketingCanonicalOutcomeReference",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createMarketingCanonicalOutcomeReference(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "digestMarketingCanonicalOutcomeArtifact",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "digestMarketingCanonicalOutcomeArtifact(artifact): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "hasCurrencyConflict",
       "kind": "function",
       "package": "@unisane/growth",
       "owner": "ops/growth",
       "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "normalizeConfirmedConversionArtifact(config, value, options): MarketingConfirmedConversionArtifact",
+      "signatureShort": "hasCurrencyConflict(records): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "latestMarketingCanonicalOutcomeRecords",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "latestMarketingCanonicalOutcomeRecords(artifact): MarketingCanonicalOutcomeRecord[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ledgerArtifacts",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ledgerArtifacts(cwd, artifact): MarketingCanonicalOutcomeArtifact[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "ledgerKey",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "ledgerKey(artifact): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "legacyReferenceSeed",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "legacyReferenceSeed(record): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "migrateMarketingConfirmedConversionV1",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "migrateMarketingConfirmedConversionV1(value, options): MarketingCanonicalOutcomeArtifact",
       "layer": "tooling-layer"
     },
     {
@@ -11303,7 +11544,7 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "readLatestMarketingConfirmedConversionArtifact(options): MarketingConfirmedConversionArtifact | undefined",
+      "signatureShort": "readLatestMarketingConfirmedConversionArtifact(options): MarketingCanonicalOutcomeArtifact | undefined",
       "layer": "tooling-layer"
     },
     {
@@ -11320,14 +11561,58 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "safeTimestamp",
+      "name": "readV2Artifact",
       "kind": "function",
       "package": "@unisane/growth",
       "owner": "ops/growth",
       "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "safeTimestamp(iso): string",
+      "signatureShort": "readV2Artifact(filePath): MarketingCanonicalOutcomeArtifact",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordKey",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "recordKey(record): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "serializedArtifact",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "serializedArtifact(artifact): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "sha256",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "sha256(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "tryReadV2Artifact",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "tryReadV2Artifact(filePath): MarketingCanonicalOutcomeArtifact | undefined",
       "layer": "tooling-layer"
     },
     {
@@ -12285,6 +12570,19 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "migrateMarketingEventRegistryV1",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/schema/event-registry.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "migrateMarketingEventRegistryV1(input): MarketingEventRegistry",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "defineMarketingExecutionContext",
       "kind": "function",
       "package": "@unisane/growth",
@@ -12511,14 +12809,25 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "duplicateFindings",
+      "name": "classifyDeliveryObservations",
       "kind": "function",
       "package": "@unisane/growth",
       "owner": "ops/growth",
       "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "duplicateFindings(observations): MarketingTrackingFinding[]",
+      "signatureShort": "classifyDeliveryObservations(input): { findings: MarketingTrackingFinding[]; coverage: Pick< MarketingTrackingCoverage, | 'expectedDualDeliveryEventCount' | 'observedLogicalEven...",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "correlationIdentity",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "correlationIdentity(observation): string",
       "layer": "tooling-layer"
     },
     {
@@ -12544,14 +12853,124 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "expectedChannel",
+      "name": "expectedChannels",
       "kind": "function",
       "package": "@unisane/growth",
       "owner": "ops/growth",
       "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "expectedChannel(event): 'browser' | 'server'",
+      "signatureShort": "expectedChannels(event): MarketingEventDeliveryChannel[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "groupDeliveryObservations",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "groupDeliveryObservations(observations, correlationWindowSeconds): Map<string, ResolvedObservation[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isDeliveryAttempt",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isDeliveryAttempt(observation): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isSuccessfulDelivery",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "isSuccessfulDelivery(observation): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "legacyCommerceState",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "legacyCommerceState(payload, names, isValid)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "legacyCoverageState",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "legacyCoverageState(payload, aliases)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "legacyCustomerFields",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "legacyCustomerFields(payload)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "legacyLogicalEventId",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "legacyLogicalEventId(observation): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "legacyParameterEvidence",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "legacyParameterEvidence(payload)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "legacyParameterType",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "legacyParameterType(value): 'string' | 'number' | 'boolean' | 'array' | 'object' | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "legacyTransportFields",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "legacyTransportFields(payload)",
       "layer": "tooling-layer"
     },
     {
@@ -12568,14 +12987,38 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "propertyTypeMatches",
+      "name": "migrateMarketingTrackingObservationArtifactV1",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "migrateMarketingTrackingObservationArtifactV1(input, options): MarketingTrackingObservationArtifact",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "opaqueLegacyReference",
       "kind": "function",
       "package": "@unisane/growth",
       "owner": "ops/growth",
       "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "propertyTypeMatches(value, type)",
+      "signatureShort": "opaqueLegacyReference(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "propertyEvidenceMatches",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "propertyEvidenceMatches(evidence, type)",
       "layer": "tooling-layer"
     },
     {
@@ -12588,7 +13031,7 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "reconcileMarketingTrackingObservations(input): { coverage: MarketingTrackingCoverage; findings: MarketingTrackingFinding[]; observedEmitters: MarketingTrackingEmitterId[]; }",
+      "signatureShort": "reconcileMarketingTrackingObservations(input): { coverage: MarketingTrackingCoverage; findings: MarketingTrackingFinding[]; observedEmitters: MarketingTrackingEmitterId[]; evide...",
       "layer": "tooling-layer"
     },
     {
@@ -12600,6 +13043,28 @@
       "exported": false,
       "tags": [],
       "signatureShort": "resolveEvent(events, eventName): MarketingEvent | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "stableSegment",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "stableSegment(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "terminalDeliveries",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/tracking/audit-observations.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "terminalDeliveries(entries, channel): ResolvedObservation[]",
       "layer": "tooling-layer"
     },
     {
@@ -17740,7 +18205,7 @@
       "file": "packages/growth/src/workflows/measurement-audit-execution.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "providerAttribution(providerId, status): ProviderAttributedConversion | undefined",
+      "signatureShort": "providerAttribution(providerId, status, outcomeId): ProviderAttributedConversion | undefined",
       "layer": "tooling-layer"
     },
     {
@@ -18088,5 +18553,5 @@
       "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:a1b868b2455a"
+  "generatedAt": "content-hash:99927a96a5d2"
 }

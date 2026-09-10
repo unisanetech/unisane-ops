@@ -1,6 +1,12 @@
 import { z } from 'zod';
 
-export const marketingEventSourceSchema = z.enum(['browser', 'server', 'webhook', 'imported']);
+const marketingEventSourceV1Schema = z.enum(['browser', 'server', 'webhook', 'imported']);
+export const marketingEventDeliveryChannelSchema = z.enum(['browser', 'server']);
+export const marketingEventDeliveryExpectationSchema = z.enum([
+  'browser-only',
+  'server-only',
+  'browser-and-server',
+]);
 export const marketingLifecycleFamilySchema = z.enum([
   'awareness',
   'intent',
@@ -60,11 +66,18 @@ export const marketingEventProviderMappingsSchema = z
   })
   .default({});
 
-export const marketingEventSchema = z.object({
+export const marketingEventEmitterExpectationsSchema = z
+  .object({
+    browser: z.array(z.string().min(1)).min(1).optional(),
+    server: z.array(z.string().min(1)).min(1).optional(),
+  })
+  .strict()
+  .default({});
+
+const marketingEventFields = {
   id: z.string().min(1),
   name: z.string().min(1),
   owner: z.string().min(1),
-  source: marketingEventSourceSchema,
   lifecycle: marketingLifecycleFamilySchema,
   description: z.string().min(1).optional(),
   requiredProperties: z.array(marketingEventPropertySchema).default([]),
@@ -78,16 +91,82 @@ export const marketingEventSchema = z.object({
   dedupeRule: z.string().min(1).optional(),
   mappings: marketingEventProviderMappingsSchema,
   reportingGoal: z.string().min(1).optional(),
-});
+};
 
-export const marketingEventRegistrySchema = z.object({
+const marketingEventRegistryV1Schema = z.object({
   version: z.literal(1),
   platformId: z.string().min(1),
-  events: z.array(marketingEventSchema),
+  events: z.array(
+    z.object({
+      ...marketingEventFields,
+      source: marketingEventSourceV1Schema,
+    }),
+  ),
 });
+
+export const marketingEventSchema = z
+  .object({
+    ...marketingEventFields,
+    deliveryExpectation: marketingEventDeliveryExpectationSchema,
+    expectedEmitters: marketingEventEmitterExpectationsSchema,
+    logicalEventIdRule: z.string().min(1),
+    canonicalCorrelationRule: z.string().min(1).optional(),
+  })
+  .strict()
+  .superRefine((event, context) => {
+    const expectsBrowser = event.deliveryExpectation !== 'server-only';
+    const expectsServer = event.deliveryExpectation !== 'browser-only';
+    if (!expectsBrowser && event.expectedEmitters.browser) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A server-only event cannot declare browser emitters.',
+        path: ['expectedEmitters', 'browser'],
+      });
+    }
+    if (!expectsServer && event.expectedEmitters.server) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A browser-only event cannot declare server emitters.',
+        path: ['expectedEmitters', 'server'],
+      });
+    }
+    if (event.deliveryExpectation === 'browser-and-server' && !event.dedupeRule) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A browser-and-server event must declare a dedupe rule.',
+        path: ['dedupeRule'],
+      });
+    }
+  });
+
+export const marketingEventRegistrySchema = z
+  .object({
+    version: z.literal(2),
+    platformId: z.string().min(1),
+    events: z.array(marketingEventSchema),
+  })
+  .strict();
+
+export function migrateMarketingEventRegistryV1(input: unknown): MarketingEventRegistry {
+  const legacy = marketingEventRegistryV1Schema.parse(input);
+  return marketingEventRegistrySchema.parse({
+    version: 2,
+    platformId: legacy.platformId,
+    events: legacy.events.map(({ source, ...event }) => ({
+      ...event,
+      deliveryExpectation: source === 'browser' ? 'browser-only' : 'server-only',
+      expectedEmitters: {},
+      logicalEventIdRule: event.transactionIdRule ?? event.eventIdRule,
+      ...(event.transactionIdRule ? { canonicalCorrelationRule: event.transactionIdRule } : {}),
+    })),
+  });
+}
 
 export type MarketingConsentCategory = z.infer<typeof marketingConsentCategorySchema>;
 export type MarketingEvent = z.infer<typeof marketingEventSchema>;
+export type MarketingEventDeliveryChannel = z.infer<typeof marketingEventDeliveryChannelSchema>;
+export type MarketingEventDeliveryExpectation = z.infer<
+  typeof marketingEventDeliveryExpectationSchema
+>;
 export type MarketingEventRegistry = z.infer<typeof marketingEventRegistrySchema>;
-export type MarketingEventSource = z.infer<typeof marketingEventSourceSchema>;
 export type MarketingLifecycleFamily = z.infer<typeof marketingLifecycleFamilySchema>;

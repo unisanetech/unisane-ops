@@ -1,3 +1,7 @@
+import type { ConsoleMetaDiagnostics } from './meta-diagnostic-action.js';
+import type { ConsoleMetaReportHistoryReader } from './meta-report-action.js';
+import type { ConsoleMetaReportReader } from './meta-report-action.js';
+import type { GrowthCapabilityReviewer } from '@unisane/growth/console';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import {
   buildMarketingConsoleState,
@@ -12,6 +16,11 @@ import type { MarketingConsoleCampaignPauseReview } from '@unisane/growth/consol
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
 export type TemporalStateHandlerOptions = {
+  reviewCapabilities?: GrowthCapabilityReviewer;
+  readReport?: ConsoleMetaReportReader;
+  metaDiagnostics?: ConsoleMetaDiagnostics;
+  collectReport?: ConsoleMetaReportReader;
+  readReportHistory?: ConsoleMetaReportHistoryReader;
   cwd?: string;
   maxAgeDays?: number;
   googleAuth?: MarketingGoogleConnectionStatus;
@@ -46,6 +55,9 @@ export async function handleTemporalStateRequest(
   try {
     const state = await buildMarketingConsoleState({
       ...options,
+      metaDiagnosticsAvailable: Boolean(options.metaDiagnostics),
+      reportReadAvailable: Boolean(options.readReport),
+      reportEvidenceAvailable: Boolean(options.collectReport && options.readReportHistory),
       temporalQuery: parseTemporalQuery(requestUrl),
     });
     response.statusCode = 200;

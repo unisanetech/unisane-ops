@@ -59,7 +59,8 @@ describe('AdvertisingOverview', () => {
       />,
     );
 
-    expect(html).toContain('No Meta Ads campaign results are available yet.');
+    expect(html).toContain('No Meta Ads performance summary is available for this period.');
+    expect(html).toContain('Saved report snapshots are listed above');
     expect(html).not.toContain('Ads readiness');
     expect(html).not.toContain('91% ready');
   });

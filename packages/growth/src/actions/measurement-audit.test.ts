@@ -14,6 +14,7 @@ import {
 
 const observedAt = '2026-08-03T00:00:00.000Z';
 const period = { start: '2026-07-01T00:00:00.000Z', end: '2026-07-31T23:59:59.000Z' };
+const canonicalWindow = { ...period, timeZone: 'Asia/Dhaka' };
 
 function trackingAudit(status: 'ready' | 'attention' | 'blocked'): MarketingTrackingAuditReport {
   const errorCount = status === 'blocked' ? 1 : 0;
@@ -41,6 +42,18 @@ function trackingAudit(status: 'ready' | 'attention' | 'blocked'): MarketingTrac
       expectedConversionCount: 1,
       observedConversionCount: 1,
       observationCount: 3,
+      expectedDualDeliveryEventCount: 0,
+      observedLogicalEventCount: 0,
+      validDeduplicationPairCount: 0,
+      deduplicationFailureCount: 0,
+      browserDuplicateCount: 0,
+      serverDuplicateCount: 0,
+      stableServerRetryCount: 0,
+      eventIdCollisionCount: 0,
+      missingChannelCount: 0,
+      pendingFreshnessCount: 0,
+      staleEvidenceCount: 0,
+      clockSkewCount: 0,
     },
     emitters: [],
     findings: [],
@@ -71,12 +84,21 @@ function trackingAudit(status: 'ready' | 'attention' | 'blocked'): MarketingTrac
 
 function canonical(freshness: CanonicalOutcome['freshness'] = 'fresh'): CanonicalOutcome {
   return {
+    projectId: 'true-resume',
+    environmentId: 'production',
     outcomeId: 'purchase',
     label: 'Completed purchases',
     count: 10,
+    value: 1250,
+    currency: 'BDT',
     source: 'Order service',
+    sourceId: 'orders',
     observedAt,
     freshness,
+    window: canonicalWindow,
+    revision: 1,
+    status: 'confirmed',
+    finality: 'server-confirmed',
   };
 }
 
@@ -188,14 +210,58 @@ describe('measurement audit action', () => {
     expect(output.limitations).toContain('The tracking audit belongs to a different environment.');
   });
 
-  it('marks stale canonical evidence as attention', async () => {
+  it('blocks when canonical evidence is stale', async () => {
     const output = await execute({
       trackingStatus: 'ready',
       canonicalOutcomes: [canonical('stale')],
     });
 
-    expect(output).toMatchObject({ status: 'attention', safeToScale: false });
+    expect(output).toMatchObject({ status: 'blocked', safeToScale: false });
     expect(output.limitations).toContain('Some canonical outcome evidence is stale.');
+  });
+
+  it.each([
+    ['partial', 'Some canonical outcome evidence is partial.'],
+    ['conflicting', 'Some canonical outcome evidence is conflicting.'],
+    ['reversed', 'Some canonical outcomes are fully reversed.'],
+  ] as const)('blocks when canonical evidence is %s', async (status, limitation) => {
+    const output = await execute({
+      trackingStatus: 'ready',
+      canonicalOutcomes: [
+        {
+          ...canonical(),
+          status,
+          count: status === 'reversed' ? 0 : 10,
+          ...(status === 'reversed' ? { value: undefined, currency: undefined } : {}),
+        },
+      ],
+    });
+
+    expect(output).toMatchObject({ status: 'blocked', safeToScale: false });
+    expect(output.limitations).toContain(limitation);
+  });
+
+  it('blocks provisional or incorrectly scoped canonical outcomes', async () => {
+    const output = await execute({
+      trackingStatus: 'ready',
+      canonicalOutcomes: [
+        {
+          ...canonical(),
+          environmentId: 'staging',
+          finality: 'provisional',
+          window: { ...canonicalWindow, end: observedAt },
+        },
+      ],
+    });
+
+    expect(output).toMatchObject({ status: 'blocked', safeToScale: false });
+    expect(output.limitations).toEqual(
+      expect.arrayContaining([
+        'Some canonical outcomes belong to a different environment.',
+        'Some canonical outcomes cover a different measurement window.',
+        'Some canonical outcomes are not server-confirmed.',
+      ]),
+    );
   });
 
   it('bounds provider comparisons without hiding the total count', async () => {

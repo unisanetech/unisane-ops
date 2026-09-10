@@ -1,0 +1,63 @@
+{
+  "snapshotId": "S-b219d7faffa2",
+  "taskId": "T-04cfd129",
+  "sessionId": "codex-meta-friendly-prompt-close-20260903",
+  "actorId": "bhaskarbarma",
+  "baseRevision": "d799e47265faab9bbf961aef294a3296b34e591f",
+  "paths": [
+    {
+      "path": "docs/reference/generated",
+      "digest": "abe61461c56901c68effcac351790ea74254db9de6f37a73faefc06c9f55302b",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/standards/13-unisane-ops-product-architecture-baseline.md",
+      "digest": "6eab07123a423a8aa53d13861946e45969542589f5860f25664e6f7ef63f62a1",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/work/plans/unisane-ops-growth-meta-measurement-roadmap.md",
+      "digest": "59c57a9fe6d316fafe7326c36d3c407c539850780cd465f74c6282d40a83a835",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/work/tasks",
+      "digest": "52241bb170fd7568d823c32cdf27398eeb240ab01d5369ba4b528bc9bcc15474",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/provider-meta",
+      "digest": "ef351ef7677b92dc83f0267adb244ac3f313186a6002b603290eb74859a775b2",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/provider-meta/README.md",
+      "digest": "ab2276ebf9cbc4ac258ed5ef6a9b7ab7cc5d712356abb98a8bcb0e0d565a2b9f",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/handlers/connect.ts",
+      "digest": "44f3524a7c561f124a3f3d3676567892365d4fe3edfdd5b14055af9fe4d5b703",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/host.ts",
+      "digest": "a9da2834aba7ce66a958d0473bf9daaec64447556b93a7e8e7d537da59efb77e",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "digest": "df96134c449c8db05d97baddf95b4319003314db54428fe84fd01fa81f8c9a57",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/test",
+      "digest": "67212ddd0d5815b96eb90b751f27c0917ad6c4a58d39f746164ba43b41b61523",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    }
+  ],
+  "digest": "b219d7faffa29f6df89999189385c5eb732afeabfa23ce261c609d2797d97733",
+  "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs",
+  "createdAt": "2026-09-02T20:24:29.269Z",
+  "artifactPath": "docs/work/tasks/snapshots/T-04cfd129-S-b219d7faffa2.json"
+}

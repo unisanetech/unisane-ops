@@ -10,7 +10,9 @@ descriptor. Descriptor validation then enforces canonical serialized bytes, the 
 project and compiler identity, an explicit allowed capability set, required feature and operation
 coverage, and the complete API compatibility lifecycle policy.
 The V1 boundary admits Compiler `0.1.0` exactly in both the contract asset and every
-consumer expectation.
+consumer expectation. Its embedded module descriptor compatibility is version 2; the outer project
+descriptor contract remains version 1. Recorded conformance fixtures are copied byte-for-byte from
+the packed Compiler public contract assets, with their digests pinned in the independent validator.
 
 `validateAndMapFrameworkProjectDescriptor(...)` returns one deeply immutable, Ops-owned
 `FrameworkOpsProjectIntegration`. The model contains static project, compiler, capability, and API

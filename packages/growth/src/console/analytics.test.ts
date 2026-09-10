@@ -39,6 +39,18 @@ const trackingAudit = {
     expectedConversionCount: 1,
     observedConversionCount: 0,
     observationCount: 0,
+    expectedDualDeliveryEventCount: 0,
+    observedLogicalEventCount: 0,
+    validDeduplicationPairCount: 0,
+    deduplicationFailureCount: 0,
+    browserDuplicateCount: 0,
+    serverDuplicateCount: 0,
+    stableServerRetryCount: 0,
+    eventIdCollisionCount: 0,
+    missingChannelCount: 0,
+    pendingFreshnessCount: 0,
+    staleEvidenceCount: 0,
+    clockSkewCount: 0,
   },
   emitters: [
     {

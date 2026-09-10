@@ -28,6 +28,7 @@ const connectResultSchema = z
           displayName: z.string().min(1),
           state: z.enum(['selected', 'missing', 'ambiguous', 'inaccessible']),
           observedAt: z.string().min(1),
+          parentResourceId: z.string().min(1).optional(),
         })
         .strict(),
     ),
@@ -78,6 +79,25 @@ function selectEnvironment(
   );
 }
 
+export function selectDefaultConnectionId(
+  currentConnectionId: string | undefined,
+  connectedConnectionId: string,
+  setDefault: boolean,
+): string {
+  return currentConnectionId && !setDefault ? currentConnectionId : connectedConnectionId;
+}
+
+export function selectsConnectedProviderAsDefault(
+  currentConnectionId: string | undefined,
+  connectedConnectionId: string,
+  setDefault: boolean,
+): boolean {
+  return (
+    selectDefaultConnectionId(currentConnectionId, connectedConnectionId, setDefault) ===
+    connectedConnectionId
+  );
+}
+
 export async function runConnect(context: PackCommandContext): Promise<PackCommandResult> {
   const [provider, ...providerArguments] = context.argv;
   if (!provider || provider.startsWith('--')) {
@@ -89,7 +109,10 @@ export async function runConnect(context: PackCommandContext): Promise<PackComma
       `[UNISANE_CONNECT_PROVIDER_UNKNOWN] No installed pack contributes '${provider}'.`,
     );
   }
-  if (provider !== 'google' || contributor.packId !== 'provider-google') {
+  if (
+    (provider !== 'google' && provider !== 'meta') ||
+    contributor.packId !== `provider-${provider}`
+  ) {
     throw new Error(
       `[UNISANE_CONNECT_PROVIDER_UNSUPPORTED] Provider '${provider}' has no ordinary connection lifecycle yet.`,
     );
@@ -105,20 +128,21 @@ export async function runConnect(context: PackCommandContext): Promise<PackComma
         provider,
         reason: 'growth-not-selected',
       },
-      nextActions: ['Run `unisane-ops add growth` before connecting Google.'],
+      nextActions: [`Run \`unisane-ops add growth\` before connecting ${provider}.`],
     });
   }
   const environmentId = selectEnvironment(
     Object.keys(loaded.config.environments),
     option(providerArguments, '--environment'),
   );
-  const connectionId = option(providerArguments, '--connection') ?? 'google-primary';
+  const connectionId = option(providerArguments, '--connection') ?? `${provider}-primary`;
+  const setDefaultConnection = providerArguments.includes('--set-default');
   const recordPath = `.unisane/ops/connections/${connectionId}.json`;
   const confirmed =
     providerArguments.includes('--yes') ||
     (await confirmWrite(
       context,
-      `Connect Google for '${loaded.config.project.id}' (${environmentId})?`,
+      `Connect ${provider} for '${loaded.config.project.id}' (${environmentId})?`,
     ));
   if (!confirmed) {
     return commandResult(context, {
@@ -128,11 +152,14 @@ export async function runConnect(context: PackCommandContext): Promise<PackComma
         provider,
         connectionId,
         environmentId,
-        requiredServices: requiredGrowthProviderServices(growth, 'google'),
+        requiredServices:
+          provider === 'meta'
+            ? ['ads-insights', 'event-measurement']
+            : requiredGrowthProviderServices(growth, 'google'),
         writeRequired: true,
       },
       nextActions: [
-        'Re-run `unisane-ops connect google --yes` after reviewing the access request.',
+        `Re-run \`unisane-ops connect ${provider} --yes\` after reviewing the access request.`,
       ],
     });
   }
@@ -144,13 +171,19 @@ export async function runConnect(context: PackCommandContext): Promise<PackComma
     await context.runtime.resolveBinding('ops.lifecycle.connect', {
       provider,
       packId: contributor.packId,
+      scopeId: 'workspace',
       projectId: loaded.config.project.id,
       environmentId,
       recordPath,
-      requiredServices: requiredGrowthProviderServices(growth, 'google'),
+      requiredServices:
+        provider === 'meta'
+          ? ['ads-insights', 'event-measurement']
+          : requiredGrowthProviderServices(growth, 'google'),
       context: {
         cwd: loaded.projectRoot,
-        argv: providerArguments.filter((argument) => argument !== '--yes'),
+        argv: providerArguments.filter(
+          (argument) => argument !== '--yes' && argument !== '--set-default',
+        ),
         json: context.json ?? false,
       },
     }),
@@ -164,26 +197,36 @@ export async function runConnect(context: PackCommandContext): Promise<PackComma
     connections: {},
     resources: [],
   };
-  const retainedResources = environment.resources.filter(
-    (resource) =>
-      resource.provider !== connected.provider || resource.connection !== connected.connectionId,
+  const selectConnectedAsDefault = selectsConnectedProviderAsDefault(
+    environment.connections[connected.provider],
+    connected.connectionId,
+    setDefaultConnection,
   );
+  const retainedResources = selectConnectedAsDefault
+    ? environment.resources.filter((resource) => resource.provider !== connected.provider)
+    : environment.resources;
   growth.environments[environmentId] = {
     connections: {
       ...environment.connections,
-      [connected.provider]: connected.connectionId,
+      [connected.provider]: selectDefaultConnectionId(
+        environment.connections[connected.provider],
+        connected.connectionId,
+        setDefaultConnection,
+      ),
     },
     resources: [
       ...retainedResources,
-      ...connected.resources
-        .filter((resource) => resource.state === 'selected')
-        .map((resource) => ({
-          provider: connected.provider,
-          connection: connected.connectionId,
-          service: resource.service,
-          resourceType: resource.resourceType,
-          resourceId: resource.resourceId,
-        })),
+      ...(selectConnectedAsDefault
+        ? connected.resources
+            .filter((resource) => resource.state === 'selected')
+            .map((resource) => ({
+              provider: connected.provider,
+              connection: connected.connectionId,
+              service: resource.service,
+              resourceType: resource.resourceType,
+              resourceId: resource.resourceId,
+            }))
+        : []),
     ],
   };
   updateOpsConfigSource({

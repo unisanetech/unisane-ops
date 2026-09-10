@@ -171,10 +171,11 @@ function reconcileConversionTruth(input: {
   providerConversionValue?: number;
   confirmedStatus: MarketingConfirmedConversionStatus;
 }): MarketingUnifiedConversionTruth['reconciliation'] {
-  if (!input.confirmedStatus.metrics) {
+  if (input.confirmedStatus.status !== 'fresh' || !input.confirmedStatus.metrics) {
     return {
       status: 'missing_unisane_truth',
-      message: 'No Unisane-confirmed conversion metrics are available for reconciliation.',
+      message:
+        'No fresh, complete, conflict-free server-confirmed canonical outcome metrics are available for reconciliation.',
     };
   }
   if (input.providerConversions === undefined && input.providerConversionValue === undefined) {
@@ -254,17 +255,30 @@ export async function buildUnifiedMarketingReport(
       sources: conversionSources,
     },
     unisaneConfirmed: {
-      status: confirmedConversionStatus.metrics ? 'available' : 'missing',
+      status: confirmedConversionStatus.status === 'fresh' ? 'available' : 'missing',
       configuredServerConversionCount: serverConversions.length,
       auditedServerConversionCount: auditedServerConversions.length,
       statusDetail: confirmedConversionStatus,
-      conversions: confirmedConversionStatus.metrics?.conversions,
-      conversionValue: confirmedConversionStatus.metrics?.conversionValue,
-      revenue: confirmedConversionStatus.metrics?.revenue,
-      margin: confirmedConversionStatus.metrics?.margin,
-      message: confirmedConversionStatus.metrics
-        ? 'Unisane-confirmed conversion performance artifact is available for reconciliation.'
-        : 'No Unisane-confirmed conversion performance artifact is configured yet; provider conversions stay attribution signals, not business truth.',
+      conversions:
+        confirmedConversionStatus.status === 'fresh'
+          ? confirmedConversionStatus.metrics?.conversions
+          : undefined,
+      conversionValue:
+        confirmedConversionStatus.status === 'fresh'
+          ? confirmedConversionStatus.metrics?.conversionValue
+          : undefined,
+      revenue:
+        confirmedConversionStatus.status === 'fresh'
+          ? confirmedConversionStatus.metrics?.revenue
+          : undefined,
+      margin:
+        confirmedConversionStatus.status === 'fresh'
+          ? confirmedConversionStatus.metrics?.margin
+          : undefined,
+      message:
+        confirmedConversionStatus.status === 'fresh'
+          ? 'Fresh server-confirmed canonical outcome metrics are available for reconciliation.'
+          : 'Canonical outcome truth is not currently trustworthy; provider conversions remain attribution signals, not business truth.',
     },
     reconciliation,
   };
@@ -273,7 +287,7 @@ export async function buildUnifiedMarketingReport(
     ok:
       !providerFreshness.some((status) => status.status === 'error') &&
       auditReport.ok &&
-      confirmedConversionStatus.status !== 'error',
+      confirmedConversionStatus.status === 'fresh',
     cwd,
     generatedAt: now.toISOString(),
     platformId: config.platformId,

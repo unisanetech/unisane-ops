@@ -13,6 +13,8 @@ type Presentation = {
 type ResumeView = { status?: unknown };
 
 function presentation(output: Record<string, unknown>): Presentation {
+  if (output.presentation && typeof output.presentation === 'object')
+    return output.presentation as Presentation;
   const workflow = output.workflow;
   if (workflow && typeof workflow === 'object') {
     const value = (workflow as { presentation?: unknown }).presentation;

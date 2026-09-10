@@ -9,14 +9,10 @@ import {
   type MarketingExecutionContext,
   type MarketingAdsPlanProvider,
 } from '@unisane/growth/marketing';
-import {
-  executeGoogleAdsLiveOperation,
-  executeMetaAdsLiveOperation,
-} from '../../../provider-adapters.js';
+import { executeGoogleAdsLiveOperation } from '../../../provider-adapters.js';
 import type { AdsCliOptions } from '../options.js';
 import { printAdsApplyResult, printAdsLiveApplyResult } from '../output/apply.js';
 import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
-import { resolveGrowthMetaConnectionToken } from '../../../connections/meta.js';
 import {
   loadGrowthProjectContext,
   loadMarketingExecutionContext,
@@ -33,6 +29,12 @@ async function resolveAdsLiveEnv(
     typeof writeMarketingAdsLiveApplyReceipt
   >[1]['providerCredentials'];
 }> {
+  void config;
+  if (providers.has('metaAds')) {
+    throw new Error(
+      '[META_ADS_LIVE_CREDENTIAL_CALLBACK_REQUIRED] Meta live apply is unavailable until its separately approved host credential callback is composed.',
+    );
+  }
   const env = { ...process.env };
   const google = providers.has('googleAds')
     ? {
@@ -51,21 +53,6 @@ async function resolveAdsLiveEnv(
         }),
       }
     : undefined;
-  const meta = providers.has('metaAds')
-    ? {
-        resource: resolveGrowthResource({
-          context: await loadGrowthProjectContext(),
-          environment: options.environment,
-          provider: 'meta',
-          service: 'ads',
-          resourceType: 'ad-account',
-        }),
-        accessToken: await resolveGrowthMetaConnectionToken({
-          connection: options.connection,
-          environment: options.environment,
-        }),
-      }
-    : undefined;
   return {
     env,
     providerCredentials: {
@@ -74,14 +61,6 @@ async function resolveAdsLiveEnv(
             googleAds: {
               accountId: google.resource.resourceId,
               ...google.credentials,
-            },
-          }
-        : {}),
-      ...(meta
-        ? {
-            metaAds: {
-              accountId: meta.resource.resourceId,
-              accessToken: meta.accessToken,
             },
           }
         : {}),
@@ -121,7 +100,6 @@ export async function adsApply(options: AdsCliOptions): Promise<number> {
         liveExecutorMode: options.liveExecutor ?? 'disabled',
         providerExecutors: {
           googleAds: executeGoogleAdsLiveOperation,
-          metaAds: executeMetaAdsLiveOperation,
         },
         out: options.out,
         env: providerContext.env,

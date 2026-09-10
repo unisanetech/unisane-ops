@@ -1,0 +1,83 @@
+{
+  "snapshotId": "S-3c001b9d5478",
+  "taskId": "T-410e4c0e",
+  "sessionId": "codex-meta-preconnect-batch-20260902",
+  "actorId": "bhaskarbarma",
+  "baseRevision": "d799e47265faab9bbf961aef294a3296b34e591f",
+  "paths": [
+    {
+      "path": "docs/reference/generated",
+      "digest": "6bcd43e544ae378bac696866e400d59c70973deac7df8be66899ff459a927857",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/standards/13-unisane-ops-product-architecture-baseline.md",
+      "digest": "28f2c3adb04868db9418bb5a60e566c6e557b981a2c2e5a42a501f6c174e8d3a",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/work/plans/unisane-ops-growth-meta-measurement-roadmap.md",
+      "digest": "cfe7990064d6dd38d413e600737fd2228a00900ae7fe06fd7108d14171114087",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/work/tasks",
+      "digest": "aea52231b1b4454ce013da0609a23954f2334041d5c0a6471cb497cfe63dc70d",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/provider-meta",
+      "digest": "5b8403fa390399d3515c8c24e7e9707e237df939f95dc2dbec735a2e3dbc2706",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/handlers/check.ts",
+      "digest": "04fd172f3cccdbee78c78b73aee3a6f955ae88dcdc27047cd2b6cc70c5ca281d",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/handlers/connect.ts",
+      "digest": "44f3524a7c561f124a3f3d3676567892365d4fe3edfdd5b14055af9fe4d5b703",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/handlers/disconnect.ts",
+      "digest": "93a9812869fb316c4d543339b4a464f9aba59bce1c4b8ffd37a3f5b639d9d7b0",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/host.ts",
+      "digest": "a9da2834aba7ce66a958d0473bf9daaec64447556b93a7e8e7d537da59efb77e",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
+      "digest": "df96134c449c8db05d97baddf95b4319003314db54428fe84fd01fa81f8c9a57",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/runtime-adapters/growth.test.ts",
+      "digest": "536cc9752508ac7200d82e1593e18635fd32d0e65b7ec018d892d0063dbb1411",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "digest": "cae0bce86bc58fdf1ff85300e17811843926292ad95ddd3c57001fddac282994",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/unisane-ops/test",
+      "digest": "67212ddd0d5815b96eb90b751f27c0917ad6c4a58d39f746164ba43b41b61523",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "digest": "38c287099c8afb858f7dcfa6a98b3133c9d8e080977a664b5441812b8e404a9d",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    }
+  ],
+  "digest": "3c001b9d5478fd1cc43625d0353eb7da0d85526bed72730c4588100d3427ff33",
+  "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs",
+  "createdAt": "2026-09-02T12:59:07.711Z",
+  "artifactPath": "docs/work/tasks/snapshots/T-410e4c0e-S-3c001b9d5478.json"
+}

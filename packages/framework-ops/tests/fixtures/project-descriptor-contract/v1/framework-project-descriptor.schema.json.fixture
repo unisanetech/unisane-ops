@@ -434,7 +434,7 @@
           "const": 3
         },
         "moduleDescriptorSchemaVersion": {
-          "const": 1
+          "const": 2
         },
         "api": {
           "type": "array",

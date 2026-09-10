@@ -153,6 +153,13 @@ export interface GrowthCampaignPauseDependencies {
     providerAccountId: string;
     campaignId: string;
   }): Promise<'paused' | 'active' | 'unknown'>;
+  beforeMutation?(input: {
+    plan: OpsMutationPlan;
+    parameters: GrowthCampaignPauseParameters;
+    context: OpsActionContext;
+    lease: z.infer<typeof opsLockLeaseSchema>;
+    startedAt: string;
+  }): Promise<void>;
   now?: () => Date;
   createPlanId?: () => string;
   createReceiptId?: () => string;
@@ -341,6 +348,14 @@ export function createGrowthCampaignPauseAction(dependencies: GrowthCampaignPaus
       });
 
       const startedAt = now().toISOString();
+      await dependencies.beforeMutation?.({
+        plan: input.plan,
+        parameters,
+        context,
+        lease: input.lease,
+        startedAt,
+      });
+      await dependencies.state.locks.assertCurrent(input.lease, now().toISOString());
       let execution: GrowthCampaignPauseExecutionResult;
       try {
         execution = await dependencies.pauseCampaign({

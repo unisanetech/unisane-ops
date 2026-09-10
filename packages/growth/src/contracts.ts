@@ -53,3 +53,11 @@ export type {
   MarketingAdsAssetProviderUploadSource,
 } from './marketing/ads/assets.js';
 export type { MarketingMetaConnectionStatus } from './marketing/connections/meta.js';
+export * from './capabilities/contracts.js';
+export * from './reports/contracts.js';
+export * from './reports/history.js';
+export * from './measurement/meta-diagnostics/contracts.js';
+
+export * from './marketing/goals/contracts.js';
+
+export * from './marketing/ads/asset-provider.js';

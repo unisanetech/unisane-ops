@@ -8,7 +8,10 @@ import type {
   MarketingReportProvider,
   MarketingStrategyObject,
 } from '../schema/report.js';
-import { readLatestMarketingConfirmedConversionArtifact } from './confirmed-conversions.js';
+import {
+  latestMarketingCanonicalOutcomeRecords,
+  readLatestMarketingConfirmedConversionArtifact,
+} from './confirmed-conversions.js';
 import { readLatestMarketingProviderReportArtifacts } from './provider-pulls.js';
 import {
   readLatestMarketingStrategyMapArtifact,
@@ -126,10 +129,8 @@ function confirmedRecordMatchesObject(
   object: MarketingStrategyObject,
 ): boolean {
   return (
-    hasString(object.conversionIds, record.conversionId) ||
-    hasString(objectCampaignIds(object), record.campaignId) ||
-    hasString(object.campaignNames, record.campaignName) ||
-    samePage(object.landingPageUrl, record.pageUrl)
+    hasString(object.conversionIds, record.outcomeId) ||
+    record.strategyObjectIds.some((objectId) => normalized(objectId) === normalized(object.id))
   );
 }
 
@@ -239,7 +240,10 @@ function joinStrategyObject(input: {
     }
   }
 
-  for (const record of input.confirmedArtifact?.records ?? []) {
+  for (const record of input.confirmedArtifact
+    ? latestMarketingCanonicalOutcomeRecords(input.confirmedArtifact)
+    : []) {
+    if (record.status === 'reversed') continue;
     if (!confirmedRecordMatchesObject(record, input.object)) continue;
     confirmedRecords += 1;
     addConfirmedConversionMetrics(confirmed, record);

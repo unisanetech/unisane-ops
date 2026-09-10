@@ -20,7 +20,7 @@ test('authored package has zero first-party imports and no executable integratio
     package: '@unisane/framework-ops',
     version: '0.1.0',
     runtimeDependencyCount: 0,
-    authoredModuleSpecifierCount: 23,
+    authoredModuleSpecifierCount: 24,
     firstPartyImports: [],
     executableBridgePresent: false,
     commandDiscoveryPresent: false,

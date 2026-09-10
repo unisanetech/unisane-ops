@@ -44,7 +44,8 @@ export function addConfirmedConversionMetrics(
   metrics: MarketingReportMetrics,
   record: MarketingConfirmedConversionRecord,
 ): void {
-  addMarketingMetric(metrics, 'conversions', 1);
+  if (record.status === 'reversed') return;
+  addMarketingMetric(metrics, 'conversions', record.count);
   addMarketingMetric(metrics, 'conversionValue', record.value);
   addMarketingMetric(metrics, 'revenue', record.revenue);
   addMarketingMetric(metrics, 'margin', record.margin);
@@ -63,13 +64,14 @@ export function summarizeProviderArtifactMetrics(
 export function summarizeConfirmedConversionMetrics(
   artifact: MarketingConfirmedConversionArtifact,
 ): MarketingReportMetrics {
-  const metrics: MarketingReportMetrics = {
-    conversions: artifact.records.length,
-  };
+  const latest = new Map<string, MarketingConfirmedConversionRecord>();
   for (const record of artifact.records) {
-    addMarketingMetric(metrics, 'conversionValue', record.value);
-    addMarketingMetric(metrics, 'revenue', record.revenue);
-    addMarketingMetric(metrics, 'margin', record.margin);
+    const current = latest.get(record.outcomeReference);
+    if (!current || record.revision > current.revision) latest.set(record.outcomeReference, record);
+  }
+  const metrics: MarketingReportMetrics = { conversions: 0 };
+  for (const record of latest.values()) {
+    addConfirmedConversionMetrics(metrics, record);
   }
   return metrics;
 }

@@ -1,6 +1,5 @@
 import type {
   MarketingConsoleConnection,
-  MarketingConsoleConnectionAction,
   MarketingConsoleStatus,
   MarketingConsoleTagManager,
 } from './contracts.js';
@@ -23,15 +22,6 @@ function timestamp(value: string | undefined): number {
   if (!value) return 0;
   const parsed = Date.parse(value);
   return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function commandAction(
-  id: string,
-  label: string,
-  description: string,
-  command: string,
-): MarketingConsoleConnectionAction {
-  return { id, label, description, command };
 }
 
 function statusForAccess(
@@ -118,47 +108,6 @@ export function buildMarketingConsoleTagManager(input: {
       : accessStatus !== 'ready' || inventoryStatus !== 'ready' || planStatus !== 'ready'
         ? 'warn'
         : 'ready';
-  const connectionId = input.connection?.connectionId;
-  const commandContext = [
-    '--cwd .',
-    `--app ${input.appId}`,
-    `--env ${input.environment}`,
-    ...(connectionId ? [`--connection ${connectionId}`] : []),
-  ].join(' ');
-  const actions = [
-    commandAction(
-      'gtm.refresh',
-      'Refresh Tag Manager',
-      'Read the selected Tag Manager workspace without changing it.',
-      `unisane-ops growth gtm pull ${commandContext}`,
-    ),
-    commandAction(
-      'gtm.review-changes',
-      'Review changes',
-      'Compare the project-owned measurement manifest with the current workspace and write a non-mutating plan.',
-      `unisane-ops growth gtm plan ${commandContext}`,
-    ),
-    ...(pendingChangeCount && pendingChangeCount > 0 && !prepared
-      ? [
-          commandAction(
-            'gtm.preview-apply',
-            'Preview workspace update',
-            'Compute the guarded workspace update without changing Tag Manager.',
-            `unisane-ops growth gtm apply ${commandContext} --dry-run`,
-          ),
-        ]
-      : []),
-    ...(prepared && !previewCurrent
-      ? [
-          commandAction(
-            'gtm.preview-workspace',
-            'Check workspace preview',
-            'Run the provider preview after the approved workspace update and record the result.',
-            `unisane-ops growth gtm preview ${commandContext}`,
-          ),
-        ]
-      : []),
-  ];
   const checks = [
     {
       id: 'tag-manager-access',
@@ -243,7 +192,7 @@ export function buildMarketingConsoleTagManager(input: {
     ...(input.preview ? { lastPreviewAt: input.preview.observedAt } : {}),
     ...(input.publish ? { lastPublishedAt: input.publish.observedAt } : {}),
     checks,
-    actions,
+    actions: [],
     technical,
   };
 }

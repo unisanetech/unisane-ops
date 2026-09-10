@@ -8,11 +8,11 @@
     "package": "@unisane/web-runtime",
     "owner": "ops/web-runtime",
     "packageDir": "packages/web-runtime",
-    "sourceFileCount": 61,
-    "symbolCount": 129,
-    "functionCount": 129,
-    "publicFunctionCount": 87,
-    "internalFunctionCount": 42,
+    "sourceFileCount": 65,
+    "symbolCount": 142,
+    "functionCount": 142,
+    "publicFunctionCount": 95,
+    "internalFunctionCount": 47,
     "serviceLayerFunctionCount": 0
   },
   "owner": "unisane-ops",
@@ -25,6 +25,32 @@
     "packages/web-runtime/package.json"
   ],
   "records": [
+    {
+      "name": "isFullIpAddress",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/contracts/tracking-observation.ts",
+      "exported": false,
+      "tags": [
+        "contracts"
+      ],
+      "signatureShort": "isFullIpAddress(value): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isRedactedReference",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/contracts/tracking-observation.ts",
+      "exported": false,
+      "tags": [
+        "contracts"
+      ],
+      "signatureShort": "isRedactedReference(value): boolean",
+      "layer": "tooling-layer"
+    },
     {
       "name": "defineWebConversionConfig",
       "kind": "function",
@@ -921,6 +947,143 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "canonicalize",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/adapter.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "canonicalize(value): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createBrowserTrackingObservationAdapter",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/adapter.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createBrowserTrackingObservationAdapter(config): TrackingObservationAdapter",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createConsentTrackingObservationAdapter",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/adapter.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createConsentTrackingObservationAdapter(config): TrackingObservationAdapter",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createInMemoryTrackingObservationSink",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/adapter.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createInMemoryTrackingObservationSink(config): InMemoryTrackingObservationSink",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createOutboxTrackingObservationAdapter",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/adapter.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createOutboxTrackingObservationAdapter(config): TrackingObservationAdapter",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createServerTrackingObservationAdapter",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/adapter.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createServerTrackingObservationAdapter(config): TrackingObservationAdapter",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createTrackingObservationAdapter",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/adapter.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "createTrackingObservationAdapter(config): TrackingObservationAdapter",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "defaultCommerceEvidence",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/adapter.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "defaultCommerceEvidence(): MarketingTrackingObservation['commerce']",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "digestTrackingObservationIdentity",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/adapter.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "digestTrackingObservationIdentity(value): Promise<string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createCommerceTrackingObservationFixture",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/testing.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCommerceTrackingObservationFixture(overrides): TrackingObservationRecordInput",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createLeadTrackingObservationFixture",
+      "kind": "function",
+      "package": "@unisane/web-runtime",
+      "owner": "ops/web-runtime",
+      "file": "packages/web-runtime/src/observations/testing.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createLeadTrackingObservationFixture(overrides): TrackingObservationRecordInput",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "buildAlternateLanguageUrls",
       "kind": "function",
       "package": "@unisane/web-runtime",
@@ -1619,5 +1782,5 @@
       "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:8a20f51f3ba8"
+  "generatedAt": "content-hash:1ec7d79fc87c"
 }

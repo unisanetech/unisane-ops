@@ -5,6 +5,7 @@ import path from 'node:path';
 import {
   buildGoogleConnectionReadiness,
   defineGoogleConnectionRecord,
+  googleTagManagerScopesForAccess,
   type GoogleConnectionRecord,
 } from '../connection.js';
 import { discoverGoogleConnectionResources } from '../connection-discovery.js';
@@ -56,6 +57,59 @@ describe('Google connection contract', () => {
     expect(parsed.grants).toHaveLength(1);
     expect(parsed.resources).toHaveLength(1);
     expect(JSON.stringify(parsed)).not.toMatch(/accessToken|refreshToken|clientSecret/);
+  });
+
+  it('uses least-privilege Tag Manager access profiles', () => {
+    expect(googleTagManagerScopesForAccess('read')).toEqual([
+      'https://www.googleapis.com/auth/tagmanager.readonly',
+    ]);
+    expect(googleTagManagerScopesForAccess('workspace')).toEqual([
+      'https://www.googleapis.com/auth/tagmanager.readonly',
+      'https://www.googleapis.com/auth/tagmanager.edit.containers',
+      'https://www.googleapis.com/auth/tagmanager.edit.containerversions',
+    ]);
+    expect(googleTagManagerScopesForAccess('publish')).toEqual([
+      'https://www.googleapis.com/auth/tagmanager.readonly',
+      'https://www.googleapis.com/auth/tagmanager.edit.containers',
+      'https://www.googleapis.com/auth/tagmanager.edit.containerversions',
+      'https://www.googleapis.com/auth/tagmanager.publish',
+    ]);
+  });
+
+  it('records an explicitly approved Tag Manager publish profile without a token', async () => {
+    const projectRoot = mkdtempSync(path.join(tmpdir(), 'google-gtm-connection-'));
+    const recordPath = '.unisane/ops/connections/google-gtm-writer.json';
+    await connectGoogle({
+      context: {
+        cwd: projectRoot,
+        argv: [
+          '--connection',
+          'google-gtm-writer',
+          '--secret-reference',
+          'google-gtm-writer-oauth',
+          '--service',
+          'tag-manager',
+          '--tag-manager-access',
+          'publish',
+          '--tag-manager-container',
+          '227348435',
+        ],
+        json: true,
+      },
+      projectId: 'product-site',
+      environmentId: 'production',
+      recordPath,
+      requiredServices: [],
+    });
+
+    const stored = readGoogleConnectionRecord({ projectRoot, recordPath });
+    expect(stored?.grants).toEqual([
+      expect.objectContaining({
+        service: 'tag-manager',
+        scopes: googleTagManagerScopesForAccess('publish'),
+      }),
+    ]);
+    expect(JSON.stringify(stored)).not.toMatch(/accessToken|refreshToken/);
   });
 
   it('rejects duplicate service grants and resource selections', () => {

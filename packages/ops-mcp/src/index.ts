@@ -9,6 +9,8 @@ export {
   growthCampaignPauseReviewToolInputSchema,
   growthCampaignPauseVerifyToolInputSchema,
   growthHealthReviewToolInputSchema,
+  growthCapabilityReviewToolInputSchema,
+  growthReportReadToolInputSchema,
   growthMeasurementAuditToolInputSchema,
   growthSeoImplementationPrepareToolInputSchema,
   growthSeoOpportunityToolInputSchema,

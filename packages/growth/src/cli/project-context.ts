@@ -59,13 +59,16 @@ export function loadGrowthConnectionsContext(
   });
 }
 
-export async function loadMarketingExecutionContext(): Promise<{
+export async function loadMarketingExecutionContext(environment?: string): Promise<{
   config: ReturnType<typeof deriveMarketingExecutionContext>;
   path: string;
 }> {
   const context = await loadGrowthProjectContext();
   return {
-    config: deriveMarketingExecutionContext(context),
+    config: {
+      ...deriveMarketingExecutionContext(context),
+      ...(environment ? { defaultEnvironment: selectGrowthEnvironment(context, environment) } : {}),
+    },
     path: context.configPath,
   };
 }

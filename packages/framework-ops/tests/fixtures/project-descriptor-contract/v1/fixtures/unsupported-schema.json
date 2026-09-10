@@ -11,8 +11,8 @@
       "version": "0.1.0"
     },
     "projectModelSchemaVersion": 3,
-    "moduleDescriptorSchemaVersion": 1,
+    "moduleDescriptorSchemaVersion": 2,
     "api": []
   },
-  "digest": "0000000000000000000000000000000000000000000000000000000000000000"
+  "digest": "b4e18d1fc12a75bd8a3ded554cec472d5d0780f0f3409c9ccd8d693b7c6685b7"
 }

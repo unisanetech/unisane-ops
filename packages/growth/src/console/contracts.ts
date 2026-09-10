@@ -1077,6 +1077,10 @@ export type MarketingConsoleTemporalQuery = {
 };
 
 export type MarketingConsoleState = {
+  reportReadAvailable?: boolean;
+  reportEvidenceAvailable?: boolean;
+  metaDiagnosticsAvailable?:boolean;
+  capabilityReview?: GrowthCapabilityReview;
   kind: 'unisane.growth.console-state';
   version: 1;
   generatedAt: string;
@@ -1135,3 +1139,4 @@ export type MarketingConsoleState = {
     researchStatus: MarketingResearchStatusSummary;
   };
 };
+import type { GrowthCapabilityReview } from '../capabilities/contracts.js';

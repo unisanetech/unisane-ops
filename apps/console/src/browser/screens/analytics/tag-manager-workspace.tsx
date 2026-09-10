@@ -1,6 +1,8 @@
-import { ActionCluster } from '@unisane/ui/action-cluster';
+import { GtmSetupControls } from './gtm-setup-controls.js';
+import { GtmReleaseControls } from './gtm-release-controls.js';
+import { GtmWorkspaceControls } from './gtm-workspace-controls.js';
+import { GtmDiagnosis } from './gtm-diagnosis.js';
 import { Badge } from '@unisane/ui/badge';
-import { Button } from '@unisane/ui/button';
 import { Card } from '@unisane/ui/card';
 import { Typography } from '@unisane/ui/typography';
 import type { ConsoleScreenProps } from '../../contracts.js';
@@ -13,10 +15,7 @@ import {
 } from '../../lib/format.js';
 import { ContentSection, MetricCard, MetricGrid } from '../../shared/content.js';
 
-export function TagManagerWorkspace({
-  state,
-  openOverlay,
-}: Pick<ConsoleScreenProps, 'state' | 'openOverlay'>) {
+export function TagManagerWorkspace({ state }: Pick<ConsoleScreenProps, 'state'>) {
   const workspace = state.tagManager;
   const technicalFields = Object.entries(workspace.technical).filter(
     (entry): entry is [string, string] => typeof entry[1] === 'string',
@@ -68,18 +67,6 @@ export function TagManagerWorkspace({
             />
           </MetricGrid>
         </div>
-        <ActionCluster align="start" className="mt-5">
-          {workspace.actions.map((action) => (
-            <Button
-              key={action.id}
-              variant={action.id === 'gtm.review-changes' ? 'filled' : 'tonal'}
-              size="sm"
-              onClick={() => openOverlay({ kind: 'command', action })}
-            >
-              {action.label}
-            </Button>
-          ))}
-        </ActionCluster>
         {workspace.lastPreviewAt || workspace.lastPublishedAt ? (
           <Typography variant="labelSmall" className="text-on-surface-variant mt-4">
             {workspace.lastPreviewAt
@@ -106,6 +93,10 @@ export function TagManagerWorkspace({
           </details>
         ) : null}
       </Card>
+      <GtmDiagnosis />
+      <GtmSetupControls />
+      <GtmWorkspaceControls />
+      <GtmReleaseControls />
     </ContentSection>
   );
 }

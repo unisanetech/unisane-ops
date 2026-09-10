@@ -75,7 +75,7 @@ test('writes a new project-scoped binding with exact target and tool bounds', ()
   assert.match(config, /"--actor","codex\.local"/);
   assert.match(
     config,
-    /enabled_tools = \["review_growth_health","research_seo_opportunities","prepare_seo_implementation","verify_seo_publication","audit_growth_measurement","plan_campaign_pause","review_campaign_pause","apply_approved_campaign_pause","verify_campaign_pause"\]/,
+    /enabled_tools = \["diagnose_gtm","generate_gtm_tracking_setup","manage_gtm_release","plan_gtm_workspace","review_gtm_workspace","apply_approved_gtm_workspace","recover_gtm_workspace","import_meta_diagnostics","review_meta_diagnostics","collect_growth_report","read_growth_report_history","read_growth_report","review_growth_capabilities","review_growth_health","research_seo_opportunities","prepare_seo_implementation","verify_seo_publication","audit_growth_measurement","plan_campaign_pause","review_campaign_pause","apply_approved_campaign_pause","verify_campaign_pause"\]/,
   );
 
   const removed = run([

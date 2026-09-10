@@ -84,13 +84,9 @@ export function registerMarketingCommands(program: Command): void {
   addSharedOptions(
     marketing
       .command('conversion-pull')
-      .description('Cache a read-only Unisane-confirmed conversion artifact'),
+      .description('Ingest a strict server-confirmed canonical outcome v2 artifact'),
   )
-    .requiredOption('--input <path>', 'Unisane-confirmed conversion JSON artifact')
-    .option('--source <source>', 'Report source: api, manual-export, or fixture')
-    .option('--start-date <date>', 'Report window start date, YYYY-MM-DD')
-    .option('--end-date <date>', 'Report window end date, YYYY-MM-DD')
-    .option('--time-zone <zone>', 'Report window time zone')
+    .requiredOption('--input <path>', 'Canonical outcome v2 JSON artifact')
     .action(async (options: MarketingCliOptions) => {
       await runMarketingCommand(options, marketingConversionPull);
     });

@@ -98,10 +98,7 @@ test('loader rejects aliases and alternate config filenames', async () => {
   );
   await assert.rejects(loadUnisaneOpsConfig(aliasedRoot));
 
-  const alternateRoot = fixture(
-    `export default ${projectLiteral()};\n`,
-    'unisane.ops.config.ts',
-  );
+  const alternateRoot = fixture(`export default ${projectLiteral()};\n`, 'unisane.ops.config.ts');
   await assert.rejects(loadUnisaneOpsConfig(alternateRoot), /UNISANE_OPS_CONFIG_NOT_FOUND/);
 });
 
@@ -110,4 +107,18 @@ test('loader rejects a standalone default combined with a named ops export', asy
     `export default ${projectLiteral()};\nexport const ops = ${opsLiteral()};\n`,
   );
   await assert.rejects(loadUnisaneOpsConfig(projectRoot), /UNISANE_OPS_CONFIG_EXPORT_AMBIGUOUS/);
+});
+
+test('ESM modules reject ambiguous exports and a named-only Ops config', async () => {
+  for (const source of [
+    `export default ${projectLiteral()}; export const ops = ${opsLiteral()};`,
+    `export const ops = ${opsLiteral()};`,
+  ]) {
+    const projectRoot = fixture(source);
+    writeFileSync(path.join(projectRoot, 'package.json'), '{"type":"module"}');
+    await assert.rejects(
+      loadUnisaneOpsConfig(projectRoot),
+      /UNISANE_OPS_(CONFIG_EXPORT_AMBIGUOUS|FRAMEWORK_DEFAULT_MISSING)/,
+    );
+  }
 });

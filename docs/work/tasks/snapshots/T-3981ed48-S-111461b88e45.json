@@ -1,0 +1,118 @@
+{
+  "snapshotId": "S-111461b88e45",
+  "taskId": "T-3981ed48",
+  "sessionId": "codex-growth-canonical-outcomes-20260901",
+  "actorId": "bhaskarbarma",
+  "baseRevision": "d799e47265faab9bbf961aef294a3296b34e591f",
+  "paths": [
+    {
+      "path": "docs/reference/generated/repository/standalone-repository-integrity.json",
+      "digest": "ba5b65677e89ab6b0661687a943fe2c3ef59367be3d7f808cccf129c705ecd06",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/reference/generated/symbols/packages/@unisane__growth.symbols.json",
+      "digest": "45d5bdbe67a20aa78d059cdbca7f5a293e01e446449b6aa88f2f1f6faf434ea2",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/standards/13-unisane-ops-product-architecture-baseline.md",
+      "digest": "0fc579d6fa6ae6355cee022b0c1cefe293384c3ec4039e68fbae2eb7b2f2c428",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/work/plans/unisane-ops-growth-meta-measurement-roadmap.md",
+      "digest": "a399ced99e671ddf3fc76c1e76bf04ce88a79a66a8a2172d518b20d1ec953a4c",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/actions/measurement-audit.test.ts",
+      "digest": "4a8aa91b69a79cf3287711e593024a44188347cbb114f043cddce2107e9e2526",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/actions/measurement-audit.ts",
+      "digest": "1dd35e32ac3abdc51456b59d666d6f0c028d1887b50bbb53973829dd779d3cf1",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/cli/commands/marketing/conversion-pull",
+      "digest": "42963a18af811631d86b10c78d814e2ed8aa0662f8aa823e508fc0a9f44222a3",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/cli/commands/marketing/register.ts",
+      "digest": "d677b669afa532360391e4a3df03a3ead602e48d03d24d33f45d63918b0b9ef2",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/ads/readiness.ts",
+      "digest": "13f34a751618e4902121007e1a9ca70ab4fcb95c6b2cf814d0d98fede5ad14a1",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/index.ts",
+      "digest": "2204c5fc21ac4afa30789905d602b3af9806be194126ba85df87af85bf1117d8",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/reports/confirmed-conversions.test.ts",
+      "digest": "e4f7fb805b764361d68c29064b371fc454ffc52aa694ecbac3110c70f91084bf",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/reports/confirmed-conversions.ts",
+      "digest": "8b6eabeacc04c931040c06b64b427891e4ebbc06ae10968189217de992825edc",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/reports/metrics.ts",
+      "digest": "62345dec5b7e33c19f56579e28ee50fafd66a6a53c7032d57f0e786620558d39",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/reports/status.ts",
+      "digest": "5463a35b528018055f305bf5c58d6717be6967db04a1d8ac0b8caa074a0a8eeb",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/reports/strategy-object-report.ts",
+      "digest": "af333b5aec2cecb6d0dc6f2056e8213517f6babd988dbeb244885359488add92",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/reports/unified-report.ts",
+      "digest": "f75580265ceaad6aa0c7eef8c6fdbfddb48aba1332f78ffec9f37aa56a42e4e9",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/marketing/schema/report.ts",
+      "digest": "31f6096d01316310c9d6f54e9c4c83907520e446c9c3a467070d052b53d19264",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/playbooks/measurement-audit.test.ts",
+      "digest": "25d5593447d3c0741f85f0cf6df0984cd9b18f04e875507e5e324074653e7bb5",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/playbooks/measurement-audit.ts",
+      "digest": "4a49e1fed9d9b4bc1946667b8e13412239ae4ce31f566c35ad0ae18452383076",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/workflows/measurement-audit-execution.test.ts",
+      "digest": "69b0a92b4ce7c63e41fc793d5ef19dbd585fca63c61f944f0de9f16c010d8434",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/growth/src/workflows/measurement-audit-execution.ts",
+      "digest": "c7123ba3d5b01d65e5bb153230ba6cf5f9e6ba695fc95b9ffb7c0aa6bc2227ea",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    }
+  ],
+  "digest": "111461b88e451b43cee2e1946e5568542252ef3c2a60b3e09ef2177cd426b93d",
+  "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs",
+  "createdAt": "2026-08-31T22:51:18.114Z",
+  "artifactPath": "docs/work/tasks/snapshots/T-3981ed48-S-111461b88e45.json"
+}

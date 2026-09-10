@@ -9,20 +9,33 @@
   "commands": [
     {
       "id": "growth.root",
-      "path": ["growth"],
+      "path": [
+        "growth"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
       },
       "maximumEffect": "spend-impact",
-      "writeTargets": ["project", "secret-store", "remote"],
+      "writeTargets": [
+        "project",
+        "secret-store",
+        "remote"
+      ],
       "artifactClasses": [],
-      "riskGuards": ["production", "security-sensitive"],
+      "riskGuards": [
+        "production",
+        "security-sensitive"
+      ],
       "json": true
     },
     {
       "id": "growth.health.review",
-      "path": ["growth", "health", "review"],
+      "path": [
+        "growth",
+        "health",
+        "review"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
@@ -35,20 +48,32 @@
     },
     {
       "id": "growth.campaign.pause.plan",
-      "path": ["growth", "campaign", "pause", "plan"],
+      "path": [
+        "growth",
+        "campaign",
+        "pause",
+        "plan"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project"],
+      "writeTargets": [
+        "project"
+      ],
       "artifactClasses": [],
       "riskGuards": [],
       "json": true
     },
     {
       "id": "growth.campaign.pause.show",
-      "path": ["growth", "campaign", "pause", "show"],
+      "path": [
+        "growth",
+        "campaign",
+        "pause",
+        "show"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
@@ -61,46 +86,77 @@
     },
     {
       "id": "growth.campaign.pause.approve",
-      "path": ["growth", "campaign", "pause", "approve"],
+      "path": [
+        "growth",
+        "campaign",
+        "pause",
+        "approve"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project"],
+      "writeTargets": [
+        "project"
+      ],
       "artifactClasses": [],
-      "riskGuards": ["security-sensitive"],
+      "riskGuards": [
+        "security-sensitive"
+      ],
       "json": true
     },
     {
       "id": "growth.campaign.pause.apply",
-      "path": ["growth", "campaign", "pause", "apply"],
+      "path": [
+        "growth",
+        "campaign",
+        "pause",
+        "apply"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
       },
       "maximumEffect": "spend-impact",
-      "writeTargets": ["project", "remote"],
+      "writeTargets": [
+        "project",
+        "remote"
+      ],
       "artifactClasses": [],
-      "riskGuards": ["production", "security-sensitive"],
+      "riskGuards": [
+        "production",
+        "security-sensitive"
+      ],
       "json": true
     },
     {
       "id": "growth.campaign.pause.verify",
-      "path": ["growth", "campaign", "pause", "verify"],
+      "path": [
+        "growth",
+        "campaign",
+        "pause",
+        "verify"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project"],
+      "writeTargets": [
+        "project"
+      ],
       "artifactClasses": [],
       "riskGuards": [],
       "json": true
     },
     {
       "id": "growth.marketing.audit",
-      "path": ["growth", "marketing", "audit"],
+      "path": [
+        "growth",
+        "marketing",
+        "audit"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
@@ -113,7 +169,11 @@
     },
     {
       "id": "growth.measurement.audit",
-      "path": ["growth", "measurement", "audit"],
+      "path": [
+        "growth",
+        "measurement",
+        "audit"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
@@ -126,7 +186,12 @@
     },
     {
       "id": "growth.seo.opportunities.review",
-      "path": ["growth", "seo", "opportunities", "review"],
+      "path": [
+        "growth",
+        "seo",
+        "opportunities",
+        "review"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
@@ -139,23 +204,433 @@
     },
     {
       "id": "growth.gtm",
-      "path": ["growth", "gtm"],
+      "path": [
+        "growth",
+        "gtm"
+      ],
       "handler": {
         "exportPath": "./handlers/growth",
         "exportName": "runGrowthCommand"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project", "secret-store", "remote"],
+      "writeTargets": [
+        "project",
+        "secret-store",
+        "remote"
+      ],
       "artifactClasses": [],
-      "riskGuards": ["production", "security-sensitive"],
+      "riskGuards": [
+        "production",
+        "security-sensitive"
+      ],
+      "json": true
+    },
+    {
+      "id": "growth.capabilities.review",
+      "path": [
+        "growth",
+        "capabilities",
+        "review"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.reports.read",
+      "path": [
+        "growth",
+        "reports",
+        "read"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "read-network",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.reports.collect",
+      "path": [
+        "growth",
+        "reports",
+        "collect"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.reports.history",
+      "path": [
+        "growth",
+        "reports",
+        "history"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.meta.diagnostics.import",
+      "path": [
+        "growth",
+        "diagnostics",
+        "import"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.meta.diagnostics.review",
+      "path": [
+        "growth",
+        "diagnostics",
+        "review"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.diagnose",
+      "path": [
+        "growth",
+        "gtm",
+        "diagnose"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.workspace.plan",
+      "path": [
+        "growth",
+        "gtm",
+        "workspace",
+        "plan"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.workspace.review",
+      "path": [
+        "growth",
+        "gtm",
+        "workspace",
+        "review"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.workspace.approve",
+      "path": [
+        "growth",
+        "gtm",
+        "workspace",
+        "approve"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [
+        "production",
+        "security-sensitive"
+      ],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.workspace.apply",
+      "path": [
+        "growth",
+        "gtm",
+        "workspace",
+        "apply"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project",
+        "remote"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [
+        "production",
+        "security-sensitive"
+      ],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.workspace.recover",
+      "path": [
+        "growth",
+        "gtm",
+        "workspace",
+        "recover"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.release.preview",
+      "path": [
+        "growth",
+        "gtm",
+        "release",
+        "preview"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.release.plan-version",
+      "path": [
+        "growth",
+        "gtm",
+        "release",
+        "plan-version"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.release.plan-publish",
+      "path": [
+        "growth",
+        "gtm",
+        "release",
+        "plan-publish"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.release.review",
+      "path": [
+        "growth",
+        "gtm",
+        "release",
+        "review"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "offline",
+      "writeTargets": [],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.release.approve",
+      "path": [
+        "growth",
+        "gtm",
+        "release",
+        "approve"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [
+        "production",
+        "security-sensitive"
+      ],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.release.apply",
+      "path": [
+        "growth",
+        "gtm",
+        "release",
+        "apply"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project",
+        "remote"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [
+        "production",
+        "security-sensitive"
+      ],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.release.recover",
+      "path": [
+        "growth",
+        "gtm",
+        "release",
+        "recover"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [],
+      "json": true
+    },
+    {
+      "id": "growth.gtm.generate-setup",
+      "path": [
+        "growth",
+        "gtm",
+        "generate-setup"
+      ],
+      "handler": {
+        "exportPath": "./handlers/growth",
+        "exportName": "runGrowthCommand"
+      },
+      "maximumEffect": "write",
+      "writeTargets": [
+        "project"
+      ],
+      "artifactClasses": [],
+      "riskGuards": [],
       "json": true
     }
   ],
-  "configNamespaces": ["growth"],
-  "addItemTypes": ["growth"],
-  "capabilities": ["growth"],
+  "configNamespaces": [
+    "growth"
+  ],
+  "addItemTypes": [
+    "growth"
+  ],
+  "capabilities": [
+    "growth"
+  ],
   "providerBindings": [],
-  "reservedRootNames": ["growth"],
+  "reservedRootNames": [
+    "growth"
+  ],
   "reservedRootContributors": [
     {
       "root": "growth",
@@ -164,6 +639,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "884432d2f8ac26eab32c3f7283925d5c426151816566b68adc8932a9a82790e9"
+    "manifestHash": "44b83ce02ea787ea4542c7819fb70a3ec03509a298b600aeffb39c17603e1177"
   }
 }

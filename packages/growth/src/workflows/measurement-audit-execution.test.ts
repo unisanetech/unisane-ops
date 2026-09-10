@@ -55,6 +55,18 @@ function trackingAudit(status: 'ready' | 'attention' | 'blocked'): MarketingTrac
       expectedConversionCount: 1,
       observedConversionCount: 1,
       observationCount: 1,
+      expectedDualDeliveryEventCount: 0,
+      observedLogicalEventCount: 0,
+      validDeduplicationPairCount: 0,
+      deduplicationFailureCount: 0,
+      browserDuplicateCount: 0,
+      serverDuplicateCount: 0,
+      stableServerRetryCount: 0,
+      eventIdCollisionCount: 0,
+      missingChannelCount: 0,
+      pendingFreshnessCount: 0,
+      staleEvidenceCount: 0,
+      clockSkewCount: 0,
     },
     emitters: [],
     findings: [],
@@ -96,26 +108,54 @@ function dependencies(
       message: confirmed ? 'Fresh.' : 'Missing.',
       ...(confirmed
         ? {
+            capturedAt: observedAt,
             pulledAt: observedAt,
             recordCount: 8,
-            window: { startDate: '2026-07-01', endDate: '2026-07-31' },
+            activeRecordCount: 8,
+            revision: 1,
+            sourceId: 'orders',
+            window: {
+              start: '2026-07-01T00:00:00.000Z',
+              end: '2026-07-31T23:59:59.000Z',
+              timeZone: 'Asia/Dhaka',
+            },
           }
         : {}),
     }),
     readConfirmedArtifact: () =>
       confirmed
         ? {
-            version: 1,
-            platformId: 'true-resume',
-            appId: 'web',
-            source: 'api',
-            pulledAt: observedAt,
-            window: { startDate: '2026-07-01', endDate: '2026-07-31' },
+            kind: 'unisane.growth.canonical-outcomes' as const,
+            version: 2 as const,
+            projectId: 'true-resume',
+            environmentId: 'production',
+            source: {
+              id: 'orders',
+              system: 'Order service',
+              authority: 'business-system' as const,
+            },
+            ingestion: { transport: 'api' as const },
+            revision: 1,
+            capturedAt: observedAt,
+            window: {
+              start: '2026-07-01T00:00:00.000Z',
+              end: '2026-07-31T23:59:59.000Z',
+              timeZone: 'Asia/Dhaka',
+            },
             partial: false,
             records: Array.from({ length: 8 }, (_, index) => ({
-              id: `conversion-${index + 1}`,
-              conversionId: 'purchase',
+              outcomeReference: `sha256:${(index + 1).toString(16).padStart(64, '0')}`,
+              correlationReference: `sha256:${(index + 1).toString(16).padStart(64, '0')}`,
+              outcomeId: 'purchase',
               sourceEventId: 'purchase-confirmed',
+              strategyObjectIds: [],
+              revision: 1,
+              status: 'confirmed' as const,
+              finality: 'server-confirmed' as const,
+              occurredAt: `2026-07-${(index + 1).toString().padStart(2, '0')}T12:00:00.000Z`,
+              count: 1,
+              value: 100,
+              currency: 'BDT',
             })),
           }
         : undefined,
@@ -148,7 +188,13 @@ describe('measurement audit execution adapter', () => {
     const output = await createGrowthMeasurementAuditExecutor(dependencies('ready'))(options);
 
     expect(output).toMatchObject({ status: 'ready', safeToScale: true });
-    expect(output.canonicalOutcomes[0]).toMatchObject({ count: 8 });
+    expect(output.canonicalOutcomes[0]).toMatchObject({
+      count: 8,
+      value: 800,
+      currency: 'BDT',
+      status: 'confirmed',
+      finality: 'server-confirmed',
+    });
     expect(output.attributionComparisons).toEqual([
       expect.objectContaining({ providerId: 'google-ads', attributedCount: 10 }),
       expect.objectContaining({ providerId: 'meta-ads', attributedCount: 6 }),

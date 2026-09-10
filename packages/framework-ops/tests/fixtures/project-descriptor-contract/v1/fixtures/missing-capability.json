@@ -11,7 +11,7 @@
       "version": "0.1.0"
     },
     "projectModelSchemaVersion": 3,
-    "moduleDescriptorSchemaVersion": 1,
+    "moduleDescriptorSchemaVersion": 2,
     "api": [
       {
         "operation": "simple.create",
@@ -25,5 +25,5 @@
       }
     ]
   },
-  "digest": "d39a1af03169e25b93fff9fcc9578727502cad3b2dd47aa8ff6684936c946b52"
+  "digest": "ee772da4d3e276ef158b436b752793b823298b2e3fb629615b092fdb390f0523"
 }

@@ -1,3 +1,4 @@
+import type { GrowthCapabilityReviewer } from '@unisane/growth/console';
 import { access, copyFile, mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -11,6 +12,11 @@ import type {
 import type { MarketingConsoleCampaignPauseReview } from '@unisane/growth/console';
 
 export type BuildMarketingConsoleAppOptions = {
+  environmentId?: string;
+  reviewCapabilities?: GrowthCapabilityReviewer;
+  reportReadAvailable?: boolean;
+  reportEvidenceAvailable?: boolean;
+  metaDiagnosticsAvailable?:boolean;
   cwd?: string;
   configPath?: string;
   outputDirectory?: string;
@@ -29,9 +35,14 @@ export async function buildMarketingConsoleApp(
   const cwd = path.resolve(options.cwd ?? process.cwd());
   const state = await buildMarketingConsoleState({
     cwd,
+    environmentId: options.environmentId,
     maxAgeDays: options.maxAgeDays,
     googleAuth: options.googleAuth,
     metaAuth: options.metaAuth,
+    reviewCapabilities: options.reviewCapabilities,
+    metaDiagnosticsAvailable:options.metaDiagnosticsAvailable??false,
+    reportEvidenceAvailable: options.reportEvidenceAvailable ?? false,
+    reportReadAvailable: options.reportReadAvailable,
     campaignPauseApprovalAvailable: options.campaignPauseApprovalAvailable,
     campaignPauseReviews: options.campaignPauseReviews,
     now: options.now,

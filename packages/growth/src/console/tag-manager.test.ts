@@ -72,16 +72,7 @@ describe('Growth console Tag Manager projection', () => {
               'Changes have not been reviewed since the latest workspace sync or manifest edit.',
           }),
         ]),
-        actions: expect.arrayContaining([
-          expect.objectContaining({
-            id: 'gtm.refresh',
-            command:
-              'unisane-ops growth gtm pull --cwd . --app true-resume --env production --connection google-primary',
-          }),
-          expect.objectContaining({
-            id: 'gtm.review-changes',
-          }),
-        ]),
+        actions: [],
       }),
     );
     expect(result).not.toHaveProperty('pendingChangeCount');
@@ -113,9 +104,6 @@ describe('Growth console Tag Manager projection', () => {
         pendingChangeCount: 0,
       }),
     );
-    expect(result.actions.map((action) => action.id)).toEqual([
-      'gtm.refresh',
-      'gtm.review-changes',
-    ]);
+    expect(result.actions).toEqual([]);
   });
 });

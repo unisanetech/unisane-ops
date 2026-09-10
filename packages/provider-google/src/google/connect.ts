@@ -12,9 +12,12 @@ import {
 import {
   defineGoogleConnectionRecord,
   googleConnectionServiceSchema,
+  googleTagManagerAccessSchema,
+  googleTagManagerScopesForAccess,
   type GoogleConnectionGrant,
   type GoogleConnectionRecord,
   type GoogleConnectionService,
+  type GoogleTagManagerAccess,
   type GoogleResourceSelection,
 } from './connection.js';
 import {
@@ -28,7 +31,7 @@ const SCOPES_BY_SERVICE: Record<GoogleConnectionService, readonly string[]> = {
   'project-administration': ['https://www.googleapis.com/auth/cloud-platform'],
   'search-console': ['https://www.googleapis.com/auth/webmasters.readonly'],
   analytics: ['https://www.googleapis.com/auth/analytics.readonly'],
-  'tag-manager': ['https://www.googleapis.com/auth/tagmanager.readonly'],
+  'tag-manager': [],
   ads: ['https://www.googleapis.com/auth/adwords'],
 };
 
@@ -49,6 +52,8 @@ interface ParsedGoogleConnectArguments {
   externalSecretReference?: string;
   port?: string;
   timeoutMs?: string;
+  tagManagerAccess: GoogleTagManagerAccess;
+  tagManagerAccessExplicit: boolean;
   resources: GoogleResourceSelection[];
 }
 
@@ -104,6 +109,7 @@ function parseArguments(argv: readonly string[], observedAt: string): ParsedGoog
     '--secret-reference',
     '--port',
     '--timeout-ms',
+    '--tag-manager-access',
     '--environment',
     '--service',
     '--search-console-site',
@@ -123,6 +129,7 @@ function parseArguments(argv: readonly string[], observedAt: string): ParsedGoog
     index += 1;
   }
   const connectionId = option(argv, '--connection') ?? 'google-primary';
+  const tagManagerAccessOption = option(argv, '--tag-manager-access');
   return {
     connectionId,
     displayName: option(argv, '--display-name') ?? 'Google',
@@ -133,8 +140,19 @@ function parseArguments(argv: readonly string[], observedAt: string): ParsedGoog
     externalSecretReference: option(argv, '--secret-reference'),
     port: option(argv, '--port'),
     timeoutMs: option(argv, '--timeout-ms'),
+    tagManagerAccess: googleTagManagerAccessSchema.parse(tagManagerAccessOption ?? 'read'),
+    tagManagerAccessExplicit: Boolean(tagManagerAccessOption),
     resources: resourceSelections(argv, observedAt),
   };
+}
+
+function scopesForService(
+  service: GoogleConnectionService,
+  tagManagerAccess: GoogleTagManagerAccess,
+): readonly string[] {
+  return service === 'tag-manager'
+    ? googleTagManagerScopesForAccess(tagManagerAccess)
+    : SCOPES_BY_SERVICE[service];
 }
 
 function services(input: readonly string[]): GoogleConnectionService[] {
@@ -145,10 +163,11 @@ function grants(
   selectedServices: readonly GoogleConnectionService[],
   state: GoogleConnectionGrant['state'],
   observedAt: string,
+  tagManagerAccess: GoogleTagManagerAccess,
 ): GoogleConnectionGrant[] {
   return selectedServices.map((service) => ({
     service,
-    scopes: [...SCOPES_BY_SERVICE[service]],
+    scopes: [...scopesForService(service, tagManagerAccess)],
     state,
     observedAt,
   }));
@@ -170,7 +189,12 @@ function recordFromExternalReference(args: {
       environmentId: args.request.environmentId,
       secretReference: args.parsed.externalSecretReference!,
       credentialState: 'missing',
-      grants: grants(args.selectedServices, 'missing', args.observedAt),
+      grants: grants(
+        args.selectedServices,
+        'missing',
+        args.observedAt,
+        args.parsed.tagManagerAccess,
+      ),
       resources: args.parsed.resources,
       createdAt: args.observedAt,
       updatedAt: args.observedAt,
@@ -191,7 +215,11 @@ async function recordFromOAuth(args: {
     );
   }
   const scopes = [
-    ...new Set(args.selectedServices.flatMap((service) => SCOPES_BY_SERVICE[service])),
+    ...new Set(
+      args.selectedServices.flatMap((service) =>
+        scopesForService(service, args.parsed.tagManagerAccess),
+      ),
+    ),
   ];
   const auth = await waitForAuthorizationCode({
     clientId: args.parsed.clientId,
@@ -267,7 +295,12 @@ async function recordFromOAuth(args: {
           : {}),
       },
       credentialState: 'active',
-      grants: grants(args.selectedServices, 'granted', args.observedAt).map((grant) =>
+      grants: grants(
+        args.selectedServices,
+        'granted',
+        args.observedAt,
+        args.parsed.tagManagerAccess,
+      ).map((grant) =>
         inaccessibleServices.has(grant.service)
           ? {
               ...grant,
@@ -298,6 +331,11 @@ export async function connectGoogle(
         : [],
     ),
   ]);
+  if (parsed.tagManagerAccessExplicit && !selectedServices.includes('tag-manager')) {
+    throw new Error(
+      '[GOOGLE_TAG_MANAGER_ACCESS_WITHOUT_SERVICE] --tag-manager-access requires --service tag-manager or a project that requires Tag Manager.',
+    );
+  }
   const outcome = parsed.externalSecretReference
     ? recordFromExternalReference({
         request,

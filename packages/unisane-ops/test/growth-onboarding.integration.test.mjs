@@ -1,20 +1,30 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync, symlinkSync, rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import process from 'node:process';
-import { test } from 'node:test';
+import { after, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const workspaceRoot = resolve(packageRoot, '../../..');
+const workspaceRoot = resolve(packageRoot, '../..');
 const fixtureRoot = resolve(workspaceRoot, '.tmp');
 const cli = resolve(packageRoot, 'dist/cli.js');
+const fixtures = [];
+after(() => {
+  for (const root of fixtures) rmSync(root, { recursive: true, force: true });
+});
 
 function createProject(name, packageDocument = { name }) {
   mkdirSync(fixtureRoot, { recursive: true });
   const root = mkdtempSync(resolve(fixtureRoot, `${name}-`));
-  writeFileSync(resolve(root, 'package.json'), `${JSON.stringify(packageDocument, null, 2)}\n`);
+  fixtures.push(root);
+  mkdirSync(resolve(root, 'node_modules'));
+  symlinkSync(packageRoot, resolve(root, 'node_modules/unisane-ops'), 'dir');
+  writeFileSync(
+    resolve(root, 'package.json'),
+    `${JSON.stringify({ type: 'module', ...packageDocument }, null, 2)}\n`,
+  );
   return root;
 }
 
@@ -33,16 +43,7 @@ function run(args, cwd) {
 test('plain projects use one init, connect, and aggregate check lifecycle', () => {
   const root = createProject('plain-growth', { name: 'plain-growth' });
   const initialized = run(
-    [
-      'init',
-      '--growth',
-      '--mode',
-      'audit-only',
-      '--environment',
-      'development',
-      '--yes',
-      '--json',
-    ],
+    ['init', '--growth', '--mode', 'audit-only', '--environment', 'development', '--yes', '--json'],
     root,
   );
   assert.equal(initialized.status, 0, initialized.stderr || initialized.stdout);

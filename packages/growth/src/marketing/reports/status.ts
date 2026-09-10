@@ -131,10 +131,13 @@ function selectNextWorkflowStep(report: Omit<MarketingStatusReport, 'nextWorkflo
     return `Refresh ${reportFamily} pulls, then rerun \`unisane-ops growth ${command}\`.`;
   }
   if (report.confirmedConversions.status === 'error') {
-    return 'Fix invalid Unisane-confirmed conversion artifact, then rerun status.';
+    return 'Fix the invalid canonical outcome v2 artifact, then rerun status.';
   }
   if (['missing', 'stale', 'partial'].includes(report.confirmedConversions.status)) {
-    return 'Refresh Unisane-confirmed conversion truth with `unisane-ops growth marketing conversion-pull`.';
+    return 'Refresh server-confirmed canonical outcome truth with `unisane-ops growth marketing conversion-pull`.';
+  }
+  if (['conflicting', 'reversed', 'empty'].includes(report.confirmedConversions.status)) {
+    return 'Repair or replace the canonical outcome ledger before using it for optimization.';
   }
   if (report.mode === 'marketing') {
     if (report.strategyMap.status === 'error') {

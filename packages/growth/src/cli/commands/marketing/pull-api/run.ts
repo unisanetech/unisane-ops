@@ -13,7 +13,6 @@ import {
 import type { MarketingCliOptions } from '../options.js';
 import { printMarketingProviderPullResult } from '../output/doctor.js';
 import { resolveGrowthGoogleConnectionCredentials } from '../../../connections/google.js';
-import { resolveGrowthMetaConnectionToken } from '../../../connections/meta.js';
 import {
   loadGrowthProjectContext,
   loadMarketingExecutionContext,
@@ -96,20 +95,19 @@ export async function pullMarketingProviderApiReport(options: MarketingCliOption
       : undefined;
   const meta =
     options.provider === 'metaAds'
-      ? {
-          resource: resolveGrowthResource({
-            context: await loadGrowthProjectContext(),
-            environment: options.environment,
-            provider: 'meta',
-            service: 'ads',
-            resourceType: 'ad-account',
-          }),
-          accessToken: await resolveGrowthMetaConnectionToken({
-            connection: options.connection,
-            environment: options.environment,
-          }),
-        }
+      ? resolveGrowthResource({
+          context: await loadGrowthProjectContext(),
+          environment: options.environment,
+          provider: 'meta',
+          service: 'ads-insights',
+          resourceType: 'ad-account',
+        })
       : undefined;
+  if (meta && options.accountId && options.accountId !== meta.resourceId) {
+    throw new Error(
+      `[GROWTH_RESOURCE_OVERRIDE_REJECTED] '${options.accountId}' is not the selected Meta Ads account.`,
+    );
+  }
   return writeMarketingProviderApiReportPull(loaded.config, {
     cwd: options.cwd,
     provider: options.provider,
@@ -124,18 +122,15 @@ export async function pullMarketingProviderApiReport(options: MarketingCliOption
               ? pullMetaAdsReport
               : undefined,
     env,
-    accountId: google?.accountId ?? meta?.resource.resourceId ?? options.accountId,
+    accountId: google?.accountId ?? meta?.resourceId ?? options.accountId,
+    connection: options.connection,
+    environment: options.environment,
     credentials: google
       ? {
           accessToken: google.accessToken,
           ...(google.developerToken ? { developerToken: google.developerToken } : {}),
         }
-      : meta
-        ? {
-            accountId: meta.resource.resourceId,
-            accessToken: meta.accessToken,
-          }
-        : undefined,
+      : undefined,
     startDate: options.startDate,
     endDate: options.endDate,
     timeZone: options.timeZone,

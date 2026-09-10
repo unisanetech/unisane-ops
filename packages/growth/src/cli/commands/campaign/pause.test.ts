@@ -1,3 +1,11 @@
+import {
+  InMemoryApprovalStore,
+  InMemoryArtifactStore,
+  InMemoryLockStore,
+  InMemoryOpsMutationRunStore,
+} from '@unisane/ops-engine/testing';
+import { createGrowthCampaignPauseWorkflow } from '../../../workflows/campaign-pause-execution.js';
+import { campaignPauseHostRequestSchema } from '../../../workflows/campaign-pause-command.js';
 import { mkdtemp, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -36,6 +44,27 @@ describe('campaign pause CLI', () => {
     temporaryDirectories.push(cwd);
     const operations: string[] = [];
     const providerInputs: Record<string, unknown>[] = [];
+    const provider = {
+      pauseCampaign: async (input: { providerAccountId: string; campaignId: string }) => {
+        providerInputs.push(input);
+        return { outcome: 'succeeded' as const, providerOperationId: 'operation-9' };
+      },
+      readCampaignStatus: async () => 'paused' as const,
+    };
+    const workflow = createGrowthCampaignPauseWorkflow({
+      state: {
+        artifacts: new InMemoryArtifactStore(),
+        approvals: new InMemoryApprovalStore(),
+        locks: new InMemoryLockStore(),
+      },
+      runStore: new InMemoryOpsMutationRunStore(),
+      providerAdapters: { googleAds: provider, metaAds: provider },
+      actor: 'developer',
+      production: false,
+      multiProcess: false,
+      mutationPolicy: 'approval-required',
+      lockOwner: 'fixture.host',
+    });
     const runtime: PackCommandRuntime = {
       async resolveBinding(_binding, requestInput) {
         const request = requestInput as { operation: string; input: Record<string, unknown> };
@@ -59,11 +88,26 @@ describe('campaign pause CLI', () => {
             },
           };
         }
-        if (request.operation === 'google.marketing.pause-campaign') {
-          providerInputs.push(request.input);
-          return { outcome: 'succeeded', providerOperationId: 'operation-9' };
+        if (request.operation === 'growth.campaign.pause') {
+          const { command, projectId, environmentId, principal } =
+            campaignPauseHostRequestSchema.parse(request.input);
+          if (command.operation === 'plan')
+            return workflow.plan({
+              ...command,
+              context: {
+                requestId: 'test.plan',
+                scopeId: `scope.${projectId}`,
+                projectId,
+                environmentId,
+                principal,
+                requestedAt: new Date().toISOString(),
+              },
+            });
+          if (command.operation === 'show') return workflow.show(command.runId);
+          if (command.operation === 'approve') return workflow.approve(command);
+          if (command.operation === 'apply') return workflow.apply({ ...command, principal });
+          if (command.operation === 'verify') return workflow.verify({ ...command, principal });
         }
-        if (request.operation === 'google.marketing.read-campaign-status') return 'paused';
         throw new Error(`Unexpected operation: ${request.operation}`);
       },
     };
@@ -140,20 +184,22 @@ describe('campaign pause CLI', () => {
     });
 
     expect(operations.filter((operation) => operation.includes('execute-live'))).toEqual([]);
-    expect(operations).toContain('google.marketing.pause-campaign');
-    expect(operations).toContain('google.marketing.read-campaign-status');
+    expect(operations).toContain('growth.campaign.pause');
+    expect(operations).not.toContain('google.marketing.pause-campaign');
     expect(providerInputs[0]).toMatchObject({
       providerAccountId: 'account-7',
       campaignId: 'campaign-42',
     });
   });
 
-  it('fails closed before creating local production mutation state', async () => {
+  it('propagates host denial without constructing a local execution workflow', async () => {
     const cwd = await mkdtemp(path.join(os.tmpdir(), 'growth-campaign-pause-production-'));
     temporaryDirectories.push(cwd);
     const runtime: PackCommandRuntime = {
       async resolveBinding(_binding, requestInput) {
         const request = requestInput as { operation: string };
+        if (request.operation === 'growth.campaign.pause')
+          throw new Error('[CAMPAIGN_HOST_DENIED] Host rejected the request.');
         if (request.operation !== 'growth.project.context') throw new Error('Unexpected operation');
         return {
           projectRoot: cwd,
@@ -187,7 +233,7 @@ describe('campaign pause CLI', () => {
 
     expect(jsonOutput(log)).toMatchObject({
       ok: false,
-      error: expect.stringContaining('OPS_RUN_STORE_DURABILITY_REQUIRED'),
+      error: expect.stringContaining('CAMPAIGN_HOST_DENIED'),
     });
   });
 });

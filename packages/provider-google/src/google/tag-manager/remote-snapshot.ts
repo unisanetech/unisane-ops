@@ -28,6 +28,23 @@ type TriggerBinding = {
   slug: string;
 };
 
+function customTemplateReference(
+  tagType: string,
+  templates: readonly GoogleTagManagerJsonObject[],
+): GoogleTagManagerJsonObject | undefined {
+  const templateId = tagType.match(/_(\d+)$/)?.[1];
+  if (!templateId) return undefined;
+  const template = templates.find((entry) => stringField(entry, 'templateId') === templateId);
+  if (!template) return undefined;
+  const gallery = isRecord(template.galleryReference) ? template.galleryReference : undefined;
+  const host = stringField(gallery ?? {}, 'host');
+  const owner = stringField(gallery ?? {}, 'owner');
+  const repository = stringField(gallery ?? {}, 'repository');
+  const version = stringField(gallery ?? {}, 'version');
+  if (!host || !owner || !repository || !version) return undefined;
+  return { tagType, templateId, host, owner, repository, version };
+}
+
 const BUILT_IN_VARIABLE_TYPE_TO_SLUG: Record<string, string> = {
   pageUrl: 'page_url',
   pagePath: 'page_path',
@@ -143,11 +160,28 @@ function normalizeVariableParameters(args: {
   type: string;
   parameters: readonly unknown[];
 }): readonly { key: string; value: unknown }[] {
-  return normalizeParameters(args.parameters)
-    .map((parameter) => ({
-      ...parameter,
-      key: args.type === 'data_layer' && parameter.key === 'name' ? 'dataLayerName' : parameter.key,
-    }))
+  return args.parameters
+    .flatMap((parameter) => {
+      if (!isRecord(parameter)) return [];
+      const key = stringField(parameter, 'key');
+      if (!key) return [];
+      const parameterType = stringField(parameter, 'type');
+      const rawValue = parameter.value;
+      const value =
+        parameterType === 'boolean' && (rawValue === 'true' || rawValue === 'false')
+          ? rawValue === 'true'
+          : parameterType === 'integer' &&
+              typeof rawValue === 'string' &&
+              /^-?\d+$/.test(rawValue)
+            ? Number.parseInt(rawValue, 10)
+            : rawValue;
+      return [
+        {
+          key: args.type === 'data_layer' && key === 'name' ? 'dataLayerName' : key,
+          value,
+        },
+      ];
+    })
     .sort(byParameterKey);
 }
 
@@ -563,6 +597,7 @@ function remoteTagResource(args: {
   triggerBindings: readonly TriggerBinding[];
   variableSlugByName: Map<string, string>;
   desiredTagsByName: Map<string, GoogleTagManagerDesiredResource>;
+  templates: readonly GoogleTagManagerJsonObject[];
 }): GoogleTagManagerRemoteResource {
   const name = stringField(args.tag, 'name') ?? '<unnamed-tag>';
   const desiredResource = args.desiredTagsByName.get(name);
@@ -576,8 +611,11 @@ function remoteTagResource(args: {
   const slug = inferredSlug ?? remoteId(args.tag, 'tagId');
   const consent = normalizeConsentSettings(args.tag.consentSettings);
   const desiredParameters = arrayField(desired ?? {}, 'parameters');
+  const customTemplate = desiredType === 'custom_template';
   const parameters =
-    desiredType === 'consent_default' || desiredType === 'meta_pixel'
+    customTemplate
+      ? []
+      : desiredType === 'consent_default' || desiredType === 'meta_pixel'
       ? normalizeParameters(desiredParameters)
       : normalizeTagParameters({
           type,
@@ -601,6 +639,17 @@ function remoteTagResource(args: {
         .filter((item): item is string => typeof item === 'string')
         .map((triggerId) => triggerSlugForId(triggerId, args.triggerBindings)),
       parameters,
+      ...(customTemplate
+        ? {
+            rawParameters: arrayField(args.tag, 'parameter'),
+            template:
+              customTemplateReference(rawType, args.templates) ??
+              (isRecord(desired?.template) ? desired.template : undefined),
+          }
+        : {}),
+      ...(stringField(args.tag, 'tagFiringOption')
+        ? { tagFiringOption: stringField(args.tag, 'tagFiringOption') }
+        : {}),
       ...(desiredType === 'consent_default' && typeof htmlParameter === 'string'
         ? { implementationHtml: htmlParameter }
         : {}),
@@ -632,11 +681,18 @@ export function normalizeGoogleTagManagerApiSnapshot(args: {
     ),
   ]);
   const folderBindings = buildFolderBindings(args.snapshot.resources.folders, desiredFoldersByName);
-  const triggerBindings = buildTriggerBindings({
-    triggers: args.snapshot.resources.triggers,
-    namespace: args.manifest.namespace,
-    desiredTriggersByName,
-  });
+  const triggerBindings = [
+    ...buildTriggerBindings({
+      triggers: args.snapshot.resources.triggers,
+      namespace: args.manifest.namespace,
+      desiredTriggersByName,
+    }),
+    ...(args.manifest.builtInTriggers ?? []).map((trigger) => ({
+      triggerId: trigger.triggerId,
+      slug: trigger.slug,
+    })),
+  ];
+  const templates = args.snapshot.extended?.templates ?? [];
 
   return {
     containerPath: args.snapshot.containerPath,
@@ -680,6 +736,7 @@ export function normalizeGoogleTagManagerApiSnapshot(args: {
           triggerBindings,
           variableSlugByName,
           desiredTagsByName,
+          templates,
         }),
       ),
     ],
@@ -760,7 +817,9 @@ export async function readGoogleTagManagerApiSnapshot(args: {
       templates: await args.client.listTemplates(workspacePath),
       transformations: await args.client.listTransformations(workspacePath),
       zones: await args.client.listZones(workspacePath),
-      userPermissions: await args.client.listUserPermissions(accountId),
+      ...(args.options.includeUserPermissions
+        ? { userPermissions: await args.client.listUserPermissions(accountId) }
+        : {}),
     },
   };
 }

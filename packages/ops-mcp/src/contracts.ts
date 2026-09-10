@@ -1,3 +1,14 @@
+import type { MetaDiagnosticImporter, MetaDiagnosticReviewer } from '@unisane/growth/contracts';
+import {
+  growthReportHistoryInputSchema,
+  growthReportHistoryInputJsonSchema,
+  type GrowthReportHistoryReader,
+} from '@unisane/growth/contracts';
+import {
+  growthReportReadInputSchema,
+  growthReportReadInputJsonSchema,
+  type GrowthReportReader,
+} from '@unisane/growth/contracts';
 import path from 'node:path';
 import {
   growthConfigSchema,
@@ -71,6 +82,7 @@ const projectTarget = z
     environmentId: stableId.describe('Exact environment id shown by the active Unisane context.'),
   })
   .strict();
+export const growthCapabilityReviewToolInputSchema = projectTarget;
 const resumableProjectTarget = projectTarget
   .extend({
     resumeFrom: workflowHandoff
@@ -201,6 +213,20 @@ export type OpsMcpGrowthExecutors = {
 };
 
 export type OpsMcpGrowthWorkflows = {
+  gtmRelease?: (input: Exclude<import('@unisane/growth/gtm').GtmReleaseCommand, { operation: 'approve' }>) => Promise<unknown>;
+  reviewCapabilities?: () => Promise<unknown>;
+  gtmWorkspace?: (input: {
+    operation: 'plan' | 'review' | 'apply' | 'recover';
+    connectionId?: string;
+    workspaceId?: string;
+    planHash?: string;
+    runId?: string;
+  }) => Promise<unknown>;
+  importMetaDiagnostics?: MetaDiagnosticImporter;
+  reviewMetaDiagnostics?: MetaDiagnosticReviewer;
+  readReport?: GrowthReportReader;
+  collectReport?: GrowthReportReader;
+  reportHistory?: GrowthReportHistoryReader;
   seoOpportunity: {
     prepare(input: {
       opportunityId: string;
@@ -325,3 +351,23 @@ export class OpsMcpSafeError extends Error {
     this.name = 'OpsMcpSafeError';
   }
 }
+
+export const growthReportReadToolInputSchema = z
+  .object({
+    projectId: stableId,
+    environmentId: stableId,
+    report: z
+      .fromJSONSchema(growthReportReadInputJsonSchema)
+      .transform((value) => growthReportReadInputSchema.parse(value)),
+  })
+  .strict();
+
+export const growthReportHistoryToolInputSchema = z
+  .object({
+    projectId: stableId,
+    environmentId: stableId,
+    query: z
+      .fromJSONSchema(growthReportHistoryInputJsonSchema)
+      .transform((value) => growthReportHistoryInputSchema.parse(value)),
+  })
+  .strict();

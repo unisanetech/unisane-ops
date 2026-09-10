@@ -110,7 +110,9 @@ describe('@unisane/provider-meta marketing transport', () => {
       .mockResolvedValueOnce(
         jsonResponse({
           data: [{ campaign_id: 'campaign_1', impression_device: 'mobile_app' }],
-          paging: { next: 'https://graph.facebook.com/v25.0/report-page-2' },
+          paging: {
+            next: 'https://graph.facebook.com/v25.0/report-page-2?access_token=query-token&appsecret_proof=query-proof',
+          },
         }),
       )
       .mockResolvedValueOnce(
@@ -169,6 +171,58 @@ describe('@unisane/provider-meta marketing transport', () => {
     expect(fetcher.mock.calls[0]?.[1]).toMatchObject({
       headers: { authorization: 'Bearer meta-access-token' },
     });
+    const secondPageUrl = new URL(String(fetcher.mock.calls[1]?.[0]));
+    expect(secondPageUrl.searchParams.has('access_token')).toBe(false);
+    expect(secondPageUrl.searchParams.has('appsecret_proof')).toBe(false);
+    expect(fetcher.mock.calls[1]?.[1]).toMatchObject({
+      headers: { authorization: 'Bearer meta-access-token' },
+    });
+  });
+
+  it('rejects pagination outside the configured Graph API boundary', async () => {
+    const fetcher = vi.fn<typeof fetch>().mockResolvedValueOnce(
+      jsonResponse({
+        data: [{ campaign_id: 'campaign_1' }],
+        paging: { next: 'https://example.invalid/steal-report' },
+      }),
+    );
+
+    await expect(
+      pullMetaAdsReport({
+        config: {} as ProviderApiPullContext['config'],
+        options: {
+          accountId: '123456',
+          startDate: '2026-07-01',
+          endDate: '2026-07-31',
+        },
+        credentials: { accessToken: 'meta-access-token' },
+        env: {},
+        fetch: fetcher,
+      }),
+    ).rejects.toThrow('[MARKETING_META_ADS_PAGINATION_UNTRUSTED]');
+    expect(fetcher).toHaveBeenCalledOnce();
+  });
+
+  it('does not expose provider response bodies in report errors', async () => {
+    const fetcher = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(jsonResponse({ message: 'secret-provider-detail' }, 403, 'Forbidden'));
+
+    const error = await pullMetaAdsReport({
+      config: {} as ProviderApiPullContext['config'],
+      options: {
+        accountId: '123456',
+        startDate: '2026-07-01',
+        endDate: '2026-07-31',
+      },
+      credentials: { accessToken: 'meta-access-token' },
+      env: {},
+      fetch: fetcher,
+    }).catch((value: unknown) => value);
+
+    expect(error).toBeInstanceOf(Error);
+    expect((error as Error).message).toContain('HTTP 403');
+    expect((error as Error).message).not.toContain('secret-provider-detail');
   });
 
   it('fails closed before report transport when canonical credentials are incomplete', async () => {
@@ -226,5 +280,16 @@ describe('@unisane/provider-meta marketing transport', () => {
     expect(body).toBeInstanceOf(URLSearchParams);
     expect((body as URLSearchParams).get('access_token')).toBe('meta-access-token');
     expect((body as URLSearchParams).get('bytes')).toBe('AQID');
+
+    fetcher.mockResolvedValueOnce(
+      jsonResponse({ images: { one: { hash: 'wrong-1' }, two: { hash: 'wrong-2' } } }),
+    );
+    await expect(uploadMetaAdsAsset(options)).rejects.toThrow('ADS_ASSET_META_UPLOAD_HASH_MISSING');
+    fetcher.mockResolvedValueOnce(
+      new Response(JSON.stringify({ error: { message: 'meta-access-token' } }), { status: 400 }),
+    );
+    await expect(uploadMetaAdsAsset(options)).rejects.toThrow(
+      'Meta image upload failed (HTTP 400).',
+    );
   });
 });

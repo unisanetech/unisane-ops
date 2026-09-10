@@ -1,12 +1,22 @@
+import { registerGtmSetupTools } from './gtm-setup-tools.js';
+import { registerGtmReleaseTools } from './gtm-release-tools.js';
+import { registerGtmWorkspaceTools } from './gtm-workspace-tools.js';
+import { registerGtmTools } from './gtm-tools.js';
+import { registerMetaDiagnosticTools } from './meta-diagnostic-tools.js';
+import { registerGrowthReportHistoryTools } from './report-history-tools.js';
+import { growthReportReadOutputSchema } from '@unisane/growth/contracts';
+import { growthReportReadToolInputSchema } from './contracts.js';
 import { McpServer } from '@modelcontextprotocol/server';
 import { randomUUID } from 'node:crypto';
 import {
   executeGrowthHealthReview,
+  growthCapabilityReviewOutputSchema,
   executeGrowthMeasurementAudit,
   executeGrowthSeoOpportunityResearch,
 } from '@unisane/growth';
 import {
   assertBoundTarget,
+  growthCapabilityReviewToolInputSchema,
   growthCampaignPauseApplyToolInputSchema,
   growthCampaignPausePlanToolInputSchema,
   growthCampaignPauseReviewToolInputSchema,
@@ -27,6 +37,19 @@ import { attachWorkflowResume } from './resume.js';
 import { createOpsMcpErrorResult, createOpsMcpToolResult } from './tool-result.js';
 
 export const OPS_MCP_TOOL_NAMES = Object.freeze([
+  'diagnose_gtm',
+  'generate_gtm_tracking_setup',
+  'manage_gtm_release',
+  'plan_gtm_workspace',
+  'review_gtm_workspace',
+  'apply_approved_gtm_workspace',
+  'recover_gtm_workspace',
+  'import_meta_diagnostics',
+  'review_meta_diagnostics',
+  'collect_growth_report',
+  'read_growth_report_history',
+  'read_growth_report',
+  'review_growth_capabilities',
   'review_growth_health',
   'research_seo_opportunities',
   'prepare_seo_implementation',
@@ -101,6 +124,73 @@ export function createLocalOpsMcpServer(
 ): McpServer {
   const binding = validateLocalOpsMcpBinding(bindingInput);
   const server = new McpServer({ name: 'unisane-ops', version: '0.1.0' });
+  registerGtmTools(server, binding);
+  registerGtmSetupTools(server, binding);
+  registerGtmReleaseTools(server, binding, workflows);
+  registerGtmWorkspaceTools(server, binding, workflows);
+  registerMetaDiagnosticTools(server, binding, workflows);
+  registerGrowthReportHistoryTools(server, binding, workflows);
+  server.registerTool(
+    'read_growth_report',
+    {
+      description:
+        'Read a bounded Meta report from the selected account. Separate action types; explicit evidence limits; no persistence or provider mutation.',
+      inputSchema: growthReportReadToolInputSchema,
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
+    },
+    async (raw) => {
+      try {
+        const input = growthReportReadToolInputSchema.parse(raw);
+        assertBoundTarget(binding, input);
+        if (!workflows.readReport)
+          throw new OpsMcpSafeError(
+            'report_unavailable',
+            'This host has not supplied report reading.',
+          );
+        const output = growthReportReadOutputSchema.parse(await workflows.readReport(input.report));
+        assertBoundTarget(binding, output);
+        return createOpsMcpToolResult(output, binding.maximumResultBytes);
+      } catch (error) {
+        return createOpsMcpErrorResult(error);
+      }
+    },
+  );
+  server.registerTool(
+    'review_growth_capabilities',
+    {
+      description:
+        'Review Meta implementation, host support and recorded account prerequisites. Offline only; does not authorize writes or verify live delivery.',
+      inputSchema: growthCapabilityReviewToolInputSchema,
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async (input) => {
+      try {
+        assertBoundTarget(binding, input);
+        if (!workflows.reviewCapabilities)
+          throw new OpsMcpSafeError(
+            'capabilities_unavailable',
+            'This host has not supplied capability discovery.',
+          );
+        const output = growthCapabilityReviewOutputSchema.parse(
+          await workflows.reviewCapabilities(),
+        );
+        assertBoundTarget(binding, output);
+        return createOpsMcpToolResult(output, binding.maximumResultBytes);
+      } catch (error) {
+        return createOpsMcpErrorResult(error);
+      }
+    },
+  );
 
   server.registerTool(
     'review_growth_health',
@@ -380,6 +470,71 @@ export function createLocalOpsMcpServer(
 }
 
 const campaignPauseErrors = Object.freeze([
+  {
+    marker: 'GROWTH_CAMPAIGN_ATTEMPT_EXISTS',
+    code: 'campaign_recovery_required',
+    message:
+      'An attempt already exists. Use verify_campaign_pause to recover; do not apply this plan again.',
+  },
+  {
+    marker: 'GROWTH_CAMPAIGN_RECOVERY_REQUIRED',
+    code: 'campaign_recovery_required',
+    message: 'Recover the earlier attempt on this campaign before starting another change.',
+  },
+  {
+    marker: 'GROWTH_CAMPAIGN_REPLAN_REQUIRED',
+    code: 'campaign_replan_required',
+    message: 'This run predates durable execution. Create and approve a new plan.',
+  },
+  {
+    marker: 'CAMPAIGN_STATE_MIGRATION_REQUIRED',
+    code: 'campaign_state_migration_required',
+    message:
+      'Existing execution history requires an explicit store migration. Keep the current backend and preserve all records.',
+  },
+  {
+    marker: 'OPS_RUN_STORE_DURABILITY_REQUIRED',
+    code: 'campaign_durable_store_required',
+    message:
+      'Configure the ads SQLite backend before creating workflows for production or automated writes.',
+  },
+  {
+    marker: 'CAMPAIGN_GOOGLE_TARGET_MISMATCH',
+    code: 'campaign_target_mismatch',
+    message:
+      'Select the Google customer in this environment before planning or applying a campaign change.',
+  },
+  {
+    marker: 'CAMPAIGN_CONTEXT_MISMATCH',
+    code: 'campaign_context_mismatch',
+    message: 'Use the project and environment bound to this host.',
+  },
+  {
+    marker: 'CAMPAIGN_RUN_CONTEXT_MISMATCH',
+    code: 'campaign_run_context_mismatch',
+    message: 'The run does not belong to the selected project and environment.',
+  },
+  {
+    marker: 'CAMPAIGN_EVIDENCE_UNAVAILABLE',
+    code: 'campaign_evidence_unavailable',
+    message: 'Read campaign state and resolve connection access before planning or applying.',
+  },
+  {
+    marker: 'META_CAMPAIGN_EVIDENCE_UNAVAILABLE',
+    code: 'campaign_evidence_unavailable',
+    message:
+      'Meta campaign identity and account could not be verified. Resolve access and retry the read.',
+  },
+  {
+    marker: 'META_CAMPAIGN_MANAGE_GRANT_REQUIRED',
+    code: 'campaign_permission_required',
+    message: 'Campaign changes require the Meta ads_management permission.',
+  },
+  {
+    marker: 'CAMPAIGN_HUMAN_APPROVAL_REQUIRED',
+    code: 'campaign_human_approval_required',
+    message: 'A human must approve the exact campaign plan. Agents cannot grant approval.',
+  },
   {
     marker: 'GROWTH_CAMPAIGN_PAUSE_MUTATION_DISABLED',
     code: 'campaign_pause_mutation_disabled',

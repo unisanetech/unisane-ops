@@ -12,7 +12,6 @@ import {
   createGoogleTagManagerContainerVersion,
   previewGoogleTagManagerWorkspace,
   publishGoogleTagManagerContainerVersion,
-  rollbackGoogleTagManagerContainerVersion,
 } from './versioning.js';
 
 export function createGoogleTagManagerProvider(
@@ -20,6 +19,11 @@ export function createGoogleTagManagerProvider(
 ): GoogleTagManagerProvider {
   const client = createGoogleTagManagerApiClient(options);
   return {
+    readVersion: (accountId, containerId, versionId) =>
+      client.getContainerVersion({ accountId, containerId, versionId }),
+    readLiveVersion: (accountId, containerId) => client.getLiveVersion({ accountId, containerId }),
+    listVersionHeaders: (accountId, containerId) =>
+      client.listVersionHeaders({ accountId, containerId }),
     readSnapshot: (request: GoogleTagManagerReadRequest) =>
       readGoogleTagManagerRemoteSnapshot({ client, options: request }),
     applyPlan: (request) => applyGoogleTagManagerPlan({ client, options: request }),
@@ -27,6 +31,5 @@ export function createGoogleTagManagerProvider(
     createVersion: (request) =>
       createGoogleTagManagerContainerVersion({ client, options: request }),
     publish: (request) => publishGoogleTagManagerContainerVersion({ client, options: request }),
-    rollback: (request) => rollbackGoogleTagManagerContainerVersion({ client, options: request }),
   };
 }

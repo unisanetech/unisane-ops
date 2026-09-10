@@ -4,23 +4,15 @@
   "id": "@unisane/web-runtime",
   "edition": "oss",
   "maturity": "beta",
-  "supportedModes": [
-    "full-platform",
-    "headless"
-  ],
+  "supportedModes": ["full-platform", "headless"],
   "requiresPackages": [],
   "requiresTokens": [],
-  "runtimeProfiles": [
-    "local-minimal",
-    "standard-production",
-    "distributed-production"
-  ],
-  "docs": [
-    "README.md"
-  ],
+  "runtimeProfiles": ["local-minimal", "standard-production", "distributed-production"],
+  "docs": ["README.md"],
   "exports": [
     ".",
     "./contracts",
+    "./observations",
     "./conversions",
     "./conversions/google-ads",
     "./conversions/meta",

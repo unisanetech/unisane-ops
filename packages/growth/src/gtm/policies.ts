@@ -70,6 +70,17 @@ export function evaluateGoogleTagManagerPolicies(args: {
       );
     }
 
+    if (tag.type === 'custom_template' && tag.approval?.customTemplate !== true) {
+      issues.push(
+        issue(
+          'error',
+          'custom_template_requires_approval',
+          `Custom-template tag "${tag.slug}" requires explicit approval metadata.`,
+          `tags.${tag.slug}.approval`,
+        ),
+      );
+    }
+
     if (hasAllPagesTrigger(tag, triggers) && !tag.consent) {
       issues.push(
         issue(
@@ -98,13 +109,18 @@ export function evaluateGoogleTagManagerPolicies(args: {
       const conversionLabel = tagParameter(tag, 'conversionLabel');
       if (
         !isSecretRef(conversionLabel) &&
+        !(
+          conversionLabel &&
+          typeof conversionLabel === 'object' &&
+          'variable' in conversionLabel
+        ) &&
         !(tag.paused === true && isPausedPlaceholder(conversionLabel))
       ) {
         issues.push(
           issue(
             'error',
             'conversion_label_must_use_secret_ref',
-            `Google Ads conversion tag "${tag.slug}" must reference conversionLabel through secretRef.`,
+            `Google Ads conversion tag "${tag.slug}" must reference conversionLabel through a typed variable or secretRef.`,
             `tags.${tag.slug}.parameters.conversionLabel`,
           ),
         );
@@ -130,4 +146,15 @@ export function evaluateGoogleTagManagerPolicies(args: {
     ok: issues.every((entry) => entry.severity !== 'error'),
     issues,
   };
+}
+
+export function assertGoogleTagManagerPublishPolicy(
+  manifest: GoogleTagManagerContainerManifest,
+  environmentId: string,
+) {
+  const environment = manifest.environments[environmentId];
+  if (!environment)
+    throw new Error('[GTM_ENVIRONMENT_UNKNOWN] Environment is not declared in the GTM manifest.');
+  if (environment.publishPolicy === 'never')
+    throw new Error('[GTM_PUBLISH_POLICY_BLOCKED] This environment forbids publication.');
 }

@@ -1,66 +1,51 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { PackCommandRuntime } from '@unisane/ops-engine/pack';
-import { createCliCampaignPauseProviderAdapters } from './provider-adapters.js';
+import type { ProviderApiPullContext } from '@unisane/growth/contracts';
+import { pullMetaAdsReport } from './provider-adapters.js';
 import { runWithGrowthProviderRuntime } from './provider-runtime.js';
 
-describe('campaign pause provider adapters', () => {
-  it('routes Google and Meta through their exact campaign operations', async () => {
-    const resolveBinding = vi.fn(async (_binding: string, request: unknown) => {
-      const operation = (request as { operation: string }).operation;
-      return operation.endsWith('read-campaign-status')
-        ? 'paused'
-        : { outcome: 'succeeded', providerOperationId: `operation.${operation}` };
-    });
+describe('provider report adapters', () => {
+  it('strips credentials and unrelated runtime state from Meta report commands', async () => {
+    const resolveBinding = vi.fn<NonNullable<PackCommandRuntime['resolveBinding']>>(async () => ({
+      accountId: 'act_123',
+      inputFormat: 'meta-ads',
+      value: { data: [] },
+    }));
     const runtime: PackCommandRuntime = { resolveBinding };
-    const adapters = createCliCampaignPauseProviderAdapters({
-      environment: 'development',
-      googleConnection: 'connection.google-primary',
-      metaConnection: 'connection.meta-primary',
-    });
 
-    await runWithGrowthProviderRuntime(runtime, '/workspace', async () => {
-      await adapters.googleAds.pauseCampaign({
-        providerAccountId: 'google-account',
-        campaignId: 'google-campaign',
-        planHash: 'google-plan',
-      });
-      await adapters.googleAds.readCampaignStatus({
-        providerAccountId: 'google-account',
-        campaignId: 'google-campaign',
-      });
-      await adapters.metaAds.pauseCampaign({
-        providerAccountId: 'meta-account',
-        campaignId: 'meta-campaign',
-        planHash: 'meta-plan',
-      });
-      await adapters.metaAds.readCampaignStatus({
-        providerAccountId: 'meta-account',
-        campaignId: 'meta-campaign',
-      });
-    });
+    await runWithGrowthProviderRuntime(runtime, '/workspace', async () =>
+      pullMetaAdsReport({
+        config: {} as ProviderApiPullContext['config'],
+        options: {
+          accountId: 'act_123',
+          environment: 'production',
+          connection: 'meta-primary',
+          startDate: '2026-08-01',
+          endDate: '2026-08-31',
+          maxPages: 3,
+        },
+        credentials: { accessToken: 'must-never-cross-host-boundary' },
+        env: { META_ACCESS_TOKEN: 'must-also-stay-local' },
+        fetch,
+      }),
+    );
 
-    const requests = resolveBinding.mock.calls.map(
-      ([, request]) => request as Record<string, unknown>,
-    );
-    expect(requests.map((request) => request.operation)).toEqual([
-      'google.marketing.pause-campaign',
-      'google.marketing.read-campaign-status',
-      'meta.marketing.pause-campaign',
-      'meta.marketing.read-campaign-status',
-    ]);
-    expect(requests[0]).toMatchObject({
+    const request = resolveBinding.mock.calls[0]?.[1] as Record<string, unknown>;
+    expect(request).toMatchObject({
+      operation: 'meta.marketing.pull-report',
       cwd: '/workspace',
-      input: { connection: 'connection.google-primary' },
+      input: {
+        accountId: 'act_123',
+        environment: 'production',
+        connection: 'meta-primary',
+        startDate: '2026-08-01',
+        endDate: '2026-08-31',
+        maxPages: 3,
+      },
     });
-    expect(requests[2]).toMatchObject({
-      cwd: '/workspace',
-      input: { connection: 'connection.meta-primary' },
-    });
-    expect(requests.map((request) => request.operation)).not.toContain(
-      'google.marketing.execute-live',
-    );
-    expect(requests.map((request) => request.operation)).not.toContain(
-      'meta.marketing.execute-live',
+    expect(JSON.stringify(request)).not.toMatch(
+      /must-never-cross-host-boundary|must-also-stay-local|credentials|META_ACCESS_TOKEN/,
     );
   });
+
 });

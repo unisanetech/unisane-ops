@@ -29,7 +29,7 @@ const SOURCE_SCRIPTS = {
   build: 'tsup src/index.ts --format esm --dts --clean',
   dev: 'tsup src/index.ts --format esm --dts --watch',
   lint: 'eslint src scripts tests --max-warnings 0',
-  test: 'pnpm build && vitest run && node --test tests/*.test.mjs',
+  test: 'pnpm build && vitest run src && node --test tests/*.test.mjs',
   'check-types': 'tsc --noEmit',
   'check:boundary': 'node scripts/verify-release-boundary.mjs --source-only',
   'pack:check': 'pnpm build && node scripts/verify-release-boundary.mjs',

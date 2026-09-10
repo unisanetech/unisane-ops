@@ -1047,7 +1047,7 @@ The provider lane is an expert escape hatch for provider-only concepts:
 ```text
 unisane-ops provider aws cloudfront inventory
 unisane-ops provider cloudflare workers plan
-unisane-ops provider google gtm rollback
+unisane-ops growth gtm release plan-publish # select an exact prior version for reviewed rollback
 ```
 
 Do not duplicate the same normalized capability under both lanes without one shared

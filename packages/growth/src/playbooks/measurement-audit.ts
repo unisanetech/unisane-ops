@@ -76,14 +76,65 @@ export const measurementFreshnessSchema = z.enum(['fresh', 'stale', 'unknown']);
 
 export const canonicalOutcomeSchema = z
   .object({
+    projectId: stableIdSchema,
+    environmentId: stableIdSchema,
     outcomeId: stableIdSchema,
     label: z.string().trim().min(1).max(120),
     count: z.number().int().nonnegative(),
+    value: z.number().finite().nonnegative().optional(),
+    currency: z
+      .string()
+      .regex(/^[A-Z]{3}$/)
+      .optional(),
     source: z.string().trim().min(1).max(160),
+    sourceId: stableIdSchema,
     observedAt: z.string().datetime({ offset: true }),
     freshness: measurementFreshnessSchema,
+    window: z
+      .object({
+        start: z.string().datetime({ offset: true }),
+        end: z.string().datetime({ offset: true }),
+        timeZone: z.string().trim().min(1).max(100),
+      })
+      .strict(),
+    revision: z.number().int().positive(),
+    status: z.enum(['confirmed', 'partial', 'conflicting', 'reversed']),
+    finality: z.enum(['server-confirmed', 'provisional']),
   })
-  .strict();
+  .strict()
+  .superRefine((outcome, context) => {
+    if ((outcome.value === undefined) !== (outcome.currency === undefined)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Canonical outcome value and uppercase currency must be provided together.',
+        path: ['currency'],
+      });
+    }
+    if (Date.parse(outcome.window.start) > Date.parse(outcome.window.end)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Canonical outcome window start must be before or equal to its end.',
+        path: ['window', 'start'],
+      });
+    }
+    if (
+      outcome.status === 'reversed' &&
+      (outcome.count !== 0 || outcome.value !== undefined || outcome.currency !== undefined)
+    ) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A fully reversed canonical outcome must have zero count and no value.',
+        path: ['status'],
+      });
+    }
+    if (outcome.status === 'confirmed' && outcome.count === 0) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'A confirmed canonical outcome must have a positive count.',
+        path: ['count'],
+      });
+    }
+  });
 export type CanonicalOutcome = z.infer<typeof canonicalOutcomeSchema>;
 
 export const providerAttributedConversionSchema = z

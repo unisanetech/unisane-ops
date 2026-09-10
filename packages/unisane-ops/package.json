@@ -20,11 +20,6 @@
     "access": "public",
     "provenance": true
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/unisanetech/unisane-ops.git",
-    "directory": "packages/unisane-ops"
-  },
   "homepage": "https://unisane.dev",
   "bugs": {
     "url": "https://github.com/unisanetech/unisane-ops/issues"
