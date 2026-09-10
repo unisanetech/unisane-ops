@@ -18,6 +18,9 @@ import test from 'node:test';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const ignoredDirectoryNames = new Set([
   '.git',
+  '.tmp',
+  '.pnpm-store',
+  '.DS_Store',
   '.skopos',
   '.unisane',
   '.turbo',

@@ -16,11 +16,6 @@ const ignoredDirectories = new Set([
   'node_modules',
 ]);
 const boundaryPackages = ['@unisane/data-table', '@unisane/ui'];
-const exactReleasedVersions = Object.freeze({
-  '@unisane/data-table': '0.1.1',
-  '@unisane/tokens': '0.1.1',
-  '@unisane/ui': '0.1.1',
-});
 const relevantPackages = [
   '@material-symbols/font-400',
   '@unisane/data-table',
@@ -523,7 +518,7 @@ export function evaluateConsoleReleaseBoundary(
     ) ||
     Object.keys(policy.producerTechnicalEvidence.versions ?? {}).length !== 3
   ) {
-    violations.push('existing producer publication evidence differs from the exact 0.1.1 policy');
+    violations.push('existing producer publication evidence differs from the reviewed registry policy');
   }
   if (
     !policy.cleanExternalConsumer.proofId ||
@@ -540,12 +535,13 @@ export function evaluateConsoleReleaseBoundary(
   ) {
     violations.push('Ops console semantic consumer inventory differs from policy');
   }
-  for (const [name, expectedVersion] of Object.entries(exactReleasedVersions)) {
+  for (const [name, expectedVersion] of Object.entries(policy.producerTechnicalEvidence.versions)) {
     const artifact = policy.cleanExternalConsumer.artifacts?.[name];
     const currentCoordinate = boundaryPackages.includes(name)
       ? policy.currentDependencies[name]
       : expectedVersion;
     if (
+      !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u.test(expectedVersion) ||
       currentCoordinate !== expectedVersion ||
       registryVersions[name] !== expectedVersion ||
       artifact?.version !== expectedVersion ||

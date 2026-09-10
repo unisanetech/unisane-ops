@@ -46,13 +46,13 @@ function exactLock() {
 test('Ops-owned semantic evidence is exact and independent of a producer checkout', () => {
   const evidence = collectConsoleConsumerEvidence(root, { policy });
   const inventory = assertOpsSemanticEvidence(evidence, policy);
-  assert.equal(inventory.imports.length, 153);
-  assert.equal(inventory.sourceFiles.length, 53);
+  assert.equal(inventory.imports.length, 165);
+  assert.equal(inventory.sourceFiles.length, 62);
   assert.deepEqual(
     inventory.coordinates.map(({ packageName, coordinate }) => ({ packageName, coordinate })),
     [
-      { packageName: '@unisane/data-table', coordinate: '0.1.1' },
-      { packageName: '@unisane/ui', coordinate: '0.1.1' },
+      { packageName: '@unisane/data-table', coordinate: '0.1.2-next.97f61b1d' },
+      { packageName: '@unisane/ui', coordinate: '0.1.2-next.97f61b1d' },
     ],
   );
 });
@@ -79,7 +79,7 @@ test('lock requires exact registry versions and immutable integrities', () => {
   assert.doesNotThrow(() => assertFrozenConsumerLock(lock, artifacts));
   assert.equal(normalizedConsumerLockDigest(lock, artifacts).length, 64);
   assert.throws(
-    () => assertFrozenConsumerLock(lock.replace('specifier: 0.1.1', 'specifier: 0.1.2'), artifacts),
+    () => assertFrozenConsumerLock(lock.replace('specifier: 0.1.2-next.97f61b1d', 'specifier: 0.1.2'), artifacts),
     /does not bind/u,
   );
   assert.throws(

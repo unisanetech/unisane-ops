@@ -1,3 +1,16 @@
+---
+id: D-20260910-private-npm-canary
+owner: unisane-ops
+repository: unisane-ops
+scope: workspace
+role: decision
+lifecycle: durable
+authority: canonical
+provenance: accepted
+view: current
+status: accepted
+---
+
 # Private npm canary distribution
 
 The owner approved private npm publication on September 10, 2026. This supersedes the public
@@ -23,3 +36,9 @@ npm provenance.
 Publishing credentials are temporary and confined to the publication step. Consumer credentials must
 be read-only. A successful publication does not certify a Platforms application: its clean install
 and build remain separate checks.
+
+The console consumes public UI canary `0.1.2-next.97f61b1d`, verified by UI workflow
+34490477119. Its boundary policy records the actual registry integrities and current import
+inventory. The isolated consumer resolves a lock and fetches its packages before testing a
+frozen offline install, so a fresh CI runner does not require a pre-populated local store.
+Release versions come from that reviewed evidence rather than a second constant in the checker.

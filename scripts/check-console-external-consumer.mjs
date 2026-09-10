@@ -372,7 +372,6 @@ export function executeProof(root = opsRoot) {
     const fixtureRoot = materializeConsumer(workRoot, inventory, policy);
     const installArgs = [
       'install',
-      '--offline',
       '--ignore-workspace',
       '--config.shared-workspace-lockfile=false',
       '--store-dir',
@@ -382,7 +381,9 @@ export function executeProof(root = opsRoot) {
     const lockPath = path.join(fixtureRoot, 'pnpm-lock.yaml');
     const artifacts = policy.cleanExternalConsumer.artifacts;
     assertFrozenConsumerLock(readFileSync(lockPath, 'utf8'), artifacts);
-    run('pnpm', [...installArgs, '--frozen-lockfile'], { cwd: fixtureRoot });
+    // Populate an empty CI store from the verified lock, then prove offline installation.
+    run('pnpm', ['fetch', '--frozen-lockfile', '--store-dir', storeRoot], { cwd: fixtureRoot });
+    run('pnpm', [...installArgs, '--offline', '--frozen-lockfile'], { cwd: fixtureRoot });
     const lock = readFileSync(lockPath, 'utf8');
     assertFrozenConsumerLock(lock, artifacts);
     run('pnpm', ['typecheck'], { cwd: fixtureRoot });

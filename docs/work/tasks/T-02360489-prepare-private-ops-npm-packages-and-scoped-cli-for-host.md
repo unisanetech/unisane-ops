@@ -11,7 +11,7 @@ provenance: accepted
 view: current
 risk: standard
 proofSubject: task-closure
-proofBaseline: baseline-1c1c9be01182fba3
+proofBaseline: baseline-fd78fbe0fa06a191
 lastUpdated: 2026-09-10
 ---
 
@@ -57,12 +57,15 @@ Prepare private Ops npm packages and scoped CLI for hosted consumers
 - `pnpm-lock.yaml`
 - `release`
 - `scripts`
+- `tests`
+- `tools/repository/console-release-boundary-policy.json`
 - `tools/repository/standalone-integrity-policy.json`
 
 ## Ownership Expansions
 
 - `2026-09-10T15:27:59.199Z` by `codex-ops-release`: `docs/decisions`, `docs/reference/generated`, `packages`, `tools/repository/standalone-integrity-policy.json` — Private Ops publication requires consistent package identities, admission policy and generated references
 - `2026-09-10T15:36:09.461Z` by `codex-ops-release`: `.gitignore`, `apps/console/package.json` — Exclude release outputs and align the console with its already admitted published UI versions
+- `2026-09-10T18:23:33.116Z` by `codex-ops-release`: `tests`, `tools/repository/console-release-boundary-policy.json` — Refresh actual published UI consumer evidence and verify cold CI installation before Ops release
 
 ## Steps
 
@@ -100,7 +103,7 @@ This machine-readable block is the durable source used to rebuild local Skopos s
   "type": "task",
   "status": "active",
   "generatedAt": "2026-09-10T15:25:55.497Z",
-  "updatedAt": "2026-09-10T15:36:09.461Z",
+  "updatedAt": "2026-09-10T18:23:33.116Z",
   "planIds": [],
   "childTasks": [],
   "state": "active",
@@ -165,7 +168,7 @@ This machine-readable block is the durable source used to rebuild local Skopos s
   },
   "proofSubject": {
     "kind": "task-closure",
-    "baselineId": "baseline-1c1c9be01182fba3"
+    "baselineId": "baseline-fd78fbe0fa06a191"
   },
   "priority": 0,
   "dependencyTaskIds": [],
@@ -260,20 +263,22 @@ This machine-readable block is the durable source used to rebuild local Skopos s
     {
       "id": "start-bounded-child-task",
       "title": "Start a bounded child Task",
-      "summary": "The Task may be drifting from its admitted subject because new impact categories appeared (docs). Keep this Task intact and move the suggested paths into focused follow-up work.",
+      "summary": "The Task may be drifting from its admitted subject because ownership expanded 3 times and new impact categories appeared (docs). Keep this Task intact and move the suggested paths into focused follow-up work.",
       "priority": "high",
       "actionKind": "start-child-task",
-      "command": "skopos task child start 'T-02360489' 'Continue Prepare private Ops npm packages and scoped CLI for hosted consumers as bounded follow-up work' . --scope 'workspace' --own '.gitignore' --own 'apps/console/package.json' --own 'docs/decisions' --own 'docs/reference/generated' --own 'packages' --own 'tools/repository/standalone-integrity-policy.json' --reason 'The Task may be drifting from its admitted subject because new impact categories appeared (docs).' --actor 'codex-ops-release'",
+      "command": "skopos task child start 'T-02360489' 'Continue Prepare private Ops npm packages and scoped CLI for hosted consumers as bounded follow-up work' . --scope 'workspace' --own '.gitignore' --own 'apps/console/package.json' --own 'docs/decisions' --own 'docs/reference/generated' --own 'packages' --own 'tests' --own 'tools/repository/console-release-boundary-policy.json' --own 'tools/repository/standalone-integrity-policy.json' --reason 'The Task may be drifting from its admitted subject because ownership expanded 3 times and new impact categories appeared (docs).' --actor 'codex-ops-release'",
       "ownedPaths": [
         ".gitignore",
         "apps/console/package.json",
         "docs/decisions",
         "docs/reference/generated",
         "packages",
+        "tests",
+        "tools/repository/console-release-boundary-policy.json",
         "tools/repository/standalone-integrity-policy.json"
       ],
       "scopeId": "workspace",
-      "reason": "The Task may be drifting from its admitted subject because new impact categories appeared (docs).",
+      "reason": "The Task may be drifting from its admitted subject because ownership expanded 3 times and new impact categories appeared (docs).",
       "blocking": false,
       "status": "open"
     }
@@ -344,6 +349,33 @@ This machine-readable block is the durable source used to rebuild local Skopos s
       "affectedScopeIds": [
         "workspace"
       ]
+    },
+    {
+      "paths": [
+        "tests",
+        "tools/repository/console-release-boundary-policy.json"
+      ],
+      "reason": "Refresh actual published UI consumer evidence and verify cold CI installation before Ops release",
+      "actorId": "codex-ops-release",
+      "recordedAt": "2026-09-10T18:23:33.116Z",
+      "baselinePaths": [
+        {
+          "path": "tests",
+          "digest": "594449f1750aead9cfcf2975f4be24b63618931d3e93d1550f2a201b8d171477",
+          "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+        },
+        {
+          "path": "tools/repository/console-release-boundary-policy.json",
+          "digest": "a0e0148bf3c6f578494ad9afa8f7be716f719cdcdf4f2133432c1a87c5df1cf1",
+          "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+        }
+      ],
+      "classification": "within-scope",
+      "priorScopeId": "workspace",
+      "nextScopeId": "workspace",
+      "affectedScopeIds": [
+        "workspace"
+      ]
     }
   ],
   "declaredOwnedPaths": [
@@ -357,6 +389,8 @@ This machine-readable block is the durable source used to rebuild local Skopos s
     "pnpm-lock.yaml",
     "release",
     "scripts",
+    "tests",
+    "tools/repository/console-release-boundary-policy.json",
     "tools/repository/standalone-integrity-policy.json"
   ]
 }

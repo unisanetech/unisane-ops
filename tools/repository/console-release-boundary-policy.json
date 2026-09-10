@@ -5,7 +5,9 @@
     "nodeVersionFile": ".node-version",
     "pnpmConfig": ".npmrc",
     "sourceRoot": "apps/console/src",
-    "authoredConfigFiles": ["apps/console/tsup.browser.config.ts"],
+    "authoredConfigFiles": [
+      "apps/console/tsup.browser.config.ts"
+    ],
     "emittedRoot": "apps/console/dist"
   },
   "nodeRuntime": {
@@ -14,8 +16,8 @@
   },
   "currentDependencies": {
     "@material-symbols/font-400": "^0.40.2",
-    "@unisane/data-table": "0.1.1",
-    "@unisane/ui": "0.1.1",
+    "@unisane/data-table": "0.1.2-next.97f61b1d",
+    "@unisane/ui": "0.1.2-next.97f61b1d",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -35,12 +37,16 @@
   ],
   "dataTableStylesheet": {
     "specifier": "@unisane/data-table/styles.css",
-    "emittedSelectors": [".cursor-cell", ".group-hover\\/row\\:overflow-visible", ".row-5000"]
+    "emittedSelectors": [
+      ".cursor-cell",
+      ".group-hover\\/row\\:overflow-visible",
+      ".row-5000"
+    ]
   },
   "authoredInventory": {
-    "declarationCount": 153,
-    "sourceFileCount": 53,
-    "digest": "88b887e7798b6f91bc04c47bafd8847355022075084687cf2f64d5d44936f303",
+    "declarationCount": 165,
+    "sourceFileCount": 62,
+    "digest": "01e290a72eb4898ab427c8b4a20c247e9f306e4492a52a082b7a20938dee6382",
     "specifiers": [
       "@unisane/data-table",
       "@unisane/data-table/styles.css",
@@ -88,27 +94,27 @@
       "react-dom": "^19"
     },
     "@unisane/data-table": {
-      "@unisane/ui": "0.1.1",
+      "@unisane/ui": "0.1.2-next.97f61b1d",
       "react": "^19",
       "react-dom": "^19"
     }
   },
   "producerTechnicalEvidence": {
     "status": "verified-existing-published-artifacts",
-    "taskId": "T-b0cfbc09",
-    "snapshotId": "S-94578b4f2066",
+    "taskId": "T-40726b29",
     "versions": {
-      "@unisane/tokens": "0.1.1",
-      "@unisane/ui": "0.1.1",
-      "@unisane/data-table": "0.1.1"
+      "@unisane/tokens": "0.1.2-next.97f61b1d",
+      "@unisane/ui": "0.1.2-next.97f61b1d",
+      "@unisane/data-table": "0.1.2-next.97f61b1d"
     },
     "publicationAuthorizedByThisTask": false,
-    "freshArtifactRequiredAtConversion": false
+    "freshArtifactRequiredAtConversion": false,
+    "workflowRun": "https://github.com/unisanetech/unisane-ui/actions/runs/34490477119"
   },
   "registry": {
-    "uiVersion": "0.1.1",
-    "dataTableVersion": "0.1.1",
-    "tokensVersion": "0.1.1",
+    "uiVersion": "0.1.2-next.97f61b1d",
+    "dataTableVersion": "0.1.2-next.97f61b1d",
+    "tokensVersion": "0.1.2-next.97f61b1d",
     "accessApproved": true
   },
   "toolchain": {
@@ -125,27 +131,27 @@
   "cleanExternalConsumer": {
     "proofId": "OPS-CONSOLE-EXTERNAL-CONSUMER-v1",
     "state": "verified-offline-frozen-isolated-consumer",
-    "consumerSemanticInventoryDigest": "957c255607338e96396a3efbce4c8d9aeb08352d98f730549bc8a864336ac043",
+    "consumerSemanticInventoryDigest": "884a4d01d8be7417c2c529256222f4ea4f4d6cbffad1dc855e75312825acc4ef",
     "artifacts": {
       "@unisane/tokens": {
-        "version": "0.1.1",
-        "registryIntegrity": "sha512-lxiR4n5KsrgUxFqtZGnNHRCMRDEQwnWJWg6BRBU4rYWcTLM9sXXm4tn5ZccDtBY0cvem+lbne1figFumjR6yHQ=="
+        "version": "0.1.2-next.97f61b1d",
+        "registryIntegrity": "sha512-DtxTlCYaddE1umwP2f4MZEaiOmY35ZMFrMTMXiuJuFVQPdJeQzDMPi9GAFP4eJ5vGFlnNx6+1EvU6RaVc532lw=="
       },
       "@unisane/ui": {
-        "version": "0.1.1",
-        "registryIntegrity": "sha512-+IaBD0SRLvoUEZir14yURiXaYT1+RIDz27g5nM8o/pNmNu5s0gi94+oFuJKOpvIOqFcD++n+gPvS1mHhyoIaXA=="
+        "version": "0.1.2-next.97f61b1d",
+        "registryIntegrity": "sha512-Zee+FpNWniLi7OI/9S9tgx2BwDuryCghsujFSW+N3DCsyFPFicFcJQvgE820AUAqjEk40OHgDNq9OBFT1e9/IA=="
       },
       "@unisane/data-table": {
-        "version": "0.1.1",
-        "registryIntegrity": "sha512-plTIPMiamNv65pqUvqJ9e8eLILAef6ZbemJPL70rXR+M17x0yAMdBTT9o6irmf8pZpTG/UffDGZX1DIKNIqmPA=="
+        "version": "0.1.2-next.97f61b1d",
+        "registryIntegrity": "sha512-CGI08HrJYYADC99d/p30sJrn8KBEguigfnrGQsIc0e55pPn7S6GsY3+YtfuKs05U1zsG2nkPA3rrtygXcqdmKA=="
       }
     },
     "receipt": {
-      "normalizedLockSha256": "077e00db3a9e973c5ae0f62f84e29f8b57d66403691fddf2cfcb0e4ea91339b6",
+      "normalizedLockSha256": "95f42b4e35576193333d5cc82afcdfbf58834ff6d914eb412c76a24b92fc5965",
       "reactVersion": "19.2.3",
       "reactDomVersion": "19.2.3",
       "runtimeModuleCount": 22,
-      "browserCssSha256": "e67b388efaa1810b68fd39381634f1554bf184164ff40ba2951c0eb39477977e",
+      "browserCssSha256": "891660ccfe228cb1188ac9b3d80a8643243f102b0c8da604bff741558100100b",
       "materialSymbolsFontSha256": "f7ebbdfac4f5f19c7d4dd7da5b836955fea1e8eda7fc8288d12c8a482a95ed7f"
     }
   },
@@ -162,17 +168,17 @@
     {
       "id": "OPS-CONSOLE-RB01-UI-COORDINATE",
       "state": "closed",
-      "evidence": "@unisane/ui is an exact 0.1.1 registry coordinate with immutable lock integrity."
+      "evidence": "@unisane/ui is an exact 0.1.2-next.97f61b1d registry coordinate with immutable lock integrity."
     },
     {
       "id": "OPS-CONSOLE-RB02-DATA-TABLE-COORDINATE",
       "state": "closed",
-      "evidence": "@unisane/data-table is an exact 0.1.1 registry coordinate with immutable lock integrity."
+      "evidence": "@unisane/data-table is an exact 0.1.2-next.97f61b1d registry coordinate with immutable lock integrity."
     },
     {
       "id": "OPS-CONSOLE-RB05-REGISTRY-VERSION-ACCESS",
       "state": "closed",
-      "evidence": "Published 0.1.1 UI, DataTable, and Tokens artifacts resolve from the offline registry store."
+      "evidence": "Published 0.1.2-next.97f61b1d UI, DataTable, and Tokens artifacts resolve from the offline registry store."
     },
     {
       "id": "OPS-CONSOLE-RB06-CLEAN-EXTERNAL-CONSUMER",

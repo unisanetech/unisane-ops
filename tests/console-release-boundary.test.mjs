@@ -86,14 +86,14 @@ test('current source inventory is conversion-ready on exact released registry co
   const report = evaluateConsoleReleaseBoundary(root);
   assert.equal(report.state, 'conversion-ready');
   assert.equal(report.conversionReady, true);
-  assert.equal(report.authored.declarationCount, 153);
-  assert.equal(report.authored.sourceFileCount, 53);
-  assert.equal(report.authored.packages['@unisane/ui'].declarationCount, 142);
+  assert.equal(report.authored.declarationCount, 165);
+  assert.equal(report.authored.sourceFileCount, 62);
+  assert.equal(report.authored.packages['@unisane/ui'].declarationCount, 154);
   assert.equal(report.authored.packages['@unisane/data-table'].declarationCount, 11);
   assert.equal(report.authored.computedLoaderCount, 0);
   assert.deepEqual(report.package.coordinates, {
-    '@unisane/data-table': '0.1.1',
-    '@unisane/ui': '0.1.1',
+    '@unisane/data-table': '0.1.2-next.97f61b1d',
+    '@unisane/ui': '0.1.2-next.97f61b1d',
   });
   assert.deepEqual(report.blockers, []);
   assert.deepEqual(report.violations, []);
@@ -357,7 +357,7 @@ test('registry, integrity, and local coordinate drift fail closed', () => {
     assert.equal(report.conversionReady, false);
     assert.match(
       report.violations.join('\n'),
-      /exact released-version contracts are not identical/u,
+      /semantic consumer inventory differs/u,
     );
   });
 });

@@ -18,7 +18,7 @@ test('authored package has zero first-party imports and no executable integratio
   assert.deepEqual(auditAuthoredBoundary(packageRoot), {
     schemaVersion: 1,
     package: '@unisane/framework-ops',
-    version: '0.1.0',
+    version: manifest.version,
     runtimeDependencyCount: 0,
     authoredModuleSpecifierCount: 24,
     firstPartyImports: [],
@@ -96,7 +96,7 @@ test('packed artifact is descriptor-only with an exact dependency-free file boun
   assert.deepEqual(verifyPackedReleaseBoundary(packageRoot), {
     schemaVersion: 1,
     package: '@unisane/framework-ops',
-    version: '0.1.0',
+    version: manifest.version,
     packedEntryCount: 5,
     runtimeDependencyCount: 0,
     packedFirstPartyImports: [],

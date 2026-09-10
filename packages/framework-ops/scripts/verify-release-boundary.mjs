@@ -165,7 +165,7 @@ export function assertManifestContract(
   context = 'framework-ops manifest',
   expectedScripts = SOURCE_SCRIPTS,
 ) {
-  if (manifest.name !== '@unisane/framework-ops' || manifest.version !== '0.1.0') {
+  if (manifest.name !== '@unisane/framework-ops' || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u.test(manifest.version ?? '')) {
     throw new Error(`${context} has an unexpected package identity.`);
   }
   for (const field of DEPENDENCY_FIELDS) {
@@ -258,6 +258,10 @@ export function verifyPackedReleaseBoundary(root = packageRoot) {
       'Packed framework-ops manifest',
       PACKED_SCRIPTS,
     );
+    const sourceManifest = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
+    if (manifest.version !== sourceManifest.version) {
+      throw new Error('Packed framework-ops version differs from its source manifest.');
+    }
     const emittedRecords = ['package/dist/index.js', 'package/dist/index.d.ts'].flatMap((entry) =>
       extractModuleSpecifiers(archiveText(tarballPath, entry), entry).map((record) => ({
         ...record,

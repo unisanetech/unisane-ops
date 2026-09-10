@@ -19,8 +19,8 @@ function createProject(name, packageDocument = { name }) {
   mkdirSync(fixtureRoot, { recursive: true });
   const root = mkdtempSync(resolve(fixtureRoot, `${name}-`));
   fixtures.push(root);
-  mkdirSync(resolve(root, 'node_modules'));
-  symlinkSync(packageRoot, resolve(root, 'node_modules/unisane-ops'), 'dir');
+  mkdirSync(resolve(root, 'node_modules/@unisane'), { recursive: true });
+  symlinkSync(packageRoot, resolve(root, 'node_modules/@unisane/ops'), 'dir');
   writeFileSync(
     resolve(root, 'package.json'),
     `${JSON.stringify({ type: 'module', ...packageDocument }, null, 2)}\n`,

@@ -18,6 +18,13 @@ relatedDocs:
 
 # D-20260724 Unisane Ops Product, Package, And Repository Boundary Contract
 
+The [September 10 private npm decision](./D-20260910-private-npm-canary.md) governs
+current distribution: the approved Ops packages are restricted, the npm CLI package is
+`@unisane/ops`, and its executable remains `unisane-ops`. Earlier public-distribution
+and unscoped-package statements below record the previous decision; capability ownership
+and typed-action contracts remain in force.
+
+
 ## Changelog
 
 - `2026-08-15`: Superseded the combined `unisane` launcher, executable Framework pack,
