@@ -3,31 +3,47 @@
   "kind": "unisane.pack-manifest",
   "packId": "provider-aws",
   "packageName": "@unisane/provider-aws",
-  "version": "0.1.0",
+  "version": "0.1.0-next.20260910.1",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [
     {
       "id": "provider.aws",
-      "path": ["provider", "aws"],
+      "path": [
+        "provider",
+        "aws"
+      ],
       "handler": {
         "exportPath": "./handlers/provider-aws",
         "exportName": "runProviderAwsCommand"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project", "secret-store", "remote"],
+      "writeTargets": [
+        "project",
+        "secret-store",
+        "remote"
+      ],
       "artifactClasses": [],
-      "riskGuards": ["production", "security-sensitive"],
+      "riskGuards": [
+        "production",
+        "security-sensitive"
+      ],
       "json": true
     }
   ],
-  "configNamespaces": ["provider-aws"],
+  "configNamespaces": [
+    "provider-aws"
+  ],
   "addItemTypes": [],
-  "capabilities": ["provider-aws"],
-  "providerBindings": ["aws"],
+  "capabilities": [
+    "provider-aws"
+  ],
+  "providerBindings": [
+    "aws"
+  ],
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "29bd6ed58a39b866dec50eb0d5afbb0ba0f15b08f2381d58f1cfd3458ee14902"
+    "manifestHash": "8bd8839b51724732e50a3b3a2a9e6caee8eef3b6b104fc6d98ee4e29b95c6d43"
   }
 }

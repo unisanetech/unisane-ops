@@ -48,18 +48,6 @@
       "path": "apps/console/package.json"
     }
   ],
-  "acceptedPublicPackages": [
-    "unisane-ops",
-    "@unisane/cloud",
-    "@unisane/growth",
-    "@unisane/ops-engine",
-    "@unisane/provider-aws",
-    "@unisane/provider-cloudflare",
-    "@unisane/provider-google",
-    "@unisane/provider-meta",
-    "@unisane/web-runtime",
-    "@unisane/framework-ops"
-  ],
   "packageAdmissions": {
     "@unisane/ops-console": {
       "kind": "public-source-deployable-app",
@@ -71,12 +59,6 @@
       "kind": "private-hosted-runtime",
       "registryAdmission": "not-admitted",
       "requiredPrivate": true,
-      "authority": "docs/standards/01-standalone-repository-transition-readiness.md"
-    },
-    "@unisane/ops-mcp": {
-      "kind": "local-mcp-adapter",
-      "registryAdmission": "owner-decision",
-      "requiredPrivate": null,
       "authority": "docs/standards/01-standalone-repository-transition-readiness.md"
     },
     "@unisane/ops-hosted-postgresql": {
@@ -118,11 +100,24 @@
     "docs/reference/generated/symbols/packages/@unisane__provider-google.symbols.json",
     "docs/reference/generated/symbols/packages/@unisane__provider-meta.symbols.json",
     "docs/reference/generated/symbols/packages/@unisane__web-runtime.symbols.json",
-    "docs/reference/generated/symbols/packages/unisane-ops.symbols.json"
+    "docs/reference/generated/symbols/packages/@unisane__ops.symbols.json"
   ],
   "excludedSourcePatterns": [
     "docs/reference/generated/**",
     "docs/work/tasks/**",
     "docs/work/archive/tasks/**"
+  ],
+  "acceptedPrivatePackages": [
+    "@unisane/ops",
+    "@unisane/cloud",
+    "@unisane/growth",
+    "@unisane/ops-engine",
+    "@unisane/provider-aws",
+    "@unisane/provider-cloudflare",
+    "@unisane/provider-google",
+    "@unisane/provider-meta",
+    "@unisane/web-runtime",
+    "@unisane/framework-ops",
+    "@unisane/ops-mcp"
   ]
 }

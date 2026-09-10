@@ -8,11 +8,11 @@
     "package": "@unisane/provider-google",
     "owner": "ops/provider-google",
     "packageDir": "packages/provider-google",
-    "sourceFileCount": 54,
-    "symbolCount": 331,
-    "functionCount": 331,
-    "publicFunctionCount": 136,
-    "internalFunctionCount": 195,
+    "sourceFileCount": 57,
+    "symbolCount": 345,
+    "functionCount": 345,
+    "publicFunctionCount": 139,
+    "internalFunctionCount": 206,
     "serviceLayerFunctionCount": 0
   },
   "owner": "unisane-ops",
@@ -327,7 +327,7 @@
       "file": "packages/provider-google/src/google/connect.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "grants(selectedServices, state, observedAt): GoogleConnectionGrant[]",
+      "signatureShort": "grants(selectedServices, state, observedAt, tagManagerAccess): GoogleConnectionGrant[]",
       "layer": "tooling-layer"
     },
     {
@@ -383,6 +383,17 @@
       "exported": false,
       "tags": [],
       "signatureShort": "resourceSelections(argv, observedAt): GoogleResourceSelection[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "scopesForService",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connect.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "scopesForService(service, tagManagerAccess): readonly string[]",
       "layer": "tooling-layer"
     },
     {
@@ -581,6 +592,19 @@
         "public"
       ],
       "signatureShort": "defineGoogleConnectionRecord(input): GoogleConnectionRecord",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleTagManagerScopesForAccess",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/connection.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleTagManagerScopesForAccess(access): readonly string[]",
       "layer": "tooling-layer"
     },
     {
@@ -1098,6 +1122,142 @@
         "public"
       ],
       "signatureShort": "disconnectGoogle(request): Promise<OpsLifecycleContributionResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsAssetProvider",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/assets.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGoogleAdsAssetProvider(options): { upload: MarketingAdsAssetProviderUploader; link: GoogleCampaignAssetLinker; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asArray",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "asArray(value): unknown[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "asRecord",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "asRecord(value): Record<string, unknown>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGoogleAdsGoalProvider",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGoogleAdsGoalProvider(options): MarketingGoogleAdsGoalProvider",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "headers",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "headers(input): Record<string, string>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "listExistingConversionActions",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "listExistingConversionActions(input): Promise<Map<string, ExistingConversionAction>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "mutateOperation",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "mutateOperation(operation, existing)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "operationResultResourceName",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "operationResultResourceName(result): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "optionalBoolean",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "optionalBoolean(value): boolean | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "optionalString",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "optionalString(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "parseExistingConversionAction",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "parseExistingConversionAction(entry): ExistingConversionAction | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readGoogleAdsResponse",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/marketing/conversion-goals.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "readGoogleAdsResponse(response): Promise<unknown>",
       "layer": "tooling-layer"
     },
     {
@@ -2869,17 +3029,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "responseMessage",
-      "kind": "function",
-      "package": "@unisane/provider-google",
-      "owner": "ops/provider-google",
-      "file": "packages/provider-google/src/google/tag-manager/api-client.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "responseMessage(body, fallback): string",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "sleep",
       "kind": "function",
       "package": "@unisane/provider-google",
@@ -2966,7 +3115,7 @@
       "file": "packages/provider-google/src/google/tag-manager/apply.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "buildApplyState(snapshot): ApplyState",
+      "signatureShort": "buildApplyState(snapshot, manifest): ApplyState",
       "layer": "tooling-layer"
     },
     {
@@ -3322,6 +3471,19 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "renderMetaPixelHtml",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/meta-pixel-html.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "renderMetaPixelHtml(input)",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "createGoogleTagManagerProvider",
       "kind": "function",
       "package": "@unisane/provider-google",
@@ -3398,6 +3560,17 @@
       "exported": false,
       "tags": [],
       "signatureShort": "customEventName(trigger): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "customTemplateReference",
+      "kind": "function",
+      "package": "@unisane/provider-google",
+      "owner": "ops/provider-google",
+      "file": "packages/provider-google/src/google/tag-manager/remote-snapshot.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "customTemplateReference(tagType, templates): GoogleTagManagerJsonObject | undefined",
       "layer": "tooling-layer"
     },
     {
@@ -3875,19 +4048,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "rollbackGoogleTagManagerContainerVersion",
-      "kind": "function",
-      "package": "@unisane/provider-google",
-      "owner": "ops/provider-google",
-      "file": "packages/provider-google/src/google/tag-manager/versioning.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "rollbackGoogleTagManagerContainerVersion(args): Promise<GoogleTagManagerRollbackReceipt>",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "stringField",
       "kind": "function",
       "package": "@unisane/provider-google",
@@ -3980,5 +4140,5 @@
       "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:3293546a1eb2"
+  "generatedAt": "content-hash:d1f141312c69"
 }

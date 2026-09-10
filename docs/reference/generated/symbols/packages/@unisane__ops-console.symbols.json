@@ -8,10 +8,10 @@
     "package": "@unisane/ops-console",
     "owner": "ops-apps/console",
     "packageDir": "apps/console",
-    "sourceFileCount": 83,
-    "symbolCount": 260,
-    "functionCount": 260,
-    "publicFunctionCount": 152,
+    "sourceFileCount": 99,
+    "symbolCount": 277,
+    "functionCount": 277,
+    "publicFunctionCount": 169,
     "internalFunctionCount": 108,
     "serviceLayerFunctionCount": 0
   },
@@ -960,6 +960,32 @@
       "layer": "package-layer"
     },
     {
+      "name": "MetaDiagnosticResult",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-diagnostics.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetaDiagnosticResult({ result })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetaDiagnostics",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-diagnostics.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetaDiagnostics({ available, projectId, environmentId, })",
+      "layer": "package-layer"
+    },
+    {
       "name": "entityMetric",
       "kind": "function",
       "package": "@unisane/ops-console",
@@ -1038,6 +1064,45 @@
       "exported": false,
       "tags": [],
       "signatureShort": "useAdvertisingEntityPane(openSupportingPane, source)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetaReportHistory",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-report-history.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetaReportHistory({ projectId, environmentId, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetaReportRead",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-report-read.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetaReportRead({ available, evidenceAvailable = false, projectId, environmentId, })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetaReportResult",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/advertising/meta-report-result.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetaReportResult({ result, savedAt, })",
       "layer": "package-layer"
     },
     {
@@ -1176,6 +1241,58 @@
       "layer": "package-layer"
     },
     {
+      "name": "GtmDiagnosis",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/gtm-diagnosis.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "GtmDiagnosis()",
+      "layer": "package-layer"
+    },
+    {
+      "name": "GtmReleaseControls",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/gtm-release-controls.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "GtmReleaseControls()",
+      "layer": "package-layer"
+    },
+    {
+      "name": "GtmSetupControls",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/gtm-setup-controls.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "GtmSetupControls()",
+      "layer": "package-layer"
+    },
+    {
+      "name": "GtmWorkspaceControls",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/analytics/gtm-workspace-controls.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "GtmWorkspaceControls()",
+      "layer": "package-layer"
+    },
+    {
       "name": "MeasurementOutcomeComparisons",
       "kind": "function",
       "package": "@unisane/ops-console",
@@ -1198,7 +1315,7 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "TagManagerWorkspace({ state, openOverlay, })",
+      "signatureShort": "TagManagerWorkspace({ state })",
       "layer": "package-layer"
     },
     {
@@ -1312,6 +1429,19 @@
       "exported": false,
       "tags": [],
       "signatureShort": "ServiceRow({ service })",
+      "layer": "package-layer"
+    },
+    {
+      "name": "MetaCapabilityList",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/browser/screens/connections/capability-list.tsx",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "MetaCapabilityList({ review })",
       "layer": "package-layer"
     },
     {
@@ -2965,6 +3095,71 @@
       "layer": "package-layer"
     },
     {
+      "name": "handleGtmDiagnosisRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/gtm-action.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "handleGtmDiagnosisRequest(request, response, target)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "handleGtmCommandRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/gtm-http.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "handleGtmCommandRequest(request, response, callback, target, route, parseInput, parseOutput, maximumInputBytes)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "handleGtmReleaseRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/gtm-release-action.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "handleGtmReleaseRequest(request, response, callback, target)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "handleGtmSetupRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/gtm-setup-action.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "handleGtmSetupRequest(request, response, target)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "handleGtmWorkspaceRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/gtm-workspace-action.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "handleGtmWorkspaceRequest(request, response, callback, target)",
+      "layer": "package-layer"
+    },
+    {
       "name": "parsePositiveInteger",
       "kind": "function",
       "package": "@unisane/ops-console",
@@ -2986,6 +3181,32 @@
         "public"
       ],
       "signatureShort": "runGrowthConsole(context): Promise<PackCommandResult>",
+      "layer": "package-layer"
+    },
+    {
+      "name": "handleMetaDiagnosticRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/meta-diagnostic-action.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "handleMetaDiagnosticRequest(request, response, callbacks, target)",
+      "layer": "package-layer"
+    },
+    {
+      "name": "handleMetaReportRequest",
+      "kind": "function",
+      "package": "@unisane/ops-console",
+      "owner": "ops-apps/console",
+      "file": "apps/console/src/meta-report-action.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "handleMetaReportRequest(request, response, read, target, evidence)",
       "layer": "package-layer"
     },
     {
@@ -3190,5 +3411,5 @@
       "layer": "package-layer"
     }
   ],
-  "generatedAt": "content-hash:33943528c46e"
+  "generatedAt": "content-hash:77577a89d000"
 }

@@ -5,14 +5,14 @@
     "sourceRoot": "packages/unisane-ops"
   },
   "summary": {
-    "package": "unisane-ops",
+    "package": "@unisane/ops",
     "owner": "ops/unisane-ops",
     "packageDir": "packages/unisane-ops",
-    "sourceFileCount": 24,
-    "symbolCount": 123,
-    "functionCount": 123,
-    "publicFunctionCount": 36,
-    "internalFunctionCount": 87,
+    "sourceFileCount": 37,
+    "symbolCount": 141,
+    "functionCount": 141,
+    "publicFunctionCount": 59,
+    "internalFunctionCount": 82,
     "serviceLayerFunctionCount": 0
   },
   "owner": "unisane-ops",
@@ -28,7 +28,7 @@
     {
       "name": "asModuleNamespace",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/loader.ts",
       "exported": false,
@@ -39,7 +39,7 @@
     {
       "name": "findConfigPath",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/loader.ts",
       "exported": false,
@@ -50,7 +50,7 @@
     {
       "name": "isRetiredGrowthConfig",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/loader.ts",
       "exported": false,
@@ -61,7 +61,7 @@
     {
       "name": "loadUnisaneOpsConfig",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/loader.ts",
       "exported": true,
@@ -74,7 +74,7 @@
     {
       "name": "normalizeConfig",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/loader.ts",
       "exported": false,
@@ -85,7 +85,7 @@
     {
       "name": "parseCurrentOpsConfig",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/loader.ts",
       "exported": false,
@@ -96,7 +96,7 @@
     {
       "name": "parseCurrentProjectConfig",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/loader.ts",
       "exported": false,
@@ -107,7 +107,7 @@
     {
       "name": "retiredGrowthConfigError",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/loader.ts",
       "exported": false,
@@ -118,7 +118,7 @@
     {
       "name": "unwrapDefault",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/loader.ts",
       "exported": false,
@@ -129,7 +129,7 @@
     {
       "name": "defineUnisaneOps",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/schema.ts",
       "exported": true,
@@ -142,7 +142,7 @@
     {
       "name": "defineUnisaneProject",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/schema.ts",
       "exported": true,
@@ -155,7 +155,7 @@
     {
       "name": "validateConfigRelations",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/config/schema.ts",
       "exported": false,
@@ -166,7 +166,7 @@
     {
       "name": "addGrowth",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/add.ts",
       "exported": false,
@@ -179,7 +179,7 @@
     {
       "name": "confirmWrite",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/add.ts",
       "exported": false,
@@ -192,7 +192,7 @@
     {
       "name": "runAdd",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/add.ts",
       "exported": true,
@@ -206,7 +206,7 @@
     {
       "name": "selectedCapabilities",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/add.ts",
       "exported": false,
@@ -219,7 +219,7 @@
     {
       "name": "oneOption",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/arguments.ts",
       "exported": true,
@@ -233,7 +233,7 @@
     {
       "name": "parseArguments",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/arguments.ts",
       "exported": true,
@@ -247,7 +247,7 @@
     {
       "name": "connectionEnvironments",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/check.ts",
       "exported": false,
@@ -260,7 +260,7 @@
     {
       "name": "connectionFailure",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/check.ts",
       "exported": false,
@@ -273,7 +273,7 @@
     {
       "name": "runCheck",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/check.ts",
       "exported": true,
@@ -287,7 +287,7 @@
     {
       "name": "confirmWrite",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/connect.ts",
       "exported": false,
@@ -300,7 +300,7 @@
     {
       "name": "option",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/connect.ts",
       "exported": false,
@@ -313,7 +313,7 @@
     {
       "name": "runConnect",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/connect.ts",
       "exported": true,
@@ -325,9 +325,23 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "selectDefaultConnectionId",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/connect.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "selectDefaultConnectionId(currentConnectionId, connectedConnectionId, setDefault): string",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "selectEnvironment",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/connect.ts",
       "exported": false,
@@ -338,9 +352,23 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "selectsConnectedProviderAsDefault",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/handlers/connect.ts",
+      "exported": true,
+      "tags": [
+        "handlers",
+        "public"
+      ],
+      "signatureShort": "selectsConnectedProviderAsDefault(currentConnectionId, connectedConnectionId, setDefault): boolean",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "confirmDisconnect",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/disconnect.ts",
       "exported": false,
@@ -353,7 +381,7 @@
     {
       "name": "option",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/disconnect.ts",
       "exported": false,
@@ -366,7 +394,7 @@
     {
       "name": "runDisconnect",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/disconnect.ts",
       "exported": true,
@@ -380,7 +408,7 @@
     {
       "name": "selectEnvironment",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/disconnect.ts",
       "exported": false,
@@ -393,7 +421,7 @@
     {
       "name": "doctorHelp",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/doctor.ts",
       "exported": false,
@@ -406,7 +434,7 @@
     {
       "name": "runDoctor",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/doctor.ts",
       "exported": true,
@@ -420,7 +448,7 @@
     {
       "name": "readProjectPackages",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/info.ts",
       "exported": false,
@@ -433,7 +461,7 @@
     {
       "name": "renderHuman",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/info.ts",
       "exported": false,
@@ -446,7 +474,7 @@
     {
       "name": "runInfo",
       "kind": "const-function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/info.ts",
       "exported": true,
@@ -460,7 +488,7 @@
     {
       "name": "adoptionMode",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/init.ts",
       "exported": false,
@@ -473,7 +501,7 @@
     {
       "name": "capabilities",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/init.ts",
       "exported": false,
@@ -486,7 +514,7 @@
     {
       "name": "confirmWrite",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/init.ts",
       "exported": false,
@@ -499,7 +527,7 @@
     {
       "name": "runOpsInit",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/init.ts",
       "exported": true,
@@ -513,7 +541,7 @@
     {
       "name": "runInspectPacks",
       "kind": "const-function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/inspect-packs.ts",
       "exported": true,
@@ -527,7 +555,7 @@
     {
       "name": "installShutdown",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/mcp.ts",
       "exported": false,
@@ -540,7 +568,7 @@
     {
       "name": "requiredOption",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/mcp.ts",
       "exported": false,
@@ -553,7 +581,7 @@
     {
       "name": "resultByteLimit",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/mcp.ts",
       "exported": false,
@@ -566,7 +594,7 @@
     {
       "name": "runMcpConfigureCodex",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/mcp.ts",
       "exported": true,
@@ -580,7 +608,7 @@
     {
       "name": "runMcpServe",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/mcp.ts",
       "exported": true,
@@ -594,7 +622,7 @@
     {
       "name": "runMigrateGrowthConfig",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/migrate-growth-config.ts",
       "exported": true,
@@ -608,7 +636,7 @@
     {
       "name": "commandResult",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/result.ts",
       "exported": true,
@@ -622,7 +650,7 @@
     {
       "name": "runStatus",
       "kind": "const-function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/handlers/status.ts",
       "exported": true,
@@ -636,7 +664,7 @@
     {
       "name": "loadExactHandler",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/host.ts",
       "exported": false,
@@ -647,7 +675,7 @@
     {
       "name": "loadFirstPartyPackGraph",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/host.ts",
       "exported": true,
@@ -660,7 +688,7 @@
     {
       "name": "loadVerifiedManifest",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/host.ts",
       "exported": false,
@@ -671,7 +699,7 @@
     {
       "name": "readIdentity",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/host.ts",
       "exported": false,
@@ -682,7 +710,7 @@
     {
       "name": "readJson",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/host.ts",
       "exported": false,
@@ -693,7 +721,7 @@
     {
       "name": "renderHuman",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/host.ts",
       "exported": false,
@@ -704,7 +732,7 @@
     {
       "name": "rootHelp",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/host.ts",
       "exported": false,
@@ -715,7 +743,7 @@
     {
       "name": "runUnisaneOpsCli",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/host.ts",
       "exported": true,
@@ -728,7 +756,7 @@
     {
       "name": "absoluteProjectRoot",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
       "exported": false,
@@ -739,7 +767,7 @@
     {
       "name": "applyCodexMcpBinding",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
       "exported": true,
@@ -752,7 +780,7 @@
     {
       "name": "managedSpan",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
       "exported": false,
@@ -763,7 +791,7 @@
     {
       "name": "planCodexMcpBinding",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
       "exported": true,
@@ -776,7 +804,7 @@
     {
       "name": "renderCodexMcpBinding",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
       "exported": true,
@@ -789,7 +817,7 @@
     {
       "name": "stableId",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
       "exported": false,
@@ -800,7 +828,7 @@
     {
       "name": "tomlString",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/mcp/codex-binding.ts",
       "exported": false,
@@ -809,42 +837,9 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "campaignExecutionResult",
-      "kind": "function",
-      "package": "unisane-ops",
-      "owner": "ops/unisane-ops",
-      "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "campaignExecutionResult(input): GrowthCampaignPauseExecutionResult",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "campaignPauseProviderAdapters",
-      "kind": "function",
-      "package": "unisane-ops",
-      "owner": "ops/unisane-ops",
-      "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "campaignPauseProviderAdapters(input): GrowthCampaignPauseProviderAdapters",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "campaignStatus",
-      "kind": "function",
-      "package": "unisane-ops",
-      "owner": "ops/unisane-ops",
-      "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "campaignStatus(input): 'paused' | 'active' | 'unknown'",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "createLocalGrowthMcpRuntime",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
       "exported": true,
@@ -855,20 +850,9 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "executionStateRoot",
-      "kind": "function",
-      "package": "unisane-ops",
-      "owner": "ops/unisane-ops",
-      "file": "packages/unisane-ops/src/mcp/local-growth-binding.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "executionStateRoot(input): string",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "createInitialOpsConfig",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": true,
@@ -881,7 +865,7 @@
     {
       "name": "dependencyNames",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -892,7 +876,7 @@
     {
       "name": "detectOpsProject",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": true,
@@ -905,7 +889,7 @@
     {
       "name": "ensureConfigImport",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -916,7 +900,7 @@
     {
       "name": "initializeOpsConfigSource",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": true,
@@ -929,7 +913,7 @@
     {
       "name": "packageDocument",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -940,7 +924,7 @@
     {
       "name": "projectConfigOf",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -951,7 +935,7 @@
     {
       "name": "recordOf",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -962,7 +946,7 @@
     {
       "name": "renderFrameworkBlock",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -973,7 +957,7 @@
     {
       "name": "renderProjectBlock",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -984,7 +968,7 @@
     {
       "name": "renderValue",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -995,7 +979,7 @@
     {
       "name": "replaceBlock",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -1006,7 +990,7 @@
     {
       "name": "stableProjectId",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -1017,7 +1001,7 @@
     {
       "name": "updateOpsConfigSource",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": true,
@@ -1030,7 +1014,7 @@
     {
       "name": "writeAtomic",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/config-source.ts",
       "exported": false,
@@ -1041,7 +1025,7 @@
     {
       "name": "enabled",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
       "exported": false,
@@ -1052,7 +1036,7 @@
     {
       "name": "inferCapabilities",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
       "exported": false,
@@ -1063,7 +1047,7 @@
     {
       "name": "loadRetiredGrowthConfigInput",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
       "exported": true,
@@ -1076,7 +1060,7 @@
     {
       "name": "migrateRetiredGrowthConfig",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
       "exported": true,
@@ -1089,7 +1073,7 @@
     {
       "name": "projectPath",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
       "exported": false,
@@ -1100,7 +1084,7 @@
     {
       "name": "recordOf",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
       "exported": false,
@@ -1111,7 +1095,7 @@
     {
       "name": "unwrapDefault",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/project/growth-config-migration.ts",
       "exported": false,
@@ -1120,9 +1104,22 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "executeCampaignPauseWorkflow",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/campaign-pause.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "executeCampaignPauseWorkflow(cwd, raw, dependencies)",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "CanonicalPackRuntime.resolveBinding",
       "kind": "method",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": true,
@@ -1136,7 +1133,7 @@
     {
       "name": "createArtifactAccess",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1147,7 +1144,7 @@
     {
       "name": "createCanonicalPackRuntime",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": true,
@@ -1160,7 +1157,7 @@
     {
       "name": "createCloudflareConnectionArtifactAccess",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1171,7 +1168,7 @@
     {
       "name": "createEnvironmentSecretResolver",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1182,7 +1179,7 @@
     {
       "name": "createResourceArtifactAccess",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1193,7 +1190,7 @@
     {
       "name": "createResourceSourceAccess",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1204,7 +1201,7 @@
     {
       "name": "isStringArray",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1215,7 +1212,7 @@
     {
       "name": "parseCloudDnsRequest",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1226,7 +1223,7 @@
     {
       "name": "parseCloudflareConnectionRequest",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1237,7 +1234,7 @@
     {
       "name": "parseCloudflareResourceRequest",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1248,7 +1245,7 @@
     {
       "name": "parseLifecycleConnectRequest",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1259,7 +1256,7 @@
     {
       "name": "parseLifecycleDisconnectRequest",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1270,7 +1267,7 @@
     {
       "name": "parseLifecycleReadinessRequest",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1281,7 +1278,7 @@
     {
       "name": "resolveResourceTarget",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1292,7 +1289,7 @@
     {
       "name": "resolveScriptSource",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1303,7 +1300,7 @@
     {
       "name": "resolveTargetContext",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1314,7 +1311,7 @@
     {
       "name": "selectId",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/cloud-dns.ts",
       "exported": false,
@@ -1323,9 +1320,61 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "selectGrowthEnvironment",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/environment.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "selectGrowthEnvironment(environments, requested): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "openScopedExecutionStore",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/execution-store.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "openScopedExecutionStore(projectRoot, backend, options)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeGoogleAssetOperation",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/google-assets.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "executeGoogleAssetOperation(cwd, input, resolveCredentials)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeGoogleGoalOperation",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/google-goals.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "executeGoogleGoalOperation(cwd, input, resolveCredentials)",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "createLocalGrowthProviderOperationDependencies",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": true,
@@ -1338,18 +1387,18 @@
     {
       "name": "executeGoogleMarketing",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "executeGoogleMarketing(cwd, operation, input): Promise<unknown>",
+      "signatureShort": "executeGoogleMarketing(cwd, operation, input, campaignFetch): Promise<unknown>",
       "layer": "tooling-layer"
     },
     {
       "name": "executeGoogleSeo",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
@@ -1360,7 +1409,7 @@
     {
       "name": "executeGoogleTagManager",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
@@ -1371,7 +1420,7 @@
     {
       "name": "executeGrowthProviderOperation",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": true,
@@ -1384,7 +1433,7 @@
     {
       "name": "executeMeta",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
@@ -1395,7 +1444,7 @@
     {
       "name": "isGrowthProviderBinding",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": true,
@@ -1408,7 +1457,7 @@
     {
       "name": "recordOf",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
@@ -1419,7 +1468,7 @@
     {
       "name": "requestOf",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
@@ -1430,7 +1479,7 @@
     {
       "name": "resolveGoogleConnectionCredentials",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
@@ -1441,7 +1490,7 @@
     {
       "name": "resolveGrowthConnectionsContext",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
@@ -1452,7 +1501,7 @@
     {
       "name": "resolveGrowthProjectContext",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": false,
@@ -1463,7 +1512,7 @@
     {
       "name": "resolveGrowthProviderBinding",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
       "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
       "exported": true,
@@ -1474,38 +1523,239 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "resolveMetaConnectionRecord",
+      "name": "openGtmExecutionStore",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
-      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "file": "packages/unisane-ops/src/runtime-adapters/gtm-execution-store.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "openGtmExecutionStore(projectRoot, backend)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeGtmWorkspaceOperation",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/gtm-workspace.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "executeGtmWorkspaceOperation(cwd, raw, release)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "executeOperation",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/gtm-workspace.ts",
       "exported": false,
       "tags": [],
+      "signatureShort": "executeOperation(cwd, raw, release)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "findMetaOperationSupport",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-capabilities.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "findMetaOperationSupport(operation)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "reviewLocalMetaCapabilities",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-capabilities.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "reviewLocalMetaCapabilities(cwd, input, options)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveMetaConnectionRecord",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-context.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
       "signatureShort": "resolveMetaConnectionRecord(cwd, input)",
       "layer": "tooling-layer"
     },
     {
       "name": "resolveSelectedMetaAdsAccount",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
-      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
-      "exported": false,
-      "tags": [],
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-context.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
       "signatureShort": "resolveSelectedMetaAdsAccount(input): string",
       "layer": "tooling-layer"
     },
     {
-      "name": "selectGrowthEnvironment",
+      "name": "executeMetaDiagnosticOperation",
       "kind": "function",
-      "package": "unisane-ops",
+      "package": "@unisane/ops",
       "owner": "ops/unisane-ops",
-      "file": "packages/unisane-ops/src/runtime-adapters/growth.ts",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-diagnostics.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "executeMetaDiagnosticOperation(cwd, mode, raw, now)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveMetaDiagnosticTarget",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-diagnostics.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveMetaDiagnosticTarget(cwd, environmentId)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "storeAt",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-diagnostics.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "selectGrowthEnvironment(environments, requested): string",
+      "signatureShort": "storeAt(root, identity, create)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "collectLocalMetaReport",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-report-history.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "collectLocalMetaReport(cwd, input, dependencies)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readLocalMetaReportHistory",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-report-history.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readLocalMetaReportHistory(cwd, input)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readLocalMetaReport",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-report-read.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readLocalMetaReport(cwd, input, dependencies)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveLocalMetaReportBinding",
+      "kind": "function",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-report-read.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveLocalMetaReportBinding(cwd, environmentIdInput)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalMetaReportStore.directory",
+      "kind": "method",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-report-store.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalMetaReportStore.directory(create): Promise<string | undefined>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalMetaReportStore.list",
+      "kind": "method",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-report-store.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalMetaReportStore.list(): Promise<GrowthReportEvidence[]>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalMetaReportStore.put",
+      "kind": "method",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-report-store.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalMetaReportStore.put(input): Promise<GrowthReportEvidence>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "LocalMetaReportStore.readFile",
+      "kind": "method",
+      "package": "@unisane/ops",
+      "owner": "ops/unisane-ops",
+      "file": "packages/unisane-ops/src/runtime-adapters/meta-report-store.ts",
+      "exported": true,
+      "tags": [
+        "class-method",
+        "public"
+      ],
+      "signatureShort": "LocalMetaReportStore.readFile(directory, name): Promise<GrowthReportEvidence>",
       "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:4ee550a66a58"
+  "generatedAt": "content-hash:debd8501167f"
 }

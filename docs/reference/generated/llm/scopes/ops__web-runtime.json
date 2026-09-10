@@ -19,7 +19,8 @@
   "generatorVersion": 1,
   "sourceCommit": "workspace",
   "sourceFiles": [
-    "packages/web-runtime/package.json"
+    "packages/web-runtime/package.json",
+    "packages/web-runtime/src/contracts/tracking-observation.ts"
   ],
   "records": {
     "scope": {
@@ -50,10 +51,12 @@
     "relevantDocs": [
       "packages/web-runtime/README.md"
     ],
-    "contractFiles": [],
+    "contractFiles": [
+      "packages/web-runtime/src/contracts/tracking-observation.ts"
+    ],
     "paths": [
       "packages/web-runtime"
     ]
   },
-  "generatedAt": "content-hash:168bfbc09f36"
+  "generatedAt": "content-hash:94a91822b414"
 }

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "state": "valid-with-exact-released-edges",
-  "generatedFromPolicySha256": "765245a4878b92e4b3b5af46f9bc2875371c0f9380f57d9a29a2c4c07c122aa1",
+  "generatedFromPolicySha256": "feaa73b8b5266aed2aa18bb1ce09f96d3e69aac90220f5552da5ca62e0689232",
   "source": {
-    "fileCount": 1034,
-    "digest": "29446307bfc3dec5cff7484b48cebff6a378b0e0d0b7163821b693fa78ecd916",
+    "fileCount": 1171,
+    "digest": "d6bfb26498f8caf4a992bdf546318e34301412f3865df7c920b09e02b20e83ff",
     "excludedGeneratedAndTaskMemory": [
       "docs/reference/generated/**",
       "docs/work/tasks/**",
@@ -38,12 +38,12 @@
       "docs/reference/generated/symbols/packages/@unisane__ops-hosted-postgresql.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__ops-hosted-runtime.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__ops-mcp.symbols.json",
+      "docs/reference/generated/symbols/packages/@unisane__ops.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__provider-aws.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__provider-cloudflare.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__provider-google.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__provider-meta.symbols.json",
-      "docs/reference/generated/symbols/packages/@unisane__web-runtime.symbols.json",
-      "docs/reference/generated/symbols/packages/unisane-ops.symbols.json"
+      "docs/reference/generated/symbols/packages/@unisane__web-runtime.symbols.json"
     ],
     "observed": [
       "docs/reference/generated/fleet-commit-map.txt",
@@ -71,12 +71,12 @@
       "docs/reference/generated/symbols/packages/@unisane__ops-hosted-postgresql.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__ops-hosted-runtime.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__ops-mcp.symbols.json",
+      "docs/reference/generated/symbols/packages/@unisane__ops.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__provider-aws.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__provider-cloudflare.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__provider-google.symbols.json",
       "docs/reference/generated/symbols/packages/@unisane__provider-meta.symbols.json",
-      "docs/reference/generated/symbols/packages/@unisane__web-runtime.symbols.json",
-      "docs/reference/generated/symbols/packages/unisane-ops.symbols.json"
+      "docs/reference/generated/symbols/packages/@unisane__web-runtime.symbols.json"
     ],
     "unexpected": [],
     "missing": []

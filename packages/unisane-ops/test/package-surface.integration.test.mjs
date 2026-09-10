@@ -8,7 +8,7 @@ const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 const manifest = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
 
 test('package exposes the final Ops coordinate, binary, config, and metadata subpaths', () => {
-  assert.equal(manifest.name, 'unisane-ops');
+  assert.equal(manifest.name, '@unisane/ops');
   assert.deepEqual(manifest.bin, { 'unisane-ops': './dist/cli.js' });
   assert.deepEqual(Object.keys(manifest.exports), ['./config', './meta']);
   assert.equal(manifest.exports['./config'].types, './dist/config/index.d.ts');

@@ -16,7 +16,7 @@ import {
 import { createCanonicalPackRuntime } from './runtime-adapters/cloud-dns.js';
 
 const TRUSTED_PACKAGES = [
-  'unisane-ops',
+  '@unisane/ops',
   '@unisane/cloud',
   '@unisane/growth',
   '@unisane/ops-console',

@@ -8,11 +8,11 @@
     "package": "@unisane/provider-meta",
     "owner": "ops/provider-meta",
     "packageDir": "packages/provider-meta",
-    "sourceFileCount": 19,
-    "symbolCount": 106,
-    "functionCount": 106,
-    "publicFunctionCount": 38,
-    "internalFunctionCount": 68,
+    "sourceFileCount": 28,
+    "symbolCount": 118,
+    "functionCount": 118,
+    "publicFunctionCount": 49,
+    "internalFunctionCount": 69,
     "serviceLayerFunctionCount": 0
   },
   "owner": "unisane-ops",
@@ -26,7 +26,7 @@
   ],
   "records": [
     {
-      "name": "metaMeasurementCapabilityMatrix",
+      "name": "metaCapabilityInventory",
       "kind": "function",
       "package": "@unisane/provider-meta",
       "owner": "ops/provider-meta",
@@ -35,7 +35,7 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "metaMeasurementCapabilityMatrix(): MetaMeasurementCapabilityMatrix",
+      "signatureShort": "metaCapabilityInventory(): MetaCapabilityInventory",
       "layer": "tooling-layer"
     },
     {
@@ -155,28 +155,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "selectedId",
-      "kind": "function",
-      "package": "@unisane/provider-meta",
-      "owner": "ops/provider-meta",
-      "file": "packages/provider-meta/src/meta/connect.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "selectedId(parsed, previous, resourceType): string | undefined",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "selectionResources",
-      "kind": "function",
-      "package": "@unisane/provider-meta",
-      "owner": "ops/provider-meta",
-      "file": "packages/provider-meta/src/meta/connect.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "selectionResources(input): MarketingMetaConnectionResource[]",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "areaResult",
       "kind": "function",
       "package": "@unisane/provider-meta",
@@ -220,6 +198,17 @@
         "public"
       ],
       "signatureShort": "discoverMetaConnection(input): Promise<MetaConnectionDiscoveryResult>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "discoveryFailureOf",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-discovery.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "discoveryFailureOf(error): MetaDiscoveryFailure",
       "layer": "tooling-layer"
     },
     {
@@ -442,6 +431,43 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "guideMetaResourceSelection",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-resource-selection.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "guideMetaResourceSelection(input): Promise<Map<MarketingMetaResourceType, string>>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectedId",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-resource-selection.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "selectedId(selections, previous, resourceType): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "selectionResources",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/connection-resource-selection.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "selectionResources(input): MarketingMetaConnectionResource[]",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "readMetaConnectionRecord",
       "kind": "function",
       "package": "@unisane/provider-meta",
@@ -566,6 +592,32 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "assertMetaCampaignMutationGrant",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/credential-execution.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertMetaCampaignMutationGrant(connection): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "controlMetaCampaignWithHostCredential",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/credential-execution.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "controlMetaCampaignWithHostCredential(input)",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "discoverMetaConnectionWithHostCredential",
       "kind": "function",
       "package": "@unisane/provider-meta",
@@ -623,7 +675,18 @@
       "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "assertCredentialNotExposed(value, credential, seen): void",
+      "signatureShort": "assertCredentialNotExposed(value, credential, seen, allowCredentialMetadataFields): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "chunkManifest",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "chunkManifest(bytes): { count: number; byteLength: number } | null",
       "layer": "tooling-layer"
     },
     {
@@ -701,6 +764,19 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "metaKeychainChunkAccount",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-resolver.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "metaKeychainChunkAccount(baseAccount, index): string",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "trimmedCredential",
       "kind": "function",
       "package": "@unisane/provider-meta",
@@ -747,6 +823,50 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "deleteItem",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-store.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "deleteItem(runner, account): boolean",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "promptInput",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-store.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "promptInput(value): Uint8Array",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "storedChunkCount",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-store.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "storedChunkCount(runner, account): number | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "writeItem",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/local-credential-store.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "writeItem(runner, account, value): void",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "accountPath",
       "kind": "function",
       "package": "@unisane/provider-meta",
@@ -765,18 +885,7 @@
       "file": "packages/provider-meta/src/meta/marketing/asset-uploader.ts",
       "exported": false,
       "tags": [],
-      "signatureShort": "imageHash(value, fallbackKey): string | undefined",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "parseProviderResponse",
-      "kind": "function",
-      "package": "@unisane/provider-meta",
-      "owner": "ops/provider-meta",
-      "file": "packages/provider-meta/src/meta/marketing/asset-uploader.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "parseProviderResponse(response): Promise<unknown>",
+      "signatureShort": "imageHash(value, fileName): string | undefined",
       "layer": "tooling-layer"
     },
     {
@@ -801,6 +910,45 @@
       "exported": false,
       "tags": [],
       "signatureShort": "videoId(value): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "readBoundMetaCampaign",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/campaign-access.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readBoundMetaCampaign(input)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "metaCampaignDailyBudget",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/campaign-input.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "metaCampaignDailyBudget(value): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "resolveMetaCampaignDestination",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/campaign-input.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "resolveMetaCampaignDestination(origin, value): string",
       "layer": "tooling-layer"
     },
     {
@@ -897,17 +1045,6 @@
       "exported": false,
       "tags": [],
       "signatureShort": "readGraphJson(args): Promise<unknown>",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "absoluteFinalUrl",
-      "kind": "function",
-      "package": "@unisane/provider-meta",
-      "owner": "ops/provider-meta",
-      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "absoluteFinalUrl(origin, value): string",
       "layer": "tooling-layer"
     },
     {
@@ -1036,17 +1173,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "minorUnitsFromDailyBudgetAmount",
-      "kind": "function",
-      "package": "@unisane/provider-meta",
-      "owner": "ops/provider-meta",
-      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "minorUnitsFromDailyBudgetAmount(value): number",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "mutateMetaAds",
       "kind": "function",
       "package": "@unisane/provider-meta",
@@ -1055,17 +1181,6 @@
       "exported": false,
       "tags": [],
       "signatureShort": "mutateMetaAds(args): Promise<Record<string, unknown>>",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "parseProviderResponse",
-      "kind": "function",
-      "package": "@unisane/provider-meta",
-      "owner": "ops/provider-meta",
-      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "parseProviderResponse(response): Promise<unknown>",
       "layer": "tooling-layer"
     },
     {
@@ -1095,14 +1210,16 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "readProviderResponse",
+      "name": "readMetaMutationResponse",
       "kind": "function",
       "package": "@unisane/provider-meta",
       "owner": "ops/provider-meta",
-      "file": "packages/provider-meta/src/meta/marketing/live-ads-executor.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "readProviderResponse(response, code, label): Promise<unknown>",
+      "file": "packages/provider-meta/src/meta/marketing/mutation-response.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readMetaMutationResponse(response, code, label): Promise<unknown>",
       "layer": "tooling-layer"
     },
     {
@@ -1162,6 +1279,19 @@
       "exported": false,
       "tags": [],
       "signatureShort": "trustedNextPageUrl(value, apiVersion): string | undefined",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "normalizeMetaReportSnapshot",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/marketing/report-snapshot.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "normalizeMetaReportSnapshot(input)",
       "layer": "tooling-layer"
     },
     {
@@ -1266,7 +1396,31 @@
       ],
       "signatureShort": "createTerminalMetaCredentialPrompt(options): MetaCredentialPrompt",
       "layer": "tooling-layer"
+    },
+    {
+      "name": "createTerminalMetaResourcePrompt",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/terminal-resource-prompt.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createTerminalMetaResourcePrompt(options): MetaResourcePrompt",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "terminalLabel",
+      "kind": "function",
+      "package": "@unisane/provider-meta",
+      "owner": "ops/provider-meta",
+      "file": "packages/provider-meta/src/meta/terminal-resource-prompt.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "terminalLabel(value): string",
+      "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:855d24b83789"
+  "generatedAt": "content-hash:9a90d7d3968f"
 }

@@ -8,10 +8,10 @@
     "package": "@unisane/ops-mcp",
     "owner": "ops/ops-mcp",
     "packageDir": "packages/ops-mcp",
-    "sourceFileCount": 11,
-    "symbolCount": 15,
-    "functionCount": 15,
-    "publicFunctionCount": 11,
+    "sourceFileCount": 17,
+    "symbolCount": 21,
+    "functionCount": 21,
+    "publicFunctionCount": 17,
     "internalFunctionCount": 4,
     "serviceLayerFunctionCount": 0
   },
@@ -126,6 +126,84 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "registerGtmReleaseTools",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/gtm-release-tools.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerGtmReleaseTools(server, binding, workflows)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerGtmSetupTools",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/gtm-setup-tools.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerGtmSetupTools(server, binding)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerGtmTools",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/gtm-tools.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerGtmTools(server, binding)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerGtmWorkspaceTools",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/gtm-workspace-tools.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerGtmWorkspaceTools(server, binding, workflows)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerMetaDiagnosticTools",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/meta-diagnostic-tools.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerMetaDiagnosticTools(server, binding, workflows)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerGrowthReportHistoryTools",
+      "kind": "function",
+      "package": "@unisane/ops-mcp",
+      "owner": "ops/ops-mcp",
+      "file": "packages/ops-mcp/src/report-history-tools.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerGrowthReportHistoryTools(server, binding, workflows)",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "attachWorkflowResume",
       "kind": "function",
       "package": "@unisane/ops-mcp",
@@ -213,5 +291,5 @@
       "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:ae03c86a86fa"
+  "generatedAt": "content-hash:ab820615eaa0"
 }

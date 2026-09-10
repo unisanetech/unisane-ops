@@ -1,0 +1,25 @@
+# Private npm canary distribution
+
+The owner approved private npm publication on September 10, 2026. This supersedes the public
+registry classification for this release. No source repository visibility change is authorized or
+required.
+
+The CLI package is `@unisane/ops`; its executable remains `unisane-ops`. Configuration imports use
+`@unisane/ops/config`. The unscoped package is not published and there is no compatibility alias.
+npm requires scoped names for private packages.
+
+The package admission policy owns the 11 restricted package names, including the CLI's required MCP
+adapter. Hosted applications and the hosted PostgreSQL adapter remain outside this release. Source
+package versions and pack manifest versions must match; changed pack manifests are sealed with the
+Ops engine's `sealPackManifest` API.
+
+`scripts/private-release.mjs prepare` packs the built packages and verifies private access,
+dependency closure, export targets and archive contents. `consumer` installs those exact archives in
+a temporary independent project, loads the public entrypoints, and runs CLI info. The manually
+dispatched workflow publishes only those checked archives and compares registry SHA-512 integrity.
+It retains the exact source commit and receipt. Private package publication does not claim public
+npm provenance.
+
+Publishing credentials are temporary and confined to the publication step. Consumer credentials must
+be read-only. A successful publication does not certify a Platforms application: its clean install
+and build remain separate checks.

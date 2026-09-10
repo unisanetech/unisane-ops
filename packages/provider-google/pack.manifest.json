@@ -3,31 +3,47 @@
   "kind": "unisane.pack-manifest",
   "packId": "provider-google",
   "packageName": "@unisane/provider-google",
-  "version": "0.1.0",
+  "version": "0.1.0-next.20260910.1",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [
     {
       "id": "provider.google",
-      "path": ["provider", "google"],
+      "path": [
+        "provider",
+        "google"
+      ],
       "handler": {
         "exportPath": "./handlers/provider-google",
         "exportName": "runProviderGoogleCommand"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project", "secret-store", "remote"],
+      "writeTargets": [
+        "project",
+        "secret-store",
+        "remote"
+      ],
       "artifactClasses": [],
-      "riskGuards": ["production", "security-sensitive"],
+      "riskGuards": [
+        "production",
+        "security-sensitive"
+      ],
       "json": true
     }
   ],
-  "configNamespaces": ["provider-google"],
+  "configNamespaces": [
+    "provider-google"
+  ],
   "addItemTypes": [],
-  "capabilities": ["provider-google"],
-  "providerBindings": ["google"],
+  "capabilities": [
+    "provider-google"
+  ],
+  "providerBindings": [
+    "google"
+  ],
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "925ddfc7e555ac0890f5a1e6bab53702123b768dcc7bcd9762ba38814c2d4d0d"
+    "manifestHash": "001d3a1600a88c6aff86138e26aa511b00a46c9d6f43b807f12aac37d5e5b563"
   }
 }

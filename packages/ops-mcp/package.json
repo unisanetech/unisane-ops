@@ -1,7 +1,7 @@
 {
   "name": "@unisane/ops-mcp",
-  "private": true,
-  "version": "0.1.0",
+  "private": false,
+  "version": "0.1.0-next.20260910.1",
   "description": "Project-scoped local MCP access to proven Unisane Ops workflows",
   "license": "MIT",
   "repository": {
@@ -61,5 +61,10 @@
     "kind": "tooling",
     "edition": "oss",
     "meta": "./unisane.meta.json"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org/",
+    "tag": "next"
   }
 }

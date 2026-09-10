@@ -33,7 +33,7 @@ function readProjectPackages(cwd: string): readonly UnisanePackageVersion[] {
   const packages: UnisanePackageVersion[] = [];
   for (const [section, scope] of DEPENDENCY_SECTIONS) {
     for (const [name, version] of Object.entries(value[section] ?? {})) {
-      if ((name === 'unisane-ops' || name.startsWith('@unisane/')) && typeof version === 'string') {
+      if (name.startsWith('@unisane/') && typeof version === 'string') {
         packages.push({ name, version, scope });
       }
     }

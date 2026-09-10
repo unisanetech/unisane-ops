@@ -8,7 +8,7 @@ const PROJECT_END = '// unisane-ops:project:end';
 const FRAMEWORK_START = '// unisane-ops:framework:start';
 const FRAMEWORK_END = '// unisane-ops:framework:end';
 const CONFIG_IMPORT =
-  "import { defineUnisaneOps, defineUnisaneProject } from 'unisane-ops/config';";
+  "import { defineUnisaneOps, defineUnisaneProject } from '@unisane/ops/config';";
 
 export interface DetectedOpsProject {
   root: string;
@@ -101,7 +101,7 @@ function writeAtomic(filePath: string, source: string): void {
 
 function ensureConfigImport(source: string): string {
   if (/\bdefineUnisaneOps\b/.test(source)) return source;
-  return `import { defineUnisaneOps } from 'unisane-ops/config';\n${source}`;
+  return `import { defineUnisaneOps } from '@unisane/ops/config';\n${source}`;
 }
 
 function replaceBlock(args: {

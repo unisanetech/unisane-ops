@@ -1,6 +1,6 @@
 {
   "name": "@unisane/provider-aws",
-  "version": "0.1.0",
+  "version": "0.1.0-next.20260910.1",
   "description": "AWS provider-family operations for Unisane Cloud",
   "license": "MIT",
   "repository": {
@@ -9,8 +9,9 @@
     "directory": "packages/provider-aws"
   },
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org/",
+    "tag": "next"
   },
   "type": "module",
   "sideEffects": false,
@@ -77,5 +78,6 @@
     "kind": "tooling",
     "edition": "oss",
     "meta": "./unisane.meta.json"
-  }
+  },
+  "private": false
 }

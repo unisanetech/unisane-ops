@@ -2,66 +2,91 @@
   "schemaVersion": 1,
   "kind": "unisane.pack-manifest",
   "packId": "core",
-  "packageName": "unisane-ops",
-  "version": "0.1.0",
+  "packageName": "@unisane/ops",
+  "version": "0.1.0-next.20260910.1",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [
     {
       "id": "core.init",
-      "path": ["init"],
+      "path": [
+        "init"
+      ],
       "handler": {
         "exportPath": "./handlers/init",
         "exportName": "runOpsInit"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project"],
+      "writeTargets": [
+        "project"
+      ],
       "artifactClasses": [],
       "riskGuards": [],
       "json": true
     },
     {
       "id": "core.add",
-      "path": ["add"],
+      "path": [
+        "add"
+      ],
       "handler": {
         "exportPath": "./handlers/add",
         "exportName": "runAdd"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project"],
+      "writeTargets": [
+        "project"
+      ],
       "artifactClasses": [],
       "riskGuards": [],
       "json": true
     },
     {
       "id": "core.connect",
-      "path": ["connect"],
+      "path": [
+        "connect"
+      ],
       "handler": {
         "exportPath": "./handlers/connect",
         "exportName": "runConnect"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project", "secret-store"],
+      "writeTargets": [
+        "project",
+        "secret-store"
+      ],
       "artifactClasses": [],
-      "riskGuards": ["security-sensitive"],
+      "riskGuards": [
+        "security-sensitive"
+      ],
       "json": true
     },
     {
       "id": "core.disconnect",
-      "path": ["disconnect"],
+      "path": [
+        "disconnect"
+      ],
       "handler": {
         "exportPath": "./handlers/disconnect",
         "exportName": "runDisconnect"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project", "secret-store"],
+      "writeTargets": [
+        "project",
+        "secret-store"
+      ],
       "artifactClasses": [],
-      "riskGuards": ["security-sensitive", "destructive"],
+      "riskGuards": [
+        "security-sensitive",
+        "destructive"
+      ],
       "json": true
     },
     {
       "id": "core.check",
-      "path": ["check"],
+      "path": [
+        "check"
+      ],
       "handler": {
         "exportPath": "./handlers/check",
         "exportName": "runCheck"
@@ -74,20 +99,27 @@
     },
     {
       "id": "core.migrate-growth-config",
-      "path": ["migrate", "growth-config"],
+      "path": [
+        "migrate",
+        "growth-config"
+      ],
       "handler": {
         "exportPath": "./handlers/migrate-growth-config",
         "exportName": "runMigrateGrowthConfig"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project"],
+      "writeTargets": [
+        "project"
+      ],
       "artifactClasses": [],
       "riskGuards": [],
       "json": true
     },
     {
       "id": "core.status",
-      "path": ["status"],
+      "path": [
+        "status"
+      ],
       "handler": {
         "exportPath": "./handlers/status",
         "exportName": "runStatus"
@@ -100,7 +132,9 @@
     },
     {
       "id": "core.info",
-      "path": ["info"],
+      "path": [
+        "info"
+      ],
       "handler": {
         "exportPath": "./handlers/info",
         "exportName": "runInfo"
@@ -113,7 +147,9 @@
     },
     {
       "id": "core.doctor",
-      "path": ["doctor"],
+      "path": [
+        "doctor"
+      ],
       "handler": {
         "exportPath": "./handlers/doctor",
         "exportName": "runDoctor"
@@ -126,7 +162,10 @@
     },
     {
       "id": "core.inspect-packs",
-      "path": ["inspect", "packs"],
+      "path": [
+        "inspect",
+        "packs"
+      ],
       "handler": {
         "exportPath": "./handlers/inspect-packs",
         "exportName": "runInspectPacks"
@@ -139,7 +178,10 @@
     },
     {
       "id": "core.mcp-serve",
-      "path": ["mcp", "serve"],
+      "path": [
+        "mcp",
+        "serve"
+      ],
       "handler": {
         "exportPath": "./handlers/mcp",
         "exportName": "runMcpServe"
@@ -147,20 +189,30 @@
       "maximumEffect": "offline",
       "writeTargets": [],
       "artifactClasses": [],
-      "riskGuards": ["security-sensitive"],
+      "riskGuards": [
+        "security-sensitive"
+      ],
       "json": false
     },
     {
       "id": "core.mcp-configure-codex",
-      "path": ["mcp", "configure", "codex"],
+      "path": [
+        "mcp",
+        "configure",
+        "codex"
+      ],
       "handler": {
         "exportPath": "./handlers/mcp",
         "exportName": "runMcpConfigureCodex"
       },
       "maximumEffect": "write",
-      "writeTargets": ["project"],
+      "writeTargets": [
+        "project"
+      ],
       "artifactClasses": [],
-      "riskGuards": ["security-sensitive"],
+      "riskGuards": [
+        "security-sensitive"
+      ],
       "json": true
     }
   ],
@@ -168,7 +220,20 @@
   "addItemTypes": [],
   "capabilities": [],
   "providerBindings": [],
-  "reservedRootNames": ["add", "check", "connect", "disconnect", "doctor", "info", "init", "inspect", "mcp", "migrate", "remove", "status"],
+  "reservedRootNames": [
+    "add",
+    "check",
+    "connect",
+    "disconnect",
+    "doctor",
+    "info",
+    "init",
+    "inspect",
+    "mcp",
+    "migrate",
+    "remove",
+    "status"
+  ],
   "reservedRootContributors": [
     {
       "root": "connect",
@@ -177,6 +242,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "c5d11e8570f4e4986f312b7a47701798c4650f3e79ce267b11b962a6b817837e"
+    "manifestHash": "09745964f56400da5bc7b31b8eedc6183ccb78433cc6f5c990667144848e3133"
   }
 }

@@ -14,6 +14,7 @@ const mode = process.argv.includes('--write')
     : 'check';
 const ignoredDirectories = new Set([
   '.git',
+  '.tmp',
   '.pnpm-store',
   '.skopos',
   '.unisane',
@@ -30,6 +31,7 @@ function sha256(value) {
 function walk(directory, prefix = '') {
   const paths = [];
   for (const entry of readdirSync(join(directory, prefix), { withFileTypes: true })) {
+    if (entry.name === '.DS_Store') continue;
     if (entry.isDirectory() && ignoredDirectories.has(entry.name)) continue;
     const path = prefix ? `${prefix}/${entry.name}` : entry.name;
     if (entry.isDirectory()) paths.push(...walk(directory, path));

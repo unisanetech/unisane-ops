@@ -8,3 +8,6 @@ dist/
 .unisane/
 *.log
 *.tsbuildinfo
+
+.tmp/
+.DS_Store

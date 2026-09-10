@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "tooling",
-  "id": "unisane-ops",
+  "id": "@unisane/ops",
   "edition": "oss",
   "maturity": "beta",
   "supportedModes": [

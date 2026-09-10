@@ -1,6 +1,6 @@
 {
-  "name": "unisane-ops",
-  "version": "0.1.0",
+  "name": "@unisane/ops",
+  "version": "0.1.0-next.20260910.1",
   "description": "CLI and project configuration for Unisane Ops",
   "keywords": [
     "unisane",
@@ -17,8 +17,9 @@
     "directory": "packages/unisane-ops"
   },
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org/",
+    "tag": "next"
   },
   "homepage": "https://unisane.dev",
   "bugs": {
@@ -90,5 +91,6 @@
     "kind": "tooling",
     "edition": "oss",
     "meta": "./unisane.meta.json"
-  }
+  },
+  "private": false
 }

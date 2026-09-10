@@ -8,11 +8,11 @@
     "package": "@unisane/growth",
     "owner": "ops/growth",
     "packageDir": "packages/growth",
-    "sourceFileCount": 351,
-    "symbolCount": 1588,
-    "functionCount": 1588,
-    "publicFunctionCount": 529,
-    "internalFunctionCount": 1059,
+    "sourceFileCount": 379,
+    "symbolCount": 1597,
+    "functionCount": 1597,
+    "publicFunctionCount": 563,
+    "internalFunctionCount": 1034,
     "serviceLayerFunctionCount": 0
   },
   "owner": "unisane-ops",
@@ -148,6 +148,30 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "assessAccount",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/actions/capability-review.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "assessAccount(snapshot, assessment, now, maxAgeHours): { state: GrowthCapabilityAccountState; reasons: string[] }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGrowthCapabilityReviewAction",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/actions/capability-review.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGrowthCapabilityReviewAction(dependencies)",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "createGrowthHealthReviewAction",
       "kind": "function",
       "package": "@unisane/growth",
@@ -215,6 +239,45 @@
       "exported": false,
       "tags": [],
       "signatureShort": "trustStatus(input)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createMetaDiagnosticReviewAction",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/actions/meta-diagnostic-review.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createMetaDiagnosticReviewAction(dependencies)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGrowthReportHistoryAction",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/actions/report-history.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGrowthReportHistoryAction(dependencies)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGrowthReportReadAction",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/actions/report-read.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGrowthReportReadAction(dependencies)",
       "layer": "tooling-layer"
     },
     {
@@ -377,17 +440,6 @@
       "exported": false,
       "tags": [],
       "signatureShort": "printJson(value): void",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "resolveAdsAssetLiveEnv",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/ads/assets/run.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "resolveAdsAssetLiveEnv(config, options, providers): Promise<{ env: Record<string, string | undefined>; providerCredentials: NonNullable< Parameters<typeof writeMarketingAdsAsset...",
       "layer": "tooling-layer"
     },
     {
@@ -1525,29 +1577,29 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "applyGoogleTagManagerCommand",
+      "name": "registerCapabilityCommands",
       "kind": "function",
       "package": "@unisane/growth",
       "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/apply/run.ts",
+      "file": "packages/growth/src/cli/commands/capabilities/register.ts",
       "exported": true,
       "tags": [
         "public"
       ],
-      "signatureShort": "applyGoogleTagManagerCommand(options): Promise<number>",
+      "signatureShort": "registerCapabilityCommands(parent): void",
       "layer": "tooling-layer"
     },
     {
-      "name": "createVersionGoogleTagManagerCommand",
+      "name": "registerDiagnosticCommands",
       "kind": "function",
       "package": "@unisane/growth",
       "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/create-version/run.ts",
+      "file": "packages/growth/src/cli/commands/diagnostics/register.ts",
       "exported": true,
       "tags": [
         "public"
       ],
-      "signatureShort": "createVersionGoogleTagManagerCommand(options): Promise<number>",
+      "signatureShort": "registerDiagnosticCommands(parent)",
       "layer": "tooling-layer"
     },
     {
@@ -1564,39 +1616,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "ensureWithinCwd",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/manifest-loader.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "ensureWithinCwd(cwd, resolvedPath): void",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "isGoogleTagManagerManifest",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/manifest-loader.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "isGoogleTagManagerManifest(value): value is GoogleTagManagerContainerManifest",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "isRecord",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/manifest-loader.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "isRecord(value): value is Record<string, unknown>",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "loadGoogleTagManagerManifest",
       "kind": "function",
       "package": "@unisane/growth",
@@ -1610,93 +1629,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "manifestFromModule",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/manifest-loader.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "manifestFromModule(moduleValue): unknown",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "resolveManifestPath",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/manifest-loader.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "resolveManifestPath(cwd, selectedPath): string",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "planGoogleTagManagerCommand",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/plan/run.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "planGoogleTagManagerCommand(options): Promise<number>",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "previewGoogleTagManagerCommand",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/preview/run.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "previewGoogleTagManagerCommand(options): Promise<number>",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "assertPublishAllowed",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/publish-policy.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "assertPublishAllowed(args): void",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "requiredVersion",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/publish-policy.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "requiredVersion(options): string",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "publishGoogleTagManagerCommand",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/publish/run.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "publishGoogleTagManagerCommand(options): Promise<number>",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "pullGoogleTagManagerCommand",
       "kind": "function",
       "package": "@unisane/growth",
@@ -1707,67 +1639,6 @@
         "public"
       ],
       "signatureShort": "pullGoogleTagManagerCommand(options): Promise<number>",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "assertPreviewReceipt",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/receipts.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "assertPreviewReceipt(args): void",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "assertRollbackSource",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/receipts.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "assertRollbackSource(args): { emergency: boolean; reason?: string; actor?: string; reconciliationTask?: string }",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "assertVersionReceipt",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/receipts.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "assertVersionReceipt(args): void",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "isRecord",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/receipts.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "isRecord(value): value is Record<string, unknown>",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "readJsonFile",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/receipts.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "readJsonFile(filePath): unknown",
       "layer": "tooling-layer"
     },
     {
@@ -1828,16 +1699,16 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "rollbackGoogleTagManagerCommand",
+      "name": "registerGtmSetupCommand",
       "kind": "function",
       "package": "@unisane/growth",
       "owner": "ops/growth",
-      "file": "packages/growth/src/cli/commands/gtm/rollback/run.ts",
+      "file": "packages/growth/src/cli/commands/gtm/setup.ts",
       "exported": true,
       "tags": [
         "public"
       ],
-      "signatureShort": "rollbackGoogleTagManagerCommand(options): Promise<number>",
+      "signatureShort": "registerGtmSetupCommand(parent)",
       "layer": "tooling-layer"
     },
     {
@@ -1864,6 +1735,19 @@
         "public"
       ],
       "signatureShort": "defaultArtifactPath(args): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleTagManagerApiSnapshotFromArtifact",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/cli/commands/gtm/shared.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleTagManagerApiSnapshotFromArtifact(value): GoogleTagManagerApiSnapshot | undefined",
       "layer": "tooling-layer"
     },
     {
@@ -2071,6 +1955,32 @@
         "public"
       ],
       "signatureShort": "validateGoogleTagManagerCommand(options): Promise<number>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerGtmReleaseCommands",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/cli/commands/gtm/workspace.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerGtmReleaseCommands(parent)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerGtmWorkspaceCommands",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/cli/commands/gtm/workspace.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerGtmWorkspaceCommands(parent)",
       "layer": "tooling-layer"
     },
     {
@@ -2959,6 +2869,19 @@
         "public"
       ],
       "signatureShort": "registerMeasurementCommands(program): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "registerReportCommands",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/cli/commands/reports/register.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "registerReportCommands(parent)",
       "layer": "tooling-layer"
     },
     {
@@ -4344,7 +4267,7 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "loadMarketingExecutionContext(): Promise<{ config: ReturnType<typeof deriveMarketingExecutionContext>; path: string; }>",
+      "signatureShort": "loadMarketingExecutionContext(environment): Promise<{ config: ReturnType<typeof deriveMarketingExecutionContext>; path: string; }>",
       "layer": "tooling-layer"
     },
     {
@@ -4371,19 +4294,6 @@
         "public"
       ],
       "signatureShort": "selectGrowthEnvironment(context, requested): string",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "createCliCampaignPauseProviderAdapters",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/cli/provider-adapters.ts",
-      "exported": true,
-      "tags": [
-        "public"
-      ],
-      "signatureShort": "createCliCampaignPauseProviderAdapters(input): GrowthCampaignPauseProviderAdapters",
       "layer": "tooling-layer"
     },
     {
@@ -5039,7 +4949,7 @@
       "tags": [
         "public"
       ],
-      "signatureShort": "resolveGrowthConsoleAuthContext()",
+      "signatureShort": "resolveGrowthConsoleAuthContext(environmentId)",
       "layer": "tooling-layer"
     },
     {
@@ -6204,6 +6114,19 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "loadConsoleCapabilityReview",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/console/capability-review.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "loadConsoleCapabilityReview(review, target)",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "accessLevelLabel",
       "kind": "function",
       "package": "@unisane/growth",
@@ -6913,17 +6836,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "commandAction",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/console/tag-manager.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "commandAction(id, label, description, command): MarketingConsoleConnectionAction",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "identityFrom",
       "kind": "function",
       "package": "@unisane/growth",
@@ -6954,6 +6866,121 @@
       "exported": false,
       "tags": [],
       "signatureShort": "timestamp(value): number",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "approveGtmPlan",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/approval.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "approveGtmPlan(plan, confirmPlanHash, deps)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertGtmContainerReconciled",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/container-guard.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertGtmContainerReconciled(state, runs, manifest)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "gtmContainerLock",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/container-guard.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "gtmContainerLock(manifest)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "pointerId",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/container-guard.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "pointerId(manifest)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "recordGtmContainerAttempt",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/container-guard.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "recordGtmContainerAttempt(state, manifest, runId, createdAt)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertGoogleTagManagerEvidenceTarget",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/evidence.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertGoogleTagManagerEvidenceTarget(value, manifest, environment)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertGoogleTagManagerVersionIdentity",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/evidence.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertGoogleTagManagerVersionIdentity(version, accountId, containerId, versionId)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "googleTagManagerVersionContentDigest",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/evidence.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "googleTagManagerVersionContentDigest(version): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "loadGoogleTagManagerManifestFile",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/manifest-file.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "loadGoogleTagManagerManifestFile(projectRoot, selectedPath)",
       "layer": "tooling-layer"
     },
     {
@@ -7130,6 +7157,19 @@
       "exported": false,
       "tags": [],
       "signatureShort": "resourceKey(kind, slug): string",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertGoogleTagManagerPublishPolicy",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/policies.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertGoogleTagManagerPublishPolicy(manifest, environmentId)",
       "layer": "tooling-layer"
     },
     {
@@ -7340,6 +7380,19 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "metaPixelEventTag",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/recipes.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "metaPixelEventTag(args): GoogleTagManagerTag",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "microsoftClarityTag",
       "kind": "function",
       "package": "@unisane/growth",
@@ -7350,6 +7403,71 @@
         "public"
       ],
       "signatureShort": "microsoftClarityTag(args): GoogleTagManagerTag",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGtmReleaseProviderBridge",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/release/adapter.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGtmReleaseProviderBridge(provider, environment): Pick<GtmReleaseDependencies, 'inspect' | 'execute' | 'observe'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertGtmReleaseReview",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/release/planning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertGtmReleaseReview(review, context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGtmReleasePlan",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/release/planning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGtmReleasePlan(parameters, evidence, context, generatedAt, expiresAt, planId)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "gtmContainerIdentity",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/release/planning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "gtmContainerIdentity(parameters)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGtmReleaseWorkflow",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/release/workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGtmReleaseWorkflow(deps)",
       "layer": "tooling-layer"
     },
     {
@@ -7468,6 +7586,110 @@
         "public"
       ],
       "signatureShort": "validateGoogleTagManagerManifest(manifest): GoogleTagManagerValidationResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGtmWorkspaceMutationAction",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/workspace/action.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGtmWorkspaceMutationAction(deps)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGtmWorkspaceProviderBridge",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/workspace/adapter.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGtmWorkspaceProviderBridge(provider): Pick<GtmWorkspaceActionDependencies, 'read' | 'apply'>",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "assertGtmWorkspaceReview",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/workspace/planning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "assertGtmWorkspaceReview(review, context)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "gtmSnapshotRevision",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/workspace/planning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "gtmSnapshotRevision(snapshot)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "gtmWorkspaceLock",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/workspace/planning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "gtmWorkspaceLock(parameters)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "gtmWorkspacePath",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/workspace/planning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "gtmWorkspacePath(parameters)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "gtmWorkspacePlan",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/workspace/planning.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "gtmWorkspacePlan(raw, context, planId): GtmWorkspaceReview",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGtmWorkspaceWorkflow",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/gtm/workspace/workflow.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGtmWorkspaceWorkflow(deps)",
       "layer": "tooling-layer"
     },
     {
@@ -7935,39 +8157,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "googleAdsAssetResourceName",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/ads/assets.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "googleAdsAssetResourceName(value): string | undefined",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "googleAdsImageMimeType",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/ads/assets.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "googleAdsImageMimeType(asset): string",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "googleAdsResultResourceNames",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/ads/assets.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "googleAdsResultResourceNames(value): string[]",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "hashJson",
       "kind": "function",
       "package": "@unisane/growth",
@@ -8044,17 +8233,6 @@
       "exported": false,
       "tags": [],
       "signatureShort": "operationConfirmation(args): string",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "parseProviderResponse",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/ads/assets.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "parseProviderResponse(response): Promise<unknown>",
       "layer": "tooling-layer"
     },
     {
@@ -8159,6 +8337,19 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "readMarketingAdsAssetUploadPlan",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/ads/assets.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "readMarketingAdsAssetUploadPlan(cwd, planPath): { path: string; plan: MarketingAdsAssetUploadPlan }",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "readProviderRef",
       "kind": "function",
       "package": "@unisane/growth",
@@ -8167,17 +8358,6 @@
       "exported": false,
       "tags": [],
       "signatureShort": "readProviderRef(args): { path: string; providerAssetId?: string; sourceSha256?: string; }",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "readUploadPlan",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/ads/assets.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "readUploadPlan(cwd, planPath): { path: string; plan: MarketingAdsAssetUploadPlan }",
       "layer": "tooling-layer"
     },
     {
@@ -8277,17 +8457,6 @@
       "exported": false,
       "tags": [],
       "signatureShort": "uploadBlockers(args): string[]",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "uploadGoogleImageAsset",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/ads/assets.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "uploadGoogleImageAsset(args): Promise<{ providerAssetId: string; providerRefPath: string; message: string }>",
       "layer": "tooling-layer"
     },
     {
@@ -10067,28 +10236,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "asArray",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "asArray(value): unknown[]",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "asRecord",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "asRecord(value): Record<string, unknown>",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "buildMarketingGoogleAdsGoalPlan",
       "kind": "function",
       "package": "@unisane/growth",
@@ -10124,39 +10271,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "headers",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "headers(input): Record<string, string>",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "listExistingConversionActions",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "listExistingConversionActions(input): Promise<Map<string, ExistingConversionAction>>",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "mutateOperation",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "mutateOperation(operation, existing)",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "normalizeCustomerId",
       "kind": "function",
       "package": "@unisane/growth",
@@ -10168,50 +10282,6 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "operationResultResourceName",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "operationResultResourceName(result): string | undefined",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "optionalBoolean",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "optionalBoolean(value): boolean | undefined",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "optionalString",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "optionalString(value): string | undefined",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "parseExistingConversionAction",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "parseExistingConversionAction(entry): ExistingConversionAction | undefined",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "plannedStep",
       "kind": "function",
       "package": "@unisane/growth",
@@ -10220,17 +10290,6 @@
       "exported": false,
       "tags": [],
       "signatureShort": "plannedStep(validateOnly, live): string",
-      "layer": "tooling-layer"
-    },
-    {
-      "name": "readGoogleAdsResponse",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/marketing/goals/google-ads-goals.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "readGoogleAdsResponse(response): Promise<unknown>",
       "layer": "tooling-layer"
     },
     {
@@ -11241,6 +11300,19 @@
       "exported": false,
       "tags": [],
       "signatureShort": "ensurePathWithinCwd(cwd, resolvedPath): void",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "isMissingMarketingRegistryError",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/marketing/registry/load-registries.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "isMissingMarketingRegistryError(error): boolean",
       "layer": "tooling-layer"
     },
     {
@@ -13417,6 +13489,58 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "createMetaDiagnosticEvidence",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/measurement/meta-diagnostics/service.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createMetaDiagnosticEvidence(raw, binding, now): MetaDiagnosticEvidence",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "reviewMetaDiagnosticEvidence",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/measurement/meta-diagnostics/service.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "reviewMetaDiagnosticEvidence(binding, raw, input, now)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateMetaDiagnosticBinding",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/measurement/meta-diagnostics/service.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validateMetaDiagnosticBinding(value, binding)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateMetaDiagnosticEvidence",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/measurement/meta-diagnostics/service.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validateMetaDiagnosticEvidence(raw, binding)",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "approvalMatches",
       "kind": "function",
       "package": "@unisane/growth",
@@ -14172,6 +14296,45 @@
         "public"
       ],
       "signatureShort": "requiredGrowthProviderServices(config, provider): string[]",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "buildGrowthReportHistory",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/reports/history-service.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "buildGrowthReportHistory(binding, raw, input): GrowthReportHistoryResult",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createGrowthReportEvidence",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/reports/history-service.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createGrowthReportEvidence(reportInput, savedAt): GrowthReportEvidence",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "validateGrowthReportEvidence",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/reports/history-service.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "validateGrowthReportEvidence(input, binding): GrowthReportEvidence",
       "layer": "tooling-layer"
     },
     {
@@ -17999,6 +18162,19 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "createCampaignPauseHostClient",
+      "kind": "function",
+      "package": "@unisane/growth",
+      "owner": "ops/growth",
+      "file": "packages/growth/src/workflows/campaign-pause-command.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createCampaignPauseHostClient(input): GrowthCampaignPauseWorkflow",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "createGrowthCampaignPauseWorkflow",
       "kind": "function",
       "package": "@unisane/growth",
@@ -18154,24 +18330,15 @@
       "layer": "tooling-layer"
     },
     {
-      "name": "isMissingTrackingRegistryError",
-      "kind": "function",
-      "package": "@unisane/growth",
-      "owner": "ops/growth",
-      "file": "packages/growth/src/workflows/measurement-audit-execution.ts",
-      "exported": false,
-      "tags": [],
-      "signatureShort": "isMissingTrackingRegistryError(error): boolean",
-      "layer": "tooling-layer"
-    },
-    {
       "name": "loadTrackingAudit",
       "kind": "function",
       "package": "@unisane/growth",
       "owner": "ops/growth",
       "file": "packages/growth/src/workflows/measurement-audit-execution.ts",
-      "exported": false,
-      "tags": [],
+      "exported": true,
+      "tags": [
+        "public"
+      ],
       "signatureShort": "loadTrackingAudit(input): Promise<MarketingTrackingAuditReport>",
       "layer": "tooling-layer"
     },
@@ -18553,5 +18720,5 @@
       "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:99927a96a5d2"
+  "generatedAt": "content-hash:4fe95ca51c76"
 }

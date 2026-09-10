@@ -51,8 +51,8 @@ importers:
         specifier: ^0.40.2
         version: 0.40.2
       '@unisane/data-table':
-        specifier: 0.1.1
-        version: 0.1.1(@unisane/ui@0.1.1(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 0.1.2-next.97f61b1d
+        version: 0.1.2-next.97f61b1d(@unisane/ui@0.1.2-next.97f61b1d(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@unisane/growth':
         specifier: workspace:*
         version: link:../../packages/growth
@@ -60,8 +60,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/ops-engine
       '@unisane/ui':
-        specifier: 0.1.1
-        version: 0.1.1(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        specifier: 0.1.2-next.97f61b1d
+        version: 0.1.2-next.97f61b1d(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react:
         specifier: ^19.1.0
         version: 19.2.8
@@ -1944,20 +1944,20 @@ packages:
     resolution: {integrity: sha512-LZ2NqIHFhvFwxG0qZeLL9DvdNAHPGCY5dIRwBhyYeU+LfLhcStE1ImjsuTG/WaVh3XysGaeLW8Rqq7cGkPCFvw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@unisane/data-table@0.1.1':
-    resolution: {integrity: sha512-plTIPMiamNv65pqUvqJ9e8eLILAef6ZbemJPL70rXR+M17x0yAMdBTT9o6irmf8pZpTG/UffDGZX1DIKNIqmPA==}
+  '@unisane/data-table@0.1.2-next.97f61b1d':
+    resolution: {integrity: sha512-CGI08HrJYYADC99d/p30sJrn8KBEguigfnrGQsIc0e55pPn7S6GsY3+YtfuKs05U1zsG2nkPA3rrtygXcqdmKA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@unisane/ui': 0.1.1
+      '@unisane/ui': 0.1.2-next.97f61b1d
       react: ^19
       react-dom: ^19
 
-  '@unisane/tokens@0.1.1':
-    resolution: {integrity: sha512-lxiR4n5KsrgUxFqtZGnNHRCMRDEQwnWJWg6BRBU4rYWcTLM9sXXm4tn5ZccDtBY0cvem+lbne1figFumjR6yHQ==}
+  '@unisane/tokens@0.1.2-next.97f61b1d':
+    resolution: {integrity: sha512-DtxTlCYaddE1umwP2f4MZEaiOmY35ZMFrMTMXiuJuFVQPdJeQzDMPi9GAFP4eJ5vGFlnNx6+1EvU6RaVc532lw==}
     engines: {node: '>=22.0.0'}
 
-  '@unisane/ui@0.1.1':
-    resolution: {integrity: sha512-+IaBD0SRLvoUEZir14yURiXaYT1+RIDz27g5nM8o/pNmNu5s0gi94+oFuJKOpvIOqFcD++n+gPvS1mHhyoIaXA==}
+  '@unisane/ui@0.1.2-next.97f61b1d':
+    resolution: {integrity: sha512-Zee+FpNWniLi7OI/9S9tgx2BwDuryCghsujFSW+N3DCsyFPFicFcJQvgE820AUAqjEk40OHgDNq9OBFT1e9/IA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       react: ^19
@@ -5631,10 +5631,10 @@ snapshots:
       '@typescript-eslint/types': 8.53.0
       eslint-visitor-keys: 4.2.1
 
-  '@unisane/data-table@0.1.1(@unisane/ui@0.1.1(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@unisane/data-table@0.1.2-next.97f61b1d(@unisane/ui@0.1.2-next.97f61b1d(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@tanstack/react-virtual': 3.13.18(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@unisane/ui': 0.1.1(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@unisane/ui': 0.1.2-next.97f61b1d(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       dequal: 2.0.3
       jspdf: 3.0.4
       jspdf-autotable: 5.0.8(jspdf@3.0.4)
@@ -5642,11 +5642,11 @@ snapshots:
       react-dom: 19.2.8(react@19.2.8)
       xlsx: 0.18.5
 
-  '@unisane/tokens@0.1.1': {}
+  '@unisane/tokens@0.1.2-next.97f61b1d': {}
 
-  '@unisane/ui@0.1.1(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@unisane/ui@0.1.2-next.97f61b1d(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@unisane/tokens': 0.1.1
+      '@unisane/tokens': 0.1.2-next.97f61b1d
       class-variance-authority: 0.7.1
       clsx: 2.1.1
       cmdk: 1.1.1(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)

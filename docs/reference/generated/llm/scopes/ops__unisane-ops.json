@@ -9,7 +9,7 @@
     "kind": "ops-tooling",
     "operationCount": 0,
     "tokenCount": 0,
-    "aliasCount": 1,
+    "aliasCount": 2,
     "validationCapabilityCount": 6,
     "relevantDocCount": 1
   },
@@ -25,12 +25,13 @@
     "scope": {
       "scopeId": "ops/unisane-ops",
       "kind": "ops-tooling",
-      "packageName": "unisane-ops",
+      "packageName": "@unisane/ops",
       "packageDir": "packages/unisane-ops",
       "deployableId": null,
       "deployableKind": null
     },
     "aliases": [
+      "@unisane/ops",
       "unisane-ops"
     ],
     "operations": [],
@@ -52,5 +53,5 @@
       "packages/unisane-ops"
     ]
   },
-  "generatedAt": "content-hash:eb838b0d50d1"
+  "generatedAt": "content-hash:bc954dc09761"
 }

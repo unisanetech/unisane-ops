@@ -8,11 +8,11 @@
     "package": "@unisane/ops-engine",
     "owner": "ops/ops-engine",
     "packageDir": "packages/ops-engine",
-    "sourceFileCount": 17,
-    "symbolCount": 146,
-    "functionCount": 146,
-    "publicFunctionCount": 104,
-    "internalFunctionCount": 42,
+    "sourceFileCount": 22,
+    "symbolCount": 155,
+    "functionCount": 155,
+    "publicFunctionCount": 112,
+    "internalFunctionCount": 43,
     "serviceLayerFunctionCount": 0
   },
   "owner": "unisane-ops",
@@ -1466,6 +1466,121 @@
       "layer": "tooling-layer"
     },
     {
+      "name": "encode",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/sqlite-execution/database.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "encode(value)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "initialize",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/sqlite-execution/database.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "initialize(db)",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "rowJson",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/sqlite-execution/database.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "rowJson(row): unknown | null",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "transaction",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/sqlite-execution/database.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "transaction(db, fn): T",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createSqliteOpsExecutionState",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/sqlite-execution/index.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createSqliteOpsExecutionState(database): { state: OpsExecutionState; runStore: OpsMutationRunStore; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createSqliteLockStore",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/sqlite-execution/leases.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createSqliteLockStore(db): LockStore",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createSqliteRecordStores",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/sqlite-execution/records.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createSqliteRecordStores(db): { artifacts: ArtifactStore; approvals: ApprovalStore; }",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "createSqliteRunStore",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/sqlite-execution/runs.ts",
+      "exported": true,
+      "tags": [
+        "public"
+      ],
+      "signatureShort": "createSqliteRunStore(db): OpsMutationRunStore",
+      "layer": "tooling-layer"
+    },
+    {
+      "name": "identity",
+      "kind": "function",
+      "package": "@unisane/ops-engine",
+      "owner": "ops/ops-engine",
+      "file": "packages/ops-engine/src/sqlite-execution/runs.ts",
+      "exported": false,
+      "tags": [],
+      "signatureShort": "identity(run)",
+      "layer": "tooling-layer"
+    },
+    {
       "name": "clone",
       "kind": "function",
       "package": "@unisane/ops-engine",
@@ -1892,5 +2007,5 @@
       "layer": "tooling-layer"
     }
   ],
-  "generatedAt": "content-hash:3a08dfdbee1f"
+  "generatedAt": "content-hash:c777f9fae6cc"
 }
