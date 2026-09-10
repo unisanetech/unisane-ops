@@ -91,7 +91,7 @@
     "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
   },
   "peerDependencies": {
-    "next": "16.0.10",
+    "next": "16.3.3",
     "react": "^19.2.0"
   },
   "peerDependenciesMeta": {
@@ -106,7 +106,7 @@
     "@types/node": "^20.10.0",
     "@types/react": "^19.2.2",
     "eslint": "^9.39.1",
-    "next": "16.0.10",
+    "next": "16.3.3",
     "react": "^19.2.0",
     "tsup": "^8.0.0",
     "typescript": "^5.9.2",
