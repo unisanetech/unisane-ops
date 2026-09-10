@@ -1,0 +1,76 @@
+{
+  "sourceCommit": "ca30150ebcd334250da7b84fb9aab55d7a7167b5",
+  "sourceDirty": false,
+  "registryVerified": true,
+  "packages": [
+    {
+      "name": "@unisane/cloud",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-cloud-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-hwtLLONiNirfBQjgG6563OsFh5T19rN5vYtBhA0VnWO6aYOTy/DSYWLM26RLBMeg5WWFTV812Wv65g0Ir+G6Dw=="
+    },
+    {
+      "name": "@unisane/framework-ops",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-framework-ops-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-grratbb+r7fdJ5TRh3YLNRpv9eyDq3Jo619+PDGlXP81ZNFcgW0fM2l80TJl4rv8pDEw+QFN/aY8xdpIUn4Ttg=="
+    },
+    {
+      "name": "@unisane/growth",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-growth-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-doUaOtT4Afujpx20olbZqBz8/XmajWZSgxRPj9nYGghkFxDEhc1MkfGgiTuP1Up6kL4i6HmnXjLB2t8OQR/7Pw=="
+    },
+    {
+      "name": "@unisane/ops-engine",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-ops-engine-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-2eupl8pGk7b8/t4y6swswtUSa95Pb4tnkZ1E1VabiaB19EszKdfGB4P0gSmNFatWJbyjoQwupDb7/3PUnN7Zgg=="
+    },
+    {
+      "name": "@unisane/ops-mcp",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-ops-mcp-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-XbTe3hy+sN8WXmnYAET4IaahfZHuEvqa0NM0SHil8JAxK84wVqgg7DUBvUBPzu0xjAcJGNEcv06EVpkVfNfPrA=="
+    },
+    {
+      "name": "@unisane/provider-aws",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-provider-aws-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-qxQxD/80X8a7TkxC4pWVisIp63FB4HmTEWu0f8ckfg6NGO7JFJ8W7Qbo4EZTymmDmLuhrWEFa08gq7+1WBqAcQ=="
+    },
+    {
+      "name": "@unisane/provider-cloudflare",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-provider-cloudflare-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-/x27P3fQc8CJkXqQptnB1cRtMugb+oJqjlvOZx9ttZmo4W2AgkyzK/mVApA1xU+dhLPiksbeiY/9lSUjTheA9w=="
+    },
+    {
+      "name": "@unisane/provider-google",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-provider-google-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-3WDdd5jIH2/hgCSWb//WVCUNsTx6/cSZUS4/zW3wtNj0aPYMIrxsUNV3da4wGEsSxP2tWfprlcJmHl3yIOW8iA=="
+    },
+    {
+      "name": "@unisane/provider-meta",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-provider-meta-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-/W731H2gU0qJrJTEFqu2JWO3M2xIX57MFOGwzOyz3WEXVABLg2sdN8Rqw6KDH7O8LGt0wtxxqkUPz/nD+hgMSw=="
+    },
+    {
+      "name": "@unisane/ops",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-ops-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-/2y6oeaKW7fMfvhz5r3NIIOp0mMxM3qokTrDmOvK5KfRJ9E40oRXBkJk970Wq6HGA9Oro274WRNxV+eErd0AKA=="
+    },
+    {
+      "name": "@unisane/web-runtime",
+      "version": "0.1.0-next.20260910.2",
+      "archive": "unisane-web-runtime-0.1.0-next.20260910.2.tgz",
+      "integrity": "sha512-uw3FUkV7MNjUEFPyo7++oaN2hSN94kzqwVaJ+QIQcoBLcgxzbOyj+pzRoKQeto6Cle2MmweqDP9k2Gpw2wzZBg=="
+    }
+  ],
+  "consumerVerified": true,
+  "workflow": "https://github.com/unisanetech/unisane-ops/actions/runs/34519518709",
+  "accessVerified": "private"
+}

@@ -1,17 +1,17 @@
 ---
 title: "Task: Prepare private Ops npm packages and scoped CLI for hosted consumers"
-status: active
+status: complete
 owner: "codex-ops-release"
 id: T-02360489
 scope: "workspace"
 role: task
-lifecycle: active
+lifecycle: historical
 authority: canonical
 provenance: accepted
-view: current
+view: exception
 risk: standard
 proofSubject: task-closure
-proofBaseline: baseline-fd78fbe0fa06a191
+proofBaseline: baseline-434a83c3ac73d631
 lastUpdated: 2026-09-10
 ---
 
@@ -19,7 +19,7 @@ lastUpdated: 2026-09-10
 
 ## Changelog
 
-- `2026-09-10`: Synchronized Task state `active` from Skopos.
+- `2026-09-10`: Synchronized Task state `complete` from Skopos.
 
 ## Goal
 
@@ -52,6 +52,7 @@ Prepare private Ops npm packages and scoped CLI for hosted consumers
 - `apps/console/package.json`
 - `docs/decisions`
 - `docs/reference/generated`
+- `docs/reference/releases`
 - `packages`
 - `packages/unisane-ops`
 - `pnpm-lock.yaml`
@@ -66,13 +67,14 @@ Prepare private Ops npm packages and scoped CLI for hosted consumers
 - `2026-09-10T15:27:59.199Z` by `codex-ops-release`: `docs/decisions`, `docs/reference/generated`, `packages`, `tools/repository/standalone-integrity-policy.json` — Private Ops publication requires consistent package identities, admission policy and generated references
 - `2026-09-10T15:36:09.461Z` by `codex-ops-release`: `.gitignore`, `apps/console/package.json` — Exclude release outputs and align the console with its already admitted published UI versions
 - `2026-09-10T18:23:33.116Z` by `codex-ops-release`: `tests`, `tools/repository/console-release-boundary-policy.json` — Refresh actual published UI consumer evidence and verify cold CI installation before Ops release
+- `2026-09-10T19:28:43.375Z` by `codex-ops-release`: `docs/reference/releases` — Preserve the verified private npm release receipt in the existing documentation tree
 
 ## Steps
 
 - [x] **Record Task risk and detail before editing** (implementation, complete) — Confirm whether Task risk is light, standard, or high-impact. Keep the active Task current, use a Plan only for multi-Task direction, add a Decision for durable choices, and add or update a Finding for structural gaps.
 - [x] **Review the current pattern in unisane-ops** (implementation, complete) — Use the compact references to confirm the current scope, command surface, and docs entrypoints before editing code.
-- [ ] **Implement the smallest scoped change** (implementation, pending) — Carry out "Prepare private Ops npm packages and scoped CLI for hosted consumers" inside the resolved scope before widening impact to adjacent areas.
-- [ ] **Sync docs and instruction surfaces if touched** (docs, pending) — Keep docs, instruction mirrors, and generated project knowledge aligned with the implementation.
+- [x] **Implement the smallest scoped change** (implementation, complete) — Carry out "Prepare private Ops npm packages and scoped CLI for hosted consumers" inside the resolved scope before widening impact to adjacent areas.
+- [x] **Sync docs and instruction surfaces if touched** (docs, complete) — Keep docs, instruction mirrors, and generated project knowledge aligned with the implementation.
 
 ## Actions And Guards
 
@@ -85,6 +87,7 @@ Prepare private Ops npm packages and scoped CLI for hosted consumers
 ## Memory Obligations
 
 - [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260910-private-npm-canary.md`); resolution: memory-updated
+- [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260910-private-npm-canary.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260910-private-npm-canary.md`); resolution: memory-updated
 - [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260729-unisane-ops-ai-native-and-hosted-delivery-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260729-unisane-ops-ai-native-and-hosted-delivery-contract.md`); resolution: reviewed-no-change
 - [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260910-private-npm-canary.md`); resolution: memory-updated
 - [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260725-unisane-meta-provider-admission-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260910-private-npm-canary.md`); resolution: memory-updated
@@ -101,12 +104,12 @@ This machine-readable block is the durable source used to rebuild local Skopos s
   "schemaVersion": 1,
   "id": "T-02360489",
   "type": "task",
-  "status": "active",
+  "status": "durable",
   "generatedAt": "2026-09-10T15:25:55.497Z",
-  "updatedAt": "2026-09-10T19:12:35.081Z",
+  "updatedAt": "2026-09-10T19:30:05.853Z",
   "planIds": [],
   "childTasks": [],
-  "state": "active",
+  "state": "complete",
   "detail": "standard",
   "title": "Prepare private Ops npm packages and scoped CLI for hosted consumers",
   "goal": "Prepare private Ops npm packages and scoped CLI for hosted consumers",
@@ -168,7 +171,7 @@ This machine-readable block is the durable source used to rebuild local Skopos s
   },
   "proofSubject": {
     "kind": "task-closure",
-    "baselineId": "baseline-fd78fbe0fa06a191"
+    "baselineId": "baseline-434a83c3ac73d631"
   },
   "priority": 0,
   "dependencyTaskIds": [],
@@ -192,14 +195,14 @@ This machine-readable block is the durable source used to rebuild local Skopos s
       "kind": "implementation",
       "title": "Implement the smallest scoped change",
       "detail": "Carry out \"Prepare private Ops npm packages and scoped CLI for hosted consumers\" inside the resolved scope before widening impact to adjacent areas.",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "id": "step-sync-knowledge",
       "kind": "docs",
       "title": "Sync docs and instruction surfaces if touched",
       "detail": "Keep docs, instruction mirrors, and generated project knowledge aligned with the implementation.",
-      "status": "pending"
+      "status": "complete"
     }
   ],
   "selectedActions": [],
@@ -224,6 +227,17 @@ This machine-readable block is the durable source used to rebuild local Skopos s
       "resolution": "memory-updated",
       "resolutionReason": "Routed current package identity and restricted distribution to the approved September 10 decision; descriptor-only action ownership is unchanged.",
       "resolvedAt": "2026-09-10T18:43:46.044Z",
+      "resolvedByActorId": "codex-ops-release"
+    },
+    {
+      "id": "memory-decision-963167850d",
+      "role": "decision",
+      "reason": "The declared Task scope owns canonical decision Memory at docs/decisions/D-20260910-private-npm-canary.md; review and synchronize it if project truth changes.",
+      "status": "complete",
+      "targetPath": "docs/decisions/D-20260910-private-npm-canary.md",
+      "resolution": "memory-updated",
+      "resolutionReason": "Recorded successful publication, exact durable receipt, private visibility verification and removal of the temporary GitHub publisher secret.",
+      "resolvedAt": "2026-09-10T19:30:03.791Z",
       "resolvedByActorId": "codex-ops-release"
     },
     {
@@ -287,22 +301,23 @@ This machine-readable block is the durable source used to rebuild local Skopos s
     {
       "id": "start-bounded-child-task",
       "title": "Start a bounded child Task",
-      "summary": "The Task may be drifting from its admitted subject because ownership expanded 3 times and new impact categories appeared (docs). Keep this Task intact and move the suggested paths into focused follow-up work.",
+      "summary": "The Task may be drifting from its admitted subject because ownership expanded 4 times and new impact categories appeared (docs). Keep this Task intact and move the suggested paths into focused follow-up work.",
       "priority": "high",
       "actionKind": "start-child-task",
-      "command": "skopos task child start 'T-02360489' 'Continue Prepare private Ops npm packages and scoped CLI for hosted consumers as bounded follow-up work' . --scope 'workspace' --own '.gitignore' --own 'apps/console/package.json' --own 'docs/decisions' --own 'docs/reference/generated' --own 'packages' --own 'tests' --own 'tools/repository/console-release-boundary-policy.json' --own 'tools/repository/standalone-integrity-policy.json' --reason 'The Task may be drifting from its admitted subject because ownership expanded 3 times and new impact categories appeared (docs).' --actor 'codex-ops-release'",
+      "command": "skopos task child start 'T-02360489' 'Continue Prepare private Ops npm packages and scoped CLI for hosted consumers as bounded follow-up work' . --scope 'workspace' --own '.gitignore' --own 'apps/console/package.json' --own 'docs/decisions' --own 'docs/reference/generated' --own 'docs/reference/releases' --own 'packages' --own 'tests' --own 'tools/repository/console-release-boundary-policy.json' --own 'tools/repository/standalone-integrity-policy.json' --reason 'The Task may be drifting from its admitted subject because ownership expanded 4 times and new impact categories appeared (docs).' --actor 'codex-ops-release'",
       "ownedPaths": [
         ".gitignore",
         "apps/console/package.json",
         "docs/decisions",
         "docs/reference/generated",
+        "docs/reference/releases",
         "packages",
         "tests",
         "tools/repository/console-release-boundary-policy.json",
         "tools/repository/standalone-integrity-policy.json"
       ],
       "scopeId": "workspace",
-      "reason": "The Task may be drifting from its admitted subject because ownership expanded 3 times and new impact categories appeared (docs).",
+      "reason": "The Task may be drifting from its admitted subject because ownership expanded 4 times and new impact categories appeared (docs).",
       "blocking": false,
       "status": "open"
     }
@@ -400,6 +415,27 @@ This machine-readable block is the durable source used to rebuild local Skopos s
       "affectedScopeIds": [
         "workspace"
       ]
+    },
+    {
+      "paths": [
+        "docs/reference/releases"
+      ],
+      "reason": "Preserve the verified private npm release receipt in the existing documentation tree",
+      "actorId": "codex-ops-release",
+      "recordedAt": "2026-09-10T19:28:43.375Z",
+      "baselinePaths": [
+        {
+          "path": "docs/reference/releases",
+          "digest": "8f8d014645dc45d9f60290ffcaa13927dd764ab37abf62b333561d28294aa874",
+          "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+        }
+      ],
+      "classification": "within-scope",
+      "priorScopeId": "workspace",
+      "nextScopeId": "workspace",
+      "affectedScopeIds": [
+        "workspace"
+      ]
     }
   ],
   "declaredOwnedPaths": [
@@ -408,6 +444,7 @@ This machine-readable block is the durable source used to rebuild local Skopos s
     "apps/console/package.json",
     "docs/decisions",
     "docs/reference/generated",
+    "docs/reference/releases",
     "packages",
     "packages/unisane-ops",
     "pnpm-lock.yaml",
