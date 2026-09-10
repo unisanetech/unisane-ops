@@ -3,7 +3,7 @@
   "kind": "unisane.pack-manifest",
   "packId": "cloud",
   "packageName": "@unisane/cloud",
-  "version": "0.1.0-next.20260910.1",
+  "version": "0.1.0-next.20260910.2",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [
@@ -674,6 +674,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "b43d300498ff24ef854236fdf5057cdcfa7b0188d47592fa1154d68b6bc5a129"
+    "manifestHash": "fe4d41850facee6756688c0c55fbde7b7e858308217a49759fd1aefb1fcff539"
   }
 }

@@ -69,8 +69,8 @@ Prepare private Ops npm packages and scoped CLI for hosted consumers
 
 ## Steps
 
-- [ ] **Record Task risk and detail before editing** (implementation, pending) — Confirm whether Task risk is light, standard, or high-impact. Keep the active Task current, use a Plan only for multi-Task direction, add a Decision for durable choices, and add or update a Finding for structural gaps.
-- [ ] **Review the current pattern in unisane-ops** (implementation, pending) — Use the compact references to confirm the current scope, command surface, and docs entrypoints before editing code.
+- [x] **Record Task risk and detail before editing** (implementation, complete) — Confirm whether Task risk is light, standard, or high-impact. Keep the active Task current, use a Plan only for multi-Task direction, add a Decision for durable choices, and add or update a Finding for structural gaps.
+- [x] **Review the current pattern in unisane-ops** (implementation, complete) — Use the compact references to confirm the current scope, command surface, and docs entrypoints before editing code.
 - [ ] **Implement the smallest scoped change** (implementation, pending) — Carry out "Prepare private Ops npm packages and scoped CLI for hosted consumers" inside the resolved scope before widening impact to adjacent areas.
 - [ ] **Sync docs and instruction surfaces if touched** (docs, pending) — Keep docs, instruction mirrors, and generated project knowledge aligned with the implementation.
 
@@ -103,7 +103,7 @@ This machine-readable block is the durable source used to rebuild local Skopos s
   "type": "task",
   "status": "active",
   "generatedAt": "2026-09-10T15:25:55.497Z",
-  "updatedAt": "2026-09-10T18:43:51.462Z",
+  "updatedAt": "2026-09-10T19:12:35.081Z",
   "planIds": [],
   "childTasks": [],
   "state": "active",
@@ -178,14 +178,14 @@ This machine-readable block is the durable source used to rebuild local Skopos s
       "kind": "implementation",
       "title": "Record Task risk and detail before editing",
       "detail": "Confirm whether Task risk is light, standard, or high-impact. Keep the active Task current, use a Plan only for multi-Task direction, add a Decision for durable choices, and add or update a Finding for structural gaps.",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "id": "step-review-current-pattern",
       "kind": "implementation",
       "title": "Review the current pattern in unisane-ops",
       "detail": "Use the compact references to confirm the current scope, command surface, and docs entrypoints before editing code.",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "id": "step-implement-scoped-change",

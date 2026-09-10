@@ -3,7 +3,7 @@
   "kind": "unisane.pack-manifest",
   "packId": "provider-meta",
   "packageName": "@unisane/provider-meta",
-  "version": "0.1.0-next.20260910.1",
+  "version": "0.1.0-next.20260910.2",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [],
@@ -20,6 +20,6 @@
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "65be9915673ecd835c3ea4e5a6642f6d37dda5ccee32ec2ba6e117ac74d517ec"
+    "manifestHash": "f690836d7e7e4826a09c3671c631d9ed622ddf69c07f9a568d889ea2af4d3c6a"
   }
 }

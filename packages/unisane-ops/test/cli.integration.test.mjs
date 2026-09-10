@@ -12,6 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const pkgRoot = resolve(__dirname, '..');
 const cli = resolve(pkgRoot, 'dist/cli.js');
+const packageVersion = JSON.parse(readFileSync(resolve(pkgRoot, 'package.json'), 'utf8')).version;
 const workspaceNodeModules = resolve(pkgRoot, '../../../node_modules');
 
 test('secondary connections preserve the existing provider default unless explicitly selected', async () => {
@@ -322,7 +323,7 @@ test('canonical info reports CLI and project package versions in JSON', () => {
   const output = JSON.parse(result.stdout);
   assert.equal(output.command, 'core.info');
   assert.equal(output.maximumEffect, 'offline');
-  assert.deepEqual(output.result.cli, { name: '@unisane/ops', version: '0.1.0-next.20260910.1' });
+  assert.deepEqual(output.result.cli, { name: '@unisane/ops', version: packageVersion });
   assert.deepEqual(output.result.project.packages, [
     { name: '@unisane/devtools', version: '^0.4.0', scope: 'devDependency' },
     { name: '@unisane/ops', version: '^0.1.0', scope: 'dependency' },
@@ -341,7 +342,7 @@ test('canonical info renders deterministic human output', () => {
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.equal(
     result.stdout,
-    'Unisane Ops CLI 0.1.0-next.20260910.1\n\nInstalled Unisane packages:\n  @unisane/platform ^0.4.0 (dependency)\n',
+    `Unisane Ops CLI ${packageVersion}\n\nInstalled Unisane packages:\n  @unisane/platform ^0.4.0 (dependency)\n`,
   );
 });
 

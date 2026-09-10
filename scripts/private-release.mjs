@@ -29,7 +29,8 @@ const selected = readdirSync(join(root, 'packages'))
   .map((path) => ({ path, manifest: read(join(path, 'package.json')) }))
   .filter(({ manifest }) => policy.acceptedPrivatePackages.includes(manifest.name));
 assert.equal(selected.length, policy.acceptedPrivatePackages.length);
-const version = '0.1.0-next.20260910.1';
+const version = selected[0].manifest.version;
+assert(/^\d+\.\d+\.\d+-next\.[0-9.]+$/u.test(version), 'Expected one exact next canary version');
 const targets = (value) =>
   typeof value === 'string' ? [value] : Object.values(value ?? {}).flatMap(targets);
 

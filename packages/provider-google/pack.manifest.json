@@ -3,7 +3,7 @@
   "kind": "unisane.pack-manifest",
   "packId": "provider-google",
   "packageName": "@unisane/provider-google",
-  "version": "0.1.0-next.20260910.1",
+  "version": "0.1.0-next.20260910.2",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [
@@ -44,6 +44,6 @@
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "001d3a1600a88c6aff86138e26aa511b00a46c9d6f43b807f12aac37d5e5b563"
+    "manifestHash": "456f4e9c88d3494da50a413aed36d6c8c9a49657f6a245b065e58dc47efc3e78"
   }
 }
