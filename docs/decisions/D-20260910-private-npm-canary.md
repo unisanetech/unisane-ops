@@ -42,3 +42,5 @@ The console consumes public UI canary `0.1.2-next.97f61b1d`, verified by UI work
 inventory. The isolated consumer resolves a lock and fetches its packages before testing a
 frozen offline install, so a fresh CI runner does not require a pre-populated local store.
 Release versions come from that reviewed evidence rather than a second constant in the checker.
+
+Publication builds and validates archives in a separate preparation job. The publication job downloads those exact archives; retrying a failed publication job does not rebuild them. After npm accepts an upload, verification retries only a temporary missing-version response for at most 31 seconds. Authentication errors, other registry failures, and integrity mismatches stop the release.

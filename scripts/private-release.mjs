@@ -1,3 +1,4 @@
+import { waitForPublishedIntegrity } from './registry-publication.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
@@ -120,7 +121,7 @@ function consumer() {
   }
 }
 
-function publish() {
+async function publish() {
   const receipt = read(join(output, 'receipt.json'));
   assert.equal(process.env.GITHUB_ACTIONS, 'true');
   assert.equal(receipt.sourceCommit, process.env.GITHUB_SHA);
@@ -137,6 +138,7 @@ function publish() {
       'view',
       `${entry.name}@${version}`,
       'dist.integrity',
+      '--prefer-online',
       '--json',
       '--registry=https://registry.npmjs.org/',
     ];
@@ -161,7 +163,7 @@ function publish() {
         ],
         output,
       );
-      assert.equal(JSON.parse(run('npm', args, output)), entry.integrity);
+      await waitForPublishedIntegrity(() => JSON.parse(run('npm', args, output)), entry.integrity);
     }
     console.log(`Registry verified ${entry.name}@${version}`);
   }
@@ -171,4 +173,4 @@ function publish() {
 
 const mode = process.argv[2];
 assert(['prepare', 'consumer', 'publish'].includes(mode));
-({ prepare, consumer, publish })[mode]();
+await ({ prepare, consumer, publish })[mode]();

@@ -84,12 +84,12 @@ Prepare private Ops npm packages and scoped CLI for hosted consumers
 
 ## Memory Obligations
 
-- [open] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md`)
-- [open] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260729-unisane-ops-ai-native-and-hosted-delivery-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260729-unisane-ops-ai-native-and-hosted-delivery-contract.md`)
-- [open] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md`)
-- [open] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260725-unisane-meta-provider-admission-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260725-unisane-meta-provider-admission-contract.md`)
-- [open] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md`)
-- [open] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260615-marketing-devtools-production-mutation-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260615-marketing-devtools-production-mutation-contract.md`)
+- [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260910-private-npm-canary.md`); resolution: memory-updated
+- [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260729-unisane-ops-ai-native-and-hosted-delivery-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260729-unisane-ops-ai-native-and-hosted-delivery-contract.md`); resolution: reviewed-no-change
+- [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260910-private-npm-canary.md`); resolution: memory-updated
+- [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260725-unisane-meta-provider-admission-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260910-private-npm-canary.md`); resolution: memory-updated
+- [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md`); resolution: reviewed-no-change
+- [complete] decision: The declared Task scope owns canonical decision Memory at docs/decisions/D-20260615-marketing-devtools-production-mutation-contract.md; review and synchronize it if project truth changes. (target: `docs/decisions/D-20260615-marketing-devtools-production-mutation-contract.md`); resolution: reviewed-no-change
 
 ## Portable Task State
 
@@ -103,7 +103,7 @@ This machine-readable block is the durable source used to rebuild local Skopos s
   "type": "task",
   "status": "active",
   "generatedAt": "2026-09-10T15:25:55.497Z",
-  "updatedAt": "2026-09-10T18:23:33.116Z",
+  "updatedAt": "2026-09-10T18:43:51.462Z",
   "planIds": [],
   "childTasks": [],
   "state": "active",
@@ -219,43 +219,67 @@ This machine-readable block is the durable source used to rebuild local Skopos s
       "id": "memory-decision-341f18b2e8",
       "role": "decision",
       "reason": "The declared Task scope owns canonical decision Memory at docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md; review and synchronize it if project truth changes.",
-      "status": "open",
-      "targetPath": "docs/decisions/D-20260815-framework-ops-descriptor-product-cli-and-typed-action-contract.md"
+      "status": "complete",
+      "targetPath": "docs/decisions/D-20260910-private-npm-canary.md",
+      "resolution": "memory-updated",
+      "resolutionReason": "Routed current package identity and restricted distribution to the approved September 10 decision; descriptor-only action ownership is unchanged.",
+      "resolvedAt": "2026-09-10T18:43:46.044Z",
+      "resolvedByActorId": "codex-ops-release"
     },
     {
       "id": "memory-decision-a11c64f03d",
       "role": "decision",
       "reason": "The declared Task scope owns canonical decision Memory at docs/decisions/D-20260729-unisane-ops-ai-native-and-hosted-delivery-contract.md; review and synchronize it if project truth changes.",
-      "status": "open",
-      "targetPath": "docs/decisions/D-20260729-unisane-ops-ai-native-and-hosted-delivery-contract.md"
+      "status": "complete",
+      "targetPath": "docs/decisions/D-20260729-unisane-ops-ai-native-and-hosted-delivery-contract.md",
+      "resolution": "reviewed-no-change",
+      "resolutionReason": "Private npm packaging does not change AI action or hosted runtime behavior and ownership.",
+      "resolvedAt": "2026-09-10T18:43:49.052Z",
+      "resolvedByActorId": "codex-ops-release"
     },
     {
       "id": "memory-decision-c88570410c",
       "role": "decision",
       "reason": "The declared Task scope owns canonical decision Memory at docs/decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md; review and synchronize it if project truth changes.",
-      "status": "open",
-      "targetPath": "docs/decisions/D-20260724-unisane-ops-product-package-and-repository-boundary-contract.md"
+      "status": "complete",
+      "targetPath": "docs/decisions/D-20260910-private-npm-canary.md",
+      "resolution": "memory-updated",
+      "resolutionReason": "Documented the approved private package distribution and scoped CLI as superseding earlier distribution statements.",
+      "resolvedAt": "2026-09-10T18:43:47.064Z",
+      "resolvedByActorId": "codex-ops-release"
     },
     {
       "id": "memory-decision-cfb606b23c",
       "role": "decision",
       "reason": "The declared Task scope owns canonical decision Memory at docs/decisions/D-20260725-unisane-meta-provider-admission-contract.md; review and synchronize it if project truth changes.",
-      "status": "open",
-      "targetPath": "docs/decisions/D-20260725-unisane-meta-provider-admission-contract.md"
+      "status": "complete",
+      "targetPath": "docs/decisions/D-20260910-private-npm-canary.md",
+      "resolution": "memory-updated",
+      "resolutionReason": "Provider Meta is included in the approved restricted package release; provider capability ownership is unchanged.",
+      "resolvedAt": "2026-09-10T18:43:48.126Z",
+      "resolvedByActorId": "codex-ops-release"
     },
     {
       "id": "memory-decision-d104bbc751",
       "role": "decision",
       "reason": "The declared Task scope owns canonical decision Memory at docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md; review and synchronize it if project truth changes.",
-      "status": "open",
-      "targetPath": "docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md"
+      "status": "complete",
+      "targetPath": "docs/decisions/D-20260729-unisane-ops-growth-onboarding-and-clean-cutover-contract.md",
+      "resolution": "reviewed-no-change",
+      "resolutionReason": "The executable remains unisane-ops and onboarding behavior is unchanged; current scoped npm identity is owned by the new release decision.",
+      "resolvedAt": "2026-09-10T18:43:50.412Z",
+      "resolvedByActorId": "codex-ops-release"
     },
     {
       "id": "memory-decision-e72ef0e604",
       "role": "decision",
       "reason": "The declared Task scope owns canonical decision Memory at docs/decisions/D-20260615-marketing-devtools-production-mutation-contract.md; review and synchronize it if project truth changes.",
-      "status": "open",
-      "targetPath": "docs/decisions/D-20260615-marketing-devtools-production-mutation-contract.md"
+      "status": "complete",
+      "targetPath": "docs/decisions/D-20260615-marketing-devtools-production-mutation-contract.md",
+      "resolution": "reviewed-no-change",
+      "resolutionReason": "Package publication changes no campaign intent or provider mutation policy.",
+      "resolvedAt": "2026-09-10T18:43:51.462Z",
+      "resolvedByActorId": "codex-ops-release"
     }
   ],
   "questions": [],

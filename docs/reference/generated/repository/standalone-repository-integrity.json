@@ -3,8 +3,8 @@
   "state": "valid-with-exact-released-edges",
   "generatedFromPolicySha256": "feaa73b8b5266aed2aa18bb1ce09f96d3e69aac90220f5552da5ca62e0689232",
   "source": {
-    "fileCount": 1171,
-    "digest": "2693b9f859f661764797ecfc1a7db3cf90a8f18d6b8f7ccc10219cbbc9102624",
+    "fileCount": 1173,
+    "digest": "2b54dc796776a7f5d42300e7b1858167f7a0131a17aa13457a55b3c9efb06c00",
     "excludedGeneratedAndTaskMemory": [
       "docs/reference/generated/**",
       "docs/work/tasks/**",

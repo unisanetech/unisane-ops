@@ -12,7 +12,7 @@ concurrency:
   group: ops-private-publication
   cancel-in-progress: false
 jobs:
-  publish:
+  prepare:
     if: github.ref == 'refs/heads/main' && inputs.confirmation == 'publish-private-next'
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -34,15 +34,42 @@ jobs:
       - run:
           node --test packages/unisane-ops/test/package-surface.integration.test.mjs
           packages/unisane-ops/test/cli.integration.test.mjs
+      - run: node --test tests/registry-publication.test.mjs
       - run: node scripts/private-release.mjs prepare
       - run: node scripts/private-release.mjs consumer
-      - name: Publish verified restricted archives
+      - name: Preserve verified release archives
+        uses: actions/upload-artifact@v4
+        with:
+          name: ops-private-canary-prepared
+          path: .tmp/private-release
+          include-hidden-files: true
+          retention-days: 30
+
+  publish:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.13.0'
+          registry-url: https://registry.npmjs.org/
+      - uses: actions/download-artifact@v4
+        with:
+          name: ops-private-canary-prepared
+          path: .tmp/private-release
+      - name: Publish exact verified restricted archives
         run: node scripts/private-release.mjs publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - uses: actions/upload-artifact@v4
+      - name: Preserve registry verification receipt
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: ops-private-canary
           path: .tmp/private-release
+          include-hidden-files: true
           retention-days: 30
+          overwrite: true
