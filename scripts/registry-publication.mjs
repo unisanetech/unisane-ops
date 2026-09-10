@@ -6,7 +6,7 @@ import { setTimeout } from 'node:timers/promises';
 export async function waitForPublishedIntegrity(
   lookup,
   expected,
-  { delays = [1000, 2000, 4000, 8000, 16000], sleep = setTimeout } = {},
+  { delays = [1000, 2000, 4000, 8000, 16000, ...Array(9).fill(30000)], sleep = setTimeout } = {},
 ) {
   for (let attempt = 0; ; attempt += 1) {
     let actual;

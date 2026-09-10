@@ -163,8 +163,11 @@ async function publish() {
         ],
         output,
       );
-      await waitForPublishedIntegrity(() => JSON.parse(run('npm', args, output)), entry.integrity);
     }
+  }
+  for (const entry of receipt.packages) {
+    const args = ['view', `${entry.name}@${version}`, 'dist.integrity', '--prefer-online', '--json', '--registry=https://registry.npmjs.org/'];
+    await waitForPublishedIntegrity(() => JSON.parse(run('npm', args, output)), entry.integrity);
     console.log(`Registry verified ${entry.name}@${version}`);
   }
   receipt.registryVerified = true;
