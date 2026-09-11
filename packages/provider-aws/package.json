@@ -1,6 +1,6 @@
 {
   "name": "@unisane/provider-aws",
-  "version": "0.1.0-next.20260910.2",
+  "version": "0.1.0-next.20260912.1",
   "description": "AWS provider-family operations for Unisane Cloud",
   "license": "MIT",
   "repository": {

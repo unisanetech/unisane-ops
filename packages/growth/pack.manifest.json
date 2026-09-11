@@ -3,7 +3,7 @@
   "kind": "unisane.pack-manifest",
   "packId": "growth",
   "packageName": "@unisane/growth",
-  "version": "0.1.0-next.20260910.2",
+  "version": "0.1.0-next.20260912.1",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [
@@ -639,6 +639,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "cec3754938c2e8e5160bf42c7e3cb76587497397309c09500aa3e609f5546ba6"
+    "manifestHash": "b805b000f3f0af38bbcac4731b3c3da91185e157fabbc18718103dcbb3592254"
   }
 }

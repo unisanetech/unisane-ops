@@ -3,7 +3,7 @@
   "kind": "unisane.pack-manifest",
   "packId": "provider-aws",
   "packageName": "@unisane/provider-aws",
-  "version": "0.1.0-next.20260910.2",
+  "version": "0.1.0-next.20260912.1",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [
@@ -44,6 +44,6 @@
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "8e98025b913db6dc45418f3b936e104f792571037842a0b24d0ac5c45b15bf68"
+    "manifestHash": "cad9472170d1ca8a606788242f93aeb162ba3addec139fbb95fb7dfaca6756f9"
   }
 }

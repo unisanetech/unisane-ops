@@ -3,7 +3,7 @@
   "kind": "unisane.pack-manifest",
   "packId": "provider.cloudflare",
   "packageName": "@unisane/provider-cloudflare",
-  "version": "0.1.0-next.20260910.2",
+  "version": "0.1.0-next.20260912.1",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [
@@ -42,6 +42,6 @@
   "reservedRootNames": [],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "d83ab26c7f67c672ed3cd54cf0ff3e51823b58d65b542cfb5fb6f74d14177c71"
+    "manifestHash": "1575a982bcf22876d6ceac48b2e893460078de70d64c1c1d5fb62e91462023ff"
   }
 }

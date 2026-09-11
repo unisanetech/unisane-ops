@@ -299,7 +299,7 @@ async function runPlan(
       nextActions:
         plan.summary.blocked === 0
           ? [
-              'Review this deterministic plan. Remote execution is intentionally unavailable until the durable approval, lock, state, and receipt path is admitted.',
+              'Review this deterministic plan. Apply requires the exact reviewed plan and confirmations. Production requires execution.cloud.backend=sqlite or a host-provided durable store.',
             ]
           : ['Resolve blocked operations, refresh inventory, and generate a new plan.'],
     });
@@ -321,6 +321,7 @@ async function runApply(
   command: ResourceCommandId,
   focus: 'queues' | 'workers' | 'cron',
 ): Promise<PackCommandResult> {
+  let close: (() => void) | undefined;
   try {
     const flags = parseArguments(context.argv);
     const planPath = requireArgument(flags.plan, '--plan');
@@ -333,6 +334,7 @@ async function runApply(
         environment: flags.environment,
       }),
     );
+    close = binding.close;
     const planInput = binding.artifacts.readJson(planPath, 'plan');
     const report =
       focus === 'queues'
@@ -372,6 +374,8 @@ async function runApply(
       diagnostics: [diagnostic(error)],
       actualEffect: 'offline',
     });
+  } finally {
+    close?.();
   }
 }
 

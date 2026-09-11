@@ -183,6 +183,7 @@ function validateConfigRelations(
 
 const executionSchema = z
   .object({
+    cloud: z.object({ backend: z.enum(['local', 'sqlite']) }).strict().optional(),
     ads: z.object({ backend: z.enum(['local', 'sqlite']) }).strict().optional(),
     gtm: z
       .object({ backend: z.enum(['local', 'sqlite']) })

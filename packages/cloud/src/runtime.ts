@@ -60,6 +60,7 @@ export interface CloudflareResourceSourceAccess {
 }
 
 export interface CloudflareResourceRuntimeBinding {
+  close?: () => void;
   target: CloudflareResourceTarget;
   artifacts: CloudflareResourceArtifactAccess;
   provider?: CloudflareReadProvider | CloudflareMutationProvider;

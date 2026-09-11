@@ -1,3 +1,5 @@
+import { readdir } from 'node:fs/promises';
+import { openScopedExecutionStore } from './execution-store.js';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -657,6 +659,7 @@ export class CanonicalPackRuntime implements PackCommandRuntime {
         configuredAccountId: connection.accountId ?? null,
         provider: createCloudflareConnectionProvider({
           apiToken: process.env[connection.credential.name],
+          accountId: connection.accountId,
         }),
         artifacts: createCloudflareConnectionArtifactAccess({
           projectRoot: loaded.projectRoot,
@@ -703,16 +706,22 @@ export class CanonicalPackRuntime implements PackCommandRuntime {
         apiToken: process.env[resolved.credentialEnvironmentVariable],
       });
       if (request.command === 'apply') {
-        binding.state = createLocalOpsExecutionState(
-          path.join(
-            loaded.projectRoot,
-            '.unisane',
-            'ops',
-            resolved.context.targetId,
-            resolved.context.environment,
-            'state',
-          ),
-        );
+        const segments = ['.unisane', 'ops', resolved.context.targetId, resolved.context.environment, 'state'];
+        const stateDirectory = path.join(loaded.projectRoot, ...segments);
+        if (loaded.config.execution?.cloud?.backend === 'sqlite') {
+          const entries = await readdir(stateDirectory).catch((error: NodeJS.ErrnoException) => {
+            if (error.code === 'ENOENT') return [];
+            throw error;
+          });
+          if (entries.some((entry) => ['artifacts', 'receipts', 'approvals', 'locks'].includes(entry))) {
+            throw new Error('[CLOUDFLARE_STATE_MIGRATION_REQUIRED] Preserve and migrate existing local execution history before selecting SQLite.');
+          }
+          const stores = await openScopedExecutionStore(loaded.projectRoot, 'sqlite', { segments, prefix: 'CLOUDFLARE' });
+          binding.state = stores.state;
+          binding.close = stores.close;
+        } else {
+          binding.state = createLocalOpsExecutionState(stateDirectory);
+        }
         binding.secrets = createEnvironmentSecretResolver();
         binding.sources = createResourceSourceAccess(loaded.projectRoot);
         binding.actor = 'developer';

@@ -12,8 +12,16 @@ const sha256 = z.string().regex(/^[a-f0-9]{64}$/);
 
 export type CloudflareMutationRisk = 'read_only' | 'low_risk_mutation' | 'high_risk_mutation';
 
+export const cloudflareQueueConsumerPolicySchema = z.object({
+  maxBatchSize: z.number().int().min(1).max(100).optional(),
+  maxBatchTimeout: z.number().int().min(0).max(60).optional(),
+  maxRetries: z.number().int().min(0).max(100).optional(),
+  maxConcurrency: z.number().int().min(1).max(250).optional(),
+}).strict();
+export type CloudflareQueueConsumerPolicy = z.infer<typeof cloudflareQueueConsumerPolicySchema>;
+
 export const cloudflareQueueConfigSchema = z
-  .object({ name: nonEmpty, dlq: nonEmpty.optional() })
+  .object({ name: nonEmpty, dlq: nonEmpty.optional(), consumer: cloudflareQueueConsumerPolicySchema.optional() })
   .strict();
 export type CloudflareQueueConfig = z.infer<typeof cloudflareQueueConfigSchema>;
 
@@ -131,6 +139,15 @@ export const cloudflareQueueInventorySchema = z
     modifiedOn: z.string().nullable(),
     producersTotalCount: z.number().int().nonnegative().nullable(),
     consumersTotalCount: z.number().int().nonnegative().nullable(),
+    consumers: z.array(z.object({
+      id: nonEmpty,
+      workerName: z.string().nullable(),
+      deadLetterQueue: z.string().nullable(),
+      maxBatchSize: z.number().nullable(),
+      maxBatchTimeout: z.number().nullable(),
+      maxRetries: z.number().nullable(),
+      maxConcurrency: z.number().nullable(),
+    }).strict()).optional(),
   })
   .strict();
 export type CloudflareQueueInventory = z.infer<typeof cloudflareQueueInventorySchema>;
@@ -474,5 +491,6 @@ export interface CloudflareMutationProvider extends CloudflareReadProvider {
     accountId: string,
     queueId: string,
     scriptName: string,
-  ): Promise<{ id: string | null }>;
+    policy?: CloudflareQueueConsumerPolicy & { deadLetterQueue?: string },
+  ): Promise<{ id: string | null; action?: 'create' | 'update' }>;
 }

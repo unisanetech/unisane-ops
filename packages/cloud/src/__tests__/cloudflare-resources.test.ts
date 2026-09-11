@@ -29,7 +29,7 @@ const target: CloudflareResourceTarget = {
   configPath: '/project/unisane.config.ts',
   desired: {
     zones: { site: { name: 'example.test', zoneId: 'zone_1' } },
-    queues: { jobs: { name: 'sample-jobs', dlq: 'sample-jobs-dlq' } },
+    queues: { jobs: { name: 'sample-jobs', dlq: 'sample-jobs-dlq', consumer: { maxBatchSize: 1, maxBatchTimeout: 0, maxRetries: 5, maxConcurrency: 4 } } },
     workers: {
       async: {
         name: 'sample-async',
@@ -145,6 +145,9 @@ describe('@unisane/cloud Cloudflare resources', () => {
         'worker-secret',
       ]),
     );
+    expect(workerPlan.operations.find((operation) => operation.desired?.direction === 'consumer')?.desired?.consumer).toEqual({
+      maxBatchSize: 1, maxBatchTimeout: 0, maxRetries: 5, maxConcurrency: 4, deadLetterQueue: 'sample-jobs-dlq',
+    });
     expect(JSON.stringify(workerPlan)).not.toContain('export default');
     expect(JSON.stringify(workerPlan)).not.toContain('secret-value');
   });
@@ -249,6 +252,17 @@ describe('@unisane/cloud Cloudflare resources', () => {
     expect(writeJson).toHaveBeenCalledWith(
       expect.objectContaining({ class: 'receipt', focus: 'queues' }),
     );
+  });
+
+  it('reconciles the full reviewed Cron set, including removal of obsolete triggers', async () => {
+    const inventory = await collectCloudflareResourceInventory({ target, provider: provider(), focus: 'workers' });
+    inventory.workerCronTriggers = ['*/10 * * * *', '5 * * * *'].map((cron) => ({ scriptName: 'sample-async', cron, createdOn: null, modifiedOn: null }));
+    const plan = createCloudflareWorkerPlan({ target, inventory, focus: 'workers' });
+    const schedule = plan.operations.find((operation) => operation.resourceType === 'worker-cron-trigger');
+    expect(schedule?.action).toBe('planned');
+    expect(schedule?.current).toEqual({ crons: ['*/10 * * * *', '5 * * * *'] });
+    expect(schedule?.desired).toMatchObject({ crons: ['*/10 * * * *'] });
+    expect(schedule?.message).toContain('remove 5 * * * *');
   });
 
   it('rejects a plan whose operations were changed after review', async () => {

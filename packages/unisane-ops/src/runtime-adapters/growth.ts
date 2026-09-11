@@ -1,7 +1,4 @@
 import { executeCampaignPauseWorkflow } from './campaign-pause.js';
-import { executeGoogleAssetOperation } from './google-assets.js';
-import { executeGoogleGoalOperation } from './google-goals.js';
-import { executeGtmWorkspaceOperation } from './gtm-workspace.js';
 import { executeMetaDiagnosticOperation } from './meta-diagnostics.js';
 import { collectLocalMetaReport, readLocalMetaReportHistory } from './meta-report-history.js';
 import { selectGrowthEnvironment } from './environment.js';
@@ -345,9 +342,9 @@ async function executeGoogleMarketing(
   const record = recordOf(input);
   switch (operation) {
     case 'google.marketing.assets':
-      return executeGoogleAssetOperation(cwd, input, request => resolveGoogleConnectionCredentials(cwd, request));
+      return (await import('./google-assets.js')).executeGoogleAssetOperation(cwd, input, request => resolveGoogleConnectionCredentials(cwd, request));
     case 'google.marketing.apply-goals':
-      return executeGoogleGoalOperation(cwd, input, request => resolveGoogleConnectionCredentials(cwd, request));
+      return (await import('./google-goals.js')).executeGoogleGoalOperation(cwd, input, request => resolveGoogleConnectionCredentials(cwd, request));
     case 'google.marketing.pull-report':
       return provider.pullGoogleAdsReport(input as never);
     case 'google.marketing.pull-ga4':
@@ -530,9 +527,9 @@ export async function executeGrowthProviderOperation(
     return resolveGrowthProjectContext(request.cwd);
   }
   if (request.operation === 'growth.gtm.release')
-    return executeGtmWorkspaceOperation(request.cwd, request.input, true);
+    return (await import('./gtm-workspace.js')).executeGtmWorkspaceOperation(request.cwd, request.input, true);
   if (request.operation === 'growth.gtm.workspace')
-    return executeGtmWorkspaceOperation(request.cwd, request.input);
+    return (await import('./gtm-workspace.js')).executeGtmWorkspaceOperation(request.cwd, request.input);
   if (request.operation === 'google.connection.resolve-credentials') {
     return resolveGoogleConnectionCredentials(request.cwd, request.input);
   }

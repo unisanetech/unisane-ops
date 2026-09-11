@@ -152,6 +152,7 @@ describe('@unisane/provider-cloudflare DNS', () => {
           result_info: { total_pages: 1 },
         }),
       )
+      .mockResolvedValueOnce(response({ success: true, result: [{ consumer_id: 'consumer_1', script_name: 'sample-worker', dead_letter_queue: 'sample-dlq', settings: { batch_size: 1, max_wait_time_ms: 2000, max_retries: 5, max_concurrency: 4 } }] }))
       .mockResolvedValueOnce(
         response({
           success: true,
@@ -176,7 +177,7 @@ describe('@unisane/provider-cloudflare DNS', () => {
     });
 
     await expect(provider.listQueues('account_1')).resolves.toEqual([
-      expect.objectContaining({ id: 'queue_1', name: 'sample-jobs' }),
+      expect.objectContaining({ id: 'queue_1', name: 'sample-jobs', consumers: [expect.objectContaining({ workerName: 'sample-worker', deadLetterQueue: 'sample-dlq', maxBatchSize: 1, maxBatchTimeout: 2, maxRetries: 5, maxConcurrency: 4 })] }),
     ]);
     await expect(provider.listWorkers('account_1')).resolves.toEqual([
       expect.objectContaining({ name: 'sample-worker' }),
@@ -206,5 +207,32 @@ describe('@unisane/provider-cloudflare DNS', () => {
     const request = fetchFn.mock.calls[0]?.[1];
     expect(request?.body).toBeInstanceOf(FormData);
     expect((request?.headers as Headers).has('Content-Type')).toBe(false);
+  });
+});
+
+
+describe('Cloudflare queue consumer policy', () => {
+  it.each([false, true])('applies the reviewed limits and DLQ when an owned consumer exists: %s', async (exists) => {
+    const fetchFn = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(response({ success: true, errors: null, result_info: null, result: exists ? [{ consumer_id: 'consumer_1', type: 'worker', script: 'async-worker' }] : [] }))
+      .mockResolvedValueOnce(response({ success: true, result: { consumer_id: 'consumer_1' } }));
+    const provider = createCloudflareResourceProvider({ apiToken: 'test-token', fetchFn });
+    const result = await provider.createQueueConsumer('account_1', 'queue_1', 'async-worker', {
+      maxBatchSize: 1, maxBatchTimeout: 2, maxRetries: 5, maxConcurrency: 4, deadLetterQueue: 'failed-jobs',
+    });
+    const [url, options] = fetchFn.mock.calls[1]!;
+    expect(String(url)).toContain(exists ? '/consumers/consumer_1' : '/consumers');
+    expect(options?.method).toBe(exists ? 'PUT' : 'POST');
+    expect(JSON.parse(String(options?.body))).toEqual({
+      type: 'worker', script_name: 'async-worker', dead_letter_queue: 'failed-jobs',
+      settings: { batch_size: 1, max_wait_time_ms: 2000, max_retries: 5, max_concurrency: 4 },
+    });
+    expect(result).toEqual({ id: 'consumer_1', action: exists ? 'update' : 'create' });
+  });
+  it('does not replace a different queue consumer', async () => {
+    const fetchFn = vi.fn<typeof fetch>().mockResolvedValue(response({ success: true, result: [{ consumer_id: 'consumer_1', type: 'worker', script_name: 'other-worker' }] }));
+    const provider = createCloudflareResourceProvider({ apiToken: 'test-token', fetchFn });
+    await expect(provider.createQueueConsumer('account_1', 'queue_1', 'async-worker')).rejects.toThrow('Queue belongs to another consumer');
+    expect(fetchFn).toHaveBeenCalledOnce();
   });
 });

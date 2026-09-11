@@ -1,3 +1,4 @@
+import { cloudflareQueueConsumerPolicySchema } from './cloudflare-resources.js';
 import { createHash, randomUUID } from 'node:crypto';
 import {
   assertOpsMutationPreflight,
@@ -459,12 +460,13 @@ async function applyQueueBinding(args: {
         args.binding.target.accountId,
         queueId,
         args.operation.workerName,
+        parseConsumerPolicy(args.operation.desired?.consumer),
       );
       return result({
         operationId: args.operation.operationId,
         resourceKey: args.operation.resourceKey,
         resourceType: args.operation.resourceType,
-        action: 'create',
+        action: applied.action ?? 'create',
         ok: true,
         id: applied.id,
       });
@@ -572,23 +574,11 @@ async function applyWorkerCron(args: {
   operation: CloudflareWorkerPlanOperation;
   beforeEffect: () => Promise<void>;
 }): Promise<CloudflareResourceApplyOperationResult> {
-  const cron = desiredString(args.operation, 'cron');
-  if (!cron) {
-    return result({
-      operationId: args.operation.operationId,
-      resourceKey: args.operation.resourceKey,
-      resourceType: args.operation.resourceType,
-      action: 'skipped',
-      ok: false,
-      error: 'Worker Cron operation is missing its expression.',
-    });
+  const crons = args.operation.desired?.crons;
+  if (!Array.isArray(crons) || !crons.every((cron): cron is string => typeof cron === 'string' && Boolean(cron.trim()))) {
+    throw new Error('Worker Cron operation requires an explicit schedule set.');
   }
   try {
-    const current = await args.provider.listWorkerCronTriggers(
-      args.binding.target.accountId,
-      args.operation.workerName,
-    );
-    const crons = [...new Set([...current.map((entry) => entry.cron), cron])].sort();
     await args.beforeEffect();
     const applied = await args.provider.putWorkerCronTriggers(
       args.binding.target.accountId,
@@ -743,18 +733,18 @@ async function collectDrift(args: {
               reason: 'Worker route was not observed after apply.',
             });
           }
+        } else if (operation.resourceType === 'worker-queue-binding' && operation.desired?.direction === 'consumer') {
+          const queue = inventory.queues.find((entry) => entry.id === operation.desired?.queueId);
+          const consumer = queue?.consumers?.find((entry) => entry.workerName === operation.workerName);
+          const policy = parseConsumerPolicy(operation.desired?.consumer);
+          if (!consumer || Object.entries(policy ?? {}).some(([key, value]) => consumer[key as keyof typeof consumer] !== value)) {
+            differences.push({ resourceKey: operation.resourceKey, reason: 'Queue consumer limits or dead-letter queue differ after apply.' });
+          }
         } else if (operation.resourceType === 'worker-cron-trigger') {
-          const cron = desiredString(operation, 'cron');
-          if (
-            cron &&
-            !inventory.workerCronTriggers.some(
-              (trigger) => trigger.scriptName === operation.workerName && trigger.cron === cron,
-            )
-          ) {
-            differences.push({
-              resourceKey: operation.resourceKey,
-              reason: 'Cron trigger was not observed after apply.',
-            });
+          const desired = operation.desired?.crons;
+          const current = inventory.workerCronTriggers.filter((entry) => entry.scriptName === operation.workerName).map((entry) => entry.cron).sort();
+          if (!Array.isArray(desired) || JSON.stringify([...desired].sort()) !== JSON.stringify(current)) {
+            differences.push({ resourceKey: operation.resourceKey, reason: 'Cron schedule set differs after apply.' });
           }
         }
       }
@@ -947,4 +937,12 @@ export async function applyCloudflareWorkerPlan(args: {
     );
   }
   return applyResourcePlan({ ...args, plan });
+}
+
+function parseConsumerPolicy(value: unknown) {
+  if (value === undefined) return undefined;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid queue consumer policy.');
+  const { deadLetterQueue, ...limits } = value as Record<string, unknown>;
+  if (deadLetterQueue !== undefined && (typeof deadLetterQueue !== 'string' || !deadLetterQueue.trim())) throw new Error('Invalid dead-letter queue name.');
+  return { ...cloudflareQueueConsumerPolicySchema.parse(limits), ...(typeof deadLetterQueue === 'string' ? { deadLetterQueue } : {}) };
 }

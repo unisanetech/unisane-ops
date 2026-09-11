@@ -547,6 +547,7 @@ function addQueueOperations(args: {
         queueName: queue.name,
         queueId: live?.id ?? null,
         bindingName: bindingName(entry.queueKey),
+        ...(entry.direction === 'consumer' ? { consumer: { ...queue.consumer, ...(queue.dlq ? { deadLetterQueue: queue.dlq } : {}) } } : {}),
       },
     });
   }
@@ -559,28 +560,26 @@ function addCronOperations(args: {
   workerKey: string;
   worker: CloudflareWorkerConfig;
 }): void {
-  for (const cron of args.worker.crons) {
-    const current =
-      args.inventory.workerCronTriggers.find(
-        (trigger) =>
-          normalize(trigger.scriptName) === normalize(args.worker.name) &&
-          trigger.cron.trim() === cron.trim(),
-      ) ?? null;
-    addWorkerOperation(args.operations, {
-      action: current ? 'no-op' : 'planned',
-      risk: current ? 'read_only' : risk(args.target),
-      resourceType: 'worker-cron-trigger',
-      resourceKey: `${args.worker.name}:${cron}`,
-      workerKey: args.workerKey,
-      workerName: args.worker.name,
-      check: current ? 'workers.cron.exists' : 'workers.cron.plan',
-      message: current
-        ? `Cron '${cron}' already exists for '${args.worker.name}'.`
-        : `Plan Cron '${cron}' for '${args.worker.name}'.`,
-      current: current ? recordValue(current) : null,
-      desired: { cron, script: args.worker.name },
-    });
-  }
+  const current = [...new Set(args.inventory.workerCronTriggers
+    .filter((trigger) => normalize(trigger.scriptName) === normalize(args.worker.name))
+    .map((trigger) => trigger.cron.trim()))].sort();
+  const crons = [...new Set(args.worker.crons.map((cron) => cron.trim()))].sort();
+  const matches = JSON.stringify(current) === JSON.stringify(crons);
+  const removed = current.filter((cron) => !crons.includes(cron));
+  addWorkerOperation(args.operations, {
+    action: matches ? 'no-op' : 'planned',
+    risk: matches ? 'read_only' : risk(args.target),
+    resourceType: 'worker-cron-trigger',
+    resourceKey: `${args.worker.name}:cron-schedules`,
+    workerKey: args.workerKey,
+    workerName: args.worker.name,
+    check: matches ? 'workers.cron.matches' : 'workers.cron.reconcile',
+    message: matches
+      ? `Cron schedules match for '${args.worker.name}'.`
+      : `Set ${crons.length} Cron schedules for '${args.worker.name}'${removed.length ? `; remove ${removed.join(', ')}` : ''}.`,
+    current: { crons: current },
+    desired: { crons, script: args.worker.name },
+  });
 }
 
 function addVariables(args: {

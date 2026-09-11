@@ -27,7 +27,18 @@ runtime binding; Cloud never imports a provider implementation.
 
 The current `0.1` artifact schema is pre-stable. Plans created before the versioned
 engine safety envelope was introduced must be regenerated and cannot be applied.
-Queue, Worker, and Cron apply is available for local non-production single-developer
-execution. Production, automation, and multi-process mutation requires a host-supplied
-durable approval/artifact store plus an atomic durable lock and therefore fails closed
-in the canonical local host.
+Queue, Worker, and Cron production apply uses the existing single-host SQLite execution
+store when the project declares `execution: { cloud: { backend: 'sqlite' } }`.
+The host owns protecting and backing up `.unisane/ops/<target>/<environment>/state`.
+Approvals, receipts and atomic fencing leases persist there; the CLI closes the store
+after each apply. Local JSON stores remain restricted to non-production development.
+Existing execution history cannot be silently replaced when selecting another backend.
+
+A queue's optional `consumer` policy sets `maxBatchSize`, `maxBatchTimeout` (seconds),
+`maxRetries` and `maxConcurrency`; `dlq` attaches its named dead-letter queue to the
+consumer. Apply updates an existing consumer only when it belongs to the configured
+Worker. Inventory and post-apply drift include the live policy and dead-letter binding.
+
+Each configured Worker's `crons` is its complete desired schedule set. The plan shows
+removed schedules and apply replaces the set, including an explicit empty set. Generate
+new plans after upgrading; pre-stable per-trigger plans must not be reused.

@@ -8,6 +8,7 @@ import type {
 import type {
   CloudflareMutationProvider,
   CloudflareQueueDesired,
+  CloudflareQueueConsumerPolicy,
   CloudflareQueueInventory,
   CloudflareWorkerCronInventory,
   CloudflareWorkerInventory,
@@ -30,14 +31,14 @@ const cloudflareEnvelopeSchema = z
   .object({
     success: z.boolean(),
     result: z.unknown(),
-    errors: z.array(cloudflareErrorSchema).optional(),
+    errors: z.array(cloudflareErrorSchema).nullish(),
     result_info: z
       .object({
         page: z.number().optional(),
         total_pages: z.number().optional(),
       })
       .passthrough()
-      .optional(),
+      .nullish(),
   })
   .passthrough();
 
@@ -83,6 +84,12 @@ const cloudflareTokenWireSchema = z
     status: z.string().optional(),
   })
   .passthrough();
+
+// Cloudflare list responses use `script`; its documented request shape uses `script_name`.
+const cloudflareQueueConsumerWireSchema = z.object({
+  consumer_id: z.string(), type: z.string().optional(), script: z.string().nullish(), script_name: z.string().nullish(), dead_letter_queue: z.string().nullish(),
+  settings: z.object({ batch_size: z.number().optional(), max_wait_time_ms: z.number().optional(), max_retries: z.number().optional(), max_concurrency: z.number().nullish() }).nullish(),
+}).transform((consumer) => ({ ...consumer, workerName: consumer.script_name ?? consumer.script ?? null }));
 
 const cloudflareQueueWireSchema = z
   .object({
@@ -348,6 +355,16 @@ export class FetchCloudflareProvider
       if (page >= (response.totalPages ?? page)) break;
       page += 1;
     }
+    for (const queue of queues) {
+      const response = await this.request(`/accounts/${accountId}/queues/${queue.id}/consumers`, z.array(cloudflareQueueConsumerWireSchema));
+      const consumers = response.result as z.infer<typeof cloudflareQueueConsumerWireSchema>[];
+      queue.consumers = consumers.map((consumer) => ({
+        id: consumer.consumer_id, workerName: consumer.workerName, deadLetterQueue: consumer.dead_letter_queue ?? null,
+        maxBatchSize: consumer.settings?.batch_size ?? null,
+        maxBatchTimeout: typeof consumer.settings?.max_wait_time_ms === 'number' ? consumer.settings.max_wait_time_ms / 1000 : null,
+        maxRetries: consumer.settings?.max_retries ?? null, maxConcurrency: consumer.settings?.max_concurrency ?? null,
+      }));
+    }
     return queues;
   }
 
@@ -563,16 +580,29 @@ export class FetchCloudflareProvider
     accountId: string,
     queueId: string,
     scriptName: string,
-  ): Promise<{ id: string | null }> {
-    await this.request(
-      `/accounts/${accountId}/queues/${queueId}/consumers`,
-      z.record(z.unknown()),
-      {
-        method: 'POST',
-        body: JSON.stringify({ type: 'worker', script_name: scriptName }),
-      },
-    );
-    return { id: `${queueId}:${scriptName}` };
+    policy?: CloudflareQueueConsumerPolicy & { deadLetterQueue?: string },
+  ): Promise<{ id: string | null; action: 'create' | 'update' }> {
+    const path = `/accounts/${accountId}/queues/${queueId}/consumers`;
+    const existing = await this.request(path, z.array(cloudflareQueueConsumerWireSchema));
+    const consumers = existing.result as z.infer<typeof cloudflareQueueConsumerWireSchema>[];
+    const current = consumers.find((consumer) => consumer.type === 'worker' && consumer.workerName === scriptName);
+    if (consumers.length && !current) throw new Error('[CLOUDFLARE_QUEUE_CONSUMER_CONFLICT] Queue belongs to another consumer.');
+    const settings = {
+      ...(policy?.maxBatchSize !== undefined ? { batch_size: policy.maxBatchSize } : {}),
+      ...(policy?.maxBatchTimeout !== undefined ? { max_wait_time_ms: policy.maxBatchTimeout * 1000 } : {}),
+      ...(policy?.maxRetries !== undefined ? { max_retries: policy.maxRetries } : {}),
+      ...(policy?.maxConcurrency !== undefined ? { max_concurrency: policy.maxConcurrency } : {}),
+    };
+    const response = await this.request(current ? `${path}/${current.consumer_id}` : path, z.record(z.unknown()), {
+      method: current ? 'PUT' : 'POST',
+      body: JSON.stringify({
+        type: 'worker', script_name: scriptName,
+        ...(policy?.deadLetterQueue ? { dead_letter_queue: policy.deadLetterQueue } : {}),
+        ...(Object.keys(settings).length ? { settings } : {}),
+      }),
+    });
+    const created = response.result as { consumer_id?: string };
+    return { id: created.consumer_id ?? current?.consumer_id ?? `${queueId}:${scriptName}`, action: current ? 'update' : 'create' };
   }
 
   async createDnsRecord(
