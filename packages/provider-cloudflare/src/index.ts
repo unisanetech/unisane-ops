@@ -495,14 +495,14 @@ export class FetchCloudflareProvider
   ): Promise<{ id: string | null }> {
     const form = new FormData();
     form.append(
-      'metadata',
+      'settings',
       new Blob([JSON.stringify({ bindings: settings.bindings })], {
         type: 'application/json',
       }),
     );
     await this.request(
-      `/accounts/${accountId}/workers/scripts/${scriptName}`,
-      cloudflareWorkerWireSchema,
+      `/accounts/${accountId}/workers/scripts/${scriptName}/settings`,
+      cloudflareWorkerSettingsWireSchema,
       { method: 'PATCH', body: form },
     );
     return { id: scriptName };

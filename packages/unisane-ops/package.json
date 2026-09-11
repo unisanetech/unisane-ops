@@ -1,6 +1,6 @@
 {
   "name": "@unisane/ops",
-  "version": "0.1.0-next.20260912.1",
+  "version": "0.1.0-next.20260912.2",
   "description": "CLI and project configuration for Unisane Ops",
   "keywords": [
     "unisane",

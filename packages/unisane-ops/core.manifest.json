@@ -3,7 +3,7 @@
   "kind": "unisane.pack-manifest",
   "packId": "core",
   "packageName": "@unisane/ops",
-  "version": "0.1.0-next.20260912.1",
+  "version": "0.1.0-next.20260912.2",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [
@@ -242,6 +242,6 @@
   ],
   "integrity": {
     "algorithm": "sha256",
-    "manifestHash": "ced976e244de74824295fb93a3d79c169f98588133d52bc7f02314c1033591f1"
+    "manifestHash": "b4fc7e384bf5f055539cb00f70afd98480f9e1d435a8e12f21cd0b6cf2951881"
   }
 }

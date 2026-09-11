@@ -142,6 +142,23 @@ describe('@unisane/provider-cloudflare DNS', () => {
     expect(fetchFn.mock.calls[1]?.[1]?.method).toBe('PATCH');
   });
 
+  it('patches Worker bindings through the documented settings endpoint and multipart field', async () => {
+    const bindings = [
+      { name: 'JOBS_QUEUE', type: 'queue', queue_name: 'sample-jobs' },
+      { name: 'INTERNAL_API_URL', type: 'plain_text', text: 'https://example.test' },
+      { name: 'BRIDGE_SECRET', type: 'secret_text' },
+    ];
+    const fetchFn = vi.fn<typeof fetch>().mockResolvedValue(response({ success: true, result: { bindings } }));
+    const provider = createCloudflareResourceProvider({ apiToken: 'secret', fetchFn });
+    await expect(provider.updateWorkerSettings('account_1', 'sample-worker', { bindings })).resolves.toEqual({ id: 'sample-worker' });
+    const [url, init] = fetchFn.mock.calls[0]!;
+    expect(String(url)).toBe('https://api.cloudflare.com/client/v4/accounts/account_1/workers/scripts/sample-worker/settings');
+    expect(init?.method).toBe('PATCH');
+    const body = init?.body as FormData;
+    expect([...body.keys()]).toEqual(['settings']);
+    expect(JSON.parse(await (body.get('settings') as Blob).text())).toEqual({ bindings });
+  });
+
   it('normalizes Queue, Worker, route, and Cron inventory through provider transport', async () => {
     const fetchFn = vi
       .fn<typeof fetch>()

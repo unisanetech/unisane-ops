@@ -1,6 +1,6 @@
 {
   "name": "@unisane/web-runtime",
-  "version": "0.1.0-next.20260912.1",
+  "version": "0.1.0-next.20260912.2",
   "description": "Portable web tracking, conversions, delivery adapters, and SEO runtime for Unisane and standalone applications",
   "license": "MIT",
   "repository": {
