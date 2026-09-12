@@ -1,0 +1,38 @@
+{
+  "snapshotId": "S-628f175e372c",
+  "taskId": "T-aeaf605a",
+  "sessionId": "conversion-package-20260911",
+  "actorId": "codex",
+  "baseRevision": "2f20fe912679c2bde2e0de383a838195a9a6d8e2",
+  "paths": [
+    {
+      "path": ".changeset",
+      "digest": "79a22c42d38869a0a4c08489a71f446cc7f09cecd32b26e6b64e19d30f6c2c05",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "docs/guides",
+      "digest": "fe26ec0e8d8d45eb58b3b74807a8126b9e181bbd1a090e2856e0066068346bf9",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/provider-meta",
+      "digest": "a94e697080fcc17a3ffcd5ee3cbcc89a3c26a863a9ec69b925c7687d1d55ff6f",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/web-runtime",
+      "digest": "d962d8466e684b79935843a51a3151efac2e5fda3d13cf8bb70b052666311af3",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "digest": "1eb981f16df502b26ca7a7ab6fa0eb45b56844189862a6f3028aced261cb7efa",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    }
+  ],
+  "digest": "628f175e372cf961cead8cb1db7cdbb1f4c5382df8e0a685f02d4650e4040491",
+  "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs",
+  "createdAt": "2026-09-11T12:40:42.082Z",
+  "artifactPath": "docs/work/tasks/snapshots/T-aeaf605a-S-628f175e372c.json"
+}

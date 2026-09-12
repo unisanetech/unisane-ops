@@ -1,0 +1,56 @@
+{
+  "id": "unisane.ops.measurement-runtime-check",
+  "title": "Portable consent and conversion runtime proof",
+  "description": "Focused reference proof for selected producer changes; does not certify every module or provider.",
+  "category": "quality-check",
+  "scope": [
+    "workspace"
+  ],
+  "command": "pnpm --filter @unisane/web-runtime check-types && pnpm --filter @unisane/web-runtime test",
+  "cwd": ".",
+  "inputs": [
+    "packages/web-runtime/src",
+    "packages/web-runtime/package.json",
+    "packages/web-runtime/tsconfig.json",
+    "tools/skopos/actions/measurement-runtime-check.yaml"
+  ],
+  "sourceExcludes": [
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/.turbo/**"
+  ],
+  "outputs": [],
+  "affects": [],
+  "capabilities": {
+    "process": "required",
+    "network": "none",
+    "browser": "none",
+    "tools": [
+      "node",
+      "pnpm"
+    ],
+    "secrets": [],
+    "services": []
+  },
+  "effects": {
+    "workspace": "none",
+    "artifacts": "none",
+    "external": "none"
+  },
+  "concurrency": "shared",
+  "workspaceMode": "overlay-safe",
+  "safety": "read-only",
+  "requiresApproval": false,
+  "whenToUse": "When the selected producer responsibility changes; supplement with affected module/provider proof.",
+  "phases": [
+    "iteration",
+    "closure"
+  ],
+  "risks": [
+    "light",
+    "standard",
+    "high-impact"
+  ],
+  "recommendedAfter": [],
+  "owner": "framework-maintainers"
+}

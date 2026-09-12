@@ -10,6 +10,9 @@ import {
 
 function createEnvelope(overrides: Partial<WebConversionEnvelope> = {}): WebConversionEnvelope {
   return {
+    occurred_at: '2026-04-28T10:11:12.000Z',
+    consent: { advertising: 'granted', capturedAt: '2026-04-28T10:11:12.000Z' },
+    customer: { sourceUrl: 'https://example.com/pricing' },
     event: 'purchase_completed',
     app_id: 'commerce',
     scope_id: 'scope_1',
@@ -78,7 +81,7 @@ describe('meta capi web conversion adapter', () => {
     ).toBeNull();
   });
 
-  it('uploads events with access token in the request body', async () => {
+  it('uploads events with bearer authorization and no body credential', async () => {
     const httpClient = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -116,6 +119,7 @@ describe('meta capi web conversion adapter', () => {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
+          authorization: 'Bearer access_token',
         },
       }),
     );
@@ -123,7 +127,7 @@ describe('meta capi web conversion adapter', () => {
       access_token: string;
       data: unknown[];
     };
-    expect(body.access_token).toBe('access_token');
+    expect(body.access_token).toBeUndefined();
     expect(body.data).toHaveLength(1);
   });
 
@@ -143,7 +147,14 @@ describe('meta capi web conversion adapter', () => {
           }),
         },
         request: {
-          data: [],
+          data: [
+            {
+              event_name: 'Purchase',
+              event_time: 1777371072,
+              action_source: 'website',
+              user_data: { external_id: ['a'.repeat(64)] },
+            },
+          ],
         },
       }),
     ).rejects.toBeInstanceOf(MetaCapiWebConversionUploadError);

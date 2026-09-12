@@ -75,6 +75,7 @@ export type WebTrackingConfig = {
   enabled: boolean;
   debug?: boolean;
   autoPageViews?: boolean;
+  pageContext?: { includeQuery?: boolean; includeTitle?: boolean };
   defaultContext?: WebTrackingParams;
   gtm?: WebTrackingGtmConfig;
   consent?: {
@@ -98,6 +99,7 @@ export type ResolvedWebTrackingConfig = {
   enabled: boolean;
   debug: boolean;
   autoPageViews: boolean;
+  pageContext?: { includeQuery?: boolean; includeTitle?: boolean };
   defaultContext: WebTrackingParams;
   gtm?: WebTrackingGtmConfig;
   consent: {
@@ -128,6 +130,7 @@ export type WebTrackingTransport = {
 export type WebTrackingAttributionStore = {
   read: () => WebTrackingAttributionState;
   write: (state: WebTrackingAttributionState) => void;
+  clear: () => void;
 };
 
 export type WebTrackingClient = {

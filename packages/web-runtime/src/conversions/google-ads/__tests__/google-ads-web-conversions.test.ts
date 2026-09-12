@@ -10,6 +10,9 @@ import {
 
 function createEnvelope(overrides: Partial<WebConversionEnvelope> = {}): WebConversionEnvelope {
   return {
+    occurred_at: '2026-04-28T10:11:12.000Z',
+    consent: { advertising: 'granted', capturedAt: '2026-04-28T10:11:12.000Z' },
+    customer: { sourceUrl: 'https://example.com/pricing' },
     event: 'purchase_completed',
     app_id: 'commerce',
     scope_id: 'scope_1',
@@ -65,7 +68,7 @@ describe('google ads web conversion adapter', () => {
     expect(
       mapWebConversionEnvelopeToGoogleAdsClickConversion({
         envelope: createEnvelope({
-          properties: {
+          customer: {
             hashedEmail,
           },
         }),
@@ -101,7 +104,10 @@ describe('google ads web conversion adapter', () => {
     const httpClient = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => ({ results: [{}], jobId: '123' }),
+      json: async () => ({
+        results: [{ conversionAction: 'customers/1234567890/conversionActions/111222333' }],
+        jobId: '123',
+      }),
     });
 
     await expect(
@@ -127,7 +133,10 @@ describe('google ads web conversion adapter', () => {
           partialFailure: true,
         },
       }),
-    ).resolves.toEqual({ results: [{}], jobId: '123' });
+    ).resolves.toEqual({
+      results: [{ conversionAction: 'customers/1234567890/conversionActions/111222333' }],
+      jobId: '123',
+    });
 
     expect(httpClient).toHaveBeenCalledWith(
       'https://googleads.googleapis.com/v21/customers/1234567890:uploadClickConversions',
@@ -171,7 +180,9 @@ describe('google ads web conversion adapter', () => {
     const httpClient = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => ({ results: [{}] }),
+      json: async () => ({
+        results: [{ conversionAction: 'customers/1234567890/conversionActions/111222333' }],
+      }),
     });
     const transport = createGoogleAdsWebConversionTransport({
       customerId: '1234567890',

@@ -1,0 +1,33 @@
+{
+  "snapshotId": "S-738e7b9824eb",
+  "taskId": "T-7efebfbb",
+  "sessionId": "tr-ops-close-20260913",
+  "actorId": "codex-trueresume-measurement",
+  "baseRevision": "2f20fe912679c2bde2e0de383a838195a9a6d8e2",
+  "paths": [
+    {
+      "path": "docs/standards/13-unisane-ops-product-architecture-baseline.md",
+      "digest": "07898081f13ebdf98f9a783a78abecf30a8a0ecb668e04ede38a53c94814db1b",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/web-runtime/package.json",
+      "digest": "c328686b10f6fc8679917c7d354694c6227d19931d2772b35d3647e9c23a366d",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/web-runtime/src/conversions",
+      "digest": "ce8b1d28d744df85e03618c164f16dbdb820c9cf06a4fb3d32f23ef68a3541e0",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "tools/skopos/actions",
+      "digest": "a24d8860a8bdaab05ed79d54c1325cc72a3d51e4f5de4e6400f382eeba9817ca",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    }
+  ],
+  "digest": "738e7b9824eb706cd85b36c641be96b29a413dde461f8192f6f27bbf1faa39f6",
+  "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs",
+  "createdAt": "2026-09-12T19:48:52.155Z",
+  "artifactPath": "docs/work/tasks/snapshots/T-7efebfbb-S-738e7b9824eb.json"
+}

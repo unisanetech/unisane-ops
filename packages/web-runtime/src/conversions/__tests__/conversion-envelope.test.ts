@@ -38,6 +38,8 @@ describe('web conversions envelope normalization', () => {
     });
 
     expect(envelope).toEqual({
+      schema_version: 2,
+      occurred_at: expect.any(String),
       event: 'subscription_activated',
       app_id: 'data-entry-lm',
       scope_id: 'scope_123',

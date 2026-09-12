@@ -1,0 +1,23 @@
+{
+  "snapshotId": "S-71836c4efce2",
+  "taskId": "T-458f4603",
+  "sessionId": "tr-ga4-ops-close-20260913",
+  "actorId": "codex-trueresume-measurement",
+  "baseRevision": "2f20fe912679c2bde2e0de383a838195a9a6d8e2",
+  "paths": [
+    {
+      "path": "docs/standards/13-unisane-ops-product-architecture-baseline.md",
+      "digest": "3f225157d1ef8446ecc84b19fd743e4596ad929ad76b1d382a3c169ec3264e6a",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    },
+    {
+      "path": "packages/web-runtime",
+      "digest": "c322eec9d58e4b406c7bfc0e502fbd6fdff4c996eb51b5abbe9b8fde27723162",
+      "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs"
+    }
+  ],
+  "digest": "71836c4efce20d65bd48bc12906302c738e254d3445019ea26859d2d72a09615",
+  "digestAlgorithm": "skopos-path-v2-code-unit-segment-dfs",
+  "createdAt": "2026-09-12T20:28:59.115Z",
+  "artifactPath": "docs/work/tasks/snapshots/T-458f4603-S-71836c4efce2.json"
+}

@@ -66,3 +66,7 @@ export {
   type MarketingTrackingObservation,
   type MarketingTrackingObservationArtifact,
 } from './contracts/tracking-observation';
+export {
+  META_GRAPH_API_VERSION,
+  META_CAMPAIGN_CONTROL_API_VERSION,
+} from './contracts/provider-api-versions';

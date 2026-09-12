@@ -32,8 +32,9 @@ function ensureGtag(windowObject: BrowserWindowLike, dataLayerName: string): voi
     return;
   }
 
-  windowObject.gtag = (...args: unknown[]) => {
-    ensureDataLayer(windowObject, dataLayerName).push(args);
+  windowObject.gtag = function gtag(..._args: unknown[]) {
+    // Google commands use an Arguments object, distinct from event-object data layer messages.
+    ensureDataLayer(windowObject, dataLayerName).push(arguments);
   };
 }
 
@@ -87,10 +88,27 @@ export function createBrowserGtmTransport(args: {
     push(payload: WebTrackingPayload) {
       if (typeof window === 'undefined') return;
       const browserWindow = window as BrowserWindowLike;
-      ensureDataLayer(browserWindow, dataLayerName).push(payload);
+      const queue = ensureDataLayer(browserWindow, dataLayerName);
+      queue.push({
+        items: null,
+        ecommerce: null,
+        user_provided_data: null,
+        user_data: null,
+        fbp: null,
+        fbc: null,
+        gclid: null,
+        gbraid: null,
+        wbraid: null,
+        msclkid: null,
+        ttclid: null,
+        transaction_id: null,
+        value: null,
+        currency: null,
+      });
+      queue.push(payload);
 
       if (args.debug) {
-        console.debug('[web-tracking] push', payload);
+        console.debug('[web-tracking] push', { event: payload.event });
       }
     },
     setConsent(mode: WebTrackingConsentMode, state: WebTrackingConsentState) {

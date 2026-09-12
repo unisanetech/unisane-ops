@@ -38,13 +38,13 @@ export function normalizeWebTrackingEventPayload(args: {
 }): WebTrackingPayload {
   const { config, input, pageContext, attribution } = args;
   const payload: WebTrackingPayload = {
-    event: toSnakeCase(input.name),
-    app_id: config.appId,
-    event_id: input.eventId ?? createWebTrackingEventId(config.appId),
     ...mergePayloadContext(
       normalizeParamsToSnakeCase(config.defaultContext),
       normalizeParamsToSnakeCase(input.params),
     ),
+    event: toSnakeCase(input.name),
+    app_id: config.appId,
+    event_id: input.eventId ?? createWebTrackingEventId(config.appId),
   };
 
   if (pageContext?.pageTitle) payload.page_title = pageContext.pageTitle;
@@ -67,6 +67,12 @@ export function normalizeWebTrackingEventPayload(args: {
     if (attribution.ttclid) payload.ttclid = attribution.ttclid;
   }
 
+  if (config.pageContext?.includeTitle === false) delete payload.page_title;
+  if (config.pageContext?.includeQuery === false) {
+    for (const key of ['page_location', 'page_path']) {
+      if (typeof payload[key] === 'string') payload[key] = payload[key].split(/[?#]/, 1)[0];
+    }
+  }
   return payload;
 }
 

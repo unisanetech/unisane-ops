@@ -27,7 +27,11 @@ function parseCookieString(cookieString: string): Record<string, string> {
       if (separatorIndex <= 0) return acc;
       const key = entry.slice(0, separatorIndex).trim();
       const value = entry.slice(separatorIndex + 1).trim();
-      acc[key] = decodeURIComponent(value);
+      try {
+        acc[key] = decodeURIComponent(value);
+      } catch {
+        /* Ignore a malformed cookie. */
+      }
       return acc;
     }, {});
 }
@@ -96,7 +100,10 @@ export function mergeWebTrackingAttributionFromSearch(args: {
   if (wbraid) next.wbraid = wbraid;
   if (msclkid) next.msclkid = msclkid;
   if (ttclid) next.ttclid = ttclid;
-  if (fbclid) next.fbc = createFbcValue(fbclid, now);
+  if (fbclid && /^[A-Za-z0-9_-]{1,480}$/.test(fbclid)) {
+    const currentClick = args.current.fbc?.split('.').slice(3).join('.');
+    if (currentClick !== fbclid) next.fbc = createFbcValue(fbclid, now);
+  }
 
   return next;
 }
@@ -108,11 +115,25 @@ export function createBrowserCookieAttributionStore(options?: {
 }): {
   read: () => WebTrackingAttributionState;
   write: (state: WebTrackingAttributionState) => void;
+  clear: () => void;
 } {
   return {
     read() {
       if (typeof document === 'undefined') return {};
       return readWebTrackingAttributionFromCookies(document.cookie);
+    },
+    clear() {
+      if (typeof document === 'undefined') return;
+      for (const name of Object.values(ATTRIBUTION_COOKIE_KEYS)) {
+        // Clear both host-only and configured-domain cookies at the owned path.
+        for (const domain of new Set([undefined, options?.domain])) {
+          document.cookie = buildCookieString(name, '', {
+            domain,
+            path: options?.path ?? '/',
+            maxAgeSec: 0,
+          });
+        }
+      }
     },
     write(state) {
       if (typeof document === 'undefined') return;

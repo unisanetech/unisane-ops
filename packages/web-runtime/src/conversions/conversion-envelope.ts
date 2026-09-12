@@ -49,10 +49,18 @@ export function normalizeWebConversionEnvelope<TMap extends WebConversionEventMa
   const event = normalizeWebConversionEventName(args.input.name);
   const scopeId = normalizeRequiredString(args.input.scopeId, 'scopeId');
   const userId = normalizeOptionalString(args.input.userId);
+  const transactionId = normalizeWebConversionTransactionId(args.input.transactionId);
   const eventId =
     normalizeWebConversionEventId(args.input.eventId) ??
-    createWebConversionEventId(args.config.appId);
-  const transactionId = normalizeWebConversionTransactionId(args.input.transactionId);
+    (transactionId
+      ? `transaction:${JSON.stringify([args.config.appId, scopeId, event, transactionId])}`
+      : createWebConversionEventId(args.config.appId));
+  const occurredAt = args.input.occurredAt ?? new Date().toISOString();
+  if (!Number.isFinite(Date.parse(occurredAt)))
+    throw new Error('Web conversion occurredAt must be a valid timestamp.');
+  if (args.input.consent && !Number.isFinite(Date.parse(args.input.consent.capturedAt))) {
+    throw new Error('Web conversion consent capturedAt must be a valid timestamp.');
+  }
 
   if (
     isTransactionIdRequiredForWebConversionEvent(event, args.config.transactionIdRequiredEvents) &&
@@ -74,6 +82,11 @@ export function normalizeWebConversionEnvelope<TMap extends WebConversionEventMa
   });
 
   return {
+    schema_version: 2,
+    occurred_at: new Date(occurredAt).toISOString(),
+    ...(args.input.consent ? { consent: { ...args.input.consent } } : {}),
+    ...(args.input.customer ? { customer: { ...args.input.customer } } : {}),
+    ...(args.input.analytics ? { analytics: { ...args.input.analytics } } : {}),
     event,
     app_id: args.config.appId,
     scope_id: scopeId,

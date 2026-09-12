@@ -23,10 +23,6 @@ type CreateWebTrackingClientArgs = {
 };
 
 function createEventDedupeKey(input: WebTrackingEventInput): string | null {
-  if (input.eventId) {
-    return `event_id:${input.eventId}`;
-  }
-
   if (input.dedupe === false) {
     return null;
   }
@@ -34,6 +30,8 @@ function createEventDedupeKey(input: WebTrackingEventInput): string | null {
   if (input.dedupe?.key) {
     return `custom:${input.dedupe.key}`;
   }
+
+  if (input.eventId) return `event_id:${input.eventId}`;
 
   if (input.transactionId) {
     return `transaction:${input.name}:${input.transactionId}`;
@@ -55,7 +53,10 @@ export function createWebTrackingClient(args: CreateWebTrackingClientArgs): WebT
   const transport = args.transport;
   const dedupe = createWebTrackingDedupeStore();
   let consent = { ...resolvedConfig.consent.defaultState };
-  let attribution = args.attributionStore?.read() ?? {};
+  const canStoreAttribution = () =>
+    resolvedConfig.enabled && resolvedConfig.attribution.enabled && consent.adStorage === 'granted';
+  const canSendAttribution = () => canStoreAttribution() && consent.adUserData === 'granted';
+  let attribution = canStoreAttribution() ? (args.attributionStore?.read() ?? {}) : {};
 
   return {
     isEnabled() {
@@ -78,7 +79,7 @@ export function createWebTrackingClient(args: CreateWebTrackingClientArgs): WebT
           config: resolvedConfig,
           input,
           pageContext: args.getPageContext?.(),
-          attribution,
+          attribution: canSendAttribution() ? attribution : {},
         }),
       );
     },
@@ -95,28 +96,30 @@ export function createWebTrackingClient(args: CreateWebTrackingClientArgs): WebT
         normalizeWebTrackingPageViewPayload({
           config: resolvedConfig,
           input,
-          attribution,
+          attribution: canSendAttribution() ? attribution : {},
           fallbackPageContext,
         }),
       );
     },
     setConsent(update, mode = 'update') {
       consent = { ...consent, ...update };
-      transport?.setConsent?.(mode, consent);
+      if (resolvedConfig.enabled) transport?.setConsent?.(mode, consent);
+      if (resolvedConfig.enabled && consent.adStorage === 'denied') {
+        attribution = {};
+        args.attributionStore?.clear();
+      }
       return { ...consent };
     },
     getConsent() {
       return { ...consent };
     },
     captureAttribution(search) {
-      if (!resolvedConfig.attribution.enabled) {
-        return { ...attribution };
-      }
+      if (!canStoreAttribution()) return {};
 
       attribution = mergeWebTrackingAttributionFromSearch({
         current: {
-          ...args.attributionStore?.read(),
           ...attribution,
+          ...args.attributionStore?.read(),
         },
         search,
         now: now(),
@@ -126,7 +129,7 @@ export function createWebTrackingClient(args: CreateWebTrackingClientArgs): WebT
       return { ...attribution };
     },
     getAttribution() {
-      return { ...attribution };
+      return canStoreAttribution() ? { ...attribution } : {};
     },
   };
 }

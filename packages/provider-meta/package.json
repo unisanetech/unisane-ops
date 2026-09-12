@@ -1,6 +1,6 @@
 {
   "name": "@unisane/provider-meta",
-  "version": "0.1.0-next.20260912.2",
+  "version": "0.1.0-next.20260913.1",
   "description": "Meta provider-family connection and control-plane operations for Unisane Ops",
   "license": "MIT",
   "repository": {
@@ -51,7 +51,8 @@
   },
   "dependencies": {
     "@unisane/growth": "workspace:*",
-    "zod": "^3.23.0"
+    "zod": "^3.23.0",
+    "@unisane/web-runtime": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

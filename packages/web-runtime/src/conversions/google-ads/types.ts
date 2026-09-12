@@ -10,6 +10,7 @@ export type GoogleAdsAccessTokenProvider = () => Promise<string> | string;
 export type GoogleAdsHttpResponse = {
   ok: boolean;
   status: number;
+  headers?: { get(name: string): string | null };
   json?: () => Promise<unknown>;
   text?: () => Promise<string>;
 };
@@ -20,6 +21,7 @@ export type GoogleAdsHttpClient = (
     method: 'POST';
     headers: Record<string, string>;
     body: string;
+    signal?: AbortSignal;
   },
 ) => Promise<GoogleAdsHttpResponse>;
 
@@ -49,6 +51,7 @@ export type GoogleAdsWebConversionTransportConfig = {
   adPersonalizationConsent?: GoogleAdsConsentStatus;
   resolveConversionDateTime?: (envelope: WebConversionEnvelope) => Date | string;
   httpClient?: GoogleAdsHttpClient;
+  timeoutMs?: number;
 };
 
 export type GoogleAdsUserIdentifier = {

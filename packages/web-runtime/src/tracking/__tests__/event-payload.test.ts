@@ -91,4 +91,15 @@ describe('web tracking payload normalization', () => {
       page_title: 'Pricing',
     });
   });
+  it('removes private page queries, fragments and document titles when disabled by the app', () => {
+    const payload = normalizeWebTrackingPageViewPayload({
+      config: resolveWebTrackingConfig({ appId: 'resume', enabled: true, pageContext: { includeQuery: false, includeTitle: false } }),
+      input: { pageLocation: 'https://example.test/editor?email=private@example.test#secret', pagePath: '/editor?token=private', pageTitle: 'Private resume name' },
+    });
+    expect(payload.page_location).toBe('https://example.test/editor');
+    expect(payload.page_path).toBe('/editor');
+    expect(payload).not.toHaveProperty('page_title');
+    expect(JSON.stringify(payload)).not.toContain('private');
+  });
+
 });

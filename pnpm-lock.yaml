@@ -408,6 +408,9 @@ importers:
       '@unisane/growth':
         specifier: workspace:*
         version: link:../growth
+      '@unisane/web-runtime':
+        specifier: workspace:*
+        version: link:../web-runtime
       zod:
         specifier: ^3.23.0
         version: 3.25.76

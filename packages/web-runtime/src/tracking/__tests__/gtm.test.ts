@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { buildGtmBootstrapScript, buildGtmScriptUrl } from '../next/gtm';
+import { describe, expect, it, vi } from 'vitest';
+import { buildGtmBootstrapScript, buildGtmScriptUrl, createBrowserGtmTransport } from '../next/gtm';
 
 describe('gtm helpers', () => {
   it('builds the GTM script URL', () => {
@@ -43,4 +43,17 @@ describe('gtm helpers', () => {
     expect(script).not.toContain('</script>');
     expect(script).toContain('GTM-TEST\\u003c/script\\u003e');
   });
+  it('uses the Google command queue contract for consent and identity retrieval', () => {
+    const browser: { dataLayer: unknown[]; gtag?: (...args: unknown[]) => void } = { dataLayer: [] };
+    vi.stubGlobal('window', browser);
+    try {
+      createBrowserGtmTransport({ gtm: { containerId: 'GTM-TEST' } }).setConsent!('update', { analyticsStorage: 'granted' } as never);
+      const command = browser.dataLayer[0] as IArguments;
+      expect(Object.prototype.toString.call(command)).toBe('[object Arguments]');
+      expect(Array.from(command).slice(0, 2)).toEqual(['consent', 'update']);
+      const callback = vi.fn(); browser.gtag!('get', 'G-TEST', 'client_id', callback);
+      expect(Array.from(browser.dataLayer[1] as IArguments)).toEqual(['get', 'G-TEST', 'client_id', callback]);
+    } finally { vi.unstubAllGlobals(); }
+  });
+
 });

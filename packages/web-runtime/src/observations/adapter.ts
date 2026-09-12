@@ -20,6 +20,7 @@ export type TrackingObservationRecordInput = TrackingObservationIdentityInput & 
   occurredAt: string;
   outcome: MarketingTrackingObservation['outcome'];
   attempt?: number;
+  receivedAt?: string;
   consent: MarketingTrackingObservation['consent'];
   parameterEvidence?: MarketingTrackingObservation['parameterEvidence'];
   commerce?: MarketingTrackingObservation['commerce'];
@@ -149,7 +150,7 @@ function createTrackingObservationAdapter(config: SourceAdapterConfig): Tracking
           source: config.source,
           schemaVersion: config.schemaVersion ?? 2,
           provenance: config.provenance ?? 'adopter-reported',
-          receivedAt: now().toISOString(),
+          receivedAt: input.receivedAt ?? now().toISOString(),
         },
         providerReference: input.providerReference,
         diagnostics: input.diagnostics,

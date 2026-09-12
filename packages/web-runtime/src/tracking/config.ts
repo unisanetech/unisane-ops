@@ -15,6 +15,7 @@ export function resolveWebTrackingConfig(config: WebTrackingConfig): ResolvedWeb
     enabled: config.enabled,
     debug: config.debug ?? false,
     autoPageViews: config.autoPageViews ?? true,
+    ...(config.pageContext ? { pageContext: { ...config.pageContext } } : {}),
     defaultContext: config.defaultContext ?? {},
     ...(config.gtm ? { gtm: config.gtm } : {}),
     consent: {

@@ -1,3 +1,4 @@
+import { isIP } from 'node:net';
 import type { WebConversionEnvelope } from '../types';
 import { hashMetaCapiExternalId } from './user-data';
 import type {
@@ -44,7 +45,7 @@ function resolveEventTime(value: Date | number | string | undefined): number {
     const numeric = Number(value);
     if (Number.isFinite(numeric)) return resolveEventTime(numeric);
   }
-  return Math.floor(Date.now() / 1000);
+  throw new Error('Meta conversion requires a recorded occurrence time.');
 }
 
 function resolveEventSourceUrl(
@@ -52,6 +53,7 @@ function resolveEventSourceUrl(
   config: Pick<MetaCapiWebConversionTransportConfig, 'eventSourceUrl'>,
   properties: Record<string, unknown> | undefined,
 ): string | undefined {
+  if (envelope.customer?.sourceUrl) return envelope.customer.sourceUrl;
   if (typeof config.eventSourceUrl === 'function') return config.eventSourceUrl(envelope);
   if (typeof config.eventSourceUrl === 'string' && config.eventSourceUrl.trim()) {
     return config.eventSourceUrl.trim();
@@ -78,15 +80,44 @@ function resolveUserData(
   const fbc = readPropertyString(properties, ['fbc']);
   const fbp = readPropertyString(properties, ['fbp']);
 
-  return {
-    ...(hashedEmail ? { em: [hashedEmail] } : {}),
-    ...(hashedPhoneNumber ? { ph: [hashedPhoneNumber] } : {}),
-    ...(envelope.user_id ? { external_id: [hashMetaCapiExternalId(envelope.user_id)] } : {}),
-    ...(clientIpAddress ? { client_ip_address: clientIpAddress } : {}),
-    ...(clientUserAgent ? { client_user_agent: clientUserAgent } : {}),
-    ...(fbc ? { fbc } : {}),
-    ...(fbp ? { fbp } : {}),
+  const customer = envelope.customer;
+  const result: MetaCapiUserData = {};
+  const hashes = {
+    em: customer?.hashedEmail ?? hashedEmail,
+    ph: customer?.hashedPhone ?? hashedPhoneNumber,
+    fn: customer?.hashedFirstName,
+    ln: customer?.hashedLastName,
+    ct: customer?.hashedCity,
+    st: customer?.hashedRegion,
+    zp: customer?.hashedPostalCode,
+    country: customer?.hashedCountry,
+    external_id:
+      customer?.hashedExternalId ??
+      (envelope.user_id ? hashMetaCapiExternalId(envelope.user_id) : undefined),
   };
+  for (const [key, value] of Object.entries(hashes)) {
+    if (!value) continue;
+    if (!/^[a-f0-9]{64}$/i.test(value)) throw new Error(`Meta CAPI ${key} must be SHA-256 hashed.`);
+    result[key as keyof typeof hashes] = [value.toLowerCase()];
+  }
+  const ip = customer?.clientIpAddress ?? clientIpAddress;
+  if (ip) {
+    if (!isIP(ip)) throw new Error('Meta CAPI client IP is invalid.');
+    result.client_ip_address = ip;
+  }
+  const agent = customer?.clientUserAgent ?? clientUserAgent;
+  if (agent) result.client_user_agent = agent;
+  for (const [key, value] of [
+    ['fbp', customer?.fbp ?? fbp],
+    ['fbc', customer?.fbc ?? fbc],
+  ] as const) {
+    if (!value) continue;
+    if (!/^fb\.\d+\.\d+\.[A-Za-z0-9_-]+$/.test(value) || value.length > 512) {
+      throw new Error(`Meta CAPI ${key} is invalid.`);
+    }
+    result[key] = value;
+  }
+  return result;
 }
 
 function hasMetaCapiAttribution(userData: MetaCapiUserData): boolean {
@@ -101,14 +132,28 @@ function hasMetaCapiAttribution(userData: MetaCapiUserData): boolean {
   );
 }
 
-function resolveContentIds(
-  items: readonly Record<string, unknown>[] | undefined,
-): string[] | undefined {
+function resolveContents(items: readonly Record<string, unknown>[] | undefined) {
   if (!items?.length) return undefined;
-  const ids = items
-    .map((item) => item.itemId)
-    .filter((value): value is string => typeof value === 'string' && value.trim().length > 0);
-  return ids.length ? ids : undefined;
+  return items.map((item) => {
+    const id = item.item_id;
+    const quantity = item.quantity ?? 1;
+    if (
+      typeof id !== 'string' ||
+      !id.trim() ||
+      typeof quantity !== 'number' ||
+      !Number.isInteger(quantity) ||
+      quantity < 1
+    ) {
+      throw new Error('Meta CAPI items require a catalog item_id and positive integer quantity.');
+    }
+    if (
+      item.price !== undefined &&
+      (typeof item.price !== 'number' || !Number.isFinite(item.price) || item.price < 0)
+    ) {
+      throw new Error('Meta CAPI item price is invalid.');
+    }
+    return { id, quantity, ...(item.price !== undefined ? { item_price: item.price } : {}) };
+  });
 }
 
 export function mapWebConversionEnvelopeToMetaCapiEvent(args: {
@@ -123,6 +168,7 @@ export function mapWebConversionEnvelopeToMetaCapiEvent(args: {
     | 'resolveEventTime'
   >;
 }): MetaCapiEvent | null {
+  if (args.envelope.consent?.advertising !== 'granted') return null;
   const properties = args.envelope.properties as Record<string, unknown> | undefined;
   const eventName = readMetaCapiEventName({
     event: args.envelope.event,
@@ -139,27 +185,34 @@ export function mapWebConversionEnvelopeToMetaCapiEvent(args: {
     throw new Error(`Meta CAPI event "${args.envelope.event}" requires user_data attribution.`);
   }
 
-  const contentIds = resolveContentIds(args.envelope.items);
+  const contents = resolveContents(args.envelope.items);
+  const contentIds = contents?.map((item) => item.id);
   const customData = {
     ...(typeof args.envelope.value === 'number' ? { value: args.envelope.value } : {}),
     ...(args.envelope.currency ? { currency: args.envelope.currency } : {}),
     ...(args.envelope.transaction_id ? { order_id: args.envelope.transaction_id } : {}),
     ...(contentIds ? { content_ids: contentIds, content_type: 'product' } : {}),
-    ...(args.envelope.items?.length ? { contents: [...args.envelope.items] } : {}),
-    ...(args.envelope.items?.length ? { num_items: args.envelope.items.length } : {}),
+    ...(contents ? { contents } : {}),
+    ...(contents ? { num_items: contents.reduce((total, item) => total + item.quantity, 0) } : {}),
   };
 
+  const sourceUrl = resolveEventSourceUrl(args.envelope, args.config, properties);
+  if ((args.config.actionSource ?? 'website') === 'website') {
+    if (!sourceUrl) throw new Error('Website conversions require a source URL.');
+    const url = new URL(sourceUrl);
+    if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password)
+      throw new Error('Conversion source URL is invalid.');
+  }
   return {
     event_name: eventName,
     event_time: resolveEventTime(
-      args.config.resolveEventTime?.(args.envelope) ??
+      args.envelope.occurred_at ??
+        args.config.resolveEventTime?.(args.envelope) ??
         readPropertyString(properties, ['event_time', 'eventTime', 'occurred_at', 'occurredAt']),
     ),
     event_id: args.envelope.event_id,
     action_source: args.config.actionSource ?? 'website',
-    ...(resolveEventSourceUrl(args.envelope, args.config, properties)
-      ? { event_source_url: resolveEventSourceUrl(args.envelope, args.config, properties) }
-      : {}),
+    ...(sourceUrl ? { event_source_url: sourceUrl } : {}),
     user_data: userData,
     ...(Object.keys(customData).length ? { custom_data: customData } : {}),
   };

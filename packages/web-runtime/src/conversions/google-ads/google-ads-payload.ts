@@ -48,11 +48,10 @@ function readGoogleAdsConversionAction(args: {
 
 function formatGoogleAdsDateTime(value: Date | string): string {
   if (typeof value === 'string') {
-    const normalized = value.trim();
-    if (!normalized) {
-      throw new Error('Google Ads conversion date time must not be empty.');
-    }
-    return normalized;
+    const date = new Date(value);
+    if (!Number.isFinite(date.getTime()))
+      throw new Error('Google Ads conversion date time is invalid.');
+    value = date;
   }
 
   const iso = value.toISOString();
@@ -69,13 +68,15 @@ function hasGoogleAdsAttribution(conversion: GoogleAdsClickConversion): boolean 
 }
 
 function resolveUserIdentifiers(
-  properties: Record<string, unknown> | undefined,
+  envelope: WebConversionEnvelope,
 ): GoogleAdsClickConversion['userIdentifiers'] {
-  const hashedEmail = readPropertyString(properties, ['hashed_email', 'hashedEmail']);
-  const hashedPhoneNumber = readPropertyString(properties, [
-    'hashed_phone_number',
-    'hashedPhoneNumber',
-  ]);
+  const hashedEmail = envelope.customer?.hashedEmail;
+  const hashedPhoneNumber = envelope.customer?.hashedPhone;
+  for (const value of [hashedEmail, hashedPhoneNumber]) {
+    if (value !== undefined && !/^[a-f0-9]{64}$/i.test(value)) {
+      throw new Error('Google Ads customer identifiers must be SHA-256 hashes.');
+    }
+  }
   const identifiers = [
     ...(hashedEmail ? [{ hashedEmail }] : []),
     ...(hashedPhoneNumber ? [{ hashedPhoneNumber }] : []),
@@ -98,6 +99,7 @@ export function mapWebConversionEnvelopeToGoogleAdsClickConversion(args: {
   >;
   now?: () => Date;
 }): GoogleAdsClickConversion | null {
+  if (args.envelope.consent?.advertising !== 'granted') return null;
   const properties = args.envelope.properties as Record<string, unknown> | undefined;
   const action = readGoogleAdsConversionAction({
     event: args.envelope.event,
@@ -108,7 +110,8 @@ export function mapWebConversionEnvelopeToGoogleAdsClickConversion(args: {
 
   const actionConfig = normalizeGoogleAdsConversionActionConfig(action);
   const conversionDateTime = formatGoogleAdsDateTime(
-    args.config.resolveConversionDateTime?.(args.envelope) ??
+    args.envelope.occurred_at ??
+      args.config.resolveConversionDateTime?.(args.envelope) ??
       readPropertyString(properties, [
         'conversion_date_time',
         'conversionDateTime',
@@ -116,7 +119,9 @@ export function mapWebConversionEnvelopeToGoogleAdsClickConversion(args: {
         'occurredAt',
       ]) ??
       args.now?.() ??
-      new Date(),
+      (() => {
+        throw new Error('Google Ads conversion requires a recorded occurrence time.');
+      })(),
   );
   const conversionValue = args.envelope.value ?? actionConfig.defaultValue;
   const currencyCode = args.envelope.currency ?? actionConfig.defaultCurrency;
@@ -128,7 +133,7 @@ export function mapWebConversionEnvelopeToGoogleAdsClickConversion(args: {
   const gclid = readPropertyString(properties, ['gclid']);
   const gbraid = readPropertyString(properties, ['gbraid']);
   const wbraid = readPropertyString(properties, ['wbraid']);
-  const userIdentifiers = resolveUserIdentifiers(properties);
+  const userIdentifiers = resolveUserIdentifiers(args.envelope);
   const consent = {
     ...((adUserData ?? args.config.adUserDataConsent)
       ? { adUserData: adUserData ?? args.config.adUserDataConsent }

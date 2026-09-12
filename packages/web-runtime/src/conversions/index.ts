@@ -28,3 +28,12 @@ export type {
   WebConversionTransport,
   WebConversionValue,
 } from './types';
+
+export type {
+  WebConversionConsent,
+  WebConversionAnalyticsContext,
+  WebConversionCustomer,
+  WebConversionReceipt,
+  WebConversionSendContext,
+} from './types';
+export * from './delivery/index';

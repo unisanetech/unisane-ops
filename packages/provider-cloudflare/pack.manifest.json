@@ -3,7 +3,7 @@
   "kind": "unisane.pack-manifest",
   "packId": "provider.cloudflare",
   "packageName": "@unisane/provider-cloudflare",
-  "version": "0.1.0-next.20260912.2",
+  "version": "0.1.0-next.20260913.1",
   "packApiVersion": 1,
   "trust": "first-party",
   "commands": [

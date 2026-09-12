@@ -1427,6 +1427,17 @@ A provider earns a package when it has provider-level connection/authentication,
 inventory, mutation, or lifecycle behavior shared by multiple capabilities. A single outbound
 runtime integration does not.
 
+Google Data Manager event ingestion lives at
+`@unisane/web-runtime/conversions/google-data-manager`, alongside runtime conversion
+transports. It preserves original occurrence and transaction identities, applies
+advertising consent, accepts only allowlisted click IDs or normalized hashes, refreshes
+OAuth through an injected resolver and uses bounded requests with provider backoff.
+An ingestion request ID is an acknowledgement, not proof of a processed or attributed
+conversion; request status is a separate read. Runtime delivery reuses the host's durable
+outbox attempt context and receipt sink instead of creating an Ops or product retry queue.
+Synthetic transport tests prove the contract only; real account activation and delivery
+verification remain explicit adopter operations.
+
 Meta Conversions API support remains at `@unisane/web-runtime/conversions/meta`; runtime event
 delivery does not depend on the admitted management provider package.
 
@@ -1441,6 +1452,7 @@ delivery does not depend on the admitted management provider package.
 @unisane/web-runtime/contracts
 @unisane/web-runtime/conversions
 @unisane/web-runtime/conversions/google-ads
+@unisane/web-runtime/conversions/google-data-manager
 @unisane/web-runtime/conversions/meta
 @unisane/web-runtime/seo
 @unisane/web-runtime/seo/next
@@ -1778,3 +1790,20 @@ port; incomplete mutation responses cannot use a local slug as a provider resour
 Read-only validate/pull/diff/diagnose remain available. Explicit local/SQLite backend selection,
 existing-history checks and recognition of previously managed remote resource names remain
 intentional protections; they do not create another approval or execution workflow.
+
+### Confirmed GA4 analytics delivery
+
+`@unisane/web-runtime/conversions/ga4` owns the portable Measurement Protocol transport.
+It requires analytics consent independently of advertising consent, the browser's public-API
+client identity, original event time, explicit event mapping and server-resolved API secret.
+The shared durable subscriber selects the transport's consent purpose and records it in
+receipts and observations. Matching hashes and arbitrary product properties are never copied
+into GA4. Delivery expires at 72 hours; old checkout sessions and invented engagement time
+must not inflate analytics. Validation-only responses and HTTP acknowledgements are distinct
+from report ingestion. GA4 generic event-ID deduplication is not assumed; consumer receipts
+and a single conversion owner prevent known duplicate paths, while uncertain network results
+remain explicitly uncertain. The application owns business mappings and activation timing.
+
+The browser Google transport uses the documented Arguments command queue. Applications may
+exclude page queries and page titles through `pageContext`; this does not replace provider
+redaction and automatic-collection configuration during an activation review.

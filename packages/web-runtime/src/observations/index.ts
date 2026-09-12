@@ -16,3 +16,4 @@ export {
   type TrackingObservationSink,
   type TrackingObservationSinkResult,
 } from './adapter';
+export { createConversionReceiptObservationRecorder } from './conversion-receipt';

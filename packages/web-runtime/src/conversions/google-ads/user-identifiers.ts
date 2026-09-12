@@ -5,11 +5,19 @@ function sha256(value: string): string {
 }
 
 export function normalizeGoogleAdsEmail(value: string): string {
-  return value.trim().toLowerCase();
+  const email = value.trim().toLowerCase().replace(/\s/g, '');
+  const [local, domain] = email.split('@');
+  return domain === 'gmail.com' || domain === 'googlemail.com'
+    ? `${local?.replace(/\./g, '')}@${domain}`
+    : email;
 }
 
 export function normalizeGoogleAdsPhoneNumber(value: string): string {
-  return value.trim();
+  const phone = value.trim().replace(/[\s().-]/g, '');
+  if (!/^\+[1-9]\d{6,14}$/.test(phone)) {
+    throw new Error('Google Ads phone numbers require an explicit international E.164 number.');
+  }
+  return phone;
 }
 
 export function hashGoogleAdsEmail(value: string): string {

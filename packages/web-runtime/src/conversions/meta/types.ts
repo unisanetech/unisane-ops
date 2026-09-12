@@ -18,6 +18,7 @@ export type MetaCapiAccessTokenProvider = () => Promise<string> | string;
 export type MetaCapiHttpResponse = {
   ok: boolean;
   status: number;
+  headers?: { get(name: string): string | null };
   json?: () => Promise<unknown>;
   text?: () => Promise<string>;
 };
@@ -28,6 +29,7 @@ export type MetaCapiHttpClient = (
     method: 'POST';
     headers: Record<string, string>;
     body: string;
+    signal?: AbortSignal;
   },
 ) => Promise<MetaCapiHttpResponse>;
 
@@ -35,6 +37,12 @@ export type MetaCapiEventNameMap = Record<string, string>;
 
 export type MetaCapiUserData = {
   em?: string[];
+  fn?: string[];
+  ln?: string[];
+  ct?: string[];
+  st?: string[];
+  zp?: string[];
+  country?: string[];
   ph?: string[];
   external_id?: string[];
   client_ip_address?: string;
@@ -95,6 +103,7 @@ export type MetaCapiWebConversionTransportConfig = {
   dataProcessingOptionsCountry?: number;
   dataProcessingOptionsState?: number;
   httpClient?: MetaCapiHttpClient;
+  timeoutMs?: number;
 };
 
 export type MetaCapiWebConversionTransport = WebConversionTransport;

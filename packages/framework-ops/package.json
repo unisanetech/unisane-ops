@@ -1,6 +1,6 @@
 {
   "name": "@unisane/framework-ops",
-  "version": "0.1.0-next.20260912.2",
+  "version": "0.1.0-next.20260913.1",
   "description": "Descriptor-only Unisane Framework integration for Unisane Ops",
   "license": "MIT",
   "repository": {

@@ -9,7 +9,7 @@ export function normalizeMetaCapiEmail(value: string): string {
 }
 
 export function normalizeMetaCapiPhoneNumber(value: string): string {
-  return value.replace(/[^\d+]/g, '').trim();
+  return value.replace(/\D/g, '');
 }
 
 export function normalizeMetaCapiExternalId(value: string): string {
@@ -26,4 +26,25 @@ export function hashMetaCapiPhoneNumber(value: string): string {
 
 export function hashMetaCapiExternalId(value: string): string {
   return sha256(normalizeMetaCapiExternalId(value));
+}
+
+export function hashMetaCapiName(value: string): string {
+  return sha256(
+    value
+      .trim()
+      .toLowerCase()
+      .replace(/[\p{P}\p{S}\s]/gu, ''),
+  );
+}
+export function hashMetaCapiLocation(value: string): string {
+  return sha256(
+    value
+      .trim()
+      .toLowerCase()
+      .replace(/[\s\p{P}]/gu, ''),
+  );
+}
+export function hashMetaCapiCountry(value: string): string {
+  if (!/^[a-z]{2}$/i.test(value.trim())) throw new Error('Country must be an ISO two-letter code.');
+  return sha256(value.trim().toLowerCase());
 }

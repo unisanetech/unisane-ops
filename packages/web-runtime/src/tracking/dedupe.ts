@@ -8,14 +8,14 @@ export function createWebTrackingDedupeStore(): WebTrackingDedupeStore {
   return {
     shouldDrop(key, ttlMs, now) {
       const previous = seen.get(key);
-      if (previous !== undefined && now - previous < ttlMs) {
+      if (previous !== undefined && now < previous) {
         return true;
       }
 
-      seen.set(key, now);
+      seen.set(key, now + ttlMs);
 
       for (const [entryKey, timestamp] of seen.entries()) {
-        if (now - timestamp >= ttlMs * 2) {
+        if (now >= timestamp) {
           seen.delete(entryKey);
         }
       }

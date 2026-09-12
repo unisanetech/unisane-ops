@@ -12,7 +12,7 @@ describe('web conversions testing and dedupe helpers', () => {
         event_id: 'evt_123',
         transaction_id: 'sub_123',
       }),
-    ).toBe('event:evt_123');
+    ).toBe('event:["data-entry-lm","scope_123","subscription_renewed","evt_123"]');
   });
 
   it('falls back to stable transaction identity when event ids are not available', () => {

@@ -4,7 +4,11 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import Script from 'next/script.js';
 import { usePathname, useSearchParams } from 'next/navigation.js';
 import { createWebTrackingClient } from '../client';
-import { setGlobalWebTrackingClient } from '../global-client';
+import {
+  getWebTrackingClient,
+  resetGlobalWebTrackingClient,
+  setGlobalWebTrackingClient,
+} from '../global-client';
 import type { WebTrackingClient, WebTrackingConfig } from '../types';
 import {
   buildGtmBootstrapScript,
@@ -17,7 +21,7 @@ import {
 export function WebTrackingRuntime({ config }: { config: WebTrackingConfig }) {
   return (
     <Suspense fallback={null}>
-      <WebTrackingRuntimeInner config={config} />
+      <WebTrackingRuntimeInner key={JSON.stringify(config)} config={config} />
     </Suspense>
   );
 }
@@ -51,7 +55,11 @@ function WebTrackingRuntimeInner({ config }: { config: WebTrackingConfig }) {
 
   useEffect(() => {
     if (!clientRef.current) return;
-    setGlobalWebTrackingClient(clientRef.current);
+    const client = clientRef.current;
+    setGlobalWebTrackingClient(client);
+    return () => {
+      if (getWebTrackingClient() === client) resetGlobalWebTrackingClient();
+    };
   }, []);
 
   useEffect(() => {

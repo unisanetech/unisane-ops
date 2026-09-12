@@ -34,3 +34,5 @@ export type {
   MetaCapiWebConversionTransport,
   MetaCapiWebConversionTransportConfig,
 } from './types';
+
+export { hashMetaCapiName, hashMetaCapiLocation, hashMetaCapiCountry } from './user-data';
