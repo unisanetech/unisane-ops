@@ -100,7 +100,7 @@
     "eslint": "^9.39.1",
     "tsup": "^8.0.0",
     "typescript": "^5.9.2",
-    "vitest": "^4.0.16"
+    "vitest": "^4.1.11"
   },
   "unisane": {
     "kind": "tooling",
