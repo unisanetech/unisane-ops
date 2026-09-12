@@ -1,14 +1,14 @@
 ---
 title: "Task: Release consent-aware portable conversion runtime"
-status: active
+status: complete
 owner: "codex-trueresume-release"
 id: T-7d9dd495
 scope: "workspace"
 role: task
-lifecycle: active
+lifecycle: historical
 authority: canonical
 provenance: accepted
-view: current
+view: exception
 risk: high-impact
 proofSubject: task-closure
 proofBaseline: baseline-4bc4a3a367263c92
@@ -19,7 +19,7 @@ lastUpdated: 2026-09-12
 
 ## Changelog
 
-- `2026-09-12`: Synchronized Task state `active` from Skopos.
+- `2026-09-12`: Synchronized Task state `complete` from Skopos.
 
 ## Goal
 
@@ -136,10 +136,10 @@ Release consent-aware portable conversion runtime
 
 ## Steps
 
-- [ ] **Record Task risk and detail before editing** (implementation, pending) — Confirm whether Task risk is light, standard, or high-impact. Keep the active Task current, use a Plan only for multi-Task direction, add a Decision for durable choices, and add or update a Finding for structural gaps.
-- [ ] **Review the current pattern in unisane-ops** (implementation, pending) — Use the compact references to confirm the current scope, command surface, and docs entrypoints before editing code.
-- [ ] **Implement the smallest scoped change** (implementation, pending) — Carry out "Release consent-aware portable conversion runtime" inside the resolved scope before widening impact to adjacent areas.
-- [ ] **Sync docs and instruction surfaces if touched** (docs, pending) — Keep docs, instruction mirrors, and generated project knowledge aligned with the implementation.
+- [x] **Record Task risk and detail before editing** (implementation, complete) — Confirm whether Task risk is light, standard, or high-impact. Keep the active Task current, use a Plan only for multi-Task direction, add a Decision for durable choices, and add or update a Finding for structural gaps.
+- [x] **Review the current pattern in unisane-ops** (implementation, complete) — Use the compact references to confirm the current scope, command surface, and docs entrypoints before editing code.
+- [x] **Implement the smallest scoped change** (implementation, complete) — Carry out "Release consent-aware portable conversion runtime" inside the resolved scope before widening impact to adjacent areas.
+- [x] **Sync docs and instruction surfaces if touched** (docs, complete) — Keep docs, instruction mirrors, and generated project knowledge aligned with the implementation.
 
 ## Actions And Guards
 
@@ -151,8 +151,8 @@ Release consent-aware portable conversion runtime
 
 ## Memory Obligations
 
-- [open] guide: The declared Task scope owns canonical guide Memory at docs/guides/portable-conversion-delivery.md; review and synchronize it if project truth changes. (target: `docs/guides/portable-conversion-delivery.md`)
-- [open] standard: High-impact work must review and synchronize the existing standard Memory for Scope workspace. (target: `docs/standards/13-unisane-ops-product-architecture-baseline.md`)
+- [complete] guide: The declared Task scope owns canonical guide Memory at docs/guides/portable-conversion-delivery.md; review and synchronize it if project truth changes. (target: `docs/guides/portable-conversion-delivery.md`); resolution: memory-updated
+- [complete] standard: High-impact work must review and synchronize the existing standard Memory for Scope workspace. (target: `docs/standards/13-unisane-ops-product-architecture-baseline.md`); resolution: memory-updated
 
 ## Portable Task State
 
@@ -164,12 +164,12 @@ This machine-readable block is the durable source used to rebuild local Skopos s
   "schemaVersion": 1,
   "id": "T-7d9dd495",
   "type": "task",
-  "status": "active",
+  "status": "durable",
   "generatedAt": "2026-09-12T20:37:39.818Z",
-  "updatedAt": "2026-09-12T20:42:10.944Z",
+  "updatedAt": "2026-09-12T21:00:38.017Z",
   "planIds": [],
   "childTasks": [],
-  "state": "active",
+  "state": "complete",
   "detail": "detailed",
   "title": "Release consent-aware portable conversion runtime",
   "goal": "Release consent-aware portable conversion runtime",
@@ -243,28 +243,28 @@ This machine-readable block is the durable source used to rebuild local Skopos s
       "kind": "implementation",
       "title": "Record Task risk and detail before editing",
       "detail": "Confirm whether Task risk is light, standard, or high-impact. Keep the active Task current, use a Plan only for multi-Task direction, add a Decision for durable choices, and add or update a Finding for structural gaps.",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "id": "step-review-current-pattern",
       "kind": "implementation",
       "title": "Review the current pattern in unisane-ops",
       "detail": "Use the compact references to confirm the current scope, command surface, and docs entrypoints before editing code.",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "id": "step-implement-scoped-change",
       "kind": "implementation",
       "title": "Implement the smallest scoped change",
       "detail": "Carry out \"Release consent-aware portable conversion runtime\" inside the resolved scope before widening impact to adjacent areas.",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "id": "step-sync-knowledge",
       "kind": "docs",
       "title": "Sync docs and instruction surfaces if touched",
       "detail": "Keep docs, instruction mirrors, and generated project knowledge aligned with the implementation.",
-      "status": "pending"
+      "status": "complete"
     }
   ],
   "selectedActions": [],
@@ -284,15 +284,23 @@ This machine-readable block is the durable source used to rebuild local Skopos s
       "id": "memory-guide-9b94585cde",
       "role": "guide",
       "reason": "The declared Task scope owns canonical guide Memory at docs/guides/portable-conversion-delivery.md; review and synchronize it if project truth changes.",
-      "status": "open",
-      "targetPath": "docs/guides/portable-conversion-delivery.md"
+      "status": "complete",
+      "targetPath": "docs/guides/portable-conversion-delivery.md",
+      "resolution": "memory-updated",
+      "resolutionReason": "Published guide and architecture describe the reviewed consent-aware transports, receipt semantics, privacy and browser ownership.",
+      "resolvedAt": "2026-09-12T20:59:51.098Z",
+      "resolvedByActorId": "codex-trueresume-release"
     },
     {
       "id": "memory-standard-2653e0fd89",
       "role": "standard",
       "reason": "High-impact work must review and synchronize the existing standard Memory for Scope workspace.",
-      "status": "open",
-      "targetPath": "docs/standards/13-unisane-ops-product-architecture-baseline.md"
+      "status": "complete",
+      "targetPath": "docs/standards/13-unisane-ops-product-architecture-baseline.md",
+      "resolution": "memory-updated",
+      "resolutionReason": "Published guide and architecture describe the reviewed consent-aware transports, receipt semantics, privacy and browser ownership.",
+      "resolvedAt": "2026-09-12T20:59:51.939Z",
+      "resolvedByActorId": "codex-trueresume-release"
     }
   ],
   "questions": [],
