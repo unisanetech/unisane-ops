@@ -72,7 +72,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "@modelcontextprotocol/client": "^2.0.0",
+    "@modelcontextprotocol/client": "^2.3.0",
     "@unisane/provider-aws": "workspace:*",
     "@unisane/provider-google": "workspace:*",
     "@unisane/provider-meta": "workspace:*",
