@@ -44,7 +44,7 @@
     "prepublishOnly": "pnpm build && pnpm check-types && pnpm test"
   },
   "dependencies": {
-    "@modelcontextprotocol/server": "^2.0.0",
+    "@modelcontextprotocol/server": "^2.3.0",
     "@unisane/growth": "workspace:*",
     "@unisane/ops-engine": "workspace:*",
     "zod": "^4.0.0"
